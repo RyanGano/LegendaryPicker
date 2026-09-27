@@ -1,0 +1,49 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The project is in the domain-discovery and rules-research phase: both projects are still scaffolding, and no game models, card data, generator, or game UI exist yet. Implement the generator only after the user confirms the final design.
+
+## Read before working
+
+- `CONTEXT.md` is the domain glossary (Scheme, Mastermind, Always Leads group, Legal setup, Scheme-first random selection, …). Use its terms exactly in code, docs, and conversation.
+- `Docs/Plan.md` is the working plan: scope decisions, randomness rules, open questions.
+- `Docs/plan_memory.md` is the detailed handoff snapshot: every user decision to date, verified First Edition facts with sources, and card-catalog status.
+
+When a decision or verified fact changes, update `Docs/Plan.md` and `CONTEXT.md` (and the snapshot) in the same change.
+
+## Commands
+
+Frontend (`LegendaryPickerApp`, Vite + React 19 + TypeScript, run from that folder):
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run lint
+```
+
+`build` runs `tsc -b` before `vite build`, so it doubles as the type check. Lint is oxlint (`.oxlintrc.json`), not ESLint.
+
+Backend (`LegendaryPickerService`, ASP.NET Core Minimal API on .NET 10, run from the repo root):
+
+```bash
+dotnet run --project LegendaryPickerService
+```
+
+There are no test projects or test scripts yet.
+
+## Architecture
+
+- The C# API is the rules authority: it owns the catalog, setup rules, and generator. The React app only calls it and renders the result checklist.
+- Hosting is split. GitHub Actions (`.github/workflows/deploy-pages.yml`) builds and deploys only the frontend to GitHub Pages on every push to `main`; `vite.config.ts` switches `base` to `/LegendaryPicker/` when `GITHUB_ACTIONS` is set. The API is planned for Azure App Service, but no Azure resources exist; provisioning needs explicit user authorization plus SKU/region/cost decisions.
+- CORS origins for the API come from the `Cors:AllowedOrigins` config section.
+- Game data (catalog + sourced setup rules) is planned as versioned files in the repo, grouped by box (core box, later expansions), and changed only through reviewed commits: no database or admin UI.
+
+## Rules and data constraints
+
+- v1 scope is the Marvel Legendary **First Edition (2013) core box** only, player counts 1–5, with First Edition Solo for one player. Second Edition rules differ; never substitute them.
+- Every setup rule needs a source: the First Edition rulebook, an official clarification, or a ruling directly attributed to the designer or an Upper Deck rules representative. Record provenance alongside the data. A community catalog may supply card names and group mappings only.
+- Generation guarantees legality, never balance. Never relax a rule to make a Scheme playable; drop Schemes with no legal completion before the draw.
+- Store only short factual identifiers (card/group names, counts). Keep rulebook text, card text, and flavor text out of the repo.
+- Research downloads (the rulebook PDF and extracted text under `_research_tmp2/`, `resp.json`) stay local and uncommitted; they are not in `.gitignore`, so stage files explicitly.
