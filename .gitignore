@@ -1,0 +1,20 @@
+# Frontend
+LegendaryPickerApp/node_modules/
+LegendaryPickerApp/dist/
+LegendaryPickerApp/dist-ssr/
+LegendaryPickerApp/*.local
+
+# Backend
+LegendaryPickerService/bin/
+LegendaryPickerService/obj/
+LegendaryPickerService/.vs/
+LegendaryPickerService/*.user
+
+# Editor and operating system files
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+.DS_Store
+Thumbs.db
