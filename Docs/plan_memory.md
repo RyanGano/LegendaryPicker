@@ -23,6 +23,7 @@ This is a handoff snapshot of the current shared understanding, verified facts, 
 - Exclude **Advanced Solo** from v1 because its origin in the core box is unverified.
 - Require complete, sourced coverage for every supported player count before calling v1 rules-valid; do not publish a partial count range as the complete randomizer.
 - Use the First Edition rulebook and official clarifications. Accept rulings directly attributed to the game's designer or an Upper Deck rules representative even when archived elsewhere, recording provenance. Do not rely on unattributed community interpretations or substitute Second Edition rules.
+- A community card catalog is acceptable for names and group mappings only, after cross-checking and recording provenance; it cannot establish setup-rule behavior.
 
 ### Generation and result
 
@@ -83,7 +84,7 @@ Names above are short factual identifiers only; do not copy full card text or fl
 ## Remaining work before design confirmation
 
 1. Validate which standard setup components are inherited by Solo (especially Master Strikes) and extract all Scheme-driven changes to Hero/Villain/Henchman counts.
-2. Find and cross-check a complete First Edition core-box card/group catalog, with source provenance per relationship. A previous report found a fan-made card reference but did not validate it; distinguish catalog discovery from authoritative rule interpretation.
+2. Find and cross-check a complete First Edition core-box card/group catalog, with source provenance per identity/mapping. A previous report found a fan-made BGG reference (file page 88786) but did not validate it; distinguish catalog discovery from authoritative rule interpretation.
 3. Update `Docs/Plan.md` and `CONTEXT.md` as new facts are verified, then summarize the complete design and ask the user to confirm shared understanding.
 4. Only after confirmation, implement the generator/API/UI and tests. Plan deployment to the selected App Service target separately; do not provision Azure resources without explicit authorization.
 

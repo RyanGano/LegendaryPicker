@@ -21,7 +21,7 @@ Help a player prepare a legally configured game of Upper Deck's Marvel Legendary
 - **Generation architecture:** The C# Minimal API owns the authoritative rules and setup generator; the React app calls it. GitHub Pages hosts only the frontend; the API is planned for Azure App Service.
 - **API access:** The setup API is public and does not require sign-in; use basic service-side rate limits if needed.
 - **Hosting priority:** Target the lowest-cost compatible App Service plan and accept possible cold starts/limits. Exact SKU and cost remain unselected; no Azure resources have been created or authorized.
-- **Game data:** Keep the catalog and sourced setup rules in versioned project data, grouped by box; future additions ship as reviewed project updates, not through an admin UI/database.
+- **Game data:** Keep the catalog and sourced setup rules in versioned project data, grouped by box; future additions ship as reviewed project updates, not through an admin UI/database. A cross-checked community catalog may supply card identities/group mappings, but not rule interpretations.
 - **Release gate:** Do not present v1 as rules-valid until all setup data and rules are sourced for every supported count from one through five, including First Edition Solo. Do not ship a partial count range as the complete randomizer.
 
 ## Existing project groundwork
@@ -60,7 +60,7 @@ Sources:
 ## Open questions
 
 1. **Solo setup and Scheme overrides:** Confirm which general setup components carry into Solo (especially Master Strikes) and verify every Scheme-specific count change. Do not infer from Second Edition.
-2. **First Edition card catalog:** Find a trustworthy source for core-box Scheme, Mastermind, Hero, Villain Group, and Henchman Group identities and their setup constraints. The generator needs this data, but the UI need only show selected components/groups and quantities.
+2. **First Edition card catalog:** Validate the full core-box Scheme, Mastermind, Hero, Villain Group, and Henchman Group identities/group mappings, preserving the source for each. The UI need only show selected components/groups and quantities; rule constraints still require rulebook or attributed-ruling support.
 3. **Backend deployment details:** Choose a region and compatible low-cost App Service SKU and review its cost before any provisioning.
 
 ## Next planning work
