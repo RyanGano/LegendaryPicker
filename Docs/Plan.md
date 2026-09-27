@@ -13,6 +13,7 @@ Help a player prepare a legally configured game of Upper Deck's Marvel Legendary
 - **Generation:** Generate one complete random setup at a time. Players do not lock a Scheme or Mastermind first and do not add their own must-include or must-exclude preferences. A player can generate another setup, replacing the current one without retaining history.
 - **Legality:** Satisfy applicable First Edition setup rules. Do not filter for subjective balance or difficulty.
 - **Randomness:** For the entered player count, select equally among Schemes that have at least one complete legal setup. For the selected Scheme, select uniformly among distinct complete legal setups compatible with it. The chosen components define a setup; draw order and shuffle order do not make a new setup. Never relax rules to make an impossible Scheme playable.
+- **No eligible Scheme:** If no Scheme has any complete legal setup for the entered player count, show a clear explanation and let the player choose another count; do not relax rules or switch modes.
 - **Result:** Show a complete setup checklist: randomized components/groups, fixed shared piles, and player starting decks/counts. Add concise notes explaining rule-driven inclusions or exclusions, with a short citation label and source link when available. Do not enumerate every card inside a selected group or reproduce an ordered rulebook walkthrough.
 - **App boundary:** Generate and present setups only. No turn/game-state tracking, accounts, history, favorites, or saved setups in v1.
 - **Use context:** Mobile-first responsive web app; online use is sufficient for v1.
@@ -60,12 +61,10 @@ Sources:
 
 1. **Solo setup and Scheme overrides:** Confirm which general setup components carry into Solo (especially Master Strikes) and verify every Scheme-specific count change. Do not infer from Second Edition.
 2. **First Edition card catalog:** Find a trustworthy source for core-box Scheme, Mastermind, Hero, Villain Group, and Henchman Group identities and their setup constraints. The generator needs this data, but the UI need only show selected components/groups and quantities.
-3. **Empty eligible pool:** Decide what to show if no Scheme has a legal completion for a given player count; the handling of individual impossible Schemes is settled, but this all-impossible case is not.
-4. **Backend deployment details:** Choose a region and compatible low-cost App Service SKU and review its cost before any provisioning.
+3. **Backend deployment details:** Choose a region and compatible low-cost App Service SKU and review its cost before any provisioning.
 
 ## Next planning work
 
 1. Finish verifying the First Edition Solo setup and Scheme-specific count overrides.
 2. Find and cross-check a complete core-box card/group catalog; keep source provenance with every setup rule.
-3. Decide the behavior for a player count with no eligible Schemes.
-4. Agree on the final domain model and generation behavior before implementing them.
+3. Agree on the final domain model and generation behavior before implementing them.

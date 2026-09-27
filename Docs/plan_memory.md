@@ -2,7 +2,7 @@
 
 **Snapshot date:** 2026-09-27
 **Phase:** Domain discovery and rules research; implementation has not started.
-**Last pushed planning commit:** `72fa6e7` (`Update Legendary setup decisions`).
+**Previous design checkpoint:** `72fa6e7` (`Update Legendary setup decisions`); this memory snapshot was subsequently committed and pushed.
 
 This is a handoff snapshot of the current shared understanding, verified facts, and unresolved work. `Docs/Plan.md` is the concise working plan; `CONTEXT.md` is the domain glossary. Update both as decisions and facts change. Do not implement the generator until the user confirms the final design.
 
@@ -29,7 +29,8 @@ This is a handoff snapshot of the current shared understanding, verified facts, 
 - Generate exactly one complete random setup at a time. Players cannot choose/lock a Scheme or Mastermind first and cannot add their own must-include/must-exclude card preferences.
 - Guarantee setup legality, not a subjective balance or difficulty level.
 - For the entered player count, choose equally among Schemes with at least one complete legal setup. Then choose uniformly among the distinct complete legal setups compatible with the selected Scheme. Different selection/shuffle order is not a distinct setup.
-- If an individual Scheme has no legal completion at that player count, exclude it before the equal-probability draw; never relax a rule. What to do if **no Scheme at all** has a legal completion remains undecided.
+- If an individual Scheme has no legal completion at that player count, exclude it before the equal-probability draw; never relax a rule.
+- If no Scheme at all has a legal completion for the entered player count, show a clear explanation and offer another count; do not silently change modes or relax a rule.
 - Show a complete setup checklist: randomized components/groups, fixed shared piles, and player starting decks/counts. Add concise notes for rule-driven inclusions/exclusions, with a short citation label and a source link when available. Do not enumerate every card within a selected group or provide an ordered rulebook walkthrough.
 - Let the player generate another setup, replacing the current result. Setups are transient: no accounts, game-state tracking, history, favorites, or saved setups.
 
@@ -83,9 +84,8 @@ Names above are short factual identifiers only; do not copy full card text or fl
 
 1. Validate which standard setup components are inherited by Solo (especially Master Strikes) and extract all Scheme-driven changes to Hero/Villain/Henchman counts.
 2. Find and cross-check a complete First Edition core-box card/group catalog, with source provenance per relationship. A previous report found a fan-made card reference but did not validate it; distinguish catalog discovery from authoritative rule interpretation.
-3. Resolve the fallback when no Scheme has any legal completion for a selected player count.
-4. Update `Docs/Plan.md` and `CONTEXT.md` as new facts are verified, then summarize the complete design and ask the user to confirm shared understanding.
-5. Only after confirmation, implement the generator/API/UI and tests. Plan deployment to the selected App Service target separately; do not provision Azure resources without explicit authorization.
+3. Update `Docs/Plan.md` and `CONTEXT.md` as new facts are verified, then summarize the complete design and ask the user to confirm shared understanding.
+4. Only after confirmation, implement the generator/API/UI and tests. Plan deployment to the selected App Service target separately; do not provision Azure resources without explicit authorization.
 
 ## Temporary research artifacts
 
