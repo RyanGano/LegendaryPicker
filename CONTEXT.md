@@ -16,6 +16,11 @@ The original Marvel Legendary base product, with its own card pool and setup rul
 **Expansion**:
 An additional product that adds content to the Marvel Legendary game system.
 
+**Included box**:
+A core box or expansion selected to contribute its cards to a particular setup.
+
+_Avoid_: Set, when referring to a product; it can also mean a card group.
+
 ## Setup elements
 
 **Scheme**:
@@ -34,7 +39,13 @@ A named set of Villain cards that can be selected as one setup component.
 A named set of Henchman cards that can be selected as one setup component.
 
 **Player count**:
-The number of players in a game; the First Edition core rules use it to determine setup quantities.
+The number of players in a game; the First Edition core rules use it to determine setup quantities. This project targets one to five players.
+
+**First Edition Solo mode**:
+The one-player mode with setup rules defined in the First Edition core box.
+
+**Advanced Solo**:
+A solo-play variant referenced in community rules material; its origin in the First Edition core box is unverified.
 
 ## Game setup
 
@@ -48,7 +59,7 @@ A game setup that satisfies all applicable official setup rules; legality does n
 A complete legal setup selected without player-selected card preferences; only official setup rules constrain the selection.
 
 **Scheme-first random selection**:
-Each Scheme is equally likely to be selected. Given the selected Scheme, each distinct combination of compatible setup components is equally likely; selection order and deck shuffles do not create a different setup.
+For a given player count, each Scheme with at least one complete legal setup is equally likely to be selected. Given the selected Scheme, each distinct compatible setup is equally likely; selection order and deck shuffles do not create a different setup.
 
 ## Rules authority
 
