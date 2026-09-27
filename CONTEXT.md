@@ -30,7 +30,7 @@ A scenario card that defines setup instructions and can require or exclude setup
 The central villain selected for a game. Its "Always Leads" ability can require a particular Villain or Henchman Group in the setup.
 
 **Always Leads group**:
-The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability, unless a conflicting Scheme takes precedence.
+The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability, unless a conflicting Scheme takes precedence. First Edition Solo ignores this ability.
 
 **Villain Group**:
 A named set of Villain cards that can be selected as one setup component.
@@ -42,7 +42,7 @@ A named set of Henchman cards that can be selected as one setup component.
 The number of players in a game; the First Edition core rules use it to determine setup quantities. This project targets one to five players.
 
 **First Edition Solo mode**:
-The one-player mode with setup rules defined in the First Edition core box.
+The one-player mode with setup rules defined in the First Edition core box. It uses three Heroes, ignores Always Leads, and excludes *Super Hero Civil War* and *Negative Zone Prison Breakout*.
 
 **Advanced Solo**:
 A solo-play variant referenced in community rules material; its origin in the First Edition core box is unverified.

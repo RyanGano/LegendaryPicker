@@ -33,27 +33,39 @@ Help a player prepare a legally configured game of Upper Deck's Marvel Legendary
 
 ## Research so far
 
-The current Upper Deck rulebook is for Marvel Legendary Second Edition (2026), not the selected First Edition. It explicitly distinguishes the editions and says the Second Edition's solo rules replace earlier solo rules, so its card pool and setup table must not be assumed to describe First Edition.
+The First Edition rulebook has now been recovered from its original Upper Deck URL through the Wayback Machine. It is the primary rules source for this project. Its contents manifest identifies 15 Heroes, 7 Villain Groups, 4 Henchman Villain Groups, 4 Masterminds, and 8 Schemes. The rulebook is not a complete card checklist, so the names and relationships of every core-box group still need to be verified.
 
-The original First Edition rulebook appears in BoardGameGeek's file archive as `Legendary_Rulebook_FINAL2.pdf`, posted in 2012 by an account carrying an Upper Deck publisher credit, but the file download is currently unavailable. Upper Deck no longer appears to host that rulebook or a formal First Edition errata document.
+The First Edition rulebook's standard setup uses five Heroes; its Solo section uses three Heroes (42 cards). Its printed 2–5 player table specifies Villain Groups, Henchman Groups, and Bystanders as follows:
 
-The BoardGameGeek *Legendary Marvel FAQ* records answers attributed to designer Devin Low and Upper Deck rules representative JeffP300. A directly attributed designer ruling confirms that a Scheme takes precedence over a Mastermind's "Always Leads" requirement. Its example covers one through five players and confirms one Henchman Group for 1–3 players and two for 4–5 players. The FAQ also confirms the First Edition box has its own Solo setup/scoring rules. It references Advanced Solo, but its origin in the First Edition core box is unverified; Advanced Solo is excluded from v1. These are useful, attributed rulings, but they do not provide the full First Edition per-player setup table.
+| Players | Villain Groups | Henchman Groups | Bystanders |
+|---:|---:|---:|---:|
+| 2 | 2 | 1 | 2 |
+| 3 | 3 | 1 | 8 |
+| 4 | 3 | 2 | 8 |
+| 5 | 4 | 2 | 12 |
+
+Solo has its own setup rules: use three Heroes, one Villain Group, three Henchman cards from one Henchman Group, one Bystander, and the Scheme's normal number of Twists; it ignores the Mastermind's "Always Leads" ability and disallows the Schemes *Super Hero Civil War* and *Negative Zone Prison Breakout*. The general setup calls for five Master Strikes; verify its application to Solo, as well as all Scheme-specific count overrides, before implementation.
+
+The BoardGameGeek *Legendary Marvel FAQ* records additional answers attributed to designer Devin Low and Upper Deck rules representative JeffP300. One directly attributed designer ruling confirms that a Scheme takes precedence over a Mastermind's "Always Leads" requirement. Advanced Solo is mentioned in community rules material, but its origin in the First Edition core box is unverified and it is excluded from v1.
 
 Sources:
 
+- [Archived Upper Deck First Edition rulebook](https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf)
 - [BoardGameGeek Legendary Marvel FAQ](https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ)
 - [Designer ruling: Scheme versus Always Leads](https://boardgamegeek.com/thread/993341/article/12653573)
-- [First Edition rulebook archive listing](https://boardgamegeek.com/filepage/83353/marvel-legendary-rule-book)
+- [First Edition rulebook archive listing](https://boardgamegeek.com/filepage/83353/marvel-legendary-rule-book) — secondary archive listing.
 - [Upper Deck Second Edition rulebook](https://upperdeck.com/wp-content/uploads/2026/08/Legendary-Second-Edition-Rulebook.pdf) — for edition comparison only, not as a First Edition rules source.
 
 ## Open questions
 
-1. **Complete First Edition setup table:** Verify all per-count quantities for one through five players (including Heroes, Villain Groups, Henchman Groups, and Bystanders) from a sufficiently authoritative source. Do not infer missing values from Second Edition.
-2. **Base Solo setup:** Retrieve the exact First Edition Solo setup details from a sufficiently authoritative source. Advanced Solo is out of scope unless its origin and compatibility are later established.
-3. **First Edition card catalog:** Find a trustworthy source for core-box Scheme, Mastermind, Hero, Villain Group, and Henchman Group identities and their setup constraints. The generator needs this data, but the UI need only show selected components/groups and quantities.
+1. **Solo setup and Scheme overrides:** Confirm which general setup components carry into Solo (especially Master Strikes) and verify every Scheme-specific count change. Do not infer from Second Edition.
+2. **First Edition card catalog:** Find a trustworthy source for core-box Scheme, Mastermind, Hero, Villain Group, and Henchman Group identities and their setup constraints. The generator needs this data, but the UI need only show selected components/groups and quantities.
+3. **Empty eligible pool:** Decide what to show if no Scheme has a legal completion for a given player count; the handling of individual impossible Schemes is settled, but this all-impossible case is not.
+4. **Backend deployment details:** Choose a region and compatible low-cost App Service SKU and review its cost before any provisioning.
+
 ## Next planning work
 
-1. Resolve the First Edition player-count table and Solo setup from sourced materials.
-2. Inventory the core-box setup components and represent each rule dependency with its source.
-3. Walk through edge cases (Scheme versus Always Leads, player-count changes, no legal completion) and confirm the proposed uniformity policy against the resulting setup space.
+1. Finish verifying the First Edition Solo setup and Scheme-specific count overrides.
+2. Find and cross-check a complete core-box card/group catalog; keep source provenance with every setup rule.
+3. Decide the behavior for a player count with no eligible Schemes.
 4. Agree on the final domain model and generation behavior before implementing them.
