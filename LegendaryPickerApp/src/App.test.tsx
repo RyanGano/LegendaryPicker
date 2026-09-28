@@ -202,6 +202,41 @@ describe('App', () => {
     expect(setupRequests()).toHaveLength(2)
   })
 
+  it('explains what the app gives until the first setup is shown', async () => {
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+    const intro =
+      'Get a random legal setup and a checklist for laying it out, following the First Edition rules.'
+
+    expect(screen.getByText(intro)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+
+    expect(screen.queryByText(intro)).not.toBeInTheDocument()
+  })
+
+  it('shows a skeleton of the result while a request is pending', async () => {
+    let answer!: () => void
+    setupAnswers.push(() => new Promise((resolve) => (answer = () => resolve(Response.json(setup)))))
+    const user = userEvent.setup()
+    renderApp()
+
+    expect(screen.queryByTestId('setup-skeleton')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    expect(screen.getByTestId('setup-skeleton')).toBeInTheDocument()
+
+    answer()
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+
+    expect(screen.queryByTestId('setup-skeleton')).not.toBeInTheDocument()
+  })
+
   it('shows the loading text, then the wake-up line on a slow response', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     setupAnswers.push(never)
