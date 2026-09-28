@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The design is confirmed and implementation is tracked as GitHub issues. The service holds the First Edition core box catalog and setup rules as data, and `Setup/SetupGenerator` draws a random legal setup and its checklist from them, which `GET /api/setup` serves; the game UI does not exist yet.
+LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The design is confirmed and implementation is tracked as GitHub issues. The service holds the First Edition core box catalog and setup rules as data, and `Setup/SetupGenerator` draws a random legal setup and its checklist from them, which `GET /api/setup` serves. The web app lets a player pick a count and shows the drawn components by name; the full result checklist is not built yet.
 
 ## Read before working
 
@@ -21,9 +21,10 @@ npm install
 npm run dev
 npm run build
 npm run lint
+npm test
 ```
 
-`build` runs `tsc -b` before `vite build`, so it doubles as the type check. Lint is oxlint (`.oxlintrc.json`), not ESLint.
+`build` runs `tsc -b` before `vite build`, so it doubles as the type check. Lint is oxlint (`.oxlintrc.json`), not ESLint. `npm test` runs Vitest with Testing Library in jsdom (config in `vite.config.ts`); tests mock `fetch` and never call the API. `npm run dev` reads the API origin from `VITE_API_BASE_URL` in `.env.development` (`http://localhost:5179`, the service's `http` profile).
 
 Backend (`LegendaryPickerService`, ASP.NET Core Minimal API on .NET 10, run from the repo root):
 
@@ -41,7 +42,7 @@ dotnet test
 
 - The C# API is the rules authority: it owns the catalog, setup rules, and generator. The React app only calls it and renders the result checklist.
 - Hosting is split. GitHub Actions (`.github/workflows/deploy-pages.yml`) builds and deploys only the frontend to GitHub Pages on every push to `main`; `vite.config.ts` switches `base` to `/LegendaryPicker/` when `GITHUB_ACTIONS` is set. The API is planned for Azure App Service, but no Azure resources exist; provisioning needs explicit user authorization plus SKU/region/cost decisions.
-- CI checks come from `.github/workflows/test.yml`, which runs on every pull request and push to `main`: `dotnet test LegendaryPicker.slnx` (job `service`) and `npm ci`, `npm run lint`, `npm run build` in `LegendaryPickerApp` (job `frontend`). It does not gate the Pages deploy.
+- CI checks come from `.github/workflows/test.yml`, which runs on every pull request and push to `main`: `dotnet test LegendaryPicker.slnx` (job `service`) and `npm ci`, `npm run lint`, `npm test`, `npm run build` in `LegendaryPickerApp` (job `frontend`). It does not gate the Pages deploy.
 - CORS origins for the API come from the `Cors:AllowedOrigins` config section.
 - Game data (catalog + sourced setup rules) lives in `LegendaryPickerService/Data/Boxes/<box-id>.json`, one file per box, changed only through reviewed commits: no database or admin UI. `Catalog/BoxCatalog` loads every file at startup (a singleton) and rejects unknown fields, missing values, malformed or duplicate ids, and references that don't resolve. Ids have the form `<boxId>_<kind>_<name>` (`core_mastermind_dr-doom`; kinds `hero`, `villain`, `henchman`, `mastermind`, `scheme`; see Ids in `Docs/Plan.md`); every rule value and setup effect carries a `source` key from `Docs/Plan.md`.
 
