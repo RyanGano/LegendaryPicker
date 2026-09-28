@@ -11,7 +11,7 @@ LegendaryPicker is a React and TypeScript web application with a C# Minimal API 
 
 Start the frontend from `LegendaryPickerApp` with `npm install` followed by `npm run dev`.
 
-Start the backend from the repository root with `dotnet run --project LegendaryPickerService`. The health endpoint is available at `/api/health`.
+Start the backend from the repository root with `dotnet run --project LegendaryPickerService`. The health endpoint is available at `/api/health`, and `/api/setup?players=3` returns a random legal setup for 1 to 5 players (30 requests per minute per client).
 
 ## GitHub Pages
 
