@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The project is in the domain-discovery and rules-research phase: both projects are still scaffolding, and no game models, card data, generator, or game UI exist yet. Implement the generator only after the user confirms the final design.
+LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The design is confirmed and implementation is tracked as GitHub issues. The service holds the First Edition core box catalog and setup rules as data; the generator, its API, and the game UI do not exist yet.
 
 ## Read before working
 
@@ -31,14 +31,18 @@ Backend (`LegendaryPickerService`, ASP.NET Core Minimal API on .NET 10, run from
 dotnet run --project LegendaryPickerService
 ```
 
-There are no test projects or test scripts yet.
+Tests (xUnit, `LegendaryPickerService.Tests`) run from the repo root through `LegendaryPicker.slnx`:
+
+```bash
+dotnet test
+```
 
 ## Architecture
 
 - The C# API is the rules authority: it owns the catalog, setup rules, and generator. The React app only calls it and renders the result checklist.
 - Hosting is split. GitHub Actions (`.github/workflows/deploy-pages.yml`) builds and deploys only the frontend to GitHub Pages on every push to `main`; `vite.config.ts` switches `base` to `/LegendaryPicker/` when `GITHUB_ACTIONS` is set. The API is planned for Azure App Service, but no Azure resources exist; provisioning needs explicit user authorization plus SKU/region/cost decisions.
 - CORS origins for the API come from the `Cors:AllowedOrigins` config section.
-- Game data (catalog + sourced setup rules) is planned as versioned files in the repo, grouped by box (core box, later expansions), and changed only through reviewed commits: no database or admin UI.
+- Game data (catalog + sourced setup rules) lives in `LegendaryPickerService/Data/Boxes/<box-id>.json`, one file per box, changed only through reviewed commits: no database or admin UI. `Catalog/BoxCatalog` loads every file at startup (a singleton) and rejects unknown fields, missing values, malformed or duplicate ids, and references that don't resolve. Ids have the form `<boxId>_<kind>_<name>` (`core_mastermind_dr-doom`; kinds `hero`, `villain`, `henchman`, `mastermind`, `scheme`; see Ids in `Docs/Plan.md`); every rule value and setup effect carries a `source` key from `Docs/Plan.md`.
 
 ## Rules and data constraints
 

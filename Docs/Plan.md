@@ -20,6 +20,7 @@ Help a player prepare a legally configured game of Upper Deck's Marvel Legendary
 - **Architecture:** The C# Minimal API owns the catalog, rules and generator; the React app calls it. GitHub Pages hosts the frontend; the API is planned for Azure App Service on the lowest-cost compatible plan. The API is public, without sign-in, with basic rate limits. No Azure resources exist; provisioning needs an explicit SKU, region and cost decision.
 - **Randomness in tests:** The generator takes an injectable random source. Tests use fixed sequences and assert exact results; no statistical tests. No public seed.
 - **Game data:** Catalog and sourced setup rules live in versioned project data grouped by box. Scheme and Mastermind setup effects are structured data, not code keyed on card names. Changes ship through reviewed commits.
+- **Ids:** Every Hero, Villain Group, Henchman Group, Mastermind and Scheme has the id `<boxId>_<kind>_<name>`, for example `core_mastermind_dr-doom`. `boxId` is the declaring box's id (the core box is `core`), `kind` is one of `hero`, `villain`, `henchman`, `mastermind` or `scheme`, and `name` is kebab-case. Underscores separate the segments; hyphens stay inside a segment. References (Always Leads, a Scheme's required groups) use the full id, so a box can reference another box's groups. The service refuses to start if an id is malformed or duplicated, or if a reference doesn't resolve to a group of the stated type.
 
 ## Sources
 
@@ -27,6 +28,7 @@ Help a player prepare a legally configured game of Upper Deck's Marvel Legendary
 - **F:** [BoardGameGeek Legendary Marvel FAQ](https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ) ([archived copy](https://web.archive.org/web/20210519195532id_/https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ)). Designer (Devin Low) and Upper Deck rulings only.
 - **D1:** [Designer ruling: Scheme over Always Leads](https://boardgamegeek.com/thread/993341/article/12653573).
 - **D2:** Designer rulings that a Scheme's setup overrides the Solo setup: [thread 884926](https://boardgamegeek.com/thread/884926), [thread 898520](https://boardgamegeek.com/thread/898520).
+- **Card:** The printed card itself: a Scheme's Twist count and Setup line, a Mastermind's Always Leads. The Schemes table and Masterminds list below record it.
 - **C1/C2:** Community card catalogs for names and group membership only: [master-strike core set](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/coreset.ts), [nutki/legendary text files](https://github.com/nutki/legendary/tree/master/texttools/Legendary).
 
 ## First Edition core box

@@ -9,6 +9,8 @@ LegendaryPickerService/bin/
 LegendaryPickerService/obj/
 LegendaryPickerService/.vs/
 LegendaryPickerService/*.user
+LegendaryPickerService.Tests/bin/
+LegendaryPickerService.Tests/obj/
 
 # Editor and operating system files
 .vs/
