@@ -13,7 +13,7 @@ public enum GroupType
 public sealed record Sourced<T>(T Value, string Source);
 
 // A count that can depend on the player count. Players is null when the value
-// applies at every player count the Scheme allows.
+// applies at every player count the Scheme allows; player count 1 is Solo.
 public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
 
 public sealed record Box(
@@ -59,7 +59,8 @@ public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> 
 
 public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string> Terms);
 
-public sealed record Mastermind(string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup AlwaysLeads);
+// Setup is null for a Mastermind whose card does not change the setup.
+public sealed record Mastermind(string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup AlwaysLeads, SetupEffects? Setup = null);
 
 public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source);
 
@@ -77,17 +78,33 @@ public enum TermKind
 // page that defines the term, so a reader can follow it to the full rule.
 public sealed record GlossaryTerm(string Id, string Name, TermKind Kind, string Summary, string Source, int Page);
 
+// Setup effects that add to a count rather than set it, which a Scheme or a Mastermind can print.
+// Each adds its value to the count the setup would otherwise use (the player-count table or Solo,
+// after any Scheme value that sets it); a Scheme's are applied before its Mastermind's. Each is a
+// list so its value can depend on the player count: an entry for players [1] applies only in Solo,
+// and a player count no entry names adds nothing.
+public record SetupEffects(
+    IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
+    IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
+    IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
+    IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null);
+
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
+// Heroes and VillainDeckBystanders set a count, replacing the table or Solo value.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
     IReadOnlyList<PlayerCountValue>? Heroes = null,
     Sourced<int>? VillainDeckBystanders = null,
     Sourced<int>? WoundsPerPlayer = null,
-    Sourced<int>? ExtraHenchmanGroups = null,
     IReadOnlyList<RequiredGroup>? RequiredGroups = null,
     Sourced<int>? HeroCardsInVillainDeck = null,
-    Sourced<int>? TwistsBesideScheme = null);
+    Sourced<int>? TwistsBesideScheme = null,
+    IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
+    IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
+    IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
+    IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null)
+    : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
 

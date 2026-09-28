@@ -74,11 +74,11 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     {
         WriteCoreBox(core =>
         {
-            core["schemaVersion"] = 2;
-            core["fieldOnlyVersion2Has"] = true;
+            core["schemaVersion"] = 3;
+            core["fieldOnlyVersion3Has"] = true;
         });
 
-        AssertRejected("schemaVersion 2; this service reads version 1");
+        AssertRejected("schemaVersion 3; this service reads version 2");
     }
 
     [Fact]
@@ -262,6 +262,17 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         WriteCoreBox(core => Scheme(core, "core_scheme_super-hero-civil-war")["setup"]!["heroes"]![0]!["source"] = "X9");
 
         AssertRejected("core_scheme_super-hero-civil-war setup.heroes cites source X9, which is not in this box's sources");
+    }
+
+    [Fact]
+    public void Rejects_a_Mastermind_effect_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => Mastermind(core, "core_mastermind_loki")["setup"] = new JsonObject
+        {
+            ["extraHeroes"] = new JsonArray(new JsonObject { ["players"] = null, ["value"] = 1, ["source"] = "X9" }),
+        });
+
+        AssertRejected("core_mastermind_loki setup.extraHeroes cites source X9, which is not in this box's sources");
     }
 
     [Fact]

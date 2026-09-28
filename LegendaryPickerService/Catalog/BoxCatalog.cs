@@ -12,7 +12,7 @@ namespace LegendaryPickerService.Catalog;
 // kebab-case segment. References name a full id, so a box can reference another box's groups.
 public sealed partial class BoxCatalog
 {
-    public const int SchemaVersion = 1;
+    public const int SchemaVersion = 2;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
@@ -307,7 +307,14 @@ public sealed partial class BoxCatalog
             yield return ("setup.rulings.schemeOverridesSolo", setup.Rulings.SchemeOverridesSolo);
         }
 
-        foreach (var mastermind in box.Masterminds) yield return ($"{mastermind.Id} alwaysLeads", mastermind.AlwaysLeads.Source);
+        foreach (var mastermind in box.Masterminds)
+        {
+            yield return ($"{mastermind.Id} alwaysLeads", mastermind.AlwaysLeads.Source);
+            if (mastermind.Setup is { } effects)
+            {
+                foreach (var rule in EffectSources(mastermind.Id, effects)) yield return rule;
+            }
+        }
 
         foreach (var scheme in box.Schemes)
         {
@@ -317,10 +324,20 @@ public sealed partial class BoxCatalog
             foreach (var value in effect.Heroes ?? []) yield return ($"{scheme.Id} setup.heroes", value.Source);
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
-            if (effect.ExtraHenchmanGroups is { } extra) yield return ($"{scheme.Id} setup.extraHenchmanGroups", extra.Source);
             foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
             if (effect.HeroCardsInVillainDeck is { } heroCards) yield return ($"{scheme.Id} setup.heroCardsInVillainDeck", heroCards.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
+            foreach (var rule in EffectSources(scheme.Id, effect)) yield return rule;
         }
+    }
+
+    private static IEnumerable<(string Rule, string Source)> EffectSources(string owner, SetupEffects effects)
+    {
+        (string Name, IReadOnlyList<PlayerCountValue>? Values)[] counts =
+        [
+            ("extraHeroes", effects.ExtraHeroes), ("extraVillainGroups", effects.ExtraVillainGroups),
+            ("extraHenchmanGroups", effects.ExtraHenchmanGroups), ("extraVillainDeckBystanders", effects.ExtraVillainDeckBystanders),
+        ];
+        return counts.SelectMany(count => (count.Values ?? []).Select(value => ($"{owner} setup.{count.Name}", value.Source)));
     }
 }
