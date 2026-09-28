@@ -230,6 +230,30 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Fact]
+    public void Rejects_a_setup_rule_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => core["setup"]!["solo"]!["heroes"]!["source"] = "X9 p.4");
+
+        AssertRejected("setup.solo.heroes cites source X9, which is not in this box's sources");
+    }
+
+    [Fact]
+    public void Rejects_a_ruling_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => core["setup"]!["rulings"]!["schemeOverridesSolo"] = "D3");
+
+        AssertRejected("setup.rulings.schemeOverridesSolo cites source D3, which is not in this box's sources");
+    }
+
+    [Fact]
+    public void Rejects_a_Scheme_effect_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_super-hero-civil-war")["setup"]!["heroes"]![0]!["source"] = "X9");
+
+        AssertRejected("core_scheme_super-hero-civil-war setup.heroes cites source X9, which is not in this box's sources");
+    }
+
+    [Fact]
     public void Rejects_two_boxes_with_the_same_id()
     {
         WriteCoreBox(_ => { });
