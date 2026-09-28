@@ -1,7 +1,8 @@
 import { useId, type ReactNode } from 'react'
 import type { Component, Setup } from './api/setupApi.ts'
+import { SetupSummary } from './SetupSummary.tsx'
 
-// The setup as a checklist, in the order a player lays it out. Every count and note comes from
+// The drawn cards, then the setup as a checklist in the order a player lays it out. Every count and note comes from
 // the API response as-is: the client never adds, splits or infers a rule. The ticks are local
 // state, so a new setup, which remounts this component, starts unticked.
 export function SetupChecklist({ setup }: { setup: Setup }) {
@@ -11,22 +12,24 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     <article className="setup">
       <h2>Setup for {plural(setup.players, 'player')}</h2>
 
+      <SetupSummary setup={setup} />
+
       <Section title="Scheme and Mastermind">
-        <Item label="Scheme" detail={setup.scheme.name} />
-        <Item label="Mastermind" detail={setup.mastermind.name} />
+        <Item label={setup.scheme.name} detail="Scheme" />
+        <Item label={setup.mastermind.name} detail="Mastermind" />
       </Section>
 
       <Section title="Villain Deck">
         <Item label="Scheme Twists" count={villainDeck.twists} />
         <Item label="Master Strikes" count={villainDeck.masterStrikes} />
         <Item
-          label={plural(setup.villainGroups.length, 'Villain Group')}
-          detail={names(setup.villainGroups)}
+          label={names(setup.villainGroups)}
+          detail={plural(setup.villainGroups.length, 'Villain Group')}
           count={villainDeck.villainCards}
         />
         <Item
-          label={plural(setup.henchmanGroups.length, 'Henchman Group')}
-          detail={names(setup.henchmanGroups)}
+          label={names(setup.henchmanGroups)}
+          detail={plural(setup.henchmanGroups.length, 'Henchman Group')}
           count={villainDeck.henchmanCards}
         />
         <Item label="Bystanders" count={villainDeck.bystanders} />
@@ -41,7 +44,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       )}
 
       <Section title="Hero Deck">
-        <Item label={plural(setup.heroes.length, 'Hero', 'Heroes')} detail={names(setup.heroes)} count={heroDeck.heroCards} />
+        <Item label={names(setup.heroes)} detail={plural(setup.heroes.length, 'Hero', 'Heroes')} count={heroDeck.heroCards} />
         {heroDeck.movedToVillainDeck > 0 && (
           <li className="row">
             <span className="label">Moved to the Villain Deck</span>{' '}
@@ -102,7 +105,8 @@ function Section({
   )
 }
 
-// One line to lay out, with a box to tick once it is on the table.
+// One line to lay out, with a box to tick once it is on the table. Where the line is drawn cards,
+// their names are the label and the detail says what they are.
 function Item({ label, detail, count }: { label: string; detail?: string; count?: number }) {
   return (
     <li className="row">

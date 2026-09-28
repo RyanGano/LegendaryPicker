@@ -109,11 +109,11 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: '3' }))
     await user.click(screen.getByRole('button', { name: 'Generate' }))
 
-    expect(await screen.findByText('Midtown Bank Robbery')).toBeInTheDocument()
-    expect(screen.getByText('Magneto')).toBeInTheDocument()
-    expect(screen.getByLabelText('3 Heroes Wolverine, Storm, Hulk 42')).toBeInTheDocument()
-    expect(screen.getByLabelText('1 Villain Group Brotherhood 8')).toBeInTheDocument()
-    expect(screen.getByLabelText('1 Henchman Group Savage Land Mutates 10')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Magneto' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Wolverine, Storm, Hulk 3 Heroes 42')).toBeInTheDocument()
+    expect(screen.getByLabelText('Brotherhood 1 Villain Group 8')).toBeInTheDocument()
+    expect(screen.getByLabelText('Savage Land Mutates 1 Henchman Group 10')).toBeInTheDocument()
     expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3$/)])
   })
 
@@ -126,7 +126,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Generate' }))
     await user.click(await screen.findByRole('button', { name: 'Generate another' }))
 
-    expect(await screen.findByText('Portals to the Dark Dimension')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Portals to the Dark Dimension' })).toBeInTheDocument()
     expect(setupRequests()).toEqual([
       expect.stringMatching(/players=3$/),
       expect.stringMatching(/players=3$/),
@@ -203,7 +203,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Generate' }))
     await user.click(await screen.findByRole('button', { name: 'Retry' }))
 
-    expect(await screen.findByText('Midtown Bank Robbery')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })).toBeInTheDocument()
     expect(setupRequests()).toEqual([
       expect.stringMatching(/\/api\/setup\?players=3$/),
       expect.stringMatching(/\/api\/setup\?players=3$/),
@@ -220,7 +220,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Generate' }))
 
     expect(await screen.findByRole('button', { name: 'Retry' })).toBeInTheDocument()
-    expect(screen.queryByText('Midtown Bank Robbery')).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Midtown Bank Robbery' })).not.toBeInTheDocument()
   })
 
   it('explains a noEligibleScheme result', async () => {

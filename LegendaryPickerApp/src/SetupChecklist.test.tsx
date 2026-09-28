@@ -19,6 +19,87 @@ const rows = (sectionName: string) =>
   within(section(sectionName)).getAllByRole('listitem').map((row) => row.textContent)
 
 describe('SetupChecklist', () => {
+  it('puts the drawn Scheme and Mastermind names first, as headings', () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    const summary = section('Drawn cards')
+    expect(within(summary).getAllByRole('heading', { level: 3 }).slice(0, 2).map((h) => h.textContent)).toEqual([
+      'Legacy Virus',
+      'Magneto',
+    ])
+    expect(screen.getAllByRole('heading', { level: 3 })[0]).toHaveTextContent('Legacy Virus')
+  })
+
+  it('shows each drawn Hero and group as its own item under its type', () => {
+    renderChecklist(killbots)
+
+    const items = (name: string) => within(section(name)).getAllByRole('listitem').map((item) => item.textContent)
+    expect(items('Heroes')).toEqual(['Hulk', 'Deadpool', 'Hawkeye', 'Captain America', 'Black Widow'])
+    expect(items('Villain Groups')).toEqual(['Masters of Evil', 'Enemies of Asgard', 'Radiation'])
+    expect(items('Henchman Groups')).toEqual(['Doombot Legion', 'Hand Ninjas'])
+  })
+
+  it('names a single drawn group in the singular', () => {
+    renderChecklist(soloSecretInvasion)
+
+    expect(within(section('Villain Group')).getAllByRole('listitem').map((item) => item.textContent)).toEqual(['Skrulls'])
+    expect(within(section('Henchman Group')).getAllByRole('listitem').map((item) => item.textContent)).toEqual([
+      'Doombot Legion',
+    ])
+  })
+
+  it("tags the Mastermind card with the API's Always Leads note, word for word", () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    const mastermind = screen.getByRole('heading', { name: 'Magneto', level: 3 }).parentElement!
+    expect(within(mastermind).getAllByRole('listitem').map((tag) => tag.textContent)).toEqual([
+      'Magneto always leads Brotherhood',
+    ])
+  })
+
+  it('tags the Mastermind card when Solo ignores its Always Leads', () => {
+    renderChecklist(soloSecretInvasion)
+
+    const mastermind = screen.getByRole('heading', { name: 'Loki', level: 3 }).parentElement!
+    expect(within(mastermind).getAllByRole('listitem').map((tag) => tag.textContent)).toEqual([
+      "Solo ignores Loki's Always Leads",
+    ])
+  })
+
+  it('tags the Mastermind card when a required group displaces its Always Leads group', () => {
+    // No fixture draws this case, so the notes follow the text SetupGenerator writes for it.
+    renderChecklist({
+      ...legacyVirusThreePlayers,
+      notes: [
+        { text: 'Scheme requires Skrulls', citation: 'Card', link: null },
+        {
+          text: "Scheme requires Skrulls, so Magneto's Always Leads group Brotherhood is dropped",
+          citation: 'D1',
+          link: null,
+        },
+      ],
+    })
+
+    const mastermind = screen.getByRole('heading', { name: 'Magneto', level: 3 }).parentElement!
+    expect(within(mastermind).getAllByRole('listitem').map((tag) => tag.textContent)).toEqual([
+      "Scheme requires Skrulls, so Magneto's Always Leads group Brotherhood is dropped",
+    ])
+  })
+
+  it('leaves the Scheme card untagged', () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    const scheme = screen.getByRole('heading', { name: 'Legacy Virus', level: 3 }).parentElement!
+    expect(within(scheme).queryByRole('listitem')).not.toBeInTheDocument()
+  })
+
+  it('lists the Scheme and Mastermind by name in the checklist', () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    expect(rows('Scheme and Mastermind')).toEqual(['Legacy Virus Scheme', 'Magneto Mastermind'])
+    expect(rows('Hero Deck')).toContain('Hawkeye, Captain America, Black Widow, Cyclops, Deadpool 5 Heroes 70')
+  })
+
   it('shows the 2-player Cosmic Cube deck totals', () => {
     renderChecklist(twoPlayerCosmicCube)
 
@@ -30,6 +111,11 @@ describe('SetupChecklist', () => {
     renderChecklist(killbots)
 
     expect(screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      "Replace Earth's Leaders with Killbots",
+      'Dr. Doom',
+      'Heroes',
+      'Villain Groups',
+      'Henchman Groups',
       'Scheme and Mastermind',
       'Villain Deck',
       'Beside the Scheme',
@@ -44,15 +130,15 @@ describe('SetupChecklist', () => {
     renderChecklist(soloSecretInvasion)
 
     expect(rows('Hero Deck')).toEqual([
-      '6 Heroes Deadpool, Hulk, Cyclops, Storm, Black Widow, Iron Man 84',
+      'Deadpool, Hulk, Cyclops, Storm, Black Widow, Iron Man 6 Heroes 84',
       'Moved to the Villain Deck −12',
       'Total 72',
     ])
     expect(rows('Villain Deck')).toEqual([
       'Scheme Twists 8',
       'Master Strikes 1',
-      '1 Villain Group Skrulls 8',
-      '1 Henchman Group Doombot Legion 3',
+      'Skrulls 1 Villain Group 8',
+      'Doombot Legion 1 Henchman Group 3',
       'Bystanders 1',
       'Hero cards from the Hero Deck 12',
       'Total 33',
