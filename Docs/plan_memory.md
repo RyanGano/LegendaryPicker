@@ -8,7 +8,7 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 ## Where things stand
 
 - Repository: [RyanGano/LegendaryPicker](https://github.com/RyanGano/LegendaryPicker), branch `main`.
-- `LegendaryPickerApp` is still the Vite starter page; `LegendaryPickerService` exposes only `/api/health` with CORS, and loads the core box catalog and setup rules from `Data/Boxes/core.json`. `Setup/SetupGenerator` draws a setup and its checklist (issue #3); no endpoint exposes it yet (#4).
+- `LegendaryPickerApp` is still the Vite starter page; `LegendaryPickerService` loads the core box catalog and setup rules from `Data/Boxes/core.json`, and serves `/api/health` and the rate-limited `GET /api/setup?players=1..5` (issue #4), which returns a `Setup/SetupGenerator` draw (issue #3). The frontend does not call it yet (#5).
 - GitHub Pages deploys the frontend from `main`: https://ryangano.github.io/LegendaryPicker/.
 - No Azure resources exist. The user chose App Service on the lowest-cost compatible plan; SKU, region and cost are undecided and provisioning needs explicit authorization.
 
