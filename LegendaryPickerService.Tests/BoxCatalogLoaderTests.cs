@@ -58,6 +58,17 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("twists");
     }
 
+    [Theory]
+    [InlineData("bystanders")]
+    [InlineData("wounds")]
+    [InlineData("officers")]
+    public void Rejects_a_base_game_that_does_not_list_a_shared_stack(string stack)
+    {
+        WriteCoreBox(core => core["components"]!.AsObject().Remove(stack));
+
+        AssertRejected($"base game core has a setup section but no components.{stack}");
+    }
+
     [Fact]
     public void Rejects_another_schema_version_before_reading_its_fields()
     {

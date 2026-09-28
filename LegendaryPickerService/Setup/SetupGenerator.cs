@@ -110,7 +110,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     plan.HeroCardsMoved),
                 new HeroDeck(heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value), plan.HeroCardsMoved),
                 plan.TwistsBeside,
-                new SetupStacks(plan.Wounds, rules.SharedStacks.Officers.Value, rules.SharedStacks.Bystanders.Value - plan.Bystanders),
+                new SetupStacks(
+                    plan.Wounds,
+                    Supply(components => components.Officers),
+                    Supply(components => components.Bystanders) - plan.Bystanders,
+                    boxes.Any(box => box.Components.Sidekicks is not null) ? Supply(components => components.Sidekicks) : null),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value),
                 notes,
                 boxes);
@@ -148,7 +152,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     $"{bystanders} Bystanders in the Villain Deck", $"puts {bystanders} Bystanders in the Villain Deck", schemeBystanders.Source));
             }
 
-            var wounds = rules.SharedStacks.Wounds.Value;
+            var wounds = Supply(components => components.Wounds);
             if (effect.WoundsPerPlayer is { } woundsPerPlayer)
             {
                 wounds = woundsPerPlayer.Value * players;
@@ -200,8 +204,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 && Slots(plan.HenchmanGroups, GroupType.Henchman) <= _henchmanGroups.Count
                 && plan.Heroes <= _heroes.Count
                 && plan.HeroCardsMoved <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
-                && plan.Bystanders <= rules.SharedStacks.Bystanders.Value
-                && plan.Twists + plan.TwistsBeside <= boxes.Sum(box => box.Components.SchemeTwists.Value);
+                && plan.Bystanders <= Supply(components => components.Bystanders)
+                && plan.Twists + plan.TwistsBeside <= Supply(components => components.SchemeTwists);
         }
 
         // Fills one group type's slots: the Scheme's required groups first, then the Always Leads
@@ -266,6 +270,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         }
 
         private T DrawOne<T>(IReadOnlyList<T> options) => options[random.Next(options.Count)];
+
+        // How many cards of one kind the included boxes hold between them.
+        private int Supply(Func<BoxComponents, Sourced<int>?> count) => boxes.Sum(box => count(box.Components)?.Value ?? 0);
 
         private HashSet<string> GroupIds() =>
             _villainGroups.Select(g => g.Id).Concat(_henchmanGroups.Select(g => g.Id)).ToHashSet();

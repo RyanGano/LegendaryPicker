@@ -40,7 +40,13 @@ public sealed record HeroDeck(int HeroCards, int MovedToVillainDeck)
     public int Total => HeroCards - MovedToVillainDeck;
 }
 
-public sealed record SetupStacks(int Wounds, int Officers, int Bystanders);
+// Each stack holds the cards every included box adds to it, less what the setup moves out, unless
+// the Scheme sets its size. Sidekicks is null, and left out of the response, when no included box has any.
+public sealed record SetupStacks(
+    int Wounds,
+    int Officers,
+    int Bystanders,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Sidekicks = null);
 
 // Each player's starting deck.
 public sealed record PlayerDeck(int Agents, int Troopers);
