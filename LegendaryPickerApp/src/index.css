@@ -218,6 +218,112 @@ button:disabled {
   gap: var(--space-3);
 }
 
+/* The drawn cards. Each card or tile takes its type's accent, and its name is the main text. */
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.headline-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.headline-card {
+  --type: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--type);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.scheme {
+  --type: var(--scheme);
+}
+
+.mastermind {
+  --type: var(--mastermind);
+}
+
+.hero {
+  --type: var(--hero);
+}
+
+.villain {
+  --type: var(--villain);
+}
+
+.henchman {
+  --type: var(--henchman);
+}
+
+.card-type {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--type);
+}
+
+.setup .headline-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1.05;
+  text-transform: none;
+  color: var(--text);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.setup .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.tag {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  border: 1px solid var(--type);
+  border-radius: 999px;
+}
+
+.setup .tile-heading {
+  margin-bottom: var(--space-2);
+}
+
+.setup .tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: var(--space-2);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--type);
+  border-radius: var(--radius-md);
+}
+
+.tile-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
 /* The checklist: one column of rows, the label wrapping and the count right-aligned beside it. */
 .setup {
   display: flex;
@@ -277,6 +383,7 @@ button:disabled {
 
 .row .detail {
   display: block;
+  font-size: var(--text-sm);
   color: var(--muted);
 }
 
