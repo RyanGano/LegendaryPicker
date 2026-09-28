@@ -28,6 +28,7 @@ public sealed record Box(
     IReadOnlyList<HenchmanGroup> HenchmanGroups,
     IReadOnlyList<Mastermind> Masterminds,
     IReadOnlyList<Scheme> Schemes,
+    IReadOnlyList<GlossaryTerm> Glossary,
     SetupRules Setup);
 
 // Where a source key (the part of a Source before the first space, such as "R" in "R p.20") is published.
@@ -40,17 +41,30 @@ public sealed record BoxComponents(
     Sourced<int> HenchmanGroupCards,
     Sourced<int> SchemeTwists);
 
-public sealed record Hero(string Id, string Name);
+// Team, Classes and Terms name glossary term ids. Team is null for an unaffiliated Hero.
+public sealed record Hero(string Id, string Name, string? Team, IReadOnlyList<string> Classes, IReadOnlyList<string> Terms);
 
-public sealed record VillainGroup(string Id, string Name);
+public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> Terms);
 
-public sealed record HenchmanGroup(string Id, string Name);
+public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string> Terms);
 
-public sealed record Mastermind(string Id, string Name, AlwaysLeadsGroup AlwaysLeads);
+public sealed record Mastermind(string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup AlwaysLeads);
 
 public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source);
 
-public sealed record Scheme(string Id, string Name, SchemeSetup Setup);
+public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms, SchemeSetup Setup);
+
+public enum TermKind
+{
+    Team,
+    Class,
+    Keyword,
+}
+
+// A team, Hero class or keyword a component uses, explained in a short summary written in our own
+// words: never rulebook or card text. Source is a key in the box's Sources and Page the rulebook
+// page that defines the term, so a reader can follow it to the full rule.
+public sealed record GlossaryTerm(string Id, string Name, TermKind Kind, string Summary, string Source, int Page);
 
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
 public sealed record SchemeSetup(

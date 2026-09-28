@@ -301,7 +301,88 @@ public class CoreBoxCatalogTests
         Assert.All(sources, source => Assert.False(string.IsNullOrWhiteSpace(source)));
     }
 
+    [Fact]
+    public void Core_glossary_has_4_teams_5_classes_and_8_keywords()
+    {
+        Assert.Equal(
+            ["Avengers", "S.H.I.E.L.D.", "Spider Friends", "X-Men"],
+            Core.Glossary.Where(term => term.Kind == TermKind.Team).Select(term => term.Name));
+        Assert.Equal(
+            ["Covert", "Instinct", "Ranged", "Strength", "Tech"],
+            Core.Glossary.Where(term => term.Kind == TermKind.Class).Select(term => term.Name));
+        Assert.Equal(
+            [
+                "Always Leads", "Ambush", "Escape", "Fight", "Master Strike",
+                "Mastermind Tactic", "Rescue a Bystander", "Scheme Twist",
+            ],
+            Core.Glossary.Where(term => term.Kind == TermKind.Keyword).Select(term => term.Name));
+    }
+
+    [Fact]
+    public void Every_core_term_cites_the_rulebook_page_that_defines_it()
+    {
+        Assert.Equal(
+            [
+                "Avengers R p.18", "S.H.I.E.L.D. R p.18", "Spider Friends R p.18", "X-Men R p.18",
+                "Covert R p.18", "Instinct R p.18", "Ranged R p.18", "Strength R p.18", "Tech R p.18",
+                "Always Leads R p.6", "Ambush R p.9", "Escape R p.9", "Fight R p.13", "Master Strike R p.10",
+                "Mastermind Tactic R p.14", "Rescue a Bystander R p.15", "Scheme Twist R p.10",
+            ],
+            Core.Glossary.Select(term => $"{term.Name} {term.Source} p.{term.Page}"));
+    }
+
+    [Theory]
+    [InlineData("Black Widow", "Avengers", "Covert Tech", "Rescue a Bystander")]
+    [InlineData("Deadpool", null, "Covert Instinct Tech", "")]
+    [InlineData("Nick Fury", "S.H.I.E.L.D.", "Covert Strength Tech", "")]
+    [InlineData("Spider-Man", "Spider Friends", "Covert Instinct Strength Tech", "Rescue a Bystander")]
+    [InlineData("Wolverine", "X-Men", "Instinct", "")]
+    public void Hero_lists_its_team_classes_and_keywords(string hero, string? team, string classes, string keywords)
+    {
+        var entry = Core.Heroes.Single(h => h.Name == hero);
+
+        Assert.Equal(team, entry.Team is null ? null : TermName(entry.Team));
+        Assert.Equal(classes, string.Join(" ", entry.Classes.Select(TermName)));
+        Assert.Equal(keywords, string.Join(" ", entry.Terms.Select(TermName)));
+    }
+
+    [Fact]
+    public void Heroes_per_team_match_the_card_catalogs()
+    {
+        var teams = Core.Heroes.GroupBy(hero => hero.Team is null ? "none" : TermName(hero.Team))
+            .Select(group => $"{group.Key} {group.Count()}");
+
+        Assert.Equal(["Avengers 6", "X-Men 6", "none 1", "S.H.I.E.L.D. 1", "Spider Friends 1"], teams);
+    }
+
+    [Theory]
+    [InlineData("Brotherhood", "Ambush Escape Fight")]
+    [InlineData("HYDRA", "Escape Fight")]
+    [InlineData("Radiation", "Ambush Escape Fight Rescue a Bystander")]
+    [InlineData("Skrulls", "Ambush Fight")]
+    public void Villain_Group_lists_its_keywords(string group, string keywords)
+    {
+        Assert.Equal(keywords, string.Join(" ", Core.VillainGroups.Single(g => g.Name == group).Terms.Select(TermName)));
+    }
+
+    [Fact]
+    public void Every_Henchman_Group_uses_Fight_and_every_Scheme_uses_Scheme_Twist()
+    {
+        Assert.All(Core.HenchmanGroups, group => Assert.Equal(["Fight"], group.Terms.Select(TermName)));
+        Assert.All(Core.Schemes, scheme => Assert.Equal(["Scheme Twist"], scheme.Terms.Select(TermName)));
+    }
+
+    [Theory]
+    [InlineData("Dr. Doom", "Always Leads Fight Master Strike Mastermind Tactic")]
+    [InlineData("Magneto", "Always Leads Fight Master Strike Mastermind Tactic Rescue a Bystander")]
+    public void Mastermind_lists_its_keywords(string mastermind, string keywords)
+    {
+        Assert.Equal(keywords, string.Join(" ", Core.Masterminds.Single(m => m.Name == mastermind).Terms.Select(TermName)));
+    }
+
     private static Scheme SchemeNamed(string name) => Core.Schemes.Single(scheme => scheme.Name == name);
+
+    private static string TermName(string id) => Core.Glossary.Single(term => term.Id == id).Name;
 
     private static string GroupName(string id, GroupType type) => type switch
     {

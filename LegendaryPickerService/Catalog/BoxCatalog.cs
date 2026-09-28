@@ -14,6 +14,9 @@ public sealed partial class BoxCatalog
 {
     public const int SchemaVersion = 1;
 
+    // Glossary summaries are short paraphrases in our own words, never rulebook text.
+    public const int MaxSummaryWords = 40;
+
     public static string DefaultDirectory { get; } = Path.Combine(AppContext.BaseDirectory, "Data", "Boxes");
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
@@ -108,6 +111,8 @@ public sealed partial class BoxCatalog
 
                 Declare(path, id);
             }
+
+            ValidateTerms(path, box);
         }
 
         var groups = files
@@ -131,7 +136,69 @@ public sealed partial class BoxCatalog
                 }
             }
         }
+
+        var terms = files
+            .SelectMany(file => file.Box.Glossary)
+            .ToDictionary(term => term.Id, term => term.Kind, StringComparer.Ordinal);
+
+        foreach (var (path, box) in files)
+        {
+            foreach (var (owner, termId, termKind) in TermReferences(box))
+            {
+                var kind = KindOf(termKind);
+                if (!terms.TryGetValue(termId, out var found))
+                {
+                    throw new InvalidDataException($"{path}: {owner} references {kind} term {termId}, which no loaded box declares.");
+                }
+
+                if (found != termKind)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {owner} references {termId} as a {kind} term, but it is a {KindOf(found)} term.");
+                }
+            }
+        }
     }
+
+    // A term needs a summary short enough to read at a glance, and a source this box links,
+    // so the reader can follow it to the page with the full rule.
+    private static void ValidateTerms(string path, Box box)
+    {
+        var sourceKeys = box.Sources.Select(source => source.Key).ToHashSet(StringComparer.Ordinal);
+        foreach (var term in box.Glossary)
+        {
+            if (string.IsNullOrWhiteSpace(term.Summary))
+            {
+                throw new InvalidDataException($"{path}: {term.Id} has no summary.");
+            }
+
+            var words = term.Summary.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
+            if (words > MaxSummaryWords)
+            {
+                throw new InvalidDataException(
+                    $"{path}: {term.Id} has a {words}-word summary; summaries are at most {MaxSummaryWords} words.");
+            }
+
+            if (!sourceKeys.Contains(term.Source))
+            {
+                throw new InvalidDataException($"{path}: {term.Id} cites source {term.Source}, which is not in this box's sources.");
+            }
+
+            if (term.Page < 1)
+            {
+                throw new InvalidDataException($"{path}: {term.Id} has page {term.Page}; a term cites the page that defines it.");
+            }
+        }
+    }
+
+    // How a term kind is written in box files and API responses.
+    public static string KindOf(TermKind kind) => kind switch
+    {
+        TermKind.Team => "team",
+        TermKind.Class => "class",
+        TermKind.Keyword => "keyword",
+        _ => throw new ArgumentOutOfRangeException(nameof(kind)),
+    };
 
     private static string KindOf(GroupType type) => type switch
     {
@@ -145,10 +212,21 @@ public sealed partial class BoxCatalog
             .Concat(box.VillainGroups.Select(x => ("villain", x.Id)))
             .Concat(box.HenchmanGroups.Select(x => ("henchman", x.Id)))
             .Concat(box.Masterminds.Select(x => ("mastermind", x.Id)))
-            .Concat(box.Schemes.Select(x => ("scheme", x.Id)));
+            .Concat(box.Schemes.Select(x => ("scheme", x.Id)))
+            .Concat(box.Glossary.Select(x => ("term", x.Id)));
 
     private static IEnumerable<(string Owner, string GroupId, GroupType GroupType)> GroupReferences(Box box) =>
         box.Masterminds.Select(m => (m.Id, m.AlwaysLeads.GroupId, m.AlwaysLeads.GroupType))
             .Concat(box.Schemes.SelectMany(s =>
                 (s.Setup.RequiredGroups ?? []).Select(g => (s.Id, g.GroupId, g.GroupType))));
+
+    // A Hero's team and classes, then every component's keywords.
+    private static IEnumerable<(string Owner, string TermId, TermKind Kind)> TermReferences(Box box) =>
+        box.Heroes.SelectMany(h => (h.Team is null ? [] : new[] { (h.Id, h.Team, TermKind.Team) })
+                .Concat(h.Classes.Select(c => (h.Id, c, TermKind.Class)))
+                .Concat(h.Terms.Select(t => (h.Id, t, TermKind.Keyword))))
+            .Concat(box.VillainGroups.SelectMany(g => g.Terms.Select(t => (g.Id, t, TermKind.Keyword))))
+            .Concat(box.HenchmanGroups.SelectMany(g => g.Terms.Select(t => (g.Id, t, TermKind.Keyword))))
+            .Concat(box.Masterminds.SelectMany(m => m.Terms.Select(t => (m.Id, t, TermKind.Keyword))))
+            .Concat(box.Schemes.SelectMany(s => s.Terms.Select(t => (s.Id, t, TermKind.Keyword))));
 }

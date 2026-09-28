@@ -16,56 +16,60 @@
     "schemeTwists": { "value": 11, "source": "R p.22" }
   },
   "heroes": [
-    { "id": "core_hero_black-widow", "name": "Black Widow" },
-    { "id": "core_hero_captain-america", "name": "Captain America" },
-    { "id": "core_hero_cyclops", "name": "Cyclops" },
-    { "id": "core_hero_deadpool", "name": "Deadpool" },
-    { "id": "core_hero_emma-frost", "name": "Emma Frost" },
-    { "id": "core_hero_gambit", "name": "Gambit" },
-    { "id": "core_hero_hawkeye", "name": "Hawkeye" },
-    { "id": "core_hero_hulk", "name": "Hulk" },
-    { "id": "core_hero_iron-man", "name": "Iron Man" },
-    { "id": "core_hero_nick-fury", "name": "Nick Fury" },
-    { "id": "core_hero_rogue", "name": "Rogue" },
-    { "id": "core_hero_spider-man", "name": "Spider-Man" },
-    { "id": "core_hero_storm", "name": "Storm" },
-    { "id": "core_hero_thor", "name": "Thor" },
-    { "id": "core_hero_wolverine", "name": "Wolverine" }
+    { "id": "core_hero_black-widow", "name": "Black Widow", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_tech"], "terms": ["core_term_rescue-a-bystander"] },
+    { "id": "core_hero_captain-america", "name": "Captain America", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": [] },
+    { "id": "core_hero_cyclops", "name": "Cyclops", "team": "core_term_x-men", "classes": ["core_term_ranged", "core_term_strength"], "terms": [] },
+    { "id": "core_hero_deadpool", "name": "Deadpool", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": [] },
+    { "id": "core_hero_emma-frost", "name": "Emma Frost", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": [] },
+    { "id": "core_hero_gambit", "name": "Gambit", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged"], "terms": [] },
+    { "id": "core_hero_hawkeye", "name": "Hawkeye", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["core_term_rescue-a-bystander"] },
+    { "id": "core_hero_hulk", "name": "Hulk", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_strength"], "terms": [] },
+    { "id": "core_hero_iron-man", "name": "Iron Man", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": [] },
+    { "id": "core_hero_nick-fury", "name": "Nick Fury", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_strength", "core_term_tech"], "terms": [] },
+    { "id": "core_hero_rogue", "name": "Rogue", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_strength"], "terms": [] },
+    { "id": "core_hero_spider-man", "name": "Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["core_term_rescue-a-bystander"] },
+    { "id": "core_hero_storm", "name": "Storm", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["core_term_rescue-a-bystander"] },
+    { "id": "core_hero_thor", "name": "Thor", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_strength"], "terms": [] },
+    { "id": "core_hero_wolverine", "name": "Wolverine", "team": "core_term_x-men", "classes": ["core_term_instinct"], "terms": [] }
   ],
   "villainGroups": [
-    { "id": "core_villain_brotherhood", "name": "Brotherhood" },
-    { "id": "core_villain_enemies-of-asgard", "name": "Enemies of Asgard" },
-    { "id": "core_villain_hydra", "name": "HYDRA" },
-    { "id": "core_villain_masters-of-evil", "name": "Masters of Evil" },
-    { "id": "core_villain_radiation", "name": "Radiation" },
-    { "id": "core_villain_skrulls", "name": "Skrulls" },
-    { "id": "core_villain_spider-foes", "name": "Spider-Foes" }
+    { "id": "core_villain_brotherhood", "name": "Brotherhood", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"] },
+    { "id": "core_villain_enemies-of-asgard", "name": "Enemies of Asgard", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"] },
+    { "id": "core_villain_hydra", "name": "HYDRA", "terms": ["core_term_escape", "core_term_fight"] },
+    { "id": "core_villain_masters-of-evil", "name": "Masters of Evil", "terms": ["core_term_escape", "core_term_fight", "core_term_rescue-a-bystander"] },
+    { "id": "core_villain_radiation", "name": "Radiation", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "core_term_rescue-a-bystander"] },
+    { "id": "core_villain_skrulls", "name": "Skrulls", "terms": ["core_term_ambush", "core_term_fight"] },
+    { "id": "core_villain_spider-foes", "name": "Spider-Foes", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"] }
   ],
   "henchmanGroups": [
-    { "id": "core_henchman_doombot-legion", "name": "Doombot Legion" },
-    { "id": "core_henchman_hand-ninjas", "name": "Hand Ninjas" },
-    { "id": "core_henchman_savage-land-mutates", "name": "Savage Land Mutates" },
-    { "id": "core_henchman_sentinel", "name": "Sentinel" }
+    { "id": "core_henchman_doombot-legion", "name": "Doombot Legion", "terms": ["core_term_fight"] },
+    { "id": "core_henchman_hand-ninjas", "name": "Hand Ninjas", "terms": ["core_term_fight"] },
+    { "id": "core_henchman_savage-land-mutates", "name": "Savage Land Mutates", "terms": ["core_term_fight"] },
+    { "id": "core_henchman_sentinel", "name": "Sentinel", "terms": ["core_term_fight"] }
   ],
   "masterminds": [
     {
       "id": "core_mastermind_dr-doom",
       "name": "Dr. Doom",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
       "alwaysLeads": { "groupId": "core_henchman_doombot-legion", "groupType": "henchman", "source": "Card" }
     },
     {
       "id": "core_mastermind_loki",
       "name": "Loki",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
       "alwaysLeads": { "groupId": "core_villain_enemies-of-asgard", "groupType": "villain", "source": "Card" }
     },
     {
       "id": "core_mastermind_magneto",
       "name": "Magneto",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "core_term_rescue-a-bystander"],
       "alwaysLeads": { "groupId": "core_villain_brotherhood", "groupType": "villain", "source": "Card" }
     },
     {
       "id": "core_mastermind_red-skull",
       "name": "Red Skull",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
       "alwaysLeads": { "groupId": "core_villain_hydra", "groupType": "villain", "source": "Card" }
     }
   ],
@@ -73,6 +77,7 @@
     {
       "id": "core_scheme_legacy-virus",
       "name": "Legacy Virus",
+      "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "woundsPerPlayer": { "value": 6, "source": "Card" }
@@ -81,6 +86,7 @@
     {
       "id": "core_scheme_midtown-bank-robbery",
       "name": "Midtown Bank Robbery",
+      "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "villainDeckBystanders": { "value": 12, "source": "Card" }
@@ -89,6 +95,7 @@
     {
       "id": "core_scheme_negative-zone-prison-breakout",
       "name": "Negative Zone Prison Breakout",
+      "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "allowedPlayerCounts": { "value": [2, 3, 4, 5], "source": "R p.20" },
@@ -98,6 +105,7 @@
     {
       "id": "core_scheme_portals-to-the-dark-dimension",
       "name": "Portals to the Dark Dimension",
+      "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 7, "source": "Card" }]
       }
@@ -105,6 +113,7 @@
     {
       "id": "core_scheme_replace-earths-leaders-with-killbots",
       "name": "Replace Earth's Leaders with Killbots",
+      "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 5, "source": "Card" }],
         "twistsBesideScheme": { "value": 3, "source": "Card" },
@@ -114,6 +123,7 @@
     {
       "id": "core_scheme_secret-invasion-of-the-skrull-shapeshifters",
       "name": "Secret Invasion of the Skrull Shapeshifters",
+      "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "heroes": [{ "players": null, "value": 6, "source": "Card" }],
@@ -124,6 +134,7 @@
     {
       "id": "core_scheme_super-hero-civil-war",
       "name": "Super Hero Civil War",
+      "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [
           { "players": [2, 3], "value": 8, "source": "Card" },
@@ -136,10 +147,30 @@
     {
       "id": "core_scheme_unleash-the-power-of-the-cosmic-cube",
       "name": "Unleash the Power of the Cosmic Cube",
+      "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }]
       }
     }
+  ],
+  "glossary": [
+    { "id": "core_term_avengers", "name": "Avengers", "kind": "team", "summary": "A Hero team. In the core box its members are Black Widow, Captain America, Hawkeye, Hulk, Iron Man and Thor.", "source": "R", "page": 18 },
+    { "id": "core_term_shield", "name": "S.H.I.E.L.D.", "kind": "team", "summary": "A Hero team. Nick Fury is its core box Hero, and the Agents, Troopers and Officers that every game uses belong to it too.", "source": "R", "page": 18 },
+    { "id": "core_term_spider-friends", "name": "Spider Friends", "kind": "team", "summary": "A Hero team. Spider-Man is its only member in the core box.", "source": "R", "page": 18 },
+    { "id": "core_term_x-men", "name": "X-Men", "kind": "team", "summary": "A Hero team. In the core box its members are Cyclops, Emma Frost, Gambit, Rogue, Storm and Wolverine.", "source": "R", "page": 18 },
+    { "id": "core_term_covert", "name": "Covert", "kind": "class", "summary": "A Hero class of fighters who prefer trickery and careful plans to open force.", "source": "R", "page": 18 },
+    { "id": "core_term_instinct", "name": "Instinct", "kind": "class", "summary": "A Hero class of fighters who trust their gut and their senses in close combat.", "source": "R", "page": 18 },
+    { "id": "core_term_ranged", "name": "Ranged", "kind": "class", "summary": "A Hero class of fighters who deal damage from a distance, by any kind of projected power.", "source": "R", "page": 18 },
+    { "id": "core_term_strength", "name": "Strength", "kind": "class", "summary": "A Hero class of fighters whose power is might, whether of body or of will and leadership.", "source": "R", "page": 18 },
+    { "id": "core_term_tech", "name": "Tech", "kind": "class", "summary": "A Hero class of fighters whose power comes from gear and science rather than the body.", "source": "R", "page": 18 },
+    { "id": "core_term_always-leads", "name": "Always Leads", "kind": "keyword", "summary": "Names the one Villain or Henchman Group this Mastermind brings to every game. That group takes one of the setup's group slots; random draws fill the rest.", "source": "R", "page": 6 },
+    { "id": "core_term_ambush", "name": "Ambush", "kind": "keyword", "summary": "Triggers as this Villain arrives in the city from the Villain Deck. When its arrival shoves another Villain out of the city, resolve that escape before this effect.", "source": "R", "page": 9 },
+    { "id": "core_term_escape", "name": "Escape", "kind": "keyword", "summary": "Triggers when this Villain is shoved past the final city space and escapes, in addition to the standard escape penalties.", "source": "R", "page": 9 },
+    { "id": "core_term_fight", "name": "Fight", "kind": "keyword", "summary": "Triggers when a player spends enough Attack to defeat this card.", "source": "R", "page": 13 },
+    { "id": "core_term_master-strike", "name": "Master Strike", "kind": "keyword", "summary": "Drawing a Master Strike from the Villain Deck makes the Mastermind act in person: resolve the Master Strike line on its card. The Strike card is then KO'd.", "source": "R", "page": 10 },
+    { "id": "core_term_mastermind-tactic", "name": "Mastermind Tactic", "kind": "keyword", "summary": "Beating the Mastermind's Attack wins one of its four face-down Tactics at random: keep it for Victory Points and do its Fight effect. Take all four to win.", "source": "R", "page": 14 },
+    { "id": "core_term_rescue-a-bystander", "name": "Rescue a Bystander", "kind": "keyword", "summary": "Add a Bystander from the shared Bystander stack to your Victory Pile, where it scores at game end. This never frees a Bystander a Villain holds; defeat that Villain for it.", "source": "R", "page": 15 },
+    { "id": "core_term_scheme-twist", "name": "Scheme Twist", "kind": "keyword", "summary": "Drawing a Twist from the Villain Deck advances the evil plan: resolve the Twist line on the Scheme card. The Twist is then KO'd, unless the Scheme sends it elsewhere.", "source": "R", "page": 10 }
   ],
   "setup": {
     "playerCounts": [

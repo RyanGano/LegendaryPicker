@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using LegendaryPickerService.Catalog;
 
 namespace LegendaryPickerService.Setup;
 
@@ -8,26 +9,64 @@ public abstract record SetupResponse
 {
     public abstract string Kind { get; }
 
-    public static SetupResponse From(GenerationResult result) => result switch
+    public static SetupResponse From(GenerationResult result, BoxCatalog catalog) => result switch
     {
-        SetupResult setup => new SetupBody(
-            setup.Players,
-            new Component(setup.Scheme.Id, setup.Scheme.Name),
-            new Component(setup.Mastermind.Id, setup.Mastermind.Name),
-            setup.VillainGroups.Select(group => new Component(group.Id, group.Name)).ToList(),
-            setup.HenchmanGroups.Select(group => new Component(group.Id, group.Name)).ToList(),
-            setup.Heroes.Select(hero => new Component(hero.Id, hero.Name)).ToList(),
-            setup.VillainDeck,
-            setup.HeroDeck,
-            setup.TwistsBesideScheme,
-            setup.Stacks,
-            setup.PlayerDeck,
-            setup.Notes),
+        SetupResult setup => FromSetup(setup, new Glossary(catalog)),
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
         _ => throw new ArgumentOutOfRangeException(nameof(result), result, "Unknown generation result."),
     };
+
+    private static SetupBody FromSetup(SetupResult setup, Glossary glossary)
+    {
+        var scheme = glossary.Component(setup.Scheme.Id, setup.Scheme.Name, setup.Scheme.Terms);
+        var mastermind = glossary.Component(setup.Mastermind.Id, setup.Mastermind.Name, setup.Mastermind.Terms);
+        var villainGroups = setup.VillainGroups.Select(group => glossary.Component(group.Id, group.Name, group.Terms)).ToList();
+        var henchmanGroups = setup.HenchmanGroups.Select(group => glossary.Component(group.Id, group.Name, group.Terms)).ToList();
+        var heroes = setup.Heroes.Select(hero => glossary.Component(
+            hero.Id, hero.Name, [.. hero.Team is null ? [] : new[] { hero.Team }, .. hero.Classes, .. hero.Terms])).ToList();
+
+        Component[] components = [scheme, mastermind, .. villainGroups, .. henchmanGroups, .. heroes];
+
+        return new SetupBody(
+            setup.Players,
+            scheme,
+            mastermind,
+            villainGroups,
+            henchmanGroups,
+            heroes,
+            setup.VillainDeck,
+            setup.HeroDeck,
+            setup.TwistsBesideScheme,
+            setup.Stacks,
+            setup.PlayerDeck,
+            setup.Notes,
+            glossary.Entries(components.SelectMany(component => component.Terms)));
+    }
+
+    // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
+    // A term links to the first URL its box lists for its source key, as rule notes do; the loader
+    // does not reject a repeated key, so this must not throw on one.
+    private sealed class Glossary(BoxCatalog catalog)
+    {
+        private readonly Dictionary<string, ((TermKind Kind, int Index) Order, GlossaryEntry Entry)> _terms = catalog.Boxes
+            .SelectMany(box => box.Glossary.Select(term => (Term: term, Link: box.Sources.First(source => source.Key == term.Source).Url)))
+            .Select((x, index) => (x.Term, x.Link, Index: index))
+            .ToDictionary(
+                x => x.Term.Id,
+                x => ((x.Term.Kind, x.Index),
+                    new GlossaryEntry(x.Term.Id, x.Term.Name, BoxCatalog.KindOf(x.Term.Kind), x.Term.Summary, $"{x.Term.Source} p.{x.Term.Page}", x.Link)),
+                StringComparer.Ordinal);
+
+        public Component Component(string id, string name, IEnumerable<string> terms) => new(id, name, Ordered(terms).ToList());
+
+        public IReadOnlyList<GlossaryEntry> Entries(IEnumerable<string> terms) =>
+            Ordered(terms).Select(term => _terms[term].Entry).ToList();
+
+        private IEnumerable<string> Ordered(IEnumerable<string> terms) =>
+            terms.Distinct(StringComparer.Ordinal).OrderBy(term => _terms[term].Order);
+    }
 }
 
 public sealed record SetupBody(
@@ -42,7 +81,8 @@ public sealed record SetupBody(
     int TwistsBesideScheme,
     SetupStacks Stacks,
     PlayerDeck PlayerDeck,
-    IReadOnlyList<RuleNote> Notes) : SetupResponse
+    IReadOnlyList<RuleNote> Notes,
+    IReadOnlyList<GlossaryEntry> Glossary) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";
@@ -54,5 +94,10 @@ public sealed record NoEligibleSchemeBody(int Players, string Message) : SetupRe
     public override string Kind => "noEligibleScheme";
 }
 
-// A chosen Scheme, Mastermind, group or Hero: its catalog id and display name.
-public sealed record Component(string Id, string Name);
+// A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the
+// glossary terms it uses (for a Hero, its team and classes too).
+public sealed record Component(string Id, string Name, IReadOnlyList<string> Terms);
+
+// One glossary term the setup uses: kind is "team", "class" or "keyword"; citation is the source
+// key and page (for example "R p.9"), and link is where that source is published.
+public sealed record GlossaryEntry(string Id, string Name, string Kind, string Summary, string Citation, string Link);
