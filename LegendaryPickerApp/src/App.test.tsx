@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { StrictMode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -73,6 +73,21 @@ describe('App', () => {
     renderApp()
 
     expect(fetchMock).toHaveBeenCalledWith(expect.stringMatching(/\/api\/health$/))
+  })
+
+  it('says in the footer that it is a fan tool and links the rulebook and repo', () => {
+    renderApp()
+
+    const footer = screen.getByRole('contentinfo')
+    expect(footer).toHaveTextContent('A fan-made tool, not affiliated with or endorsed by Marvel or Upper Deck.')
+    expect(within(footer).getByRole('link', { name: 'First Edition rulebook' })).toHaveAttribute(
+      'href',
+      'https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf',
+    )
+    expect(within(footer).getByRole('link', { name: 'Source on GitHub' })).toHaveAttribute(
+      'href',
+      'https://github.com/RyanGano/LegendaryPicker',
+    )
   })
 
   it('keeps Generate disabled until a player count is picked', async () => {
