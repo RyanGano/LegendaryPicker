@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBoxes, getSetup, ping, type Box, type Setup } from './api/setupApi.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
+import { SetupSkeleton } from './SetupSkeleton.tsx'
 
 const PLAYER_COUNTS = [1, 2, 3, 4, 5]
 
@@ -186,15 +187,21 @@ function App() {
           >
             Generate
           </button>
+          {status.kind === 'idle' && (
+            <p className="intro">
+              Get a random legal setup and a checklist for laying it out, following the First Edition rules.
+            </p>
+          )}
         </section>
 
         <section className="status" aria-live="polite">
           {status.kind === 'loading' && (
             <>
-              <p>Drawing a setup…</p>
+              <p className="loading-line">Drawing a setup…</p>
               {showWakeUpNotice && (
                 <p className="notice">The server may be waking up. This can take up to 30 seconds.</p>
               )}
+              <SetupSkeleton />
             </>
           )}
           {status.kind === 'result' && (
@@ -209,18 +216,18 @@ function App() {
             </>
           )}
           {status.kind === 'noEligibleScheme' && (
-            <>
+            <div className="state-card scheme">
               <p>{status.message}</p>
-              <p>Pick another player count.</p>
-            </>
+              <p className="state-prompt">Pick another player count.</p>
+            </div>
           )}
           {status.kind === 'error' && (
-            <>
+            <div className="state-card">
               <p>Couldn't get a setup. Check your connection and try again.</p>
               <button type="button" className="primary" onClick={generate}>
                 Retry
               </button>
-            </>
+            </div>
           )}
         </section>
       </main>

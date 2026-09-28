@@ -147,8 +147,7 @@ a {
   color: var(--link);
 }
 
-.tagline,
-.notice {
+.tagline {
   color: var(--muted);
 }
 
@@ -271,6 +270,109 @@ button:disabled {
   gap: var(--space-3);
 }
 
+/* What the app gives, shown until the first draw. */
+.intro {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  text-align: center;
+  color: var(--muted);
+}
+
+.loading-line {
+  font-weight: 600;
+}
+
+/* A cold start is expected, so its notice is a friendly callout rather than a warning. */
+.notice {
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--hero);
+  border-radius: var(--radius-md);
+}
+
+/* The result's cards and tiles with grey bars where the names go. The bars shimmer unless the
+   player asks for reduced motion. */
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.bone {
+  display: block;
+  height: 1rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--border) 40%, var(--surface) 50%, var(--border) 60%) 0 0 / 300% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+.bone-heading {
+  width: 60%;
+  height: var(--text-lg);
+}
+
+.bone-label {
+  width: 30%;
+  height: var(--text-sm);
+}
+
+.bone-title {
+  width: 70%;
+  height: var(--text-xl);
+}
+
+.bone-line {
+  width: 75%;
+}
+
+.bone-count {
+  flex: none;
+  width: 1.5rem;
+}
+
+.skeleton-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0 var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--border);
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bone {
+    animation: none;
+  }
+}
+
+/* An error or a count with no legal Scheme: a card topped with its accent. */
+.state-card {
+  --type: var(--link);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--type);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.state-prompt {
+  font-weight: 600;
+}
+
 /* Generate another and the count it draws for. On a phone the bar stays at the bottom of the
    screen while the checklist scrolls, then settles after the last row so it never covers it. */
 .action-bar {
@@ -389,7 +491,8 @@ button:disabled {
   margin-bottom: var(--space-2);
 }
 
-.setup .tiles {
+.setup .tiles,
+.skeleton .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
   gap: var(--space-2);
