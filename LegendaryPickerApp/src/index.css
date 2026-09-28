@@ -86,7 +86,8 @@ body {
   margin: 0;
 }
 
-/* Mobile first: one column that stops growing on wide screens. */
+/* Mobile first: one column on a phone, a wider one on a tablet (600px), and two columns from
+   900px, where the rail (the controls and drawn cards) stays in view beside the checklist. */
 .app {
   box-sizing: border-box;
   max-width: 32rem;
@@ -97,10 +98,43 @@ body {
   gap: var(--space-5);
 }
 
-.content {
+.content,
+.rail {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+}
+
+@media (width >= 37.5rem) {
+  .app {
+    max-width: 44rem;
+    padding-inline: var(--space-6);
+  }
+}
+
+@media (width >= 56.25rem) {
+  .app {
+    max-width: 76rem;
+  }
+
+  .content {
+    display: grid;
+    grid-template-columns: minmax(20rem, 26rem) minmax(0, 1fr);
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  /* A rail taller than the screen scrolls on its own. The padding keeps focus rings and card
+     shadows clear of the scroll edge. */
+  .rail {
+    position: sticky;
+    top: var(--space-4);
+    max-height: calc(100dvh - var(--space-6));
+    box-sizing: border-box;
+    overflow-y: auto;
+    margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2));
+    padding: var(--space-1) var(--space-2);
+  }
 }
 
 h1,
@@ -373,12 +407,21 @@ button:disabled {
   font-weight: 600;
 }
 
-/* Generate another and the count it draws for. On a phone the bar stays at the bottom of the
-   screen while the checklist scrolls, then settles after the last row so it never covers it. */
+/* Generate another and the count it draws for, on a phone only. The bar stays at the bottom of
+   the screen while the checklist scrolls, then settles after the last row so it never covers it.
+   Wider screens have room for Generate in view, so they don't need the bar. */
 .action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
   display: flex;
   align-items: center;
   gap: var(--space-4);
+  /* Close under the checklist, as the status's own lines are. */
+  margin: calc(var(--space-3) - var(--space-5)) calc(-1 * var(--space-4)) 0;
+  padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+  background: var(--bg);
+  border-top: 1px solid var(--border);
 }
 
 .action-players {
@@ -387,15 +430,9 @@ button:disabled {
   color: var(--muted);
 }
 
-@media (max-width: 40rem) {
+@media (width >= 37.5rem) {
   .action-bar {
-    position: sticky;
-    bottom: 0;
-    z-index: 5;
-    margin: 0 calc(-1 * var(--space-4));
-    padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
-    background: var(--bg);
-    border-top: 1px solid var(--border);
+    display: none;
   }
 }
 
@@ -461,7 +498,7 @@ button:disabled {
   color: var(--type);
 }
 
-.setup .headline-card h3 {
+.summary .headline-card h3 {
   font-family: var(--font-display);
   font-size: var(--text-xl);
   font-weight: 400;
@@ -473,7 +510,7 @@ button:disabled {
   overflow-wrap: anywhere;
 }
 
-.setup .tags {
+.summary .tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
@@ -487,11 +524,11 @@ button:disabled {
   border-radius: 999px;
 }
 
-.setup .tile-heading {
+.summary .tile-heading {
   margin-bottom: var(--space-2);
 }
 
-.setup .tiles,
+.summary .tiles,
 .skeleton .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
@@ -521,7 +558,7 @@ button:disabled {
   gap: var(--space-5);
 }
 
-.setup h2 {
+.result-heading {
   margin: 0;
   scroll-margin-top: var(--space-4);
 }
@@ -537,7 +574,8 @@ button:disabled {
   border-radius: 999px;
 }
 
-.setup h3 {
+.setup h3,
+.summary h3 {
   font-size: var(--text-sm);
   font-weight: 600;
   text-transform: uppercase;
@@ -546,7 +584,8 @@ button:disabled {
   margin: 0 0 var(--space-1);
 }
 
-.setup ul {
+.setup ul,
+.summary ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -666,7 +705,7 @@ button:disabled {
   --kind: var(--term-keyword);
 }
 
-.setup .term-chips {
+.summary .term-chips {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-1);
@@ -691,8 +730,8 @@ button:disabled {
 
 /* A term's explanation: a popover under its chip, or a bottom sheet on a phone. */
 .term-popover {
-  position: absolute;
-  top: calc(var(--popover-top) + var(--space-1));
+  position: fixed;
+  top: var(--popover-top);
   left: clamp(var(--space-4), var(--popover-left), calc(100vw - 20rem - var(--space-4)));
   z-index: 10;
   box-sizing: border-box;
@@ -715,9 +754,8 @@ button:disabled {
   outline: none;
 }
 
-@media (max-width: 40rem) {
+@media (width < 37.5rem) {
   .term-popover {
-    position: fixed;
     inset: auto 0 0;
     width: auto;
     padding-bottom: var(--space-6);

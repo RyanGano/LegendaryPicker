@@ -159,6 +159,22 @@ describe('App', () => {
     expect(scrolled.at(-1)).toEqual({ heading: 'Setup for 3 players', options: { behavior, block: 'start' } })
   })
 
+  it('scrolls the page to the top instead in the two-column layout', async () => {
+    vi.stubGlobal('matchMedia', (query: string) => ({ matches: query === '(width >= 56.25rem)', media: query }))
+    const scrollIntoView = vi.spyOn(Element.prototype, 'scrollIntoView')
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    expect(await screen.findByRole('heading', { name: 'Setup for 3 players' })).toHaveFocus()
+    expect(scrollTo).toHaveBeenLastCalledWith({ top: 0, behavior: 'smooth' })
+    expect(scrollIntoView).not.toHaveBeenCalled()
+  })
+
   it('draws again for the same count from the action bar', async () => {
     setupAnswers.push(() => json(setup), () => json({ ...setup, scheme: { id: 'core_scheme_x', name: 'Portals to the Dark Dimension', terms: [] } }))
     const user = userEvent.setup()

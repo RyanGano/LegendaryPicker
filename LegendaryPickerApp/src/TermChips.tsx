@@ -1,10 +1,13 @@
-import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import type { GlossaryEntry } from './api/setupApi.ts'
 
 // A drawn component's glossary terms as chips. Tapping one opens its explanation: the term's
 // name, summary and citation exactly as the API returns them. The explanation is a popover under
 // the chip, or a bottom sheet on a phone, and closes on Escape, an outside tap or its close
 // button, handing focus back to the chip.
+
+// Pixels between a chip and its popover.
+const POPOVER_GAP = 4
 export function TermChips({ terms }: { terms: GlossaryEntry[] }) {
   if (terms.length === 0) return null
   return (
@@ -25,15 +28,26 @@ function TermChip({ term }: { term: GlossaryEntry }) {
   const id = useId()
   const open = position !== null
 
-  function show() {
+  // The popover is fixed to the viewport, so a scrolling or sticky column can't clip or offset it,
+  // and it moves with its chip on any scroll. It opens under the chip, or above it when it would run
+  // off the bottom of the screen and there is room above.
+  function place() {
     const rect = chip.current!.getBoundingClientRect()
-    setPosition({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX })
+    const height = popover.current?.offsetHeight ?? 0
+    const below = rect.bottom + POPOVER_GAP
+    const above = rect.top - POPOVER_GAP - height
+    setPosition({ top: below + height > window.innerHeight && above >= 0 ? above : below, left: rect.left })
   }
 
   function close() {
     setPosition(null)
     chip.current?.focus()
   }
+
+  // The first placement can't know the popover's height, so place it again once it is drawn.
+  useLayoutEffect(() => {
+    if (open) place()
+  }, [open])
 
   useEffect(() => {
     if (!open) return
@@ -53,9 +67,14 @@ function TermChip({ term }: { term: GlossaryEntry }) {
     }
     document.addEventListener('keydown', onKeyDown)
     document.addEventListener('click', onClick)
+    // Capture sees scrolls inside a column as well as the page's.
+    document.addEventListener('scroll', place, true)
+    window.addEventListener('resize', place)
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       document.removeEventListener('click', onClick)
+      document.removeEventListener('scroll', place, true)
+      window.removeEventListener('resize', place)
     }
   }, [open])
 
@@ -68,7 +87,7 @@ function TermChip({ term }: { term: GlossaryEntry }) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={open ? id : undefined}
-        onClick={() => (open ? close() : show())}
+        onClick={() => (open ? close() : place())}
       >
         {term.name}
       </button>

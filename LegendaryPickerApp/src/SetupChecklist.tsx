@@ -1,13 +1,12 @@
-import { useId, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
+import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import type { Component, Setup } from './api/setupApi.ts'
-import { SetupSummary } from './SetupSummary.tsx'
 import { TermKind } from './TermChips.tsx'
 
-// The drawn cards, then the setup as a checklist in the order a player lays it out. Every count and note comes from
+// The setup as a checklist in the order a player lays it out. Every count and note comes from
 // the API response as-is: the client never adds, splits or infers a rule. The ticks are local
 // state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
-export function SetupChecklist({ setup, headingRef }: { setup: Setup; headingRef?: Ref<HTMLHeadingElement> }) {
+export function SetupChecklist({ setup }: { setup: Setup }) {
   const { villainDeck, heroDeck, stacks, playerDeck } = setup
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
@@ -17,12 +16,6 @@ export function SetupChecklist({ setup, headingRef }: { setup: Setup; headingRef
 
   return (
     <article className="setup" ref={article} onChange={countTicks}>
-      <h2 ref={headingRef} tabIndex={-1}>
-        Setup for {plural(setup.players, 'player')}
-      </h2>
-
-      <SetupSummary setup={setup} />
-
       <p className="progress" role="status">
         {progress.ticked} of {progress.total} laid out
       </p>
