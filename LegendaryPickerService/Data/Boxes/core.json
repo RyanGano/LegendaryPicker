@@ -3,6 +3,12 @@
   "id": "core",
   "name": "Marvel Legendary First Edition core box",
   "catalogSource": "R p.22; C1; C2",
+  "sources": [
+    { "key": "R", "url": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf" },
+    { "key": "F", "url": "https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ" },
+    { "key": "D1", "url": "https://boardgamegeek.com/thread/993341/article/12653573" },
+    { "key": "D2", "url": "https://boardgamegeek.com/thread/884926" }
+  ],
   "components": {
     "heroCards": { "value": 14, "source": "R p.22" },
     "villainGroupCards": { "value": 8, "source": "R p.22" },
@@ -156,10 +162,17 @@
     "solo": {
       "heroes": { "value": 3, "source": "R p.20" },
       "villainGroups": { "value": 1, "source": "R p.20" },
+      "henchmanGroups": { "value": 1, "source": "R p.20" },
       "henchmanCards": { "value": 3, "source": "R p.20" },
       "bystanders": { "value": 1, "source": "R p.20" },
       "masterStrikes": { "value": 1, "source": "R p.20" },
-      "ignoresAlwaysLeads": { "value": true, "source": "R p.20" }
+      "ignoresAlwaysLeads": { "value": true, "source": "R p.20" },
+      "twistKosHeroCostingAtMost": { "value": 6, "source": "R p.20" }
+    },
+    "rulings": {
+      "alwaysLeadsFillsSlot": "R p.6",
+      "requiredGroupDisplacesAlwaysLeads": "D1",
+      "schemeOverridesSolo": "D2"
     }
   }
 }

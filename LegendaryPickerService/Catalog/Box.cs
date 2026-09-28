@@ -21,6 +21,7 @@ public sealed record Box(
     string Id,
     string Name,
     string CatalogSource,
+    IReadOnlyList<SourceLink> Sources,
     BoxComponents Components,
     IReadOnlyList<Hero> Heroes,
     IReadOnlyList<VillainGroup> VillainGroups,
@@ -28,6 +29,10 @@ public sealed record Box(
     IReadOnlyList<Mastermind> Masterminds,
     IReadOnlyList<Scheme> Schemes,
     SetupRules Setup);
+
+// Where a source key (the part of a Source before the first space, such as "R" in "R p.20") is published.
+// "Card" has no link: it is the printed card itself.
+public sealed record SourceLink(string Key, string Url);
 
 public sealed record BoxComponents(
     Sourced<int> HeroCards,
@@ -67,7 +72,8 @@ public sealed record SetupRules(
     Sourced<int> MasterStrikes,
     StartingDeck StartingDeck,
     SharedStacks SharedStacks,
-    SoloSetup Solo);
+    SoloSetup Solo,
+    Rulings Rulings);
 
 public sealed record PlayerCountSetup(int Players, int VillainGroups, int HenchmanGroups, int Bystanders, string Source);
 
@@ -78,7 +84,18 @@ public sealed record SharedStacks(Sourced<int> Officers, Sourced<int> Wounds, So
 public sealed record SoloSetup(
     Sourced<int> Heroes,
     Sourced<int> VillainGroups,
+    Sourced<int> HenchmanGroups,
     Sourced<int> HenchmanCards,
     Sourced<int> Bystanders,
     Sourced<int> MasterStrikes,
-    Sourced<bool> IgnoresAlwaysLeads);
+    Sourced<bool> IgnoresAlwaysLeads,
+    Sourced<int> TwistKosHeroCostingAtMost);
+
+// The sources of how rules combine, rather than of a single value.
+public sealed record Rulings(
+    // An Always Leads group fills one of the player-count group slots.
+    string AlwaysLeadsFillsSlot,
+    // When a Scheme's required groups leave no slot for the Always Leads group, the Always Leads group is dropped.
+    string RequiredGroupDisplacesAlwaysLeads,
+    // A Scheme's Setup line overrides the Solo setup.
+    string SchemeOverridesSolo);

@@ -262,11 +262,32 @@ public class CoreBoxCatalogTests
 
         Assert.Equal(3, solo.Heroes.Value);
         Assert.Equal(1, solo.VillainGroups.Value);
+        Assert.Equal(1, solo.HenchmanGroups.Value);
         Assert.Equal(3, solo.HenchmanCards.Value);
         Assert.Equal(1, solo.Bystanders.Value);
         Assert.Equal(1, solo.MasterStrikes.Value);
         Assert.True(solo.IgnoresAlwaysLeads.Value);
         Assert.Equal("R p.20", solo.IgnoresAlwaysLeads.Source);
+        Assert.Equal(6, solo.TwistKosHeroCostingAtMost.Value);
+    }
+
+    [Fact]
+    public void Rulings_cite_the_rulebook_and_the_designer()
+    {
+        Assert.Equal(new Rulings("R p.6", "D1", "D2"), Core.Setup.Rulings);
+    }
+
+    [Fact]
+    public void Source_keys_link_to_the_sources_in_the_plan()
+    {
+        Assert.Equal(
+            [
+                new SourceLink("R", "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"),
+                new SourceLink("F", "https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ"),
+                new SourceLink("D1", "https://boardgamegeek.com/thread/993341/article/12653573"),
+                new SourceLink("D2", "https://boardgamegeek.com/thread/884926"),
+            ],
+            Core.Sources);
     }
 
     [Fact]
@@ -274,9 +295,9 @@ public class CoreBoxCatalogTests
     {
         var sources = RuleSources().ToList();
 
-        // 1 catalog + 4 components + 4 player-count rows + 2 + 2 starting deck + 3 stacks + 6 solo
-        // + 4 Always Leads + 20 Scheme setup values.
-        Assert.Equal(46, sources.Count);
+        // 1 catalog + 4 components + 4 player-count rows + 2 + 2 starting deck + 3 stacks + 8 solo
+        // + 3 rulings + 4 Always Leads + 20 Scheme setup values.
+        Assert.Equal(51, sources.Count);
         Assert.All(sources, source => Assert.False(string.IsNullOrWhiteSpace(source)));
     }
 
@@ -317,10 +338,15 @@ public class CoreBoxCatalogTests
         yield return setup.SharedStacks.Bystanders.Source;
         yield return setup.Solo.Heroes.Source;
         yield return setup.Solo.VillainGroups.Source;
+        yield return setup.Solo.HenchmanGroups.Source;
         yield return setup.Solo.HenchmanCards.Source;
         yield return setup.Solo.Bystanders.Source;
         yield return setup.Solo.MasterStrikes.Source;
         yield return setup.Solo.IgnoresAlwaysLeads.Source;
+        yield return setup.Solo.TwistKosHeroCostingAtMost.Source;
+        yield return setup.Rulings.AlwaysLeadsFillsSlot;
+        yield return setup.Rulings.RequiredGroupDisplacesAlwaysLeads;
+        yield return setup.Rulings.SchemeOverridesSolo;
 
         foreach (var mastermind in Core.Masterminds) yield return mastermind.AlwaysLeads.Source;
 
