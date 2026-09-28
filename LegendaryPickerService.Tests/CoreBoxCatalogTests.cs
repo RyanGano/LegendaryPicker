@@ -13,7 +13,7 @@ public class CoreBoxCatalogTests
     public void Core_box_is_the_First_Edition_core_box()
     {
         Assert.Equal("Marvel Legendary First Edition core box", Core.Name);
-        Assert.Equal(1, Core.SchemaVersion);
+        Assert.Equal(2, Core.SchemaVersion);
         Assert.True(Core.IsBaseGame);
     }
 
@@ -187,7 +187,10 @@ public class CoreBoxCatalogTests
     [Fact]
     public void Negative_Zone_Prison_Breakout_adds_one_Henchman_Group()
     {
-        Assert.Equal(1, SchemeNamed("Negative Zone Prison Breakout").Setup.ExtraHenchmanGroups!.Value);
+        var extra = Assert.Single(SchemeNamed("Negative Zone Prison Breakout").Setup.ExtraHenchmanGroups!);
+
+        Assert.Null(extra.Players);
+        Assert.Equal(1, extra.Value);
     }
 
     [Fact]
@@ -437,11 +440,12 @@ public class CoreBoxCatalogTests
         {
             foreach (var twists in effect.Twists) yield return twists.Source;
             foreach (var heroes in effect.Heroes ?? []) yield return heroes.Source;
+            foreach (var extra in effect.ExtraHenchmanGroups ?? []) yield return extra.Source;
             foreach (var group in effect.RequiredGroups ?? []) yield return group.Source;
 
             Sourced<int>?[] counts =
             [
-                effect.VillainDeckBystanders, effect.WoundsPerPlayer, effect.ExtraHenchmanGroups,
+                effect.VillainDeckBystanders, effect.WoundsPerPlayer,
                 effect.HeroCardsInVillainDeck, effect.TwistsBesideScheme,
             ];
             foreach (var count in counts.OfType<Sourced<int>>()) yield return count.Source;

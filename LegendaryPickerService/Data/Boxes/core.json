@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "core",
   "name": "Marvel Legendary First Edition core box",
   "catalogSource": "R p.22; C1; C2",
@@ -102,7 +102,7 @@
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "allowedPlayerCounts": { "value": [2, 3, 4, 5], "source": "R p.20" },
-        "extraHenchmanGroups": { "value": 1, "source": "Card" }
+        "extraHenchmanGroups": [{ "players": null, "value": 1, "source": "Card" }]
       }
     },
     {

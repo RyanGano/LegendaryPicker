@@ -24,10 +24,13 @@ _Avoid_: Set, when referring to a product; it can also mean a card group.
 ## Setup elements
 
 **Scheme**:
-A scenario card whose Setup line can change counts (Twists, Heroes, Bystanders, Wounds, Henchman Groups) and require or exclude setup components.
+A scenario card whose Setup line can change counts (Twists, Heroes, Bystanders, Wounds, Villain and Henchman Groups) and require or exclude setup components.
 
 **Mastermind**:
-The central villain selected for a game. Its "Always Leads" ability can require a particular Villain or Henchman Group in the setup.
+The central villain selected for a game. Its "Always Leads" ability can require a particular Villain or Henchman Group in the setup, and some Masterminds print setup effects that add to setup counts.
+
+**Setup effect**:
+A change a Scheme's or Mastermind's card makes to the setup. It either sets a count (for example, 12 Bystanders in the Villain Deck) or adds to the count the setup would otherwise use (for example, one extra Hero, which makes 6 Heroes with 2–5 players and 4 in Solo). An effect can apply only at some player counts or only in Solo. A Scheme's effects apply before its Mastermind's.
 
 **Always Leads group**:
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability.
@@ -67,7 +70,7 @@ A game setup that satisfies all applicable official setup rules; legality does n
 A complete legal setup selected without player-selected card preferences; only official setup rules constrain the selection.
 
 **Table draw**:
-How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then draw the Heroes. Each draw is equally likely among the remaining options.
+How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind from those that can complete it, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then draw the Heroes. Each draw is equally likely among the remaining options.
 
 **Setup checklist**:
 What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals; the Twists beside the Scheme; the Wound, Bystander and S.H.I.E.L.D. Officer stacks (and the Sidekick stack when an included box has Sidekicks), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; the rule notes; and the glossary terms its components use.
