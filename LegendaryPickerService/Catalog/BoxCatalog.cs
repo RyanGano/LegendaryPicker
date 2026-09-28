@@ -17,6 +17,10 @@ public sealed partial class BoxCatalog
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
 
+    // The player counts a setup can be drawn for; 1 is Solo.
+    public const int MinPlayers = 1;
+    public const int MaxPlayers = 5;
+
     public static string DefaultDirectory { get; } = Path.Combine(AppContext.BaseDirectory, "Data", "Boxes");
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
@@ -124,6 +128,7 @@ public sealed partial class BoxCatalog
 
             ValidateTerms(path, box, sourceKeys);
             ValidateRuleSources(path, box, sourceKeys);
+            ValidatePlayerCounts(path, box);
 
             // Every setup includes its base game, so the base game's stacks can't be left to an expansion;
             // a stack it forgot to list would otherwise come out as 0.
@@ -233,6 +238,50 @@ public sealed partial class BoxCatalog
         }
     }
 
+    // A draw reads a player count's value from the one entry that names it, so each count may be named once,
+    // by an entry that exists at a count the game supports and adds or sets at least 1.
+    private static void ValidatePlayerCounts(string path, Box box)
+    {
+        if (box.Setup is { } setup)
+        {
+            CheckPlayerCounts(path, "setup.playerCounts", setup.PlayerCounts.Select(row => new[] { row.Players }));
+        }
+
+        foreach (var (rule, values) in PlayerCountLists(box))
+        {
+            if (values.FirstOrDefault(value => value.Players is []) is not null)
+            {
+                throw new InvalidDataException($"{path}: {rule} has an entry that names no player count.");
+            }
+
+            if (values.FirstOrDefault(value => value.Value < 1) is { } low)
+            {
+                throw new InvalidDataException($"{path}: {rule} has value {low.Value}; values are at least 1.");
+            }
+
+            // An entry with no players applies at every player count.
+            CheckPlayerCounts(path, rule, values.Select(value => value.Players ?? Enumerable.Range(MinPlayers, MaxPlayers - MinPlayers + 1)));
+        }
+    }
+
+    private static void CheckPlayerCounts(string path, string rule, IEnumerable<IEnumerable<int>> entries)
+    {
+        var named = new HashSet<int>();
+        foreach (var players in entries.SelectMany(entry => entry))
+        {
+            if (players is < MinPlayers or > MaxPlayers)
+            {
+                throw new InvalidDataException(
+                    $"{path}: {rule} names player count {players}; player counts are {MinPlayers} to {MaxPlayers}.");
+            }
+
+            if (!named.Add(players))
+            {
+                throw new InvalidDataException($"{path}: {rule} has more than one entry for player count {players}.");
+            }
+        }
+    }
+
     // How a term kind is written in box files and API responses.
     public static string KindOf(TermKind kind) => kind switch
     {
@@ -310,34 +359,51 @@ public sealed partial class BoxCatalog
         foreach (var mastermind in box.Masterminds)
         {
             yield return ($"{mastermind.Id} alwaysLeads", mastermind.AlwaysLeads.Source);
-            if (mastermind.Setup is { } effects)
-            {
-                foreach (var rule in EffectSources(mastermind.Id, effects)) yield return rule;
-            }
         }
 
         foreach (var scheme in box.Schemes)
         {
             var effect = scheme.Setup;
-            foreach (var value in effect.Twists) yield return ($"{scheme.Id} setup.twists", value.Source);
             if (effect.AllowedPlayerCounts is { } allowed) yield return ($"{scheme.Id} setup.allowedPlayerCounts", allowed.Source);
-            foreach (var value in effect.Heroes ?? []) yield return ($"{scheme.Id} setup.heroes", value.Source);
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
             foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
             if (effect.HeroCardsInVillainDeck is { } heroCards) yield return ($"{scheme.Id} setup.heroCardsInVillainDeck", heroCards.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
-            foreach (var rule in EffectSources(scheme.Id, effect)) yield return rule;
+        }
+
+        foreach (var (rule, values) in PlayerCountLists(box))
+        {
+            foreach (var value in values) yield return (rule, value.Source);
         }
     }
 
-    private static IEnumerable<(string Rule, string Source)> EffectSources(string owner, SetupEffects effects)
+    // Every list of per-player-count values in a box: the Masterminds' setup effects, then each Scheme's.
+    private static IEnumerable<(string Rule, IReadOnlyList<PlayerCountValue> Values)> PlayerCountLists(Box box)
+    {
+        foreach (var mastermind in box.Masterminds)
+        {
+            if (mastermind.Setup is { } effects)
+            {
+                foreach (var list in EffectLists(mastermind.Id, effects)) yield return list;
+            }
+        }
+
+        foreach (var scheme in box.Schemes)
+        {
+            yield return ($"{scheme.Id} setup.twists", scheme.Setup.Twists);
+            if (scheme.Setup.Heroes is { } heroes) yield return ($"{scheme.Id} setup.heroes", heroes);
+            foreach (var list in EffectLists(scheme.Id, scheme.Setup)) yield return list;
+        }
+    }
+
+    private static IEnumerable<(string Rule, IReadOnlyList<PlayerCountValue> Values)> EffectLists(string owner, SetupEffects effects)
     {
         (string Name, IReadOnlyList<PlayerCountValue>? Values)[] counts =
         [
             ("extraHeroes", effects.ExtraHeroes), ("extraVillainGroups", effects.ExtraVillainGroups),
             ("extraHenchmanGroups", effects.ExtraHenchmanGroups), ("extraVillainDeckBystanders", effects.ExtraVillainDeckBystanders),
         ];
-        return counts.SelectMany(count => (count.Values ?? []).Select(value => ($"{owner} setup.{count.Name}", value.Source)));
+        return counts.Where(count => count.Values is not null).Select(count => ($"{owner} setup.{count.Name}", count.Values!));
     }
 }
