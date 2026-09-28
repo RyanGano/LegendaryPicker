@@ -61,6 +61,10 @@ public class CoreBoxCatalogTests
         Assert.Equal(8, Core.Components.VillainGroupCards.Value);
         Assert.Equal(10, Core.Components.HenchmanGroupCards.Value);
         Assert.Equal(11, Core.Components.SchemeTwists.Value);
+        Assert.Equal(30, Core.Components.Bystanders!.Value);
+        Assert.Equal(30, Core.Components.Wounds!.Value);
+        Assert.Equal(30, Core.Components.Officers!.Value);
+        Assert.Null(Core.Components.Sidekicks);
     }
 
     [Fact]
@@ -231,7 +235,7 @@ public class CoreBoxCatalogTests
         Assert.Equal(8, twistsUsed.Max());
         Assert.True(twistsUsed.Max() <= Core.Components.SchemeTwists.Value);
         Assert.Equal(18, villainDeckBystanders.Max());
-        Assert.True(villainDeckBystanders.Max() <= Core.Setup!.SharedStacks.Bystanders.Value);
+        Assert.True(villainDeckBystanders.Max() <= Core.Components.Bystanders!.Value);
     }
 
     [Fact]
@@ -251,9 +255,6 @@ public class CoreBoxCatalogTests
         Assert.Equal(5, setup.MasterStrikes.Value);
         Assert.Equal(8, setup.StartingDeck.Agents.Value);
         Assert.Equal(4, setup.StartingDeck.Troopers.Value);
-        Assert.Equal(30, setup.SharedStacks.Officers.Value);
-        Assert.Equal(30, setup.SharedStacks.Wounds.Value);
-        Assert.Equal(30, setup.SharedStacks.Bystanders.Value);
     }
 
     [Fact]
@@ -296,7 +297,7 @@ public class CoreBoxCatalogTests
     {
         var sources = RuleSources().ToList();
 
-        // 1 catalog + 4 components + 4 player-count rows + 2 + 2 starting deck + 3 stacks + 8 solo
+        // 1 catalog + 7 components + 4 player-count rows + 2 + 2 starting deck + 8 solo
         // + 3 rulings + 4 Always Leads + 20 Scheme setup values.
         Assert.Equal(51, sources.Count);
         Assert.All(sources, source => Assert.False(string.IsNullOrWhiteSpace(source)));
@@ -408,6 +409,9 @@ public class CoreBoxCatalogTests
         yield return components.VillainGroupCards.Source;
         yield return components.HenchmanGroupCards.Source;
         yield return components.SchemeTwists.Source;
+        yield return components.Bystanders!.Source;
+        yield return components.Wounds!.Source;
+        yield return components.Officers!.Source;
 
         var setup = Core.Setup!;
         foreach (var row in setup.PlayerCounts) yield return row.Source;
@@ -415,9 +419,6 @@ public class CoreBoxCatalogTests
         yield return setup.MasterStrikes.Source;
         yield return setup.StartingDeck.Agents.Source;
         yield return setup.StartingDeck.Troopers.Source;
-        yield return setup.SharedStacks.Officers.Source;
-        yield return setup.SharedStacks.Wounds.Source;
-        yield return setup.SharedStacks.Bystanders.Source;
         yield return setup.Solo.Heroes.Source;
         yield return setup.Solo.VillainGroups.Source;
         yield return setup.Solo.HenchmanGroups.Source;

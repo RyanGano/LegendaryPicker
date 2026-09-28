@@ -6,7 +6,9 @@ namespace LegendaryPickerService.Tests;
 // Setups drawn from more than one box, using Fixtures/Boxes: a copy of the core box and a
 // made-up expansion. Catalog order puts the fixture's cards after the core box's, so at 2 players
 // the Schemes are the core box's 8 then 8 Test Heist, and the Masterminds the core box's 4 then 4 Test Tyrant.
-// Test Heist requires HYDRA, citing the fixture's own source R; Test Tyrant always leads Test Cult.
+// Test Heist requires HYDRA, citing the fixture's own source R, and puts 35 Bystanders in the Villain
+// Deck; Test Tyrant always leads Test Cult. The fixture adds 11 Bystanders, 5 Wounds and 16 Sidekicks
+// to the core box's 30 Bystanders, 30 Wounds and 30 Officers.
 public class MultiBoxSetupTests
 {
     public static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "Boxes");
@@ -57,13 +59,56 @@ public class MultiBoxSetupTests
         Assert.Equal("Test Heist", setup.Scheme.Name);
         Assert.Equal("Test Tyrant", setup.Mastermind.Name);
         Assert.Equal(["HYDRA", "Test Cult"], setup.VillainGroups.Select(group => group.Name));
-        Assert.Equal(new VillainDeck(6, 5, 16, 10, 2, 0), setup.VillainDeck);
+        Assert.Equal(new VillainDeck(6, 5, 16, 10, 35, 0), setup.VillainDeck);
         Assert.Equal(
             [
+                new RuleNote("Scheme puts 35 Bystanders in the Villain Deck", "Card", null, FixtureName),
                 new RuleNote("Scheme requires HYDRA", "R p.3", "https://example.test/fixture-rules.pdf", FixtureName),
                 new RuleNote("Test Tyrant always leads Test Cult", "R p.6", Rulebook, CoreName),
             ],
             setup.Notes);
+    }
+
+    [Fact]
+    public void The_Bystander_stack_holds_every_included_boxs_Bystanders_less_the_Villain_Decks()
+    {
+        // Midtown Bank Robbery puts 12 of the 30 + 11 Bystanders in the Villain Deck.
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "fixture"], new ScriptedRandom(1)));
+
+        Assert.Equal("Midtown Bank Robbery", setup.Scheme.Name);
+        Assert.Equal(new SetupStacks(35, 30, 29, 16), setup.Stacks);
+    }
+
+    [Fact]
+    public void A_Scheme_needing_more_Bystanders_than_one_box_has_is_eligible_with_the_combined_stack()
+    {
+        // Test Heist's 35 Bystanders fit only in the combined 41.
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(3, ["core", "fixture"], new ScriptedRandom(8)));
+
+        Assert.Equal("Test Heist", setup.Scheme.Name);
+        Assert.Equal(6, setup.Stacks.Bystanders);
+    }
+
+    [Fact]
+    public void A_Scheme_that_sets_the_Wound_stack_overrides_the_sum()
+    {
+        // Legacy Virus sets 6 Wounds per player; Midtown Bank Robbery keeps the 30 + 5 the boxes hold.
+        var legacyVirus = Assert.IsType<SetupResult>(Generator.Generate(3, ["core", "fixture"], new ScriptedRandom(0)));
+        var midtown = Assert.IsType<SetupResult>(Generator.Generate(3, ["core", "fixture"], new ScriptedRandom(1)));
+
+        Assert.Equal("Legacy Virus", legacyVirus.Scheme.Name);
+        Assert.Equal(18, legacyVirus.Stacks.Wounds);
+        Assert.Equal(35, midtown.Stacks.Wounds);
+    }
+
+    [Fact]
+    public void Sidekicks_appear_only_when_an_included_box_provides_them()
+    {
+        var withFixture = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "fixture"], new ScriptedRandom(1)));
+        var coreAlone = Assert.IsType<SetupResult>(Generator.Generate(2, ["core"], new ScriptedRandom(1)));
+
+        Assert.Equal(16, withFixture.Stacks.Sidekicks);
+        Assert.Null(coreAlone.Stacks.Sidekicks);
     }
 
     [Fact]

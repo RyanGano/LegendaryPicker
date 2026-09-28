@@ -124,6 +124,18 @@ public sealed partial class BoxCatalog
 
             ValidateTerms(path, box, sourceKeys);
             ValidateRuleSources(path, box, sourceKeys);
+
+            // Every setup includes its base game, so the base game's stacks can't be left to an expansion;
+            // a stack it forgot to list would otherwise come out as 0.
+            if (box.Setup is not null)
+            {
+                (string Name, Sourced<int>? Count)[] stacks =
+                    [("bystanders", box.Components.Bystanders), ("wounds", box.Components.Wounds), ("officers", box.Components.Officers)];
+                foreach (var (name, _) in stacks.Where(stack => stack.Count is null))
+                {
+                    throw new InvalidDataException($"{path}: base game {box.Id} has a setup section but no components.{name}.");
+                }
+            }
         }
 
         // A reference into a box that isn't loaded says so, rather than that the card is missing.
@@ -268,6 +280,12 @@ public sealed partial class BoxCatalog
         yield return ("components.villainGroupCards", components.VillainGroupCards.Source);
         yield return ("components.henchmanGroupCards", components.HenchmanGroupCards.Source);
         yield return ("components.schemeTwists", components.SchemeTwists.Source);
+        (string Name, Sourced<int>? Count)[] stacks =
+            [("bystanders", components.Bystanders), ("wounds", components.Wounds), ("officers", components.Officers), ("sidekicks", components.Sidekicks)];
+        foreach (var (name, count) in stacks)
+        {
+            if (count is not null) yield return ($"components.{name}", count.Source);
+        }
 
         if (box.Setup is { } setup)
         {
@@ -276,9 +294,6 @@ public sealed partial class BoxCatalog
             yield return ("setup.masterStrikes", setup.MasterStrikes.Source);
             yield return ("setup.startingDeck.agents", setup.StartingDeck.Agents.Source);
             yield return ("setup.startingDeck.troopers", setup.StartingDeck.Troopers.Source);
-            yield return ("setup.sharedStacks.officers", setup.SharedStacks.Officers.Source);
-            yield return ("setup.sharedStacks.wounds", setup.SharedStacks.Wounds.Source);
-            yield return ("setup.sharedStacks.bystanders", setup.SharedStacks.Bystanders.Source);
             yield return ("setup.solo.heroes", setup.Solo.Heroes.Source);
             yield return ("setup.solo.villainGroups", setup.Solo.VillainGroups.Source);
             yield return ("setup.solo.henchmanGroups", setup.Solo.HenchmanGroups.Source);

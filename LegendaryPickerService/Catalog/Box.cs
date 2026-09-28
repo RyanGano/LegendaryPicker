@@ -39,11 +39,18 @@ public sealed record Box(
 // "Card" has no link: it is the printed card itself.
 public sealed record SourceLink(string Key, string Url);
 
+// The cards a box puts in the shared stacks, which a setup sums across its included boxes. A stack
+// the box adds nothing to is left out. A box's special cards of a stack, such as Special Bystanders
+// shuffled in with the Bystanders, count toward that stack.
 public sealed record BoxComponents(
     Sourced<int> HeroCards,
     Sourced<int> VillainGroupCards,
     Sourced<int> HenchmanGroupCards,
-    Sourced<int> SchemeTwists);
+    Sourced<int> SchemeTwists,
+    Sourced<int>? Bystanders = null,
+    Sourced<int>? Wounds = null,
+    Sourced<int>? Officers = null,
+    Sourced<int>? Sidekicks = null);
 
 // Team, Classes and Terms name glossary term ids. Team is null for an unaffiliated Hero.
 public sealed record Hero(string Id, string Name, string? Team, IReadOnlyList<string> Classes, IReadOnlyList<string> Terms);
@@ -89,15 +96,12 @@ public sealed record SetupRules(
     Sourced<int> Heroes,
     Sourced<int> MasterStrikes,
     StartingDeck StartingDeck,
-    SharedStacks SharedStacks,
     SoloSetup Solo,
     Rulings Rulings);
 
 public sealed record PlayerCountSetup(int Players, int VillainGroups, int HenchmanGroups, int Bystanders, string Source);
 
 public sealed record StartingDeck(Sourced<int> Agents, Sourced<int> Troopers);
-
-public sealed record SharedStacks(Sourced<int> Officers, Sourced<int> Wounds, Sourced<int> Bystanders);
 
 public sealed record SoloSetup(
     Sourced<int> Heroes,

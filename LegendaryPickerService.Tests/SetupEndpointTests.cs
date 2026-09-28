@@ -131,6 +131,7 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal("fixture_scheme_test-heist", (string?)body!["scheme"]!["id"]);
         var notes = JsonNode.Parse("""
             [
+              { "text": "Scheme puts 35 Bystanders in the Villain Deck", "citation": "Card", "link": null, "box": "Fixture Expansion" },
               { "text": "Scheme requires HYDRA", "citation": "R p.3", "link": "https://example.test/fixture-rules.pdf", "box": "Fixture Expansion" },
               {
                 "text": "Test Tyrant always leads Test Cult",
@@ -144,6 +145,8 @@ public sealed class SetupEndpointTests : IDisposable
         var boxOfTerm = body["glossary"]!.AsArray().ToDictionary(term => (string)term!["id"]!, term => (string?)term!["box"]);
         Assert.Equal("Marvel Legendary First Edition core box", boxOfTerm["core_term_scheme-twist"]);
         Assert.Equal("Fixture Expansion", boxOfTerm["fixture_term_overdrive"]);
+        var stacks = JsonNode.Parse("""{ "wounds": 35, "officers": 30, "bystanders": 6, "sidekicks": 16 }""");
+        Assert.True(JsonNode.DeepEquals(stacks, body["stacks"]), body["stacks"]?.ToJsonString());
     }
 
     [Theory]
