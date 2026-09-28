@@ -82,6 +82,15 @@ function App() {
 
   const loading = status.kind === 'loading'
 
+  // A new setup lands below the controls, so bring its heading into view and give it focus.
+  const resultHeading = useRef<HTMLHeadingElement>(null)
+  useEffect(() => {
+    if (status.kind !== 'result') return
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    resultHeading.current?.focus({ preventScroll: true })
+    resultHeading.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
+  }, [status])
+
   useEffect(() => {
     if (!loading) return
     const timer = setTimeout(() => setShowWakeUpNotice(true), WAKE_UP_NOTICE_MS)
@@ -190,10 +199,13 @@ function App() {
           )}
           {status.kind === 'result' && (
             <>
-              <SetupChecklist setup={status.setup} />
-              <button type="button" className="primary" onClick={generate}>
-                Generate another
-              </button>
+              <SetupChecklist setup={status.setup} headingRef={resultHeading} />
+              <div className="action-bar" role="group" aria-label="Setup actions">
+                <p className="action-players">{players === 1 ? '1 player' : `${players} players`}</p>
+                <button type="button" className="primary" onClick={generate}>
+                  Generate another
+                </button>
+              </div>
             </>
           )}
           {status.kind === 'noEligibleScheme' && (

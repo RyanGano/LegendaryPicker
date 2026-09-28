@@ -125,14 +125,52 @@ describe('App', () => {
     expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3&boxes=core$/)])
   })
 
-  it('draws again for the same count on Generate another', async () => {
+  it('moves focus to the result heading after Generate', async () => {
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    expect(await screen.findByRole('heading', { name: 'Setup for 3 players' })).toHaveFocus()
+  })
+
+  it.each([
+    { reduceMotion: false, behavior: 'smooth' },
+    { reduceMotion: true, behavior: 'auto' },
+  ])('scrolls the result heading to the top, $behavior when reduced motion is $reduceMotion', async ({ reduceMotion, behavior }) => {
+    vi.stubGlobal('matchMedia', (query: string) => ({
+      matches: reduceMotion && query === '(prefers-reduced-motion: reduce)',
+      media: query,
+    }))
+    const scrolled: { heading: string | null; options: unknown }[] = []
+    vi.spyOn(Element.prototype, 'scrollIntoView').mockImplementation(function (this: Element, options) {
+      scrolled.push({ heading: this.textContent, options })
+    })
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('heading', { name: 'Setup for 3 players' })
+
+    expect(scrolled.at(-1)).toEqual({ heading: 'Setup for 3 players', options: { behavior, block: 'start' } })
+  })
+
+  it('draws again for the same count from the action bar', async () => {
     setupAnswers.push(() => json(setup), () => json({ ...setup, scheme: { id: 'core_scheme_x', name: 'Portals to the Dark Dimension', terms: [] } }))
     const user = userEvent.setup()
     renderApp()
 
     await user.click(screen.getByRole('button', { name: '3' }))
     await user.click(screen.getByRole('button', { name: 'Generate' }))
-    await user.click(await screen.findByRole('button', { name: 'Generate another' }))
+    const actionBar = await screen.findByRole('group', { name: 'Setup actions' })
+
+    expect(actionBar).toHaveTextContent('3 players')
+
+    await user.click(within(actionBar).getByRole('button', { name: 'Generate another' }))
 
     expect(await screen.findByRole('heading', { name: 'Portals to the Dark Dimension' })).toBeInTheDocument()
     expect(setupRequests()).toEqual([
