@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from 'react'
 import type { Component, Setup } from './api/setupApi.ts'
 import { SetupSummary } from './SetupSummary.tsx'
+import { TermKind } from './TermChips.tsx'
 
 // The drawn cards, then the setup as a checklist in the order a player lays it out. Every count and note comes from
 // the API response as-is: the client never adds, splits or infers a rule. The ticks are local
@@ -78,6 +79,25 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
                 ) : (
                   note.citation
                 )}
+              </cite>
+            </li>
+          ))}
+        </Section>
+      )}
+
+      {setup.glossary.length > 0 && (
+        <Section title="Terms in this setup" className="glossary">
+          {setup.glossary.map((term) => (
+            <li key={term.id} className={term.kind}>
+              <span className="term-name">{term.name}</span>{' '}
+              <span className="detail">
+                <TermKind kind={term.kind} />
+              </span>{' '}
+              {term.summary}{' '}
+              <cite>
+                <a href={term.link} target="_blank" rel="noreferrer">
+                  {term.citation}
+                </a>
               </cite>
             </li>
           ))}

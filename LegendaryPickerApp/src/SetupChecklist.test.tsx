@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import type { Setup } from './api/setupApi.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
@@ -18,6 +19,28 @@ const section = (name: string) => screen.getByRole('region', { name })
 const rows = (sectionName: string) =>
   within(section(sectionName)).getAllByRole('listitem').map((row) => row.textContent)
 
+// The drawn cards or groups under a summary heading, by name alone.
+const tileNames = (sectionName: string) =>
+  [...section(sectionName).querySelectorAll('.tile-name')].map((name) => name.textContent)
+
+// A drawn card by its heading, and the tags on it, leaving out its term chips.
+const card = (name: string) => screen.getByRole('heading', { name, level: 3 }).parentElement!
+const tags = (name: string) => {
+  const terms = within(card(name)).queryByRole('list', { name: 'Terms' })
+  return within(card(name))
+    .queryAllByRole('listitem')
+    .filter((item) => !terms?.contains(item))
+    .map((tag) => tag.textContent)
+}
+
+// The term chips on a drawn card or tile, by name.
+const chips = (container: HTMLElement) =>
+  within(within(container).getByRole('list', { name: 'Terms' }))
+    .getAllByRole('button')
+    .map((chip) => chip.textContent)
+
+const tile = (sectionName: string, name: string) => within(section(sectionName)).getByText(name).closest('li')!
+
 describe('SetupChecklist', () => {
   it('puts the drawn Scheme and Mastermind names first, as headings', () => {
     renderChecklist(legacyVirusThreePlayers)
@@ -33,26 +56,22 @@ describe('SetupChecklist', () => {
   it('shows each drawn Hero and group as its own item under its type', () => {
     renderChecklist(killbots)
 
-    const items = (name: string) => within(section(name)).getAllByRole('listitem').map((item) => item.textContent)
-    expect(items('Heroes')).toEqual(['Hulk', 'Deadpool', 'Hawkeye', 'Captain America', 'Black Widow'])
-    expect(items('Villain Groups')).toEqual(['Masters of Evil', 'Enemies of Asgard', 'Radiation'])
-    expect(items('Henchman Groups')).toEqual(['Doombot Legion', 'Hand Ninjas'])
+    expect(tileNames('Heroes')).toEqual(['Hulk', 'Deadpool', 'Hawkeye', 'Captain America', 'Black Widow'])
+    expect(tileNames('Villain Groups')).toEqual(['Masters of Evil', 'Enemies of Asgard', 'Radiation'])
+    expect(tileNames('Henchman Groups')).toEqual(['Doombot Legion', 'Hand Ninjas'])
   })
 
   it('names a single drawn group in the singular', () => {
     renderChecklist(soloSecretInvasion)
 
-    expect(within(section('Villain Group')).getAllByRole('listitem').map((item) => item.textContent)).toEqual(['Skrulls'])
-    expect(within(section('Henchman Group')).getAllByRole('listitem').map((item) => item.textContent)).toEqual([
-      'Doombot Legion',
-    ])
+    expect(tileNames('Villain Group')).toEqual(['Skrulls'])
+    expect(tileNames('Henchman Group')).toEqual(['Doombot Legion'])
   })
 
   it("tags the Mastermind card with the API's Always Leads note, word for word", () => {
     renderChecklist(legacyVirusThreePlayers)
 
-    const mastermind = screen.getByRole('heading', { name: 'Magneto', level: 3 }).parentElement!
-    expect(within(mastermind).getAllByRole('listitem').map((tag) => tag.textContent)).toEqual([
+    expect(tags('Magneto')).toEqual([
       'Magneto always leads Brotherhood',
     ])
   })
@@ -60,8 +79,7 @@ describe('SetupChecklist', () => {
   it('tags the Mastermind card when Solo ignores its Always Leads', () => {
     renderChecklist(soloSecretInvasion)
 
-    const mastermind = screen.getByRole('heading', { name: 'Loki', level: 3 }).parentElement!
-    expect(within(mastermind).getAllByRole('listitem').map((tag) => tag.textContent)).toEqual([
+    expect(tags('Loki')).toEqual([
       "Solo ignores Loki's Always Leads",
     ])
   })
@@ -80,8 +98,7 @@ describe('SetupChecklist', () => {
       ],
     })
 
-    const mastermind = screen.getByRole('heading', { name: 'Magneto', level: 3 }).parentElement!
-    expect(within(mastermind).getAllByRole('listitem').map((tag) => tag.textContent)).toEqual([
+    expect(tags('Magneto')).toEqual([
       "Scheme requires Skrulls, so Magneto's Always Leads group Brotherhood is dropped",
     ])
   })
@@ -89,8 +106,7 @@ describe('SetupChecklist', () => {
   it('leaves the Scheme card untagged', () => {
     renderChecklist(legacyVirusThreePlayers)
 
-    const scheme = screen.getByRole('heading', { name: 'Legacy Virus', level: 3 }).parentElement!
-    expect(within(scheme).queryByRole('listitem')).not.toBeInTheDocument()
+    expect(tags('Legacy Virus')).toEqual([])
   })
 
   it('lists the Scheme and Mastermind by name in the checklist', () => {
@@ -123,6 +139,7 @@ describe('SetupChecklist', () => {
       'Shared stacks',
       'Starting deck per player · 4 players',
       'Why this setup',
+      'Terms in this setup',
     ])
   })
 
@@ -181,5 +198,91 @@ describe('SetupChecklist', () => {
 
     expect(rows('Shared stacks')).toEqual(['Wounds 18', 'S.H.I.E.L.D. Officers 30', 'Bystanders 22'])
     expect(rows('Starting deck per player · 3 players')).toEqual(['S.H.I.E.L.D. Agents 8', 'S.H.I.E.L.D. Troopers 4'])
+  })
+
+  it("shows a Hero's team and classes as chips on its tile", () => {
+    renderChecklist(killbots)
+
+    expect(chips(tile('Heroes', 'Hulk'))).toEqual(['Avengers', 'Instinct', 'Strength'])
+    expect(chips(tile('Heroes', 'Black Widow'))).toEqual(['Avengers', 'Covert', 'Tech', 'Rescue a Bystander'])
+  })
+
+  it("shows the Villain Groups', Scheme's and Mastermind's keywords as chips", () => {
+    renderChecklist(killbots)
+
+    expect(chips(tile('Villain Groups', 'Enemies of Asgard'))).toEqual(['Ambush', 'Escape', 'Fight'])
+    expect(chips(card("Replace Earth's Leaders with Killbots"))).toEqual(['Scheme Twist'])
+    expect(chips(card('Dr. Doom'))).toEqual(['Always Leads', 'Fight', 'Master Strike', 'Mastermind Tactic'])
+  })
+
+  it("opens a chip's explanation with its name, summary and cited source", async () => {
+    const user = userEvent.setup()
+    renderChecklist(killbots)
+
+    const chip = within(tile('Heroes', 'Hulk')).getByRole('button', { name: 'Strength' })
+    await user.click(chip)
+
+    const explanation = screen.getByRole('dialog', { name: 'Strength' })
+    expect(within(explanation).getByRole('heading', { name: 'Strength' })).toBeInTheDocument()
+    expect(explanation).toHaveTextContent('Hero class')
+    expect(explanation).toHaveTextContent(
+      'A Hero class of fighters whose power is might, whether of body or of will and leadership.',
+    )
+    expect(within(explanation).getByRole('link', { name: 'R p.18' })).toHaveAttribute('href', 'https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf')
+    expect(chip).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('closes the explanation on Escape and returns focus to its chip', async () => {
+    const user = userEvent.setup()
+    renderChecklist(killbots)
+
+    const chip = within(card('Dr. Doom')).getByRole('button', { name: 'Master Strike' })
+    await user.click(chip)
+    expect(screen.getByRole('dialog', { name: 'Master Strike' })).toHaveFocus()
+
+    await user.keyboard('{Escape}')
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(chip).toHaveFocus()
+    expect(chip).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('closes the explanation with its close button or a tap outside it', async () => {
+    const user = userEvent.setup()
+    renderChecklist(killbots)
+
+    const chip = within(card('Dr. Doom')).getByRole('button', { name: 'Fight' })
+    await user.click(chip)
+    await user.click(within(screen.getByRole('dialog', { name: 'Fight' })).getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(chip).toHaveFocus()
+
+    await user.click(chip)
+    await user.click(screen.getByRole('heading', { name: 'Setup for 4 players' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(chip).toHaveFocus()
+  })
+
+  it('lists every term in the setup once, after the rule notes, with its summary and citation', () => {
+    renderChecklist(killbots)
+
+    const terms = within(section('Terms in this setup')).getAllByRole('listitem')
+    expect(terms.map((term) => term.querySelector('.term-name')!.textContent)).toEqual([
+      'Avengers',
+      'Covert',
+      'Instinct',
+      'Strength',
+      'Tech',
+      'Always Leads',
+      'Ambush',
+      'Escape',
+      'Fight',
+      'Master Strike',
+      'Mastermind Tactic',
+      'Rescue a Bystander',
+      'Scheme Twist',
+    ])
+    expect(terms[8]).toHaveTextContent('Fight Keyword Triggers when a player spends enough Attack to defeat this card. R p.13')
+    expect(within(terms[8]).getByRole('link', { name: 'R p.13' })).toHaveAttribute('href', 'https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf')
   })
 })
