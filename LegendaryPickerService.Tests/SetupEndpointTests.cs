@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json.Nodes;
 using LegendaryPickerService.Catalog;
 using LegendaryPickerService.Setup;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -103,6 +104,58 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/health")).StatusCode);
     }
 
+    [Fact]
+    public async Task Behind_the_platform_proxy_each_forwarded_client_gets_its_own_budget()
+    {
+        var server = Server();
+        for (var i = 1; i <= 30; i++)
+        {
+            Assert.Equal(200, await SetupStatus(server, AppServiceFrontEnd, forwardedFor: "198.51.100.7"));
+        }
+
+        Assert.Equal(429, await SetupStatus(server, AppServiceFrontEnd, forwardedFor: "198.51.100.7"));
+        Assert.Equal(200, await SetupStatus(server, AppServiceFrontEnd, forwardedFor: "198.51.100.8"));
+    }
+
+    [Fact]
+    public async Task A_client_that_forges_X_Forwarded_For_still_spends_its_own_budget()
+    {
+        var server = Server();
+        for (var i = 1; i <= 30; i++)
+        {
+            Assert.Equal(200, await SetupStatus(server, IPAddress.Parse("203.0.113.9"), forwardedFor: $"198.51.100.{i}"));
+        }
+
+        Assert.Equal(429, await SetupStatus(server, IPAddress.Parse("203.0.113.9"), forwardedFor: "198.51.100.99"));
+    }
+
+    [Fact]
+    public async Task A_forged_X_Forwarded_For_passed_on_by_the_platform_proxy_does_not_buy_a_new_budget()
+    {
+        // The front end appends the real caller to whatever X-Forwarded-For the client sent,
+        // so only the rightmost entry can be trusted.
+        var server = Server();
+        for (var i = 1; i <= 30; i++)
+        {
+            Assert.Equal(200, await SetupStatus(server, AppServiceFrontEnd, forwardedFor: $"198.51.100.{i}, 203.0.113.9"));
+        }
+
+        Assert.Equal(429, await SetupStatus(server, AppServiceFrontEnd, forwardedFor: "198.51.100.99, 203.0.113.9"));
+    }
+
+    [Fact]
+    public async Task IPv6_clients_in_one_64_share_a_budget_and_another_64_does_not()
+    {
+        var server = Server();
+        for (var i = 1; i <= 30; i++)
+        {
+            Assert.Equal(200, await SetupStatus(server, AppServiceFrontEnd, forwardedFor: $"2001:db8:1:2::{i:x}"));
+        }
+
+        Assert.Equal(429, await SetupStatus(server, AppServiceFrontEnd, forwardedFor: "2001:db8:1:2:ffff::1"));
+        Assert.Equal(200, await SetupStatus(server, AppServiceFrontEnd, forwardedFor: "2001:db8:1:3::1"));
+    }
+
     [Theory]
     [InlineData("/api/setup?players=3")]
     [InlineData("/api/setup?players=9")]
@@ -128,6 +181,28 @@ public sealed class SetupEndpointTests : IDisposable
         var response = await Client().SendAsync(Preflight("https://example.com"));
 
         Assert.False(response.Headers.Contains("Access-Control-Allow-Origin"));
+    }
+
+    // The App Service front end as the deployed app sees it: an IPv4-mapped link-local address.
+    private static readonly IPAddress AppServiceFrontEnd = IPAddress.Parse("::ffff:169.254.129.1");
+
+    private static async Task<int> SetupStatus(TestServer server, IPAddress remote, string forwardedFor)
+    {
+        var context = await server.SendAsync(context =>
+        {
+            context.Request.Path = "/api/setup";
+            context.Request.QueryString = new QueryString("?players=3");
+            context.Request.Headers["X-Forwarded-For"] = forwardedFor;
+            context.Connection.RemoteIpAddress = remote;
+        });
+        return context.Response.StatusCode;
+    }
+
+    private TestServer Server()
+    {
+        var factory = new WebApplicationFactory<Program>();
+        _hosts.Add(factory);
+        return factory.Server;
     }
 
     private HttpClient Client(IRandomSource? random = null, BoxCatalog? catalog = null)
