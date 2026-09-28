@@ -8,7 +8,7 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 ## Where things stand
 
 - Repository: [RyanGano/LegendaryPicker](https://github.com/RyanGano/LegendaryPicker), branch `main`.
-- `LegendaryPickerService` loads the core box catalog and setup rules from `Data/Boxes/core.json`, and serves `/api/health` and the rate-limited `GET /api/setup?players=1..5` (issue #4), which returns a `Setup/SetupGenerator` draw (issue #3). `LegendaryPickerApp` pings `/api/health` on load, lets the player pick a count and shows the drawn components by name (#5). The full result checklist is #6.
+- `LegendaryPickerService` loads the core box catalog and setup rules from `Data/Boxes/core.json`, and serves `/api/health` and the rate-limited `GET /api/setup?players=1..5` (issue #4), which returns a `Setup/SetupGenerator` draw (issue #3). `LegendaryPickerApp` pings `/api/health` on load, lets the player pick a count (#5) and renders the draw as the Setup checklist, with counts, totals, cited Rule notes and per-line ticks that reset on a new draw (#6).
 - GitHub Pages deploys the frontend from `main`: https://ryangano.github.io/LegendaryPicker/.
 - The API is hosted on Azure App Service Free F1, Linux, West US 2, $0 a month (user decision, 2026-09-27). The web app is the one named by the `AZURE_WEBAPP_NAME` repository variable; the resource names and hostname are kept out of the repo. `.github/workflows/deploy-api.yml` deploys it from `main` through OIDC (the Entra app identified by the `AZURE_CLIENT_ID` repository variable, trusted for `refs/heads/main` only); the Pages build points at it through the `VITE_API_BASE_URL` repository variable (#7). Any other Azure resource needs explicit authorization.
 

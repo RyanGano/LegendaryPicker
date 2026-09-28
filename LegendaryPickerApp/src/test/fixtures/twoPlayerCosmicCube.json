@@ -1,0 +1,81 @@
+{
+  "kind": "setup",
+  "players": 2,
+  "scheme": {
+    "id": "core_scheme_unleash-the-power-of-the-cosmic-cube",
+    "name": "Unleash the Power of the Cosmic Cube"
+  },
+  "mastermind": {
+    "id": "core_mastermind_red-skull",
+    "name": "Red Skull"
+  },
+  "villainGroups": [
+    {
+      "id": "core_villain_hydra",
+      "name": "HYDRA"
+    },
+    {
+      "id": "core_villain_masters-of-evil",
+      "name": "Masters of Evil"
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "id": "core_henchman_hand-ninjas",
+      "name": "Hand Ninjas"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "core_hero_gambit",
+      "name": "Gambit"
+    },
+    {
+      "id": "core_hero_deadpool",
+      "name": "Deadpool"
+    },
+    {
+      "id": "core_hero_black-widow",
+      "name": "Black Widow"
+    },
+    {
+      "id": "core_hero_spider-man",
+      "name": "Spider-Man"
+    },
+    {
+      "id": "core_hero_captain-america",
+      "name": "Captain America"
+    }
+  ],
+  "villainDeck": {
+    "twists": 8,
+    "masterStrikes": 5,
+    "villainCards": 16,
+    "henchmanCards": 10,
+    "bystanders": 2,
+    "heroCards": 0,
+    "total": 41
+  },
+  "heroDeck": {
+    "heroCards": 70,
+    "movedToVillainDeck": 0,
+    "total": 70
+  },
+  "twistsBesideScheme": 0,
+  "stacks": {
+    "wounds": 30,
+    "officers": 30,
+    "bystanders": 28
+  },
+  "playerDeck": {
+    "agents": 8,
+    "troopers": 4
+  },
+  "notes": [
+    {
+      "text": "Red Skull always leads HYDRA",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    }
+  ]
+}

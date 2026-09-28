@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getSetup, ping, type Setup } from './api/setupApi.ts'
-import { SetupSummary } from './SetupSummary.tsx'
+import { SetupChecklist } from './SetupChecklist.tsx'
 
 const PLAYER_COUNTS = [1, 2, 3, 4, 5]
 
@@ -120,7 +120,7 @@ function App() {
         )}
         {status.kind === 'result' && (
           <>
-            <SetupSummary setup={status.setup} />
+            <SetupChecklist setup={status.setup} />
             <button type="button" className="primary" onClick={generate}>
               Generate another
             </button>

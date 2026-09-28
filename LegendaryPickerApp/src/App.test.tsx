@@ -96,9 +96,9 @@ describe('App', () => {
 
     expect(await screen.findByText('Midtown Bank Robbery')).toBeInTheDocument()
     expect(screen.getByText('Magneto')).toBeInTheDocument()
-    expect(screen.getByText('Wolverine')).toBeInTheDocument()
-    expect(screen.getByText('Brotherhood')).toBeInTheDocument()
-    expect(screen.getByText('Savage Land Mutates')).toBeInTheDocument()
+    expect(screen.getByLabelText('3 Heroes Wolverine, Storm, Hulk 42')).toBeInTheDocument()
+    expect(screen.getByLabelText('1 Villain Group Brotherhood 8')).toBeInTheDocument()
+    expect(screen.getByLabelText('1 Henchman Group Savage Land Mutates 10')).toBeInTheDocument()
     expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3$/)])
   })
 
@@ -116,6 +116,25 @@ describe('App', () => {
       expect.stringMatching(/players=3$/),
       expect.stringMatching(/players=3$/),
     ])
+  })
+
+  it('clears the ticks on Generate another', async () => {
+    setupAnswers.push(() => json(setup), () => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await user.click(await screen.findByLabelText('Scheme Twists 8'))
+    await user.click(screen.getByLabelText('Wounds 30'))
+
+    expect(screen.getByLabelText('Scheme Twists 8')).toBeChecked()
+
+    await user.click(screen.getByRole('button', { name: 'Generate another' }))
+    await screen.findByRole('button', { name: 'Generate another' })
+
+    expect(screen.getAllByRole('checkbox').filter((box) => (box as HTMLInputElement).checked)).toEqual([])
+    expect(setupRequests()).toHaveLength(2)
   })
 
   it('shows the loading text, then the wake-up line on a slow response', async () => {
