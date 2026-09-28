@@ -45,7 +45,7 @@ dotnet test
 - CI checks come from `.github/workflows/test.yml`, which runs on every pull request and push to `main`: `dotnet test LegendaryPicker.slnx` (job `service`) and `npm ci`, `npm run lint`, `npm test`, `npm run build` in `LegendaryPickerApp` (job `frontend`). It does not gate the Pages deploy.
 - CORS origins for the API come from the `Cors:AllowedOrigins` config section.
 - `/api/setup` is rate-limited per client IP. Behind App Service the IP comes from `X-Forwarded-For`, trusted only from the platform front end (169.254.0.0/16); IPv6 clients are bucketed by /64.
-- Game data (catalog + sourced setup rules) lives in `LegendaryPickerService/Data/Boxes/<box-id>.json`, one file per box, changed only through reviewed commits: no database or admin UI. `Catalog/BoxCatalog` loads every file at startup (a singleton) and rejects unknown fields, missing values, malformed or duplicate ids, and references that don't resolve. Ids have the form `<boxId>_<kind>_<name>` (`core_mastermind_dr-doom`; kinds `hero`, `villain`, `henchman`, `mastermind`, `scheme`; see Ids in `Docs/Plan.md`); every rule value and setup effect carries a `source` key from `Docs/Plan.md`.
+- Game data (catalog + sourced setup rules) lives in `LegendaryPickerService/Data/Boxes/<box-id>.json`, one file per box, changed only through reviewed commits: no database or admin UI. `Catalog/BoxCatalog` loads every file at startup (a singleton) and rejects unknown fields, missing values, malformed or duplicate ids, and references that don't resolve. Ids have the form `<boxId>_<kind>_<name>` (`core_mastermind_dr-doom`; kinds `hero`, `villain`, `henchman`, `mastermind`, `scheme`, `term`; see Ids in `Docs/Plan.md`); every rule value and setup effect carries a `source` key from `Docs/Plan.md`.
 
 ## Rules and data constraints
 
@@ -53,4 +53,5 @@ dotnet test
 - Every setup rule needs a source: the First Edition rulebook, an official clarification, or a ruling directly attributed to the designer or an Upper Deck rules representative. Record provenance alongside the data. A community catalog may supply card names and group mappings only.
 - Generation guarantees legality, never balance. Never relax a rule to make a Scheme playable; drop Schemes with no legal completion before the draw.
 - Store only short factual identifiers (card/group names, counts). Keep rulebook text, card text, and flavor text out of the repo.
+- Glossary term summaries (`glossary` in each box file) are the one exception to names-only: original paraphrases in our own words, at most two short sentences (40 words, enforced at load), never quoted or closely reworded from the rulebook, each with a `source` key and `page` that point to the full rule. Rewrite any summary that reads like copied rulebook text.
 - Research downloads (the rulebook PDF and extracted text under `_research_tmp2/`, `resp.json`) stay local and uncommitted; they are not in `.gitignore`, so stage files explicitly.

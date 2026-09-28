@@ -64,7 +64,7 @@ app.MapGet("/api/health", () => Results.Ok(new { status = "ok" }));
 // NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
 const int MinPlayers = 1;
 const int MaxPlayers = 5;
-app.MapGet("/api/setup", (string? players, HttpResponse response, SetupGenerator generator, IRandomSource random) =>
+app.MapGet("/api/setup", (string? players, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
 {
     // "Generate another" must always draw a fresh setup.
     response.Headers.CacheControl = "no-store";
@@ -77,7 +77,7 @@ app.MapGet("/api/setup", (string? players, HttpResponse response, SetupGenerator
         });
     }
 
-    return Results.Ok(SetupResponse.From(generator.Generate(count, random)));
+    return Results.Ok(SetupResponse.From(generator.Generate(count, random), catalog));
 }).RequireRateLimiting(SetupRateLimit);
 
 app.Run();

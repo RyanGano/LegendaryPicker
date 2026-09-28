@@ -70,10 +70,15 @@ A complete legal setup selected without player-selected card preferences; only o
 How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then draw the Heroes. Each draw is equally likely among the remaining options.
 
 **Setup checklist**:
-What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals; the Twists beside the Scheme; the Wound, Bystander and S.H.I.E.L.D. Officer stacks; each player's starting deck; and the rule notes.
+What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals; the Twists beside the Scheme; the Wound, Bystander and S.H.I.E.L.D. Officer stacks; each player's starting deck; the rule notes; and the glossary terms its components use.
 
 **Rule note**:
 One short line naming a rule that changed a setup, with its citation (for example "R p.6") and a link to the source when one is published. Never card or rulebook text.
+
+**Glossary term**:
+A Hero team, Hero class or keyword that a setup component uses (for example Avengers, Covert or Ambush), with a summary of at most 40 words written in our own words and a citation to the rulebook page that defines it. Never rulebook or card text.
+
+_Avoid_: Keyword, for teams and classes; a keyword is one kind of glossary term.
 
 **No eligible Scheme**:
 The result when no Scheme in the included boxes can be set up legally at the player count. It is a result, not an error.
