@@ -70,18 +70,16 @@ app.MapGet("/api/boxes", (BoxCatalog catalog) =>
 // players is read as text so a non-number gets the same ProblemDetails as an out-of-range count.
 // boxes is a comma-separated list of box ids; without it a setup uses the core box alone.
 // NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
-const int MinPlayers = 1;
-const int MaxPlayers = 5;
 app.MapGet("/api/setup", (string? players, string? boxes, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
 {
     // "Generate another" must always draw a fresh setup.
     response.Headers.CacheControl = "no-store";
 
-    if (!int.TryParse(players, out var count) || count is < MinPlayers or > MaxPlayers)
+    if (!int.TryParse(players, out var count) || count is < BoxCatalog.MinPlayers or > BoxCatalog.MaxPlayers)
     {
         return Results.ValidationProblem(new Dictionary<string, string[]>
         {
-            ["players"] = [$"players must be a whole number from {MinPlayers} to {MaxPlayers}."],
+            ["players"] = [$"players must be a whole number from {BoxCatalog.MinPlayers} to {BoxCatalog.MaxPlayers}."],
         });
     }
 

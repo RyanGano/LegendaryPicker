@@ -276,6 +276,71 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Fact]
+    public void Rejects_a_player_count_listed_twice()
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_super-hero-civil-war")["setup"]!["twists"]![1]!["players"] = new JsonArray(3, 4, 5));
+
+        AssertRejected("core_scheme_super-hero-civil-war setup.twists has more than one entry for player count 3");
+    }
+
+    [Fact]
+    public void Rejects_an_entry_for_every_player_count_beside_another_entry()
+    {
+        WriteCoreBox(core => Mastermind(core, "core_mastermind_loki")["setup"] = new JsonObject
+        {
+            ["extraHeroes"] = new JsonArray(
+                new JsonObject { ["players"] = null, ["value"] = 1, ["source"] = "Card" },
+                new JsonObject { ["players"] = new JsonArray(1), ["value"] = 2, ["source"] = "Card" }),
+        });
+
+        AssertRejected("core_mastermind_loki setup.extraHeroes has more than one entry for player count 1");
+    }
+
+    [Fact]
+    public void Rejects_a_setup_player_count_row_listed_twice()
+    {
+        WriteCoreBox(core => core["setup"]!["playerCounts"]![3]!["players"] = 4);
+
+        AssertRejected("setup.playerCounts has more than one entry for player count 4");
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(6)]
+    public void Rejects_a_player_count_outside_1_to_5(int players)
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_super-hero-civil-war")["setup"]!["heroes"]![0]!["players"] = new JsonArray(players));
+
+        AssertRejected($"core_scheme_super-hero-civil-war setup.heroes names player count {players}; player counts are 1 to 5");
+    }
+
+    [Fact]
+    public void Rejects_a_setup_player_count_row_outside_1_to_5()
+    {
+        WriteCoreBox(core => core["setup"]!["playerCounts"]![3]!["players"] = 6);
+
+        AssertRejected("setup.playerCounts names player count 6; player counts are 1 to 5");
+    }
+
+    [Fact]
+    public void Rejects_an_entry_that_names_no_player_count()
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_super-hero-civil-war")["setup"]!["heroes"]![0]!["players"] = new JsonArray());
+
+        AssertRejected("core_scheme_super-hero-civil-war setup.heroes has an entry that names no player count");
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void Rejects_a_per_player_count_value_below_1(int value)
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_negative-zone-prison-breakout")["setup"]!["extraHenchmanGroups"]![0]!["value"] = value);
+
+        AssertRejected($"core_scheme_negative-zone-prison-breakout setup.extraHenchmanGroups has value {value}; values are at least 1");
+    }
+
+    [Fact]
     public void Rejects_two_boxes_with_the_same_id()
     {
         WriteCoreBox(_ => { });
