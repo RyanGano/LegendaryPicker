@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="LegendaryPickerService.Tests/LegendaryPickerService.Tests.csproj" />
+  <Project Path="LegendaryPickerService/LegendaryPickerService.csproj" />
+</Solution>

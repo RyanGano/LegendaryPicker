@@ -1,3 +1,5 @@
+using LegendaryPickerService.Catalog;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var allowedOrigins = builder.Configuration
@@ -11,6 +13,8 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
+
+builder.Services.AddSingleton(BoxCatalog.Load(BoxCatalog.DefaultDirectory));
 
 var app = builder.Build();
 
