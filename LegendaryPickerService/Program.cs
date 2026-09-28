@@ -1,6 +1,10 @@
+using System.Net;
+using System.Net.Sockets;
 using System.Threading.RateLimiting;
 using LegendaryPickerService.Catalog;
 using LegendaryPickerService.Setup;
+using Microsoft.AspNetCore.HttpOverrides;
+using IPNetwork = System.Net.IPNetwork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,14 +20,29 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod());
 });
 
+// On App Service every request reaches the app from the platform front end, which appends the
+// caller's address to X-Forwarded-For. Only that hop (link-local, seen as 169.254.129.1 on the
+// deployed app) is trusted, so a client that sends its own X-Forwarded-For can't pick its rate-limit
+// bucket. App Service also turns on the framework's forwarded headers by default
+// (ASPNETCORE_FORWARDEDHEADERS_ENABLED) with every source trusted; configuring these options replaces
+// that trust list, because both middlewares read the same options.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownProxies.Clear();
+    options.KnownIPNetworks.Clear();
+    options.KnownIPNetworks.Add(IPNetwork.Parse("169.254.0.0/16"));
+});
+
 // The API is public with no sign-in, so each client IP gets a fixed number of setups a minute.
+// An IPv6 client can rotate addresses within its /64, so the whole /64 shares one bucket.
 // Health stays unlimited: the frontend pings it on load to wake the app.
 const string SetupRateLimit = "setup";
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     options.AddPolicy(SetupRateLimit, context => RateLimitPartition.GetFixedWindowLimiter(
-        context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        ClientBucket(context.Connection.RemoteIpAddress),
         _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1) }));
 });
 
@@ -33,7 +52,9 @@ builder.Services.AddSingleton<IRandomSource, SharedRandomSource>();
 
 var app = builder.Build();
 
-// CORS runs first so a 429 still carries Access-Control-Allow-Origin and the browser app can read it.
+// Forwarded headers run first, so the rate limiter partitions on the caller's address.
+app.UseForwardedHeaders();
+// CORS runs next so a 429 still carries Access-Control-Allow-Origin and the browser app can read it.
 app.UseCors();
 app.UseRateLimiter();
 
@@ -60,6 +81,23 @@ app.MapGet("/api/setup", (string? players, HttpResponse response, SetupGenerator
 }).RequireRateLimiting(SetupRateLimit);
 
 app.Run();
+
+static string ClientBucket(IPAddress? address)
+{
+    if (address is null)
+    {
+        return "unknown";
+    }
+
+    if (address.IsIPv4MappedToIPv6)
+    {
+        return address.MapToIPv4().ToString();
+    }
+
+    return address.AddressFamily == AddressFamily.InterNetworkV6
+        ? new IPNetwork(address, 64).BaseAddress + "/64"
+        : address.ToString();
+}
 
 // Lets the tests host the app through WebApplicationFactory<Program>.
 public partial class Program;

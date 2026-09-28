@@ -16,3 +16,7 @@ Start the backend from the repository root with `dotnet run --project LegendaryP
 ## GitHub Pages
 
 The frontend is built and deployed automatically to GitHub Pages when changes are pushed to `main`. The site URL is https://ryangano.github.io/LegendaryPicker/.
+
+## Azure App Service
+
+`.github/workflows/deploy-api.yml` deploys the API to the App Service web app named by the `AZURE_WEBAPP_NAME` repository variable when a push to `main` changes the service. The tests run first, and a failure stops the deploy.
