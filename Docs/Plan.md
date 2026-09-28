@@ -1,42 +1,48 @@
 # LegendaryPicker design plan
 
-**Status:** Draft for discussion. This records the current understanding, not an implementation authorization. Update it as design decisions and rule research are resolved.
+**Status:** Design confirmed on 2026-09-27. Implementation is tracked as GitHub issues under the "Legendary Picker v1" parent issue. Update this plan when a decision or verified fact changes.
 
 ## Product goal
 
-Help a player prepare a legally configured game of Upper Deck's Marvel Legendary by randomly selecting a complete setup and explaining any setup components required or excluded by the selected rules.
+Help a player prepare a legally configured game of Upper Deck's Marvel Legendary: pick a player count, get one random complete setup, and set it up from a checklist that explains rule-driven inclusions and exclusions.
 
-## Current scope and decisions
+## Decisions
 
-- **Game:** Marvel Legendary First Edition (2013) core box only. Other expansions and other Legendary game lines are out of scope for the first version. When expansion support is added later, players choose which boxes to include per setup.
-- **Input:** Ask for the number of players for each setup, supporting one through five players. A one-player game uses the First Edition core box's own Solo rules; multiplayer is also in scope. Advanced Solo is excluded from v1.
-- **Generation:** Generate one complete random setup at a time. Players do not lock a Scheme or Mastermind first and do not add their own must-include or must-exclude preferences. A player can generate another setup, replacing the current one without retaining history.
-- **Legality:** Satisfy applicable First Edition setup rules. Do not filter for subjective balance or difficulty.
-- **Randomness:** For the entered player count, select equally among Schemes that have at least one complete legal setup. For the selected Scheme, select uniformly among distinct complete legal setups compatible with it. The chosen components define a setup; draw order and shuffle order do not make a new setup. Never relax rules to make an impossible Scheme playable.
-- **No eligible Scheme:** If no Scheme has any complete legal setup for the entered player count, show a clear explanation and let the player choose another count; do not relax rules or switch modes.
-- **Result:** Show a complete setup checklist: randomized components/groups, fixed shared piles, and player starting decks/counts. Add concise notes explaining rule-driven inclusions or exclusions, with a short citation label and source link when available. Do not enumerate every card inside a selected group or reproduce an ordered rulebook walkthrough.
-- **App boundary:** Generate and present setups only. No turn/game-state tracking, accounts, history, favorites, or saved setups in v1.
-- **Use context:** Mobile-first responsive web app; online use is sufficient for v1.
-- **Rules authority:** Use the First Edition rulebook and official clarifications. Accept rulings directly attributed to the game's designer or an Upper Deck rules representative when archived elsewhere, and record their provenance. Do not rely on unattributed community interpretations or silently substitute Second Edition rules.
-- **Generation architecture:** The C# Minimal API owns the authoritative rules and setup generator; the React app calls it. GitHub Pages hosts only the frontend; the API is planned for Azure App Service.
-- **API access:** The setup API is public and does not require sign-in; use basic service-side rate limits if needed.
-- **Hosting priority:** Target the lowest-cost compatible App Service plan and accept possible cold starts/limits. Exact SKU and cost remain unselected; no Azure resources have been created or authorized.
-- **Game data:** Keep the catalog and sourced setup rules in versioned project data, grouped by box; future additions ship as reviewed project updates, not through an admin UI/database. A cross-checked community catalog may supply card identities/group mappings, but not rule interpretations.
-- **Release gate:** Do not present v1 as rules-valid until all setup data and rules are sourced for every supported count from one through five, including First Edition Solo. Do not ship a partial count range as the complete randomizer.
+- **Game:** Marvel Legendary First Edition (2013) core box only for v1. When expansion support is added, players choose which boxes to include per setup, and an expansion's rules apply only when its box is included. Data and rules are organized so adding a box is mostly adding data.
+- **Input:** One to five players. One player uses the First Edition core Solo mode. Advanced Solo is excluded.
+- **Rule precedence:** Printed card text overrides the rulebook (a Scheme overrides Always Leads and the Solo setup). Otherwise the base Legendary rules apply. Never substitute Second Edition rules.
+- **Generation (table draw):** Draw the Scheme from those allowed at the player count; then the Mastermind; then add the groups the Scheme and Mastermind require (Always Leads is ignored in Solo); then draw the remaining Villain and Henchman Groups from what is left; then draw the Heroes. Each draw is equally likely among the remaining options. No locking or player preferences. Legality only, never balance.
+- **No eligible Scheme:** If no Scheme is allowed at the player count, explain it and let the player choose another count. This is unreachable with the core box alone but must hold once expansions exist.
+- **Result:** The selected Scheme, Mastermind, Heroes, Villain Groups and Henchman Groups; per-component counts and totals for the Villain Deck and Hero Deck; the Wound, Bystander and S.H.I.E.L.D. Officer stacks; each player's starting deck; short rule notes with a citation label and source link. "Generate another" replaces the result. No card-by-card lists or rulebook walkthrough.
+- **App boundary:** Generate and present setups only. No accounts, history, favorites, saved setups or game-state tracking.
+- **Use context:** Mobile-first responsive web app, online only.
+- **UX:** The page calls the API on load to wake it. The player picks a count, then taps Generate. A loading state covers cold starts; errors show a Retry.
+- **Architecture:** The C# Minimal API owns the catalog, rules and generator; the React app calls it. GitHub Pages hosts the frontend; the API is planned for Azure App Service on the lowest-cost compatible plan. The API is public, without sign-in, with basic rate limits. No Azure resources exist; provisioning needs an explicit SKU, region and cost decision.
+- **Randomness in tests:** The generator takes an injectable random source. Tests use fixed sequences and assert exact results; no statistical tests. No public seed.
+- **Game data:** Catalog and sourced setup rules live in versioned project data grouped by box. Scheme and Mastermind setup effects are structured data, not code keyed on card names. Changes ship through reviewed commits.
 
-## Existing project groundwork
+## Sources
 
-- `LegendaryPickerApp` is the React/TypeScript/Vite frontend.
-- `LegendaryPickerService` is the C# Minimal API backend.
-- GitHub Pages is configured to deploy the frontend from `main`.
-- `CONTEXT.md` records the agreed domain vocabulary so far.
-- No game-specific models, card data, setup generator, or game UI have been implemented yet.
+- **R:** [Archived Upper Deck First Edition rulebook](https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf). Primary rules source; page numbers below are its printed pages.
+- **F:** [BoardGameGeek Legendary Marvel FAQ](https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ) ([archived copy](https://web.archive.org/web/20210519195532id_/https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ)). Designer (Devin Low) and Upper Deck rulings only.
+- **D1:** [Designer ruling: Scheme over Always Leads](https://boardgamegeek.com/thread/993341/article/12653573).
+- **D2:** Designer rulings that a Scheme's setup overrides the Solo setup: [thread 884926](https://boardgamegeek.com/thread/884926), [thread 898520](https://boardgamegeek.com/thread/898520).
+- **C1/C2:** Community card catalogs for names and group membership only: [master-strike core set](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/coreset.ts), [nutki/legendary text files](https://github.com/nutki/legendary/tree/master/texttools/Legendary).
 
-## Research so far
+## First Edition core box
 
-The First Edition rulebook has now been recovered from its original Upper Deck URL through the Wayback Machine. It is the primary rules source for this project. Its contents manifest identifies 15 Heroes, 7 Villain Groups, 4 Henchman Villain Groups, 4 Masterminds, and 8 Schemes. The rulebook is not a complete card checklist, so the names and relationships of every core-box group still need to be verified.
+Counts (R p.22): 15 Heroes × 14 cards, 7 Villain Groups × 8, 4 Henchman Groups × 10, 4 Masterminds, 8 Schemes, 11 Scheme Twists, 5 Master Strikes, 30 Bystanders, 30 Wounds, 30 S.H.I.E.L.D. Officers, and per-player starting cards. Names confirmed by C1 and C2 against those counts:
 
-The First Edition rulebook's standard setup uses five Heroes; its Solo section uses three Heroes (42 cards). Its printed 2–5 player table specifies Villain Groups, Henchman Groups, and Bystanders as follows:
+- **Heroes:** Black Widow, Captain America, Cyclops, Deadpool, Emma Frost, Gambit, Hawkeye, Hulk, Iron Man, Nick Fury, Rogue, Spider-Man, Storm, Thor, Wolverine.
+- **Villain Groups:** Brotherhood, Enemies of Asgard, HYDRA, Masters of Evil, Radiation, Skrulls, Spider-Foes.
+- **Henchman Groups:** Doombot Legion, Hand Ninjas, Savage Land Mutates, Sentinel.
+- **Masterminds (Always Leads):** Dr. Doom (Doombot Legion, a Henchman Group), Loki (Enemies of Asgard), Magneto (Brotherhood), Red Skull (HYDRA).
+
+R p.2 "Your First Game" lists Villain and Henchman groups together; Sentinel and Hand Ninjas are Henchman Groups.
+
+### Standard setup (R pp.4–6)
+
+Each player starts with 8 S.H.I.E.L.D. Agents and 4 S.H.I.E.L.D. Troopers. The Villain Deck holds the Scheme's Twists, 5 Master Strikes, the Villain Groups, all 10 cards of each Henchman Group, and Bystanders. The Hero Deck is 5 Heroes (70 cards). The Always Leads group counts as one of the groups (R p.6).
 
 | Players | Villain Groups | Henchman Groups | Bystanders |
 |---:|---:|---:|---:|
@@ -45,26 +51,25 @@ The First Edition rulebook's standard setup uses five Heroes; its Solo section u
 | 4 | 3 | 2 | 8 |
 | 5 | 4 | 2 | 12 |
 
-Solo has its own setup rules: use three Heroes, one Villain Group, three Henchman cards from one Henchman Group, one Bystander, and the Scheme's normal number of Twists; it ignores the Mastermind's "Always Leads" ability and disallows the Schemes *Super Hero Civil War* and *Negative Zone Prison Breakout*. The general setup calls for five Master Strikes; verify its application to Solo, as well as all Scheme-specific count overrides, before implementation.
+### Solo setup (R p.20)
 
-The BoardGameGeek *Legendary Marvel FAQ* records additional answers attributed to designer Devin Low and Upper Deck rules representative JeffP300. One directly attributed designer ruling confirms that a Scheme takes precedence over a Mastermind's "Always Leads" requirement. Advanced Solo is mentioned in community rules material, but its origin in the First Edition core box is unverified and it is excluded from v1.
+3 Heroes (42 cards); 1 Villain Group; 3 cards from one Henchman Group; 1 Bystander; 1 Master Strike; the Scheme's normal Twists. Ignore Always Leads. *Super Hero Civil War* and *Negative Zone Prison Breakout* are not allowed. Play rule: after each Twist, KO a Hero costing 6 or less from the HQ. A Scheme's Setup line overrides these values (D2; applied by extension to Schemes other than *Secret Invasion*).
 
-Sources:
+### Schemes
 
-- [Archived Upper Deck First Edition rulebook](https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf)
-- [BoardGameGeek Legendary Marvel FAQ](https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ)
-- [Designer ruling: Scheme versus Always Leads](https://boardgamegeek.com/thread/993341/article/12653573)
-- [First Edition rulebook archive listing](https://boardgamegeek.com/filepage/83353/marvel-legendary-rule-book) — secondary archive listing.
-- [Upper Deck Second Edition rulebook](https://upperdeck.com/wp-content/uploads/2026/08/Legendary-Second-Edition-Rulebook.pdf) — for edition comparison only, not as a First Edition rules source.
+| Scheme | Twists | Setup effect |
+|---|---:|---|
+| Legacy Virus | 8 | Wound stack is 6 per player |
+| Midtown Bank Robbery | 8 | 12 Bystanders in the Villain Deck |
+| Negative Zone Prison Breakout | 8 | One extra Henchman Group; not in Solo |
+| Portals to the Dark Dimension | 7 | — |
+| Replace Earth's Leaders with Killbots | 5 | 3 more Twists beside the Scheme; 18 Bystanders in the Villain Deck |
+| Secret Invasion of the Skrull Shapeshifters | 8 | 6 Heroes; Skrulls required; 12 random Hero cards moved from the Hero Deck into the Villain Deck |
+| Super Hero Civil War | 8 at 2–3 players, 5 at 4–5 | 4 Heroes at 2 players; not in Solo |
+| Unleash the Power of the Cosmic Cube | 8 | — |
+
+A Scheme's required group fills a slot rather than adding one (Devin Low ruling in F on a non-core Scheme, applied by extension). Each group exists once, so no group is drawn twice.
 
 ## Open questions
 
-1. **Solo setup and Scheme overrides:** Confirm which general setup components carry into Solo (especially Master Strikes) and verify every Scheme-specific count change. Do not infer from Second Edition.
-2. **First Edition card catalog:** Validate the full core-box Scheme, Mastermind, Hero, Villain Group, and Henchman Group identities/group mappings, preserving the source for each. The UI need only show selected components/groups and quantities; rule constraints still require rulebook or attributed-ruling support.
-3. **Backend deployment details:** Choose a region and compatible low-cost App Service SKU and review its cost before any provisioning.
-
-## Next planning work
-
-1. Finish verifying the First Edition Solo setup and Scheme-specific count overrides.
-2. Find and cross-check a complete core-box card/group catalog; keep source provenance with every setup rule.
-3. Agree on the final domain model and generation behavior before implementing them.
+1. **Backend hosting:** Choose the App Service region and SKU and review cost before any provisioning.
