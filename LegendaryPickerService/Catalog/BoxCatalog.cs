@@ -123,6 +123,7 @@ public sealed partial class BoxCatalog
             }
 
             ValidateTerms(path, box, sourceKeys);
+            ValidateRuleSources(path, box, sourceKeys);
         }
 
         // A reference into a box that isn't loaded says so, rather than that the card is missing.
@@ -206,6 +207,20 @@ public sealed partial class BoxCatalog
         }
     }
 
+    // A rule note links its citation's key through its own box's sources, so a key the box doesn't
+    // list would show the note with no link. Card is the printed card itself, which has no link.
+    private static void ValidateRuleSources(string path, Box box, IReadOnlySet<string> sourceKeys)
+    {
+        foreach (var (rule, source) in RuleSources(box))
+        {
+            var key = source.Split(' ')[0];
+            if (key != "Card" && !sourceKeys.Contains(key))
+            {
+                throw new InvalidDataException($"{path}: {rule} cites source {key}, which is not in this box's sources.");
+            }
+        }
+    }
+
     // How a term kind is written in box files and API responses.
     public static string KindOf(TermKind kind) => kind switch
     {
@@ -244,4 +259,53 @@ public sealed partial class BoxCatalog
             .Concat(box.HenchmanGroups.SelectMany(g => g.Terms.Select(t => (g.Id, t, TermKind.Keyword))))
             .Concat(box.Masterminds.SelectMany(m => m.Terms.Select(t => (m.Id, t, TermKind.Keyword))))
             .Concat(box.Schemes.SelectMany(s => s.Terms.Select(t => (s.Id, t, TermKind.Keyword))));
+
+    // Every rule value and setup effect a rule note can cite, named by where it sits in the box file.
+    private static IEnumerable<(string Rule, string Source)> RuleSources(Box box)
+    {
+        var components = box.Components;
+        yield return ("components.heroCards", components.HeroCards.Source);
+        yield return ("components.villainGroupCards", components.VillainGroupCards.Source);
+        yield return ("components.henchmanGroupCards", components.HenchmanGroupCards.Source);
+        yield return ("components.schemeTwists", components.SchemeTwists.Source);
+
+        if (box.Setup is { } setup)
+        {
+            foreach (var row in setup.PlayerCounts) yield return ($"setup.playerCounts ({row.Players} players)", row.Source);
+            yield return ("setup.heroes", setup.Heroes.Source);
+            yield return ("setup.masterStrikes", setup.MasterStrikes.Source);
+            yield return ("setup.startingDeck.agents", setup.StartingDeck.Agents.Source);
+            yield return ("setup.startingDeck.troopers", setup.StartingDeck.Troopers.Source);
+            yield return ("setup.sharedStacks.officers", setup.SharedStacks.Officers.Source);
+            yield return ("setup.sharedStacks.wounds", setup.SharedStacks.Wounds.Source);
+            yield return ("setup.sharedStacks.bystanders", setup.SharedStacks.Bystanders.Source);
+            yield return ("setup.solo.heroes", setup.Solo.Heroes.Source);
+            yield return ("setup.solo.villainGroups", setup.Solo.VillainGroups.Source);
+            yield return ("setup.solo.henchmanGroups", setup.Solo.HenchmanGroups.Source);
+            yield return ("setup.solo.henchmanCards", setup.Solo.HenchmanCards.Source);
+            yield return ("setup.solo.bystanders", setup.Solo.Bystanders.Source);
+            yield return ("setup.solo.masterStrikes", setup.Solo.MasterStrikes.Source);
+            yield return ("setup.solo.ignoresAlwaysLeads", setup.Solo.IgnoresAlwaysLeads.Source);
+            yield return ("setup.solo.twistKosHeroCostingAtMost", setup.Solo.TwistKosHeroCostingAtMost.Source);
+            yield return ("setup.rulings.alwaysLeadsFillsSlot", setup.Rulings.AlwaysLeadsFillsSlot);
+            yield return ("setup.rulings.requiredGroupDisplacesAlwaysLeads", setup.Rulings.RequiredGroupDisplacesAlwaysLeads);
+            yield return ("setup.rulings.schemeOverridesSolo", setup.Rulings.SchemeOverridesSolo);
+        }
+
+        foreach (var mastermind in box.Masterminds) yield return ($"{mastermind.Id} alwaysLeads", mastermind.AlwaysLeads.Source);
+
+        foreach (var scheme in box.Schemes)
+        {
+            var effect = scheme.Setup;
+            foreach (var value in effect.Twists) yield return ($"{scheme.Id} setup.twists", value.Source);
+            if (effect.AllowedPlayerCounts is { } allowed) yield return ($"{scheme.Id} setup.allowedPlayerCounts", allowed.Source);
+            foreach (var value in effect.Heroes ?? []) yield return ($"{scheme.Id} setup.heroes", value.Source);
+            if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
+            if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
+            if (effect.ExtraHenchmanGroups is { } extra) yield return ($"{scheme.Id} setup.extraHenchmanGroups", extra.Source);
+            foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
+            if (effect.HeroCardsInVillainDeck is { } heroCards) yield return ($"{scheme.Id} setup.heroCardsInVillainDeck", heroCards.Source);
+            if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
+        }
+    }
 }
