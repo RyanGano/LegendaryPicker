@@ -12,7 +12,8 @@ export type Component = {
 }
 
 // One glossary term the setup uses: an original short summary, cited by source key and page
-// (for example "R p.18"), with the link where that source is published.
+// (for example "R p.18"), with the link where that source is published. box names the box that
+// defines the term, and is present only when the setup includes more than one box.
 export type GlossaryEntry = {
   id: string
   name: string
@@ -20,6 +21,7 @@ export type GlossaryEntry = {
   summary: string
   citation: string
   link: string
+  box?: string
 }
 
 export type VillainDeck = {
@@ -49,10 +51,12 @@ export type PlayerDeck = {
   troopers: number
 }
 
+// box names the box the rule comes from, and is present only when the setup includes more than one box.
 export type RuleNote = {
   text: string
   citation: string
   link: string | null
+  box?: string
 }
 
 export type Setup = {
@@ -82,6 +86,13 @@ export type NoEligibleScheme = {
 
 export type SetupResponse = Setup | NoEligibleScheme
 
+// A box a setup can include. A base game supplies the setup rules; an expansion adds cards.
+export type Box = {
+  id: string
+  name: string
+  baseGame: boolean
+}
+
 // A sleeping App Service instance takes 10-30 seconds to wake, so give up well after that.
 export const REQUEST_TIMEOUT_MS = 45_000
 
@@ -96,13 +107,31 @@ export async function ping(): Promise<void> {
   }
 }
 
-// Throws on a network failure, a non-2xx status (bad count, rate limit, server error),
-// an unrecognised body, or no answer within REQUEST_TIMEOUT_MS.
-export async function getSetup(players: number): Promise<SetupResponse> {
+// The boxes the API holds. Throws on a network failure, a non-2xx status, or no answer
+// within REQUEST_TIMEOUT_MS.
+export async function getBoxes(): Promise<Box[]> {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
   try {
-    const response = await fetch(`${apiBaseUrl}/api/setup?players=${players}`, {
+    const response = await fetch(`${apiBaseUrl}/api/boxes`, { signal: controller.signal })
+    if (!response.ok) {
+      throw new Error(`GET /api/boxes returned ${response.status}.`)
+    }
+    return (await response.json()) as Box[]
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
+// Draws from the named boxes, or from the core box alone when boxes is empty.
+// Throws on a network failure, a non-2xx status (bad count or boxes, rate limit, server error),
+// an unrecognised body, or no answer within REQUEST_TIMEOUT_MS.
+export async function getSetup(players: number, boxes: string[] = []): Promise<SetupResponse> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+  const query = boxes.length > 0 ? `&boxes=${boxes.map(encodeURIComponent).join(',')}` : ''
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/setup?players=${players}${query}`, {
       signal: controller.signal,
     })
     if (!response.ok) {

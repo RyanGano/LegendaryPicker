@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { StrictMode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App.tsx'
-import type { NoEligibleScheme, Setup } from './api/setupApi.ts'
+import type { Box, NoEligibleScheme, Setup } from './api/setupApi.ts'
 
 const setup: Setup = {
   kind: 'setup',
@@ -32,6 +32,9 @@ const noEligibleScheme: NoEligibleScheme = {
   message: 'No Scheme can be set up legally for 3 players with the included boxes.',
 }
 
+const core: Box = { id: 'core', name: 'Marvel Legendary First Edition core box', baseGame: true }
+const fixture: Box = { id: 'fixture', name: 'Fixture Expansion', baseGame: false }
+
 type SetupAnswer = (signal: AbortSignal) => Promise<Response>
 
 const json = (body: unknown) => Promise.resolve(Response.json(body))
@@ -39,12 +42,16 @@ const never: SetupAnswer = () => new Promise<Response>(() => {})
 
 let fetchMock: ReturnType<typeof vi.fn>
 let setupAnswers: SetupAnswer[]
+let boxesAnswer: () => Promise<Response>
 
-// Health always answers; each /api/setup request takes the next queued answer.
+// Health always answers, /api/boxes lists the core box unless a test says otherwise, and each
+// /api/setup request takes the next queued answer.
 beforeEach(() => {
   setupAnswers = []
+  boxesAnswer = () => json([core])
   fetchMock = vi.fn((url: string, init?: RequestInit) => {
     if (url.endsWith('/api/health')) return json({ status: 'ok' })
+    if (url.endsWith('/api/boxes')) return boxesAnswer()
     const answer = setupAnswers.shift()
     if (!answer) throw new Error(`Unexpected request ${url}`)
     return answer(init!.signal!)
@@ -115,7 +122,7 @@ describe('App', () => {
     expect(screen.getByLabelText('Wolverine, Storm, Hulk 3 Heroes 42')).toBeInTheDocument()
     expect(screen.getByLabelText('Brotherhood 1 Villain Group 8')).toBeInTheDocument()
     expect(screen.getByLabelText('Savage Land Mutates 1 Henchman Group 10')).toBeInTheDocument()
-    expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3$/)])
+    expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3&boxes=core$/)])
   })
 
   it('draws again for the same count on Generate another', async () => {
@@ -129,8 +136,8 @@ describe('App', () => {
 
     expect(await screen.findByRole('heading', { name: 'Portals to the Dark Dimension' })).toBeInTheDocument()
     expect(setupRequests()).toEqual([
-      expect.stringMatching(/players=3$/),
-      expect.stringMatching(/players=3$/),
+      expect.stringMatching(/players=3&boxes=core$/),
+      expect.stringMatching(/players=3&boxes=core$/),
     ])
   })
 
@@ -149,7 +156,11 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Generate another' }))
     await screen.findByRole('button', { name: 'Generate another' })
 
-    expect(screen.getAllByRole('checkbox').filter((box) => (box as HTMLInputElement).checked)).toEqual([])
+    expect(
+      within(screen.getByRole('article'))
+        .getAllByRole('checkbox')
+        .filter((box) => (box as HTMLInputElement).checked),
+    ).toEqual([])
     expect(setupRequests()).toHaveLength(2)
   })
 
@@ -206,8 +217,8 @@ describe('App', () => {
 
     expect(await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })).toBeInTheDocument()
     expect(setupRequests()).toEqual([
-      expect.stringMatching(/\/api\/setup\?players=3$/),
-      expect.stringMatching(/\/api\/setup\?players=3$/),
+      expect.stringMatching(/\/api\/setup\?players=3&boxes=core$/),
+      expect.stringMatching(/\/api\/setup\?players=3&boxes=core$/),
     ])
   })
 
@@ -250,7 +261,83 @@ describe('App', () => {
     expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
   })
 
+  it('always includes the core box and lists expansions unticked', async () => {
+    boxesAnswer = () => json([core, fixture])
+    renderApp()
+
+    const coreBox = await screen.findByRole('checkbox', { name: /^Marvel Legendary First Edition core box/ })
+    expect(coreBox).toBeChecked()
+    expect(coreBox).toBeDisabled()
+    expect(screen.getByRole('checkbox', { name: 'Fixture Expansion' })).not.toBeChecked()
+  })
+
+  it('draws from the core box and every ticked expansion', async () => {
+    boxesAnswer = () => json([core, fixture])
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(await screen.findByRole('checkbox', { name: 'Fixture Expansion' }))
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+    expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3&boxes=core,fixture$/)])
+  })
+
+  it('remembers the ticked expansions on the next visit and forgets boxes the API no longer lists', async () => {
+    boxesAnswer = () => json([core, fixture])
+    const user = userEvent.setup()
+    const firstVisit = renderApp()
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(await screen.findByRole('checkbox', { name: 'Fixture Expansion' }))
+    firstVisit.unmount()
+    expect(localStorage.getItem('legendaryPicker.expansions')).toBe('["fixture"]')
+    localStorage.setItem('legendaryPicker.expansions', JSON.stringify(['fixture', 'retired']))
+    setupAnswers.push(() => json(setup))
+
+    renderApp()
+
+    expect(await screen.findByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+    expect(setupRequests()).toEqual([expect.stringMatching(/players=3&boxes=core,fixture$/)])
+  })
+
+  it('waits for a slow box list so a remembered expansion is still included', async () => {
+    localStorage.setItem('legendaryPicker.expansions', JSON.stringify(['fixture']))
+    let answerBoxes!: () => void
+    const boxesListed = new Promise<void>((resolve) => (answerBoxes = resolve))
+    boxesAnswer = () => boxesListed.then(() => Response.json([core, fixture]))
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    expect(setupRequests()).toEqual([])
+    answerBoxes()
+
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+    expect(setupRequests()).toEqual([expect.stringMatching(/players=3&boxes=core,fixture$/)])
+  })
+
+  it('draws from the core box alone when the box list cannot be loaded', async () => {
+    boxesAnswer = () => Promise.reject(new TypeError('Failed to fetch'))
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+    expect(screen.queryByRole('group', { name: 'Boxes' })).not.toBeInTheDocument()
+    expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3$/)])
+  })
+
   it('works when storage is unavailable', async () => {
+    boxesAnswer = () => json([core, fixture])
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new DOMException('Blocked', 'SecurityError')
     })
@@ -264,5 +351,9 @@ describe('App', () => {
 
     expect(screen.getByRole('button', { name: '2' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
+
+    await user.click(await screen.findByRole('checkbox', { name: 'Fixture Expansion' }))
+
+    expect(screen.getByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
   })
 })

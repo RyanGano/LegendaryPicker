@@ -63,11 +63,16 @@ app.UseRateLimiter();
 app.MapMethods("/api/health", ["GET", "HEAD"], (HttpRequest request) =>
     HttpMethods.IsHead(request.Method) ? Results.Ok() : Results.Ok(new { status = "ok" }));
 
+// The boxes a player can include in a setup. A base game supplies setup rules; an expansion adds cards.
+app.MapGet("/api/boxes", (BoxCatalog catalog) =>
+    Results.Ok(catalog.Boxes.Select(box => new { box.Id, box.Name, BaseGame = box.IsBaseGame })));
+
 // players is read as text so a non-number gets the same ProblemDetails as an out-of-range count.
+// boxes is a comma-separated list of box ids; without it a setup uses the core box alone.
 // NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
 const int MinPlayers = 1;
 const int MaxPlayers = 5;
-app.MapGet("/api/setup", (string? players, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
+app.MapGet("/api/setup", (string? players, string? boxes, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
 {
     // "Generate another" must always draw a fresh setup.
     response.Headers.CacheControl = "no-store";
@@ -80,7 +85,15 @@ app.MapGet("/api/setup", (string? players, HttpResponse response, SetupGenerator
         });
     }
 
-    return Results.Ok(SetupResponse.From(generator.Generate(count, random), catalog));
+    var included = (boxes ?? SetupGenerator.CoreBoxId)
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        .ToHashSet(StringComparer.Ordinal);
+    if (generator.CheckBoxes(included) is { } problem)
+    {
+        return Results.ValidationProblem(new Dictionary<string, string[]> { ["boxes"] = [problem] });
+    }
+
+    return Results.Ok(SetupResponse.From(generator.Generate(count, included, random), catalog));
 }).RequireRateLimiting(SetupRateLimit);
 
 app.Run();

@@ -125,6 +125,12 @@ public sealed partial class BoxCatalog
             ValidateTerms(path, box, sourceKeys);
         }
 
+        // A reference into a box that isn't loaded says so, rather than that the card is missing.
+        var loadedBoxes = files.Select(file => file.Box.Id).ToHashSet(StringComparer.Ordinal);
+        string Unresolved(string id) => loadedBoxes.Contains(id.Split('_')[0])
+            ? ", which no loaded box declares"
+            : $" from box {id.Split('_')[0]}, which is not loaded";
+
         var groups = files
             .SelectMany(file => DeclaredIds(file.Box))
             .Where(entry => entry.Kind is "villain" or "henchman")
@@ -137,7 +143,7 @@ public sealed partial class BoxCatalog
                 var kind = KindOf(groupType);
                 if (!groups.TryGetValue(groupId, out var found))
                 {
-                    throw new InvalidDataException($"{path}: {owner} references {kind} group {groupId}, which no loaded box declares.");
+                    throw new InvalidDataException($"{path}: {owner} references {kind} group {groupId}{Unresolved(groupId)}.");
                 }
 
                 if (found != kind)
@@ -158,7 +164,7 @@ public sealed partial class BoxCatalog
                 var kind = KindOf(termKind);
                 if (!terms.TryGetValue(termId, out var found))
                 {
-                    throw new InvalidDataException($"{path}: {owner} references {kind} term {termId}, which no loaded box declares.");
+                    throw new InvalidDataException($"{path}: {owner} references {kind} term {termId}{Unresolved(termId)}.");
                 }
 
                 if (found != termKind)

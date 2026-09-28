@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "fixture",
+  "name": "Fixture Expansion",
+  "catalogSource": "R p.1",
+  "sources": [
+    { "key": "R", "url": "https://example.test/fixture-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [
+    { "id": "fixture_hero_test-pilot", "name": "Test Pilot", "team": "core_term_avengers", "classes": ["core_term_tech"], "terms": ["fixture_term_overdrive"] },
+    { "id": "fixture_hero_test-medic", "name": "Test Medic", "team": null, "classes": ["core_term_covert"], "terms": [] }
+  ],
+  "villainGroups": [
+    { "id": "fixture_villain_test-cult", "name": "Test Cult", "terms": ["core_term_fight", "fixture_term_overdrive"] }
+  ],
+  "henchmanGroups": [
+    { "id": "fixture_henchman_test-drones", "name": "Test Drones", "terms": ["core_term_fight"] }
+  ],
+  "masterminds": [
+    {
+      "id": "fixture_mastermind_test-tyrant",
+      "name": "Test Tyrant",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "alwaysLeads": { "groupId": "fixture_villain_test-cult", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "fixture_scheme_test-heist",
+      "name": "Test Heist",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 6, "source": "Card" }],
+        "requiredGroups": [{ "groupId": "core_villain_hydra", "groupType": "villain", "source": "R p.3" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "fixture_term_overdrive", "name": "Overdrive", "kind": "keyword", "summary": "A made-up keyword that exists only in this test fixture.", "source": "R", "page": 2 }
+  ]
+}

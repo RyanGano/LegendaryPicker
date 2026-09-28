@@ -80,6 +80,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
                   note.citation
                 )}
               </cite>
+              {note.box && <span className="source-box">{note.box}</span>}
             </li>
           ))}
         </Section>
@@ -99,6 +100,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
                   {term.citation}
                 </a>
               </cite>
+              {term.box && <span className="source-box">{term.box}</span>}
             </li>
           ))}
         </Section>

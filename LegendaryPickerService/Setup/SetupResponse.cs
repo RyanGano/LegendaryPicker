@@ -11,7 +11,7 @@ public abstract record SetupResponse
 
     public static SetupResponse From(GenerationResult result, BoxCatalog catalog) => result switch
     {
-        SetupResult setup => FromSetup(setup, new Glossary(catalog)),
+        SetupResult setup => FromSetup(setup, new Glossary(catalog, nameBoxes: setup.Boxes.Count > 1)),
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
@@ -47,15 +47,18 @@ public abstract record SetupResponse
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
     // A term links to the URL its box lists for its source key; the loader guarantees one per key.
-    private sealed class Glossary(BoxCatalog catalog)
+    // When the setup includes more than one box, each entry names the box that defines the term.
+    private sealed class Glossary(BoxCatalog catalog, bool nameBoxes)
     {
         private readonly Dictionary<string, ((TermKind Kind, int Index) Order, GlossaryEntry Entry)> _terms = catalog.Boxes
-            .SelectMany(box => box.Glossary.Select(term => (Term: term, Link: box.Sources.First(source => source.Key == term.Source).Url)))
-            .Select((x, index) => (x.Term, x.Link, Index: index))
+            .SelectMany(box => box.Glossary.Select(term => (Term: term, Box: box, Link: box.Sources.First(source => source.Key == term.Source).Url)))
+            .Select((x, index) => (x.Term, x.Box, x.Link, Index: index))
             .ToDictionary(
                 x => x.Term.Id,
                 x => ((x.Term.Kind, x.Index),
-                    new GlossaryEntry(x.Term.Id, x.Term.Name, BoxCatalog.KindOf(x.Term.Kind), x.Term.Summary, $"{x.Term.Source} p.{x.Term.Page}", x.Link)),
+                    new GlossaryEntry(
+                        x.Term.Id, x.Term.Name, BoxCatalog.KindOf(x.Term.Kind), x.Term.Summary, $"{x.Term.Source} p.{x.Term.Page}", x.Link,
+                        nameBoxes ? x.Box.Name : null)),
                 StringComparer.Ordinal);
 
         public Component Component(string id, string name, IEnumerable<string> terms) => new(id, name, Ordered(terms).ToList());
@@ -98,5 +101,13 @@ public sealed record NoEligibleSchemeBody(int Players, string Message) : SetupRe
 public sealed record Component(string Id, string Name, IReadOnlyList<string> Terms);
 
 // One glossary term the setup uses: kind is "team", "class" or "keyword"; citation is the source
-// key and page (for example "R p.9"), and link is where that source is published.
-public sealed record GlossaryEntry(string Id, string Name, string Kind, string Summary, string Citation, string Link);
+// key and page (for example "R p.9"), and link is where that source is published. Box names the
+// box that defines the term once a setup includes more than one box, as on RuleNote.
+public sealed record GlossaryEntry(
+    string Id,
+    string Name,
+    string Kind,
+    string Summary,
+    string Citation,
+    string Link,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Box = null);

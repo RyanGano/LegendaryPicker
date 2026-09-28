@@ -29,7 +29,11 @@ public sealed record Box(
     IReadOnlyList<Mastermind> Masterminds,
     IReadOnlyList<Scheme> Schemes,
     IReadOnlyList<GlossaryTerm> Glossary,
-    SetupRules Setup);
+    SetupRules? Setup = null)
+{
+    // Only a base game supplies setup rules; an expansion's box file has no setup section.
+    public bool IsBaseGame => Setup is not null;
+}
 
 // Where a source key (the part of a Source before the first space, such as "R" in "R p.20") is published.
 // "Card" has no link: it is the printed card itself.
