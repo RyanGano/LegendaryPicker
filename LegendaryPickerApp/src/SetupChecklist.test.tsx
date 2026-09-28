@@ -118,6 +118,23 @@ describe('SetupChecklist', () => {
     expect(rows('Hero Deck')).toContain('Hawkeye, Captain America, Black Widow, Cyclops, Deadpool 5 Heroes 70')
   })
 
+  it('counts the ticked lines against the lines to lay out, leaving totals out', async () => {
+    const user = userEvent.setup()
+    renderChecklist(legacyVirusThreePlayers)
+
+    expect(screen.getByRole('status')).toHaveTextContent('0 of 13 laid out')
+
+    const [twists, strikes] = within(section('Villain Deck')).getAllByRole('checkbox')
+    await user.click(twists)
+    await user.click(strikes)
+
+    expect(screen.getByRole('status')).toHaveTextContent('2 of 13 laid out')
+
+    await user.click(twists)
+
+    expect(screen.getByRole('status')).toHaveTextContent('1 of 13 laid out')
+  })
+
   it('shows the 2-player Cosmic Cube deck totals', () => {
     renderChecklist(twoPlayerCosmicCube)
 
@@ -288,7 +305,7 @@ describe('SetupChecklist', () => {
     expect(chip).toHaveFocus()
 
     await user.click(chip)
-    await user.click(screen.getByRole('heading', { name: 'Setup for 4 players' }))
+    await user.click(screen.getByRole('heading', { name: 'Villain Deck' }))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(chip).toHaveFocus()
   })
