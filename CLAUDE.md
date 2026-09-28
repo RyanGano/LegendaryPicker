@@ -41,6 +41,7 @@ dotnet test
 
 - The C# API is the rules authority: it owns the catalog, setup rules, and generator. The React app only calls it and renders the result checklist.
 - Hosting is split. GitHub Actions (`.github/workflows/deploy-pages.yml`) builds and deploys only the frontend to GitHub Pages on every push to `main`; `vite.config.ts` switches `base` to `/LegendaryPicker/` when `GITHUB_ACTIONS` is set. The API is planned for Azure App Service, but no Azure resources exist; provisioning needs explicit user authorization plus SKU/region/cost decisions.
+- CI checks come from `.github/workflows/test.yml`, which runs on every pull request and push to `main`: `dotnet test LegendaryPicker.slnx` (job `service`) and `npm ci`, `npm run lint`, `npm run build` in `LegendaryPickerApp` (job `frontend`). It does not gate the Pages deploy.
 - CORS origins for the API come from the `Cors:AllowedOrigins` config section.
 - Game data (catalog + sourced setup rules) lives in `LegendaryPickerService/Data/Boxes/<box-id>.json`, one file per box, changed only through reviewed commits: no database or admin UI. `Catalog/BoxCatalog` loads every file at startup (a singleton) and rejects unknown fields, missing values, malformed or duplicate ids, and references that don't resolve. Ids have the form `<boxId>_<kind>_<name>` (`core_mastermind_dr-doom`; kinds `hero`, `villain`, `henchman`, `mastermind`, `scheme`; see Ids in `Docs/Plan.md`); every rule value and setup effect carries a `source` key from `Docs/Plan.md`.
 
