@@ -93,7 +93,7 @@
       "id": "core_scheme_portals-to-the-dark-dimension",
       "name": "Portals to the Dark Dimension",
       "setup": {
-        "twists": [{ "players": null, "value": 7, "source": "Card" }]
+        "twists": [{ "players": null, "value": 6, "source": "Card" }]
       }
     },
     {
