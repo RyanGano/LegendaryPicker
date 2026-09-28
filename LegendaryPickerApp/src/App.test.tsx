@@ -8,14 +8,14 @@ import type { NoEligibleScheme, Setup } from './api/setupApi.ts'
 const setup: Setup = {
   kind: 'setup',
   players: 3,
-  scheme: { id: 'core_scheme_midtown-bank-robbery', name: 'Midtown Bank Robbery' },
-  mastermind: { id: 'core_mastermind_magneto', name: 'Magneto' },
-  villainGroups: [{ id: 'core_villain_brotherhood', name: 'Brotherhood' }],
-  henchmanGroups: [{ id: 'core_henchman_savage-land-mutates', name: 'Savage Land Mutates' }],
+  scheme: { id: 'core_scheme_midtown-bank-robbery', name: 'Midtown Bank Robbery', terms: [] },
+  mastermind: { id: 'core_mastermind_magneto', name: 'Magneto', terms: [] },
+  villainGroups: [{ id: 'core_villain_brotherhood', name: 'Brotherhood', terms: [] }],
+  henchmanGroups: [{ id: 'core_henchman_savage-land-mutates', name: 'Savage Land Mutates', terms: [] }],
   heroes: [
-    { id: 'core_hero_wolverine', name: 'Wolverine' },
-    { id: 'core_hero_storm', name: 'Storm' },
-    { id: 'core_hero_hulk', name: 'Hulk' },
+    { id: 'core_hero_wolverine', name: 'Wolverine', terms: [] },
+    { id: 'core_hero_storm', name: 'Storm', terms: [] },
+    { id: 'core_hero_hulk', name: 'Hulk', terms: [] },
   ],
   villainDeck: { twists: 8, masterStrikes: 5, villainCards: 8, henchmanCards: 10, bystanders: 12, heroCards: 0, total: 43 },
   heroDeck: { heroCards: 42, movedToVillainDeck: 0, total: 42 },
@@ -23,6 +23,7 @@ const setup: Setup = {
   stacks: { wounds: 30, officers: 30, bystanders: 18 },
   playerDeck: { agents: 8, troopers: 4 },
   notes: [],
+  glossary: [],
 }
 
 const noEligibleScheme: NoEligibleScheme = {
@@ -118,7 +119,7 @@ describe('App', () => {
   })
 
   it('draws again for the same count on Generate another', async () => {
-    setupAnswers.push(() => json(setup), () => json({ ...setup, scheme: { id: 'core_scheme_x', name: 'Portals to the Dark Dimension' } }))
+    setupAnswers.push(() => json(setup), () => json({ ...setup, scheme: { id: 'core_scheme_x', name: 'Portals to the Dark Dimension', terms: [] } }))
     const user = userEvent.setup()
     renderApp()
 

@@ -3,52 +3,109 @@
   "players": 3,
   "scheme": {
     "id": "core_scheme_legacy-virus",
-    "name": "Legacy Virus"
+    "name": "Legacy Virus",
+    "terms": [
+      "core_term_scheme-twist"
+    ]
   },
   "mastermind": {
     "id": "core_mastermind_magneto",
-    "name": "Magneto"
+    "name": "Magneto",
+    "terms": [
+      "core_term_always-leads",
+      "core_term_fight",
+      "core_term_master-strike",
+      "core_term_mastermind-tactic",
+      "core_term_rescue-a-bystander"
+    ]
   },
   "villainGroups": [
     {
       "id": "core_villain_brotherhood",
-      "name": "Brotherhood"
+      "name": "Brotherhood",
+      "terms": [
+        "core_term_ambush",
+        "core_term_escape",
+        "core_term_fight"
+      ]
     },
     {
       "id": "core_villain_hydra",
-      "name": "HYDRA"
+      "name": "HYDRA",
+      "terms": [
+        "core_term_escape",
+        "core_term_fight"
+      ]
     },
     {
       "id": "core_villain_radiation",
-      "name": "Radiation"
+      "name": "Radiation",
+      "terms": [
+        "core_term_ambush",
+        "core_term_escape",
+        "core_term_fight",
+        "core_term_rescue-a-bystander"
+      ]
     }
   ],
   "henchmanGroups": [
     {
       "id": "core_henchman_sentinel",
-      "name": "Sentinel"
+      "name": "Sentinel",
+      "terms": [
+        "core_term_fight"
+      ]
     }
   ],
   "heroes": [
     {
       "id": "core_hero_hawkeye",
-      "name": "Hawkeye"
+      "name": "Hawkeye",
+      "terms": [
+        "core_term_avengers",
+        "core_term_instinct",
+        "core_term_tech",
+        "core_term_rescue-a-bystander"
+      ]
     },
     {
       "id": "core_hero_captain-america",
-      "name": "Captain America"
+      "name": "Captain America",
+      "terms": [
+        "core_term_avengers",
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_strength",
+        "core_term_tech"
+      ]
     },
     {
       "id": "core_hero_black-widow",
-      "name": "Black Widow"
+      "name": "Black Widow",
+      "terms": [
+        "core_term_avengers",
+        "core_term_covert",
+        "core_term_tech",
+        "core_term_rescue-a-bystander"
+      ]
     },
     {
       "id": "core_hero_cyclops",
-      "name": "Cyclops"
+      "name": "Cyclops",
+      "terms": [
+        "core_term_x-men",
+        "core_term_ranged",
+        "core_term_strength"
+      ]
     },
     {
       "id": "core_hero_deadpool",
-      "name": "Deadpool"
+      "name": "Deadpool",
+      "terms": [
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_tech"
+      ]
     }
   ],
   "villainDeck": {
@@ -84,6 +141,128 @@
     {
       "text": "Magneto always leads Brotherhood",
       "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    }
+  ],
+  "glossary": [
+    {
+      "id": "core_term_avengers",
+      "name": "Avengers",
+      "kind": "team",
+      "summary": "A Hero team. In the core box its members are Black Widow, Captain America, Hawkeye, Hulk, Iron Man and Thor.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_x-men",
+      "name": "X-Men",
+      "kind": "team",
+      "summary": "A Hero team. In the core box its members are Cyclops, Emma Frost, Gambit, Rogue, Storm and Wolverine.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_covert",
+      "name": "Covert",
+      "kind": "class",
+      "summary": "A Hero class of fighters who prefer trickery and careful plans to open force.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_instinct",
+      "name": "Instinct",
+      "kind": "class",
+      "summary": "A Hero class of fighters who trust their gut and their senses in close combat.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_ranged",
+      "name": "Ranged",
+      "kind": "class",
+      "summary": "A Hero class of fighters who deal damage from a distance, by any kind of projected power.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_strength",
+      "name": "Strength",
+      "kind": "class",
+      "summary": "A Hero class of fighters whose power is might, whether of body or of will and leadership.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_tech",
+      "name": "Tech",
+      "kind": "class",
+      "summary": "A Hero class of fighters whose power comes from gear and science rather than the body.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_always-leads",
+      "name": "Always Leads",
+      "kind": "keyword",
+      "summary": "Names the one Villain or Henchman Group this Mastermind brings to every game. That group takes one of the setup's group slots; random draws fill the rest.",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_ambush",
+      "name": "Ambush",
+      "kind": "keyword",
+      "summary": "Triggers as this Villain arrives in the city from the Villain Deck. When its arrival shoves another Villain out of the city, resolve that escape before this effect.",
+      "citation": "R p.9",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_escape",
+      "name": "Escape",
+      "kind": "keyword",
+      "summary": "Triggers when this Villain is shoved past the final city space and escapes, in addition to the standard escape penalties.",
+      "citation": "R p.9",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_fight",
+      "name": "Fight",
+      "kind": "keyword",
+      "summary": "Triggers when a player spends enough Attack to defeat this card.",
+      "citation": "R p.13",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_master-strike",
+      "name": "Master Strike",
+      "kind": "keyword",
+      "summary": "Drawing a Master Strike from the Villain Deck makes the Mastermind act in person: resolve the Master Strike line on its card. The Strike card is then KO'd.",
+      "citation": "R p.10",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_mastermind-tactic",
+      "name": "Mastermind Tactic",
+      "kind": "keyword",
+      "summary": "Beating the Mastermind's Attack wins one of its four face-down Tactics at random: keep it for Victory Points and do its Fight effect. Take all four to win.",
+      "citation": "R p.14",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_rescue-a-bystander",
+      "name": "Rescue a Bystander",
+      "kind": "keyword",
+      "summary": "Add a Bystander from the shared Bystander stack to your Victory Pile, where it scores at game end. This never frees a Bystander a Villain holds; defeat that Villain for it.",
+      "citation": "R p.15",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    },
+    {
+      "id": "core_term_scheme-twist",
+      "name": "Scheme Twist",
+      "kind": "keyword",
+      "summary": "Drawing a Twist from the Villain Deck advances the evil plan: resolve the Twist line on the Scheme card. The Twist is then KO'd, unless the Scheme sends it elsewhere.",
+      "citation": "R p.10",
       "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
     }
   ]

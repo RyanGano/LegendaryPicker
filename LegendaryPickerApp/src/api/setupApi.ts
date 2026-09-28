@@ -3,10 +3,23 @@
 
 // The types mirror LegendaryPickerService/Setup/SetupResponse.cs, serialized camelCase.
 
-// A chosen Scheme, Mastermind, group or Hero: its catalog id and display name.
+// A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the
+// glossary terms it uses (for a Hero, its team and classes too), in glossary order.
 export type Component = {
   id: string
   name: string
+  terms: string[]
+}
+
+// One glossary term the setup uses: an original short summary, cited by source key and page
+// (for example "R p.18"), with the link where that source is published.
+export type GlossaryEntry = {
+  id: string
+  name: string
+  kind: 'team' | 'class' | 'keyword'
+  summary: string
+  citation: string
+  link: string
 }
 
 export type VillainDeck = {
@@ -56,6 +69,8 @@ export type Setup = {
   stacks: SetupStacks
   playerDeck: PlayerDeck
   notes: RuleNote[]
+  // One entry per term any drawn component uses: teams, then classes, then keywords.
+  glossary: GlossaryEntry[]
 }
 
 // A valid answer, not an error: no Scheme can be set up legally at this count.
