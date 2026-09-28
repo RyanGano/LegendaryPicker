@@ -1,0 +1,90 @@
+{
+  "kind": "setup",
+  "players": 3,
+  "scheme": {
+    "id": "core_scheme_legacy-virus",
+    "name": "Legacy Virus"
+  },
+  "mastermind": {
+    "id": "core_mastermind_magneto",
+    "name": "Magneto"
+  },
+  "villainGroups": [
+    {
+      "id": "core_villain_brotherhood",
+      "name": "Brotherhood"
+    },
+    {
+      "id": "core_villain_hydra",
+      "name": "HYDRA"
+    },
+    {
+      "id": "core_villain_radiation",
+      "name": "Radiation"
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "id": "core_henchman_sentinel",
+      "name": "Sentinel"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "core_hero_hawkeye",
+      "name": "Hawkeye"
+    },
+    {
+      "id": "core_hero_captain-america",
+      "name": "Captain America"
+    },
+    {
+      "id": "core_hero_black-widow",
+      "name": "Black Widow"
+    },
+    {
+      "id": "core_hero_cyclops",
+      "name": "Cyclops"
+    },
+    {
+      "id": "core_hero_deadpool",
+      "name": "Deadpool"
+    }
+  ],
+  "villainDeck": {
+    "twists": 8,
+    "masterStrikes": 5,
+    "villainCards": 24,
+    "henchmanCards": 10,
+    "bystanders": 8,
+    "heroCards": 0,
+    "total": 55
+  },
+  "heroDeck": {
+    "heroCards": 70,
+    "movedToVillainDeck": 0,
+    "total": 70
+  },
+  "twistsBesideScheme": 0,
+  "stacks": {
+    "wounds": 18,
+    "officers": 30,
+    "bystanders": 22
+  },
+  "playerDeck": {
+    "agents": 8,
+    "troopers": 4
+  },
+  "notes": [
+    {
+      "text": "Scheme sets the Wound stack to 6 per player",
+      "citation": "Card",
+      "link": null
+    },
+    {
+      "text": "Magneto always leads Brotherhood",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    }
+  ]
+}

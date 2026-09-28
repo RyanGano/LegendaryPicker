@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The design is confirmed and implementation is tracked as GitHub issues. The service holds the First Edition core box catalog and setup rules as data, and `Setup/SetupGenerator` draws a random legal setup and its checklist from them, which `GET /api/setup` serves. The web app lets a player pick a count and shows the drawn components by name; the full result checklist is not built yet.
+LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The design is confirmed and implementation is tracked as GitHub issues. The service holds the First Edition core box catalog and setup rules as data, and `Setup/SetupGenerator` draws a random legal setup and its checklist from them, which `GET /api/setup` serves. The web app lets a player pick a count and renders the draw as the Setup checklist (`SetupChecklist`): deck counts and totals, stacks, starting decks, and the cited Rule notes, with a tick box per line.
 
 ## Read before working
 

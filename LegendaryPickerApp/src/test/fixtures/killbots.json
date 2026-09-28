@@ -1,0 +1,99 @@
+{
+  "kind": "setup",
+  "players": 4,
+  "scheme": {
+    "id": "core_scheme_replace-earths-leaders-with-killbots",
+    "name": "Replace Earth's Leaders with Killbots"
+  },
+  "mastermind": {
+    "id": "core_mastermind_dr-doom",
+    "name": "Dr. Doom"
+  },
+  "villainGroups": [
+    {
+      "id": "core_villain_masters-of-evil",
+      "name": "Masters of Evil"
+    },
+    {
+      "id": "core_villain_enemies-of-asgard",
+      "name": "Enemies of Asgard"
+    },
+    {
+      "id": "core_villain_radiation",
+      "name": "Radiation"
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "id": "core_henchman_doombot-legion",
+      "name": "Doombot Legion"
+    },
+    {
+      "id": "core_henchman_hand-ninjas",
+      "name": "Hand Ninjas"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "core_hero_hulk",
+      "name": "Hulk"
+    },
+    {
+      "id": "core_hero_deadpool",
+      "name": "Deadpool"
+    },
+    {
+      "id": "core_hero_hawkeye",
+      "name": "Hawkeye"
+    },
+    {
+      "id": "core_hero_captain-america",
+      "name": "Captain America"
+    },
+    {
+      "id": "core_hero_black-widow",
+      "name": "Black Widow"
+    }
+  ],
+  "villainDeck": {
+    "twists": 5,
+    "masterStrikes": 5,
+    "villainCards": 24,
+    "henchmanCards": 20,
+    "bystanders": 18,
+    "heroCards": 0,
+    "total": 72
+  },
+  "heroDeck": {
+    "heroCards": 70,
+    "movedToVillainDeck": 0,
+    "total": 70
+  },
+  "twistsBesideScheme": 3,
+  "stacks": {
+    "wounds": 30,
+    "officers": 30,
+    "bystanders": 12
+  },
+  "playerDeck": {
+    "agents": 8,
+    "troopers": 4
+  },
+  "notes": [
+    {
+      "text": "Scheme puts 18 Bystanders in the Villain Deck",
+      "citation": "Card",
+      "link": null
+    },
+    {
+      "text": "Scheme puts 3 Twists beside it",
+      "citation": "Card",
+      "link": null
+    },
+    {
+      "text": "Dr. Doom always leads Doombot Legion",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
+    }
+  ]
+}
