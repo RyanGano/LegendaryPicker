@@ -112,7 +112,17 @@ public sealed partial class BoxCatalog
                 Declare(path, id);
             }
 
-            ValidateTerms(path, box);
+            // Rule notes and glossary links look a key up by name, so a second URL for it would never show.
+            var sourceKeys = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var source in box.Sources)
+            {
+                if (!sourceKeys.Add(source.Key))
+                {
+                    throw new InvalidDataException($"{path}: box {box.Id} lists source {source.Key} more than once.");
+                }
+            }
+
+            ValidateTerms(path, box, sourceKeys);
         }
 
         var groups = files
@@ -162,9 +172,8 @@ public sealed partial class BoxCatalog
 
     // A term needs a summary short enough to read at a glance, and a source this box links,
     // so the reader can follow it to the page with the full rule.
-    private static void ValidateTerms(string path, Box box)
+    private static void ValidateTerms(string path, Box box, IReadOnlySet<string> sourceKeys)
     {
-        var sourceKeys = box.Sources.Select(source => source.Key).ToHashSet(StringComparer.Ordinal);
         foreach (var term in box.Glossary)
         {
             if (string.IsNullOrWhiteSpace(term.Summary))

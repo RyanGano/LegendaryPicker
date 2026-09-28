@@ -112,6 +112,36 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
+    public async Task Health_answers_GET_with_status_ok()
+    {
+        var response = await Client().GetAsync("/api/health");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("""{"status":"ok"}""", await response.Content.ReadAsStringAsync());
+    }
+
+    // UptimeRobot's free tier checks with HEAD, so HEAD must be a 200 with no body.
+    [Fact]
+    public async Task Health_answers_HEAD_with_200_and_no_body()
+    {
+        var response = await Client().SendAsync(new HttpRequestMessage(HttpMethod.Head, "/api/health"));
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Empty(await response.Content.ReadAsByteArrayAsync());
+    }
+
+    [Fact]
+    public async Task Forty_HEAD_health_checks_in_a_minute_are_never_rate_limited()
+    {
+        var client = Client();
+        for (var i = 1; i <= 40; i++)
+        {
+            var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, "/api/health"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+    }
+
+    [Fact]
     public async Task The_31st_setup_in_a_minute_is_rejected_but_health_still_answers()
     {
         var client = Client();

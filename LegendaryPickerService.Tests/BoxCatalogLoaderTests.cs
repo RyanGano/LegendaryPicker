@@ -1,7 +1,6 @@
 using System.Text;
 using System.Text.Json.Nodes;
 using LegendaryPickerService.Catalog;
-using LegendaryPickerService.Setup;
 
 namespace LegendaryPickerService.Tests;
 
@@ -223,15 +222,11 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Fact]
-    public void A_repeated_source_key_links_glossary_terms_to_its_first_url_like_rule_notes()
+    public void Rejects_a_source_key_listed_twice()
     {
         WriteCoreBox(core => core["sources"]!.AsArray().Add(new JsonObject { ["key"] = "R", ["url"] = "https://example.test/other" }));
-        var catalog = BoxCatalog.Load(_directory);
 
-        var body = Assert.IsType<SetupBody>(
-            SetupResponse.From(new SetupGenerator(catalog).Generate(2, new CyclingRandom(0)), catalog));
-
-        Assert.All(body.Glossary, term => Assert.StartsWith("https://web.archive.org/", term.Link));
+        AssertRejected("box core lists source R more than once");
     }
 
     [Fact]

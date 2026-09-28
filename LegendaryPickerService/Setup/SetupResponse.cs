@@ -46,8 +46,7 @@ public abstract record SetupResponse
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
-    // A term links to the first URL its box lists for its source key, as rule notes do; the loader
-    // does not reject a repeated key, so this must not throw on one.
+    // A term links to the URL its box lists for its source key; the loader guarantees one per key.
     private sealed class Glossary(BoxCatalog catalog)
     {
         private readonly Dictionary<string, ((TermKind Kind, int Index) Order, GlossaryEntry Entry)> _terms = catalog.Boxes

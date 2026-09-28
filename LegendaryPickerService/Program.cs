@@ -58,7 +58,10 @@ app.UseForwardedHeaders();
 app.UseCors();
 app.UseRateLimiter();
 
-app.MapGet("/api/health", () => Results.Ok(new { status = "ok" }));
+// HEAD too, because UptimeRobot's free tier checks with HEAD; its pings keep the F1 app from idling.
+// HEAD gets no body from the handler itself rather than relying on the server to drop one.
+app.MapMethods("/api/health", ["GET", "HEAD"], (HttpRequest request) =>
+    HttpMethods.IsHead(request.Method) ? Results.Ok() : Results.Ok(new { status = "ok" }));
 
 // players is read as text so a non-number gets the same ProblemDetails as an out-of-range count.
 // NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
