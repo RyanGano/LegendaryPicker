@@ -97,6 +97,7 @@ function TermChip({ term }: { term: GlossaryEntry }) {
               {term.citation}
             </a>
           </cite>
+          {term.box && <span className="source-box">{term.box}</span>}
         </div>
       )}
     </>

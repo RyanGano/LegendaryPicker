@@ -14,18 +14,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
     public GenerationResult Generate(int players, IRandomSource random) => Generate(players, [CoreBoxId], random);
 
-    // The first included box supplies the setup rules (the player-count table, Solo, stacks,
-    // rulings); every included box contributes its cards.
-    public GenerationResult Generate(int players, IReadOnlyList<string> includedBoxes, IRandomSource random)
+    // The included base game supplies the setup rules (the player-count table, Solo, stacks,
+    // rulings); every included box contributes its cards, drawn in catalog order whatever order
+    // the boxes are named in.
+    public GenerationResult Generate(int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random)
     {
-        var boxes = includedBoxes.Distinct().Select(id => catalog.Boxes.SingleOrDefault(box => box.Id == id)
-            ?? throw new ArgumentException($"No box has id {id}.", nameof(includedBoxes))).ToList();
-        if (boxes.Count == 0)
+        if (CheckBoxes(includedBoxes) is { } problem)
         {
-            throw new ArgumentException("At least one box must be included.", nameof(includedBoxes));
+            throw new ArgumentException(problem, nameof(includedBoxes));
         }
 
-        var rules = boxes[0].Setup;
+        var boxes = catalog.Boxes.Where(box => includedBoxes.Contains(box.Id)).ToList();
+        var rulesBox = boxes.Single(box => box.IsBaseGame);
+        var rules = rulesBox.Setup!;
         var row = rules.PlayerCounts.SingleOrDefault(r => r.Players == players);
         if (players != 1 && row is null)
         {
@@ -33,18 +34,27 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 $"Supported player counts are 1 (Solo) and {string.Join(", ", rules.PlayerCounts.Select(r => r.Players))}.");
         }
 
-        return new TableDraw(boxes, rules, players, row, random).Run();
+        return new TableDraw(boxes, rulesBox, rules, players, row, random).Run();
     }
 
-    // One table draw: the included cards, the rules they are drawn under, and the random source.
-    // row is the player-count table row, or null in Solo.
-    private sealed class TableDraw(IReadOnlyList<Box> boxes, SetupRules rules, int players, PlayerCountSetup? row, IRandomSource random)
+    // Why a set of box ids can't be drawn from, or null when it can. A setup needs exactly one
+    // base game for its rules; choosing between two is not supported yet.
+    public string? CheckBoxes(IReadOnlyCollection<string> includedBoxes)
     {
-        private readonly Dictionary<string, string> _links = boxes
-            .SelectMany(box => box.Sources)
-            .DistinctBy(source => source.Key)
-            .ToDictionary(source => source.Key, source => source.Url);
+        if (includedBoxes.FirstOrDefault(id => catalog.Boxes.All(box => box.Id != id)) is { } unknown)
+        {
+            return $"No box has id {unknown}.";
+        }
 
+        return catalog.Boxes.Count(box => box.IsBaseGame && includedBoxes.Contains(box.Id)) == 1
+            ? null
+            : "Include exactly one base game.";
+    }
+
+    // One table draw: the included cards, the base game whose rules they are drawn under, and the random source.
+    // row is the player-count table row, or null in Solo.
+    private sealed class TableDraw(IReadOnlyList<Box> boxes, Box rulesBox, SetupRules rules, int players, PlayerCountSetup? row, IRandomSource random)
+    {
         private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.VillainGroups).ToList();
         private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).ToList();
         private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).ToList();
@@ -81,7 +91,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             if (Solo)
             {
                 var ko = rules.Solo.TwistKosHeroCostingAtMost;
-                notes.Add(Note($"Solo: after each Twist, KO a Hero costing {ko.Value} or less from the HQ", ko.Source));
+                notes.Add(Note($"Solo: after each Twist, KO a Hero costing {ko.Value} or less from the HQ", ko.Source, rulesBox));
             }
 
             return new SetupResult(
@@ -102,7 +112,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 plan.TwistsBeside,
                 new SetupStacks(plan.Wounds, rules.SharedStacks.Officers.Value, rules.SharedStacks.Bystanders.Value - plan.Bystanders),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value),
-                notes);
+                notes,
+                boxes);
         }
 
         // The counts one Scheme sets at this player count: the player-count table or Solo,
@@ -112,11 +123,15 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var effect = scheme.Setup;
             var notes = new List<RuleNote>();
 
+            // A note the Scheme card itself causes, cited from the box that holds the card.
+            var schemeBox = BoxOf(scheme.Id);
+            RuleNote Card(string text, string source) => Note(text, source, schemeBox);
+
             // A Scheme value that replaces a Solo value cites the ruling that the Scheme wins;
             // otherwise the card itself is the source.
             RuleNote Replaces(string soloText, string text, string source) => Solo
-                ? Note($"Scheme overrides Solo: {soloText}", rules.Rulings.SchemeOverridesSolo)
-                : Note($"Scheme {text}", source);
+                ? Note($"Scheme overrides Solo: {soloText}", rules.Rulings.SchemeOverridesSolo, rulesBox)
+                : Card($"Scheme {text}", source);
 
             var heroes = Solo ? rules.Solo.Heroes.Value : rules.Heroes.Value;
             if (ForPlayers(effect.Heroes ?? []) is { } schemeHeroes)
@@ -137,24 +152,24 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             if (effect.WoundsPerPlayer is { } woundsPerPlayer)
             {
                 wounds = woundsPerPlayer.Value * players;
-                notes.Add(Note($"Scheme sets the Wound stack to {woundsPerPlayer.Value} per player", woundsPerPlayer.Source));
+                notes.Add(Card($"Scheme sets the Wound stack to {woundsPerPlayer.Value} per player", woundsPerPlayer.Source));
             }
 
             var henchmanGroups = Solo ? rules.Solo.HenchmanGroups.Value : row!.HenchmanGroups;
             if (effect.ExtraHenchmanGroups is { } extra)
             {
                 henchmanGroups += extra.Value;
-                notes.Add(Note($"Scheme adds {extra.Value} Henchman Group{(extra.Value == 1 ? "" : "s")}", extra.Source));
+                notes.Add(Card($"Scheme adds {extra.Value} Henchman Group{(extra.Value == 1 ? "" : "s")}", extra.Source));
             }
 
             if (effect.HeroCardsInVillainDeck is { } moved)
             {
-                notes.Add(Note($"Scheme moves {moved.Value} Hero cards into the Villain Deck", moved.Source));
+                notes.Add(Card($"Scheme moves {moved.Value} Hero cards into the Villain Deck", moved.Source));
             }
 
             if (effect.TwistsBesideScheme is { } beside)
             {
-                notes.Add(Note($"Scheme puts {beside.Value} Twists beside it", beside.Source));
+                notes.Add(Card($"Scheme puts {beside.Value} Twists beside it", beside.Source));
             }
 
             var twists = ForPlayers(effect.Twists)
@@ -201,7 +216,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 var group = pool.Single(g => id(g) == required.GroupId);
                 chosen.Add(group);
-                notes.Add(Note($"Scheme requires {name(group)}", required.Source));
+                notes.Add(Note($"Scheme requires {name(group)}", required.Source, BoxOf(scheme.Id)));
             }
 
             var leads = mastermind.AlwaysLeads;
@@ -209,7 +224,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 if (IgnoresAlwaysLeads)
                 {
-                    notes.Add(Note($"Solo ignores {mastermind.Name}'s Always Leads", rules.Solo.IgnoresAlwaysLeads.Source));
+                    notes.Add(Note($"Solo ignores {mastermind.Name}'s Always Leads", rules.Solo.IgnoresAlwaysLeads.Source, rulesBox));
                 }
                 else
                 {
@@ -218,7 +233,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     {
                         notes.Add(Note(
                             $"Scheme requires {string.Join(" and ", chosen.Select(name))}, so {mastermind.Name}'s Always Leads group {name(group)} is dropped",
-                            rules.Rulings.RequiredGroupDisplacesAlwaysLeads));
+                            rules.Rulings.RequiredGroupDisplacesAlwaysLeads, rulesBox));
                     }
                     else
                     {
@@ -227,7 +242,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                             chosen.Add(group);
                         }
 
-                        notes.Add(Note($"{mastermind.Name} always leads {name(group)}", rules.Rulings.AlwaysLeadsFillsSlot));
+                        notes.Add(Note($"{mastermind.Name} always leads {name(group)}", rules.Rulings.AlwaysLeadsFillsSlot, rulesBox));
                     }
                 }
             }
@@ -261,8 +276,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // Ids start with the declaring box's id, and box ids contain no underscore.
         private Box BoxOf(string id) => boxes.Single(box => id.StartsWith(box.Id + "_", StringComparison.Ordinal));
 
-        private RuleNote Note(string text, string citation) =>
-            new(text, citation, _links.GetValueOrDefault(citation.Split(' ')[0]));
+        // A note cites a source key of the box whose rule it is, since each box lists its own sources.
+        // Once more than one box is included, the note also names that box.
+        private RuleNote Note(string text, string citation, Box from) => new(
+            text,
+            citation,
+            from.Sources.FirstOrDefault(source => source.Key == citation.Split(' ')[0])?.Url,
+            boxes.Count > 1 ? from.Name : null);
     }
 
     private sealed record SchemePlan(

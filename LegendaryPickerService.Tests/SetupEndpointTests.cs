@@ -95,6 +95,72 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.True(JsonNode.DeepEquals(expected, body), body?.ToJsonString());
     }
 
+    [Fact]
+    public async Task Boxes_lists_each_box_and_whether_it_is_a_base_game()
+    {
+        var body = await Client(catalog: BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory)).GetStringAsync("/api/boxes");
+
+        var expected = JsonNode.Parse("""
+            [
+              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true },
+              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false }
+            ]
+            """);
+        Assert.True(JsonNode.DeepEquals(expected, JsonNode.Parse(body)), body);
+    }
+
+    [Fact]
+    public async Task Naming_only_the_core_box_returns_the_same_setup_as_naming_none()
+    {
+        // The fixture expansion is loaded but not included.
+        var client = Client(new ScriptedRandom(7, 3), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory));
+
+        var body = JsonNode.Parse(await client.GetStringAsync("/api/setup?players=2&boxes=core"));
+
+        Assert.True(JsonNode.DeepEquals(JsonNode.Parse(ExpectedTwoPlayerSetup), body), body?.ToJsonString());
+    }
+
+    [Fact]
+    public async Task A_setup_from_two_boxes_names_the_box_on_each_note_and_glossary_term()
+    {
+        // Test Heist and Test Tyrant, the fixture's Scheme and Mastermind.
+        var client = Client(new ScriptedRandom(8, 4), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory));
+
+        var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,fixture");
+
+        Assert.Equal("fixture_scheme_test-heist", (string?)body!["scheme"]!["id"]);
+        var notes = JsonNode.Parse("""
+            [
+              { "text": "Scheme requires HYDRA", "citation": "R p.3", "link": "https://example.test/fixture-rules.pdf", "box": "Fixture Expansion" },
+              {
+                "text": "Test Tyrant always leads Test Cult",
+                "citation": "R p.6",
+                "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+                "box": "Marvel Legendary First Edition core box"
+              }
+            ]
+            """);
+        Assert.True(JsonNode.DeepEquals(notes, body["notes"]), body["notes"]?.ToJsonString());
+        var boxOfTerm = body["glossary"]!.AsArray().ToDictionary(term => (string)term!["id"]!, term => (string?)term!["box"]);
+        Assert.Equal("Marvel Legendary First Edition core box", boxOfTerm["core_term_scheme-twist"]);
+        Assert.Equal("Fixture Expansion", boxOfTerm["fixture_term_overdrive"]);
+    }
+
+    [Theory]
+    [InlineData("core,nope", "No box has id nope.")]
+    [InlineData("fixture", "Include exactly one base game.")]
+    [InlineData("", "Include exactly one base game.")]
+    public async Task Boxes_that_cannot_make_a_setup_return_a_validation_problem(string boxes, string expected)
+    {
+        var client = Client(catalog: BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory));
+
+        var response = await client.GetAsync($"/api/setup?players=2&boxes={boxes}");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problem = await response.Content.ReadFromJsonAsync<JsonObject>();
+        Assert.Equal(expected, (string?)problem!["errors"]!["boxes"]![0]);
+    }
+
     [Theory]
     [InlineData("/api/setup?players=0")]
     [InlineData("/api/setup?players=6")]

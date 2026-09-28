@@ -278,6 +278,18 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         Assert.Equal(["core", "extra"], catalog.Boxes.Select(box => box.Id));
     }
 
+    [Fact]
+    public void Rejects_an_expansion_whose_reference_names_a_box_that_is_not_loaded()
+    {
+        File.Copy(Path.Combine(MultiBoxSetupTests.FixtureDirectory, "fixture.json"), Path.Combine(_directory, "fixture.json"));
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains("fixture.json", error.Message);
+        Assert.Contains(
+            "fixture_scheme_test-heist references villain group core_villain_hydra from box core, which is not loaded", error.Message);
+    }
+
     private void AssertRejected(string expectedInMessage)
     {
         var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));

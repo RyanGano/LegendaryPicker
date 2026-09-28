@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The design is confirmed and implementation is tracked as GitHub issues. The service holds the First Edition core box catalog and setup rules as data, and `Setup/SetupGenerator` draws a random legal setup and its checklist from them, which `GET /api/setup` serves. The web app lets a player pick a count and renders the draw as the Setup checklist (`SetupChecklist`): deck counts and totals, stacks, starting decks, and the cited Rule notes, with a tick box per line.
+LegendaryPicker randomly generates a legal setup for Upper Deck's Marvel Legendary card game. The design is confirmed and implementation is tracked as GitHub issues. The service holds the First Edition core box catalog and setup rules as data, and `Setup/SetupGenerator` draws a random legal setup and its checklist from them, which `GET /api/setup` serves. `GET /api/setup` takes the included boxes as `boxes=` (default `core`; an expansion's box file has no `setup` section), and `GET /api/boxes` lists them. Multi-box behavior is tested with a made-up expansion in `LegendaryPickerService.Tests/Fixtures/Boxes`, not real expansion data. The web app lets a player pick a count and the expansions to include, and renders the draw as the Setup checklist (`SetupChecklist`): deck counts and totals, stacks, starting decks, and the cited Rule notes, with a tick box per line.
 
 ## Read before working
 
@@ -50,7 +50,7 @@ dotnet test
 
 ## Rules and data constraints
 
-- v1 scope is the Marvel Legendary **First Edition (2013) core box** only, player counts 1–5, with First Edition Solo for one player. Second Edition rules differ; never substitute them.
+- v1 scope is the Marvel Legendary **First Edition core box** (released November 2012) only, player counts 1–5, with First Edition Solo for one player. Second Edition rules differ; never substitute them.
 - Every setup rule needs a source: the First Edition rulebook, an official clarification, or a ruling directly attributed to the designer or an Upper Deck rules representative. Record provenance alongside the data. A community catalog may supply card names and group mappings only.
 - Generation guarantees legality, never balance. Never relax a rule to make a Scheme playable; drop Schemes with no legal completion before the draw.
 - Store only short factual identifiers (card/group names, counts). Keep rulebook text, card text, and flavor text out of the repo.

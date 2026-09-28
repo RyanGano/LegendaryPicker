@@ -8,6 +8,8 @@ import killbots from './test/fixtures/killbots.json'
 import legacyVirusThreePlayers from './test/fixtures/legacyVirusThreePlayers.json'
 import soloSecretInvasion from './test/fixtures/soloSecretInvasion.json'
 import twoPlayerCosmicCube from './test/fixtures/twoPlayerCosmicCube.json'
+// Drawn from the core box and the service's test-only fixture expansion.
+import twoBoxesTestHeist from './test/fixtures/twoBoxesTestHeist.json'
 
 function renderChecklist(setup: unknown) {
   render(<SetupChecklist setup={setup as Setup} />)
@@ -178,6 +180,34 @@ describe('SetupChecklist', () => {
       'Solo: after each Twist, KO a Hero costing 6 or less from the HQ R p.20',
     ])
     expect(within(notes[1]).queryByRole('link')).not.toBeInTheDocument()
+  })
+
+  it('names the box each note comes from when the setup includes more than one box', () => {
+    renderChecklist(twoBoxesTestHeist)
+
+    const notes = within(section('Why this setup')).getAllByRole('listitem')
+    expect(notes.map((note) => note.textContent)).toEqual([
+      'Scheme requires HYDRA R p.3Fixture Expansion',
+      'Test Tyrant always leads Test Cult R p.6Marvel Legendary First Edition core box',
+    ])
+    expect(within(notes[0]).getByRole('link', { name: 'R p.3' })).toHaveAttribute('href', 'https://example.test/fixture-rules.pdf')
+  })
+
+  it('names the box each term comes from when the setup includes more than one box', async () => {
+    const user = userEvent.setup()
+    renderChecklist(twoBoxesTestHeist)
+
+    const terms = within(section('Terms in this setup')).getAllByRole('listitem')
+    expect(terms.find((term) => term.textContent!.startsWith('Overdrive'))!.textContent).toBe(
+      'Overdrive Keyword A made-up keyword that exists only in this test fixture. R p.2Fixture Expansion',
+    )
+    expect(terms.find((term) => term.textContent!.startsWith('Avengers'))).toHaveTextContent(
+      /R p\.18Marvel Legendary First Edition core box$/,
+    )
+
+    await user.click(screen.getAllByRole('button', { name: 'Overdrive' })[0])
+
+    expect(screen.getByRole('dialog', { name: 'Overdrive' })).toHaveTextContent(/R p\.2Fixture Expansion$/)
   })
 
   it('shows the Killbots Twists beside the Scheme and a Bystander stack of 12', () => {

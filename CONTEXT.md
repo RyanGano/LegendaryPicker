@@ -17,7 +17,7 @@ The original Marvel Legendary base product, with its own card pool and setup rul
 An additional product that adds content to the Marvel Legendary game system. An expansion's rules apply only to a setup that includes that expansion.
 
 **Included box**:
-A core box or expansion selected to contribute its cards to a particular setup.
+A core box or expansion selected to contribute its cards to a particular setup. The core box is always included; its setup rules govern the setup, and each included expansion adds cards but no setup rules of its own.
 
 _Avoid_: Set, when referring to a product; it can also mean a card group.
 

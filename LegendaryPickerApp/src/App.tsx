@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { getSetup, ping, type Setup } from './api/setupApi.ts'
+import { useEffect, useRef, useState } from 'react'
+import { getBoxes, getSetup, ping, type Box, type Setup } from './api/setupApi.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
 
 const PLAYER_COUNTS = [1, 2, 3, 4, 5]
@@ -8,6 +8,8 @@ const PLAYER_COUNTS = [1, 2, 3, 4, 5]
 const WAKE_UP_NOTICE_MS = 3_000
 
 const PLAYER_COUNT_KEY = 'legendaryPicker.playerCount'
+// The expansions the player included. Base games are always included, so they are not stored.
+const EXPANSIONS_KEY = 'legendaryPicker.expansions'
 
 // Source R in LegendaryPickerService/Data/Boxes/core.json: the archived First Edition rulebook.
 const RULEBOOK_URL =
@@ -32,6 +34,23 @@ function savePlayerCount(players: number) {
   }
 }
 
+function loadExpansions(): string[] {
+  try {
+    const stored: unknown = JSON.parse(localStorage.getItem(EXPANSIONS_KEY) ?? '[]')
+    return Array.isArray(stored) ? stored.filter((id): id is string => typeof id === 'string') : []
+  } catch {
+    return []
+  }
+}
+
+function saveExpansions(ids: string[]) {
+  try {
+    localStorage.setItem(EXPANSIONS_KEY, JSON.stringify(ids))
+  } catch {
+    // Remembering the boxes is optional.
+  }
+}
+
 type Status =
   | { kind: 'idle' }
   | { kind: 'loading' }
@@ -41,12 +60,24 @@ type Status =
 
 function App() {
   const [players, setPlayers] = useState<number | null>(loadPlayerCount)
+  const [boxes, setBoxes] = useState<Box[]>([])
+  const [expansions, setExpansions] = useState<string[]>(loadExpansions)
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   const [showWakeUpNotice, setShowWakeUpNotice] = useState(false)
 
   // Wake the API while the player is still choosing a count. Strict mode may repeat this harmlessly.
   useEffect(() => {
     void ping()
+  }, [])
+
+  // Without the box list there is nothing to pick, and a setup uses the core box alone.
+  // Generate waits for this request, so a draw made while a cold start is still answering
+  // includes the remembered expansions.
+  const boxesRequest = useRef<Promise<Box[]>>(Promise.resolve([]))
+  useEffect(() => {
+    const request = getBoxes().catch((): Box[] => [])
+    boxesRequest.current = request
+    void request.then(setBoxes)
   }, [])
 
   const loading = status.kind === 'loading'
@@ -65,12 +96,21 @@ function App() {
     savePlayerCount(count)
   }
 
-  // Generate, Generate another and Retry all draw for the selected count.
+  function toggleExpansion(id: string) {
+    const next = expansions.includes(id) ? expansions.filter((included) => included !== id) : [...expansions, id]
+    setExpansions(next)
+    saveExpansions(next)
+  }
+
+  const isIncluded = (box: Box) => box.baseGame || expansions.includes(box.id)
+
+  // Generate, Generate another and Retry all draw for the selected count and boxes.
   async function generate() {
     if (players === null) return
     setStatus({ kind: 'loading' })
     try {
-      const response = await getSetup(players)
+      const available = await boxesRequest.current
+      const response = await getSetup(players, available.filter(isIncluded).map((box) => box.id))
       setStatus(
         response.kind === 'setup'
           ? { kind: 'result', setup: response }
@@ -110,6 +150,25 @@ function App() {
               </button>
             ))}
           </div>
+          {boxes.length > 0 && (
+            <>
+              <h2 id="boxes-label">Boxes</h2>
+              <div className="box-options" role="group" aria-labelledby="boxes-label">
+                {boxes.map((box) => (
+                  <label key={box.id} className="box-option">
+                    <input
+                      type="checkbox"
+                      checked={isIncluded(box)}
+                      disabled={box.baseGame || loading}
+                      onChange={() => toggleExpansion(box.id)}
+                    />
+                    <span className="box-name">{box.name}</span>
+                    {box.baseGame && <span className="detail">Always included</span>}
+                  </label>
+                ))}
+              </div>
+            </>
+          )}
           <button
             type="button"
             className="primary"

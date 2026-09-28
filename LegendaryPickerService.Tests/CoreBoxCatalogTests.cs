@@ -14,6 +14,7 @@ public class CoreBoxCatalogTests
     {
         Assert.Equal("Marvel Legendary First Edition core box", Core.Name);
         Assert.Equal(1, Core.SchemaVersion);
+        Assert.True(Core.IsBaseGame);
     }
 
     [Fact]
@@ -225,12 +226,12 @@ public class CoreBoxCatalogTests
             scheme.Setup.Twists.Max(t => t.Value) + (scheme.Setup.TwistsBesideScheme?.Value ?? 0));
         var villainDeckBystanders = Core.Schemes
             .Select(scheme => scheme.Setup.VillainDeckBystanders?.Value ?? 0)
-            .Concat(Core.Setup.PlayerCounts.Select(row => row.Bystanders));
+            .Concat(Core.Setup!.PlayerCounts.Select(row => row.Bystanders));
 
         Assert.Equal(8, twistsUsed.Max());
         Assert.True(twistsUsed.Max() <= Core.Components.SchemeTwists.Value);
         Assert.Equal(18, villainDeckBystanders.Max());
-        Assert.True(villainDeckBystanders.Max() <= Core.Setup.SharedStacks.Bystanders.Value);
+        Assert.True(villainDeckBystanders.Max() <= Core.Setup!.SharedStacks.Bystanders.Value);
     }
 
     [Fact]
@@ -238,13 +239,13 @@ public class CoreBoxCatalogTests
     {
         Assert.Equal(
             [(2, 2, 1, 2), (3, 3, 1, 8), (4, 3, 2, 8), (5, 4, 2, 12)],
-            Core.Setup.PlayerCounts.Select(row => (row.Players, row.VillainGroups, row.HenchmanGroups, row.Bystanders)));
+            Core.Setup!.PlayerCounts.Select(row => (row.Players, row.VillainGroups, row.HenchmanGroups, row.Bystanders)));
     }
 
     [Fact]
     public void Standard_setup_values_match_the_rulebook()
     {
-        var setup = Core.Setup;
+        var setup = Core.Setup!;
 
         Assert.Equal(5, setup.Heroes.Value);
         Assert.Equal(5, setup.MasterStrikes.Value);
@@ -258,7 +259,7 @@ public class CoreBoxCatalogTests
     [Fact]
     public void Solo_setup_matches_the_rulebook()
     {
-        var solo = Core.Setup.Solo;
+        var solo = Core.Setup!.Solo;
 
         Assert.Equal(3, solo.Heroes.Value);
         Assert.Equal(1, solo.VillainGroups.Value);
@@ -274,7 +275,7 @@ public class CoreBoxCatalogTests
     [Fact]
     public void Rulings_cite_the_rulebook_and_the_designer()
     {
-        Assert.Equal(new Rulings("R p.6", "D1", "D2"), Core.Setup.Rulings);
+        Assert.Equal(new Rulings("R p.6", "D1", "D2"), Core.Setup!.Rulings);
     }
 
     [Fact]
@@ -408,7 +409,7 @@ public class CoreBoxCatalogTests
         yield return components.HenchmanGroupCards.Source;
         yield return components.SchemeTwists.Source;
 
-        var setup = Core.Setup;
+        var setup = Core.Setup!;
         foreach (var row in setup.PlayerCounts) yield return row.Source;
         yield return setup.Heroes.Source;
         yield return setup.MasterStrikes.Source;

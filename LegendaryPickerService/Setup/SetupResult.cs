@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using LegendaryPickerService.Catalog;
 
 namespace LegendaryPickerService.Setup;
@@ -20,7 +21,8 @@ public sealed record SetupResult(
     int TwistsBesideScheme,
     SetupStacks Stacks,
     PlayerDeck PlayerDeck,
-    IReadOnlyList<RuleNote> Notes) : GenerationResult;
+    IReadOnlyList<RuleNote> Notes,
+    IReadOnlyList<Box> Boxes) : GenerationResult;
 
 public sealed record VillainDeck(
     int Twists,
@@ -44,5 +46,10 @@ public sealed record SetupStacks(int Wounds, int Officers, int Bystanders);
 public sealed record PlayerDeck(int Agents, int Troopers);
 
 // One rule that changed the result, with its source key (for example "R p.6") and,
-// when the source is published, a link to it.
-public sealed record RuleNote(string Text, string Citation, string? Link);
+// when the source is published, a link to it. Box names the box the rule comes from once
+// a setup includes more than one box; with one box it is left out of the response.
+public sealed record RuleNote(
+    string Text,
+    string Citation,
+    string? Link,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Box = null);
