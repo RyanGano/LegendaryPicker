@@ -1,3 +1,4 @@
+using LegendaryPickerService.Setup;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -175,15 +176,16 @@ public sealed partial class BoxCatalog
 
         var heroes = files
             .SelectMany(file => file.Box.Heroes)
-            .Select(hero => hero.Id)
-            .ToHashSet(StringComparer.Ordinal);
+            .ToDictionary(hero => hero.Id, StringComparer.Ordinal);
 
         foreach (var (path, box) in files)
         {
-            foreach (var (owner, heroId) in HeroReferences(box).Where(reference => !heroes.Contains(reference.HeroId)))
+            foreach (var (owner, heroId) in HeroReferences(box).Where(reference => !heroes.ContainsKey(reference.HeroId)))
             {
                 throw new InvalidDataException($"{path}: {owner} references Hero {heroId}{Unresolved(heroId)}.");
             }
+
+            ValidateHeroRulesCanBeMet(path, box, heroes);
         }
 
         var terms = files
@@ -384,6 +386,69 @@ public sealed partial class BoxCatalog
                 }
             }
         }
+    }
+
+    // A Scheme's own Hero choices must leave its Hero rules possible at every player count it allows. Which
+    // boxes are included, and how many Hero Deck slots a setup has, are left open: the Heroes the Scheme
+    // doesn't name are stand-ins of every team and Hero Name its rules or named Heroes mention, as many as a
+    // setup could use, and the Hero Deck has room for every required Hero and every count. So a Scheme only
+    // Heroes from another box could complete still loads, and drops out of the draw until they are included.
+    private static void ValidateHeroRulesCanBeMet(string path, Box box, IReadOnlyDictionary<string, Hero> heroes)
+    {
+        foreach (var scheme in box.Schemes)
+        {
+            foreach (var players in scheme.Setup.AllowedPlayerCounts?.Value ?? Enumerable.Range(MinPlayers, MaxPlayers - MinPlayers + 1))
+            {
+                if (CanMeetHeroRules(scheme.Setup, players, heroes))
+                {
+                    continue;
+                }
+
+                var culprits = HeroRulesLeftOut(scheme.Setup)
+                    .Where(rule => CanMeetHeroRules(rule.Without, players, heroes))
+                    .Select(rule => rule.Name)
+                    .ToList();
+                throw new InvalidDataException(
+                    $"{path}: {scheme.Id} has Hero rules no draw can meet at {players} {(players == 1 ? "player" : "players")}, whichever Heroes are included; "
+                    + (culprits.Count > 0 ? $"it can be met without {string.Join(" or ", culprits)}." : "no one of them can be left out to meet the rest."));
+            }
+        }
+    }
+
+    private static bool CanMeetHeroRules(SchemeSetup setup, int players, IReadOnlyDictionary<string, Hero> heroes)
+    {
+        var required = (setup.RequiredHeroes ?? []).Select(rule => heroes[rule.HeroId]).ToList();
+        var counts = setup.HeroCounts ?? [];
+        var outside = (setup.OutsideHeroes ?? [])
+            .SelectMany(rule => Enumerable.Repeat(rule, rule.Count.SingleOrDefault(count => count.Players?.Contains(players) ?? true)?.Value ?? 0))
+            .ToList();
+        var deckSlots = required.Count + counts.Sum(count => count.AtLeast ?? count.Exactly!.Value);
+        var named = required.Concat(outside.Select(rule => rule.Hero).OfType<string>().Select(id => heroes[id])).Distinct().ToList();
+
+        // Stand-ins of each team and Hero Name, including none and a Hero Name of their own, enough of each
+        // to fill every slot.
+        var teams = counts.Select(count => count.Team).Concat(outside.Select(rule => rule.Team)).Concat(named.Select(hero => hero.Team)).Append(null).Distinct();
+        var names = counts.Select(count => count.HeroName).Concat(outside.Select(rule => rule.HeroName)).Concat(named.Select(hero => hero.NameOfHero)).Append(null).Distinct().ToList();
+        var standIns = teams
+            .SelectMany(team => names.SelectMany(name => Enumerable.Range(0, deckSlots + outside.Count).Select(_ => (Team: team, Name: name))))
+            .Select((standIn, index) => new Hero($"stand-in_{index}", standIn.Name ?? $"stand-in {index}", standIn.Team, [], []))
+            .ToList();
+
+        return new HeroRules([.. named, .. standIns], deckSlots, setup, outside).CanComplete(required, []);
+    }
+
+    // The Scheme's Hero rules, each with the setup that leaves it out.
+    private static IEnumerable<(string Name, SchemeSetup Without)> HeroRulesLeftOut(SchemeSetup setup)
+    {
+        static List<T> Except<T>(IReadOnlyList<T> list, int index) => list.Where((_, i) => i != index).ToList();
+
+        var required = setup.RequiredHeroes ?? [];
+        var counts = setup.HeroCounts ?? [];
+        var outside = setup.OutsideHeroes ?? [];
+        return required.Select((_, i) => ($"setup.requiredHeroes[{i}]", setup with { RequiredHeroes = Except(required, i) }))
+            .Concat(counts.Select((_, i) => ($"setup.heroCounts[{i}]", setup with { HeroCounts = Except(counts, i) })))
+            .Concat(setup.DistinctHeroNames?.Value == true ? [("setup.distinctHeroNames", setup with { DistinctHeroNames = null })] : [])
+            .Concat(outside.Select((_, i) => ($"setup.outsideHeroes[{i}]", setup with { OutsideHeroes = Except(outside, i) })));
     }
 
     private static string WireName<T>(T value) where T : struct, Enum => JsonNamingPolicy.CamelCase.ConvertName(value.ToString());

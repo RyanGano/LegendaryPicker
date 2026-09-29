@@ -452,6 +452,50 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected($"core_scheme_legacy-virus {expected}");
     }
 
+    // Each Scheme's own choices break one of its rules, whatever other Heroes are included, so the Scheme
+    // would drop out of every draw. Rogue is given Storm's Hero Name where a case needs two Heroes to share one.
+    [Theory]
+    [InlineData(
+        """{ "requiredHeroes": [{ "heroId": "core_hero_storm", "source": "Card" }, { "heroId": "core_hero_rogue", "source": "Card" }], "distinctHeroNames": { "value": true, "source": "Card" } }""",
+        "at 1 player, whichever Heroes are included; it can be met without setup.requiredHeroes[0] or setup.requiredHeroes[1] or setup.distinctHeroNames")]
+    [InlineData(
+        """{ "requiredHeroes": [{ "heroId": "core_hero_storm", "source": "Card" }, { "heroId": "core_hero_wolverine", "source": "Card" }], "heroCounts": [{ "team": "core_term_x-men", "exactly": 1, "source": "Card" }] }""",
+        "at 1 player, whichever Heroes are included; it can be met without setup.requiredHeroes[0] or setup.requiredHeroes[1] or setup.heroCounts[0]")]
+    [InlineData(
+        """{ "requiredHeroes": [{ "heroId": "core_hero_storm", "source": "Card" }], "heroCounts": [{ "team": "core_term_x-men", "exactly": 0, "source": "Card" }] }""",
+        "at 1 player, whichever Heroes are included; it can be met without setup.requiredHeroes[0] or setup.heroCounts[0]")]
+    [InlineData(
+        """{ "outsideHeroes": [{ "to": "villainDeck", "hero": "core_hero_rogue", "count": [{ "players": [3, 4, 5], "value": 1, "source": "Card" }] }], "heroCounts": [{ "heroName": "Storm", "atLeast": 1, "source": "Card" }], "distinctHeroNames": { "value": true, "source": "Card" } }""",
+        "at 3 players, whichever Heroes are included; it can be met without setup.heroCounts[0] or setup.distinctHeroNames or setup.outsideHeroes[0]")]
+    [InlineData(
+        """{ "requiredHeroes": [{ "heroId": "core_hero_storm", "source": "Card" }, { "heroId": "core_hero_rogue", "source": "Card" }], "heroCounts": [{ "team": "core_term_x-men", "exactly": 0, "source": "Card" }], "distinctHeroNames": { "value": true, "source": "Card" } }""",
+        "at 1 player, whichever Heroes are included; no one of them can be left out to meet the rest")]
+    public void Rejects_Hero_rules_that_contradict_themselves(string rules, string expected)
+    {
+        WriteCoreBox(core =>
+        {
+            Entry(core, "heroes", "core_hero_rogue")["heroName"] = "Storm";
+            var setup = LegacyVirusSetup(core);
+            foreach (var (name, rule) in JsonNode.Parse(rules)!.AsObject())
+            {
+                setup[name] = rule!.DeepClone();
+            }
+        });
+
+        AssertRejected($"core_scheme_legacy-virus has Hero rules no draw can meet {expected}.");
+    }
+
+    // Only one Storm is loaded and no Nova, but an expansion could add them; until one does, the Scheme
+    // drops out of the draw rather than the box failing to load.
+    [Fact]
+    public void Accepts_Hero_rules_only_Heroes_from_another_box_can_meet()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["heroCounts"] = JsonNode.Parse(
+            """[{ "heroName": "Storm", "exactly": 2, "source": "Card" }, { "heroName": "Nova", "atLeast": 1, "source": "Card" }]"""));
+
+        Assert.Single(BoxCatalog.Load(_directory).Boxes);
+    }
+
     [Fact]
     public void Accepts_one_Hero_drawn_outside_the_Hero_Deck_by_two_entries_at_different_player_counts()
     {
