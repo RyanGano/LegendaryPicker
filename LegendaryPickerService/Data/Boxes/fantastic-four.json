@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "fantastic-four",
   "name": "Fantastic Four",
+  "ruleset": "firstEdition",
   "catalogSource": "FF p.2; C1; C2",
   "sources": [
     { "key": "FF", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Fantastic-4-Rules.pdf" }

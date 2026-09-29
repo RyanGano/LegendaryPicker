@@ -38,7 +38,7 @@ public class PaintTheTownRedTests
     {
         Assert.Equal(["core", "dark-city", "fantastic-four", "paint-the-town-red"], Catalog.Boxes.Select(box => box.Id).Take(4));
         Assert.Equal(PaintTheTownRedName, PaintTheTownRed.Name);
-        Assert.Equal(4, PaintTheTownRed.SchemaVersion);
+        Assert.Equal(5, PaintTheTownRed.SchemaVersion);
         Assert.False(PaintTheTownRed.IsBaseGame);
     }
 
@@ -180,9 +180,10 @@ public class PaintTheTownRedTests
 
     private const string SpiderNamesBox = """
         {
-          "schemaVersion": 4,
+          "schemaVersion": 5,
           "id": "spider-names",
           "name": "Spider Names Fixture",
+          "ruleset": "firstEdition",
           "catalogSource": "R p.1",
           "sources": [{ "key": "R", "url": "https://example.test/spider-names.pdf" }],
           "components": {

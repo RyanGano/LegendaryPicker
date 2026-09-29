@@ -52,7 +52,7 @@ public sealed class SetupEffectsTests : IDisposable
             [
                 new RuleNote("Scheme adds 1 Hero", "Card", null, FixtureName),
                 new RuleNote("Solo ignores Dr. Doom's Always Leads", "R p.20", Rulebook, CoreName),
-                new RuleNote("Solo: after each Twist, KO a Hero costing 6 or less from the HQ", "R p.20", Rulebook, CoreName),
+                new RuleNote("Solo: After each Twist, KO a Hero costing 6 or less from the HQ", "R p.20", Rulebook, CoreName),
             ],
             setup.Notes);
     }

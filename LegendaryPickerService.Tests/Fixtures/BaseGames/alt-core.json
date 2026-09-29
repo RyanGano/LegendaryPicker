@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "alt-core",
   "name": "Alternate Core Fixture",
+  "ruleset": "firstEdition",
   "catalogSource": "R p.1",
   "sources": [
     {
@@ -46,7 +47,6 @@
   "schemes": [],
   "glossary": [],
   "setup": {
-    "ruleset": "firstEdition",
     "playerCounts": [
       {
         "players": 2,
@@ -124,10 +124,12 @@
         "value": true,
         "source": "R p.3"
       },
-      "twistKosHeroCostingAtMost": {
-        "value": 5,
-        "source": "R p.3"
-      }
+      "playRules": [
+        {
+          "label": "After each Twist, KO a Hero costing 5 or less from the HQ",
+          "source": "R p.3"
+        }
+      ]
     },
     "rulings": {
       "alwaysLeadsFillsSlot": "R p.2",

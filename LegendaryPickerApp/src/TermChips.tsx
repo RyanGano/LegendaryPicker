@@ -4,24 +4,25 @@ import type { GlossaryEntry } from './api/setupApi.ts'
 // A drawn component's glossary terms as chips. Tapping one opens its explanation: the term's
 // name, summary and citation exactly as the API returns them. The explanation is a popover under
 // the chip, or a bottom sheet on a phone, and closes on Escape, an outside tap or its close
-// button, handing focus back to the chip.
+// button, handing focus back to the chip. hero is what the setup's ruleset calls a Hero, which names
+// the class kind ("Hero class", or "Ally class" under the Villainous ruleset).
 
 // Pixels between a chip and its popover.
 const POPOVER_GAP = 4
-export function TermChips({ terms }: { terms: GlossaryEntry[] }) {
+export function TermChips({ terms, hero }: { terms: GlossaryEntry[]; hero: string }) {
   if (terms.length === 0) return null
   return (
     <ul className="term-chips" aria-label="Terms">
       {terms.map((term) => (
         <li key={term.id}>
-          <TermChip term={term} />
+          <TermChip term={term} hero={hero} />
         </li>
       ))}
     </ul>
   )
 }
 
-function TermChip({ term }: { term: GlossaryEntry }) {
+function TermChip({ term, hero }: { term: GlossaryEntry; hero: string }) {
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null)
   const chip = useRef<HTMLButtonElement>(null)
   const popover = useRef<HTMLDivElement>(null)
@@ -103,7 +104,7 @@ function TermChip({ term }: { term: GlossaryEntry }) {
         >
           <div className="term-popover-header">
             <p className="term-kind">
-              <TermKind kind={term.kind} />
+              <TermKind kind={term.kind} hero={hero} />
             </p>
             <button type="button" className="term-close" aria-label="Close" onClick={close}>
               ×
@@ -123,12 +124,7 @@ function TermChip({ term }: { term: GlossaryEntry }) {
   )
 }
 
-const KIND_LABELS: Record<GlossaryEntry['kind'], string> = {
-  team: 'Team',
-  class: 'Hero class',
-  keyword: 'Keyword',
-}
-
-export function TermKind({ kind }: { kind: GlossaryEntry['kind'] }) {
-  return KIND_LABELS[kind]
+export function TermKind({ kind, hero }: { kind: GlossaryEntry['kind']; hero: string }) {
+  const labels: Record<GlossaryEntry['kind'], string> = { team: 'Team', class: `${hero} class`, keyword: 'Keyword' }
+  return labels[kind]
 }

@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "paint-the-town-red",
   "name": "Paint the Town Red",
+  "ruleset": "firstEdition",
   "catalogSource": "PTTR p.2; C1; C2",
   "sources": [
     { "key": "PTTR", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf" }

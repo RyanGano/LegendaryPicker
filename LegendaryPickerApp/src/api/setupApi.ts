@@ -87,18 +87,27 @@ export type OutsideHenchmen = {
   cards: number
 }
 
-// sidekicks is left out when no included box has Sidekicks.
+// A stack is left out when no included box has it: a First Edition setup has Wounds and S.H.I.E.L.D.
+// Officers, a Villainous one Bindings, Madame HYDRA and New Recruits, and only some boxes have Sidekicks.
 export type SetupStacks = {
-  wounds: number
-  officers: number
+  wounds?: number
+  officers?: number
   bystanders: number
   sidekicks?: number
+  bindings?: number
+  madameHydra?: number
+  newRecruits?: number
 }
 
+// The two kinds of starting card each player gets: S.H.I.E.L.D. Agents and Troopers, or under the
+// Villainous ruleset HYDRA Operatives and Soldiers.
 export type PlayerDeck = {
   agents: number
   troopers: number
 }
+
+// The rules a box's cards are played under. A setup follows one ruleset.
+export type Ruleset = 'firstEdition' | 'villainous'
 
 // box names the box the rule comes from, and is present only when the setup includes more than one box.
 export type RuleNote = {
@@ -111,6 +120,8 @@ export type RuleNote = {
 export type Setup = {
   kind: 'setup'
   players: number
+  // Left out by an API from before rulesets, which drew First Edition setups only.
+  ruleset?: Ruleset
   scheme: Component
   mastermind: Component
   villainGroups: Component[]
@@ -144,11 +155,13 @@ export type NoEligibleScheme = {
 
 export type SetupResponse = Setup | NoEligibleScheme
 
-// A box a setup can include. A base game supplies the setup rules; an expansion adds cards.
+// A box a setup can include. A base game supplies the setup rules; an expansion adds cards. Boxes of
+// different rulesets can't be combined yet. An API from before rulesets leaves ruleset out.
 export type Box = {
   id: string
   name: string
   baseGame: boolean
+  ruleset?: Ruleset
 }
 
 // A sleeping App Service instance takes 10-30 seconds to wake, so give up well after that.

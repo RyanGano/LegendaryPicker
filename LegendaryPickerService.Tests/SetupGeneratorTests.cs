@@ -403,7 +403,7 @@ public class SetupGeneratorTests
     {
         Assert.All(AllScriptedSetups(1), setup =>
         {
-            Assert.Contains(new RuleNote("Solo: after each Twist, KO a Hero costing 6 or less from the HQ", "R p.20", Rulebook), setup.Notes);
+            Assert.Contains(new RuleNote("Solo: After each Twist, KO a Hero costing 6 or less from the HQ", "R p.20", Rulebook), setup.Notes);
             Assert.Contains(new RuleNote($"Solo ignores {setup.Mastermind.Name}'s Always Leads", "R p.20", Rulebook), setup.Notes);
             Assert.DoesNotContain(setup.Notes, note => note.Citation == "R p.6");
         });
@@ -421,7 +421,7 @@ public class SetupGeneratorTests
                 new RuleNote("Scheme moves 12 Hero cards into the Villain Deck", "Card", null),
                 new RuleNote("Scheme requires Skrulls", "Card", null),
                 new RuleNote("Solo ignores Loki's Always Leads", "R p.20", Rulebook),
-                new RuleNote("Solo: after each Twist, KO a Hero costing 6 or less from the HQ", "R p.20", Rulebook),
+                new RuleNote("Solo: After each Twist, KO a Hero costing 6 or less from the HQ", "R p.20", Rulebook),
             ],
             setup.Notes);
     }

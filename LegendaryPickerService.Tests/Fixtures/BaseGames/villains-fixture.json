@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "villains-fixture",
   "name": "Villains Fixture",
+  "ruleset": "villainous",
   "catalogSource": "R p.1",
   "sources": [
     {
@@ -30,12 +31,16 @@
       "value": 30,
       "source": "R p.1"
     },
-    "wounds": {
+    "bindings": {
       "value": 30,
       "source": "R p.1"
     },
-    "officers": {
-      "value": 30,
+    "madameHydra": {
+      "value": 12,
+      "source": "R p.1"
+    },
+    "newRecruits": {
+      "value": 15,
       "source": "R p.1"
     }
   },
@@ -46,7 +51,6 @@
   "schemes": [],
   "glossary": [],
   "setup": {
-    "ruleset": "villainous",
     "playerCounts": [
       {
         "players": 2,
@@ -124,10 +128,12 @@
         "value": true,
         "source": "R p.3"
       },
-      "twistKosHeroCostingAtMost": {
-        "value": 6,
-        "source": "R p.3"
-      }
+      "playRules": [
+        {
+          "label": "After each Twist, KO a Hero costing 6 or less from the HQ",
+          "source": "R p.3"
+        }
+      ]
     },
     "rulings": {
       "alwaysLeadsFillsSlot": "R p.2",

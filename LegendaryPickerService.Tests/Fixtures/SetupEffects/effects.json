@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "effects",
   "name": "Effects Fixture",
+  "ruleset": "firstEdition",
   "catalogSource": "R p.1",
   "sources": [
     { "key": "R", "url": "https://example.test/effects-rules.pdf" }

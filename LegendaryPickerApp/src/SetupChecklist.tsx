@@ -1,10 +1,12 @@
 import { Fragment, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import type { CardKind, Component, Move, Pile, Setup } from './api/setupApi.ts'
+import type { CardKind, Component, Move, Pile, Setup, SetupStacks } from './api/setupApi.ts'
+import { rulesetTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { TermKind } from './TermChips.tsx'
 
 // The setup as a checklist in the order a player lays it out. Every count and note comes from
-// the API response as-is: the client never adds, splits or infers a rule. The ticks are local
-// state, so a new setup, which remounts this component, starts unticked. The progress line counts
+// the API response as-is: the client never adds, splits or infers a rule. Parts of the setup are named
+// in the words of its ruleset, so a Villainous setup lays out a Plot and an Adversary Deck. The ticks are
+// local state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
 export function SetupChecklist({ setup }: { setup: Setup }) {
   // An API from before card moves, Heroes outside the Hero Deck, Henchman Groups outside the Villain Deck or
@@ -19,6 +21,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     outsideHenchmen = [],
     steps = [],
   } = setup
+  const t = rulesetTerms(setup)
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
@@ -31,75 +34,75 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         {progress.ticked} of {progress.total} laid out
       </p>
 
-      <Section title="Scheme and Mastermind" kind="mastermind">
-        <Item label={names([setup.scheme])} detail="Scheme" />
-        <Item label={names([setup.mastermind])} detail="Mastermind" />
+      <Section title={`${t.scheme} and ${t.mastermind}`} kind="mastermind">
+        <Item label={names([setup.scheme])} detail={t.scheme} />
+        <Item label={names([setup.mastermind])} detail={t.mastermind} />
       </Section>
 
-      <Section title="Villain Deck" kind="villain">
-        <Item label="Scheme Twists" count={villainDeck.twists} />
-        <Item label="Master Strikes" count={villainDeck.masterStrikes} />
+      <Section title={t.villainDeck} kind="villain">
+        <Item label={t.twists} count={villainDeck.twists} />
+        <Item label={t.masterStrikes} count={villainDeck.masterStrikes} />
         <Item
           label={names(setup.villainGroups)}
-          detail={plural(setup.villainGroups.length, 'Villain Group')}
+          detail={plural(setup.villainGroups.length, t.villainGroup, t.villainGroups)}
           count={villainDeck.villainCards}
         />
         <Item
           label={names(setup.henchmanGroups)}
-          detail={plural(setup.henchmanGroups.length, 'Henchman Group')}
+          detail={plural(setup.henchmanGroups.length, t.henchmanGroup, t.henchmanGroups)}
           count={villainDeck.henchmanCards}
         />
         <Item label="Bystanders" count={villainDeck.bystanders} />
-        <MovedIn moves={moves} to="villainDeck" />
-        <MovedOut moves={moves} from="villainDeck" />
-        <OutsideHeroCards count={villainDeck.outsideHeroCards} />
+        <MovedIn moves={moves} to="villainDeck" terms={t} />
+        <MovedOut moves={moves} from="villainDeck" terms={t} />
+        <OutsideHeroCards count={villainDeck.outsideHeroCards} terms={t} />
         <Total count={villainDeck.total} />
       </Section>
 
       {(setup.twistsBesideScheme > 0 || moves.some((move) => move.to === 'besideScheme')) && (
-        <Section title="Beside the Scheme" kind="scheme">
-          {setup.twistsBesideScheme > 0 && <Item label="Scheme Twists" count={setup.twistsBesideScheme} />}
-          <MovedIn moves={moves} to="besideScheme" />
+        <Section title={`Beside the ${t.scheme}`} kind="scheme">
+          {setup.twistsBesideScheme > 0 && <Item label={t.twists} count={setup.twistsBesideScheme} />}
+          <MovedIn moves={moves} to="besideScheme" terms={t} />
         </Section>
       )}
 
-      <Section title="Hero Deck" kind="hero">
-        <Item label={names(setup.heroes)} detail={plural(setup.heroes.length, 'Hero', 'Heroes')} count={heroDeck.heroCards} />
-        <MovedIn moves={moves} to="heroDeck" />
+      <Section title={t.heroDeck} kind="hero">
+        <Item label={names(setup.heroes)} detail={plural(setup.heroes.length, t.hero, t.heroes)} count={heroDeck.heroCards} />
+        <MovedIn moves={moves} to="heroDeck" terms={t} />
         {outsideHenchmen.map(
           (outside) =>
             outside.to === 'heroDeck' && (
               <Item
                 key={outside.group.id}
                 label={names([outside.group])}
-                detail="Henchmen of an extra Henchman Group"
+                detail={`${t.henchmen} of an extra ${t.henchmanGroup}`}
                 count={outside.cards}
               />
             ),
         )}
-        <MovedOut moves={moves} from="heroDeck" />
+        <MovedOut moves={moves} from="heroDeck" terms={t} />
         <Total count={heroDeck.total} />
       </Section>
 
       {outsideHeroes.length > 0 && (
-        <Section title="Heroes outside the Hero Deck" kind="hero">
+        <Section title={`${t.heroes} outside the ${t.heroDeck}`} kind="hero">
           {outsideHeroes.map((outside) => (
-            <Item key={outside.hero.id} label={names([outside.hero])} detail={INTO[outside.to]} count={outside.cards} />
+            <Item key={outside.hero.id} label={names([outside.hero])} detail={into(t)[outside.to]} count={outside.cards} />
           ))}
         </Section>
       )}
 
       <Section title="Shared stacks" kind="wound">
-        <Item label="Wounds" count={stacks.wounds} />
-        <Item label="S.H.I.E.L.D. Officers" count={stacks.officers} />
-        <Item label="Bystanders" count={stacks.bystanders} />
-        {stacks.sidekicks !== undefined && <Item label="Sidekicks" count={stacks.sidekicks} />}
+        {STACKS.map(([stack, label]) => {
+          const count = stacks[stack]
+          return count !== undefined && <Item key={stack} label={label} count={count} />
+        })}
       </Section>
 
       <Section title={`Starting deck per player · ${plural(setup.players, 'player')}`} kind="shield">
-        <Item label="S.H.I.E.L.D. Agents" count={playerDeck.agents} />
-        <Item label="S.H.I.E.L.D. Troopers" count={playerDeck.troopers} />
-        <MovedIn moves={moves} to="startingDecks" />
+        <Item label={t.agents} count={playerDeck.agents} />
+        <Item label={t.troopers} count={playerDeck.troopers} />
+        <MovedIn moves={moves} to="startingDecks" terms={t} />
       </Section>
 
       {steps.length > 0 && (
@@ -137,7 +140,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
             <li key={term.id} className={term.kind}>
               <span className="term-name">{term.name}</span>{' '}
               <span className="detail">
-                <TermKind kind={term.kind} />
+                <TermKind kind={term.kind} hero={t.hero} />
               </span>{' '}
               {term.summary}{' '}
               <cite>
@@ -194,23 +197,27 @@ function Item({ label, detail, count }: { label: ReactNode; detail?: string; cou
 }
 
 // The cards the Scheme moves into a pile, each a line to lay out, named with where they come from.
-function MovedIn({ moves, to }: { moves: Move[]; to: Pile }) {
+function MovedIn({ moves, to, terms }: { moves: Move[]; to: Pile; terms: RulesetTerms }) {
   // Keyed by position in the setup's moves: a Scheme can move the same kind of card to one pile twice.
   return moves.map(
     (move, index) =>
       move.to === to && (
-        <Item key={index} label={`${CARD_NAMES[move.card]} from the ${PILE_NAMES[move.from]}`} count={move.count} />
+        <Item
+          key={index}
+          label={`${cardNames(terms)[move.card]} from the ${pileNames(terms)[move.from]}`}
+          count={move.count}
+        />
       ),
   )
 }
 
 // The cards the Scheme moves out of a deck: taken away rather than laid out, so no tick box.
-function MovedOut({ moves, from }: { moves: Move[]; from: Pile }) {
+function MovedOut({ moves, from, terms }: { moves: Move[]; from: Pile; terms: RulesetTerms }) {
   return moves.map(
     (move, index) =>
       move.from === from && (
         <li key={index} className="row">
-          <span className="label">Moved {INTO[move.to]}</span> <span className="count">−{move.total}</span>
+          <span className="label">Moved {into(terms)[move.to]}</span> <span className="count">−{move.total}</span>
         </li>
       ),
   )
@@ -218,49 +225,68 @@ function MovedOut({ moves, from }: { moves: Move[]; from: Pile }) {
 
 // The cards of the Heroes outside the Hero Deck that go into the Villain Deck. They are laid out, and
 // ticked, in their own section, so here they only show what the total holds.
-function OutsideHeroCards({ count = 0 }: { count?: number }) {
+function OutsideHeroCards({ count = 0, terms }: { count?: number; terms: RulesetTerms }) {
   return (
     count > 0 && (
       <li className="row">
-        <span className="label">Cards of the Heroes outside the Hero Deck</span> <span className="count">{count}</span>
+        <span className="label">{`Cards of the ${terms.heroes} outside the ${terms.heroDeck}`}</span>{' '}
+        <span className="count">{count}</span>
       </li>
     )
   )
 }
 
-const CARD_NAMES: Record<CardKind, string> = {
-  hero: 'Hero cards',
-  henchman: 'Henchmen',
-  bystander: 'Bystanders',
-  wound: 'Wounds',
-  officer: 'S.H.I.E.L.D. Officers',
-  sidekick: 'Sidekicks',
+// The shared stacks in the order they are laid out, each shown only when the setup has it. Bindings,
+// Madame HYDRA and New Recruits are Villainous cards of their own, not other names for Wounds and Officers.
+const STACKS: [keyof SetupStacks, string][] = [
+  ['wounds', 'Wounds'],
+  ['bindings', 'Bindings'],
+  ['officers', 'S.H.I.E.L.D. Officers'],
+  ['madameHydra', 'Madame HYDRA'],
+  ['newRecruits', 'New Recruits'],
+  ['bystanders', 'Bystanders'],
+  ['sidekicks', 'Sidekicks'],
+]
+
+function cardNames(terms: RulesetTerms): Record<CardKind, string> {
+  return {
+    hero: `${terms.hero} cards`,
+    henchman: terms.henchmen,
+    bystander: 'Bystanders',
+    wound: 'Wounds',
+    officer: 'S.H.I.E.L.D. Officers',
+    sidekick: 'Sidekicks',
+  }
 }
 
-const PILE_NAMES: Record<Pile, string> = {
-  villainDeck: 'Villain Deck',
-  heroDeck: 'Hero Deck',
-  besideScheme: 'pile beside the Scheme',
-  startingDecks: 'starting decks',
-  setAside: 'stack set aside',
-  bystanders: 'Bystander stack',
-  wounds: 'Wound stack',
-  officers: 'Officer stack',
-  sidekicks: 'Sidekick stack',
+function pileNames(terms: RulesetTerms): Record<Pile, string> {
+  return {
+    villainDeck: terms.villainDeck,
+    heroDeck: terms.heroDeck,
+    besideScheme: `pile beside the ${terms.scheme}`,
+    startingDecks: 'starting decks',
+    setAside: 'stack set aside',
+    bystanders: 'Bystander stack',
+    wounds: 'Wound stack',
+    officers: 'Officer stack',
+    sidekicks: 'Sidekick stack',
+  }
 }
 
 // Where a move, or a Hero outside the Hero Deck, puts cards. Moves only go to the four destinations and
 // those Heroes to the Villain Deck, beside the Scheme or a stack set aside, never to a shared stack.
-const INTO: Record<Pile, string> = {
-  villainDeck: 'to the Villain Deck',
-  heroDeck: 'to the Hero Deck',
-  besideScheme: 'beside the Scheme',
-  startingDecks: 'to each starting deck',
-  setAside: 'to a stack set aside',
-  bystanders: 'to the Bystander stack',
-  wounds: 'to the Wound stack',
-  officers: 'to the Officer stack',
-  sidekicks: 'to the Sidekick stack',
+function into(terms: RulesetTerms): Record<Pile, string> {
+  return {
+    villainDeck: `to the ${terms.villainDeck}`,
+    heroDeck: `to the ${terms.heroDeck}`,
+    besideScheme: `beside the ${terms.scheme}`,
+    startingDecks: 'to each starting deck',
+    setAside: 'to a stack set aside',
+    bystanders: 'to the Bystander stack',
+    wounds: 'to the Wound stack',
+    officers: 'to the Officer stack',
+    sidekicks: 'to the Sidekick stack',
+  }
 }
 
 function Total({ count }: { count: number }) {

@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 5,
+  "id": "villains",
+  "name": "Legendary: Villains",
+  "ruleset": "villainous",
+  "catalogSource": "VIL p.22; C1; C2",
+  "sources": [
+    { "key": "VIL", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "VIL p.7" },
+    "villainGroupCards": { "value": 8, "source": "VIL p.6" },
+    "henchmanGroupCards": { "value": 10, "source": "VIL p.6" },
+    "schemeTwists": { "value": 12, "source": "VIL p.22" },
+    "bystanders": { "value": 41, "source": "VIL p.5" },
+    "bindings": { "value": 30, "source": "VIL p.5" },
+    "madameHydra": { "value": 12, "source": "VIL p.5" },
+    "newRecruits": { "value": 15, "source": "VIL p.5" }
+  },
+  "heroes": [
+    { "id": "villains_hero_bullseye", "name": "Bullseye", "team": "villains_term_crime-syndicate", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_ranged"], "terms": ["villains_term_dodge"] },
+    { "id": "villains_hero_dr-octopus", "name": "Dr. Octopus", "team": "villains_term_sinister-six", "classes": ["villains_term_strength", "villains_term_tech"], "terms": [] },
+    { "id": "villains_hero_electro", "name": "Electro", "team": "villains_term_sinister-six", "classes": ["villains_term_instinct", "villains_term_ranged"], "terms": ["villains_term_dodge"] },
+    { "id": "villains_hero_enchantress", "name": "Enchantress", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_ranged"], "terms": [] },
+    { "id": "villains_hero_green-goblin", "name": "Green Goblin", "team": "villains_term_sinister-six", "classes": ["villains_term_instinct", "villains_term_tech"], "terms": ["villains_term_dodge", "villains_term_kidnap-a-bystander"] },
+    { "id": "villains_hero_juggernaut", "name": "Juggernaut", "team": "villains_term_brotherhood", "classes": ["villains_term_strength"], "terms": [] },
+    { "id": "villains_hero_kingpin", "name": "Kingpin", "team": "villains_term_crime-syndicate", "classes": ["villains_term_covert", "villains_term_strength", "villains_term_tech"], "terms": [] },
+    { "id": "villains_hero_kraven", "name": "Kraven", "team": "villains_term_sinister-six", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_strength"], "terms": ["villains_term_dodge"] },
+    { "id": "villains_hero_loki", "name": "Loki", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_ranged"], "terms": [] },
+    { "id": "villains_hero_magneto", "name": "Magneto", "team": "villains_term_brotherhood", "classes": ["villains_term_ranged", "villains_term_strength"], "terms": ["villains_term_dodge"] },
+    { "id": "villains_hero_mysterio", "name": "Mysterio", "team": "villains_term_sinister-six", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_ranged", "villains_term_tech"], "terms": ["villains_term_dodge"] },
+    { "id": "villains_hero_mystique", "name": "Mystique", "team": "villains_term_brotherhood", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_tech"], "terms": ["villains_term_dodge"] },
+    { "id": "villains_hero_sabretooth", "name": "Sabretooth", "team": "villains_term_brotherhood", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_strength"], "terms": [] },
+    { "id": "villains_hero_ultron", "name": "Ultron", "team": null, "classes": ["villains_term_tech"], "terms": ["villains_term_dodge", "villains_term_kidnap-a-bystander"] },
+    { "id": "villains_hero_venom", "name": "Venom", "team": "villains_term_sinister-six", "classes": ["villains_term_instinct", "villains_term_strength"], "terms": ["villains_term_kidnap-a-bystander"] }
+  ],
+  "villainGroups": [
+    { "id": "villains_villain_avengers", "name": "Avengers", "terms": ["villains_term_ambush", "villains_term_demolish", "villains_term_elusive", "villains_term_fight", "villains_term_overrun"] },
+    { "id": "villains_villain_defenders", "name": "Defenders", "terms": ["villains_term_ambush", "villains_term_fight", "villains_term_overrun"] },
+    { "id": "villains_villain_marvel-knights", "name": "Marvel Knights", "terms": ["villains_term_fight", "villains_term_overrun"] },
+    { "id": "villains_villain_spider-friends", "name": "Spider Friends", "terms": ["villains_term_elusive", "villains_term_fight", "villains_term_overrun"] },
+    { "id": "villains_villain_uncanny-avengers", "name": "Uncanny Avengers", "terms": ["villains_term_ambush", "villains_term_fight", "villains_term_overrun", "villains_term_x-treme-attack"] },
+    { "id": "villains_villain_uncanny-x-men", "name": "Uncanny X-Men", "terms": ["villains_term_ambush", "villains_term_elusive", "villains_term_fight", "villains_term_x-treme-attack"] },
+    { "id": "villains_villain_x-men-first-class", "name": "X-Men First Class", "terms": ["villains_term_ambush", "villains_term_fight", "villains_term_overrun", "villains_term_x-treme-attack"] }
+  ],
+  "henchmanGroups": [
+    { "id": "villains_henchman_asgardian-warriors", "name": "Asgardian Warriors", "terms": ["villains_term_fight"] },
+    { "id": "villains_henchman_cops", "name": "Cops", "terms": ["villains_term_fight"] },
+    { "id": "villains_henchman_multiple-man", "name": "Multiple Man", "terms": ["villains_term_fight"] },
+    { "id": "villains_henchman_shield-assault-squad", "name": "S.H.I.E.L.D. Assault Squad", "terms": ["villains_term_fight"] }
+  ],
+  "masterminds": [
+    {
+      "id": "villains_mastermind_dr-strange",
+      "name": "Dr. Strange",
+      "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_fight"],
+      "alwaysLeads": { "groupId": "villains_villain_defenders", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "villains_mastermind_nick-fury",
+      "name": "Nick Fury",
+      "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_demolish", "villains_term_fight"],
+      "alwaysLeads": { "groupId": "villains_villain_avengers", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "villains_mastermind_odin",
+      "name": "Odin",
+      "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_fight"],
+      "alwaysLeads": { "groupId": "villains_henchman_asgardian-warriors", "groupType": "henchman", "source": "Card" }
+    },
+    {
+      "id": "villains_mastermind_professor-x",
+      "name": "Professor X",
+      "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_fight"],
+      "alwaysLeads": { "groupId": "villains_villain_x-men-first-class", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "villains_scheme_build-an-underground-megavault-prison",
+      "name": "Build an Underground MegaVault Prison",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "bindingsPerPlayer": { "value": 5, "source": "Card" }
+      }
+    },
+    {
+      "id": "villains_scheme_crush-hydra",
+      "name": "Crush HYDRA",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    },
+    {
+      "id": "villains_scheme_graduation-at-xaviers-x-academy",
+      "name": "Graduation at Xavier's X-Academy",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [
+          { "card": "bystander", "to": "besideScheme", "count": [{ "players": null, "value": 8, "source": "Card" }] }
+        ]
+      }
+    },
+    {
+      "id": "villains_scheme_infiltrate-the-lair-with-spies",
+      "name": "Infiltrate the Lair with Spies",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [
+          { "card": "bystander", "to": "besideScheme", "count": [{ "players": null, "value": 21, "source": "Card" }] }
+        ]
+      }
+    },
+    {
+      "id": "villains_scheme_mass-produce-war-machine-armor",
+      "name": "Mass Produce War Machine Armor",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "requiredGroups": [{ "groupId": "villains_henchman_shield-assault-squad", "groupType": "henchman", "source": "Card" }],
+        "henchmanCards": [{ "players": [1], "value": 10, "source": "VIL p.18" }]
+      }
+    },
+    {
+      "id": "villains_scheme_resurrect-heroes-with-norn-stones",
+      "name": "Resurrect Heroes with Norn Stones",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "villains_term_brotherhood", "name": "Brotherhood", "kind": "team", "summary": "An Ally team of mutants who believe their kind should rule. In Villains its members are Juggernaut, Magneto, Mystique and Sabretooth.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_crime-syndicate", "name": "Crime Syndicate", "kind": "team", "summary": "An Ally team of street-level crime bosses and hired killers. In Villains its members are Bullseye and Kingpin.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_foes-of-asgard", "name": "Foes of Asgard", "kind": "team", "summary": "An Ally team of enemies of Thor's home realm. In Villains its members are Enchantress and Loki.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_sinister-six", "name": "Sinister Six", "kind": "team", "summary": "An Ally team of Spider-Man's foes who band together against him. In Villains its members are Dr. Octopus, Electro, Green Goblin, Kraven, Mysterio and Venom.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_covert", "name": "Covert", "kind": "class", "summary": "An Ally class that wins through deceit, cunning schemes and subtle powers.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_instinct", "name": "Instinct", "kind": "class", "summary": "An Ally class that relies on ferocity, fast reactions and keen senses.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_ranged", "name": "Ranged", "kind": "class", "summary": "An Ally class that attacks from afar with blasts, beams and elemental or mental power.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_strength", "name": "Strength", "kind": "class", "summary": "An Ally class whose power is raw might, iron will or command of others.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_tech", "name": "Tech", "kind": "class", "summary": "An Ally class armed with weapons, gadgets, inventions and advanced science.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_always-leads", "name": "Always Leads", "kind": "keyword", "summary": "Names the Adversary Group or Backup Adversary group this Commander brings to every game. It takes one of the setup's group slots; random draws fill the rest.", "source": "VIL", "page": 6 },
+    { "id": "villains_term_ambush", "name": "Ambush", "kind": "keyword", "summary": "Triggers as this Adversary arrives in the city. If its arrival pushes another Adversary out, resolve that overrun first.", "source": "VIL", "page": 9 },
+    { "id": "villains_term_command-strike", "name": "Command Strike", "kind": "keyword", "summary": "When a Command Strike comes off the Adversary Deck, the Commander acts in person: resolve the Command Strike line on its card, then KO the Strike.", "source": "VIL", "page": 10 },
+    { "id": "villains_term_commander-tactic", "name": "Commander Tactic", "kind": "keyword", "summary": "Beating the Commander's Attack takes one of its four face-down Tactics at random for your Victory Pile, with its Fight effect. Taking all four wins.", "source": "VIL", "page": 13 },
+    { "id": "villains_term_demolish", "name": "Demolish", "kind": "keyword", "summary": "Reveal the Ally Deck's top card and move it to the bottom; every player then discards a card that costs the same, if they have one.", "source": "VIL", "page": 13 },
+    { "id": "villains_term_dodge", "name": "Dodge", "kind": "keyword", "summary": "On your turn you can discard this card from your hand to draw a replacement, ignoring its other text. Dodging is not playing the card.", "source": "VIL", "page": 14 },
+    { "id": "villains_term_elusive", "name": "Elusive", "kind": "keyword", "summary": "You can only fight this Adversary once you have made at least the listed amount of Recruit this turn. That Recruit stays yours to spend.", "source": "VIL", "page": 14 },
+    { "id": "villains_term_fight", "name": "Fight", "kind": "keyword", "summary": "Triggers when a player spends enough Attack to defeat this card.", "source": "VIL", "page": 12 },
+    { "id": "villains_term_kidnap-a-bystander", "name": "Kidnap a Bystander", "kind": "keyword", "summary": "Take the top Bystander of the Bystander Deck into your Victory Pile. It never takes a Bystander an Adversary guards; defeat that Adversary for it.", "source": "VIL", "page": 15 },
+    { "id": "villains_term_overrun", "name": "Overrun", "kind": "keyword", "summary": "Triggers when this Adversary is pushed out past the last city space, after it KOs a cheap Ally from the Lair and any guarded Bystanders cost each player a discard.", "source": "VIL", "page": 8 },
+    { "id": "villains_term_plot-twist", "name": "Plot Twist", "kind": "keyword", "summary": "Drawing a Plot Twist from the Adversary Deck moves the Commander's plan forward: resolve the Twist line on the Plot, then KO the Twist unless the Plot says otherwise.", "source": "VIL", "page": 9 },
+    { "id": "villains_term_x-treme-attack", "name": "X-Treme Attack", "kind": "keyword", "summary": "This Adversary gets +1 Attack for every other Adversary with X-Treme Attack in the city, so these teams grow stronger together.", "source": "VIL", "page": 14 }
+  ],
+  "setup": {
+    "playerCounts": [
+      { "players": 2, "villainGroups": 2, "henchmanGroups": 1, "bystanders": 2, "source": "VIL p.6" },
+      { "players": 3, "villainGroups": 3, "henchmanGroups": 1, "bystanders": 8, "source": "VIL p.6" },
+      { "players": 4, "villainGroups": 3, "henchmanGroups": 2, "bystanders": 8, "source": "VIL p.6" },
+      { "players": 5, "villainGroups": 4, "henchmanGroups": 2, "bystanders": 12, "source": "VIL p.6" }
+    ],
+    "heroes": { "value": 5, "source": "VIL p.7" },
+    "extraHeroes": [{ "players": [5], "value": 1, "source": "VIL p.7" }],
+    "masterStrikes": { "value": 5, "source": "VIL p.6" },
+    "startingDeck": {
+      "agents": { "value": 8, "source": "VIL p.5" },
+      "troopers": { "value": 4, "source": "VIL p.5" }
+    },
+    "solo": {
+      "heroes": { "value": 3, "source": "VIL p.19" },
+      "villainGroups": { "value": 1, "source": "VIL p.20" },
+      "henchmanGroups": { "value": 1, "source": "VIL p.20" },
+      "henchmanCards": { "value": 3, "source": "VIL p.20" },
+      "bystanders": { "value": 1, "source": "VIL p.20" },
+      "masterStrikes": { "value": 5, "source": "VIL p.20" },
+      "ignoresAlwaysLeads": { "value": true, "source": "VIL pp.19-20" },
+      "playRules": [
+        { "label": "Plot Twists also send a Lair Ally costing 6 or less under the Ally Deck", "source": "VIL p.20" },
+        { "label": "After each Command Strike, play another card from the Adversary Deck", "source": "VIL p.20" }
+      ]
+    },
+    "rulings": {
+      "alwaysLeadsFillsSlot": "VIL p.6",
+      "requiredGroupDisplacesAlwaysLeads": "VIL p.18",
+      "schemeOverridesSolo": "VIL p.18"
+    }
+  }
+}

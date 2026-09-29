@@ -17,10 +17,13 @@ The original Marvel Legendary base product, with its own card pool and setup rul
 An additional product that adds content to the Marvel Legendary game system. An expansion's rules apply only to a setup that includes that expansion.
 
 **Base game**:
-A box that can be played on its own and carries setup rules, such as the First Edition core box. A base game is an optional pick like any other box, but every setup includes at least one.
+A box that can be played on its own and carries setup rules, such as the First Edition core box or Legendary: Villains. A base game is an optional pick like any other box, but every setup includes at least one.
 
 **Ruleset**:
-The rules a base game is played under, separate from the box itself: First Edition for the core box, and later Villainous for Legendary: Villains. A setup follows one ruleset; base games of different rulesets can't be combined yet.
+The rules a box's cards are played under, separate from the box itself: First Edition for the core box and its Heroic expansions, and Villainous for Legendary: Villains. A setup follows one ruleset; boxes of different rulesets can't be combined yet.
+
+**Villainous terms**:
+The words a Villainous setup uses for the parts of a setup, one-to-one with the First Edition terms this glossary defines (Villains rulebook p.21): Ally for Hero, Adversary Group for Villain Group, Backup Adversary group for Henchman Group, Commander for Mastermind, Commander Tactic for Mastermind Tactic, Plot for Scheme, Plot Twist for Scheme Twist, Command Strike for Master Strike, Overrun for Escape, Adversary Deck for Villain Deck, Ally Deck for Hero Deck, and kidnapping for rescuing a Bystander. The code keeps the First Edition names. Bindings are not Wounds, and Madame HYDRA and New Recruits are not S.H.I.E.L.D. Officers: each is a stack of its own. HYDRA Operatives and Soldiers are the Villainous starting deck.
 
 **Included box**:
 A base game or expansion selected to contribute its cards to a particular setup. No box is mandatory, but at least one included box is a base game. The first included base game in catalog order supplies the setup rules; every other included box adds cards but no setup rules of its own.
@@ -81,6 +84,9 @@ The number of players in a game; the First Edition core rules use it to determin
 **First Edition Solo mode**:
 The one-player mode defined in the First Edition core rulebook: three Heroes, one Villain Group, three cards from one Henchman Group, one Bystander, one Master Strike, and the Scheme's normal Twists. It ignores Always Leads and excludes *Super Hero Civil War* and *Negative Zone Prison Breakout*. A Scheme's own Setup line overrides these Solo values.
 
+**Villainous Solo mode**:
+The one-player mode in the Villains rulebook: three Allies, one Adversary Group, three cards from one Backup Adversary group, one Bystander, five Command Strikes, and the Plot's normal Twists. It ignores Always Leads; each Plot Twist also sends a cheap Lair Ally under the Ally Deck, and each Command Strike plays another card. The rulebook titles it Advanced Solo Mode, but it is Villains' only one-player mode.
+
 **Advanced Solo**:
 A solo-play variant from later products and community material; not part of the First Edition core box.
 
@@ -104,7 +110,7 @@ A complete legal setup selected without player-selected card preferences; only o
 How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind from those that can complete it, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then any Henchman Groups outside the Villain Deck, then draw the Heroes, then any Heroes outside the Hero Deck. Each draw is equally likely among the remaining options that still leave a legal setup.
 
 **Setup checklist**:
-What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists beside the Scheme; any Heroes outside the Hero Deck and where their cards go; the Wound, Bystander and S.H.I.E.L.D. Officer stacks (and the Sidekick stack when an included box has Sidekicks), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
+What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists beside the Scheme; any Heroes outside the Hero Deck and where their cards go; the shared stacks the included boxes have (Wounds and S.H.I.E.L.D. Officers, or under Villainous Bindings, Madame HYDRA and New Recruits; Bystanders; and Sidekicks when an included box has them), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
 
 **Rule note**:
 One short line naming a rule that changed a setup, with its citation (for example "R p.6") and a link to the source when one is published. Never card or rulebook text.

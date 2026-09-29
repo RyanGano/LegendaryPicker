@@ -1,14 +1,19 @@
-import { useId, type Ref } from 'react'
-import type { Component, GlossaryEntry, RuleNote, Setup } from './api/setupApi.ts'
+import { useId, type ReactNode, type Ref } from 'react'
+import type { Component, RuleNote, Setup } from './api/setupApi.ts'
+import { rulesetTerms } from './rulesetTerms.ts'
 import { TermChips } from './TermChips.tsx'
 
 // What the players are playing, before how to lay it out: the setup's heading, the drawn Scheme
 // and Mastermind as cards, then every Hero and group as its own tile. Under each name sit the chips
 // for the glossary terms that component uses. When the setup includes more than one box, the box
-// each one comes from sits under its name. On a wide screen this sits beside the checklist.
+// each one comes from sits under its name. Card types use the words of the setup's ruleset. On a wide
+// screen this sits beside the checklist.
 export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?: Ref<HTMLHeadingElement> }) {
   const glossary = new Map(setup.glossary.map((entry) => [entry.id, entry]))
-  const termsOf = (component: Component) => component.terms.flatMap((id) => glossary.get(id) ?? [])
+  const t = rulesetTerms(setup)
+  const chipsOf = (component: Component) => (
+    <TermChips terms={component.terms.flatMap((id) => glossary.get(id) ?? [])} hero={t.hero} />
+  )
 
   return (
     <>
@@ -17,27 +22,27 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
       </h2>
       <section className="summary" aria-label="Drawn cards">
         <div className="headline-cards">
-          <HeadlineCard type="Scheme" kind="scheme" component={setup.scheme} terms={termsOf(setup.scheme)} />
+          <HeadlineCard type={t.scheme} kind="scheme" component={setup.scheme} chips={chipsOf(setup.scheme)} />
           <HeadlineCard
-            type="Mastermind"
+            type={t.mastermind}
             kind="mastermind"
             component={setup.mastermind}
-            terms={termsOf(setup.mastermind)}
+            chips={chipsOf(setup.mastermind)}
             tags={alwaysLeadsNotes(setup.notes)}
           />
         </div>
-        <TileGroup title={['Hero', 'Heroes']} kind="hero" components={setup.heroes} termsOf={termsOf} />
+        <TileGroup title={[t.hero, t.heroes]} kind="hero" components={setup.heroes} chipsOf={chipsOf} />
         <TileGroup
-          title={['Villain Group', 'Villain Groups']}
+          title={[t.villainGroup, t.villainGroups]}
           kind="villain"
           components={setup.villainGroups}
-          termsOf={termsOf}
+          chipsOf={chipsOf}
         />
         <TileGroup
-          title={['Henchman Group', 'Henchman Groups']}
+          title={[t.henchmanGroup, t.henchmanGroups]}
           kind="henchman"
           components={setup.henchmanGroups}
-          termsOf={termsOf}
+          chipsOf={chipsOf}
         />
       </section>
     </>
@@ -48,13 +53,13 @@ function HeadlineCard({
   type,
   kind,
   component,
-  terms,
+  chips,
   tags = [],
 }: {
   type: string
   kind: string
   component: Component
-  terms: GlossaryEntry[]
+  chips: ReactNode
   tags?: string[]
 }) {
   return (
@@ -62,7 +67,7 @@ function HeadlineCard({
       <p className="card-type">{type}</p>
       <h3>{component.name}</h3>
       {component.box && <p className="source-box">{component.box}</p>}
-      <TermChips terms={terms} />
+      {chips}
       {tags.length > 0 && (
         <ul className="tags">
           {tags.map((tag) => (
@@ -80,12 +85,12 @@ function TileGroup({
   title: [singular, plural],
   kind,
   components,
-  termsOf,
+  chipsOf,
 }: {
   title: [string, string]
   kind: string
   components: Component[]
-  termsOf: (component: Component) => GlossaryEntry[]
+  chipsOf: (component: Component) => ReactNode
 }) {
   const id = useId()
   return (
@@ -98,7 +103,7 @@ function TileGroup({
           <li key={component.id} className="tile">
             <span className="tile-name">{component.name}</span>
             {component.box && <span className="source-box">{component.box}</span>}
-            <TermChips terms={termsOf(component)} />
+            {chipsOf(component)}
           </li>
         ))}
       </ul>

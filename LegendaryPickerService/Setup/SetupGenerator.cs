@@ -40,8 +40,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     }
 
     // Why a set of box ids can't be drawn from, or null when it can. A setup needs at least one base
-    // game for its rules, and every base game in it must follow the same ruleset: combining rulesets
-    // is not supported yet.
+    // game for its rules, and every box in it must follow the same ruleset: combining rulesets, such as
+    // Heroic cards in a Villainous game, is not supported yet (#73).
     public string? CheckBoxes(IReadOnlyCollection<string> includedBoxes)
     {
         if (includedBoxes.FirstOrDefault(id => catalog.Boxes.All(box => box.Id != id)) is { } unknown)
@@ -55,8 +55,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return "Include at least one base game.";
         }
 
-        return baseGames.Select(box => box.Setup!.Ruleset).Distinct().Count() > 1
-            ? $"Base games {string.Join(" and ", baseGames.Select(box => box.Name))} follow different rulesets, which can't be combined yet."
+        if (baseGames.Select(box => box.Ruleset).Distinct().Count() > 1)
+        {
+            return $"Base games {string.Join(" and ", baseGames.Select(box => box.Name))} follow different rulesets, which can't be combined yet.";
+        }
+
+        var others = catalog.Boxes.Where(box => includedBoxes.Contains(box.Id) && box.Ruleset != baseGames[0].Ruleset).ToList();
+        return others.Count > 0
+            ? $"{string.Join(" and ", others.Select(box => box.Name))} can't be combined with {baseGames[0].Name} yet: they follow different rulesets."
             : null;
     }
 
@@ -68,6 +74,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).ToList();
         private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).ToList();
         private readonly Dictionary<(string Scheme, int Heroes), bool> _heroesFit = [];
+
+        // The words the ruleset's rulebook uses, for rule notes.
+        private readonly RulesetTerms _terms = RulesetTerms.For(rulesBox.Ruleset);
 
         private bool Solo => row is null;
 
@@ -108,13 +117,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             if (Solo)
             {
-                var ko = rules.Solo.TwistKosHeroCostingAtMost;
-                notes.Add(Note($"Solo: after each Twist, KO a Hero costing {ko.Value} or less from the HQ", ko.Source, rulesBox));
+                notes.AddRange(rules.Solo.PlayRules.Select(rule => Note($"Solo: {rule.Label}", rule.Source, rulesBox)));
             }
 
             return new SetupResult(
                 players,
-                rules.Ruleset,
+                rulesBox.Ruleset,
                 plan.Scheme,
                 mastermind,
                 villainGroups,
@@ -136,12 +144,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     outsideHenchmen.Where(outside => outside.To == Pile.HeroDeck).Sum(outside => outside.Cards)),
                 plan.TwistsBeside,
                 new SetupStacks(
-                    plan.Wounds - plan.MovedOut(Pile.Wounds),
-                    Supply(components => components.Officers) - plan.MovedOut(Pile.Officers),
+                    Stack(components => components.Wounds, plan.Wounds - plan.MovedOut(Pile.Wounds)),
+                    Stack(components => components.Officers, Supply(components => components.Officers) - plan.MovedOut(Pile.Officers)),
                     Supply(components => components.Bystanders) - plan.Bystanders - plan.MovedOut(Pile.Bystanders),
-                    boxes.Any(box => box.Components.Sidekicks is not null)
-                        ? Supply(components => components.Sidekicks) - plan.MovedOut(Pile.Sidekicks)
-                        : null),
+                    Stack(components => components.Sidekicks, Supply(components => components.Sidekicks) - plan.MovedOut(Pile.Sidekicks)),
+                    Stack(components => components.Bindings, plan.Bindings),
+                    Stack(components => components.MadameHydra, Supply(components => components.MadameHydra)),
+                    Stack(components => components.NewRecruits, Supply(components => components.NewRecruits))),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value),
                 plan.Moves,
                 outside,
@@ -164,15 +173,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             // A Scheme value that replaces a Solo value cites the ruling that the Scheme wins;
             // otherwise the card itself is the source.
+            // What the ruleset calls a Scheme, which every note here starts with.
+            var schemeWord = _terms.Scheme;
             RuleNote Replaces(string soloText, string text, string source) => Solo
-                ? Note($"Scheme overrides Solo: {soloText}", rules.Rulings.SchemeOverridesSolo, rulesBox)
-                : Card($"Scheme {text}", source);
+                ? Note($"{schemeWord} overrides Solo: {soloText}", rules.Rulings.SchemeOverridesSolo, rulesBox)
+                : Card($"{schemeWord} {text}", source);
 
-            var heroes = Solo ? rules.Solo.Heroes.Value : rules.Heroes.Value;
+            // The base game's extra Heroes are part of its player-count table, so they give no note.
+            var heroes = Solo ? rules.Solo.Heroes.Value : rules.Heroes.Value + (ForPlayers(rules.ExtraHeroes ?? [])?.Value ?? 0);
             if (ForPlayers(effect.Heroes ?? []) is { } schemeHeroes)
             {
                 heroes = schemeHeroes.Value;
-                notes.Add(Replaces($"{heroes} Heroes", $"uses {heroes} Heroes", schemeHeroes.Source));
+                notes.Add(Replaces($"{heroes} {_terms.Heroes}", $"uses {heroes} {_terms.Heroes}", schemeHeroes.Source));
             }
 
             int? henchmanCards = null;
@@ -180,8 +192,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 henchmanCards = schemeHenchmen.Value;
                 notes.Add(Replaces(
-                    $"{henchmanCards} Henchmen of each Henchman Group",
-                    $"puts {henchmanCards} Henchmen of each Henchman Group in the Villain Deck",
+                    $"{henchmanCards} {_terms.Henchmen} of each {_terms.HenchmanGroup}",
+                    $"puts {henchmanCards} {_terms.Henchmen} of each {_terms.HenchmanGroup} in the {_terms.VillainDeck}",
                     schemeHenchmen.Source));
             }
 
@@ -190,14 +202,21 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 bystanders = schemeBystanders.Value;
                 notes.Add(Replaces(
-                    $"{bystanders} Bystanders in the Villain Deck", $"puts {bystanders} Bystanders in the Villain Deck", schemeBystanders.Source));
+                    $"{bystanders} Bystanders in the {_terms.VillainDeck}", $"puts {bystanders} Bystanders in the {_terms.VillainDeck}", schemeBystanders.Source));
             }
 
             var wounds = Supply(components => components.Wounds);
             if (effect.WoundsPerPlayer is { } woundsPerPlayer)
             {
                 wounds = woundsPerPlayer.Value * players;
-                notes.Add(Card($"Scheme sets the Wound stack to {woundsPerPlayer.Value} per player", woundsPerPlayer.Source));
+                notes.Add(Card($"{schemeWord} sets the Wound stack to {woundsPerPlayer.Value} per player", woundsPerPlayer.Source));
+            }
+
+            var bindings = Supply(components => components.Bindings);
+            if (effect.BindingsPerPlayer is { } bindingsPerPlayer)
+            {
+                bindings = bindingsPerPlayer.Value * players;
+                notes.Add(Card($"{schemeWord} sets the Bindings stack to {bindingsPerPlayer.Value} per player", bindingsPerPlayer.Source));
             }
 
             var moves = new List<MovedCards>();
@@ -212,29 +231,29 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 var total = move.To == Pile.StartingDecks ? each * players : each;
                 moves.Add(new MovedCards(move.Card, move.From(), move.To, each, total));
                 notes.Add(Card(
-                    $"Scheme moves {each} {CardName(move.Card, each)} {Into(move.To)}{(move.PerPlayer ? $", {count.Value} per player" : "")}",
+                    $"{schemeWord} moves {each} {CardName(move.Card, each)} {Into(move.To)}{(move.PerPlayer ? $", {count.Value} per player" : "")}",
                     count.Source));
             }
 
             if (effect.TwistsBesideScheme is { } beside)
             {
-                notes.Add(Card($"Scheme puts {beside.Value} Twists beside it", beside.Source));
+                notes.Add(Card($"{schemeWord} puts {beside.Value} {_terms.Twists} beside it", beside.Source));
             }
 
             foreach (var required in effect.RequiredHeroes ?? [])
             {
-                notes.Add(Card($"Scheme requires {HeroNamed(required.HeroId)}", required.Source));
+                notes.Add(Card($"{schemeWord} requires {HeroNamed(required.HeroId)}", required.Source));
             }
 
             foreach (var count in effect.HeroCounts ?? [])
             {
                 var (bound, value) = count.AtLeast is { } atLeast ? ("at least", atLeast) : ("exactly", count.Exactly!.Value);
-                notes.Add(Card($"Scheme requires {bound} {value} {HeroesOf(value, count.Team, count.HeroName)}", count.Source));
+                notes.Add(Card($"{schemeWord} requires {bound} {value} {HeroesOf(value, count.Team, count.HeroName)}", count.Source));
             }
 
             if (effect.DistinctHeroNames is { Value: true } distinct)
             {
-                notes.Add(Card("Scheme allows no two Heroes with the same Hero Name", distinct.Source));
+                notes.Add(Card($"{schemeWord} allows no two {_terms.Heroes} with the same Hero Name", distinct.Source));
             }
 
             var outside = new List<OutsideDraw>();
@@ -250,7 +269,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     ? HeroNamed(heroId)
                     : $"{count.Value} extra {HeroesOf(count.Value, rule.Team, rule.HeroName)}";
                 notes.Add(Card(
-                    $"Scheme draws {which} outside the Hero Deck and puts {(count.Value == 1 ? "its" : "their")} cards {Onto(rule.To)}",
+                    $"{schemeWord} draws {which} outside the {_terms.HeroDeck} and puts {(count.Value == 1 ? "its" : "their")} cards {Onto(rule.To)}",
                     count.Source));
             }
 
@@ -264,7 +283,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
                 outsideHenchmen.Add(new HenchmenDraw(rule.To, cards.Value));
                 notes.Add(Card(
-                    $"Scheme draws 1 extra Henchman Group outside the Villain Deck and puts {cards.Value} of its {CardName(CardKind.Henchman, cards.Value)} {Into(rule.To)}",
+                    $"{schemeWord} draws 1 extra {_terms.HenchmanGroup} outside the {_terms.VillainDeck} and puts {cards.Value} of its {CardName(CardKind.Henchman, cards.Value)} {Into(rule.To)}",
                     cards.Source));
             }
 
@@ -283,13 +302,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 Solo ? rules.Solo.MasterStrikes.Value : rules.MasterStrikes.Value,
                 bystanders,
                 wounds,
+                bindings,
                 moves,
                 outside,
                 outsideHenchmen,
                 [],
                 notes);
 
-            return Add(plan, effect, "Scheme", schemeBox);
+            return Add(plan, effect, schemeWord, schemeBox);
         }
 
         // The Scheme's plan with the Mastermind's setup effects added after the Scheme's.
@@ -325,11 +345,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             return plan with
             {
-                Heroes = plan.Heroes + Extra(effects.ExtraHeroes, "Hero", "Heroes"),
-                VillainGroups = plan.VillainGroups + Extra(effects.ExtraVillainGroups, "Villain Group", "Villain Groups"),
-                HenchmanGroups = plan.HenchmanGroups + Extra(effects.ExtraHenchmanGroups, "Henchman Group", "Henchman Groups"),
+                Heroes = plan.Heroes + Extra(effects.ExtraHeroes, _terms.Hero, _terms.Heroes),
+                VillainGroups = plan.VillainGroups + Extra(effects.ExtraVillainGroups, _terms.VillainGroup, _terms.VillainGroups),
+                HenchmanGroups = plan.HenchmanGroups + Extra(effects.ExtraHenchmanGroups, _terms.HenchmanGroup, _terms.HenchmanGroups),
                 Bystanders = plan.Bystanders + Extra(
-                    effects.ExtraVillainDeckBystanders, "Bystander", "Bystanders", " to the Villain Deck"),
+                    effects.ExtraVillainDeckBystanders, "Bystander", "Bystanders", $" to the {_terms.VillainDeck}"),
                 Steps = [.. plan.Steps, .. (effects.Steps ?? []).Select(Step)],
                 Notes = notes,
             };
@@ -372,7 +392,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 var group = pool.Single(g => id(g) == required.GroupId);
                 chosen.Add(group);
-                notes.Add(Note($"Scheme requires {name(group)}", required.Source, BoxOf(scheme.Id)));
+                notes.Add(Note($"{_terms.Scheme} requires {name(group)}", required.Source, BoxOf(scheme.Id)));
             }
 
             var leads = mastermind.AlwaysLeads;
@@ -388,7 +408,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     if (!chosen.Contains(group) && chosen.Count >= slots)
                     {
                         notes.Add(Note(
-                            $"Scheme requires {string.Join(" and ", chosen.Select(name))}, so {mastermind.Name}'s Always Leads group {name(group)} is dropped",
+                            $"{_terms.Scheme} requires {string.Join(" and ", chosen.Select(name))}, so {mastermind.Name}'s Always Leads group {name(group)} is dropped",
                             rules.Rulings.RequiredGroupDisplacesAlwaysLeads, rulesBox));
                     }
                     else
@@ -466,15 +486,15 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private string HeroesOf(int count, string? team, string? heroName)
         {
             var kind = team is null ? heroName : boxes.SelectMany(box => box.Glossary).FirstOrDefault(term => term.Id == team)?.Name ?? team;
-            return $"{(kind is null ? "" : kind + " ")}{(count == 1 ? "Hero" : "Heroes")}";
+            return $"{(kind is null ? "" : kind + " ")}{(count == 1 ? _terms.Hero : _terms.Heroes)}";
         }
 
         private string HeroNamed(string heroId) => _heroes.FirstOrDefault(hero => hero.Id == heroId)?.Name ?? heroId;
 
-        private static string Onto(Pile to) => to switch
+        private string Onto(Pile to) => to switch
         {
-            Pile.VillainDeck => "into the Villain Deck",
-            Pile.BesideScheme => "beside the Scheme",
+            Pile.VillainDeck => $"into the {_terms.VillainDeck}",
+            Pile.BesideScheme => $"beside the {_terms.Scheme}",
             Pile.SetAside => "in a stack set aside",
             _ => throw new ArgumentOutOfRangeException(nameof(to), to, null),
         };
@@ -498,15 +518,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // How many cards of one kind the included boxes hold between them.
         private int Supply(Func<BoxComponents, Sourced<int>?> count) => boxes.Sum(box => count(box.Components)?.Value ?? 0);
 
+        // A stack's size, or null when no included box has that stack, so the setup leaves it out.
+        private int? Stack(Func<BoxComponents, Sourced<int>?> count, int size) =>
+            boxes.Any(box => count(box.Components) is not null) ? size : null;
+
         private HashSet<string> GroupIds() =>
             _villainGroups.Select(g => g.Id).Concat(_henchmanGroups.Select(g => g.Id)).ToHashSet();
 
-        private static string CardName(CardKind card, int count) => (card, count == 1) switch
+        private string CardName(CardKind card, int count) => (card, count == 1) switch
         {
-            (CardKind.Hero, true) => "Hero card",
-            (CardKind.Hero, false) => "Hero cards",
-            (CardKind.Henchman, true) => "Henchman",
-            (CardKind.Henchman, false) => "Henchmen",
+            (CardKind.Hero, true) => $"{_terms.Hero} card",
+            (CardKind.Hero, false) => $"{_terms.Hero} cards",
+            (CardKind.Henchman, true) => _terms.Henchman,
+            (CardKind.Henchman, false) => _terms.Henchmen,
             (CardKind.Bystander, true) => "Bystander",
             (CardKind.Bystander, false) => "Bystanders",
             (CardKind.Wound, true) => "Wound",
@@ -518,10 +542,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             _ => throw new ArgumentOutOfRangeException(nameof(card), card, null),
         };
 
-        private static string Into(Pile to) => to switch
+        private string Into(Pile to) => to switch
         {
-            Pile.VillainDeck => "into the Villain Deck",
-            Pile.HeroDeck => "into the Hero Deck",
+            Pile.VillainDeck => $"into the {_terms.VillainDeck}",
+            Pile.HeroDeck => $"into the {_terms.HeroDeck}",
             Pile.BesideScheme => "beside it",
             Pile.StartingDecks => "into each starting deck",
             _ => throw new ArgumentOutOfRangeException(nameof(to), to, null),
@@ -558,6 +582,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int MasterStrikes,
         int Bystanders,
         int Wounds,
+        int Bindings,
         IReadOnlyList<MovedCards> Moves,
         IReadOnlyList<OutsideDraw> Outside,
         IReadOnlyList<HenchmenDraw> OutsideHenchmen,
