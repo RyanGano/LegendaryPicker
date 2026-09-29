@@ -61,6 +61,8 @@ public sealed class CardMovesTests
         Assert.Equal(ninth, setup.Scheme.Name);
     }
 
+    // The fixture box has no Henchman Groups and lists 0 cards per group, as Fantastic Four does; only the
+    // groups a setup can draw decide how many Henchmen a Scheme can move.
     [Fact]
     public void Henchmen_moved_into_the_Hero_Deck_leave_the_Villain_Deck()
     {
