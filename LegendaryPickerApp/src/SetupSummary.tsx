@@ -4,7 +4,8 @@ import { TermChips } from './TermChips.tsx'
 
 // What the players are playing, before how to lay it out: the setup's heading, the drawn Scheme
 // and Mastermind as cards, then every Hero and group as its own tile. Under each name sit the chips
-// for the glossary terms that component uses. On a wide screen this sits beside the checklist.
+// for the glossary terms that component uses. When the setup includes more than one box, the box
+// each one comes from sits under its name. On a wide screen this sits beside the checklist.
 export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?: Ref<HTMLHeadingElement> }) {
   const glossary = new Map(setup.glossary.map((entry) => [entry.id, entry]))
   const termsOf = (component: Component) => component.terms.flatMap((id) => glossary.get(id) ?? [])
@@ -16,11 +17,11 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
       </h2>
       <section className="summary" aria-label="Drawn cards">
         <div className="headline-cards">
-          <HeadlineCard type="Scheme" kind="scheme" name={setup.scheme.name} terms={termsOf(setup.scheme)} />
+          <HeadlineCard type="Scheme" kind="scheme" component={setup.scheme} terms={termsOf(setup.scheme)} />
           <HeadlineCard
             type="Mastermind"
             kind="mastermind"
-            name={setup.mastermind.name}
+            component={setup.mastermind}
             terms={termsOf(setup.mastermind)}
             tags={alwaysLeadsNotes(setup.notes)}
           />
@@ -46,20 +47,21 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
 function HeadlineCard({
   type,
   kind,
-  name,
+  component,
   terms,
   tags = [],
 }: {
   type: string
   kind: string
-  name: string
+  component: Component
   terms: GlossaryEntry[]
   tags?: string[]
 }) {
   return (
     <div className={`headline-card ${kind}`}>
       <p className="card-type">{type}</p>
-      <h3>{name}</h3>
+      <h3>{component.name}</h3>
+      {component.box && <p className="source-box">{component.box}</p>}
       <TermChips terms={terms} />
       {tags.length > 0 && (
         <ul className="tags">
@@ -95,6 +97,7 @@ function TileGroup({
         {components.map((component) => (
           <li key={component.id} className="tile">
             <span className="tile-name">{component.name}</span>
+            {component.box && <span className="source-box">{component.box}</span>}
             <TermChips terms={termsOf(component)} />
           </li>
         ))}

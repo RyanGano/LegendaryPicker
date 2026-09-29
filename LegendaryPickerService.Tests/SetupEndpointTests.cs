@@ -93,7 +93,8 @@ public sealed class SetupEndpointTests : IDisposable
 
         var expected = JsonNode.Parse("""
             [{
-              "hero": { "id": "core_hero_gambit", "name": "Gambit", "terms": ["core_term_x-men", "core_term_covert", "core_term_instinct", "core_term_ranged"] },
+              "hero": { "id": "core_hero_gambit", "name": "Gambit", "terms": ["core_term_x-men", "core_term_covert", "core_term_instinct", "core_term_ranged"],
+                "box": "Marvel Legendary First Edition core box" },
               "to": "villainDeck",
               "cards": 14
             }]
@@ -197,6 +198,40 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal("Fixture Expansion", boxOfTerm["fixture_term_overdrive"]);
         var stacks = JsonNode.Parse("""{ "wounds": 35, "officers": 30, "bystanders": 6, "sidekicks": 16 }""");
         Assert.True(JsonNode.DeepEquals(stacks, body["stacks"]), body["stacks"]?.ToJsonString());
+    }
+
+    [Fact]
+    public async Task A_setup_from_two_boxes_names_the_box_of_each_drawn_card()
+    {
+        // Test Heist and Test Tyrant, then the first option left: HYDRA is required, Test Cult always led.
+        var client = Client(new ScriptedRandom(8, 4), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory));
+
+        var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,fixture");
+
+        string BoxOf(JsonNode component) => $"{component["name"]}: {component["box"]}";
+        Assert.Equal("Test Heist: Fixture Expansion", BoxOf(body!["scheme"]!));
+        Assert.Equal("Test Tyrant: Fixture Expansion", BoxOf(body["mastermind"]!));
+        Assert.Equal(
+            ["HYDRA: Marvel Legendary First Edition core box", "Test Cult: Fixture Expansion"],
+            body["villainGroups"]!.AsArray().Select(group => BoxOf(group!)));
+        var heroes = body["heroes"]!.AsArray();
+        Assert.Equal(5, heroes.Count);
+        Assert.All(heroes, hero => Assert.Contains((string?)hero!["box"], new[] { "Marvel Legendary First Edition core box", "Fixture Expansion" }));
+    }
+
+    [Fact]
+    public async Task A_setup_from_one_box_leaves_the_box_off_every_drawn_card()
+    {
+        // The fixture expansion is loaded but not included.
+        var client = Client(new ScriptedRandom(7, 3), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory));
+
+        var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core");
+
+        var components = new[] { body!["scheme"]!, body["mastermind"]! }
+            .Concat(body["villainGroups"]!.AsArray()!)
+            .Concat(body["henchmanGroups"]!.AsArray()!)
+            .Concat(body["heroes"]!.AsArray()!);
+        Assert.All(components, component => Assert.False(component!.AsObject().ContainsKey("box"), component.ToJsonString()));
     }
 
     [Theory]

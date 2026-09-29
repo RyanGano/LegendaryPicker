@@ -6,7 +6,8 @@
     "name": "Test Song",
     "terms": [
       "core_term_scheme-twist"
-    ]
+    ],
+    "box": "Heroes Fixture"
   },
   "mastermind": {
     "id": "core_mastermind_dr-doom",
@@ -16,7 +17,8 @@
       "core_term_fight",
       "core_term_master-strike",
       "core_term_mastermind-tactic"
-    ]
+    ],
+    "box": "Marvel Legendary First Edition core box"
   },
   "villainGroups": [
     {
@@ -26,7 +28,8 @@
         "core_term_ambush",
         "core_term_escape",
         "core_term_fight"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_villain_enemies-of-asgard",
@@ -35,7 +38,8 @@
         "core_term_ambush",
         "core_term_escape",
         "core_term_fight"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     }
   ],
   "henchmanGroups": [
@@ -44,7 +48,8 @@
       "name": "Doombot Legion",
       "terms": [
         "core_term_fight"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     }
   ],
   "heroes": [
@@ -56,7 +61,8 @@
         "core_term_covert",
         "core_term_tech",
         "core_term_rescue-a-bystander"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_captain-america",
@@ -67,7 +73,8 @@
         "core_term_instinct",
         "core_term_strength",
         "core_term_tech"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_cyclops",
@@ -76,7 +83,8 @@
         "core_term_x-men",
         "core_term_ranged",
         "core_term_strength"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_deadpool",
@@ -85,7 +93,8 @@
         "core_term_covert",
         "core_term_instinct",
         "core_term_tech"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_emma-frost",
@@ -96,7 +105,8 @@
         "core_term_instinct",
         "core_term_ranged",
         "core_term_strength"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     }
   ],
   "villainDeck": {
@@ -133,7 +143,8 @@
           "core_term_covert",
           "core_term_instinct",
           "core_term_ranged"
-        ]
+        ],
+        "box": "Marvel Legendary First Edition core box"
       },
       "to": "villainDeck",
       "cards": 14

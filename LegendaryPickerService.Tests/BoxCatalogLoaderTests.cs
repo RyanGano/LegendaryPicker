@@ -594,8 +594,7 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     public void Resolves_a_reference_into_another_box()
     {
         WriteCoreBox(_ => { });
-        var extra = JsonNode.Parse(ReadCoreBox().ToJsonString().Replace("core_", "extra_"))!.AsObject();
-        extra["id"] = "extra";
+        var extra = ExtraCopyOfCore();
         Mastermind(extra, "extra_mastermind_red-skull")["alwaysLeads"]!["groupId"] = "core_villain_hydra";
         Entry(extra, "heroes", "extra_hero_thor")["team"] = "core_term_avengers";
         WriteBox("extra.json", extra);
@@ -603,6 +602,48 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         var catalog = BoxCatalog.Load(_directory);
 
         Assert.Equal(["core", "extra"], catalog.Boxes.Select(box => box.Id));
+    }
+
+    [Fact]
+    public void Rejects_a_Hero_in_another_box_with_the_same_name()
+    {
+        WriteCoreBox(_ => { });
+        var extra = ExtraCopyOfCore();
+        Entry(extra, "heroes", "extra_hero_wolverine")["name"] = "Wolverine";
+        WriteBox("extra.json", extra);
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains("extra.json: hero extra_hero_wolverine is named \"Wolverine\", like core_hero_wolverine in", error.Message);
+        Assert.Contains("core.json", error.Message);
+    }
+
+    // A group named "Hydra" beside the core box's "HYDRA" is no easier to tell apart.
+    [Fact]
+    public void Rejects_a_Villain_Group_name_that_differs_only_in_case()
+    {
+        WriteCoreBox(_ => { });
+        var extra = ExtraCopyOfCore();
+        Entry(extra, "villainGroups", "extra_villain_hydra")["name"] = "Hydra";
+        WriteBox("extra.json", extra);
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains("villain extra_villain_hydra is named \"Hydra\", like core_villain_hydra", error.Message);
+    }
+
+    // A second version of a character loads under its own name, keeping the shared Hero Name for Hero rules.
+    [Fact]
+    public void Accepts_a_second_version_of_a_Hero_with_a_distinguishing_name()
+    {
+        WriteCoreBox(_ => { });
+        var extra = ExtraCopyOfCore();
+        var wolverine = Entry(extra, "heroes", "extra_hero_wolverine");
+        wolverine["name"] = "Wolverine (X-Force)";
+        wolverine["heroName"] = "Wolverine";
+        WriteBox("extra.json", extra);
+
+        Assert.Equal(["core", "extra"], BoxCatalog.Load(_directory).Boxes.Select(box => box.Id));
     }
 
     [Fact]
@@ -623,6 +664,28 @@ public sealed class BoxCatalogLoaderTests : IDisposable
 
         Assert.Contains("core.json", error.Message);
         Assert.Contains(expectedInMessage, error.Message);
+    }
+
+    // A copy of the core box as box "extra", every id and display name its own. Hero rules match on the
+    // Hero Name, so each copied Hero keeps the core one's.
+    private static JsonObject ExtraCopyOfCore()
+    {
+        var extra = JsonNode.Parse(ReadCoreBox().ToJsonString().Replace("core_", "extra_"))!.AsObject();
+        extra["id"] = "extra";
+        foreach (var list in new[] { "heroes", "villainGroups", "henchmanGroups", "masterminds", "schemes" })
+        {
+            foreach (var entry in extra[list]!.AsArray())
+            {
+                if (list == "heroes")
+                {
+                    entry!["heroName"] ??= (string?)entry["name"];
+                }
+
+                entry!["name"] = $"Extra {entry["name"]}";
+            }
+        }
+
+        return extra;
     }
 
     private static JsonObject ReadCoreBox() =>

@@ -6,7 +6,8 @@
     "name": "Test Wounded",
     "terms": [
       "core_term_scheme-twist"
-    ]
+    ],
+    "box": "Moves Fixture"
   },
   "mastermind": {
     "id": "core_mastermind_red-skull",
@@ -16,7 +17,8 @@
       "core_term_fight",
       "core_term_master-strike",
       "core_term_mastermind-tactic"
-    ]
+    ],
+    "box": "Marvel Legendary First Edition core box"
   },
   "villainGroups": [
     {
@@ -25,7 +27,8 @@
       "terms": [
         "core_term_escape",
         "core_term_fight"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_villain_spider-foes",
@@ -34,7 +37,8 @@
         "core_term_ambush",
         "core_term_escape",
         "core_term_fight"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     }
   ],
   "henchmanGroups": [
@@ -43,7 +47,8 @@
       "name": "Doombot Legion",
       "terms": [
         "core_term_fight"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     }
   ],
   "heroes": [
@@ -57,7 +62,8 @@
         "core_term_strength",
         "core_term_tech",
         "core_term_rescue-a-bystander"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_iron-man",
@@ -66,7 +72,8 @@
         "core_term_avengers",
         "core_term_ranged",
         "core_term_tech"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_black-widow",
@@ -76,7 +83,8 @@
         "core_term_covert",
         "core_term_tech",
         "core_term_rescue-a-bystander"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_wolverine",
@@ -84,7 +92,8 @@
       "terms": [
         "core_term_x-men",
         "core_term_instinct"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_deadpool",
@@ -93,7 +102,8 @@
         "core_term_covert",
         "core_term_instinct",
         "core_term_tech"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     }
   ],
   "villainDeck": {

@@ -708,11 +708,22 @@ button:disabled {
   border-radius: var(--radius-md);
 }
 
-/* The box a note's rule or a term comes from, shown once a setup includes more than one box. */
+/* The box a drawn card, a note's rule or a term comes from, shown once a setup includes more than one box. */
 .source-box {
   display: block;
+  margin: 0;
   font-size: var(--text-sm);
+  font-weight: 400;
   color: var(--muted);
+}
+
+/* A checklist row naming cards from more than one box puts each name, with its box, on its own line. */
+.card-name {
+  display: block;
+}
+
+.card-name + .card-name {
+  margin-top: var(--space-1);
 }
 
 .notes cite {

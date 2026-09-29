@@ -150,6 +150,25 @@ public sealed partial class BoxCatalog
             }
         }
 
+        // A setup names its cards by display name, so two Heroes, groups, Masterminds or Schemes sharing
+        // one would leave the player unsure which physical card to use. A new version of a character
+        // takes a distinguishing name, such as "Wolverine (X-Force)", and keeps heroName for Hero rules.
+        // Names differing only in case or surrounding spaces read as the same name.
+        var namedIn = new Dictionary<string, (string Id, string Path)>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (path, box) in files)
+        {
+            foreach (var (kind, id, name) in NamedComponents(box))
+            {
+                var key = $"{kind}:{name.Trim()}";
+                if (!namedIn.TryAdd(key, (id, path)))
+                {
+                    var (otherId, otherPath) = namedIn[key];
+                    throw new InvalidDataException(
+                        $"{path}: {kind} {id} is named \"{name}\", like {otherId} in {otherPath}; a setup must tell them apart.");
+                }
+            }
+        }
+
         // A reference into a box that isn't loaded says so, rather than that the card is missing.
         var loadedBoxes = files.Select(file => file.Box.Id).ToHashSet(StringComparer.Ordinal);
         string Unresolved(string id) => loadedBoxes.Contains(id.Split('_')[0])
@@ -530,6 +549,14 @@ public sealed partial class BoxCatalog
             .Concat(box.Masterminds.Select(x => ("mastermind", x.Id)))
             .Concat(box.Schemes.Select(x => ("scheme", x.Id)))
             .Concat(box.Glossary.Select(x => ("term", x.Id)));
+
+    // The components a setup names on the page, each with its kind, id and display name.
+    private static IEnumerable<(string Kind, string Id, string Name)> NamedComponents(Box box) =>
+        box.Heroes.Select(x => ("hero", x.Id, x.Name))
+            .Concat(box.VillainGroups.Select(x => ("villain", x.Id, x.Name)))
+            .Concat(box.HenchmanGroups.Select(x => ("henchman", x.Id, x.Name)))
+            .Concat(box.Masterminds.Select(x => ("mastermind", x.Id, x.Name)))
+            .Concat(box.Schemes.Select(x => ("scheme", x.Id, x.Name)));
 
     private static IEnumerable<(string Owner, string GroupId, GroupType GroupType)> GroupReferences(Box box) =>
         box.Masterminds.Select(m => (m.Id, m.AlwaysLeads.GroupId, m.AlwaysLeads.GroupType))

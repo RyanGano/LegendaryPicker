@@ -32,6 +32,9 @@ function renderChecklist(setup: unknown) {
 
 const section = (name: string) => screen.getByRole('region', { name })
 
+// Every two-box fixture draws its familiar cards from the core box.
+const CORE = 'Marvel Legendary First Edition core box'
+
 // Each line of a section as the player reads it: label, drawn names, count.
 const rows = (sectionName: string) =>
   within(section(sectionName)).getAllByRole('listitem').map((row) => row.textContent)
@@ -243,14 +246,14 @@ describe('SetupChecklist', () => {
     expect(rows('Villain Deck')).toEqual([
       'Scheme Twists 8',
       'Master Strikes 5',
-      'HYDRA, Skrulls 2 Villain Groups 16',
-      'Sentinel 1 Henchman Group 10',
+      `HYDRA ${CORE} Skrulls ${CORE} 2 Villain Groups 16`,
+      `Sentinel ${CORE} 1 Henchman Group 10`,
       'Bystanders 2',
       'Moved to the Hero Deck −6',
       'Total 35',
     ])
     expect(rows('Hero Deck')).toEqual([
-      'Rogue, Hulk, Emma Frost, Black Widow, Iron Man 5 Heroes 70',
+      `Rogue ${CORE} Hulk ${CORE} Emma Frost ${CORE} Black Widow ${CORE} Iron Man ${CORE} 5 Heroes 70`,
       'Henchmen from the Villain Deck 6',
       'Total 76',
     ])
@@ -295,12 +298,12 @@ describe('SetupChecklist', () => {
   it("lists a Hero outside the Hero Deck in its own section and counts its cards in the Villain Deck's total", () => {
     renderChecklist(twoBoxesTestSong)
 
-    expect(rows('Heroes outside the Hero Deck')).toEqual(['Gambit to the Villain Deck 14'])
+    expect(rows('Heroes outside the Hero Deck')).toEqual([`Gambit ${CORE} to the Villain Deck 14`])
     expect(rows('Villain Deck')).toEqual([
       'Scheme Twists 8',
       'Master Strikes 5',
-      'Brotherhood, Enemies of Asgard 2 Villain Groups 16',
-      'Doombot Legion 1 Henchman Group 10',
+      `Brotherhood ${CORE} Enemies of Asgard ${CORE} 2 Villain Groups 16`,
+      `Doombot Legion ${CORE} 1 Henchman Group 10`,
       'Bystanders 2',
       'Cards of the Heroes outside the Hero Deck 14',
       'Total 55',
@@ -313,7 +316,10 @@ describe('SetupChecklist', () => {
   it('lists Heroes set aside outside the Hero Deck without adding them to a deck', () => {
     renderChecklist(twoBoxesTestVault)
 
-    expect(rows('Heroes outside the Hero Deck')).toEqual(['Gambit to a stack set aside 14', 'Rogue to a stack set aside 14'])
+    expect(rows('Heroes outside the Hero Deck')).toEqual([
+      `Gambit ${CORE} to a stack set aside 14`,
+      `Rogue ${CORE} to a stack set aside 14`,
+    ])
     expect(rows('Villain Deck')).not.toContain('Cards of the Heroes outside the Hero Deck 0')
     expect(rows('Villain Deck')).toContain('Total 41')
   })
@@ -382,6 +388,27 @@ describe('SetupChecklist', () => {
     const calls = error.mock.calls.length
     error.mockRestore()
     expect(calls).toBe(0)
+  })
+
+  it('names the box each drawn card comes from when the setup includes more than one box', () => {
+    renderChecklist(twoBoxesTestHeist)
+
+    expect(within(card('Test Heist')).getByText('Fixture Expansion')).toHaveClass('source-box')
+    expect(within(card('Test Tyrant')).getByText('Fixture Expansion')).toHaveClass('source-box')
+    expect(tile('Villain Groups', 'HYDRA')).toHaveTextContent(new RegExp(`^HYDRA${CORE}`))
+    expect(tile('Villain Groups', 'Test Cult')).toHaveTextContent(/^Test CultFixture Expansion/)
+    expect(tile('Heroes', 'Storm')).toHaveTextContent(new RegExp(`^Storm${CORE}`))
+    expect(rows('Scheme and Mastermind')).toEqual(['Test Heist Fixture Expansion Scheme', 'Test Tyrant Fixture Expansion Mastermind'])
+    expect(within(section('Villain Deck')).getAllByRole('checkbox')[2]).toHaveAccessibleName(
+      `HYDRA ${CORE} Test Cult Fixture Expansion 2 Villain Groups 16`,
+    )
+  })
+
+  it('leaves the box off every drawn card when the setup includes one box', () => {
+    renderChecklist(twoPlayerCosmicCube)
+
+    expect(screen.queryByText(CORE)).not.toBeInTheDocument()
+    expect(document.querySelector('.source-box')).toBeNull()
   })
 
   it('names the box each note comes from when the setup includes more than one box', () => {
