@@ -310,7 +310,8 @@ public sealed partial class BoxCatalog
 
     // A Hero constraint counts Heroes by one thing, a team or a Hero Name, against one bound. Heroes drawn
     // outside the Hero Deck go to a pile of their own rather than a stack or the Hero Deck, and are
-    // chosen by at most one of a Hero, a Hero Name or a team.
+    // chosen by at most one of a Hero, a Hero Name or a team. There is one of each Hero, so a rule that
+    // needs one Hero twice, or both in the Hero Deck and outside it, has no draw.
     private static void ValidateHeroRules(string path, Box box)
     {
         foreach (var scheme in box.Schemes)
@@ -334,8 +335,42 @@ public sealed partial class BoxCatalog
                 }
             }
 
-            foreach (var outside in scheme.Setup.OutsideHeroes ?? [])
+            var required = new HashSet<string>();
+            foreach (var hero in scheme.Setup.RequiredHeroes ?? [])
             {
+                if (!required.Add(hero.HeroId))
+                {
+                    throw new InvalidDataException($"{path}: {scheme.Id} setup.requiredHeroes lists {hero.HeroId} more than once.");
+                }
+            }
+
+            // For each Hero an outsideHeroes entry names, the player counts at which an entry draws it.
+            var drawnOutside = new Dictionary<string, HashSet<int>>();
+            foreach (var (outside, index) in (scheme.Setup.OutsideHeroes ?? []).Select((outside, index) => (outside, index)))
+            {
+                if (outside.Hero is { } named)
+                {
+                    var counts = drawnOutside.TryGetValue(named, out var earlier) ? earlier : drawnOutside[named] = [];
+                    var players = outside.Count.SelectMany(count => count.Players ?? Enumerable.Range(MinPlayers, MaxPlayers - MinPlayers + 1)).Distinct();
+                    if (players.FirstOrDefault(player => !counts.Add(player)) is > 0 and var twice)
+                    {
+                        throw new InvalidDataException(
+                            $"{path}: {scheme.Id} setup.outsideHeroes[{index}] draws {named}, which an earlier entry also draws at {twice} players; there is one of each Hero.");
+                    }
+
+                    if (outside.Count.FirstOrDefault(count => count.Value > 1) is { } many)
+                    {
+                        throw new InvalidDataException(
+                            $"{path}: {scheme.Id} setup.outsideHeroes[{index}] draws {many.Value} of Hero {named}; there is one of each Hero.");
+                    }
+
+                    if (required.Contains(named))
+                    {
+                        throw new InvalidDataException(
+                            $"{path}: {scheme.Id} setup.outsideHeroes[{index}] draws {named} outside the Hero Deck, but setup.requiredHeroes puts it in the Hero Deck.");
+                    }
+                }
+
                 if (!OutsideHeroes.Destinations.Contains(outside.To))
                 {
                     throw new InvalidDataException(

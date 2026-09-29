@@ -418,6 +418,49 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected($"core_scheme_legacy-virus {expected}");
     }
 
+    // Each of these rules is well formed, but no draw can meet it: without the check the Scheme would
+    // silently drop out of every draw.
+    [Theory]
+    [InlineData(null,
+        """[{ "to": "villainDeck", "hero": "core_hero_storm", "count": [{ "players": [1, 2, 3, 4], "value": 1, "source": "Card" }, { "players": [5], "value": 2, "source": "Card" }] }]""",
+        "setup.outsideHeroes[0] draws 2 of Hero core_hero_storm; there is one of each Hero")]
+    [InlineData("""[{ "heroId": "core_hero_storm", "source": "Card" }, { "heroId": "core_hero_storm", "source": "Card" }]""",
+        null,
+        "setup.requiredHeroes lists core_hero_storm more than once")]
+    [InlineData("""[{ "heroId": "core_hero_storm", "source": "Card" }]""",
+        """[{ "to": "setAside", "hero": "core_hero_storm", "count": [{ "players": null, "value": 1, "source": "Card" }] }]""",
+        "setup.outsideHeroes[0] draws core_hero_storm outside the Hero Deck, but setup.requiredHeroes puts it in the Hero Deck")]
+    [InlineData(null,
+        """[{ "to": "setAside", "hero": "core_hero_storm", "count": [{ "players": [1, 2], "value": 1, "source": "Card" }] }, { "to": "villainDeck", "hero": "core_hero_storm", "count": [{ "players": [2, 3], "value": 1, "source": "Card" }] }]""",
+        "setup.outsideHeroes[1] draws core_hero_storm, which an earlier entry also draws at 2 players; there is one of each Hero")]
+    public void Rejects_Hero_rules_no_draw_can_meet(string? required, string? outside, string expected)
+    {
+        WriteCoreBox(core =>
+        {
+            var setup = LegacyVirusSetup(core);
+            if (required is not null)
+            {
+                setup["requiredHeroes"] = JsonNode.Parse(required);
+            }
+
+            if (outside is not null)
+            {
+                setup["outsideHeroes"] = JsonNode.Parse(outside);
+            }
+        });
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
+    [Fact]
+    public void Accepts_one_Hero_drawn_outside_the_Hero_Deck_by_two_entries_at_different_player_counts()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["outsideHeroes"] = JsonNode.Parse(
+            """[{ "to": "setAside", "hero": "core_hero_storm", "count": [{ "players": [1, 2], "value": 1, "source": "Card" }] }, { "to": "villainDeck", "hero": "core_hero_storm", "count": [{ "players": [3, 4, 5], "value": 1, "source": "Card" }] }]"""));
+
+        Assert.Single(BoxCatalog.Load(_directory).Boxes);
+    }
+
     [Fact]
     public void Rejects_two_boxes_with_the_same_id()
     {
