@@ -13,7 +13,7 @@ namespace LegendaryPickerService.Catalog;
 // kebab-case segment. References name a full id, so a box can reference another box's groups.
 public sealed partial class BoxCatalog
 {
-    public const int SchemaVersion = 3;
+    public const int SchemaVersion = 4;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
@@ -137,8 +137,8 @@ public sealed partial class BoxCatalog
             ValidateMoves(path, box);
             ValidateHeroRules(path, box);
 
-            // Every setup includes its base game, so the base game's stacks can't be left to an expansion;
-            // a stack it forgot to list would otherwise come out as 0.
+            // A setup can include a base game and no expansion, so a base game's stacks can't be left to
+            // an expansion; a stack it forgot to list would otherwise come out as 0.
             if (box.Setup is not null)
             {
                 (string Name, Sourced<int>? Count)[] stacks =

@@ -16,9 +16,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
     public GenerationResult Generate(int players, IRandomSource random) => Generate(players, [CoreBoxId], random);
 
-    // The included base game supplies the setup rules (the player-count table, Solo, stacks,
-    // rulings); every included box contributes its cards, drawn in catalog order whatever order
-    // the boxes are named in.
+    // The first included base game in catalog order supplies the setup rules (the player-count table,
+    // Solo, starting decks, rulings); every included box contributes its cards and stacks, drawn in
+    // catalog order whatever order the boxes are named in.
     public GenerationResult Generate(int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random)
     {
         if (CheckBoxes(includedBoxes) is { } problem)
@@ -27,7 +27,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         }
 
         var boxes = catalog.Boxes.Where(box => includedBoxes.Contains(box.Id)).ToList();
-        var rulesBox = boxes.Single(box => box.IsBaseGame);
+        var rulesBox = boxes.First(box => box.IsBaseGame);
         var rules = rulesBox.Setup!;
         var row = rules.PlayerCounts.SingleOrDefault(r => r.Players == players);
         if (players != 1 && row is null)
@@ -39,8 +39,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         return new TableDraw(boxes, rulesBox, rules, players, row, random).Run();
     }
 
-    // Why a set of box ids can't be drawn from, or null when it can. A setup needs exactly one
-    // base game for its rules; choosing between two is not supported yet.
+    // Why a set of box ids can't be drawn from, or null when it can. A setup needs at least one base
+    // game for its rules, and every base game in it must follow the same ruleset: combining rulesets
+    // is not supported yet.
     public string? CheckBoxes(IReadOnlyCollection<string> includedBoxes)
     {
         if (includedBoxes.FirstOrDefault(id => catalog.Boxes.All(box => box.Id != id)) is { } unknown)
@@ -48,9 +49,15 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return $"No box has id {unknown}.";
         }
 
-        return catalog.Boxes.Count(box => box.IsBaseGame && includedBoxes.Contains(box.Id)) == 1
-            ? null
-            : "Include exactly one base game.";
+        var baseGames = catalog.Boxes.Where(box => box.IsBaseGame && includedBoxes.Contains(box.Id)).ToList();
+        if (baseGames.Count == 0)
+        {
+            return "Include at least one base game.";
+        }
+
+        return baseGames.Select(box => box.Setup!.Ruleset).Distinct().Count() > 1
+            ? $"Base games {string.Join(" and ", baseGames.Select(box => box.Name))} follow different rulesets, which can't be combined yet."
+            : null;
     }
 
     // One table draw: the included cards, the base game whose rules they are drawn under, and the random source.
@@ -104,6 +111,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             return new SetupResult(
                 players,
+                rules.Ruleset,
                 plan.Scheme,
                 mastermind,
                 villainGroups,

@@ -38,7 +38,7 @@ public class FantasticFourTests
     {
         Assert.Equal(["core", "dark-city", "fantastic-four"], Catalog.Boxes.Select(box => box.Id).Take(3));
         Assert.Equal(FantasticFourName, FantasticFour.Name);
-        Assert.Equal(3, FantasticFour.SchemaVersion);
+        Assert.Equal(4, FantasticFour.SchemaVersion);
         Assert.False(FantasticFour.IsBaseGame);
     }
 

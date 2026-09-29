@@ -16,6 +16,14 @@ public sealed record Sourced<T>(T Value, string Source);
 // applies at every player count the Scheme allows; player count 1 is Solo.
 public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
 
+// The rules a base game is played under, separate from the box: First Edition's core box, and
+// Legendary: Villains, which plays by its own. Written camelCase in box files ("firstEdition").
+public enum Ruleset
+{
+    FirstEdition,
+    Villainous,
+}
+
 public sealed record Box(
     int SchemaVersion,
     string Id,
@@ -191,7 +199,10 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
     };
 }
 
+// A base game's setup rules. Ruleset names the rules they belong to: base games of one ruleset can be
+// combined in a setup, which then follows the first one's rules.
 public sealed record SetupRules(
+    Ruleset Ruleset,
     IReadOnlyList<PlayerCountSetup> PlayerCounts,
     Sourced<int> Heroes,
     Sourced<int> MasterStrikes,

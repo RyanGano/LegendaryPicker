@@ -13,8 +13,10 @@ const TWO_COLUMNS = '(width >= 56.25rem)'
 const WAKE_UP_NOTICE_MS = 3_000
 
 const PLAYER_COUNT_KEY = 'legendaryPicker.playerCount'
-// The expansions the player included. Base games are always included, so they are not stored.
-const EXPANSIONS_KEY = 'legendaryPicker.expansions'
+// Every box the player included, base games and expansions alike.
+const BOXES_KEY = 'legendaryPicker.boxes'
+// What a first visit includes: the First Edition core box, one base game.
+const DEFAULT_BOXES = ['core']
 
 // Source R in LegendaryPickerService/Data/Boxes/core.json: the archived First Edition rulebook.
 const RULEBOOK_URL =
@@ -39,18 +41,18 @@ function savePlayerCount(players: number) {
   }
 }
 
-function loadExpansions(): string[] {
+function loadBoxes(): string[] {
   try {
-    const stored: unknown = JSON.parse(localStorage.getItem(EXPANSIONS_KEY) ?? '[]')
-    return Array.isArray(stored) ? stored.filter((id): id is string => typeof id === 'string') : []
+    const stored: unknown = JSON.parse(localStorage.getItem(BOXES_KEY) ?? 'null')
+    return Array.isArray(stored) ? stored.filter((id): id is string => typeof id === 'string') : DEFAULT_BOXES
   } catch {
-    return []
+    return DEFAULT_BOXES
   }
 }
 
-function saveExpansions(ids: string[]) {
+function saveBoxes(ids: string[]) {
   try {
-    localStorage.setItem(EXPANSIONS_KEY, JSON.stringify(ids))
+    localStorage.setItem(BOXES_KEY, JSON.stringify(ids))
   } catch {
     // Remembering the boxes is optional.
   }
@@ -87,7 +89,7 @@ function announcement(status: Status, showWakeUpNotice: boolean) {
 function App() {
   const [players, setPlayers] = useState<number | null>(loadPlayerCount)
   const [boxes, setBoxes] = useState<Box[]>([])
-  const [expansions, setExpansions] = useState<string[]>(loadExpansions)
+  const [included, setIncluded] = useState<string[]>(loadBoxes)
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   const [showWakeUpNotice, setShowWakeUpNotice] = useState(false)
 
@@ -98,7 +100,7 @@ function App() {
 
   // Without the box list there is nothing to pick, and a setup uses the core box alone.
   // Generate waits for this request, so a draw made while a cold start is still answering
-  // includes the remembered expansions.
+  // includes the remembered boxes.
   const boxesRequest = useRef<Promise<Box[]>>(Promise.resolve([]))
   useEffect(() => {
     const request = getBoxes().catch((): Box[] => [])
@@ -134,13 +136,19 @@ function App() {
     savePlayerCount(count)
   }
 
-  function toggleExpansion(id: string) {
-    const next = expansions.includes(id) ? expansions.filter((included) => included !== id) : [...expansions, id]
-    setExpansions(next)
-    saveExpansions(next)
+  function toggleBox(id: string) {
+    const next = included.includes(id) ? included.filter((other) => other !== id) : [...included, id]
+    setIncluded(next)
+    saveBoxes(next)
   }
 
-  const isIncluded = (box: Box) => box.baseGame || expansions.includes(box.id)
+  // Stored ids the API no longer lists are ignored.
+  const isIncluded = (box: Box) => included.includes(box.id)
+  // A setup takes its rules from a base game, so it needs at least one. Until the box list loads
+  // there is nothing to check, and the API decides.
+  const needsBaseGame = boxes.length > 0 && !boxes.some((box) => box.baseGame && isIncluded(box))
+  // Base games first, then expansions, each in the API's order.
+  const listedBoxes = [...boxes.filter((box) => box.baseGame), ...boxes.filter((box) => !box.baseGame)]
 
   // Generate, Generate another and Retry all draw for the selected count and boxes.
   async function generate() {
@@ -148,7 +156,13 @@ function App() {
     setStatus({ kind: 'loading', players })
     try {
       const available = await boxesRequest.current
-      const response = await getSetup(players, available.filter(isIncluded).map((box) => box.id))
+      const drawn = available.filter(isIncluded)
+      // A draw started before the box list loaded may turn out to have no base game; the picker now says so.
+      if (available.length > 0 && !drawn.some((box) => box.baseGame)) {
+        setStatus({ kind: 'idle' })
+        return
+      }
+      const response = await getSetup(players, drawn.map((box) => box.id))
       setStatus(
         response.kind === 'setup'
           ? { kind: 'result', setup: response }
@@ -194,25 +208,26 @@ function App() {
               <>
                 <h2 id="boxes-label">Boxes</h2>
                 <div className="box-options" role="group" aria-labelledby="boxes-label">
-                  {boxes.map((box) => (
+                  {listedBoxes.map((box) => (
                     <label key={box.id} className="box-option">
                       <input
                         type="checkbox"
                         checked={isIncluded(box)}
-                        disabled={box.baseGame || loading}
-                        onChange={() => toggleExpansion(box.id)}
+                        disabled={loading}
+                        onChange={() => toggleBox(box.id)}
                       />
                       <span className="box-name">{box.name}</span>
-                      {box.baseGame && <> <span className="detail">Always included</span></>}
+                      {box.baseGame && <> <span className="detail">Base game</span></>}
                     </label>
                   ))}
                 </div>
+                {needsBaseGame && <p className="box-hint">Pick a base game to draw a setup.</p>}
               </>
             )}
             <button
               type="button"
               className="primary"
-              disabled={players === null || loading}
+              disabled={players === null || loading || needsBaseGame}
               onClick={generate}
             >
               Generate

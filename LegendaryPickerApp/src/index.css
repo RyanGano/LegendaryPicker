@@ -270,7 +270,7 @@ button:disabled {
   box-shadow: var(--shadow-sm);
 }
 
-/* The boxes to draw from. A base game is always included, so its box can't be unticked. */
+/* The boxes to draw from: base games, then expansions. */
 .box-options {
   display: flex;
   flex-direction: column;
@@ -314,6 +314,12 @@ button:disabled {
 
 .box-option .detail {
   flex: none;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+/* Shown while no base game is ticked, since a setup takes its rules from one. */
+.box-hint {
   font-size: var(--text-sm);
   color: var(--muted);
 }
