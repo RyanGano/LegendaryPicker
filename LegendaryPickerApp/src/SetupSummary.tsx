@@ -1,40 +1,45 @@
-import { useId } from 'react'
+import { useId, type Ref } from 'react'
 import type { Component, GlossaryEntry, RuleNote, Setup } from './api/setupApi.ts'
 import { TermChips } from './TermChips.tsx'
 
-// What the players are playing, before how to lay it out: the drawn Scheme and Mastermind as
-// cards, then every Hero and group as its own tile. Under each name sit the chips for the glossary
-// terms that component uses.
-export function SetupSummary({ setup }: { setup: Setup }) {
+// What the players are playing, before how to lay it out: the setup's heading, the drawn Scheme
+// and Mastermind as cards, then every Hero and group as its own tile. Under each name sit the chips
+// for the glossary terms that component uses. On a wide screen this sits beside the checklist.
+export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?: Ref<HTMLHeadingElement> }) {
   const glossary = new Map(setup.glossary.map((entry) => [entry.id, entry]))
   const termsOf = (component: Component) => component.terms.flatMap((id) => glossary.get(id) ?? [])
 
   return (
-    <section className="summary" aria-label="Drawn cards">
-      <div className="headline-cards">
-        <HeadlineCard type="Scheme" kind="scheme" name={setup.scheme.name} terms={termsOf(setup.scheme)} />
-        <HeadlineCard
-          type="Mastermind"
-          kind="mastermind"
-          name={setup.mastermind.name}
-          terms={termsOf(setup.mastermind)}
-          tags={alwaysLeadsNotes(setup.notes)}
+    <>
+      <h2 ref={headingRef} tabIndex={-1} className="result-heading">
+        Setup for {setup.players} {setup.players === 1 ? 'player' : 'players'}
+      </h2>
+      <section className="summary" aria-label="Drawn cards">
+        <div className="headline-cards">
+          <HeadlineCard type="Scheme" kind="scheme" name={setup.scheme.name} terms={termsOf(setup.scheme)} />
+          <HeadlineCard
+            type="Mastermind"
+            kind="mastermind"
+            name={setup.mastermind.name}
+            terms={termsOf(setup.mastermind)}
+            tags={alwaysLeadsNotes(setup.notes)}
+          />
+        </div>
+        <TileGroup title={['Hero', 'Heroes']} kind="hero" components={setup.heroes} termsOf={termsOf} />
+        <TileGroup
+          title={['Villain Group', 'Villain Groups']}
+          kind="villain"
+          components={setup.villainGroups}
+          termsOf={termsOf}
         />
-      </div>
-      <TileGroup title={['Hero', 'Heroes']} kind="hero" components={setup.heroes} termsOf={termsOf} />
-      <TileGroup
-        title={['Villain Group', 'Villain Groups']}
-        kind="villain"
-        components={setup.villainGroups}
-        termsOf={termsOf}
-      />
-      <TileGroup
-        title={['Henchman Group', 'Henchman Groups']}
-        kind="henchman"
-        components={setup.henchmanGroups}
-        termsOf={termsOf}
-      />
-    </section>
+        <TileGroup
+          title={['Henchman Group', 'Henchman Groups']}
+          kind="henchman"
+          components={setup.henchmanGroups}
+          termsOf={termsOf}
+        />
+      </section>
+    </>
   )
 }
 

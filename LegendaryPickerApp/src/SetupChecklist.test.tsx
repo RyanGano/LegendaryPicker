@@ -1,8 +1,9 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Setup } from './api/setupApi.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
+import { SetupSummary } from './SetupSummary.tsx'
 // Real GET /api/setup bodies, each from a scripted draw through the service's HTTP pipeline.
 import killbots from './test/fixtures/killbots.json'
 import legacyVirusThreePlayers from './test/fixtures/legacyVirusThreePlayers.json'
@@ -11,8 +12,14 @@ import twoPlayerCosmicCube from './test/fixtures/twoPlayerCosmicCube.json'
 // Drawn from the core box and the service's test-only fixture expansion.
 import twoBoxesTestHeist from './test/fixtures/twoBoxesTestHeist.json'
 
+// The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
-  render(<SetupChecklist setup={setup as Setup} />)
+  render(
+    <>
+      <SetupSummary setup={setup as Setup} />
+      <SetupChecklist setup={setup as Setup} />
+    </>,
+  )
 }
 
 const section = (name: string) => screen.getByRole('region', { name })
@@ -308,6 +315,59 @@ describe('SetupChecklist', () => {
     await user.click(screen.getByRole('heading', { name: 'Villain Deck' }))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(chip).toHaveFocus()
+  })
+
+  describe('explanation placement', () => {
+    // jsdom lays nothing out, so give the chip a place on an 800px-tall screen and the popover a height.
+    function layOut(chip: HTMLElement, rect: { top: number; bottom: number; left: number }) {
+      vi.spyOn(chip, 'getBoundingClientRect').mockImplementation(() => rect as DOMRect)
+      vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(200)
+      vi.stubGlobal('innerHeight', 800)
+    }
+    const placement = (dialog: HTMLElement) => ({
+      top: dialog.style.getPropertyValue('--popover-top'),
+      left: dialog.style.getPropertyValue('--popover-left'),
+    })
+
+    afterEach(() => {
+      vi.restoreAllMocks()
+      vi.unstubAllGlobals()
+    })
+
+    it('opens under the chip when there is room below', async () => {
+      const user = userEvent.setup()
+      renderChecklist(killbots)
+      const chip = within(card('Dr. Doom')).getByRole('button', { name: 'Fight' })
+      layOut(chip, { top: 100, bottom: 124, left: 40 })
+
+      await user.click(chip)
+
+      expect(placement(screen.getByRole('dialog', { name: 'Fight' }))).toEqual({ top: '128px', left: '40px' })
+    })
+
+    it('opens above the chip when it would run off the bottom of the screen', async () => {
+      const user = userEvent.setup()
+      renderChecklist(killbots)
+      const chip = within(card('Dr. Doom')).getByRole('button', { name: 'Fight' })
+      layOut(chip, { top: 700, bottom: 724, left: 40 })
+
+      await user.click(chip)
+
+      expect(placement(screen.getByRole('dialog', { name: 'Fight' }))).toEqual({ top: '496px', left: '40px' })
+    })
+
+    it('follows its chip when a column scrolls', async () => {
+      const user = userEvent.setup()
+      renderChecklist(killbots)
+      const chip = within(card('Dr. Doom')).getByRole('button', { name: 'Fight' })
+      layOut(chip, { top: 100, bottom: 124, left: 40 })
+      await user.click(chip)
+
+      layOut(chip, { top: 50, bottom: 74, left: 40 })
+      fireEvent.scroll(card('Dr. Doom'))
+
+      expect(placement(screen.getByRole('dialog', { name: 'Fight' }))).toEqual({ top: '78px', left: '40px' })
+    })
   })
 
   it('lists every term in the setup once, after the rule notes, with its summary and citation', () => {

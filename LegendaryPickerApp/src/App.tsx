@@ -2,8 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { getBoxes, getSetup, ping, type Box, type Setup } from './api/setupApi.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
 import { SetupSkeleton } from './SetupSkeleton.tsx'
+import { SetupSummary } from './SetupSummary.tsx'
 
 const PLAYER_COUNTS = [1, 2, 3, 4, 5]
+
+// The two-column layout in index.css, where the result's heading sits in the rail under the controls.
+const TWO_COLUMNS = '(width >= 56.25rem)'
 
 // A sleeping API answers slowly; past this point the loading state says so.
 const WAKE_UP_NOTICE_MS = 3_000
@@ -83,13 +87,16 @@ function App() {
 
   const loading = status.kind === 'loading'
 
-  // A new setup lands below the controls, so bring its heading into view and give it focus.
+  // A new setup lands below the controls, so bring its heading into view and give it focus. In two
+  // columns the setup starts at the top of both, so scroll there instead: scrolling the heading to
+  // the top would scroll the controls out of the rail.
   const resultHeading = useRef<HTMLHeadingElement>(null)
   useEffect(() => {
     if (status.kind !== 'result') return
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
     resultHeading.current?.focus({ preventScroll: true })
-    resultHeading.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
+    if (window.matchMedia(TWO_COLUMNS).matches) window.scrollTo({ top: 0, behavior })
+    else resultHeading.current?.scrollIntoView({ behavior, block: 'start' })
   }, [status])
 
   useEffect(() => {
@@ -144,55 +151,59 @@ function App() {
       </header>
 
       <main className="content">
-        <section className="controls">
-          <h2 id="players-label">Players</h2>
-          <div className="player-counts" role="group" aria-labelledby="players-label">
-            {PLAYER_COUNTS.map((count) => (
-              <button
-                key={count}
-                type="button"
-                className="player-count"
-                aria-pressed={players === count}
-                disabled={loading}
-                onClick={() => choosePlayers(count)}
-              >
-                {count}
-              </button>
-            ))}
-          </div>
-          {boxes.length > 0 && (
-            <>
-              <h2 id="boxes-label">Boxes</h2>
-              <div className="box-options" role="group" aria-labelledby="boxes-label">
-                {boxes.map((box) => (
-                  <label key={box.id} className="box-option">
-                    <input
-                      type="checkbox"
-                      checked={isIncluded(box)}
-                      disabled={box.baseGame || loading}
-                      onChange={() => toggleExpansion(box.id)}
-                    />
-                    <span className="box-name">{box.name}</span>
-                    {box.baseGame && <span className="detail">Always included</span>}
-                  </label>
-                ))}
-              </div>
-            </>
-          )}
-          <button
-            type="button"
-            className="primary"
-            disabled={players === null || loading}
-            onClick={generate}
-          >
-            Generate
-          </button>
-          {status.kind === 'idle' && (
-            <p className="intro">
-              Get a random legal setup and a checklist for laying it out, following the First Edition rules.
-            </p>
-          )}
-        </section>
+        {/* The controls and the drawn cards. On a wide screen they stay in view beside the checklist. */}
+        <div className="rail">
+          <section className="controls">
+            <h2 id="players-label">Players</h2>
+            <div className="player-counts" role="group" aria-labelledby="players-label">
+              {PLAYER_COUNTS.map((count) => (
+                <button
+                  key={count}
+                  type="button"
+                  className="player-count"
+                  aria-pressed={players === count}
+                  disabled={loading}
+                  onClick={() => choosePlayers(count)}
+                >
+                  {count}
+                </button>
+              ))}
+            </div>
+            {boxes.length > 0 && (
+              <>
+                <h2 id="boxes-label">Boxes</h2>
+                <div className="box-options" role="group" aria-labelledby="boxes-label">
+                  {boxes.map((box) => (
+                    <label key={box.id} className="box-option">
+                      <input
+                        type="checkbox"
+                        checked={isIncluded(box)}
+                        disabled={box.baseGame || loading}
+                        onChange={() => toggleExpansion(box.id)}
+                      />
+                      <span className="box-name">{box.name}</span>
+                      {box.baseGame && <span className="detail">Always included</span>}
+                    </label>
+                  ))}
+                </div>
+              </>
+            )}
+            <button
+              type="button"
+              className="primary"
+              disabled={players === null || loading}
+              onClick={generate}
+            >
+              Generate
+            </button>
+            {status.kind === 'idle' && (
+              <p className="intro">
+                Get a random legal setup and a checklist for laying it out, following the First Edition rules.
+              </p>
+            )}
+          </section>
+          {status.kind === 'result' && <SetupSummary setup={status.setup} headingRef={resultHeading} />}
+        </div>
 
         <section className="status" aria-live="polite">
           {status.kind === 'loading' && (
@@ -204,17 +215,7 @@ function App() {
               <SetupSkeleton />
             </>
           )}
-          {status.kind === 'result' && (
-            <>
-              <SetupChecklist setup={status.setup} headingRef={resultHeading} />
-              <div className="action-bar" role="group" aria-label="Setup actions">
-                <p className="action-players">{players === 1 ? '1 player' : `${players} players`}</p>
-                <button type="button" className="primary" onClick={generate}>
-                  Generate another
-                </button>
-              </div>
-            </>
-          )}
+          {status.kind === 'result' && <SetupChecklist setup={status.setup} />}
           {status.kind === 'noEligibleScheme' && (
             <div className="state-card scheme">
               <p>{status.message}</p>
@@ -230,6 +231,16 @@ function App() {
             </div>
           )}
         </section>
+
+        {/* Outside the status so it can stick while the drawn cards above the checklist scroll by. */}
+        {status.kind === 'result' && (
+          <div className="action-bar" role="group" aria-label="Setup actions">
+            <p className="action-players">{players === 1 ? '1 player' : `${players} players`}</p>
+            <button type="button" className="primary" onClick={generate}>
+              Generate another
+            </button>
+          </div>
+        )}
       </main>
 
       <footer className="site-footer">
