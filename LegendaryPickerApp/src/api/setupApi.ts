@@ -63,10 +63,12 @@ export type Move = {
   total: number
 }
 
+// sidekicks is left out when no included box has Sidekicks.
 export type SetupStacks = {
   wounds: number
   officers: number
   bystanders: number
+  sidekicks?: number
 }
 
 export type PlayerDeck = {

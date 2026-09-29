@@ -113,7 +113,8 @@
   "stacks": {
     "wounds": 30,
     "officers": 30,
-    "bystanders": 28
+    "bystanders": 28,
+    "sidekicks": 16
   },
   "playerDeck": {
     "agents": 8,
