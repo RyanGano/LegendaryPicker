@@ -66,7 +66,7 @@
     }
   ],
   "glossary": [
-    { "id": "paint-the-town-red_term_wall-crawl", "name": "Wall-Crawl", "kind": "keyword", "summary": "When you recruit a Hero card with this keyword, you may put it on top of your deck instead of in your discard pile, so you draw it sooner.", "source": "PTTR", "page": 1 },
-    { "id": "paint-the-town-red_term_feast", "name": "Feast", "kind": "keyword", "summary": "When you fight an enemy with Feast, it eats the top card of a player's deck: that card is KO'd. Some enemies do more depending on what they eat.", "source": "PTTR", "page": 1 }
+    { "id": "paint-the-town-red_term_wall-crawl", "name": "Wall-Crawl", "kind": "keyword", "summary": "Recruiting a Hero with Wall-Crawl gives you a choice: send it to your discard pile as usual, or set it on your deck to draw it next.", "source": "PTTR", "page": 1 },
+    { "id": "paint-the-town-red_term_feast", "name": "Feast", "kind": "keyword", "summary": "Defeating an enemy that has Feast KOs the top card of a player's deck. Some of these enemies add an extra effect that depends on which card got KO'd.", "source": "PTTR", "page": 1 }
   ]
 }
