@@ -30,10 +30,11 @@ public class BaseGameTests
         }
     }
 
+    // Villains Fixture has no rules for mixing, unlike Legendary: Villains, so nothing covers the mix.
     [Fact]
-    public void Base_games_of_different_rulesets_are_refused()
+    public void Boxes_of_different_rulesets_with_no_rules_for_mixing_them_are_refused()
     {
-        const string Refusal = "Base games Marvel Legendary First Edition core box and Villains Fixture follow different rulesets, which can't be combined yet.";
+        const string Refusal = "Marvel Legendary First Edition core box and Villains Fixture follow different rulesets, and no included base game has rules for mixing them.";
 
         Assert.Equal(Refusal, Generator.CheckBoxes(["core", "villains-fixture"]));
         var error = Assert.Throws<ArgumentException>(() => Generator.Generate(2, ["villains-fixture", "core"], new ScriptedRandom()));

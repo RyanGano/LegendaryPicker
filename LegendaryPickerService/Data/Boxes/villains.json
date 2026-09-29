@@ -5,7 +5,8 @@
   "ruleset": "villainous",
   "catalogSource": "VIL p.22; C1; C2",
   "sources": [
-    { "key": "VIL", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf" }
+    { "key": "VIL", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf" },
+    { "key": "D-mixed", "url": "https://github.com/RyanGano/LegendaryPicker/issues/85" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "VIL p.7" },
@@ -188,6 +189,12 @@
       "alwaysLeadsFillsSlot": "VIL p.6",
       "requiredGroupDisplacesAlwaysLeads": "VIL p.18",
       "schemeOverridesSolo": "VIL p.18"
+    },
+    "mixing": {
+      "rules": "D-mixed",
+      "pools": "VIL pp.20-21",
+      "stacks": "VIL p.21",
+      "startingDeckChoice": "VIL p.21"
     }
   }
 }

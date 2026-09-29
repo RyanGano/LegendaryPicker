@@ -11,7 +11,7 @@ public abstract record SetupResponse
 
     public static SetupResponse From(GenerationResult result, BoxCatalog catalog) => result switch
     {
-        SetupResult setup => FromSetup(setup, new Glossary(catalog, nameBoxes: setup.Boxes.Count > 1)),
+        SetupResult setup => FromSetup(setup, new Glossary(catalog, nameBoxes: setup.Boxes.Count > 1, nameRulesets: setup.Mixed)),
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
@@ -57,14 +57,16 @@ public abstract record SetupResponse
             outsideHenchmen,
             setup.Steps,
             setup.Notes,
-            glossary.Entries(components.SelectMany(component => component.Terms)));
+            glossary.Entries(components.SelectMany(component => component.Terms)),
+            setup.Mixed,
+            setup.RulesReason);
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
     // A term links to the URL its box lists for its source key; the loader guarantees one per key.
     // When the setup includes more than one box, each entry names the box that defines the term, and
-    // each component the box it comes from.
-    private sealed class Glossary(BoxCatalog catalog, bool nameBoxes)
+    // each component the box it comes from. In a mixed setup each component also names its ruleset.
+    private sealed class Glossary(BoxCatalog catalog, bool nameBoxes, bool nameRulesets)
     {
         private readonly Dictionary<string, ((TermKind Kind, int Index) Order, GlossaryEntry Entry)> _terms = catalog.Boxes
             .SelectMany(box => box.Glossary.Select(term => (Term: term, Box: box, Link: box.Sources.First(source => source.Key == term.Source).Url)))
@@ -78,10 +80,13 @@ public abstract record SetupResponse
                 StringComparer.Ordinal);
 
         // A catalog id starts with its box's id, which the loader checks.
-        private readonly Dictionary<string, string> _boxNames = catalog.Boxes.ToDictionary(box => box.Id, box => box.Name, StringComparer.Ordinal);
+        private readonly Dictionary<string, Box> _boxes = catalog.Boxes.ToDictionary(box => box.Id, StringComparer.Ordinal);
 
-        public Component Component(string id, string name, IEnumerable<string> terms) =>
-            new(id, name, Ordered(terms).ToList(), nameBoxes ? _boxNames[id.Split('_')[0]] : null);
+        public Component Component(string id, string name, IEnumerable<string> terms)
+        {
+            var box = _boxes[id.Split('_')[0]];
+            return new(id, name, Ordered(terms).ToList(), nameBoxes ? box.Name : null, nameRulesets ? box.Ruleset : null);
+        }
 
         public IReadOnlyList<GlossaryEntry> Entries(IEnumerable<string> terms) =>
             Ordered(terms).Select(term => _terms[term].Entry).ToList();
@@ -91,7 +96,9 @@ public abstract record SetupResponse
     }
 }
 
-// Ruleset is written camelCase, as in box files ("firstEdition").
+// Ruleset is written camelCase, as in box files ("firstEdition"): the ruleset whose rules the setup follows.
+// Mixed is true, and written only then, when the drawn cards come from more than one ruleset. RulesReason says
+// why the setup follows its ruleset, and is written only when the included boxes follow more than one.
 public sealed record SetupBody(
     int Players,
     Ruleset Ruleset,
@@ -110,7 +117,9 @@ public sealed record SetupBody(
     IReadOnlyList<OutsideHenchmenBody> OutsideHenchmen,
     IReadOnlyList<string> Steps,
     IReadOnlyList<RuleNote> Notes,
-    IReadOnlyList<GlossaryEntry> Glossary) : SetupResponse
+    IReadOnlyList<GlossaryEntry> Glossary,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Mixed = false,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RuleNote? RulesReason = null) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";
@@ -124,12 +133,14 @@ public sealed record NoEligibleSchemeBody(int Players, string Message) : SetupRe
 
 // A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the
 // glossary terms it uses (for a Hero, its team and classes too). Box names the box it comes from once
-// a setup includes more than one box, as on RuleNote, so the player can tell which card to pull.
+// a setup includes more than one box, as on RuleNote, so the player can tell which card to pull. Ruleset
+// names the ruleset of its box in a mixed setup, so the page can call a Plot a Plot and a Scheme a Scheme.
 public sealed record Component(
     string Id,
     string Name,
     IReadOnlyList<string> Terms,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Box = null);
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Box = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] Ruleset? Ruleset = null);
 
 // A Hero drawn outside the Hero Deck, the pile its cards go to ("villainDeck", "besideScheme" or
 // "setAside"), and how many cards that is.

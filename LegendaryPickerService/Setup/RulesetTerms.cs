@@ -28,10 +28,41 @@ public sealed record RulesetTerms(
         "Plot", "Ally", "Allies", "Adversary Group", "Adversary Groups", "Backup Adversary group", "Backup Adversary groups",
         "Backup Adversary", "Backup Adversaries", "Adversary Deck", "Ally Deck", "Plot Twists");
 
+    // A setup that draws Heroic and Villainous cards together names a part by both words, since its cards
+    // may be either (VIL p.21 treats them as equivalent).
+    public static readonly RulesetTerms Mixed = new(
+        "Scheme or Plot", "Hero or Ally", "Heroes or Allies", "Villain or Adversary Group", "Villain or Adversary Groups",
+        "Henchman or Backup Adversary group", "Henchman or Backup Adversary groups", "Henchman or Backup Adversary",
+        "Henchmen or Backup Adversaries", "Villain or Adversary Deck", "Hero or Ally Deck", "Scheme Twists or Plot Twists");
+
     public static RulesetTerms For(Ruleset ruleset) => ruleset switch
     {
         Ruleset.FirstEdition => FirstEdition,
         Ruleset.Villainous => Villainous,
+        _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
+    };
+
+    // What a setup's rules are called when it says which ruleset it followed.
+    public static string RulesName(Ruleset ruleset) => ruleset switch
+    {
+        Ruleset.FirstEdition => "First Edition",
+        Ruleset.Villainous => "Villains",
+        _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
+    };
+
+    // What the rulebooks call a set of each ruleset (VIL p.21): Heroic or Villainous.
+    public static string Side(Ruleset ruleset) => ruleset switch
+    {
+        Ruleset.FirstEdition => "Heroic",
+        Ruleset.Villainous => "Villainous",
+        _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
+    };
+
+    // The team each ruleset's starting deck belongs to (VIL p.21).
+    public static string StartingTeam(Ruleset ruleset) => ruleset switch
+    {
+        Ruleset.FirstEdition => "S.H.I.E.L.D.",
+        Ruleset.Villainous => "HYDRA",
         _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
     };
 }

@@ -327,6 +327,15 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Fact]
+    public void Rejects_a_mixing_rule_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => core["setup"]!["mixing"] = JsonNode.Parse(
+            """{ "rules": "D1", "pools": "R p.6", "stacks": "X9 p.1", "startingDeckChoice": "R p.6" }"""));
+
+        AssertRejected("setup.mixing.stacks cites source X9, which is not in this box's sources");
+    }
+
+    [Fact]
     public void Rejects_a_Scheme_effect_citing_a_source_key_the_box_does_not_list()
     {
         WriteCoreBox(core => Scheme(core, "core_scheme_super-hero-civil-war")["setup"]!["heroes"]![0]!["source"] = "X9");

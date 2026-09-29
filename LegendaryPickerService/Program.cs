@@ -70,7 +70,7 @@ app.MapMethods("/api/health", ["GET", "HEAD"], (HttpRequest request) =>
     HttpMethods.IsHead(request.Method) ? Results.Ok() : Results.Ok(new { status = "ok" }));
 
 // The boxes a player can include in a setup. A base game supplies setup rules; an expansion adds cards.
-// Each names its ruleset, so the web app can tell boxes that can't be combined yet.
+// Each names its ruleset.
 app.MapGet("/api/boxes", (BoxCatalog catalog) =>
     Results.Ok(catalog.Boxes.Select(box => new { box.Id, box.Name, BaseGame = box.IsBaseGame, box.Ruleset })));
 

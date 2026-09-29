@@ -606,6 +606,18 @@ button:disabled {
   scroll-margin-top: var(--space-4);
 }
 
+/* Which rules the setup follows and why, when the included boxes follow more than one ruleset. */
+.rules-reason {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.rules-reason cite {
+  font-style: normal;
+  white-space: nowrap;
+}
+
 .progress {
   align-self: flex-start;
   padding: var(--space-1) var(--space-3);

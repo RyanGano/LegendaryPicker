@@ -633,6 +633,13 @@ public sealed partial class BoxCatalog
             yield return ("setup.rulings.alwaysLeadsFillsSlot", setup.Rulings.AlwaysLeadsFillsSlot);
             yield return ("setup.rulings.requiredGroupDisplacesAlwaysLeads", setup.Rulings.RequiredGroupDisplacesAlwaysLeads);
             yield return ("setup.rulings.schemeOverridesSolo", setup.Rulings.SchemeOverridesSolo);
+            if (setup.Mixing is { } mixing)
+            {
+                yield return ("setup.mixing.rules", mixing.Rules);
+                yield return ("setup.mixing.pools", mixing.Pools);
+                yield return ("setup.mixing.stacks", mixing.Stacks);
+                yield return ("setup.mixing.startingDeckChoice", mixing.StartingDeckChoice);
+            }
         }
 
         foreach (var mastermind in box.Masterminds)
