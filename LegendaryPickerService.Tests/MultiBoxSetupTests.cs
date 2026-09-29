@@ -138,6 +138,6 @@ public class MultiBoxSetupTests
     {
         var error = Assert.Throws<ArgumentException>(() => Generator.Generate(2, ["fixture"], new ScriptedRandom()));
 
-        Assert.StartsWith("Include exactly one base game.", error.Message);
+        Assert.StartsWith("Include at least one base game.", error.Message);
     }
 }

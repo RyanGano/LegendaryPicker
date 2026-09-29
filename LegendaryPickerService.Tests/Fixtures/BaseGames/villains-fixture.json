@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 4,
+  "id": "villains-fixture",
+  "name": "Villains Fixture",
+  "catalogSource": "R p.1",
+  "sources": [
+    {
+      "key": "R",
+      "url": "https://example.test/villains-fixture-rules.pdf"
+    }
+  ],
+  "components": {
+    "heroCards": {
+      "value": 14,
+      "source": "R p.1"
+    },
+    "villainGroupCards": {
+      "value": 8,
+      "source": "R p.1"
+    },
+    "henchmanGroupCards": {
+      "value": 10,
+      "source": "R p.1"
+    },
+    "schemeTwists": {
+      "value": 11,
+      "source": "R p.1"
+    },
+    "bystanders": {
+      "value": 30,
+      "source": "R p.1"
+    },
+    "wounds": {
+      "value": 30,
+      "source": "R p.1"
+    },
+    "officers": {
+      "value": 30,
+      "source": "R p.1"
+    }
+  },
+  "heroes": [],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [],
+  "schemes": [],
+  "glossary": [],
+  "setup": {
+    "ruleset": "villainous",
+    "playerCounts": [
+      {
+        "players": 2,
+        "villainGroups": 2,
+        "henchmanGroups": 1,
+        "bystanders": 2,
+        "source": "R p.2"
+      },
+      {
+        "players": 3,
+        "villainGroups": 3,
+        "henchmanGroups": 1,
+        "bystanders": 8,
+        "source": "R p.2"
+      },
+      {
+        "players": 4,
+        "villainGroups": 3,
+        "henchmanGroups": 2,
+        "bystanders": 8,
+        "source": "R p.2"
+      },
+      {
+        "players": 5,
+        "villainGroups": 4,
+        "henchmanGroups": 2,
+        "bystanders": 12,
+        "source": "R p.2"
+      }
+    ],
+    "heroes": {
+      "value": 5,
+      "source": "R p.2"
+    },
+    "masterStrikes": {
+      "value": 5,
+      "source": "R p.2"
+    },
+    "startingDeck": {
+      "agents": {
+        "value": 8,
+        "source": "R p.2"
+      },
+      "troopers": {
+        "value": 4,
+        "source": "R p.2"
+      }
+    },
+    "solo": {
+      "heroes": {
+        "value": 3,
+        "source": "R p.3"
+      },
+      "villainGroups": {
+        "value": 1,
+        "source": "R p.3"
+      },
+      "henchmanGroups": {
+        "value": 1,
+        "source": "R p.3"
+      },
+      "henchmanCards": {
+        "value": 3,
+        "source": "R p.3"
+      },
+      "bystanders": {
+        "value": 1,
+        "source": "R p.3"
+      },
+      "masterStrikes": {
+        "value": 1,
+        "source": "R p.3"
+      },
+      "ignoresAlwaysLeads": {
+        "value": true,
+        "source": "R p.3"
+      },
+      "twistKosHeroCostingAtMost": {
+        "value": 6,
+        "source": "R p.3"
+      }
+    },
+    "rulings": {
+      "alwaysLeadsFillsSlot": "R p.2",
+      "requiredGroupDisplacesAlwaysLeads": "R p.2",
+      "schemeOverridesSolo": "R p.3"
+    }
+  }
+}

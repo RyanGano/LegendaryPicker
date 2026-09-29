@@ -74,11 +74,29 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     {
         WriteCoreBox(core =>
         {
-            core["schemaVersion"] = 4;
-            core["fieldOnlyVersion4Has"] = true;
+            core["schemaVersion"] = 5;
+            core["fieldOnlyVersion5Has"] = true;
         });
 
-        AssertRejected("schemaVersion 4; this service reads version 3");
+        AssertRejected("schemaVersion 5; this service reads version 4");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("secondEdition")]
+    public void Rejects_a_base_game_without_a_known_ruleset(string? ruleset)
+    {
+        WriteCoreBox(core =>
+        {
+            var setup = core["setup"]!.AsObject();
+            setup.Remove("ruleset");
+            if (ruleset is not null)
+            {
+                setup["ruleset"] = ruleset;
+            }
+        });
+
+        AssertRejected("ruleset");
     }
 
     [Fact]

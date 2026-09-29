@@ -13,8 +13,9 @@ public class CoreBoxCatalogTests
     public void Core_box_is_the_First_Edition_core_box()
     {
         Assert.Equal("Marvel Legendary First Edition core box", Core.Name);
-        Assert.Equal(3, Core.SchemaVersion);
+        Assert.Equal(4, Core.SchemaVersion);
         Assert.True(Core.IsBaseGame);
+        Assert.Equal(Ruleset.FirstEdition, Core.Setup!.Ruleset);
     }
 
     [Fact]

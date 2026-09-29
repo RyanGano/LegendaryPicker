@@ -396,16 +396,39 @@ describe('App', () => {
     expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
   })
 
-  it('always includes the core box and lists expansions unticked', async () => {
-    boxesAnswer = () => json([core, fixture])
+  it('lists base games above expansions, with only the core box ticked at first', async () => {
+    boxesAnswer = () => json([fixture, core])
     renderApp()
 
-    const coreBox = await screen.findByRole('checkbox', {
-      name: 'Marvel Legendary First Edition core box Always included',
-    })
-    expect(coreBox).toBeChecked()
-    expect(coreBox).toBeDisabled()
-    expect(screen.getByRole('checkbox', { name: 'Fixture Expansion' })).not.toBeChecked()
+    await screen.findByRole('checkbox', { name: 'Fixture Expansion' })
+
+    expect(
+      within(screen.getByRole('group', { name: 'Boxes' }))
+        .getAllByRole('checkbox')
+        .map((box) => [box.closest('label')!.textContent, (box as HTMLInputElement).checked]),
+    ).toEqual([
+      ['Marvel Legendary First Edition core box Base game', true],
+      ['Fixture Expansion', false],
+    ])
+  })
+
+  it('lets the core box be unticked, and disables Generate until a base game is ticked', async () => {
+    boxesAnswer = () => json([core, fixture])
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '3' }))
+    const coreBox = await screen.findByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' })
+
+    await user.click(coreBox)
+
+    expect(coreBox).not.toBeChecked()
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
+    expect(screen.getByText('Pick a base game to draw a setup.')).toBeInTheDocument()
+
+    await user.click(coreBox)
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
+    expect(screen.queryByText('Pick a base game to draw a setup.')).not.toBeInTheDocument()
   })
 
   it('draws from the core box and every ticked expansion', async () => {
@@ -422,15 +445,15 @@ describe('App', () => {
     expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3&boxes=core,fixture$/)])
   })
 
-  it('remembers the ticked expansions on the next visit and forgets boxes the API no longer lists', async () => {
+  it('remembers the ticked boxes on the next visit and forgets boxes the API no longer lists', async () => {
     boxesAnswer = () => json([core, fixture])
     const user = userEvent.setup()
     const firstVisit = renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
     await user.click(await screen.findByRole('checkbox', { name: 'Fixture Expansion' }))
     firstVisit.unmount()
-    expect(localStorage.getItem('legendaryPicker.expansions')).toBe('["fixture"]')
-    localStorage.setItem('legendaryPicker.expansions', JSON.stringify(['fixture', 'retired']))
+    expect(localStorage.getItem('legendaryPicker.boxes')).toBe('["core","fixture"]')
+    localStorage.setItem('legendaryPicker.boxes', JSON.stringify(['fixture', 'retired', 'core']))
     setupAnswers.push(() => json(setup))
 
     renderApp()
@@ -441,8 +464,35 @@ describe('App', () => {
     expect(setupRequests()).toEqual([expect.stringMatching(/players=3&boxes=core,fixture$/)])
   })
 
+  it('restores a remembered selection without the core box', async () => {
+    localStorage.setItem('legendaryPicker.boxes', JSON.stringify(['fixture']))
+    boxesAnswer = () => json([core, fixture])
+    renderApp()
+
+    expect(await screen.findByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' })).not.toBeChecked()
+    expect(screen.getByText('Pick a base game to draw a setup.')).toBeInTheDocument()
+  })
+
+  it('draws nothing when a slow box list shows the remembered boxes have no base game', async () => {
+    localStorage.setItem('legendaryPicker.boxes', JSON.stringify(['fixture']))
+    let answerBoxes!: () => void
+    const boxesListed = new Promise<void>((resolve) => (answerBoxes = resolve))
+    boxesAnswer = () => boxesListed.then(() => Response.json([core, fixture]))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    answerBoxes()
+
+    expect(await screen.findByText('Pick a base game to draw a setup.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
+    expect(setupRequests()).toEqual([])
+  })
+
   it('waits for a slow box list so a remembered expansion is still included', async () => {
-    localStorage.setItem('legendaryPicker.expansions', JSON.stringify(['fixture']))
+    localStorage.setItem('legendaryPicker.boxes', JSON.stringify(['core', 'fixture']))
     let answerBoxes!: () => void
     const boxesListed = new Promise<void>((resolve) => (answerBoxes = resolve))
     boxesAnswer = () => boxesListed.then(() => Response.json([core, fixture]))

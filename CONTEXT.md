@@ -16,8 +16,14 @@ The original Marvel Legendary base product, with its own card pool and setup rul
 **Expansion**:
 An additional product that adds content to the Marvel Legendary game system. An expansion's rules apply only to a setup that includes that expansion.
 
+**Base game**:
+A box that can be played on its own and carries setup rules, such as the First Edition core box. A base game is an optional pick like any other box, but every setup includes at least one.
+
+**Ruleset**:
+The rules a base game is played under, separate from the box itself: First Edition for the core box, and later Villainous for Legendary: Villains. A setup follows one ruleset; base games of different rulesets can't be combined yet.
+
 **Included box**:
-A core box or expansion selected to contribute its cards to a particular setup. The core box is always included; its setup rules govern the setup, and each included expansion adds cards but no setup rules of its own.
+A base game or expansion selected to contribute its cards to a particular setup. No box is mandatory, but at least one included box is a base game. The first included base game in catalog order supplies the setup rules; every other included box adds cards but no setup rules of its own.
 
 _Avoid_: Set, when referring to a product; it can also mean a card group.
 

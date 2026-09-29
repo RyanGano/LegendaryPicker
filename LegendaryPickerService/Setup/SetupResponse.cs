@@ -33,6 +33,7 @@ public abstract record SetupResponse
 
         return new SetupBody(
             setup.Players,
+            setup.Ruleset,
             scheme,
             mastermind,
             villainGroups,
@@ -81,8 +82,10 @@ public abstract record SetupResponse
     }
 }
 
+// Ruleset is written camelCase, as in box files ("firstEdition").
 public sealed record SetupBody(
     int Players,
+    Ruleset Ruleset,
     Component Scheme,
     Component Mastermind,
     IReadOnlyList<Component> VillainGroups,

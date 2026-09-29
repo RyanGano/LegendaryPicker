@@ -236,8 +236,8 @@ public sealed class SetupEndpointTests : IDisposable
 
     [Theory]
     [InlineData("core,nope", "No box has id nope.")]
-    [InlineData("fixture", "Include exactly one base game.")]
-    [InlineData("", "Include exactly one base game.")]
+    [InlineData("fixture", "Include at least one base game.")]
+    [InlineData("", "Include at least one base game.")]
     public async Task Boxes_that_cannot_make_a_setup_return_a_validation_problem(string boxes, string expected)
     {
         var client = Client(catalog: BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory));
@@ -247,6 +247,20 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var problem = await response.Content.ReadFromJsonAsync<JsonObject>();
         Assert.Equal(expected, (string?)problem!["errors"]!["boxes"]![0]);
+    }
+
+    [Fact]
+    public async Task Base_games_of_different_rulesets_return_a_validation_problem()
+    {
+        var client = Client(catalog: BoxCatalog.Load(BaseGameTests.Directory));
+
+        var response = await client.GetAsync("/api/setup?players=2&boxes=core,villains-fixture");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problem = await response.Content.ReadFromJsonAsync<JsonObject>();
+        Assert.Equal(
+            "Base games Marvel Legendary First Edition core box and Villains Fixture follow different rulesets, which can't be combined yet.",
+            (string?)problem!["errors"]!["boxes"]![0]);
     }
 
     [Theory]
@@ -446,6 +460,7 @@ public sealed class SetupEndpointTests : IDisposable
         {
           "kind": "setup",
           "players": 2,
+          "ruleset": "firstEdition",
           "scheme": { "id": "core_scheme_unleash-the-power-of-the-cosmic-cube", "name": "Unleash the Power of the Cosmic Cube", "terms": ["core_term_scheme-twist"] },
           "mastermind": { "id": "core_mastermind_red-skull", "name": "Red Skull", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"] },
           "villainGroups": [

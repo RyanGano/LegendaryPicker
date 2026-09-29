@@ -8,10 +8,11 @@ public abstract record GenerationResult;
 // No Scheme in the included boxes can be set up legally at this player count.
 public sealed record NoEligibleScheme(int Players) : GenerationResult;
 
-// A legal random setup and the checklist for laying it out. Steps are the labels of the setup steps
-// its Scheme and Mastermind print that change no count, Scheme first.
+// A legal random setup and the checklist for laying it out, under the Ruleset of its base games.
+// Steps are the labels of the setup steps its Scheme and Mastermind print that change no count, Scheme first.
 public sealed record SetupResult(
     int Players,
+    Ruleset Ruleset,
     Scheme Scheme,
     Mastermind Mastermind,
     IReadOnlyList<VillainGroup> VillainGroups,
