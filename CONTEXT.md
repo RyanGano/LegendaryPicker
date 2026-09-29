@@ -1,6 +1,6 @@
 # Marvel Legendary Game Setup
 
-This context defines the language used to describe a playable setup using the Marvel Legendary First Edition core box.
+This context defines the language used to describe a playable setup using the Marvel Legendary First Edition core box and its expansions.
 
 ## Game scope
 

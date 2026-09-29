@@ -167,7 +167,7 @@ function App() {
           <h1 className="wordmark">
             Legendary <span>Picker</span>
           </h1>
-          <p className="tagline">A random legal setup for the Marvel Legendary core box.</p>
+          <p className="tagline">A random legal setup for Marvel Legendary First Edition and its expansions.</p>
         </div>
       </header>
 
