@@ -50,7 +50,7 @@ dotnet test
 
 ## Rules and data constraints
 
-- v1 scope is the Marvel Legendary **First Edition core box** (released November 2012) only, player counts 1–5, with First Edition Solo for one player. Second Edition rules differ; never substitute them.
+- Scope is the Marvel Legendary **First Edition core box** (released November 2012) plus its expansions, added one box at a time in release order (#34; Dark City and Fantastic Four so far), all on the First Edition ruleset: player counts 1–5, with First Edition Solo for one player. Second Edition rules differ; never substitute them.
 - Every setup rule needs a source: the First Edition rulebook, an official clarification, or a ruling directly attributed to the designer or an Upper Deck rules representative. Record provenance alongside the data. A community catalog may supply card names and group mappings only.
 - Generation guarantees legality, never balance. Never relax a rule to make a Scheme playable; drop Schemes with no legal completion before the draw.
 - Store only short factual identifiers (card/group names, counts). Keep rulebook text, card text, and flavor text out of the repo.

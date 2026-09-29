@@ -100,11 +100,13 @@ public record SetupEffects(
 public sealed record SetupStep(string Label, string Source);
 
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
-// Heroes and VillainDeckBystanders set a count, replacing the table or Solo value.
+// Heroes, HenchmanCards and VillainDeckBystanders set a count, replacing the table or Solo value.
+// HenchmanCards is how many cards of each Henchman Group go in the Villain Deck.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
     IReadOnlyList<PlayerCountValue>? Heroes = null,
+    IReadOnlyList<PlayerCountValue>? HenchmanCards = null,
     Sourced<int>? VillainDeckBystanders = null,
     Sourced<int>? WoundsPerPlayer = null,
     IReadOnlyList<RequiredGroup>? RequiredGroups = null,

@@ -104,6 +104,16 @@
       }
     },
     {
+      "id": "dark-city_scheme_organized-crime-wave",
+      "name": "Organized Crime Wave",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "henchmanCards": [{ "players": null, "value": 10, "source": "Card" }],
+        "requiredGroups": [{ "groupId": "dark-city_henchman_maggia-goons", "groupType": "henchman", "source": "Card" }]
+      }
+    },
+    {
       "id": "dark-city_scheme_save-humanity",
       "name": "Save Humanity",
       "terms": ["core_term_scheme-twist", "core_term_rescue-a-bystander"],
