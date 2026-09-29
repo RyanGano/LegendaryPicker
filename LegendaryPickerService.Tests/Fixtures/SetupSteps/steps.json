@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 3,
+  "id": "steps",
+  "name": "Steps Fixture",
+  "catalogSource": "R p.1",
+  "sources": [
+    { "key": "R", "url": "https://example.test/steps-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "steps_mastermind_test-watcher",
+      "name": "Test Watcher",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "alwaysLeads": { "groupId": "core_villain_hydra", "groupType": "villain", "source": "Card" },
+      "setup": {
+        "steps": [{ "label": "Put the test lookout token on the first city space", "source": "Card" }]
+      }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "steps_scheme_test-plain",
+      "name": "Test Plain",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    },
+    {
+      "id": "steps_scheme_test-vigil",
+      "name": "Test Vigil",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "steps": [
+          { "label": "Place the test beacon token on the Scheme", "source": "Card" },
+          { "label": "Split the Villain Deck into two equal piles", "source": "R p.2" }
+        ]
+      }
+    }
+  ],
+  "glossary": []
+}

@@ -275,6 +275,47 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("core_mastermind_loki setup.extraHeroes cites source X9, which is not in this box's sources");
     }
 
+    [Theory]
+    [InlineData("  ", "core_scheme_legacy-virus has a setup step with no label")]
+    [InlineData("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen",
+        "core_scheme_legacy-virus has a 16-word setup step label; labels are at most 15 words")]
+    public void Rejects_a_setup_step_label_that_is_empty_or_too_long(string label, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["steps"] = new JsonArray(new JsonObject { ["label"] = label, ["source"] = "Card" }));
+
+        AssertRejected(expected);
+    }
+
+    [Fact]
+    public void Rejects_a_setup_step_a_card_lists_twice()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["steps"] = new JsonArray(
+            new JsonObject { ["label"] = "Place a token on the Scheme", ["source"] = "Card" },
+            new JsonObject { ["label"] = "place a token on the scheme", ["source"] = "Card" }));
+
+        AssertRejected("core_scheme_legacy-virus lists the setup step \"place a token on the scheme\" twice");
+    }
+
+    [Fact]
+    public void Accepts_a_setup_step_label_of_exactly_15_words()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["steps"] = new JsonArray(
+            new JsonObject { ["label"] = string.Join(" ", Enumerable.Repeat("word", 15)), ["source"] = "Card" }));
+
+        Assert.Single(BoxCatalog.Load(_directory).Boxes);
+    }
+
+    [Fact]
+    public void Rejects_a_Mastermind_setup_step_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => Mastermind(core, "core_mastermind_loki")["setup"] = new JsonObject
+        {
+            ["steps"] = new JsonArray(new JsonObject { ["label"] = "Place a token on the Scheme", ["source"] = "X9 p.3" }),
+        });
+
+        AssertRejected("core_mastermind_loki setup.steps cites source X9, which is not in this box's sources");
+    }
+
     [Fact]
     public void Rejects_a_player_count_listed_twice()
     {

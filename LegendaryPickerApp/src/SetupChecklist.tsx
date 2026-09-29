@@ -7,9 +7,9 @@ import { TermKind } from './TermChips.tsx'
 // state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
 export function SetupChecklist({ setup }: { setup: Setup }) {
-  // An API from before card moves or Heroes outside the Hero Deck leaves them out; the site can deploy
-  // first, so read that as none.
-  const { villainDeck, heroDeck, stacks, playerDeck, moves = [], outsideHeroes = [] } = setup
+  // An API from before card moves, Heroes outside the Hero Deck or setup steps leaves them out; the site
+  // can deploy first, so read that as none.
+  const { villainDeck, heroDeck, stacks, playerDeck, moves = [], outsideHeroes = [], steps = [] } = setup
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
@@ -81,6 +81,15 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <Item label="S.H.I.E.L.D. Troopers" count={playerDeck.troopers} />
         <MovedIn moves={moves} to="startingDecks" />
       </Section>
+
+      {steps.length > 0 && (
+        <Section title="Other setup steps" kind="scheme">
+          {/* Keyed by position: a Scheme and its Mastermind can print the same step. */}
+          {steps.map((step, index) => (
+            <Item key={index} label={step} />
+          ))}
+        </Section>
+      )}
 
       {setup.notes.length > 0 && (
         <Section title="Why this setup" className="notes">
