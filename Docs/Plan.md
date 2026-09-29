@@ -8,7 +8,7 @@ Help a player prepare a legally configured game of Upper Deck's Marvel Legendary
 
 ## Decisions
 
-- **Game:** Marvel Legendary First Edition core box (released November 2012) for v1. Expansions are added one box at a time in release order (#34). Players choose which boxes to include per setup (#8): the core box is always included, and an expansion's rules apply only when its box is included. Data and rules are organized so adding a box is mostly adding data.
+- **Game:** Marvel Legendary First Edition core box (released November 2012) for v1. Expansions are added one box at a time in release order (#34); Dark City (June 2013) is the first (#40). Players choose which boxes to include per setup (#8): the core box is always included, and an expansion's rules apply only when its box is included. Data and rules are organized so adding a box is mostly adding data.
 - **Input:** One to five players. One player uses the First Edition core Solo mode. Advanced Solo is excluded.
 - **Rule precedence:** Printed card text overrides the rulebook (a Scheme overrides Always Leads and the Solo setup). Otherwise the base Legendary rules apply. Never substitute Second Edition rules.
 - **Generation (table draw):** Draw the Scheme from those allowed at the player count; then the Mastermind (from those that can complete it); then add the groups the Scheme and Mastermind require (Always Leads is ignored in Solo); then draw the remaining Villain and Henchman Groups from what is left; then draw the Heroes. Each draw is equally likely among the remaining options. No locking or player preferences. Legality only, never balance.
@@ -31,7 +31,7 @@ Help a player prepare a legally configured game of Upper Deck's Marvel Legendary
 - **Rule notes and citations:** Each box file lists its source keys with links (`sources`), and `setup.rulings` records the sources of how rules combine: Always Leads fills a slot (R p.6), a required group displaces Always Leads (D1), a Scheme overrides Solo (D2). A note cites the value's own source, or D2 when a Scheme value replaces a Solo value. `Card` has no link. A note's link comes from the sources of the box whose rule it is (the Scheme's box for a Scheme effect, the base game for the rulings and Solo), since two boxes may use the same key for different documents. The service refuses to start if a box lists the same source key twice, or if a rule value, ruling or setup effect cites a key other than `Card` that its own box doesn't list.
 - **Ids:** Every Hero, Villain Group, Henchman Group, Mastermind and Scheme has the id `<boxId>_<kind>_<name>`, for example `core_mastermind_dr-doom`. `boxId` is the declaring box's id (the core box is `core`), `kind` is one of `hero`, `villain`, `henchman`, `mastermind` or `scheme`, and `name` is kebab-case. Glossary terms use the kind `term` (`core_term_ambush`). Underscores separate the segments; hyphens stay inside a segment. References (Always Leads, a Scheme's required groups, glossary terms) use the full id, so a box can reference another box's groups and terms. The service refuses to start if an id is malformed or duplicated, or if a reference doesn't resolve to a group of the stated type; a reference into a box that isn't loaded names that box.
 - **Expansion box files:** Only a base game's box file has a `setup` section; an expansion's has none. An expansion still lists its `sources`, `components`, cards and `glossary`.
-- **Shared stacks (#35):** Each box's `components` lists what it adds to the shared stacks: `bystanders`, `wounds`, `officers` and `sidekicks`, each sourced, and left out when the box adds none. A box's special cards of a stack (Special Bystanders, special Wounds or Officers) count toward that stack. The core box lists 30 Bystanders, 30 Wounds and 30 Officers (R p.22). Each stack in the Result is the sum over the included boxes, less the Bystanders the setup puts in the Villain Deck, or the size a Scheme sets (Legacy Virus's Wounds). The Sidekick stack appears only when an included box has Sidekicks, and `stacks.sidekicks` is otherwise left out of the response. The Twist and Bystander eligibility checks use these combined counts. The service refuses to start if a base game box (one with a `setup` section) leaves out `bystanders`, `wounds` or `officers`. Multi-box behavior is tested with a made-up expansion under `LegendaryPickerService.Tests/Fixtures/Boxes`, never with real expansion data.
+- **Shared stacks (#35):** Each box's `components` lists what it adds to the shared stacks: `bystanders`, `wounds`, `officers` and `sidekicks`, each sourced, and left out when the box adds none. A box's special cards of a stack (Special Bystanders, special Wounds or Officers) count toward that stack. The core box lists 30 Bystanders, 30 Wounds and 30 Officers (R p.22). Each stack in the Result is the sum over the included boxes, less the Bystanders the setup puts in the Villain Deck, or the size a Scheme sets (Legacy Virus's Wounds). The Sidekick stack appears only when an included box has Sidekicks, and `stacks.sidekicks` is otherwise left out of the response. The Twist and Bystander eligibility checks use these combined counts. The service refuses to start if a base game box (one with a `setup` section) leaves out `bystanders`, `wounds` or `officers`. Each generator capability is tested with made-up expansions under `LegendaryPickerService.Tests/Fixtures`; each real expansion also gets its own tests against its box file (Dark City: `DarkCityTests`), including a check that it changes no draw when it isn't included.
 
 ## Sources
 
@@ -39,8 +39,9 @@ Help a player prepare a legally configured game of Upper Deck's Marvel Legendary
 - **F:** [BoardGameGeek Legendary Marvel FAQ](https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ) ([archived copy](https://web.archive.org/web/20210519195532id_/https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ)). Designer (Devin Low) and Upper Deck rulings only.
 - **D1:** [Designer ruling: Scheme over Always Leads](https://boardgamegeek.com/thread/993341/article/12653573).
 - **D2:** Designer rulings that a Scheme's setup overrides the Solo setup: [thread 884926](https://boardgamegeek.com/thread/884926), [thread 898520](https://boardgamegeek.com/thread/898520).
+- **DC:** [Upper Deck Dark City rules insert](https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf) ([archived copy](https://web.archive.org/web/20241207015018id_/https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf), the same file on Upper Deck's content host). A two-page insert with no printed page numbers; `DC p.1` and `DC p.2` are its PDF pages. Game contents are on p.2; new teams and keywords on p.1.
 - **Card:** The printed card itself: a Scheme's Twist count and Setup line, a Mastermind's Always Leads. The Schemes table and Masterminds list below record it.
-- **C1/C2:** Community card catalogs for names and group membership only: [master-strike core set](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/coreset.ts), [nutki/legendary text files](https://github.com/nutki/legendary/tree/master/texttools/Legendary).
+- **C1/C2:** Community card catalogs for names and group membership only: [master-strike core set](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/coreset.ts), [nutki/legendary text files](https://github.com/nutki/legendary/tree/master/texttools/Legendary); for Dark City, [master-strike darkcity.ts](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/darkcity.ts) and [nutki Dark City](https://github.com/nutki/legendary/tree/master/texttools/Dark%20City). Each Dark City Scheme's Setup line was read from both catalogs, which agree, and is cited as `Card`.
 
 ## First Edition core box
 
@@ -88,6 +89,30 @@ Each player starts with 8 S.H.I.E.L.D. Agents and 4 S.H.I.E.L.D. Troopers. The V
 | Unleash the Power of the Cosmic Cube | 8 | — |
 
 A Scheme's required group fills a slot rather than adding one (Devin Low ruling in F on a non-core Scheme, applied by extension). Each group exists once, so no group is drawn twice.
+
+## Dark City (June 2013)
+
+Box id `dark-city`, file `LegendaryPickerService/Data/Boxes/dark-city.json`. Counts (DC p.2): 17 Heroes × 14 cards, 6 Villain Groups × 8, 2 Henchman Groups × 10, 5 Masterminds, 8 Schemes, and 11 Special Bystanders (4 Reporters, 4 Radiation Scientists, 3 Paramedics), which join the Bystander stack. It adds no Twists, Master Strikes, Wounds or Officers. Names, teams, classes and the keywords each card uses come from C1; C2 agrees on the Mastermind and Scheme names, Always Leads groups and Setup lines.
+
+- **Heroes:** Angel, Bishop, Iceman, Jean Grey, Nightcrawler, Professor X (X-Men); Blade, Daredevil, Elektra, Ghost Rider, Iron Fist, Punisher (Marvel Knights); Cable, Colossus, Domino, Forge, Wolverine (X-Force). Dark City's Wolverine is stored as "Wolverine (X-Force)" with the Hero Name Wolverine, which it shares with the core box's.
+- **Villain Groups:** Emissaries of Evil, Four Horsemen, Marauders, Mutant Liberation Front, Streets of New York, Underworld.
+- **Henchman Groups:** Maggia Goons, Phalanx.
+- **Masterminds (Always Leads, Card):** Apocalypse (Four Horsemen), Kingpin (Streets of New York), Mephisto (Underworld), Mr. Sinister (Marauders), Stryfe (Mutant Liberation Front). None changes the setup.
+- **Glossary (DC p.1):** teams Marvel Knights and X-Force; keywords Bribe, Teleport and Versatile.
+
+| Scheme | Twists | Setup effect (Card) |
+|---|---:|---|
+| Capture Baby Hope | 8 | Setup step: the Baby Hope token on the Scheme |
+| Detonate the Helicarrier | 8 | 6 Heroes (also in Solo, D2) |
+| Massive Earthquake Generator | 8 | — |
+| Save Humanity | 8 | 24 Bystanders moved into the Hero Deck; 12 in Solo |
+| Steal the Weaponized Plutonium | 8 | One extra Villain Group (so 2 in Solo) |
+| Transform Citizens Into Demons | 8 | No Bystanders in the Villain Deck; a Jean Grey Hero drawn outside the Hero Deck, its 14 cards into the Villain Deck |
+| X-Cutioner's Song | 8 | No Bystanders in the Villain Deck; an extra Hero drawn outside the Hero Deck, its 14 cards into the Villain Deck |
+
+**Left out:** *Organized Crime Wave* (8 Twists; Maggia Goons required) is not in the box file. Its card asks for 10 Maggia Goons, and under D2 that would replace Solo's 3 Henchmen, which no setup field can express. It is added when a Scheme can set the Solo Henchman count.
+
+**Excluded:** the insert's Advanced Solo mode (#34 D4) and its optional Challenge Modes. The insert also has the Bystander stack kept face down and shuffled; that is a play rule, not a setup count.
 
 ## Open questions
 
