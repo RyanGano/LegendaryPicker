@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 3,
+  "id": "moves",
+  "name": "Moves Fixture",
+  "catalogSource": "R p.1",
+  "sources": [
+    { "key": "R", "url": "https://example.test/moves-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [],
+  "schemes": [
+    {
+      "id": "moves_scheme_test-rescue",
+      "name": "Test Rescue",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [
+          {
+            "card": "bystander",
+            "to": "heroDeck",
+            "count": [
+              { "players": [1], "value": 12, "source": "R p.2" },
+              { "players": [2, 3, 4, 5], "value": 20, "source": "Card" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "moves_scheme_test-henchman-army",
+      "name": "Test Henchman Army",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [
+          { "card": "henchman", "to": "heroDeck", "count": [{ "players": null, "value": 6, "source": "Card" }] }
+        ]
+      }
+    },
+    {
+      "id": "moves_scheme_test-muster",
+      "name": "Test Muster",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [
+          { "card": "officer", "to": "villainDeck", "count": [{ "players": null, "value": 2, "source": "Card" }], "perPlayer": true }
+        ]
+      }
+    },
+    {
+      "id": "moves_scheme_test-wounded",
+      "name": "Test Wounded",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [
+          { "card": "wound", "to": "startingDecks", "count": [{ "players": null, "value": 1, "source": "Card" }] }
+        ]
+      }
+    },
+    {
+      "id": "moves_scheme_test-lookout",
+      "name": "Test Lookout",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [
+          { "card": "bystander", "to": "besideScheme", "count": [{ "players": null, "value": 3, "source": "Card" }] }
+        ]
+      }
+    }
+  ],
+  "glossary": []
+}

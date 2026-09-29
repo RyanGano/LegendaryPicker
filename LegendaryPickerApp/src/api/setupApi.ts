@@ -24,19 +24,42 @@ export type GlossaryEntry = {
   box?: string
 }
 
+// Each deck's total counts the cards the setup's moves put in it and take out of it.
 export type VillainDeck = {
   twists: number
   masterStrikes: number
   villainCards: number
   henchmanCards: number
   bystanders: number
-  heroCards: number
   total: number
 }
 
 export type HeroDeck = {
   heroCards: number
-  movedToVillainDeck: number
+  total: number
+}
+
+export type CardKind = 'hero' | 'henchman' | 'bystander' | 'wound' | 'officer' | 'sidekick'
+
+// The destinations a move can put cards in, then the shared stacks it can take them from. Hero cards
+// come from the Hero Deck and Henchmen from the Villain Deck.
+export type Pile =
+  | 'villainDeck'
+  | 'heroDeck'
+  | 'besideScheme'
+  | 'startingDecks'
+  | 'bystanders'
+  | 'wounds'
+  | 'officers'
+  | 'sidekicks'
+
+// Cards a Scheme moves during setup. count is what the destination gets (into the starting decks,
+// what each player's deck gets); total is what leaves from.
+export type Move = {
+  card: CardKind
+  from: Pile
+  to: Pile
+  count: number
   total: number
 }
 
@@ -72,6 +95,8 @@ export type Setup = {
   twistsBesideScheme: number
   stacks: SetupStacks
   playerDeck: PlayerDeck
+  // Left out by an API from before card moves.
+  moves?: Move[]
   notes: RuleNote[]
   // One entry per term any drawn component uses: teams, then classes, then keywords.
   glossary: GlossaryEntry[]

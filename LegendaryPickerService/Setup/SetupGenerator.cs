@@ -113,15 +113,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     villainGroups.Sum(group => BoxOf(group.Id).Components.VillainGroupCards.Value),
                     henchmanGroups.Sum(group => Solo ? rules.Solo.HenchmanCards.Value : BoxOf(group.Id).Components.HenchmanGroupCards.Value),
                     plan.Bystanders,
-                    plan.HeroCardsMoved),
-                new HeroDeck(heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value), plan.HeroCardsMoved),
+                    plan.MovedIn(Pile.VillainDeck),
+                    plan.MovedOut(Pile.VillainDeck)),
+                new HeroDeck(heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value), plan.MovedOut(Pile.HeroDeck), plan.MovedIn(Pile.HeroDeck)),
                 plan.TwistsBeside,
                 new SetupStacks(
-                    plan.Wounds,
-                    Supply(components => components.Officers),
-                    Supply(components => components.Bystanders) - plan.Bystanders,
-                    boxes.Any(box => box.Components.Sidekicks is not null) ? Supply(components => components.Sidekicks) : null),
+                    plan.Wounds - plan.MovedOut(Pile.Wounds),
+                    Supply(components => components.Officers) - plan.MovedOut(Pile.Officers),
+                    Supply(components => components.Bystanders) - plan.Bystanders - plan.MovedOut(Pile.Bystanders),
+                    boxes.Any(box => box.Components.Sidekicks is not null)
+                        ? Supply(components => components.Sidekicks) - plan.MovedOut(Pile.Sidekicks)
+                        : null),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value),
+                plan.Moves,
                 notes,
                 boxes);
         }
@@ -165,9 +169,20 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(Card($"Scheme sets the Wound stack to {woundsPerPlayer.Value} per player", woundsPerPlayer.Source));
             }
 
-            if (effect.HeroCardsInVillainDeck is { } moved)
+            var moves = new List<MovedCards>();
+            foreach (var move in effect.Moves ?? [])
             {
-                notes.Add(Card($"Scheme moves {moved.Value} Hero cards into the Villain Deck", moved.Source));
+                if (ForPlayers(move.Count) is not { } count)
+                {
+                    continue;
+                }
+
+                var each = move.PerPlayer ? count.Value * players : count.Value;
+                var total = move.To == Pile.StartingDecks ? each * players : each;
+                moves.Add(new MovedCards(move.Card, move.From(), move.To, each, total));
+                notes.Add(Card(
+                    $"Scheme moves {each} {CardName(move.Card, each)} {Into(move.To)}{(move.PerPlayer ? $", {count.Value} per player" : "")}",
+                    count.Source));
             }
 
             if (effect.TwistsBesideScheme is { } beside)
@@ -189,7 +204,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 Solo ? rules.Solo.MasterStrikes.Value : rules.MasterStrikes.Value,
                 bystanders,
                 wounds,
-                effect.HeroCardsInVillainDeck?.Value ?? 0,
+                moves,
                 notes);
 
             return Add(plan, effect, "Scheme", schemeBox);
@@ -241,8 +256,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 && Slots(plan.VillainGroups, GroupType.Villain) <= _villainGroups.Count
                 && Slots(plan.HenchmanGroups, GroupType.Henchman) <= _henchmanGroups.Count
                 && plan.Heroes <= _heroes.Count
-                && plan.HeroCardsMoved <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
-                && plan.Bystanders <= Supply(components => components.Bystanders)
+                && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
+                && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (Solo
+                    ? rules.Solo.HenchmanCards.Value
+                    : boxes.Min(box => box.Components.HenchmanGroupCards.Value))
+                && plan.Bystanders + plan.MovedOut(Pile.Bystanders) <= Supply(components => components.Bystanders)
+                && plan.MovedOut(Pile.Wounds) <= plan.Wounds
+                && plan.MovedOut(Pile.Officers) <= Supply(components => components.Officers)
+                && plan.MovedOut(Pile.Sidekicks) <= Supply(components => components.Sidekicks)
                 && plan.Twists + plan.TwistsBeside <= Supply(components => components.SchemeTwists);
         }
 
@@ -315,6 +336,32 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private HashSet<string> GroupIds() =>
             _villainGroups.Select(g => g.Id).Concat(_henchmanGroups.Select(g => g.Id)).ToHashSet();
 
+        private static string CardName(CardKind card, int count) => (card, count == 1) switch
+        {
+            (CardKind.Hero, true) => "Hero card",
+            (CardKind.Hero, false) => "Hero cards",
+            (CardKind.Henchman, true) => "Henchman",
+            (CardKind.Henchman, false) => "Henchmen",
+            (CardKind.Bystander, true) => "Bystander",
+            (CardKind.Bystander, false) => "Bystanders",
+            (CardKind.Wound, true) => "Wound",
+            (CardKind.Wound, false) => "Wounds",
+            (CardKind.Officer, true) => "S.H.I.E.L.D. Officer",
+            (CardKind.Officer, false) => "S.H.I.E.L.D. Officers",
+            (CardKind.Sidekick, true) => "Sidekick",
+            (CardKind.Sidekick, false) => "Sidekicks",
+            _ => throw new ArgumentOutOfRangeException(nameof(card), card, null),
+        };
+
+        private static string Into(Pile to) => to switch
+        {
+            Pile.VillainDeck => "into the Villain Deck",
+            Pile.HeroDeck => "into the Hero Deck",
+            Pile.BesideScheme => "beside it",
+            Pile.StartingDecks => "into each starting deck",
+            _ => throw new ArgumentOutOfRangeException(nameof(to), to, null),
+        };
+
         private PlayerCountValue? ForPlayers(IReadOnlyList<PlayerCountValue> values) =>
             values.SingleOrDefault(value => value.Players?.Contains(players) ?? true);
 
@@ -343,6 +390,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int MasterStrikes,
         int Bystanders,
         int Wounds,
-        int HeroCardsMoved,
-        IReadOnlyList<RuleNote> Notes);
+        IReadOnlyList<MovedCards> Moves,
+        IReadOnlyList<RuleNote> Notes)
+    {
+        public int MovedIn(Pile to) => Moves.Where(move => move.To == to).Sum(move => move.Count);
+
+        public int MovedOut(Pile from) => Moves.Where(move => move.From == from).Sum(move => move.Total);
+    }
 }

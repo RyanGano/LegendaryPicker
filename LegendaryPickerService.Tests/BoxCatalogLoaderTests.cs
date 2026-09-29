@@ -74,11 +74,11 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     {
         WriteCoreBox(core =>
         {
-            core["schemaVersion"] = 3;
-            core["fieldOnlyVersion3Has"] = true;
+            core["schemaVersion"] = 4;
+            core["fieldOnlyVersion4Has"] = true;
         });
 
-        AssertRejected("schemaVersion 3; this service reads version 2");
+        AssertRejected("schemaVersion 4; this service reads version 3");
     }
 
     [Fact]
@@ -340,6 +340,40 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected($"core_scheme_negative-zone-prison-breakout setup.extraHenchmanGroups has value {value}; values are at least 1");
     }
 
+    [Theory]
+    [InlineData("hero", "bystanders", false, "moves cards to bystanders; cards move to villainDeck, heroDeck, besideScheme, startingDecks")]
+    [InlineData("hero", "heroDeck", false, "moves hero cards to heroDeck, where they come from")]
+    [InlineData("wound", "startingDecks", true, "moves cards to startingDecks per player; a move to startingDecks already puts its count in each player's deck")]
+    public void Rejects_a_move_with_no_legal_destination(string card, string to, bool perPlayer, string expected)
+    {
+        WriteCoreBox(core =>
+        {
+            var move = SecretInvasionMove(core);
+            move["card"] = card;
+            move["to"] = to;
+            move["perPlayer"] = perPlayer;
+        });
+
+        AssertRejected($"core_scheme_secret-invasion-of-the-skrull-shapeshifters {expected}");
+    }
+
+    [Fact]
+    public void Rejects_a_move_count_below_1()
+    {
+        WriteCoreBox(core => SecretInvasionMove(core)["count"]![0]!["value"] = 0);
+
+        AssertRejected("core_scheme_secret-invasion-of-the-skrull-shapeshifters setup.moves[0].count has value 0; values are at least 1");
+    }
+
+    [Fact]
+    public void Rejects_a_move_that_names_its_source()
+    {
+        // A move's source follows from its card kind, so a box file can't name another.
+        WriteCoreBox(core => SecretInvasionMove(core)["from"] = "wounds");
+
+        AssertRejected("from");
+    }
+
     [Fact]
     public void Rejects_two_boxes_with_the_same_id()
     {
@@ -425,6 +459,9 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     private static JsonObject Scheme(JsonObject box, string id) => Entry(box, "schemes", id);
 
     private static JsonObject Mastermind(JsonObject box, string id) => Entry(box, "masterminds", id);
+
+    private static JsonObject SecretInvasionMove(JsonObject core) =>
+        Scheme(core, "core_scheme_secret-invasion-of-the-skrull-shapeshifters")["setup"]!["moves"]![0]!.AsObject();
 
     private static JsonObject Term(JsonObject box, string id) => Entry(box, "glossary", id);
 

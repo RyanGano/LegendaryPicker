@@ -72,6 +72,18 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
+    public async Task A_move_names_its_card_and_piles_as_they_are_written_in_box_files()
+    {
+        // Solo Secret Invasion with Loki.
+        var body = await Client(new ScriptedRandom(4, 1)).GetFromJsonAsync<JsonObject>("/api/setup?players=1");
+
+        Assert.Equal("Secret Invasion of the Skrull Shapeshifters", (string?)body!["scheme"]!["name"]);
+        var expected = JsonNode.Parse("""[{ "card": "hero", "from": "heroDeck", "to": "villainDeck", "count": 12, "total": 12 }]""");
+        Assert.True(JsonNode.DeepEquals(expected, body["moves"]), body["moves"]?.ToJsonString());
+        Assert.True(JsonNode.DeepEquals(JsonNode.Parse("""{ "heroCards": 84, "total": 72 }"""), body["heroDeck"]), body["heroDeck"]?.ToJsonString());
+    }
+
+    [Fact]
     public async Task No_eligible_Scheme_is_a_200_with_kind_noEligibleScheme()
     {
         // A catalog without Masterminds leaves no Scheme a legal completion.
@@ -377,11 +389,12 @@ public sealed class SetupEndpointTests : IDisposable
             { "id": "core_hero_deadpool", "name": "Deadpool", "terms": ["core_term_covert", "core_term_instinct", "core_term_tech"] },
             { "id": "core_hero_emma-frost", "name": "Emma Frost", "terms": ["core_term_x-men", "core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"] }
           ],
-          "villainDeck": { "twists": 8, "masterStrikes": 5, "villainCards": 16, "henchmanCards": 10, "bystanders": 2, "heroCards": 0, "total": 41 },
-          "heroDeck": { "heroCards": 70, "movedToVillainDeck": 0, "total": 70 },
+          "villainDeck": { "twists": 8, "masterStrikes": 5, "villainCards": 16, "henchmanCards": 10, "bystanders": 2, "total": 41 },
+          "heroDeck": { "heroCards": 70, "total": 70 },
           "twistsBesideScheme": 0,
           "stacks": { "wounds": 30, "officers": 30, "bystanders": 28 },
           "playerDeck": { "agents": 8, "troopers": 4 },
+          "moves": [],
           "notes": [
             {
               "text": "Red Skull always leads HYDRA",

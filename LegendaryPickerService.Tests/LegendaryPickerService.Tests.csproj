@@ -30,6 +30,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\SetupEffects\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Schemes move cards between stacks and decks, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\CardMoves\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\CardMoves\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LegendaryPickerService\LegendaryPickerService.csproj" />
   </ItemGroup>

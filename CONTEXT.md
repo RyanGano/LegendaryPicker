@@ -32,6 +32,9 @@ The central villain selected for a game. Its "Always Leads" ability can require 
 **Setup effect**:
 A change a Scheme's or Mastermind's card makes to the setup. It either sets a count (for example, 12 Bystanders in the Villain Deck) or adds to the count the setup would otherwise use (for example, one extra Hero, which makes 6 Heroes with 2–5 players and 4 in Solo). An effect can apply only at some player counts or only in Solo. A Scheme's effects apply before its Mastermind's.
 
+**Card move**:
+A setup effect that moves cards of one kind from where they come from (the Hero Deck, the Henchman Groups in the Villain Deck, or a shared stack) to the Villain Deck, the Hero Deck, beside the Scheme, or each player's starting deck, for example Secret Invasion's 12 Hero cards into the Villain Deck. Its count can depend on the player count, be per player, or have a Solo value.
+
 **Always Leads group**:
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability.
 

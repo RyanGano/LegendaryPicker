@@ -13,7 +13,7 @@ public class CoreBoxCatalogTests
     public void Core_box_is_the_First_Edition_core_box()
     {
         Assert.Equal("Marvel Legendary First Edition core box", Core.Name);
-        Assert.Equal(2, Core.SchemaVersion);
+        Assert.Equal(3, Core.SchemaVersion);
         Assert.True(Core.IsBaseGame);
     }
 
@@ -215,7 +215,13 @@ public class CoreBoxCatalogTests
         Assert.Equal(GroupType.Villain, required.GroupType);
         Assert.Equal("Skrulls", GroupName(required.GroupId, required.GroupType));
 
-        Assert.Equal(12, setup.HeroCardsInVillainDeck!.Value);
+        var move = Assert.Single(setup.Moves!);
+        Assert.Equal(CardKind.Hero, move.Card);
+        Assert.Equal(Pile.VillainDeck, move.To);
+        Assert.False(move.PerPlayer);
+        var count = Assert.Single(move.Count);
+        Assert.Null(count.Players);
+        Assert.Equal(12, count.Value);
     }
 
     [Theory]
@@ -442,11 +448,11 @@ public class CoreBoxCatalogTests
             foreach (var heroes in effect.Heroes ?? []) yield return heroes.Source;
             foreach (var extra in effect.ExtraHenchmanGroups ?? []) yield return extra.Source;
             foreach (var group in effect.RequiredGroups ?? []) yield return group.Source;
+            foreach (var count in (effect.Moves ?? []).SelectMany(move => move.Count)) yield return count.Source;
 
             Sourced<int>?[] counts =
             [
-                effect.VillainDeckBystanders, effect.WoundsPerPlayer,
-                effect.HeroCardsInVillainDeck, effect.TwistsBesideScheme,
+                effect.VillainDeckBystanders, effect.WoundsPerPlayer, effect.TwistsBesideScheme,
             ];
             foreach (var count in counts.OfType<Sourced<int>>()) yield return count.Source;
             if (effect.AllowedPlayerCounts is not null) yield return effect.AllowedPlayerCounts.Source;

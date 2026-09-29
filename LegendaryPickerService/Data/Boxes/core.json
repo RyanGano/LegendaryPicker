@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "id": "core",
   "name": "Marvel Legendary First Edition core box",
   "catalogSource": "R p.22; C1; C2",
@@ -131,7 +131,9 @@
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "heroes": [{ "players": null, "value": 6, "source": "Card" }],
         "requiredGroups": [{ "groupId": "core_villain_skrulls", "groupType": "villain", "source": "Card" }],
-        "heroCardsInVillainDeck": { "value": 12, "source": "Card" }
+        "moves": [
+          { "card": "hero", "to": "villainDeck", "count": [{ "players": null, "value": 12, "source": "Card" }] }
+        ]
       }
     },
     {

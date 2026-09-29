@@ -41,6 +41,7 @@ public abstract record SetupResponse
             setup.TwistsBesideScheme,
             setup.Stacks,
             setup.PlayerDeck,
+            setup.Moves,
             setup.Notes,
             glossary.Entries(components.SelectMany(component => component.Terms)));
     }
@@ -83,6 +84,7 @@ public sealed record SetupBody(
     int TwistsBesideScheme,
     SetupStacks Stacks,
     PlayerDeck PlayerDeck,
+    IReadOnlyList<MovedCards> Moves,
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<GlossaryEntry> Glossary) : SetupResponse
 {

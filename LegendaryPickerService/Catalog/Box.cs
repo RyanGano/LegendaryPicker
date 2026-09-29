@@ -98,7 +98,7 @@ public sealed record SchemeSetup(
     Sourced<int>? VillainDeckBystanders = null,
     Sourced<int>? WoundsPerPlayer = null,
     IReadOnlyList<RequiredGroup>? RequiredGroups = null,
-    Sourced<int>? HeroCardsInVillainDeck = null,
+    IReadOnlyList<CardMove>? Moves = null,
     Sourced<int>? TwistsBesideScheme = null,
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
@@ -107,6 +107,54 @@ public sealed record SchemeSetup(
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
+
+// A kind of card a Scheme can move during setup.
+public enum CardKind
+{
+    Hero,
+    Henchman,
+    Bystander,
+    Wound,
+    Officer,
+    Sidekick,
+}
+
+// A deck, pile or shared stack cards are laid out in. A move takes cards from the pile its card kind
+// comes from and puts them in one of the destinations: the Villain Deck, the Hero Deck, beside the
+// Scheme, or each player's starting deck.
+public enum Pile
+{
+    VillainDeck,
+    HeroDeck,
+    BesideScheme,
+    StartingDecks,
+    Bystanders,
+    Wounds,
+    Officers,
+    Sidekicks,
+}
+
+// A Scheme moving cards of one kind from their own pile to another during setup. Count says how many
+// at each player count, so Solo can have its own value; PerPlayer multiplies it by the player count.
+// A move into the starting decks puts Count cards in each one, so it is already per player.
+public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountValue> Count, bool PerPlayer = false)
+{
+    public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.HeroDeck, Pile.BesideScheme, Pile.StartingDecks];
+
+    // The pile the cards come from, which the card kind decides, so a box file never names it.
+    // Hero cards come from the drawn Heroes and Henchmen from the drawn Henchman Groups, so both
+    // leave a deck; every other kind comes from its shared stack.
+    public Pile From() => Card switch
+    {
+        CardKind.Hero => Pile.HeroDeck,
+        CardKind.Henchman => Pile.VillainDeck,
+        CardKind.Bystander => Pile.Bystanders,
+        CardKind.Wound => Pile.Wounds,
+        CardKind.Officer => Pile.Officers,
+        CardKind.Sidekick => Pile.Sidekicks,
+        _ => throw new ArgumentOutOfRangeException(nameof(Card), Card, null),
+    };
+}
 
 public sealed record SetupRules(
     IReadOnlyList<PlayerCountSetup> PlayerCounts,

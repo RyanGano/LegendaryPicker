@@ -114,12 +114,10 @@
     "villainCards": 24,
     "henchmanCards": 10,
     "bystanders": 8,
-    "heroCards": 0,
     "total": 55
   },
   "heroDeck": {
     "heroCards": 70,
-    "movedToVillainDeck": 0,
     "total": 70
   },
   "twistsBesideScheme": 0,
@@ -132,6 +130,7 @@
     "agents": 8,
     "troopers": 4
   },
+  "moves": [],
   "notes": [
     {
       "text": "Scheme sets the Wound stack to 6 per player",
