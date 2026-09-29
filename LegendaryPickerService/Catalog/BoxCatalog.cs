@@ -643,6 +643,7 @@ public sealed partial class BoxCatalog
         {
             yield return ($"{scheme.Id} setup.twists", scheme.Setup.Twists);
             if (scheme.Setup.Heroes is { } heroes) yield return ($"{scheme.Id} setup.heroes", heroes);
+            if (scheme.Setup.HenchmanCards is { } henchmen) yield return ($"{scheme.Id} setup.henchmanCards", henchmen);
             foreach (var list in EffectLists(scheme.Id, scheme.Setup)) yield return list;
             foreach (var (move, index) in (scheme.Setup.Moves ?? []).Select((move, index) => (move, index)))
             {

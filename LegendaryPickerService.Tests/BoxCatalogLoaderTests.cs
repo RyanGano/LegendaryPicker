@@ -338,6 +338,16 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Fact]
+    public void Rejects_a_Scheme_Henchman_card_count_listed_twice_for_a_player_count()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["henchmanCards"] = new JsonArray(
+            new JsonObject { ["players"] = null, ["value"] = 10, ["source"] = "Card" },
+            new JsonObject { ["players"] = new JsonArray(1), ["value"] = 5, ["source"] = "Card" }));
+
+        AssertRejected("core_scheme_legacy-virus setup.henchmanCards has more than one entry for player count 1");
+    }
+
+    [Fact]
     public void Rejects_a_setup_player_count_row_listed_twice()
     {
         WriteCoreBox(core => core["setup"]!["playerCounts"]![3]!["players"] = 4);

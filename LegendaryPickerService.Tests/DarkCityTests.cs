@@ -6,9 +6,10 @@ namespace LegendaryPickerService.Tests;
 // The Dark City box file (Data/Boxes/dark-city.json), pinned to the rules insert (DC) and the card
 // catalogs, and drawn with the core box. Catalog order puts Dark City's cards after the core box's, so at
 // 2–5 players its Schemes are 8 Capture Baby Hope, 9 Detonate the Helicarrier, 10 Massive Earthquake
-// Generator, 11 Save Humanity, 12 Steal the Weaponized Plutonium, 13 Transform Citizens Into Demons and
-// 14 X-Cutioner's Song; Solo allows 6 core Schemes, so there they are 6 to 12. Its Masterminds are 4
-// Apocalypse, 5 Kingpin, 6 Mephisto, 7 Mr. Sinister and 8 Stryfe. Together the boxes hold 30 + 11 Bystanders.
+// Generator, 11 Organized Crime Wave, 12 Save Humanity, 13 Steal the Weaponized Plutonium, 14 Transform
+// Citizens Into Demons and 15 X-Cutioner's Song; Solo allows 6 core Schemes, so there they are 6 to 13.
+// Its Masterminds are 4 Apocalypse, 5 Kingpin, 6 Mephisto, 7 Mr. Sinister and 8 Stryfe. Together the
+// boxes hold 30 + 11 Bystanders.
 public class DarkCityTests
 {
     private const string DarkCityName = "Dark City";
@@ -26,6 +27,7 @@ public class DarkCityTests
         "Capture Baby Hope",
         "Detonate the Helicarrier",
         "Massive Earthquake Generator",
+        "Organized Crime Wave",
         "Save Humanity",
         "Steal the Weaponized Plutonium",
         "Transform Citizens Into Demons",
@@ -84,10 +86,8 @@ public class DarkCityTests
         Assert.All(DarkCity.Masterminds, mastermind => Assert.Null(mastermind.Setup));
     }
 
-    // Organized Crime Wave is the insert's eighth Scheme. It is left out: its card asks for all 10 Maggia
-    // Goons, which in Solo would override the 3 Henchmen Solo uses (D2), and no setup field can say so.
     [Fact]
-    public void Dark_City_has_7_of_the_8_Schemes_in_the_rules_insert()
+    public void Dark_City_has_the_8_Schemes_in_the_rules_insert()
     {
         Assert.Equal(SchemeNames, DarkCity.Schemes.Select(scheme => scheme.Name));
         Assert.All(DarkCity.Schemes, scheme => Assert.Equal([new PlayerCountValue(null, 8, "Card")], scheme.Setup.Twists));
@@ -207,6 +207,9 @@ public class DarkCityTests
     [InlineData("Massive Earthquake Generator", 1, 8, 1, 8, 3, 1, 0, 21, 42, 40)]
     [InlineData("Massive Earthquake Generator", 2, 8, 5, 16, 10, 2, 0, 41, 70, 39)]
     [InlineData("Massive Earthquake Generator", 5, 8, 5, 32, 20, 12, 0, 77, 70, 29)]
+    [InlineData("Organized Crime Wave", 1, 8, 1, 8, 10, 1, 0, 28, 42, 40)]
+    [InlineData("Organized Crime Wave", 2, 8, 5, 16, 10, 2, 0, 41, 70, 39)]
+    [InlineData("Organized Crime Wave", 5, 8, 5, 32, 20, 12, 0, 77, 70, 29)]
     [InlineData("Save Humanity", 1, 8, 1, 8, 3, 1, 0, 21, 54, 28)]
     [InlineData("Save Humanity", 2, 8, 5, 16, 10, 2, 0, 41, 94, 15)]
     [InlineData("Save Humanity", 5, 8, 5, 32, 20, 12, 0, 77, 94, 5)]
@@ -259,6 +262,29 @@ public class DarkCityTests
         Assert.Equal(6, solo.Heroes.Count);
         Assert.Contains(
             new RuleNote("Scheme overrides Solo: 6 Heroes", "D2", "https://boardgamegeek.com/thread/884926", CoreName), solo.Notes);
+    }
+
+    [Fact]
+    public void Organized_Crime_Wave_puts_all_10_Maggia_Goons_in_the_Solo_Villain_Deck()
+    {
+        var setup = Draw(1, "Organized Crime Wave");
+
+        Assert.Equal(["Maggia Goons"], setup.HenchmanGroups.Select(group => group.Name));
+        Assert.Equal(10, setup.VillainDeck.HenchmanCards);
+        Assert.Contains(new RuleNote("Scheme requires Maggia Goons", "Card", null, DarkCityName), setup.Notes);
+        Assert.Contains(
+            new RuleNote("Scheme overrides Solo: 10 Henchmen of each Henchman Group", "D2", "https://boardgamegeek.com/thread/884926", CoreName),
+            setup.Notes);
+    }
+
+    [Fact]
+    public void Organized_Crime_Wave_puts_10_Henchmen_of_each_Henchman_Group_in_the_Villain_Deck()
+    {
+        var setup = Draw(5, "Organized Crime Wave");
+
+        Assert.Equal(["Maggia Goons", "Doombot Legion"], setup.HenchmanGroups.Select(group => group.Name));
+        Assert.Contains(
+            new RuleNote("Scheme puts 10 Henchmen of each Henchman Group in the Villain Deck", "Card", null, DarkCityName), setup.Notes);
     }
 
     [Theory]
@@ -319,7 +345,7 @@ public class DarkCityTests
 
         var setup = Assert.IsType<SetupResult>(Generator.Generate(3, Boxes, random));
 
-        Assert.Equal([15, 9], random.Options.Take(2));
+        Assert.Equal([16, 9], random.Options.Take(2));
         Assert.Equal("Legacy Virus", setup.Scheme.Name);
         Assert.Equal("Kingpin", setup.Mastermind.Name);
         Assert.Equal(["Streets of New York", "Brotherhood", "Enemies of Asgard"], setup.VillainGroups.Select(group => group.Name));

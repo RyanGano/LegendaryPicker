@@ -205,7 +205,7 @@ public class FantasticFourTests
 
         var setup = Assert.IsType<SetupResult>(Generator.Generate(3, ["core", "dark-city", "fantastic-four"], random));
 
-        Assert.Equal([19, 11], random.Options.Take(2));
+        Assert.Equal([20, 11], random.Options.Take(2));
         Assert.Equal("Super Hero Civil War", setup.Scheme.Name);
         Assert.Equal("Mole Man", setup.Mastermind.Name);
         Assert.Equal(["Subterranea", "Brotherhood", "Enemies of Asgard"], setup.VillainGroups.Select(group => group.Name));

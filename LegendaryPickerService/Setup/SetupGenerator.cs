@@ -113,7 +113,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     plan.Twists,
                     plan.MasterStrikes,
                     villainGroups.Sum(group => BoxOf(group.Id).Components.VillainGroupCards.Value),
-                    henchmanGroups.Sum(group => Solo ? rules.Solo.HenchmanCards.Value : BoxOf(group.Id).Components.HenchmanGroupCards.Value),
+                    henchmanGroups.Sum(group => plan.HenchmanCards ?? (Solo ? rules.Solo.HenchmanCards.Value : BoxOf(group.Id).Components.HenchmanGroupCards.Value)),
                     plan.Bystanders,
                     plan.MovedIn(Pile.VillainDeck),
                     plan.MovedOut(Pile.VillainDeck),
@@ -157,6 +157,16 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 heroes = schemeHeroes.Value;
                 notes.Add(Replaces($"{heroes} Heroes", $"uses {heroes} Heroes", schemeHeroes.Source));
+            }
+
+            int? henchmanCards = null;
+            if (ForPlayers(effect.HenchmanCards ?? []) is { } schemeHenchmen)
+            {
+                henchmanCards = schemeHenchmen.Value;
+                notes.Add(Replaces(
+                    $"{henchmanCards} Henchmen of each Henchman Group",
+                    $"puts {henchmanCards} Henchmen of each Henchman Group in the Villain Deck",
+                    schemeHenchmen.Source));
             }
 
             var bystanders = Solo ? rules.Solo.Bystanders.Value : row!.Bystanders;
@@ -237,6 +247,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 heroes,
                 Solo ? rules.Solo.VillainGroups.Value : row!.VillainGroups,
                 Solo ? rules.Solo.HenchmanGroups.Value : row!.HenchmanGroups,
+                henchmanCards,
                 twists.Value,
                 effect.TwistsBesideScheme?.Value ?? 0,
                 Solo ? rules.Solo.MasterStrikes.Value : rules.MasterStrikes.Value,
@@ -305,9 +316,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 && Slots(plan.HenchmanGroups, GroupType.Henchman) <= _henchmanGroups.Count
                 && HeroesFit(plan)
                 && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
-                && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (Solo
+                && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (plan.HenchmanCards ?? (Solo
                     ? rules.Solo.HenchmanCards.Value
-                    : _henchmanGroups.Select(group => BoxOf(group.Id).Components.HenchmanGroupCards.Value).DefaultIfEmpty(0).Min())
+                    : _henchmanGroups.Select(group => BoxOf(group.Id).Components.HenchmanGroupCards.Value).DefaultIfEmpty(0).Min()))
                 && plan.Bystanders + plan.MovedOut(Pile.Bystanders) <= Supply(components => components.Bystanders)
                 && plan.MovedOut(Pile.Wounds) <= plan.Wounds
                 && plan.MovedOut(Pile.Officers) <= Supply(components => components.Officers)
@@ -498,13 +509,15 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     }
 
     // The counts a setup uses, from the rules and the setup effects of its Scheme and, once one is
-    // paired with it, its Mastermind.
+    // paired with it, its Mastermind. HenchmanCards is the Scheme's count of cards of each Henchman
+    // Group, or null when the table or Solo sets it.
     private sealed record SetupPlan(
         Scheme Scheme,
         Mastermind? Mastermind,
         int Heroes,
         int VillainGroups,
         int HenchmanGroups,
+        int? HenchmanCards,
         int Twists,
         int TwistsBeside,
         int MasterStrikes,
