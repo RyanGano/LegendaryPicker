@@ -5,8 +5,9 @@ namespace LegendaryPickerService.Tests;
 
 // The Paint the Town Red box file (Data/Boxes/paint-the-town-red.json), pinned to the rules insert (PTTR)
 // and the card catalogs, and drawn with the core box. Catalog order puts its cards after the core box's, so
-// at 2–5 players its Schemes are 8 Splice Humans with Spider DNA, 9 The Clone Saga and 10 Weave a Web of
-// Lies; Solo allows 6 core Schemes, so there they are 6 to 8. Its Masterminds are 4 Carnage and 5 Mysterio.
+// at 2–5 players its Schemes are 8 Invade the Daily Bugle News HQ, 9 Splice Humans with Spider DNA, 10 The
+// Clone Saga and 11 Weave a Web of Lies; Solo allows 6 core Schemes, so there they are 6 to 9. Its Masterminds
+// are 4 Carnage and 5 Mysterio.
 public class PaintTheTownRedTests
 {
     private const string PaintTheTownRedName = "Paint the Town Red";
@@ -21,6 +22,7 @@ public class PaintTheTownRedTests
 
     private static readonly string[] SchemeNames =
     [
+        "Invade the Daily Bugle News HQ",
         "Splice Humans with Spider DNA",
         "The Clone Saga",
         "Weave a Web of Lies",
@@ -52,30 +54,33 @@ public class PaintTheTownRedTests
         Assert.All(PaintTheTownRed.Masterminds, mastermind => Assert.Null(mastermind.Setup));
     }
 
-    // Invade the Daily Bugle News HQ is the insert's fourth Scheme. It is left out: its card adds 6 extra
-    // Henchmen from one Henchman Group to the Hero Deck. A move takes Henchmen out of the Villain Deck's own
-    // groups, leaving it 6 short, and an extra Henchman Group puts all 10 of its cards in the Villain Deck, so
-    // no setup field can say that only 6 cards of a group are used, and in the Hero Deck.
     [Fact]
-    public void Paint_the_Town_Red_has_3_of_the_4_Schemes_in_the_rules_insert()
+    public void Paint_the_Town_Red_has_the_4_Schemes_in_the_rules_insert()
     {
         Assert.Equal(SchemeNames, PaintTheTownRed.Schemes.Select(scheme => scheme.Name));
         Assert.Equal(
-            [new PlayerCountValue(null, 8, "Card"), new PlayerCountValue(null, 8, "Card"), new PlayerCountValue(null, 7, "Card")],
+            [new PlayerCountValue(null, 8, "Card"), new PlayerCountValue(null, 8, "Card"), new PlayerCountValue(null, 8, "Card"), new PlayerCountValue(null, 7, "Card")],
             PaintTheTownRed.Schemes.Select(scheme => Assert.Single(scheme.Setup.Twists)));
         Assert.All(PaintTheTownRed.Schemes, scheme => Assert.Null(scheme.Setup.AllowedPlayerCounts));
     }
 
+    // Invade the Daily Bugle News HQ adds 6 Henchmen of one extra Henchman Group to the Hero Deck, and Splice
+    // Humans with Spider DNA requires Sinister Six; the other two change only their Twists.
     [Fact]
-    public void Only_Splice_Humans_with_Spider_DNA_changes_more_than_its_Twists()
+    public void Only_Invade_the_Daily_Bugle_and_Splice_Humans_change_more_than_their_Twists()
     {
-        var splice = PaintTheTownRed.Schemes[0];
+        var invade = PaintTheTownRed.Schemes[0];
+        var splice = PaintTheTownRed.Schemes[1];
 
+        var outside = Assert.Single(invade.Setup.OutsideHenchmen!);
+        Assert.Equal(Pile.HeroDeck, outside.To);
+        Assert.Equal([new PlayerCountValue(null, 6, "Card")], outside.Cards);
+        Assert.Equal(new SchemeSetup(invade.Setup.Twists, OutsideHenchmen: invade.Setup.OutsideHenchmen), invade.Setup);
         Assert.Equal(
             [new RequiredGroup("paint-the-town-red_villain_sinister-six", GroupType.Villain, "Card")],
             splice.Setup.RequiredGroups);
         Assert.Equal(new SchemeSetup(splice.Setup.Twists, RequiredGroups: splice.Setup.RequiredGroups), splice.Setup);
-        Assert.All(PaintTheTownRed.Schemes.Skip(1), scheme => Assert.Equal(new SchemeSetup(scheme.Setup.Twists), scheme.Setup));
+        Assert.All(PaintTheTownRed.Schemes.Skip(2), scheme => Assert.Equal(new SchemeSetup(scheme.Setup.Twists), scheme.Setup));
     }
 
     [Fact]
@@ -162,11 +167,11 @@ public class PaintTheTownRedTests
         File.WriteAllText(System.IO.Path.Combine(directory.Path, "spider-names.json"), SpiderNamesBox);
         var generator = new SetupGenerator(BoxCatalog.Load(directory.Path));
 
-        // At 2 players the core box allows 8 Schemes and Paint the Town Red 3, so draw 11 is the made-up Scheme.
-        var random = new ScriptedRandom(11);
+        // At 2 players the core box allows 8 Schemes and Paint the Town Red 4, so draw 12 is the made-up Scheme.
+        var random = new ScriptedRandom(12);
         var setup = Assert.IsType<SetupResult>(generator.Generate(2, ["core", "paint-the-town-red", "spider-names"], random));
 
-        Assert.Equal(12, random.Options[0]);
+        Assert.Equal(13, random.Options[0]);
         Assert.Equal("Test Two Spider-Men", setup.Scheme.Name);
         Assert.Equal(
             ["core_hero_spider-man", "paint-the-town-red_hero_symbiote-spider-man"],
@@ -210,6 +215,7 @@ public class PaintTheTownRedTests
     [InlineData("Sinister Six", "Ambush Escape Fight")]
     [InlineData("Carnage", "Always Leads Fight Master Strike Mastermind Tactic Feast")]
     [InlineData("Mysterio", "Always Leads Fight Master Strike Mastermind Tactic Rescue a Bystander")]
+    [InlineData("Invade the Daily Bugle News HQ", "Scheme Twist")]
     [InlineData("Splice Humans with Spider DNA", "Scheme Twist Wall-Crawl")]
     [InlineData("The Clone Saga", "Scheme Twist")]
     [InlineData("Weave a Web of Lies", "Scheme Twist Rescue a Bystander")]
@@ -228,6 +234,9 @@ public class PaintTheTownRedTests
     // the stacks, so they hold the core box's 30 Wounds, 30 Officers and the Bystanders left of 30.
 
     [Theory]
+    [InlineData("Invade the Daily Bugle News HQ", 1, 8, 1, 8, 3, 1, 21, 48, 29)]
+    [InlineData("Invade the Daily Bugle News HQ", 2, 8, 5, 16, 10, 2, 41, 76, 28)]
+    [InlineData("Invade the Daily Bugle News HQ", 5, 8, 5, 32, 20, 12, 77, 76, 18)]
     [InlineData("Splice Humans with Spider DNA", 1, 8, 1, 8, 3, 1, 21, 42, 29)]
     [InlineData("Splice Humans with Spider DNA", 2, 8, 5, 16, 10, 2, 41, 70, 28)]
     [InlineData("Splice Humans with Spider DNA", 5, 8, 5, 32, 20, 12, 77, 70, 18)]
@@ -249,6 +258,25 @@ public class PaintTheTownRedTests
         Assert.Equal(villainDeck, setup.VillainDeck.Total);
         Assert.Equal(heroDeck, setup.HeroDeck.Total);
         Assert.Equal(new SetupStacks(30, 30, bystanderStack), setup.Stacks);
+    }
+
+    // The extra Henchman Group is drawn from the core box's groups the Villain Deck doesn't use: Carnage leads a
+    // Villain Group, so the Villain Deck's groups are drawn first (Doombot Legion, then Hand Ninjas at 5 players).
+    [Theory]
+    [InlineData(1, "Doombot Legion", "Hand Ninjas")]
+    [InlineData(2, "Doombot Legion", "Hand Ninjas")]
+    [InlineData(5, "Doombot Legion|Hand Ninjas", "Savage Land Mutates")]
+    public void Invade_the_Daily_Bugle_adds_6_Henchmen_of_an_extra_Henchman_Group_to_the_Hero_Deck(int players, string villainDeckGroups, string extraGroup)
+    {
+        var setup = Draw(players, "Invade the Daily Bugle News HQ", Carnage);
+
+        Assert.Equal(villainDeckGroups.Split('|'), setup.HenchmanGroups.Select(group => group.Name));
+        var outside = Assert.Single(setup.OutsideHenchmen);
+        Assert.Equal((extraGroup, Pile.HeroDeck, 6), (outside.Group.Name, outside.To, outside.Cards));
+        Assert.Equal(6, setup.HeroDeck.OutsideHenchmanCards);
+        Assert.Contains(
+            new RuleNote("Scheme draws 1 extra Henchman Group outside the Villain Deck and puts 6 of its Henchmen into the Hero Deck", "Card", null, PaintTheTownRedName),
+            setup.Notes);
     }
 
     [Theory]
@@ -287,7 +315,7 @@ public class PaintTheTownRedTests
 
         var setup = Assert.IsType<SetupResult>(Generator.Generate(3, Boxes, random));
 
-        Assert.Equal([11, 6], random.Options.Take(2));
+        Assert.Equal([12, 6], random.Options.Take(2));
         Assert.Equal("Legacy Virus", setup.Scheme.Name);
         Assert.Equal("Mysterio", setup.Mastermind.Name);
         Assert.Equal(["Sinister Six", "Brotherhood", "Enemies of Asgard"], setup.VillainGroups.Select(group => group.Name));

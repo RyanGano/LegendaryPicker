@@ -40,6 +40,15 @@
   ],
   "schemes": [
     {
+      "id": "paint-the-town-red_scheme_invade-the-daily-bugle-news-hq",
+      "name": "Invade the Daily Bugle News HQ",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "outsideHenchmen": [{ "to": "heroDeck", "cards": [{ "players": null, "value": 6, "source": "Card" }] }]
+      }
+    },
+    {
       "id": "paint-the-town-red_scheme_splice-humans-with-spider-dna",
       "name": "Splice Humans with Spider DNA",
       "terms": ["core_term_scheme-twist", "paint-the-town-red_term_wall-crawl"],

@@ -39,6 +39,7 @@ export type VillainDeck = {
   total: number
 }
 
+// total counts the Henchmen of the Henchman Groups outside the Villain Deck that go into the Hero Deck.
 export type HeroDeck = {
   heroCards: number
   total: number
@@ -74,6 +75,14 @@ export type Move = {
 // the Scheme, or a stack set aside.
 export type OutsideHero = {
   hero: Component
+  to: Pile
+  cards: number
+}
+
+// A Henchman Group a Scheme draws outside the Villain Deck: cards of its Henchmen go to one pile (the
+// Hero Deck), and the rest of the group stays out of the game.
+export type OutsideHenchmen = {
+  group: Component
   to: Pile
   cards: number
 }
@@ -116,6 +125,8 @@ export type Setup = {
   moves?: Move[]
   // Left out by an API from before Heroes outside the Hero Deck.
   outsideHeroes?: OutsideHero[]
+  // Left out by an API from before Henchman Groups outside the Villain Deck.
+  outsideHenchmen?: OutsideHenchmen[]
   // The setup steps the Scheme and Mastermind print that change no count, Scheme first, each a short
   // instruction. Left out by an API from before setup steps.
   steps?: string[]

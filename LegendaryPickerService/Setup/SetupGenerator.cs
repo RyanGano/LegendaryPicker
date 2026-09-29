@@ -4,9 +4,9 @@ namespace LegendaryPickerService.Setup;
 
 // Draws a random legal setup the way players would at the table: the Scheme from those allowed
 // at the player count, then a Mastermind that can complete it, then the groups they require, then
-// the remaining Villain and Henchman Groups, then the Heroes, then any Heroes the Scheme draws outside
-// the Hero Deck. Each draw goes through the
-// IRandomSource and picks from the options left, in catalog order, so a fixed sequence of draws
+// the remaining Villain and Henchman Groups, then any Henchman Groups the Scheme draws outside the
+// Villain Deck, then the Heroes, then any Heroes the Scheme draws outside the Hero Deck. Each draw goes
+// through the IRandomSource and picks from the options left, in catalog order, so a fixed sequence of draws
 // always gives the same setup.
 //
 // Every count and rule comes from the box data; nothing here compares a card name.
@@ -101,6 +101,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             var villainGroups = FillSlots(_villainGroups, g => g.Id, g => g.Name, GroupType.Villain, plan.VillainGroups, plan.Scheme, mastermind, notes);
             var henchmanGroups = FillSlots(_henchmanGroups, g => g.Id, g => g.Name, GroupType.Henchman, plan.HenchmanGroups, plan.Scheme, mastermind, notes);
+            var outsideHenchmen = plan.OutsideHenchmen
+                .Zip(DrawMany(_henchmanGroups.Except(henchmanGroups), plan.OutsideHenchmen.Count), (draw, group) => new OutsideHenchmanGroup(group, draw.To, draw.Cards))
+                .ToList();
             var (heroes, outside) = DrawHeroes(plan);
 
             if (Solo)
@@ -126,7 +129,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     plan.MovedIn(Pile.VillainDeck),
                     plan.MovedOut(Pile.VillainDeck),
                     outside.Where(hero => hero.To == Pile.VillainDeck).Sum(hero => hero.Cards)),
-                new HeroDeck(heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value), plan.MovedOut(Pile.HeroDeck), plan.MovedIn(Pile.HeroDeck)),
+                new HeroDeck(
+                    heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value),
+                    plan.MovedOut(Pile.HeroDeck),
+                    plan.MovedIn(Pile.HeroDeck),
+                    outsideHenchmen.Where(outside => outside.To == Pile.HeroDeck).Sum(outside => outside.Cards)),
                 plan.TwistsBeside,
                 new SetupStacks(
                     plan.Wounds - plan.MovedOut(Pile.Wounds),
@@ -138,6 +145,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value),
                 plan.Moves,
                 outside,
+                outsideHenchmen,
                 plan.Steps,
                 notes,
                 boxes);
@@ -246,6 +254,20 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     count.Source));
             }
 
+            var outsideHenchmen = new List<HenchmenDraw>();
+            foreach (var rule in effect.OutsideHenchmen ?? [])
+            {
+                if (ForPlayers(rule.Cards) is not { } cards)
+                {
+                    continue;
+                }
+
+                outsideHenchmen.Add(new HenchmenDraw(rule.To, cards.Value));
+                notes.Add(Card(
+                    $"Scheme draws 1 extra Henchman Group outside the Villain Deck and puts {cards.Value} of its {CardName(CardKind.Henchman, cards.Value)} {Into(rule.To)}",
+                    cards.Source));
+            }
+
             var twists = ForPlayers(effect.Twists)
                 ?? throw new InvalidDataException($"{scheme.Id} has no Twist count for {players} players.");
 
@@ -263,6 +285,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 wounds,
                 moves,
                 outside,
+                outsideHenchmen,
                 [],
                 notes);
 
@@ -318,15 +341,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         {
             var required = plan.Scheme.Setup.RequiredGroups ?? [];
             int Slots(int slots, GroupType type) => Math.Max(slots, required.Count(group => group.GroupType == type));
+            var henchmanGroupCards = _henchmanGroups.Select(group => BoxOf(group.Id).Components.HenchmanGroupCards.Value).DefaultIfEmpty(0).Min();
 
+            // A Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use.
             return required.All(group => GroupIds().Contains(group.GroupId))
                 && Slots(plan.VillainGroups, GroupType.Villain) <= _villainGroups.Count
-                && Slots(plan.HenchmanGroups, GroupType.Henchman) <= _henchmanGroups.Count
+                && Slots(plan.HenchmanGroups, GroupType.Henchman) + plan.OutsideHenchmen.Count <= _henchmanGroups.Count
+                && plan.OutsideHenchmen.All(draw => draw.Cards <= henchmanGroupCards)
                 && HeroesFit(plan)
                 && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
                 && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (plan.HenchmanCards ?? (Solo
                     ? rules.Solo.HenchmanCards.Value
-                    : _henchmanGroups.Select(group => BoxOf(group.Id).Components.HenchmanGroupCards.Value).DefaultIfEmpty(0).Min()))
+                    : henchmanGroupCards))
                 && plan.Bystanders + plan.MovedOut(Pile.Bystanders) <= Supply(components => components.Bystanders)
                 && plan.MovedOut(Pile.Wounds) <= plan.Wounds
                 && plan.MovedOut(Pile.Officers) <= Supply(components => components.Officers)
@@ -518,7 +544,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
     // The counts a setup uses, from the rules and the setup effects of its Scheme and, once one is
     // paired with it, its Mastermind. HenchmanCards is the Scheme's count of cards of each Henchman
-    // Group, or null when the table or Solo sets it.
+    // Group, or null when the table or Solo sets it. OutsideHenchmen has one entry per Henchman Group
+    // the Scheme draws outside the Villain Deck.
     private sealed record SetupPlan(
         Scheme Scheme,
         Mastermind? Mastermind,
@@ -533,6 +560,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int Wounds,
         IReadOnlyList<MovedCards> Moves,
         IReadOnlyList<OutsideDraw> Outside,
+        IReadOnlyList<HenchmenDraw> OutsideHenchmen,
         IReadOnlyList<string> Steps,
         IReadOnlyList<RuleNote> Notes)
     {
@@ -543,4 +571,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
     // How many Heroes one of the Scheme's draws outside the Hero Deck takes at this player count.
     private sealed record OutsideDraw(OutsideHeroes Rule, int Count);
+
+    // How many cards of a Henchman Group the Scheme draws outside the Villain Deck at this player count, and where they go.
+    private sealed record HenchmenDraw(Pile To, int Cards);
 }

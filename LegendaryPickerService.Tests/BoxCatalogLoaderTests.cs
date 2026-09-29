@@ -487,6 +487,20 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected($"core_scheme_legacy-virus {expected}");
     }
 
+    [Theory]
+    [InlineData("""{ "to": "villainDeck", "cards": [{ "players": null, "value": 6, "source": "Card" }] }""",
+        "puts Henchmen from outside the Villain Deck in villainDeck; they go to heroDeck")]
+    [InlineData("""{ "to": "heroDeck", "cards": [{ "players": null, "value": 0, "source": "Card" }] }""",
+        "setup.outsideHenchmen[0].cards has value 0; values are at least 1")]
+    [InlineData("""{ "to": "heroDeck", "cards": [{ "players": null, "value": 6, "source": "Rumor" }] }""",
+        "setup.outsideHenchmen[0].cards cites source Rumor, which is not in this box's sources")]
+    public void Rejects_Henchmen_outside_the_Villain_Deck_with_no_legal_draw(string outside, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["outsideHenchmen"] = new JsonArray(JsonNode.Parse(outside)));
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
     // Each of these rules is well formed, but no draw can meet it: without the check the Scheme would
     // silently drop out of every draw.
     [Theory]

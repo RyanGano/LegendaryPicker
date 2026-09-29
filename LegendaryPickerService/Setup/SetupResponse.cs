@@ -29,7 +29,15 @@ public abstract record SetupResponse
         var heroes = setup.Heroes.Select(Hero).ToList();
         var outsideHeroes = setup.OutsideHeroes.Select(outside => new OutsideHeroBody(Hero(outside.Hero), outside.To, outside.Cards)).ToList();
 
-        Component[] components = [scheme, mastermind, .. villainGroups, .. henchmanGroups, .. heroes, .. outsideHeroes.Select(outside => outside.Hero)];
+        var outsideHenchmen = setup.OutsideHenchmen
+            .Select(outside => new OutsideHenchmenBody(glossary.Component(outside.Group.Id, outside.Group.Name, outside.Group.Terms), outside.To, outside.Cards))
+            .ToList();
+
+        Component[] components =
+        [
+            scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(outside => outside.Group),
+            .. heroes, .. outsideHeroes.Select(outside => outside.Hero),
+        ];
 
         return new SetupBody(
             setup.Players,
@@ -46,6 +54,7 @@ public abstract record SetupResponse
             setup.PlayerDeck,
             setup.Moves,
             outsideHeroes,
+            outsideHenchmen,
             setup.Steps,
             setup.Notes,
             glossary.Entries(components.SelectMany(component => component.Terms)));
@@ -98,6 +107,7 @@ public sealed record SetupBody(
     PlayerDeck PlayerDeck,
     IReadOnlyList<MovedCards> Moves,
     IReadOnlyList<OutsideHeroBody> OutsideHeroes,
+    IReadOnlyList<OutsideHenchmenBody> OutsideHenchmen,
     IReadOnlyList<string> Steps,
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<GlossaryEntry> Glossary) : SetupResponse
@@ -124,6 +134,10 @@ public sealed record Component(
 // A Hero drawn outside the Hero Deck, the pile its cards go to ("villainDeck", "besideScheme" or
 // "setAside"), and how many cards that is.
 public sealed record OutsideHeroBody(Component Hero, Pile To, int Cards);
+
+// A Henchman Group a Scheme draws outside the Villain Deck, the pile its cards go to ("heroDeck"), and
+// how many of its cards that is.
+public sealed record OutsideHenchmenBody(Component Group, Pile To, int Cards);
 
 // One glossary term the setup uses: kind is "team", "class" or "keyword"; citation is the source
 // key and page (for example "R p.9"), and link is where that source is published. Box names the

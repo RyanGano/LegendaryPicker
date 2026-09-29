@@ -128,7 +128,8 @@ public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null,
-    IReadOnlyList<SetupStep>? Steps = null)
+    IReadOnlyList<SetupStep>? Steps = null,
+    IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
@@ -149,6 +150,15 @@ public sealed record OutsideHeroes(
 {
     public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.BesideScheme, Pile.SetAside];
 }
+
+// A Henchman Group a Scheme draws outside the Villain Deck, from the included groups the setup doesn't
+// already use, and puts Cards of its cards To one pile; the rest of the group stays out of the game.
+// Cards says how many at each player count. Each entry draws a group of its own.
+public sealed record OutsideHenchmen(Pile To, IReadOnlyList<PlayerCountValue> Cards)
+{
+    public static readonly Pile[] Destinations = [Pile.HeroDeck];
+}
+
 // A kind of card a Scheme can move during setup.
 public enum CardKind
 {

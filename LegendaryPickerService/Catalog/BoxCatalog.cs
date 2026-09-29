@@ -337,7 +337,8 @@ public sealed partial class BoxCatalog
     }
 
     // A move puts cards somewhere they can be laid out from, never back where they came from, and
-    // one into the starting decks already puts its count in each player's deck.
+    // one into the starting decks already puts its count in each player's deck. Henchmen drawn outside
+    // the Villain Deck go only where a Scheme is known to put them.
     private static void ValidateMoves(string path, Box box)
     {
         foreach (var scheme in box.Schemes)
@@ -360,6 +361,15 @@ public sealed partial class BoxCatalog
                 {
                     throw new InvalidDataException(
                         $"{path}: {scheme.Id} moves cards to {to} per player; a move to {to} already puts its count in each player's deck.");
+                }
+            }
+
+            foreach (var outside in scheme.Setup.OutsideHenchmen ?? [])
+            {
+                if (!OutsideHenchmen.Destinations.Contains(outside.To))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} puts Henchmen from outside the Villain Deck in {WireName(outside.To)}; they go to {string.Join(", ", OutsideHenchmen.Destinations.Select(WireName))}.");
                 }
             }
         }
@@ -655,7 +665,7 @@ public sealed partial class BoxCatalog
             .Select(list => (list.Id, list.Steps!));
 
     // Every list of per-player-count values in a box: the Masterminds' setup effects, then each Scheme's,
-    // with its moves and Heroes outside the Hero Deck last.
+    // with its moves, Heroes outside the Hero Deck and Henchmen outside the Villain Deck last.
     private static IEnumerable<(string Rule, IReadOnlyList<PlayerCountValue> Values)> PlayerCountLists(Box box)
     {
         foreach (var mastermind in box.Masterminds)
@@ -680,6 +690,11 @@ public sealed partial class BoxCatalog
             foreach (var (outside, index) in (scheme.Setup.OutsideHeroes ?? []).Select((outside, index) => (outside, index)))
             {
                 yield return ($"{scheme.Id} setup.outsideHeroes[{index}].count", outside.Count);
+            }
+
+            foreach (var (outside, index) in (scheme.Setup.OutsideHenchmen ?? []).Select((outside, index) => (outside, index)))
+            {
+                yield return ($"{scheme.Id} setup.outsideHenchmen[{index}].cards", outside.Cards);
             }
         }
     }
