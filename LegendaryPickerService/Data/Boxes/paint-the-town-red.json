@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 3,
+  "id": "paint-the-town-red",
+  "name": "Paint the Town Red",
+  "catalogSource": "PTTR p.2; C1; C2",
+  "sources": [
+    { "key": "PTTR", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "PTTR p.2" },
+    "villainGroupCards": { "value": 8, "source": "PTTR p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "PTTR p.2" },
+    "schemeTwists": { "value": 0, "source": "PTTR p.2" }
+  },
+  "heroes": [
+    { "id": "paint-the-town-red_hero_black-cat", "name": "Black Cat", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["core_term_rescue-a-bystander", "paint-the-town-red_term_wall-crawl"] },
+    { "id": "paint-the-town-red_hero_moon-knight", "name": "Moon Knight", "team": "dark-city_term_marvel-knights", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["core_term_rescue-a-bystander", "paint-the-town-red_term_wall-crawl"] },
+    { "id": "paint-the-town-red_hero_scarlet-spider", "name": "Scarlet Spider", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["paint-the-town-red_term_wall-crawl"] },
+    { "id": "paint-the-town-red_hero_spider-woman", "name": "Spider-Woman", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["paint-the-town-red_term_wall-crawl"] },
+    { "id": "paint-the-town-red_hero_symbiote-spider-man", "name": "Symbiote Spider-Man", "heroName": "Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["paint-the-town-red_term_wall-crawl"] }
+  ],
+  "villainGroups": [
+    { "id": "paint-the-town-red_villain_maximum-carnage", "name": "Maximum Carnage", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "paint-the-town-red_term_feast"] },
+    { "id": "paint-the-town-red_villain_sinister-six", "name": "Sinister Six", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "paint-the-town-red_mastermind_carnage",
+      "name": "Carnage",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "paint-the-town-red_term_feast"],
+      "alwaysLeads": { "groupId": "paint-the-town-red_villain_maximum-carnage", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "paint-the-town-red_mastermind_mysterio",
+      "name": "Mysterio",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "core_term_rescue-a-bystander"],
+      "alwaysLeads": { "groupId": "paint-the-town-red_villain_sinister-six", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "paint-the-town-red_scheme_splice-humans-with-spider-dna",
+      "name": "Splice Humans with Spider DNA",
+      "terms": ["core_term_scheme-twist", "paint-the-town-red_term_wall-crawl"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "requiredGroups": [{ "groupId": "paint-the-town-red_villain_sinister-six", "groupType": "villain", "source": "Card" }]
+      }
+    },
+    {
+      "id": "paint-the-town-red_scheme_the-clone-saga",
+      "name": "The Clone Saga",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    },
+    {
+      "id": "paint-the-town-red_scheme_weave-a-web-of-lies",
+      "name": "Weave a Web of Lies",
+      "terms": ["core_term_scheme-twist", "core_term_rescue-a-bystander"],
+      "setup": {
+        "twists": [{ "players": null, "value": 7, "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "paint-the-town-red_term_wall-crawl", "name": "Wall-Crawl", "kind": "keyword", "summary": "Recruiting a Hero with Wall-Crawl gives you a choice: send it to your discard pile as usual, or set it on your deck to draw it next.", "source": "PTTR", "page": 1 },
+    { "id": "paint-the-town-red_term_feast", "name": "Feast", "kind": "keyword", "summary": "Defeating an enemy that has Feast KOs the top card of a player's deck. Some of these enemies add an extra effect that depends on which card got KO'd.", "source": "PTTR", "page": 1 }
+  ]
+}
