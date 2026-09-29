@@ -58,10 +58,31 @@ function saveExpansions(ids: string[]) {
 
 type Status =
   | { kind: 'idle' }
-  | { kind: 'loading' }
+  | { kind: 'loading'; players: number }
   | { kind: 'result'; setup: Setup }
   | { kind: 'noEligibleScheme'; message: string }
   | { kind: 'error' }
+
+// What the live region reads out for each state. The loading and result lines are short on purpose:
+// the checklist itself is read once the player moves into it, starting from the focused heading.
+function announcement(status: Status, showWakeUpNotice: boolean) {
+  const playerCount = (players: number) => (players === 1 ? '1 player' : `${players} players`)
+
+  switch (status.kind) {
+    case 'idle':
+      return ''
+    case 'loading':
+      return `Drawing a setup for ${playerCount(status.players)}…${
+        showWakeUpNotice ? ' The server may be waking up. This can take up to 30 seconds.' : ''
+      }`
+    case 'result':
+      return `Setup for ${playerCount(status.setup.players)} ready. Scheme: ${status.setup.scheme.name}. Mastermind: ${status.setup.mastermind.name}.`
+    case 'noEligibleScheme':
+      return `${status.message} Pick another player count.`
+    case 'error':
+      return "Couldn't get a setup. Check your connection and try again."
+  }
+}
 
 function App() {
   const [players, setPlayers] = useState<number | null>(loadPlayerCount)
@@ -124,7 +145,7 @@ function App() {
   // Generate, Generate another and Retry all draw for the selected count and boxes.
   async function generate() {
     if (players === null) return
-    setStatus({ kind: 'loading' })
+    setStatus({ kind: 'loading', players })
     try {
       const available = await boxesRequest.current
       const response = await getSetup(players, available.filter(isIncluded).map((box) => box.id))
@@ -182,7 +203,7 @@ function App() {
                         onChange={() => toggleExpansion(box.id)}
                       />
                       <span className="box-name">{box.name}</span>
-                      {box.baseGame && <span className="detail">Always included</span>}
+                      {box.baseGame && <> <span className="detail">Always included</span></>}
                     </label>
                   ))}
                 </div>
@@ -205,7 +226,13 @@ function App() {
           {status.kind === 'result' && <SetupSummary setup={status.setup} headingRef={resultHeading} />}
         </div>
 
-        <section className="status" aria-live="polite">
+        {/* Announces each state change. The status below is not live, so a new checklist isn't read
+            out in full. */}
+        <p className="visually-hidden" aria-live="polite">
+          {announcement(status, showWakeUpNotice)}
+        </p>
+
+        <section className="status">
           {status.kind === 'loading' && (
             <>
               <p className="loading-line">Drawing a setup…</p>

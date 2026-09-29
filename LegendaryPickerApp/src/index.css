@@ -1,4 +1,6 @@
-/* Design tokens. Every color used as text meets WCAG AA (4.5:1) on both --bg and --surface. */
+/* Design tokens. Every color used as text meets WCAG AA (4.5:1) on both --bg and --surface, and
+   so does --accent-text on --accent. --focus and --accent (a pressed count against an unpressed
+   one) meet 3:1 against both. */
 :root {
   --font-display: 'Bangers', Impact, 'Arial Narrow Bold', sans-serif;
   --font-body: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -35,6 +37,8 @@
   --accent: #b3121f;
   --accent-text: #fff;
   --link: #b3121f;
+  /* The keyboard focus ring, drawn outside the element so it always sits on --bg or --surface. */
+  --focus: #1459b8;
 
   /* One accent per card type. */
   --scheme: #6d3bb5;
@@ -68,8 +72,9 @@
     --bg: #16151a;
     --surface: #222128;
     --border: #3a3842;
-    --accent: #c8212f;
+    --accent: #d42431;
     --link: #ff7a85;
+    --focus: #78adff;
 
     --scheme: #b99af0;
     --mastermind: #ff7a85;
@@ -161,6 +166,30 @@ p {
 
 a {
   color: var(--link);
+}
+
+/* Every control shows where keyboard focus is. A heading or popover that takes focus only so a
+   screen reader starts there has no ring. */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 1px;
+}
+
+[tabindex='-1']:focus-visible {
+  outline: none;
+}
+
+/* Read by screen readers, not shown. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .site-header {
@@ -748,10 +777,6 @@ button:disabled {
   border-top: 4px solid var(--kind);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-}
-
-.term-popover:focus {
-  outline: none;
 }
 
 @media (width < 37.5rem) {
