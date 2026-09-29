@@ -103,12 +103,10 @@
     "villainCards": 16,
     "henchmanCards": 10,
     "bystanders": 2,
-    "heroCards": 0,
     "total": 39
   },
   "heroDeck": {
     "heroCards": 70,
-    "movedToVillainDeck": 0,
     "total": 70
   },
   "twistsBesideScheme": 0,
@@ -121,6 +119,7 @@
     "agents": 8,
     "troopers": 4
   },
+  "moves": [],
   "notes": [
     {
       "text": "Scheme requires HYDRA",

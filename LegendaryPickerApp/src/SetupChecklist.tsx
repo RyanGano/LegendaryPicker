@@ -1,5 +1,5 @@
 import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import type { Component, Setup } from './api/setupApi.ts'
+import type { CardKind, Component, Move, Pile, Setup } from './api/setupApi.ts'
 import { TermKind } from './TermChips.tsx'
 
 // The setup as a checklist in the order a player lays it out. Every count and note comes from
@@ -7,7 +7,8 @@ import { TermKind } from './TermChips.tsx'
 // state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
 export function SetupChecklist({ setup }: { setup: Setup }) {
-  const { villainDeck, heroDeck, stacks, playerDeck } = setup
+  // An API from before card moves leaves moves out; the site can deploy first, so read that as none.
+  const { villainDeck, heroDeck, stacks, playerDeck, moves = [] } = setup
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
@@ -39,24 +40,22 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
           count={villainDeck.henchmanCards}
         />
         <Item label="Bystanders" count={villainDeck.bystanders} />
-        {villainDeck.heroCards > 0 && <Item label="Hero cards from the Hero Deck" count={villainDeck.heroCards} />}
+        <MovedIn moves={moves} to="villainDeck" />
+        <MovedOut moves={moves} from="villainDeck" />
         <Total count={villainDeck.total} />
       </Section>
 
-      {setup.twistsBesideScheme > 0 && (
+      {(setup.twistsBesideScheme > 0 || moves.some((move) => move.to === 'besideScheme')) && (
         <Section title="Beside the Scheme" kind="scheme">
-          <Item label="Scheme Twists" count={setup.twistsBesideScheme} />
+          {setup.twistsBesideScheme > 0 && <Item label="Scheme Twists" count={setup.twistsBesideScheme} />}
+          <MovedIn moves={moves} to="besideScheme" />
         </Section>
       )}
 
       <Section title="Hero Deck" kind="hero">
         <Item label={names(setup.heroes)} detail={plural(setup.heroes.length, 'Hero', 'Heroes')} count={heroDeck.heroCards} />
-        {heroDeck.movedToVillainDeck > 0 && (
-          <li className="row">
-            <span className="label">Moved to the Villain Deck</span>{' '}
-            <span className="count">−{heroDeck.movedToVillainDeck}</span>
-          </li>
-        )}
+        <MovedIn moves={moves} to="heroDeck" />
+        <MovedOut moves={moves} from="heroDeck" />
         <Total count={heroDeck.total} />
       </Section>
 
@@ -69,6 +68,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       <Section title={`Starting deck per player · ${plural(setup.players, 'player')}`} kind="shield">
         <Item label="S.H.I.E.L.D. Agents" count={playerDeck.agents} />
         <Item label="S.H.I.E.L.D. Troopers" count={playerDeck.troopers} />
+        <MovedIn moves={moves} to="startingDecks" />
       </Section>
 
       {setup.notes.length > 0 && (
@@ -152,6 +152,61 @@ function Item({ label, detail, count }: { label: string; detail?: string; count?
   )
 }
 
+// The cards the Scheme moves into a pile, each a line to lay out, named with where they come from.
+function MovedIn({ moves, to }: { moves: Move[]; to: Pile }) {
+  // Keyed by position in the setup's moves: a Scheme can move the same kind of card to one pile twice.
+  return moves.map(
+    (move, index) =>
+      move.to === to && (
+        <Item key={index} label={`${CARD_NAMES[move.card]} from the ${PILE_NAMES[move.from]}`} count={move.count} />
+      ),
+  )
+}
+
+// The cards the Scheme moves out of a deck: taken away rather than laid out, so no tick box.
+function MovedOut({ moves, from }: { moves: Move[]; from: Pile }) {
+  return moves.map(
+    (move, index) =>
+      move.from === from && (
+        <li key={index} className="row">
+          <span className="label">Moved {INTO[move.to]}</span> <span className="count">−{move.total}</span>
+        </li>
+      ),
+  )
+}
+
+const CARD_NAMES: Record<CardKind, string> = {
+  hero: 'Hero cards',
+  henchman: 'Henchmen',
+  bystander: 'Bystanders',
+  wound: 'Wounds',
+  officer: 'S.H.I.E.L.D. Officers',
+  sidekick: 'Sidekicks',
+}
+
+const PILE_NAMES: Record<Pile, string> = {
+  villainDeck: 'Villain Deck',
+  heroDeck: 'Hero Deck',
+  besideScheme: 'pile beside the Scheme',
+  startingDecks: 'starting decks',
+  bystanders: 'Bystander stack',
+  wounds: 'Wound stack',
+  officers: 'Officer stack',
+  sidekicks: 'Sidekick stack',
+}
+
+// Where a move puts cards. Moves only go to the four destinations, never to a stack.
+const INTO: Record<Pile, string> = {
+  villainDeck: 'to the Villain Deck',
+  heroDeck: 'to the Hero Deck',
+  besideScheme: 'beside the Scheme',
+  startingDecks: 'to each starting deck',
+  bystanders: 'to the Bystander stack',
+  wounds: 'to the Wound stack',
+  officers: 'to the Officer stack',
+  sidekicks: 'to the Sidekick stack',
+}
+
 function Total({ count }: { count: number }) {
   return (
     <li className="row total">
@@ -160,8 +215,8 @@ function Total({ count }: { count: number }) {
   )
 }
 
-// Lines ticked against lines to lay out. Totals and the Hero cards moved have no tick box, so they
-// don't count.
+// Lines ticked against lines to lay out. Totals and the cards moved out of a deck have no tick box,
+// so they don't count.
 function tickProgress(article: HTMLElement) {
   const boxes = [...article.querySelectorAll<HTMLInputElement>('.row input[type="checkbox"]')]
   return { ticked: boxes.filter((box) => box.checked).length, total: boxes.length }

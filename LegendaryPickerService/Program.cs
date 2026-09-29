@@ -1,5 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using LegendaryPickerService.Catalog;
 using LegendaryPickerService.Setup;
@@ -45,6 +47,10 @@ builder.Services.AddRateLimiter(options =>
         ClientBucket(context.Connection.RemoteIpAddress),
         _ => new FixedWindowRateLimiterOptions { PermitLimit = 30, Window = TimeSpan.FromMinutes(1) }));
 });
+
+// Enums, such as a moved card's kind and piles, are written as camelCase names, as in the box files.
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
 builder.Services.AddSingleton(BoxCatalog.Load(BoxCatalog.DefaultDirectory));
 builder.Services.AddSingleton<SetupGenerator>();

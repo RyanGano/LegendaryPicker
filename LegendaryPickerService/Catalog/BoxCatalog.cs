@@ -12,7 +12,7 @@ namespace LegendaryPickerService.Catalog;
 // kebab-case segment. References name a full id, so a box can reference another box's groups.
 public sealed partial class BoxCatalog
 {
-    public const int SchemaVersion = 2;
+    public const int SchemaVersion = 3;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
@@ -129,6 +129,7 @@ public sealed partial class BoxCatalog
             ValidateTerms(path, box, sourceKeys);
             ValidateRuleSources(path, box, sourceKeys);
             ValidatePlayerCounts(path, box);
+            ValidateMoves(path, box);
 
             // Every setup includes its base game, so the base game's stacks can't be left to an expansion;
             // a stack it forgot to list would otherwise come out as 0.
@@ -264,6 +265,37 @@ public sealed partial class BoxCatalog
         }
     }
 
+    // A move puts cards somewhere they can be laid out from, never back where they came from, and
+    // one into the starting decks already puts its count in each player's deck.
+    private static void ValidateMoves(string path, Box box)
+    {
+        foreach (var scheme in box.Schemes)
+        {
+            foreach (var move in scheme.Setup.Moves ?? [])
+            {
+                var to = WireName(move.To);
+                if (!CardMove.Destinations.Contains(move.To))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} moves cards to {to}; cards move to {string.Join(", ", CardMove.Destinations.Select(WireName))}.");
+                }
+
+                if (move.To == move.From())
+                {
+                    throw new InvalidDataException($"{path}: {scheme.Id} moves {WireName(move.Card)} cards to {to}, where they come from.");
+                }
+
+                if (move.PerPlayer && move.To == Pile.StartingDecks)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} moves cards to {to} per player; a move to {to} already puts its count in each player's deck.");
+                }
+            }
+        }
+    }
+
+    private static string WireName<T>(T value) where T : struct, Enum => JsonNamingPolicy.CamelCase.ConvertName(value.ToString());
+
     private static void CheckPlayerCounts(string path, string rule, IEnumerable<IEnumerable<int>> entries)
     {
         var named = new HashSet<int>();
@@ -368,7 +400,6 @@ public sealed partial class BoxCatalog
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
             foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
-            if (effect.HeroCardsInVillainDeck is { } heroCards) yield return ($"{scheme.Id} setup.heroCardsInVillainDeck", heroCards.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
         }
 
@@ -378,7 +409,8 @@ public sealed partial class BoxCatalog
         }
     }
 
-    // Every list of per-player-count values in a box: the Masterminds' setup effects, then each Scheme's.
+    // Every list of per-player-count values in a box: the Masterminds' setup effects, then each Scheme's,
+    // with its moves last.
     private static IEnumerable<(string Rule, IReadOnlyList<PlayerCountValue> Values)> PlayerCountLists(Box box)
     {
         foreach (var mastermind in box.Masterminds)
@@ -394,6 +426,10 @@ public sealed partial class BoxCatalog
             yield return ($"{scheme.Id} setup.twists", scheme.Setup.Twists);
             if (scheme.Setup.Heroes is { } heroes) yield return ($"{scheme.Id} setup.heroes", heroes);
             foreach (var list in EffectLists(scheme.Id, scheme.Setup)) yield return list;
+            foreach (var (move, index) in (scheme.Setup.Moves ?? []).Select((move, index) => (move, index)))
+            {
+                yield return ($"{scheme.Id} setup.moves[{index}].count", move.Count);
+            }
         }
     }
 

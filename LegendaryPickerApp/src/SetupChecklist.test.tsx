@@ -11,6 +11,9 @@ import soloSecretInvasion from './test/fixtures/soloSecretInvasion.json'
 import twoPlayerCosmicCube from './test/fixtures/twoPlayerCosmicCube.json'
 // Drawn from the core box and the service's test-only fixture expansion.
 import twoBoxesTestHeist from './test/fixtures/twoBoxesTestHeist.json'
+// Drawn from the core box and the service's test-only card-moves fixture expansion.
+import twoBoxesHenchmanArmy from './test/fixtures/twoBoxesHenchmanArmy.json'
+import twoBoxesTestWounded from './test/fixtures/twoBoxesTestWounded.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -204,6 +207,65 @@ describe('SetupChecklist', () => {
       'Solo: after each Twist, KO a Hero costing 6 or less from the HQ R p.20',
     ])
     expect(within(notes[1]).queryByRole('link')).not.toBeInTheDocument()
+  })
+
+  it('shows Henchmen moved out of the Villain Deck as a line to lay out in the Hero Deck', () => {
+    renderChecklist(twoBoxesHenchmanArmy)
+
+    expect(rows('Villain Deck')).toEqual([
+      'Scheme Twists 8',
+      'Master Strikes 5',
+      'HYDRA, Skrulls 2 Villain Groups 16',
+      'Sentinel 1 Henchman Group 10',
+      'Bystanders 2',
+      'Moved to the Hero Deck −6',
+      'Total 35',
+    ])
+    expect(rows('Hero Deck')).toEqual([
+      'Rogue, Hulk, Emma Frost, Black Widow, Iron Man 5 Heroes 70',
+      'Henchmen from the Villain Deck 6',
+      'Total 76',
+    ])
+    // The line moved in gets a tick box; the one moved out does not.
+    expect(within(section('Hero Deck')).getAllByRole('checkbox')).toHaveLength(2)
+    expect(within(section('Villain Deck')).getAllByRole('checkbox')).toHaveLength(5)
+  })
+
+  it("adds a moved card to each player's starting deck and leaves the rest in its stack", () => {
+    renderChecklist(twoBoxesTestWounded)
+
+    expect(rows('Starting deck per player · 2 players')).toEqual([
+      'S.H.I.E.L.D. Agents 8',
+      'S.H.I.E.L.D. Troopers 4',
+      'Wounds from the Wound stack 1',
+    ])
+    expect(rows('Shared stacks')).toEqual(['Wounds 28', 'S.H.I.E.L.D. Officers 30', 'Bystanders 28'])
+  })
+
+  it('renders a setup from an API that predates moves as having none', () => {
+    // The site and the API deploy separately, so the site can briefly talk to an API without moves.
+    const { moves: _moves, ...withoutMoves } = soloSecretInvasion
+    renderChecklist(withoutMoves)
+
+    expect(rows('Hero Deck')).toEqual(['Deadpool, Hulk, Cyclops, Storm, Black Widow, Iron Man 6 Heroes 84', 'Total 72'])
+  })
+
+  it('lists two moves of the same kind of card to one deck as two lines', () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const heroCards = soloSecretInvasion.moves[0]
+    renderChecklist({
+      ...soloSecretInvasion,
+      moves: [heroCards, { ...heroCards, count: 2, total: 2 }],
+    })
+
+    expect(rows('Villain Deck')).toContain('Hero cards from the Hero Deck 2')
+    expect(rows('Hero Deck')).toContain('Moved to the Villain Deck −2')
+    expect(within(section('Villain Deck')).getAllByText('Hero cards from the Hero Deck')).toHaveLength(2)
+    expect(within(section('Hero Deck')).getAllByText('Moved to the Villain Deck')).toHaveLength(2)
+    // React warns about duplicate keys through console.error.
+    const calls = error.mock.calls.length
+    error.mockRestore()
+    expect(calls).toBe(0)
   })
 
   it('names the box each note comes from when the setup includes more than one box', () => {

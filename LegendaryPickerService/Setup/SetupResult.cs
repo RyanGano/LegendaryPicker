@@ -21,27 +21,35 @@ public sealed record SetupResult(
     int TwistsBesideScheme,
     SetupStacks Stacks,
     PlayerDeck PlayerDeck,
+    IReadOnlyList<MovedCards> Moves,
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<Box> Boxes) : GenerationResult;
 
+// MovedIn and MovedOut count the cards the setup's moves put in the deck and take out of it. The
+// response lists each move under the setup's moves instead, so they are left out of it.
 public sealed record VillainDeck(
     int Twists,
     int MasterStrikes,
     int VillainCards,
     int HenchmanCards,
     int Bystanders,
-    int HeroCards)
+    [property: JsonIgnore] int MovedIn,
+    [property: JsonIgnore] int MovedOut = 0)
 {
-    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + HeroCards;
+    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + MovedIn - MovedOut;
 }
 
-public sealed record HeroDeck(int HeroCards, int MovedToVillainDeck)
+public sealed record HeroDeck(int HeroCards, [property: JsonIgnore] int MovedOut, [property: JsonIgnore] int MovedIn = 0)
 {
-    public int Total => HeroCards - MovedToVillainDeck;
+    public int Total => HeroCards + MovedIn - MovedOut;
 }
 
-// Each stack holds the cards every included box adds to it, less what the setup moves out, unless
-// the Scheme sets its size. Sidekicks is null, and left out of the response, when no included box has any.
+// Cards a Scheme moves during setup, from the pile their kind comes from. Count is what the
+// destination gets: with To StartingDecks, what each player's deck gets. Total is what leaves From.
+public sealed record MovedCards(CardKind Card, Pile From, Pile To, int Count, int Total);
+
+// Each stack holds the cards every included box adds to it, or the size the Scheme sets, less what
+// the setup moves out. Sidekicks is null, and left out of the response, when no included box has any.
 public sealed record SetupStacks(
     int Wounds,
     int Officers,
