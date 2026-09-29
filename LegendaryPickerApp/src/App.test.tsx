@@ -69,6 +69,10 @@ afterEach(() => {
 const setupRequests = () =>
   fetchMock.mock.calls.map(([url]) => url as string).filter((url) => url.includes('/api/setup'))
 
+// The app's aria-live line: what a screen reader announces as the draw's state changes. (The
+// checklist's progress line is a separate role="status" region.)
+const announced = () => document.querySelector('[aria-live]')!.textContent
+
 function renderApp() {
   return render(
     <StrictMode>
@@ -135,6 +139,47 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Generate' }))
 
     expect(await screen.findByRole('heading', { name: 'Setup for 3 players' })).toHaveFocus()
+  })
+
+  it('announces the draw and then the result through the live region', async () => {
+    let answer!: () => void
+    setupAnswers.push(() => new Promise((resolve) => (answer = () => resolve(Response.json(setup)))))
+    const user = userEvent.setup()
+    renderApp()
+
+    expect(announced()).toBe('')
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    expect(announced()).toBe('Drawing a setup for 3 players…')
+
+    answer()
+    await screen.findByRole('heading', { name: 'Setup for 3 players' })
+
+    expect(announced()).toBe('Setup for 3 players ready. Scheme: Midtown Bank Robbery. Mastermind: Magneto.')
+  })
+
+  it('announces a failed draw and a count with no legal Scheme', async () => {
+    setupAnswers.push(
+      () => Promise.reject(new TypeError('Failed to fetch')),
+      () => json(noEligibleScheme),
+    )
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    const retry = await screen.findByRole('button', { name: 'Retry' })
+
+    expect(announced()).toBe("Couldn't get a setup. Check your connection and try again.")
+
+    await user.click(retry)
+    await screen.findByText('Pick another player count.')
+
+    expect(announced()).toBe(
+      'No Scheme can be set up legally for 3 players with the included boxes. Pick another player count.',
+    )
   })
 
   it.each([
@@ -268,7 +313,7 @@ describe('App', () => {
 
     await act(() => vi.advanceTimersByTimeAsync(3_000))
 
-    expect(screen.getByText(/The server may be waking up/)).toBeInTheDocument()
+    expect(screen.getByText('The server may be waking up. This can take up to 30 seconds.')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
     expect(screen.getByRole('button', { name: '3' })).toBeDisabled()
   })
@@ -355,7 +400,9 @@ describe('App', () => {
     boxesAnswer = () => json([core, fixture])
     renderApp()
 
-    const coreBox = await screen.findByRole('checkbox', { name: /^Marvel Legendary First Edition core box/ })
+    const coreBox = await screen.findByRole('checkbox', {
+      name: 'Marvel Legendary First Edition core box Always included',
+    })
     expect(coreBox).toBeChecked()
     expect(coreBox).toBeDisabled()
     expect(screen.getByRole('checkbox', { name: 'Fixture Expansion' })).not.toBeChecked()

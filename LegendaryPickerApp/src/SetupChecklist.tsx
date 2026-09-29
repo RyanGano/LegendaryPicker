@@ -136,7 +136,8 @@ function Section({
 }
 
 // One line to lay out, with a box to tick once it is on the table. Where the line is drawn cards,
-// their names are the label and the detail says what they are.
+// their names are the label and the detail says what they are. The whole line names the tick box,
+// so the spaces sit between the spans: a name computation may trim the text inside each one.
 function Item({ label, detail, count }: { label: string; detail?: string; count?: number }) {
   return (
     <li className="row">
@@ -144,9 +145,9 @@ function Item({ label, detail, count }: { label: string; detail?: string; count?
         <input type="checkbox" />
         <span className="label">
           {label}
-          {detail && <span className="detail"> {detail}</span>}
+          {detail && <> <span className="detail">{detail}</span></>}
         </span>
-        {count !== undefined && <span className="count"> {count}</span>}
+        {count !== undefined && <> <span className="count">{count}</span></>}
       </label>
     </li>
   )

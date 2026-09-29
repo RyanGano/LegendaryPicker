@@ -145,6 +145,29 @@ describe('SetupChecklist', () => {
     expect(screen.getByRole('status')).toHaveTextContent('1 of 13 laid out')
   })
 
+  it('names each tick box by its row, so a screen reader says what the box is for', () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    const expected = [
+      'Legacy Virus Scheme',
+      'Magneto Mastermind',
+      'Scheme Twists 8',
+      'Master Strikes 5',
+      'Brotherhood, HYDRA, Radiation 3 Villain Groups 24',
+      'Sentinel 1 Henchman Group 10',
+      'Bystanders 8',
+      'Hawkeye, Captain America, Black Widow, Cyclops, Deadpool 5 Heroes 70',
+      'Wounds 18',
+      'S.H.I.E.L.D. Officers 30',
+      'Bystanders 22',
+      'S.H.I.E.L.D. Agents 8',
+      'S.H.I.E.L.D. Troopers 4',
+    ]
+    const boxes = screen.getAllByRole('checkbox')
+    expect(boxes).toHaveLength(expected.length)
+    boxes.forEach((box, i) => expect(box).toHaveAccessibleName(expected[i]))
+  })
+
   it('shows the 2-player Cosmic Cube deck totals', () => {
     renderChecklist(twoPlayerCosmicCube)
 
@@ -229,6 +252,10 @@ describe('SetupChecklist', () => {
     // The line moved in gets a tick box; the one moved out does not.
     expect(within(section('Hero Deck')).getAllByRole('checkbox')).toHaveLength(2)
     expect(within(section('Villain Deck')).getAllByRole('checkbox')).toHaveLength(5)
+    // Like every other line, the moved-in line names its tick box.
+    expect(within(section('Hero Deck')).getAllByRole('checkbox')[1]).toHaveAccessibleName(
+      'Henchmen from the Villain Deck 6',
+    )
   })
 
   it("adds a moved card to each player's starting deck and leaves the rest in its stack", () => {
