@@ -104,6 +104,24 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
+    public async Task Setup_steps_are_listed_by_label()
+    {
+        // Test Vigil with Test Watcher: the Scheme's two steps, then the Mastermind's.
+        var client = Client(new ScriptedRandom(9, 4), BoxCatalog.Load(SetupStepsTests.FixtureDirectory));
+
+        var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,steps");
+
+        var expected = JsonNode.Parse("""
+            [
+              "Place the test beacon token on the Scheme",
+              "Split the Villain Deck into two equal piles",
+              "Put the test lookout token on the first city space"
+            ]
+            """);
+        Assert.True(JsonNode.DeepEquals(expected, body!["steps"]), body["steps"]?.ToJsonString());
+    }
+
+    [Fact]
     public async Task No_eligible_Scheme_is_a_200_with_kind_noEligibleScheme()
     {
         // A catalog without Masterminds leaves no Scheme a legal completion.
@@ -416,6 +434,7 @@ public sealed class SetupEndpointTests : IDisposable
           "playerDeck": { "agents": 8, "troopers": 4 },
           "moves": [],
           "outsideHeroes": [],
+          "steps": [],
           "notes": [
             {
               "text": "Red Skull always leads HYDRA",

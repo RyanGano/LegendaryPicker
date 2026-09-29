@@ -18,6 +18,9 @@ public sealed partial class BoxCatalog
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
 
+    // Setup step labels are one short instruction in our own words, never card text.
+    public const int MaxStepLabelWords = 15;
+
     // The player counts a setup can be drawn for; 1 is Solo.
     public const int MinPlayers = 1;
     public const int MaxPlayers = 5;
@@ -128,6 +131,7 @@ public sealed partial class BoxCatalog
             }
 
             ValidateTerms(path, box, sourceKeys);
+            ValidateSteps(path, box);
             ValidateRuleSources(path, box, sourceKeys);
             ValidatePlayerCounts(path, box);
             ValidateMoves(path, box);
@@ -222,7 +226,7 @@ public sealed partial class BoxCatalog
                 throw new InvalidDataException($"{path}: {term.Id} has no summary.");
             }
 
-            var words = term.Summary.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
+            var words = WordCount(term.Summary);
             if (words > MaxSummaryWords)
             {
                 throw new InvalidDataException(
@@ -240,6 +244,38 @@ public sealed partial class BoxCatalog
             }
         }
     }
+
+    // A setup step is a line on the checklist, so its label must say something and stay short enough to
+    // be one instruction rather than copied card text. A card listing one step twice would show it twice,
+    // with two identical rule notes.
+    private static void ValidateSteps(string path, Box box)
+    {
+        foreach (var (owner, steps) in StepLists(box))
+        {
+            var labels = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var step in steps)
+            {
+                if (string.IsNullOrWhiteSpace(step.Label))
+                {
+                    throw new InvalidDataException($"{path}: {owner} has a setup step with no label.");
+                }
+
+                var words = WordCount(step.Label);
+                if (words > MaxStepLabelWords)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {owner} has a {words}-word setup step label; labels are at most {MaxStepLabelWords} words.");
+                }
+
+                if (!labels.Add(step.Label.Trim()))
+                {
+                    throw new InvalidDataException($"{path}: {owner} lists the setup step \"{step.Label}\" twice.");
+                }
+            }
+        }
+    }
+
+    private static int WordCount(string text) => text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
 
     // A rule note links its citation's key through its own box's sources, so a key the box doesn't
     // list would show the note with no link. Card is the printed card itself, which has no link.
@@ -577,7 +613,19 @@ public sealed partial class BoxCatalog
         {
             foreach (var value in values) yield return (rule, value.Source);
         }
+
+        foreach (var (owner, steps) in StepLists(box))
+        {
+            foreach (var step in steps) yield return ($"{owner} setup.steps", step.Source);
+        }
     }
+
+    // The setup steps of every Mastermind and Scheme that has any, by the id of the card that prints them.
+    private static IEnumerable<(string Owner, IReadOnlyList<SetupStep> Steps)> StepLists(Box box) =>
+        box.Masterminds.Select(m => (m.Id, m.Setup?.Steps))
+            .Concat(box.Schemes.Select(s => (s.Id, s.Setup.Steps)))
+            .Where(list => list.Steps is not null)
+            .Select(list => (list.Id, list.Steps!));
 
     // Every list of per-player-count values in a box: the Masterminds' setup effects, then each Scheme's,
     // with its moves and Heroes outside the Hero Deck last.

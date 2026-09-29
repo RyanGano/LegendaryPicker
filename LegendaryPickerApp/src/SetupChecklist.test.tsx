@@ -17,6 +17,8 @@ import twoBoxesTestWounded from './test/fixtures/twoBoxesTestWounded.json'
 // Drawn from the core box and the service's test-only Hero rules fixture expansion.
 import twoBoxesTestSong from './test/fixtures/twoBoxesTestSong.json'
 import twoBoxesTestVault from './test/fixtures/twoBoxesTestVault.json'
+// Drawn from the core box and the service's test-only setup-steps fixture expansion.
+import twoBoxesTestVigil from './test/fixtures/twoBoxesTestVigil.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -329,6 +331,39 @@ describe('SetupChecklist', () => {
     renderChecklist(withoutMoves)
 
     expect(rows('Hero Deck')).toEqual(['Deadpool, Hulk, Cyclops, Storm, Black Widow, Iron Man 6 Heroes 84', 'Total 72'])
+  })
+
+  it('lists the setup steps the Scheme and Mastermind print as lines to tick, after the starting decks', async () => {
+    const user = userEvent.setup()
+    renderChecklist(twoBoxesTestVigil)
+
+    expect(rows('Other setup steps')).toEqual([
+      'Place the test beacon token on the Scheme',
+      'Split the Villain Deck into two equal piles',
+      'Put the test lookout token on the first city space',
+    ])
+    const headings = screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)
+    expect(headings.slice(headings.indexOf('Starting deck per player · 2 players'))).toEqual([
+      'Starting deck per player · 2 players',
+      'Other setup steps',
+      'Why this setup',
+      'Terms in this setup',
+    ])
+    expect(screen.getByRole('status')).toHaveTextContent('0 of 16 laid out')
+
+    await user.click(screen.getByRole('checkbox', { name: 'Split the Villain Deck into two equal piles' }))
+
+    expect(screen.getByRole('status')).toHaveTextContent('1 of 16 laid out')
+    expect(rows('Why this setup')).toContain(
+      'Scheme adds a setup step: Split the Villain Deck into two equal piles R p.2Steps Fixture',
+    )
+  })
+
+  it('renders a setup from an API that predates setup steps as having none', () => {
+    // This body was captured before the API listed setup steps.
+    renderChecklist(twoBoxesTestSong)
+
+    expect(screen.queryByRole('region', { name: 'Other setup steps' })).not.toBeInTheDocument()
   })
 
   it('lists two moves of the same kind of card to one deck as two lines', () => {

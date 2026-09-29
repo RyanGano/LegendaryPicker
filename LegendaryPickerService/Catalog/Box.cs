@@ -87,12 +87,17 @@ public sealed record GlossaryTerm(string Id, string Name, TermKind Kind, string 
 // Each adds its value to the count the setup would otherwise use (the player-count table or Solo,
 // after any Scheme value that sets it); a Scheme's are applied before its Mastermind's. Each is a
 // list so its value can depend on the player count: an entry for players [1] applies only in Solo,
-// and a player count no entry names adds nothing.
+// and a player count no entry names adds nothing. Steps are setup steps that change no count.
 public record SetupEffects(
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
-    IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null);
+    IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null,
+    IReadOnlyList<SetupStep>? Steps = null);
+
+// A setup step that changes no count, such as placing a token on the Scheme, which the setup lists as a
+// line to tick. Label is a short instruction in our own words, never card text.
+public sealed record SetupStep(string Label, string Source);
 
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
 // Heroes and VillainDeckBystanders set a count, replacing the table or Solo value.
@@ -112,8 +117,9 @@ public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
-    IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null)
-    : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders);
+    IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null,
+    IReadOnlyList<SetupStep>? Steps = null)
+    : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
 

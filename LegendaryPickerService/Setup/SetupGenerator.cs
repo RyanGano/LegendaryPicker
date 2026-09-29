@@ -130,6 +130,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value),
                 plan.Moves,
                 outside,
+                plan.Steps,
                 notes,
                 boxes);
         }
@@ -243,6 +244,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 wounds,
                 moves,
                 outside,
+                [],
                 notes);
 
             return Add(plan, effect, "Scheme", schemeBox);
@@ -255,8 +257,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return mastermind.Setup is { } effects ? Add(plan, effects, mastermind.Name, BoxOf(mastermind.Id)) : plan;
         }
 
-        // Adds each effect that applies at this player count to the plan's counts, with a note citing
-        // the card that prints it. An effect only adds to the count, so it replaces no Solo value.
+        // Adds each effect that applies at this player count to the plan's counts, and each setup step to
+        // its steps, with a note citing the card that prints it. An effect only adds to the count, so it
+        // replaces no Solo value.
         private SetupPlan Add(SetupPlan plan, SetupEffects effects, string by, Box from)
         {
             var notes = new List<RuleNote>(plan.Notes);
@@ -272,6 +275,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 return extra.Value;
             }
 
+            string Step(SetupStep step)
+            {
+                notes.Add(Note($"{by} adds a setup step: {step.Label}", step.Source, from));
+                return step.Label;
+            }
+
             return plan with
             {
                 Heroes = plan.Heroes + Extra(effects.ExtraHeroes, "Hero", "Heroes"),
@@ -279,6 +288,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 HenchmanGroups = plan.HenchmanGroups + Extra(effects.ExtraHenchmanGroups, "Henchman Group", "Henchman Groups"),
                 Bystanders = plan.Bystanders + Extra(
                     effects.ExtraVillainDeckBystanders, "Bystander", "Bystanders", " to the Villain Deck"),
+                Steps = [.. plan.Steps, .. (effects.Steps ?? []).Select(Step)],
                 Notes = notes,
             };
         }
@@ -502,6 +512,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int Wounds,
         IReadOnlyList<MovedCards> Moves,
         IReadOnlyList<OutsideDraw> Outside,
+        IReadOnlyList<string> Steps,
         IReadOnlyList<RuleNote> Notes)
     {
         public int MovedIn(Pile to) => Moves.Where(move => move.To == to).Sum(move => move.Count);
