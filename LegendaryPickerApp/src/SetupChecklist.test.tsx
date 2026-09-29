@@ -23,6 +23,12 @@ import twoBoxesTestVigil from './test/fixtures/twoBoxesTestVigil.json'
 import twoBoxesDailyBugle from './test/fixtures/twoBoxesDailyBugle.json'
 // A live draw from Legendary: Villains alone, on the Villainous ruleset: Graduation at Xavier's X-Academy with Odin.
 import twoPlayerVillainsGraduation from './test/fixtures/twoPlayerVillainsGraduation.json'
+// A live mixed draw from the core box and Legendary: Villains with 3 players: the Plot Crush HYDRA with the
+// Mastermind Magneto, and Heroes and Allies together, under the Villains rules.
+import mixedCrushHydra from './test/fixtures/mixedCrushHydra.json'
+// A live draw from the core box and Legendary: Villains with 2 players that drew no Villainous card, so it
+// follows the First Edition rules: Replace Earth's Leaders with Killbots and Loki.
+import heroicOnlyWithVillains from './test/fixtures/heroicOnlyWithVillains.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -38,6 +44,7 @@ const section = (name: string) => screen.getByRole('region', { name })
 
 // Every two-box fixture draws its familiar cards from the core box.
 const CORE = 'Marvel Legendary First Edition core box'
+const VILLAINS = 'Legendary: Villains'
 
 // Each line of a section as the player reads it: label, drawn names, count.
 const rows = (sectionName: string) =>
@@ -292,6 +299,84 @@ describe('SetupChecklist', () => {
     renderChecklist(twoPlayerVillainsGraduation)
 
     expect(rows('Shared stacks')).toEqual(['Bindings 30', 'Madame HYDRA 12', 'New Recruits 15', 'Bystanders 31'])
+  })
+
+  it("names each card of a mixed setup by its own side's word and a mixed part by both", () => {
+    renderChecklist(mixedCrushHydra)
+
+    expect(screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      'Crush HYDRA',
+      'Magneto',
+      'Heroes or Allies',
+      'Villain or Adversary Groups',
+      'Henchman Group',
+      'Plot and Mastermind',
+      'Villain or Adversary Deck',
+      'Hero or Ally Deck',
+      'Shared stacks',
+      'Starting deck per player · 3 players',
+      'Why this setup',
+      'Terms in this setup',
+    ])
+    expect(within(card('Crush HYDRA')).getByText('Plot')).toBeInTheDocument()
+    expect(within(card('Magneto')).getByText('Mastermind')).toBeInTheDocument()
+    expect(rows('Villain or Adversary Deck')).toEqual([
+      'Scheme Twists or Plot Twists 8',
+      'Master Strikes or Command Strikes 5',
+      `Brotherhood ${CORE} Uncanny X-Men ${VILLAINS} X-Men First Class ${VILLAINS} 3 Villain or Adversary Groups 24`,
+      `Hand Ninjas ${CORE} 1 Henchman Group 10`,
+      'Bystanders 8',
+      'Total 55',
+    ])
+    expect(rows('Hero or Ally Deck')[0]).toMatch(/^Sabretooth .* 5 Heroes or Allies 70$/)
+  })
+
+  it('lays out every stack of both base games in a mixed setup', () => {
+    renderChecklist(mixedCrushHydra)
+
+    expect(rows('Shared stacks')).toEqual([
+      'Wounds 30',
+      'Bindings 30',
+      'S.H.I.E.L.D. Officers 30',
+      'Madame HYDRA 12',
+      'New Recruits 15',
+      'Bystanders 63',
+    ])
+  })
+
+  it('asks the players to pick a starting team when a mixed setup includes both base games', () => {
+    renderChecklist(mixedCrushHydra)
+
+    expect(rows('Starting deck per player · 3 players')).toEqual([
+      'Pick one starting team for every player: S.H.I.E.L.D. or HYDRA',
+      'S.H.I.E.L.D. Agents or HYDRA Operatives 8',
+      'S.H.I.E.L.D. Troopers or HYDRA Soldiers 4',
+    ])
+  })
+
+  it('says which rules the setup follows and why when the included boxes follow more than one ruleset', () => {
+    renderChecklist(mixedCrushHydra)
+
+    const reason = screen.getByText(/^Villains rules: the setup includes Villainous cards/)
+    expect(within(reason).getByRole('link', { name: 'D-mixed' })).toHaveAttribute(
+      'href',
+      'https://github.com/RyanGano/LegendaryPicker/issues/85',
+    )
+  })
+
+  it('lays out a Heroic-only draw with Villains included as a First Edition setup', () => {
+    renderChecklist(heroicOnlyWithVillains)
+
+    expect(screen.getByText(/^First Edition rules: the setup has no Villainous cards/)).toBeInTheDocument()
+    expect(rows('Shared stacks')).toEqual(['Wounds 30', 'S.H.I.E.L.D. Officers 30', 'Bystanders 12'])
+    expect(rows('Starting deck per player · 2 players')).toEqual(['S.H.I.E.L.D. Agents 8', 'S.H.I.E.L.D. Troopers 4'])
+    expect(tileNames('Heroes')).toEqual(['Thor', 'Cyclops', 'Nick Fury', 'Black Widow', 'Hulk'])
+  })
+
+  it('says nothing about rules when the included boxes follow one ruleset', () => {
+    renderChecklist(twoPlayerVillainsGraduation)
+
+    expect(screen.queryByText(/ rules: /)).not.toBeInTheDocument()
   })
 
   it('shows the Solo Secret Invasion Heroes, the Hero cards moved and the D2 note', () => {

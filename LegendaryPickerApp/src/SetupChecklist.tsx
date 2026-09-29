@@ -1,11 +1,12 @@
 import { Fragment, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import type { CardKind, Component, Move, Pile, Setup, SetupStacks } from './api/setupApi.ts'
-import { rulesetTerms, type RulesetTerms } from './rulesetTerms.ts'
+import { cardTerms, setupTerms, startingDeckTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { TermKind } from './TermChips.tsx'
 
 // The setup as a checklist in the order a player lays it out. Every count and note comes from
 // the API response as-is: the client never adds, splits or infers a rule. Parts of the setup are named
-// in the words of its ruleset, so a Villainous setup lays out a Plot and an Adversary Deck. The ticks are
+// in the words of its ruleset, so a Villainous setup lays out a Plot and an Adversary Deck; a mixed setup
+// names each card by its own ruleset's word and a part holding both kinds by both words. The ticks are
 // local state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
 export function SetupChecklist({ setup }: { setup: Setup }) {
@@ -21,7 +22,11 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     outsideHenchmen = [],
     steps = [],
   } = setup
-  const t = rulesetTerms(setup)
+  const t = setupTerms(setup)
+  const villainTerms = cardTerms(setup, setup.villainGroups)
+  const henchmanTerms = cardTerms(setup, setup.henchmanGroups)
+  const heroTerms = cardTerms(setup, setup.heroes)
+  const decks = startingDeckTerms(setup)
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
@@ -44,12 +49,12 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <Item label={t.masterStrikes} count={villainDeck.masterStrikes} />
         <Item
           label={names(setup.villainGroups)}
-          detail={plural(setup.villainGroups.length, t.villainGroup, t.villainGroups)}
+          detail={plural(setup.villainGroups.length, villainTerms.villainGroup, villainTerms.villainGroups)}
           count={villainDeck.villainCards}
         />
         <Item
           label={names(setup.henchmanGroups)}
-          detail={plural(setup.henchmanGroups.length, t.henchmanGroup, t.henchmanGroups)}
+          detail={plural(setup.henchmanGroups.length, henchmanTerms.henchmanGroup, henchmanTerms.henchmanGroups)}
           count={villainDeck.henchmanCards}
         />
         <Item label="Bystanders" count={villainDeck.bystanders} />
@@ -67,7 +72,11 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       )}
 
       <Section title={t.heroDeck} kind="hero">
-        <Item label={names(setup.heroes)} detail={plural(setup.heroes.length, t.hero, t.heroes)} count={heroDeck.heroCards} />
+        <Item
+          label={names(setup.heroes)}
+          detail={plural(setup.heroes.length, heroTerms.hero, heroTerms.heroes)}
+          count={heroDeck.heroCards}
+        />
         <MovedIn moves={moves} to="heroDeck" terms={t} />
         {outsideHenchmen.map(
           (outside) =>
@@ -100,8 +109,11 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       </Section>
 
       <Section title={`Starting deck per player · ${plural(setup.players, 'player')}`} kind="shield">
-        <Item label={t.agents} count={playerDeck.agents} />
-        <Item label={t.troopers} count={playerDeck.troopers} />
+        {decks.length > 1 && (
+          <Item label={`Pick one starting team for every player: ${decks.map((deck) => deck.team).join(' or ')}`} />
+        )}
+        <Item label={decks.map((deck) => deck.agents).join(' or ')} count={playerDeck.agents} />
+        <Item label={decks.map((deck) => deck.troopers).join(' or ')} count={playerDeck.troopers} />
         <MovedIn moves={moves} to="startingDecks" terms={t} />
       </Section>
 

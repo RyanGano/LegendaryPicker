@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBoxes, getSetup, ping, type Box, type Setup } from './api/setupApi.ts'
-import { rulesetTerms } from './rulesetTerms.ts'
+import { setupTerms } from './rulesetTerms.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
 import { SetupSkeleton } from './SetupSkeleton.tsx'
 import { SetupSummary } from './SetupSummary.tsx'
@@ -104,7 +104,7 @@ function announcement(status: Status, showWakeUpNotice: boolean) {
         showWakeUpNotice ? ' The server may be waking up. This can take up to 30 seconds.' : ''
       }`
     case 'result': {
-      const terms = rulesetTerms(status.setup)
+      const terms = setupTerms(status.setup)
       return `Setup for ${playerCount(status.setup.players)} ready. ${terms.scheme}: ${status.setup.scheme.name}. ${terms.mastermind}: ${status.setup.mastermind.name}.`
     }
     case 'noEligibleScheme':
@@ -175,9 +175,6 @@ function App() {
   // A setup takes its rules from a base game, so it needs at least one. Until the box list loads
   // there is nothing to check, and the API decides.
   const needsBaseGame = boxes.length > 0 && !boxes.some((box) => box.baseGame && isIncluded(box))
-  // Boxes of different rulesets, such as the core box and Villains, can't be combined yet.
-  const mixesRulesets = new Set(boxes.filter(isIncluded).map((box) => box.ruleset ?? 'firstEdition')).size > 1
-  const blocked = needsBaseGame || mixesRulesets
   // Base games first, then expansions, each in the API's order.
   const listedBoxes = [...boxes.filter((box) => box.baseGame), ...boxes.filter((box) => !box.baseGame)]
 
@@ -188,10 +185,8 @@ function App() {
     try {
       const available = await boxesRequest.current
       const drawn = available.filter(isIncluded)
-      // A draw started before the box list loaded may turn out to have no base game, or boxes that can't be
-      // combined; the picker now says so.
-      const rulesets = new Set(drawn.map((box) => box.ruleset ?? 'firstEdition'))
-      if (available.length > 0 && (!drawn.some((box) => box.baseGame) || rulesets.size > 1)) {
+      // A draw started before the box list loaded may turn out to have no base game; the picker now says so.
+      if (available.length > 0 && !drawn.some((box) => box.baseGame)) {
         setStatus({ kind: 'idle' })
         return
       }
@@ -255,17 +250,12 @@ function App() {
                   ))}
                 </div>
                 {needsBaseGame && <p className="box-hint">Pick a base game to draw a setup.</p>}
-                {!needsBaseGame && mixesRulesets && (
-                  <p className="box-hint">
-                    The ticked boxes follow different rules, First Edition and Villainous, which can't be combined yet.
-                  </p>
-                )}
               </>
             )}
             <button
               type="button"
               className="primary"
-              disabled={players === null || loading || blocked}
+              disabled={players === null || loading || needsBaseGame}
               onClick={generate}
             >
               Generate

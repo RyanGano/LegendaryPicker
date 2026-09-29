@@ -4,6 +4,7 @@ import { StrictMode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App.tsx'
 import type { Box, NoEligibleScheme, Setup } from './api/setupApi.ts'
+import mixedCrushHydra from './test/fixtures/mixedCrushHydra.json'
 
 const setup: Setup = {
   kind: 'setup',
@@ -501,27 +502,27 @@ describe('App', () => {
     expect(localStorage.getItem('legendaryPicker.expansions')).toBeNull()
   })
 
-  it('disables Generate with a hint while boxes of different rulesets are ticked', async () => {
+  it('draws from the core box and Villains together, and from Villains with a Heroic expansion', async () => {
     boxesAnswer = () => json([core, villains, fixture])
+    setupAnswers.push(() => json(mixedCrushHydra), () => json(mixedCrushHydra))
     const user = userEvent.setup()
     renderApp()
-    await user.click(screen.getByRole('button', { name: '2' }))
-    const hint = 'The ticked boxes follow different rules, First Edition and Villainous, which can\'t be combined yet.'
+    await user.click(screen.getByRole('button', { name: '3' }))
 
     await user.click(await screen.findByRole('checkbox', { name: 'Legendary: Villains Base game' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
 
-    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
-    expect(screen.getByText(hint)).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Setup for 3 players', level: 2 })).toBeInTheDocument()
+    expect(announced()).toBe('Setup for 3 players ready. Plot: Crush HYDRA. Mastermind: Magneto.')
 
     await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' }))
-
-    expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
-    expect(screen.queryByText(hint)).not.toBeInTheDocument()
-
     await user.click(screen.getByRole('checkbox', { name: 'Fixture Expansion' }))
+    await user.click(screen.getByRole('button', { name: 'Generate another' }))
 
-    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
-    expect(screen.getByText(hint)).toBeInTheDocument()
+    expect(setupRequests()).toEqual([
+      expect.stringMatching(/players=3&boxes=core,villains$/),
+      expect.stringMatching(/players=3&boxes=villains,fixture$/),
+    ])
   })
 
   it('draws nothing when a slow box list shows the remembered boxes have no base game', async () => {

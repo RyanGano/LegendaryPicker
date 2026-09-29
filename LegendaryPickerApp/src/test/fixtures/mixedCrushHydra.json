@@ -1,0 +1,439 @@
+{
+  "kind": "setup",
+  "players": 3,
+  "ruleset": "villainous",
+  "scheme": {
+    "id": "villains_scheme_crush-hydra",
+    "name": "Crush HYDRA",
+    "terms": [
+      "villains_term_plot-twist"
+    ],
+    "box": "Legendary: Villains",
+    "ruleset": "villainous"
+  },
+  "mastermind": {
+    "id": "core_mastermind_magneto",
+    "name": "Magneto",
+    "terms": [
+      "core_term_always-leads",
+      "core_term_fight",
+      "core_term_master-strike",
+      "core_term_mastermind-tactic",
+      "core_term_rescue-a-bystander"
+    ],
+    "box": "Marvel Legendary First Edition core box",
+    "ruleset": "firstEdition"
+  },
+  "villainGroups": [
+    {
+      "id": "core_villain_brotherhood",
+      "name": "Brotherhood",
+      "terms": [
+        "core_term_ambush",
+        "core_term_escape",
+        "core_term_fight"
+      ],
+      "box": "Marvel Legendary First Edition core box",
+      "ruleset": "firstEdition"
+    },
+    {
+      "id": "villains_villain_uncanny-x-men",
+      "name": "Uncanny X-Men",
+      "terms": [
+        "villains_term_ambush",
+        "villains_term_elusive",
+        "villains_term_fight",
+        "villains_term_x-treme-attack"
+      ],
+      "box": "Legendary: Villains",
+      "ruleset": "villainous"
+    },
+    {
+      "id": "villains_villain_x-men-first-class",
+      "name": "X-Men First Class",
+      "terms": [
+        "villains_term_ambush",
+        "villains_term_fight",
+        "villains_term_overrun",
+        "villains_term_x-treme-attack"
+      ],
+      "box": "Legendary: Villains",
+      "ruleset": "villainous"
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "id": "core_henchman_hand-ninjas",
+      "name": "Hand Ninjas",
+      "terms": [
+        "core_term_fight"
+      ],
+      "box": "Marvel Legendary First Edition core box",
+      "ruleset": "firstEdition"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "villains_hero_sabretooth",
+      "name": "Sabretooth",
+      "terms": [
+        "villains_term_brotherhood",
+        "villains_term_covert",
+        "villains_term_instinct",
+        "villains_term_strength"
+      ],
+      "box": "Legendary: Villains",
+      "ruleset": "villainous"
+    },
+    {
+      "id": "villains_hero_electro",
+      "name": "Electro",
+      "terms": [
+        "villains_term_sinister-six",
+        "villains_term_instinct",
+        "villains_term_ranged",
+        "villains_term_dodge"
+      ],
+      "box": "Legendary: Villains",
+      "ruleset": "villainous"
+    },
+    {
+      "id": "villains_hero_bullseye",
+      "name": "Bullseye",
+      "terms": [
+        "villains_term_crime-syndicate",
+        "villains_term_covert",
+        "villains_term_instinct",
+        "villains_term_ranged",
+        "villains_term_dodge"
+      ],
+      "box": "Legendary: Villains",
+      "ruleset": "villainous"
+    },
+    {
+      "id": "core_hero_deadpool",
+      "name": "Deadpool",
+      "terms": [
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_tech"
+      ],
+      "box": "Marvel Legendary First Edition core box",
+      "ruleset": "firstEdition"
+    },
+    {
+      "id": "core_hero_gambit",
+      "name": "Gambit",
+      "terms": [
+        "core_term_x-men",
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_ranged"
+      ],
+      "box": "Marvel Legendary First Edition core box",
+      "ruleset": "firstEdition"
+    }
+  ],
+  "villainDeck": {
+    "twists": 8,
+    "masterStrikes": 5,
+    "villainCards": 24,
+    "henchmanCards": 10,
+    "bystanders": 8,
+    "outsideHeroCards": 0,
+    "total": 55
+  },
+  "heroDeck": {
+    "heroCards": 70,
+    "total": 70
+  },
+  "twistsBesideScheme": 0,
+  "stacks": {
+    "wounds": 30,
+    "officers": 30,
+    "bystanders": 63,
+    "bindings": 30,
+    "madameHydra": 12,
+    "newRecruits": 15
+  },
+  "playerDeck": {
+    "agents": 8,
+    "troopers": 4,
+    "choices": [
+      "firstEdition",
+      "villainous"
+    ]
+  },
+  "moves": [],
+  "outsideHeroes": [],
+  "outsideHenchmen": [],
+  "steps": [],
+  "notes": [
+    {
+      "text": "Magneto always leads Brotherhood",
+      "citation": "VIL p.6",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "text": "Mixed sets: Schemes and Plots, Masterminds and Commanders, Heroes and Allies and the groups each come from one pool",
+      "citation": "VIL pp.20-21",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "text": "Mixed sets: lay out every Wound, Bindings and recruit stack, and shuffle all Bystanders together",
+      "citation": "VIL p.21",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "text": "Mixed sets: the players choose S.H.I.E.L.D. or HYDRA starting decks",
+      "citation": "VIL p.21",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    }
+  ],
+  "glossary": [
+    {
+      "id": "core_term_x-men",
+      "name": "X-Men",
+      "kind": "team",
+      "summary": "A Hero team. In the core box its members are Cyclops, Emma Frost, Gambit, Rogue, Storm and Wolverine.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "villains_term_brotherhood",
+      "name": "Brotherhood",
+      "kind": "team",
+      "summary": "An Ally team of mutants who believe their kind should rule. In Villains its members are Juggernaut, Magneto, Mystique and Sabretooth.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_crime-syndicate",
+      "name": "Crime Syndicate",
+      "kind": "team",
+      "summary": "An Ally team of street-level crime bosses and hired killers. In Villains its members are Bullseye and Kingpin.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_sinister-six",
+      "name": "Sinister Six",
+      "kind": "team",
+      "summary": "An Ally team of Spider-Man's foes who band together against him. In Villains its members are Dr. Octopus, Electro, Green Goblin, Kraven, Mysterio and Venom.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "core_term_covert",
+      "name": "Covert",
+      "kind": "class",
+      "summary": "A Hero class of fighters who prefer trickery and careful plans to open force.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_instinct",
+      "name": "Instinct",
+      "kind": "class",
+      "summary": "A Hero class of fighters who trust their gut and their senses in close combat.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_ranged",
+      "name": "Ranged",
+      "kind": "class",
+      "summary": "A Hero class of fighters who deal damage from a distance, by any kind of projected power.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_tech",
+      "name": "Tech",
+      "kind": "class",
+      "summary": "A Hero class of fighters whose power comes from gear and science rather than the body.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "villains_term_covert",
+      "name": "Covert",
+      "kind": "class",
+      "summary": "An Ally class that wins through deceit, cunning schemes and subtle powers.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_instinct",
+      "name": "Instinct",
+      "kind": "class",
+      "summary": "An Ally class that relies on ferocity, fast reactions and keen senses.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_ranged",
+      "name": "Ranged",
+      "kind": "class",
+      "summary": "An Ally class that attacks from afar with blasts, beams and elemental or mental power.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_strength",
+      "name": "Strength",
+      "kind": "class",
+      "summary": "An Ally class whose power is raw might, iron will or command of others.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "core_term_always-leads",
+      "name": "Always Leads",
+      "kind": "keyword",
+      "summary": "Names the one Villain or Henchman Group this Mastermind brings to every game. That group takes one of the setup's group slots; random draws fill the rest.",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_ambush",
+      "name": "Ambush",
+      "kind": "keyword",
+      "summary": "Triggers as this Villain arrives in the city from the Villain Deck. When its arrival shoves another Villain out of the city, resolve that escape before this effect.",
+      "citation": "R p.9",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_escape",
+      "name": "Escape",
+      "kind": "keyword",
+      "summary": "Triggers when this Villain is shoved past the final city space and escapes, in addition to the standard escape penalties.",
+      "citation": "R p.9",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_fight",
+      "name": "Fight",
+      "kind": "keyword",
+      "summary": "Triggers when a player spends enough Attack to defeat this card.",
+      "citation": "R p.13",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_master-strike",
+      "name": "Master Strike",
+      "kind": "keyword",
+      "summary": "Drawing a Master Strike from the Villain Deck makes the Mastermind act in person: resolve the Master Strike line on its card. The Strike card is then KO'd.",
+      "citation": "R p.10",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_mastermind-tactic",
+      "name": "Mastermind Tactic",
+      "kind": "keyword",
+      "summary": "Beating the Mastermind's Attack wins one of its four face-down Tactics at random: keep it for Victory Points and do its Fight effect. Take all four to win.",
+      "citation": "R p.14",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_rescue-a-bystander",
+      "name": "Rescue a Bystander",
+      "kind": "keyword",
+      "summary": "Add a Bystander from the shared Bystander stack to your Victory Pile, where it scores at game end. This never frees a Bystander a Villain holds; defeat that Villain for it.",
+      "citation": "R p.15",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "villains_term_ambush",
+      "name": "Ambush",
+      "kind": "keyword",
+      "summary": "Triggers as this Adversary arrives in the city. If its arrival pushes another Adversary out, resolve that overrun first.",
+      "citation": "VIL p.9",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_dodge",
+      "name": "Dodge",
+      "kind": "keyword",
+      "summary": "On your turn you can discard this card from your hand to draw a replacement, ignoring its other text. Dodging is not playing the card.",
+      "citation": "VIL p.14",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_elusive",
+      "name": "Elusive",
+      "kind": "keyword",
+      "summary": "You can only fight this Adversary once you have made at least the listed amount of Recruit this turn. That Recruit stays yours to spend.",
+      "citation": "VIL p.14",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_fight",
+      "name": "Fight",
+      "kind": "keyword",
+      "summary": "Triggers when a player spends enough Attack to defeat this card.",
+      "citation": "VIL p.12",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_overrun",
+      "name": "Overrun",
+      "kind": "keyword",
+      "summary": "Triggers when this Adversary is pushed out past the last city space, after it KOs a cheap Ally from the Lair and any guarded Bystanders cost each player a discard.",
+      "citation": "VIL p.8",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_plot-twist",
+      "name": "Plot Twist",
+      "kind": "keyword",
+      "summary": "Drawing a Plot Twist from the Adversary Deck moves the Commander's plan forward: resolve the Twist line on the Plot, then KO the Twist unless the Plot says otherwise.",
+      "citation": "VIL p.9",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_x-treme-attack",
+      "name": "X-Treme Attack",
+      "kind": "keyword",
+      "summary": "This Adversary gets +1 Attack for every other Adversary with X-Treme Attack in the city, so these teams grow stronger together.",
+      "citation": "VIL p.14",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    }
+  ],
+  "mixed": true,
+  "rulesReason": {
+    "text": "Villains rules: the setup includes Villainous cards",
+    "citation": "D-mixed",
+    "link": "https://github.com/RyanGano/LegendaryPicker/issues/85"
+  }
+}

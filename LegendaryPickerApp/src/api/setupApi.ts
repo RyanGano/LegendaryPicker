@@ -5,12 +5,14 @@
 
 // A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the
 // glossary terms it uses (for a Hero, its team and classes too), in glossary order. box names the box
-// it comes from, and is present only when the setup includes more than one box.
+// it comes from, and is present only when the setup includes more than one box. ruleset is its box's
+// ruleset, present only in a mixed setup.
 export type Component = {
   id: string
   name: string
   terms: string[]
   box?: string
+  ruleset?: Ruleset
 }
 
 // One glossary term the setup uses: an original short summary, cited by source key and page
@@ -88,7 +90,8 @@ export type OutsideHenchmen = {
 }
 
 // A stack is left out when no included box has it: a First Edition setup has Wounds and S.H.I.E.L.D.
-// Officers, a Villainous one Bindings, Madame HYDRA and New Recruits, and only some boxes have Sidekicks.
+// Officers, a Villainous one Bindings, Madame HYDRA and New Recruits, a mixed one all of them, and only
+// some boxes have Sidekicks.
 export type SetupStacks = {
   wounds?: number
   officers?: number
@@ -100,13 +103,16 @@ export type SetupStacks = {
 }
 
 // The two kinds of starting card each player gets: S.H.I.E.L.D. Agents and Troopers, or under the
-// Villainous ruleset HYDRA Operatives and Soldiers.
+// Villainous ruleset HYDRA Operatives and Soldiers. choices lists the rulesets whose starting decks the
+// players choose between, present only in a mixed setup that includes base games of both.
 export type PlayerDeck = {
   agents: number
   troopers: number
+  choices?: Ruleset[]
 }
 
-// The rules a box's cards are played under. A setup follows one ruleset.
+// The rules a box's cards are played under. A setup follows one ruleset, which its drawn cards decide when
+// the included boxes follow more than one.
 export type Ruleset = 'firstEdition' | 'villainous'
 
 // box names the box the rule comes from, and is present only when the setup includes more than one box.
@@ -122,6 +128,10 @@ export type Setup = {
   players: number
   // Left out by an API from before rulesets, which drew First Edition setups only.
   ruleset?: Ruleset
+  // Present, and true, only when the drawn cards come from more than one ruleset.
+  mixed?: boolean
+  // Why the setup follows its ruleset, present only when the included boxes follow more than one.
+  rulesReason?: RuleNote
   scheme: Component
   mastermind: Component
   villainGroups: Component[]
@@ -155,8 +165,8 @@ export type NoEligibleScheme = {
 
 export type SetupResponse = Setup | NoEligibleScheme
 
-// A box a setup can include. A base game supplies the setup rules; an expansion adds cards. Boxes of
-// different rulesets can't be combined yet. An API from before rulesets leaves ruleset out.
+// A box a setup can include. A base game supplies the setup rules; an expansion adds cards. An API from
+// before rulesets leaves ruleset out.
 export type Box = {
   id: string
   name: string

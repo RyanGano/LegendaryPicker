@@ -18,7 +18,8 @@ public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
 
 // The rules a box's cards are played under, separate from the box: First Edition for the core box and the
 // Heroic expansions, and Villainous for Legendary: Villains. Written camelCase in box files ("firstEdition").
-// A setup's boxes all follow one ruleset until combining them is supported (#73).
+// A setup can include boxes of both when a base game gives rules for mixing them (SetupRules.Mixing); the
+// cards it draws then decide which ruleset it follows (#73, #85).
 public enum Ruleset
 {
     FirstEdition,
@@ -220,7 +221,8 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
 
 // A base game's setup rules, for its box's Ruleset: base games of one ruleset can be combined in a setup,
 // which then follows the first one's rules. ExtraHeroes adds to Heroes at some player counts, as Villains
-// adds a 6th Ally with 5 players; it is part of the table, not a rule note.
+// adds a 6th Ally with 5 players; it is part of the table, not a rule note. Mixing is present on a base
+// game whose rules cover a setup that also includes boxes of another ruleset.
 public sealed record SetupRules(
     IReadOnlyList<PlayerCountSetup> PlayerCounts,
     Sourced<int> Heroes,
@@ -228,7 +230,8 @@ public sealed record SetupRules(
     StartingDeck StartingDeck,
     SoloSetup Solo,
     Rulings Rulings,
-    IReadOnlyList<PlayerCountValue>? ExtraHeroes = null);
+    IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
+    Mixing? Mixing = null);
 
 public sealed record PlayerCountSetup(int Players, int VillainGroups, int HenchmanGroups, int Bystanders, string Source);
 
@@ -258,3 +261,17 @@ public sealed record Rulings(
     string RequiredGroupDisplacesAlwaysLeads,
     // A Scheme's Setup line overrides the Solo setup.
     string SchemeOverridesSolo);
+
+// The sources of a base game's rules for mixing its ruleset with another in one setup. A draw with any card
+// of this base game's ruleset follows this base game's rules; a draw with none follows its own ruleset's
+// base game. A draw with cards of both rulesets also uses the mixed setup: shared pools, every stack, and a
+// choice of starting deck.
+public sealed record Mixing(
+    // Which base game's rules a draw that includes boxes of several rulesets follows.
+    string Rules,
+    // Schemes, Masterminds, Heroes and groups are each drawn from one pool across the rulesets.
+    string Pools,
+    // Every included stack is laid out, and all Bystanders are shuffled together.
+    string Stacks,
+    // The players choose which base game's starting deck everyone uses.
+    string StartingDeckChoice);

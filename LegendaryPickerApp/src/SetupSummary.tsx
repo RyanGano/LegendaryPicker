@@ -1,6 +1,6 @@
 import { useId, type ReactNode, type Ref } from 'react'
 import type { Component, Pile, RuleNote, Setup } from './api/setupApi.ts'
-import { rulesetTerms, type RulesetTerms } from './rulesetTerms.ts'
+import { cardTerms, setupTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { TermChips } from './TermChips.tsx'
 
 // What the players are playing, before how to lay it out: the setup's heading, the drawn Scheme
@@ -8,16 +8,21 @@ import { TermChips } from './TermChips.tsx'
 // the Hero Deck, and the Henchman Groups it draws outside the Villain Deck, follow the others of their
 // type, each with a line saying where its cards go. Under each name sit the chips for the glossary terms
 // that component uses. When the setup includes more than one box, the box each one comes from sits under
-// its name. Card types use the words of the setup's ruleset. On a wide screen this sits beside the
-// checklist.
+// its name. Card types use the words of the setup's ruleset, or in a mixed setup each card's own ruleset's.
+// When the included boxes follow more than one ruleset, a line under the heading says which rules the
+// setup follows and why. On a wide screen this sits beside the checklist.
 export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?: Ref<HTMLHeadingElement> }) {
   // An API from before them leaves these out; read that as none.
   const { outsideHeroes = [], outsideHenchmen = [] } = setup
   const glossary = new Map(setup.glossary.map((entry) => [entry.id, entry]))
-  const t = rulesetTerms(setup)
+  const t = setupTerms(setup)
   const chipsOf = (component: Component) => (
-    <TermChips terms={component.terms.flatMap((id) => glossary.get(id) ?? [])} hero={t.hero} />
+    <TermChips terms={component.terms.flatMap((id) => glossary.get(id) ?? [])} hero={cardTerms(setup, [component]).hero} />
   )
+  // A group of tiles is headed by its cards' own word when they share a ruleset.
+  const heroTerms = cardTerms(setup, [...setup.heroes, ...outsideHeroes.map(({ hero }) => hero)])
+  const villainTerms = cardTerms(setup, setup.villainGroups)
+  const henchmanTerms = cardTerms(setup, [...setup.henchmanGroups, ...outsideHenchmen.map(({ group }) => group)])
   const goesTo = destinations(t)
 
   return (
@@ -25,6 +30,20 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
       <h2 ref={headingRef} tabIndex={-1} className="result-heading">
         Setup for {setup.players} {setup.players === 1 ? 'player' : 'players'}
       </h2>
+      {setup.rulesReason && (
+        <p className="rules-reason">
+          {setup.rulesReason.text}{' '}
+          <cite>
+            {setup.rulesReason.link ? (
+              <a href={setup.rulesReason.link} target="_blank" rel="noreferrer">
+                {setup.rulesReason.citation}
+              </a>
+            ) : (
+              setup.rulesReason.citation
+            )}
+          </cite>
+        </p>
+      )}
       <section className="summary" aria-label="Drawn cards">
         <div className="headline-cards">
           <HeadlineCard type={t.scheme} kind="scheme" component={setup.scheme} chips={chipsOf(setup.scheme)} />
@@ -37,20 +56,20 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
           />
         </div>
         <TileGroup
-          title={[t.hero, t.heroes]}
+          title={[heroTerms.hero, heroTerms.heroes]}
           kind="hero"
           components={setup.heroes}
           outside={outsideHeroes.map(({ hero, to }) => ({ component: hero, destination: goesTo[to] }))}
           chipsOf={chipsOf}
         />
         <TileGroup
-          title={[t.villainGroup, t.villainGroups]}
+          title={[villainTerms.villainGroup, villainTerms.villainGroups]}
           kind="villain"
           components={setup.villainGroups}
           chipsOf={chipsOf}
         />
         <TileGroup
-          title={[t.henchmanGroup, t.henchmanGroups]}
+          title={[henchmanTerms.henchmanGroup, henchmanTerms.henchmanGroups]}
           kind="henchman"
           components={setup.henchmanGroups}
           outside={outsideHenchmen.map(({ group, to }) => ({ component: group, destination: goesTo[to] }))}

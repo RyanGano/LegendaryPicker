@@ -145,9 +145,11 @@ public class VillainsTests
     }
 
     [Fact]
-    public void The_rulebook_is_the_one_source_key()
+    public void The_rulebook_and_the_owner_decision_on_mixed_setups_are_the_source_keys()
     {
-        Assert.Equal([new SourceLink("VIL", Rulebook)], Villains.Sources);
+        Assert.Equal(
+            [new SourceLink("VIL", Rulebook), new SourceLink("D-mixed", "https://github.com/RyanGano/LegendaryPicker/issues/85")],
+            Villains.Sources);
         Assert.Equal("VIL p.22; C1; C2", Villains.CatalogSource);
     }
 
@@ -317,6 +319,9 @@ public class VillainsTests
             Assert.All(ComponentIds(setup), id => Assert.StartsWith("villains_", id));
             Assert.Equal(Ruleset.Villainous, setup.Ruleset);
             Assert.Equal(["villains"], setup.Boxes.Select(box => box.Id));
+            Assert.False(setup.Mixed);
+            Assert.Null(setup.RulesReason);
+            Assert.Null(setup.PlayerDeck.Choices);
         }
     }
 
@@ -334,28 +339,12 @@ public class VillainsTests
 
             Assert.All(ComponentIds(setup), id => Assert.StartsWith("core_", id));
             Assert.Equal(Ruleset.FirstEdition, setup.Ruleset);
+            Assert.False(setup.Mixed);
+            Assert.Null(setup.RulesReason);
             Assert.Null(setup.Stacks.Bindings);
             Assert.Null(setup.Stacks.MadameHydra);
             Assert.Null(setup.Stacks.NewRecruits);
         }
-    }
-
-    [Fact]
-    public void Villains_and_the_core_box_cannot_be_combined_yet()
-    {
-        Assert.Equal(
-            "Base games Marvel Legendary First Edition core box and Legendary: Villains follow different rulesets, which can't be combined yet.",
-            Generator.CheckBoxes(["core", "villains"]));
-    }
-
-    // The expansions so far are Heroic sets. The Villains rulebook mixes Heroic sets into a Villainous game
-    // under combined rules (VIL p.21), which a later change adds, so until then they are refused.
-    [Fact]
-    public void A_Heroic_expansion_cannot_join_a_Villains_setup_yet()
-    {
-        Assert.Equal(
-            "Dark City and Fantastic Four can't be combined with Legendary: Villains yet: they follow different rulesets.",
-            Generator.CheckBoxes(["villains", "fantastic-four", "dark-city"]));
     }
 
     private static SetupResult Draw(int players, int plot, int commander) =>
