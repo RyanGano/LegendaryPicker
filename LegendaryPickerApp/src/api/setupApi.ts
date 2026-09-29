@@ -4,11 +4,13 @@
 // The types mirror LegendaryPickerService/Setup/SetupResponse.cs, serialized camelCase.
 
 // A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the
-// glossary terms it uses (for a Hero, its team and classes too), in glossary order.
+// glossary terms it uses (for a Hero, its team and classes too), in glossary order. box names the box
+// it comes from, and is present only when the setup includes more than one box.
 export type Component = {
   id: string
   name: string
   terms: string[]
+  box?: string
 }
 
 // One glossary term the setup uses: an original short summary, cited by source key and page

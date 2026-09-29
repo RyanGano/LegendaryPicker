@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import type { CardKind, Component, Move, Pile, Setup } from './api/setupApi.ts'
 import { TermKind } from './TermChips.tsx'
 
@@ -23,8 +23,8 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       </p>
 
       <Section title="Scheme and Mastermind" kind="mastermind">
-        <Item label={setup.scheme.name} detail="Scheme" />
-        <Item label={setup.mastermind.name} detail="Mastermind" />
+        <Item label={names([setup.scheme])} detail="Scheme" />
+        <Item label={names([setup.mastermind])} detail="Mastermind" />
       </Section>
 
       <Section title="Villain Deck" kind="villain">
@@ -64,7 +64,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       {outsideHeroes.length > 0 && (
         <Section title="Heroes outside the Hero Deck" kind="hero">
           {outsideHeroes.map((outside) => (
-            <Item key={outside.hero.id} label={outside.hero.name} detail={INTO[outside.to]} count={outside.cards} />
+            <Item key={outside.hero.id} label={names([outside.hero])} detail={INTO[outside.to]} count={outside.cards} />
           ))}
         </Section>
       )}
@@ -158,7 +158,7 @@ function Section({
 // One line to lay out, with a box to tick once it is on the table. Where the line is drawn cards,
 // their names are the label and the detail says what they are. The whole line names the tick box,
 // so the spaces sit between the spans: a name computation may trim the text inside each one.
-function Item({ label, detail, count }: { label: string; detail?: string; count?: number }) {
+function Item({ label, detail, count }: { label: ReactNode; detail?: string; count?: number }) {
   return (
     <li className="row">
       <label>
@@ -258,9 +258,22 @@ function tickProgress(article: HTMLElement) {
   return { ticked: boxes.filter((box) => box.checked).length, total: boxes.length }
 }
 
-// The drawn groups or Heroes by name; the checklist never lists the cards inside them.
+// The drawn cards by name; the checklist never lists the cards inside a group or Hero. When the setup
+// includes more than one box, each name stands on its own line with its box under it, so the player
+// knows which box to pull it from.
 function names(components: Component[]) {
-  return components.map((component) => component.name).join(', ')
+  if (!components.some((component) => component.box)) {
+    return components.map((component) => component.name).join(', ')
+  }
+  // The space between names keeps the tick box's name readable: "HYDRA Dark City Skrulls Dark City".
+  return components.map((component, index) => (
+    <Fragment key={component.id}>
+      {index > 0 && ' '}
+      <span className="card-name">
+        {component.name} <span className="source-box">{component.box}</span>
+      </span>
+    </Fragment>
+  ))
 }
 
 function plural(count: number, singular: string, pluralForm = `${singular}s`) {

@@ -52,7 +52,8 @@ public abstract record SetupResponse
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
     // A term links to the URL its box lists for its source key; the loader guarantees one per key.
-    // When the setup includes more than one box, each entry names the box that defines the term.
+    // When the setup includes more than one box, each entry names the box that defines the term, and
+    // each component the box it comes from.
     private sealed class Glossary(BoxCatalog catalog, bool nameBoxes)
     {
         private readonly Dictionary<string, ((TermKind Kind, int Index) Order, GlossaryEntry Entry)> _terms = catalog.Boxes
@@ -66,7 +67,11 @@ public abstract record SetupResponse
                         nameBoxes ? x.Box.Name : null)),
                 StringComparer.Ordinal);
 
-        public Component Component(string id, string name, IEnumerable<string> terms) => new(id, name, Ordered(terms).ToList());
+        // A catalog id starts with its box's id, which the loader checks.
+        private readonly Dictionary<string, string> _boxNames = catalog.Boxes.ToDictionary(box => box.Id, box => box.Name, StringComparer.Ordinal);
+
+        public Component Component(string id, string name, IEnumerable<string> terms) =>
+            new(id, name, Ordered(terms).ToList(), nameBoxes ? _boxNames[id.Split('_')[0]] : null);
 
         public IReadOnlyList<GlossaryEntry> Entries(IEnumerable<string> terms) =>
             Ordered(terms).Select(term => _terms[term].Entry).ToList();
@@ -105,8 +110,13 @@ public sealed record NoEligibleSchemeBody(int Players, string Message) : SetupRe
 }
 
 // A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the
-// glossary terms it uses (for a Hero, its team and classes too).
-public sealed record Component(string Id, string Name, IReadOnlyList<string> Terms);
+// glossary terms it uses (for a Hero, its team and classes too). Box names the box it comes from once
+// a setup includes more than one box, as on RuleNote, so the player can tell which card to pull.
+public sealed record Component(
+    string Id,
+    string Name,
+    IReadOnlyList<string> Terms,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Box = null);
 
 // A Hero drawn outside the Hero Deck, the pile its cards go to ("villainDeck", "besideScheme" or
 // "setAside"), and how many cards that is.

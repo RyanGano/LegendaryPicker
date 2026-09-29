@@ -6,7 +6,8 @@
     "name": "Test Heist",
     "terms": [
       "core_term_scheme-twist"
-    ]
+    ],
+    "box": "Fixture Expansion"
   },
   "mastermind": {
     "id": "fixture_mastermind_test-tyrant",
@@ -16,7 +17,8 @@
       "core_term_fight",
       "core_term_master-strike",
       "core_term_mastermind-tactic"
-    ]
+    ],
+    "box": "Fixture Expansion"
   },
   "villainGroups": [
     {
@@ -25,7 +27,8 @@
       "terms": [
         "core_term_escape",
         "core_term_fight"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "fixture_villain_test-cult",
@@ -33,7 +36,8 @@
       "terms": [
         "core_term_fight",
         "fixture_term_overdrive"
-      ]
+      ],
+      "box": "Fixture Expansion"
     }
   ],
   "henchmanGroups": [
@@ -42,7 +46,8 @@
       "name": "Savage Land Mutates",
       "terms": [
         "core_term_fight"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     }
   ],
   "heroes": [
@@ -55,7 +60,8 @@
         "core_term_instinct",
         "core_term_ranged",
         "core_term_strength"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_captain-america",
@@ -66,7 +72,8 @@
         "core_term_instinct",
         "core_term_strength",
         "core_term_tech"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_deadpool",
@@ -75,7 +82,8 @@
         "core_term_covert",
         "core_term_instinct",
         "core_term_tech"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_storm",
@@ -85,7 +93,8 @@
         "core_term_covert",
         "core_term_ranged",
         "core_term_rescue-a-bystander"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     },
     {
       "id": "core_hero_hulk",
@@ -94,7 +103,8 @@
         "core_term_avengers",
         "core_term_instinct",
         "core_term_strength"
-      ]
+      ],
+      "box": "Marvel Legendary First Edition core box"
     }
   ],
   "villainDeck": {
