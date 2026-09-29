@@ -1,19 +1,24 @@
 import { useId, type ReactNode, type Ref } from 'react'
-import type { Component, RuleNote, Setup } from './api/setupApi.ts'
-import { rulesetTerms } from './rulesetTerms.ts'
+import type { Component, Pile, RuleNote, Setup } from './api/setupApi.ts'
+import { rulesetTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { TermChips } from './TermChips.tsx'
 
 // What the players are playing, before how to lay it out: the setup's heading, the drawn Scheme
-// and Mastermind as cards, then every Hero and group as its own tile. Under each name sit the chips
-// for the glossary terms that component uses. When the setup includes more than one box, the box
-// each one comes from sits under its name. Card types use the words of the setup's ruleset. On a wide
-// screen this sits beside the checklist.
+// and Mastermind as cards, then every Hero and group as its own tile. The Heroes a Scheme draws outside
+// the Hero Deck, and the Henchman Groups it draws outside the Villain Deck, follow the others of their
+// type, each with a line saying where its cards go. Under each name sit the chips for the glossary terms
+// that component uses. When the setup includes more than one box, the box each one comes from sits under
+// its name. Card types use the words of the setup's ruleset. On a wide screen this sits beside the
+// checklist.
 export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?: Ref<HTMLHeadingElement> }) {
+  // An API from before them leaves these out; read that as none.
+  const { outsideHeroes = [], outsideHenchmen = [] } = setup
   const glossary = new Map(setup.glossary.map((entry) => [entry.id, entry]))
   const t = rulesetTerms(setup)
   const chipsOf = (component: Component) => (
     <TermChips terms={component.terms.flatMap((id) => glossary.get(id) ?? [])} hero={t.hero} />
   )
+  const goesTo = destinations(t)
 
   return (
     <>
@@ -31,7 +36,13 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
             tags={alwaysLeadsNotes(setup.notes)}
           />
         </div>
-        <TileGroup title={[t.hero, t.heroes]} kind="hero" components={setup.heroes} chipsOf={chipsOf} />
+        <TileGroup
+          title={[t.hero, t.heroes]}
+          kind="hero"
+          components={setup.heroes}
+          outside={outsideHeroes.map(({ hero, to }) => ({ component: hero, destination: goesTo[to] }))}
+          chipsOf={chipsOf}
+        />
         <TileGroup
           title={[t.villainGroup, t.villainGroups]}
           kind="villain"
@@ -42,6 +53,7 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
           title={[t.henchmanGroup, t.henchmanGroups]}
           kind="henchman"
           components={setup.henchmanGroups}
+          outside={outsideHenchmen.map(({ group, to }) => ({ component: group, destination: goesTo[to] }))}
           chipsOf={chipsOf}
         />
       </section>
@@ -85,30 +97,51 @@ function TileGroup({
   title: [singular, plural],
   kind,
   components,
+  outside = [],
   chipsOf,
 }: {
   title: [string, string]
   kind: string
   components: Component[]
+  outside?: { component: Component; destination: string }[]
   chipsOf: (component: Component) => ReactNode
 }) {
   const id = useId()
+  const tiles = [...components.map((component) => ({ component, destination: undefined })), ...outside]
   return (
     <section aria-labelledby={id}>
       <h3 id={id} className="tile-heading">
-        {components.length === 1 ? singular : plural}
+        {tiles.length === 1 ? singular : plural}
       </h3>
       <ul className={`tiles ${kind}`}>
-        {components.map((component) => (
+        {tiles.map(({ component, destination }) => (
           <li key={component.id} className="tile">
             <span className="tile-name">{component.name}</span>
             {component.box && <span className="source-box">{component.box}</span>}
             {chipsOf(component)}
+            {destination && <span className="destination">{destination}</span>}
           </li>
         ))}
       </ul>
     </section>
   )
+}
+
+// Where the cards of a Hero or Henchman Group drawn outside its usual deck go, in the ruleset's words.
+// Heroes go to the Villain Deck, beside the Scheme or a stack set aside, and Henchmen to the Hero Deck;
+// never elsewhere.
+function destinations(t: RulesetTerms): Record<Pile, string> {
+  return {
+    villainDeck: `Goes to ${t.villainDeck}`,
+    heroDeck: `Goes to ${t.heroDeck}`,
+    besideScheme: `Goes beside the ${t.scheme}`,
+    startingDecks: 'Goes to starting decks',
+    setAside: 'Set aside',
+    bystanders: 'Goes to Bystander stack',
+    wounds: 'Goes to Wound stack',
+    officers: 'Goes to Officer stack',
+    sidekicks: 'Goes to Sidekick stack',
+  }
 }
 
 // The API's notes about the Mastermind's Always Leads group (the group it brings, the Scheme

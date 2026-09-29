@@ -586,6 +586,14 @@ button:disabled {
   overflow-wrap: anywhere;
 }
 
+/* Where the cards of a Hero or Henchman Group drawn outside its usual deck go: plain bold text, not a
+   pill, so it doesn't read as another term chip, and not muted, so it doesn't read as the box line. */
+.destination {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
 /* The checklist: one column of rows, the label wrapping and the count right-aligned beside it. */
 .setup {
   display: flex;
