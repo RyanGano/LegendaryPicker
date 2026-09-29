@@ -92,6 +92,52 @@ describe('SetupChecklist', () => {
     expect(tileNames('Henchman Group')).toEqual(['Doombot Legion'])
   })
 
+  it('shows a Hero drawn outside the Hero Deck after the others, tagged with where its cards go', () => {
+    renderChecklist(twoBoxesTestSong)
+
+    expect(tileNames('Heroes')).toEqual(['Black Widow', 'Captain America', 'Cyclops', 'Deadpool', 'Emma Frost', 'Gambit'])
+    expect(tile('Heroes', 'Gambit')).toHaveTextContent(new RegExp(`^Gambit${CORE}X-MenCovertInstinctRangedGoes to Villain Deck$`))
+    expect(chips(tile('Heroes', 'Gambit'))).toEqual(['X-Men', 'Covert', 'Instinct', 'Ranged'])
+    expect(within(section('Heroes')).getAllByText('Goes to Villain Deck')).toHaveLength(1)
+  })
+
+  it("names where an outside card goes in the setup's ruleset's words", () => {
+    renderChecklist({ ...twoBoxesTestSong, ruleset: 'villainous' })
+
+    expect(within(tile('Allies', 'Gambit')).getByText('Goes to Adversary Deck')).toBeInTheDocument()
+  })
+
+  it('tags Heroes set aside outside the Hero Deck', () => {
+    renderChecklist(twoBoxesTestVault)
+
+    expect(tileNames('Heroes').slice(-2)).toEqual(['Gambit', 'Rogue'])
+    expect(within(tile('Heroes', 'Gambit')).getByText('Set aside')).toBeInTheDocument()
+    expect(within(tile('Heroes', 'Rogue')).getByText('Set aside')).toBeInTheDocument()
+  })
+
+  it('shows a Henchman Group drawn outside the Villain Deck after the others, tagged with where its cards go', () => {
+    renderChecklist(twoBoxesDailyBugle)
+
+    expect(tileNames('Henchman Groups')).toEqual(['Hand Ninjas', 'Savage Land Mutates'])
+    expect(tile('Henchman Groups', 'Savage Land Mutates')).toHaveTextContent(
+      new RegExp(`^Savage Land Mutates${CORE}FightGoes to Hero Deck$`),
+    )
+    expect(tile('Henchman Groups', 'Hand Ninjas')).toHaveTextContent(new RegExp(`^Hand Ninjas${CORE}Fight$`))
+  })
+
+  it('tags no tile when the Scheme draws nothing outside the decks', () => {
+    renderChecklist(killbots)
+
+    expect(section('Drawn cards').querySelector('.tile .destination')).toBeNull()
+  })
+
+  it('renders a setup from an API that predates cards drawn outside the decks with only the drawn tiles', () => {
+    // This body was captured before the API listed Heroes outside the Hero Deck.
+    renderChecklist(twoPlayerCosmicCube)
+
+    expect(tileNames('Heroes')).toHaveLength(5)
+  })
+
   it("tags the Mastermind card with the API's Always Leads note, word for word", () => {
     renderChecklist(legacyVirusThreePlayers)
 
