@@ -1,0 +1,343 @@
+{
+  "kind": "setup",
+  "players": 2,
+  "ruleset": "firstEdition",
+  "scheme": {
+    "id": "paint-the-town-red_scheme_invade-the-daily-bugle-news-hq",
+    "name": "Invade the Daily Bugle News HQ",
+    "terms": [
+      "core_term_scheme-twist"
+    ],
+    "box": "Paint the Town Red"
+  },
+  "mastermind": {
+    "id": "core_mastermind_red-skull",
+    "name": "Red Skull",
+    "terms": [
+      "core_term_always-leads",
+      "core_term_fight",
+      "core_term_master-strike",
+      "core_term_mastermind-tactic"
+    ],
+    "box": "Marvel Legendary First Edition core box"
+  },
+  "villainGroups": [
+    {
+      "id": "core_villain_hydra",
+      "name": "HYDRA",
+      "terms": [
+        "core_term_escape",
+        "core_term_fight"
+      ],
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "paint-the-town-red_villain_maximum-carnage",
+      "name": "Maximum Carnage",
+      "terms": [
+        "core_term_ambush",
+        "core_term_escape",
+        "core_term_fight",
+        "paint-the-town-red_term_feast"
+      ],
+      "box": "Paint the Town Red"
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "id": "core_henchman_hand-ninjas",
+      "name": "Hand Ninjas",
+      "terms": [
+        "core_term_fight"
+      ],
+      "box": "Marvel Legendary First Edition core box"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "paint-the-town-red_hero_black-cat",
+      "name": "Black Cat",
+      "terms": [
+        "core_term_spider-friends",
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_rescue-a-bystander",
+        "paint-the-town-red_term_wall-crawl"
+      ],
+      "box": "Paint the Town Red"
+    },
+    {
+      "id": "core_hero_nick-fury",
+      "name": "Nick Fury",
+      "terms": [
+        "core_term_shield",
+        "core_term_covert",
+        "core_term_strength",
+        "core_term_tech"
+      ],
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_hero_emma-frost",
+      "name": "Emma Frost",
+      "terms": [
+        "core_term_x-men",
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_ranged",
+        "core_term_strength"
+      ],
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "paint-the-town-red_hero_scarlet-spider",
+      "name": "Scarlet Spider",
+      "terms": [
+        "core_term_spider-friends",
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_strength",
+        "paint-the-town-red_term_wall-crawl"
+      ],
+      "box": "Paint the Town Red"
+    },
+    {
+      "id": "core_hero_hawkeye",
+      "name": "Hawkeye",
+      "terms": [
+        "core_term_avengers",
+        "core_term_instinct",
+        "core_term_tech",
+        "core_term_rescue-a-bystander"
+      ],
+      "box": "Marvel Legendary First Edition core box"
+    }
+  ],
+  "villainDeck": {
+    "twists": 8,
+    "masterStrikes": 5,
+    "villainCards": 16,
+    "henchmanCards": 10,
+    "bystanders": 2,
+    "outsideHeroCards": 0,
+    "total": 41
+  },
+  "heroDeck": {
+    "heroCards": 70,
+    "total": 76
+  },
+  "twistsBesideScheme": 0,
+  "stacks": {
+    "wounds": 30,
+    "officers": 30,
+    "bystanders": 28
+  },
+  "playerDeck": {
+    "agents": 8,
+    "troopers": 4
+  },
+  "moves": [],
+  "outsideHeroes": [],
+  "outsideHenchmen": [
+    {
+      "group": {
+        "id": "core_henchman_savage-land-mutates",
+        "name": "Savage Land Mutates",
+        "terms": [
+          "core_term_fight"
+        ],
+        "box": "Marvel Legendary First Edition core box"
+      },
+      "to": "heroDeck",
+      "cards": 6
+    }
+  ],
+  "steps": [],
+  "notes": [
+    {
+      "text": "Scheme draws 1 extra Henchman Group outside the Villain Deck and puts 6 of its Henchmen into the Hero Deck",
+      "citation": "Card",
+      "link": null,
+      "box": "Paint the Town Red"
+    },
+    {
+      "text": "Red Skull always leads HYDRA",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    }
+  ],
+  "glossary": [
+    {
+      "id": "core_term_avengers",
+      "name": "Avengers",
+      "kind": "team",
+      "summary": "A Hero team. In the core box its members are Black Widow, Captain America, Hawkeye, Hulk, Iron Man and Thor.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_shield",
+      "name": "S.H.I.E.L.D.",
+      "kind": "team",
+      "summary": "A Hero team. Nick Fury is its core box Hero, and the Agents, Troopers and Officers that every game uses belong to it too.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_spider-friends",
+      "name": "Spider Friends",
+      "kind": "team",
+      "summary": "A Hero team. Spider-Man is its only member in the core box.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_x-men",
+      "name": "X-Men",
+      "kind": "team",
+      "summary": "A Hero team. In the core box its members are Cyclops, Emma Frost, Gambit, Rogue, Storm and Wolverine.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_covert",
+      "name": "Covert",
+      "kind": "class",
+      "summary": "A Hero class of fighters who prefer trickery and careful plans to open force.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_instinct",
+      "name": "Instinct",
+      "kind": "class",
+      "summary": "A Hero class of fighters who trust their gut and their senses in close combat.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_ranged",
+      "name": "Ranged",
+      "kind": "class",
+      "summary": "A Hero class of fighters who deal damage from a distance, by any kind of projected power.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_strength",
+      "name": "Strength",
+      "kind": "class",
+      "summary": "A Hero class of fighters whose power is might, whether of body or of will and leadership.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_tech",
+      "name": "Tech",
+      "kind": "class",
+      "summary": "A Hero class of fighters whose power comes from gear and science rather than the body.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_always-leads",
+      "name": "Always Leads",
+      "kind": "keyword",
+      "summary": "Names the one Villain or Henchman Group this Mastermind brings to every game. That group takes one of the setup's group slots; random draws fill the rest.",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_ambush",
+      "name": "Ambush",
+      "kind": "keyword",
+      "summary": "Triggers as this Villain arrives in the city from the Villain Deck. When its arrival shoves another Villain out of the city, resolve that escape before this effect.",
+      "citation": "R p.9",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_escape",
+      "name": "Escape",
+      "kind": "keyword",
+      "summary": "Triggers when this Villain is shoved past the final city space and escapes, in addition to the standard escape penalties.",
+      "citation": "R p.9",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_fight",
+      "name": "Fight",
+      "kind": "keyword",
+      "summary": "Triggers when a player spends enough Attack to defeat this card.",
+      "citation": "R p.13",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_master-strike",
+      "name": "Master Strike",
+      "kind": "keyword",
+      "summary": "Drawing a Master Strike from the Villain Deck makes the Mastermind act in person: resolve the Master Strike line on its card. The Strike card is then KO'd.",
+      "citation": "R p.10",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_mastermind-tactic",
+      "name": "Mastermind Tactic",
+      "kind": "keyword",
+      "summary": "Beating the Mastermind's Attack wins one of its four face-down Tactics at random: keep it for Victory Points and do its Fight effect. Take all four to win.",
+      "citation": "R p.14",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_rescue-a-bystander",
+      "name": "Rescue a Bystander",
+      "kind": "keyword",
+      "summary": "Add a Bystander from the shared Bystander stack to your Victory Pile, where it scores at game end. This never frees a Bystander a Villain holds; defeat that Villain for it.",
+      "citation": "R p.15",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_scheme-twist",
+      "name": "Scheme Twist",
+      "kind": "keyword",
+      "summary": "Drawing a Twist from the Villain Deck advances the evil plan: resolve the Twist line on the Scheme card. The Twist is then KO'd, unless the Scheme sends it elsewhere.",
+      "citation": "R p.10",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "paint-the-town-red_term_wall-crawl",
+      "name": "Wall-Crawl",
+      "kind": "keyword",
+      "summary": "Recruiting a Hero with Wall-Crawl gives you a choice: send it to your discard pile as usual, or set it on your deck to draw it next.",
+      "citation": "PTTR p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf",
+      "box": "Paint the Town Red"
+    },
+    {
+      "id": "paint-the-town-red_term_feast",
+      "name": "Feast",
+      "kind": "keyword",
+      "summary": "Defeating an enemy that has Feast KOs the top card of a player's deck. Some of these enemies add an extra effect that depends on which card got KO'd.",
+      "citation": "PTTR p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf",
+      "box": "Paint the Town Red"
+    }
+  ]
+}

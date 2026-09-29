@@ -105,6 +105,28 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
+    public async Task A_Henchman_Group_outside_the_Villain_Deck_is_listed_with_its_pile_and_cards()
+    {
+        // Invade the Daily Bugle News HQ with Carnage: Doombot Legion goes in the Villain Deck, and Hand Ninjas is
+        // the first Henchman Group left.
+        var client = Client(new ScriptedRandom(8, 4));
+
+        var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,paint-the-town-red");
+
+        var expected = JsonNode.Parse("""
+            [{
+              "group": { "id": "core_henchman_hand-ninjas", "name": "Hand Ninjas", "terms": ["core_term_fight"],
+                "box": "Marvel Legendary First Edition core box" },
+              "to": "heroDeck",
+              "cards": 6
+            }]
+            """);
+        Assert.Equal("Invade the Daily Bugle News HQ", (string?)body!["scheme"]!["name"]);
+        Assert.True(JsonNode.DeepEquals(expected, body["outsideHenchmen"]), body["outsideHenchmen"]?.ToJsonString());
+        Assert.True(JsonNode.DeepEquals(JsonNode.Parse("""{ "heroCards": 70, "total": 76 }"""), body["heroDeck"]), body["heroDeck"]?.ToJsonString());
+    }
+
+    [Fact]
     public async Task Setup_steps_are_listed_by_label()
     {
         // Test Vigil with Test Watcher: the Scheme's two steps, then the Mastermind's.
@@ -484,6 +506,7 @@ public sealed class SetupEndpointTests : IDisposable
           "playerDeck": { "agents": 8, "troopers": 4 },
           "moves": [],
           "outsideHeroes": [],
+          "outsideHenchmen": [],
           "steps": [],
           "notes": [
             {

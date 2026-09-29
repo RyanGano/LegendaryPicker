@@ -42,6 +42,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\HeroRules\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Schemes draw Henchman Groups outside the Villain Deck, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\OutsideHenchmen\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\OutsideHenchmen\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Scheme and Mastermind print setup steps that change no counts, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\SetupSteps\*.json" CopyToOutputDirectory="PreserveNewest" />

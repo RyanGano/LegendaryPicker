@@ -25,6 +25,7 @@ public sealed record SetupResult(
     PlayerDeck PlayerDeck,
     IReadOnlyList<MovedCards> Moves,
     IReadOnlyList<OutsideHero> OutsideHeroes,
+    IReadOnlyList<OutsideHenchmanGroup> OutsideHenchmen,
     IReadOnlyList<string> Steps,
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<Box> Boxes) : GenerationResult;
@@ -45,9 +46,15 @@ public sealed record VillainDeck(
     public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MovedIn - MovedOut;
 }
 
-public sealed record HeroDeck(int HeroCards, [property: JsonIgnore] int MovedOut, [property: JsonIgnore] int MovedIn = 0)
+// OutsideHenchmanCards counts the Henchmen of the Henchman Groups drawn outside the Villain Deck that go into
+// the Hero Deck. The response lists each of those groups under the setup's outside Henchmen, so it is left out.
+public sealed record HeroDeck(
+    int HeroCards,
+    [property: JsonIgnore] int MovedOut,
+    [property: JsonIgnore] int MovedIn = 0,
+    [property: JsonIgnore] int OutsideHenchmanCards = 0)
 {
-    public int Total => HeroCards + MovedIn - MovedOut;
+    public int Total => HeroCards + MovedIn + OutsideHenchmanCards - MovedOut;
 }
 
 // Cards a Scheme moves during setup, from the pile their kind comes from. Count is what the
@@ -56,6 +63,10 @@ public sealed record MovedCards(CardKind Card, Pile From, Pile To, int Count, in
 
 // A Hero a Scheme draws outside the Hero Deck, and the pile all its cards go to.
 public sealed record OutsideHero(Hero Hero, Pile To, int Cards);
+
+// A Henchman Group a Scheme draws outside the Villain Deck, and the pile Cards of its cards go to. The rest
+// of the group stays out of the game.
+public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Cards);
 
 // Each stack holds the cards every included box adds to it, or the size the Scheme sets, less what
 // the setup moves out. Sidekicks is null, and left out of the response, when no included box has any.

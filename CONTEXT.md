@@ -58,6 +58,11 @@ A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to
 
 _Avoid_: Extra Hero, which is the setup effect that adds a Hero to the Hero Deck.
 
+**Henchman Group outside the Villain Deck**:
+A Henchman Group a Scheme draws in addition to the Villain Deck's, from the included groups the setup doesn't already use, which sends some of its cards to the Hero Deck; the rest of the group stays out of the game. A Scheme is dropped before the draw when no such group is left.
+
+_Avoid_: Extra Henchman Group, which is the setup effect that adds a Henchman Group to the Villain Deck.
+
 **Always Leads group**:
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability.
 
@@ -96,10 +101,10 @@ A game setup that satisfies all applicable official setup rules; legality does n
 A complete legal setup selected without player-selected card preferences; only official setup rules constrain the selection.
 
 **Table draw**:
-How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind from those that can complete it, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then draw the Heroes, then any Heroes outside the Hero Deck. Each draw is equally likely among the remaining options that still leave a legal setup.
+How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind from those that can complete it, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then any Henchman Groups outside the Villain Deck, then draw the Heroes, then any Heroes outside the Hero Deck. Each draw is equally likely among the remaining options that still leave a legal setup.
 
 **Setup checklist**:
-What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals; the Twists beside the Scheme; any Heroes outside the Hero Deck and where their cards go; the Wound, Bystander and S.H.I.E.L.D. Officer stacks (and the Sidekick stack when an included box has Sidekicks), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
+What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists beside the Scheme; any Heroes outside the Hero Deck and where their cards go; the Wound, Bystander and S.H.I.E.L.D. Officer stacks (and the Sidekick stack when an included box has Sidekicks), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
 
 **Rule note**:
 One short line naming a rule that changed a setup, with its citation (for example "R p.6") and a link to the source when one is published. Never card or rulebook text.

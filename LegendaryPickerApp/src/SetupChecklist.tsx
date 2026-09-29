@@ -7,9 +7,18 @@ import { TermKind } from './TermChips.tsx'
 // state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
 export function SetupChecklist({ setup }: { setup: Setup }) {
-  // An API from before card moves, Heroes outside the Hero Deck or setup steps leaves them out; the site
-  // can deploy first, so read that as none.
-  const { villainDeck, heroDeck, stacks, playerDeck, moves = [], outsideHeroes = [], steps = [] } = setup
+  // An API from before card moves, Heroes outside the Hero Deck, Henchman Groups outside the Villain Deck or
+  // setup steps leaves them out; the site can deploy first, so read that as none.
+  const {
+    villainDeck,
+    heroDeck,
+    stacks,
+    playerDeck,
+    moves = [],
+    outsideHeroes = [],
+    outsideHenchmen = [],
+    steps = [],
+  } = setup
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
@@ -57,6 +66,17 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       <Section title="Hero Deck" kind="hero">
         <Item label={names(setup.heroes)} detail={plural(setup.heroes.length, 'Hero', 'Heroes')} count={heroDeck.heroCards} />
         <MovedIn moves={moves} to="heroDeck" />
+        {outsideHenchmen.map(
+          (outside) =>
+            outside.to === 'heroDeck' && (
+              <Item
+                key={outside.group.id}
+                label={names([outside.group])}
+                detail="Henchmen of an extra Henchman Group"
+                count={outside.cards}
+              />
+            ),
+        )}
         <MovedOut moves={moves} from="heroDeck" />
         <Total count={heroDeck.total} />
       </Section>

@@ -19,6 +19,8 @@ import twoBoxesTestSong from './test/fixtures/twoBoxesTestSong.json'
 import twoBoxesTestVault from './test/fixtures/twoBoxesTestVault.json'
 // Drawn from the core box and the service's test-only setup-steps fixture expansion.
 import twoBoxesTestVigil from './test/fixtures/twoBoxesTestVigil.json'
+// Drawn from the core box and Paint the Town Red: Invade the Daily Bugle News HQ.
+import twoBoxesDailyBugle from './test/fixtures/twoBoxesDailyBugle.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -311,6 +313,20 @@ describe('SetupChecklist', () => {
     // The Hero is laid out, and ticked, in its own section; the Villain Deck line only adds up the total.
     expect(within(section('Heroes outside the Hero Deck')).getAllByRole('checkbox')).toHaveLength(1)
     expect(within(section('Villain Deck')).getAllByRole('checkbox')).toHaveLength(5)
+  })
+
+  it('lays out Henchmen of an extra Henchman Group in the Hero Deck and counts them in its total', () => {
+    renderChecklist(twoBoxesDailyBugle)
+
+    const ptr = 'Paint the Town Red'
+    expect(rows('Hero Deck')).toEqual([
+      `Black Cat ${ptr} Nick Fury ${CORE} Emma Frost ${CORE} Scarlet Spider ${ptr} Hawkeye ${CORE} 5 Heroes 70`,
+      `Savage Land Mutates ${CORE} Henchmen of an extra Henchman Group 6`,
+      'Total 76',
+    ])
+    expect(within(section('Hero Deck')).getAllByRole('checkbox')).toHaveLength(2)
+    // The extra group stays out of the Villain Deck.
+    expect(rows('Villain Deck')).toContain(`Hand Ninjas ${CORE} 1 Henchman Group 10`)
   })
 
   it('lists Heroes set aside outside the Hero Deck without adding them to a deck', () => {
