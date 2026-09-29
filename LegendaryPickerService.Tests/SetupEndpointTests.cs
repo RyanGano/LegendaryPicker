@@ -72,6 +72,23 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
+    public async Task A_Villains_setup_names_its_ruleset_and_lists_only_the_Villainous_stacks()
+    {
+        // Graduation at Xavier's X-Academy with Dr. Strange: 8 Bystanders beside the Plot, 2 in the Adversary Deck.
+        var body = await Client(new ScriptedRandom(2, 0)).GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=villains");
+
+        Assert.Equal("villainous", (string?)body!["ruleset"]);
+        Assert.Equal("Graduation at Xavier's X-Academy", (string?)body["scheme"]!["name"]);
+        Assert.True(
+            JsonNode.DeepEquals(JsonNode.Parse("""{ "bystanders": 31, "bindings": 30, "madameHydra": 12, "newRecruits": 15 }"""), body["stacks"]),
+            body["stacks"]?.ToJsonString());
+        Assert.True(JsonNode.DeepEquals(JsonNode.Parse("""{ "agents": 8, "troopers": 4 }"""), body["playerDeck"]), body["playerDeck"]?.ToJsonString());
+        Assert.Equal(
+            ["Plot moves 8 Bystanders beside it", "Dr. Strange always leads Defenders"],
+            body["notes"]!.AsArray().Select(note => (string?)note!["text"]));
+    }
+
+    [Fact]
     public async Task A_move_names_its_card_and_piles_as_they_are_written_in_box_files()
     {
         // Solo Secret Invasion with Loki.
@@ -169,14 +186,14 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
-    public async Task Boxes_lists_each_box_and_whether_it_is_a_base_game()
+    public async Task Boxes_lists_each_box_whether_it_is_a_base_game_and_its_ruleset()
     {
         var body = await Client(catalog: BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory)).GetStringAsync("/api/boxes");
 
         var expected = JsonNode.Parse("""
             [
-              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true },
-              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false }
+              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition" },
+              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition" }
             ]
             """);
         Assert.True(JsonNode.DeepEquals(expected, JsonNode.Parse(body)), body);

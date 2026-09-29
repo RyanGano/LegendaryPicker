@@ -33,8 +33,9 @@ const noEligibleScheme: NoEligibleScheme = {
   message: 'No Scheme can be set up legally for 3 players with the included boxes.',
 }
 
-const core: Box = { id: 'core', name: 'Marvel Legendary First Edition core box', baseGame: true }
-const fixture: Box = { id: 'fixture', name: 'Fixture Expansion', baseGame: false }
+const core: Box = { id: 'core', name: 'Marvel Legendary First Edition core box', baseGame: true, ruleset: 'firstEdition' }
+const fixture: Box = { id: 'fixture', name: 'Fixture Expansion', baseGame: false, ruleset: 'firstEdition' }
+const villains: Box = { id: 'villains', name: 'Legendary: Villains', baseGame: true, ruleset: 'villainous' }
 
 type SetupAnswer = (signal: AbortSignal) => Promise<Response>
 
@@ -96,6 +97,10 @@ describe('App', () => {
     expect(within(footer).getByRole('link', { name: 'First Edition rulebook' })).toHaveAttribute(
       'href',
       'https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf',
+    )
+    expect(within(footer).getByRole('link', { name: 'Villains rulebook' })).toHaveAttribute(
+      'href',
+      'https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf',
     )
     expect(within(footer).getByRole('link', { name: 'Source on GitHub' })).toHaveAttribute(
       'href',
@@ -269,7 +274,7 @@ describe('App', () => {
     const user = userEvent.setup()
     renderApp()
     const intro =
-      'Get a random legal setup and a checklist for laying it out, following the First Edition rules.'
+      'Get a random legal setup and a checklist for laying it out, following the official rules.'
 
     expect(screen.getByText(intro)).toBeInTheDocument()
 
@@ -472,6 +477,51 @@ describe('App', () => {
     expect(await screen.findByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
     expect(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' })).not.toBeChecked()
     expect(screen.getByText('Pick a base game to draw a setup.')).toBeInTheDocument()
+  })
+
+  it('moves expansions remembered before base games were picks into the box list once, with the core box', async () => {
+    localStorage.setItem('legendaryPicker.expansions', JSON.stringify(['fixture']))
+    boxesAnswer = () => json([core, fixture])
+    renderApp()
+
+    expect(await screen.findByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' })).toBeChecked()
+    expect(localStorage.getItem('legendaryPicker.boxes')).toBe('["core","fixture"]')
+    expect(localStorage.getItem('legendaryPicker.expansions')).toBeNull()
+  })
+
+  it('keeps the boxes already remembered and drops the old expansions key', async () => {
+    localStorage.setItem('legendaryPicker.boxes', JSON.stringify(['villains']))
+    localStorage.setItem('legendaryPicker.expansions', JSON.stringify(['fixture']))
+    boxesAnswer = () => json([core, villains, fixture])
+    renderApp()
+
+    expect(await screen.findByRole('checkbox', { name: 'Legendary: Villains Base game' })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: 'Fixture Expansion' })).not.toBeChecked()
+    expect(localStorage.getItem('legendaryPicker.expansions')).toBeNull()
+  })
+
+  it('disables Generate with a hint while boxes of different rulesets are ticked', async () => {
+    boxesAnswer = () => json([core, villains, fixture])
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '2' }))
+    const hint = 'The ticked boxes follow different rules, First Edition and Villainous, which can\'t be combined yet.'
+
+    await user.click(await screen.findByRole('checkbox', { name: 'Legendary: Villains Base game' }))
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
+    expect(screen.getByText(hint)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' }))
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
+    expect(screen.queryByText(hint)).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('checkbox', { name: 'Fixture Expansion' }))
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
+    expect(screen.getByText(hint)).toBeInTheDocument()
   })
 
   it('draws nothing when a slow box list shows the remembered boxes have no base game', async () => {

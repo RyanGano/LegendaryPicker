@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "moves",
   "name": "Moves Fixture",
+  "ruleset": "firstEdition",
   "catalogSource": "R p.1",
   "sources": [
     { "key": "R", "url": "https://example.test/moves-rules.pdf" }

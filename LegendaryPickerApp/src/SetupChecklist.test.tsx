@@ -21,6 +21,8 @@ import twoBoxesTestVault from './test/fixtures/twoBoxesTestVault.json'
 import twoBoxesTestVigil from './test/fixtures/twoBoxesTestVigil.json'
 // Drawn from the core box and Paint the Town Red: Invade the Daily Bugle News HQ.
 import twoBoxesDailyBugle from './test/fixtures/twoBoxesDailyBugle.json'
+// A live draw from Legendary: Villains alone, on the Villainous ruleset: Graduation at Xavier's X-Academy with Odin.
+import twoPlayerVillainsGraduation from './test/fixtures/twoPlayerVillainsGraduation.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -203,6 +205,47 @@ describe('SetupChecklist', () => {
       'Why this setup',
       'Terms in this setup',
     ])
+  })
+
+  it('names a Villainous setup in the Villains rulebook\'s words', () => {
+    renderChecklist(twoPlayerVillainsGraduation)
+
+    expect(screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      "Graduation at Xavier's X-Academy",
+      'Odin',
+      'Allies',
+      'Adversary Groups',
+      'Backup Adversary group',
+      'Plot and Commander',
+      'Adversary Deck',
+      'Beside the Plot',
+      'Ally Deck',
+      'Shared stacks',
+      'Starting deck per player · 2 players',
+      'Why this setup',
+      'Terms in this setup',
+    ])
+    expect(within(card("Graduation at Xavier's X-Academy")).getByText('Plot')).toBeInTheDocument()
+    expect(within(card('Odin')).getByText('Commander')).toBeInTheDocument()
+    expect(rows('Adversary Deck')).toEqual([
+      'Plot Twists 8',
+      'Command Strikes 5',
+      'Marvel Knights, X-Men First Class 2 Adversary Groups 16',
+      'Asgardian Warriors 1 Backup Adversary group 10',
+      'Bystanders 2',
+      'Total 41',
+    ])
+    expect(rows('Beside the Plot')).toEqual(['Bystanders from the Bystander stack 8'])
+    expect(rows('Ally Deck')).toEqual(['Ultron, Enchantress, Electro, Mystique, Magneto 5 Allies 70', 'Total 70'])
+    expect(rows('Starting deck per player · 2 players')).toEqual(['HYDRA Operatives 8', 'HYDRA Soldiers 4'])
+    expect(within(section('Terms in this setup')).getAllByText('Ally class')).toHaveLength(5)
+    expect(within(section('Terms in this setup')).queryByText('Hero class')).not.toBeInTheDocument()
+  })
+
+  it('lays out the Villainous stacks and no Wounds or S.H.I.E.L.D. Officers', () => {
+    renderChecklist(twoPlayerVillainsGraduation)
+
+    expect(rows('Shared stacks')).toEqual(['Bindings 30', 'Madame HYDRA 12', 'New Recruits 15', 'Bystanders 31'])
   })
 
   it('shows the Solo Secret Invasion Heroes, the Hero cards moved and the D2 note', () => {

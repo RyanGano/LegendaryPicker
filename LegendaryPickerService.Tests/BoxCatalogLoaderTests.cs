@@ -69,30 +69,82 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected($"base game core has a setup section but no components.{stack}");
     }
 
+    // A Villainous base game lays out Bindings, Madame HYDRA and New Recruits instead of Wounds and Officers.
+    [Theory]
+    [InlineData("bystanders")]
+    [InlineData("bindings")]
+    [InlineData("madameHydra")]
+    [InlineData("newRecruits")]
+    public void Rejects_a_Villainous_base_game_that_does_not_list_a_Villainous_stack(string stack)
+    {
+        WriteCoreBox(core =>
+        {
+            AsVillainous(core);
+            core["components"]!.AsObject().Remove(stack);
+        });
+
+        AssertRejected($"base game core has a setup section but no components.{stack}");
+    }
+
+    [Fact]
+    public void Accepts_a_Villainous_base_game_without_Wounds_or_Officers()
+    {
+        WriteCoreBox(AsVillainous);
+
+        Assert.Equal(Ruleset.Villainous, Assert.Single(BoxCatalog.Load(_directory).Boxes).Ruleset);
+    }
+
+    [Theory]
+    [InlineData("  ", "setup.solo has a play rule with no label")]
+    [InlineData("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen",
+        "setup.solo has a 16-word play rule label; labels are at most 15 words")]
+    public void Rejects_a_Solo_play_rule_label_that_is_empty_or_too_long(string label, string expected)
+    {
+        WriteCoreBox(core => core["setup"]!["solo"]!["playRules"] = new JsonArray(new JsonObject { ["label"] = label, ["source"] = "R p.20" }));
+
+        AssertRejected(expected);
+    }
+
+    [Fact]
+    public void Rejects_a_Solo_play_rule_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => core["setup"]!["solo"]!["playRules"]![0]!["source"] = "X9 p.3");
+
+        AssertRejected("setup.solo.playRules cites source X9, which is not in this box's sources");
+    }
+
+    [Fact]
+    public void Rejects_a_base_game_extra_Hero_count_outside_1_to_5()
+    {
+        WriteCoreBox(core => core["setup"]!["extraHeroes"] = new JsonArray(
+            new JsonObject { ["players"] = new JsonArray(6), ["value"] = 1, ["source"] = "R p.4" }));
+
+        AssertRejected("setup.extraHeroes names player count 6; player counts are 1 to 5");
+    }
+
     [Fact]
     public void Rejects_another_schema_version_before_reading_its_fields()
     {
         WriteCoreBox(core =>
         {
-            core["schemaVersion"] = 5;
-            core["fieldOnlyVersion5Has"] = true;
+            core["schemaVersion"] = 6;
+            core["fieldOnlyVersion6Has"] = true;
         });
 
-        AssertRejected("schemaVersion 5; this service reads version 4");
+        AssertRejected("schemaVersion 6; this service reads version 5");
     }
 
     [Theory]
     [InlineData(null)]
     [InlineData("secondEdition")]
-    public void Rejects_a_base_game_without_a_known_ruleset(string? ruleset)
+    public void Rejects_a_box_without_a_known_ruleset(string? ruleset)
     {
         WriteCoreBox(core =>
         {
-            var setup = core["setup"]!.AsObject();
-            setup.Remove("ruleset");
+            core.Remove("ruleset");
             if (ruleset is not null)
             {
-                setup["ruleset"] = ruleset;
+                core["ruleset"] = ruleset;
             }
         });
 
@@ -732,6 +784,19 @@ public sealed class BoxCatalogLoaderTests : IDisposable
 
     private void WriteBox(string fileName, JsonObject box, bool byteOrderMark = false) =>
         File.WriteAllText(Path.Combine(_directory, fileName), box.ToJsonString(), new UTF8Encoding(byteOrderMark));
+
+    // Turns a copy of the core box into a Villainous base game, with the Villainous stacks in place of
+    // Wounds and Officers.
+    private static void AsVillainous(JsonObject core)
+    {
+        core["ruleset"] = "villainous";
+        var components = core["components"]!.AsObject();
+        components.Remove("wounds");
+        components.Remove("officers");
+        components["bindings"] = new JsonObject { ["value"] = 30, ["source"] = "R p.22" };
+        components["madameHydra"] = new JsonObject { ["value"] = 12, ["source"] = "R p.22" };
+        components["newRecruits"] = new JsonObject { ["value"] = 15, ["source"] = "R p.22" };
+    }
 
     private static JsonObject Scheme(JsonObject box, string id) => Entry(box, "schemes", id);
 

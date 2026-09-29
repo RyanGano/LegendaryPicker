@@ -13,12 +13,12 @@ namespace LegendaryPickerService.Catalog;
 // kebab-case segment. References name a full id, so a box can reference another box's groups.
 public sealed partial class BoxCatalog
 {
-    public const int SchemaVersion = 4;
+    public const int SchemaVersion = 5;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
 
-    // Setup step labels are one short instruction in our own words, never card text.
+    // Setup step and Solo play rule labels are one short instruction in our own words, never card or rulebook text.
     public const int MaxStepLabelWords = 15;
 
     // The player counts a setup can be drawn for; 1 is Solo.
@@ -138,12 +138,10 @@ public sealed partial class BoxCatalog
             ValidateHeroRules(path, box);
 
             // A setup can include a base game and no expansion, so a base game's stacks can't be left to
-            // an expansion; a stack it forgot to list would otherwise come out as 0.
-            if (box.Setup is not null)
+            // an expansion; a stack it forgot to list would otherwise come out as 0 or be left out.
+            if (box.IsBaseGame)
             {
-                (string Name, Sourced<int>? Count)[] stacks =
-                    [("bystanders", box.Components.Bystanders), ("wounds", box.Components.Wounds), ("officers", box.Components.Officers)];
-                foreach (var (name, _) in stacks.Where(stack => stack.Count is null))
+                foreach (var name in BaseGameStacks(box.Ruleset).Where(name => Stacks(box.Components).Single(stack => stack.Name == name).Count is null))
                 {
                     throw new InvalidDataException($"{path}: base game {box.Id} has a setup section but no components.{name}.");
                 }
@@ -267,29 +265,40 @@ public sealed partial class BoxCatalog
     // A setup step is a line on the checklist, so its label must say something and stay short enough to
     // be one instruction rather than copied card text. A card listing one step twice would show it twice,
     // with two identical rule notes.
+    // Solo play rules are rule notes, held to the same limits.
     private static void ValidateSteps(string path, Box box)
     {
         foreach (var (owner, steps) in StepLists(box))
         {
-            var labels = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var step in steps)
+            CheckLabels(path, owner, "setup step", steps.Select(step => step.Label));
+        }
+
+        if (box.Setup is { } setup)
+        {
+            CheckLabels(path, "setup.solo", "play rule", setup.Solo.PlayRules.Select(rule => rule.Label));
+        }
+    }
+
+    private static void CheckLabels(string path, string owner, string what, IEnumerable<string> labels)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var label in labels)
+        {
+            if (string.IsNullOrWhiteSpace(label))
             {
-                if (string.IsNullOrWhiteSpace(step.Label))
-                {
-                    throw new InvalidDataException($"{path}: {owner} has a setup step with no label.");
-                }
+                throw new InvalidDataException($"{path}: {owner} has a {what} with no label.");
+            }
 
-                var words = WordCount(step.Label);
-                if (words > MaxStepLabelWords)
-                {
-                    throw new InvalidDataException(
-                        $"{path}: {owner} has a {words}-word setup step label; labels are at most {MaxStepLabelWords} words.");
-                }
+            var words = WordCount(label);
+            if (words > MaxStepLabelWords)
+            {
+                throw new InvalidDataException(
+                    $"{path}: {owner} has a {words}-word {what} label; labels are at most {MaxStepLabelWords} words.");
+            }
 
-                if (!labels.Add(step.Label.Trim()))
-                {
-                    throw new InvalidDataException($"{path}: {owner} lists the setup step \"{step.Label}\" twice.");
-                }
+            if (!seen.Add(label.Trim()))
+            {
+                throw new InvalidDataException($"{path}: {owner} lists the {what} \"{label}\" twice.");
             }
         }
     }
@@ -601,9 +610,7 @@ public sealed partial class BoxCatalog
         yield return ("components.villainGroupCards", components.VillainGroupCards.Source);
         yield return ("components.henchmanGroupCards", components.HenchmanGroupCards.Source);
         yield return ("components.schemeTwists", components.SchemeTwists.Source);
-        (string Name, Sourced<int>? Count)[] stacks =
-            [("bystanders", components.Bystanders), ("wounds", components.Wounds), ("officers", components.Officers), ("sidekicks", components.Sidekicks)];
-        foreach (var (name, count) in stacks)
+        foreach (var (name, count) in Stacks(components))
         {
             if (count is not null) yield return ($"components.{name}", count.Source);
         }
@@ -622,7 +629,7 @@ public sealed partial class BoxCatalog
             yield return ("setup.solo.bystanders", setup.Solo.Bystanders.Source);
             yield return ("setup.solo.masterStrikes", setup.Solo.MasterStrikes.Source);
             yield return ("setup.solo.ignoresAlwaysLeads", setup.Solo.IgnoresAlwaysLeads.Source);
-            yield return ("setup.solo.twistKosHeroCostingAtMost", setup.Solo.TwistKosHeroCostingAtMost.Source);
+            foreach (var rule in setup.Solo.PlayRules) yield return ("setup.solo.playRules", rule.Source);
             yield return ("setup.rulings.alwaysLeadsFillsSlot", setup.Rulings.AlwaysLeadsFillsSlot);
             yield return ("setup.rulings.requiredGroupDisplacesAlwaysLeads", setup.Rulings.RequiredGroupDisplacesAlwaysLeads);
             yield return ("setup.rulings.schemeOverridesSolo", setup.Rulings.SchemeOverridesSolo);
@@ -639,6 +646,7 @@ public sealed partial class BoxCatalog
             if (effect.AllowedPlayerCounts is { } allowed) yield return ($"{scheme.Id} setup.allowedPlayerCounts", allowed.Source);
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
+            if (effect.BindingsPerPlayer is { } bindings) yield return ($"{scheme.Id} setup.bindingsPerPlayer", bindings.Source);
             foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
             foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);
@@ -664,10 +672,32 @@ public sealed partial class BoxCatalog
             .Where(list => list.Steps is not null)
             .Select(list => (list.Id, list.Steps!));
 
-    // Every list of per-player-count values in a box: the Masterminds' setup effects, then each Scheme's,
-    // with its moves, Heroes outside the Hero Deck and Henchmen outside the Villain Deck last.
+    // The shared stacks a box can add cards to, by their name in box files.
+    private static (string Name, Sourced<int>? Count)[] Stacks(BoxComponents components) =>
+    [
+        ("bystanders", components.Bystanders), ("wounds", components.Wounds), ("officers", components.Officers),
+        ("sidekicks", components.Sidekicks), ("bindings", components.Bindings), ("madameHydra", components.MadameHydra),
+        ("newRecruits", components.NewRecruits),
+    ];
+
+    // The stacks a base game of each ruleset lays out (R p.22; VIL p.5).
+    private static string[] BaseGameStacks(Ruleset ruleset) => ruleset switch
+    {
+        Ruleset.FirstEdition => ["bystanders", "wounds", "officers"],
+        Ruleset.Villainous => ["bystanders", "bindings", "madameHydra", "newRecruits"],
+        _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
+    };
+
+    // Every list of per-player-count values in a box: the base game's extra Heroes, the Masterminds' setup
+    // effects, then each Scheme's, with its moves, Heroes outside the Hero Deck and Henchmen outside the
+    // Villain Deck last.
     private static IEnumerable<(string Rule, IReadOnlyList<PlayerCountValue> Values)> PlayerCountLists(Box box)
     {
+        if (box.Setup?.ExtraHeroes is { } extraHeroes)
+        {
+            yield return ("setup.extraHeroes", extraHeroes);
+        }
+
         foreach (var mastermind in box.Masterminds)
         {
             if (mastermind.Setup is { } effects)

@@ -13,9 +13,9 @@ public class CoreBoxCatalogTests
     public void Core_box_is_the_First_Edition_core_box()
     {
         Assert.Equal("Marvel Legendary First Edition core box", Core.Name);
-        Assert.Equal(4, Core.SchemaVersion);
+        Assert.Equal(5, Core.SchemaVersion);
         Assert.True(Core.IsBaseGame);
-        Assert.Equal(Ruleset.FirstEdition, Core.Setup!.Ruleset);
+        Assert.Equal(Ruleset.FirstEdition, Core.Ruleset);
     }
 
     [Fact]
@@ -280,7 +280,7 @@ public class CoreBoxCatalogTests
         Assert.Equal(1, solo.MasterStrikes.Value);
         Assert.True(solo.IgnoresAlwaysLeads.Value);
         Assert.Equal("R p.20", solo.IgnoresAlwaysLeads.Source);
-        Assert.Equal(6, solo.TwistKosHeroCostingAtMost.Value);
+        Assert.Equal([new PlayRule("After each Twist, KO a Hero costing 6 or less from the HQ", "R p.20")], solo.PlayRules);
     }
 
     [Fact]
@@ -436,7 +436,7 @@ public class CoreBoxCatalogTests
         yield return setup.Solo.Bystanders.Source;
         yield return setup.Solo.MasterStrikes.Source;
         yield return setup.Solo.IgnoresAlwaysLeads.Source;
-        yield return setup.Solo.TwistKosHeroCostingAtMost.Source;
+        foreach (var rule in setup.Solo.PlayRules) yield return rule.Source;
         yield return setup.Rulings.AlwaysLeadsFillsSlot;
         yield return setup.Rulings.RequiredGroupDisplacesAlwaysLeads;
         yield return setup.Rulings.SchemeOverridesSolo;

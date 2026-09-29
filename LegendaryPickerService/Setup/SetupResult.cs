@@ -69,14 +69,19 @@ public sealed record OutsideHero(Hero Hero, Pile To, int Cards);
 public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Cards);
 
 // Each stack holds the cards every included box adds to it, or the size the Scheme sets, less what
-// the setup moves out. Sidekicks is null, and left out of the response, when no included box has any.
+// the setup moves out. A stack no included box has is null and left out of the response: a First
+// Edition setup has no Bindings, Madame HYDRA or New Recruits, a Villainous one no Wounds or Officers,
+// and only some boxes have Sidekicks. Every base game has Bystanders.
 public sealed record SetupStacks(
-    int Wounds,
-    int Officers,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Wounds,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Officers,
     int Bystanders,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Sidekicks = null);
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Sidekicks = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Bindings = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? MadameHydra = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? NewRecruits = null);
 
-// Each player's starting deck.
+// Each player's starting deck: S.H.I.E.L.D. Agents and Troopers, or under Villainous HYDRA Operatives and Soldiers.
 public sealed record PlayerDeck(int Agents, int Troopers);
 
 // One rule that changed the result, with its source key (for example "R p.6") and,

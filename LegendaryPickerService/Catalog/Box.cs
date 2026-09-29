@@ -16,8 +16,9 @@ public sealed record Sourced<T>(T Value, string Source);
 // applies at every player count the Scheme allows; player count 1 is Solo.
 public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
 
-// The rules a base game is played under, separate from the box: First Edition's core box, and
-// Legendary: Villains, which plays by its own. Written camelCase in box files ("firstEdition").
+// The rules a box's cards are played under, separate from the box: First Edition for the core box and the
+// Heroic expansions, and Villainous for Legendary: Villains. Written camelCase in box files ("firstEdition").
+// A setup's boxes all follow one ruleset until combining them is supported (#73).
 public enum Ruleset
 {
     FirstEdition,
@@ -28,6 +29,7 @@ public sealed record Box(
     int SchemaVersion,
     string Id,
     string Name,
+    Ruleset Ruleset,
     string CatalogSource,
     IReadOnlyList<SourceLink> Sources,
     BoxComponents Components,
@@ -49,7 +51,9 @@ public sealed record SourceLink(string Key, string Url);
 
 // The cards a box puts in the shared stacks, which a setup sums across its included boxes. A stack
 // the box adds nothing to is left out. A box's special cards of a stack, such as Special Bystanders
-// shuffled in with the Bystanders, count toward that stack.
+// shuffled in with the Bystanders, count toward that stack. Bindings, Madame HYDRA and New Recruits are
+// the Villainous stacks; the Villains rulebook says they are not the same cards as Wounds and Officers,
+// so each is a stack of its own.
 public sealed record BoxComponents(
     Sourced<int> HeroCards,
     Sourced<int> VillainGroupCards,
@@ -58,7 +62,10 @@ public sealed record BoxComponents(
     Sourced<int>? Bystanders = null,
     Sourced<int>? Wounds = null,
     Sourced<int>? Officers = null,
-    Sourced<int>? Sidekicks = null);
+    Sourced<int>? Sidekicks = null,
+    Sourced<int>? Bindings = null,
+    Sourced<int>? MadameHydra = null,
+    Sourced<int>? NewRecruits = null);
 
 // Team, Classes and Terms name glossary term ids. Team is null for an unaffiliated Hero. HeroName is the
 // Hero Name several Heroes can share, such as two versions of one character; it is left out when the
@@ -109,7 +116,8 @@ public sealed record SetupStep(string Label, string Source);
 
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
 // Heroes, HenchmanCards and VillainDeckBystanders set a count, replacing the table or Solo value.
-// HenchmanCards is how many cards of each Henchman Group go in the Villain Deck.
+// HenchmanCards is how many cards of each Henchman Group go in the Villain Deck. WoundsPerPlayer and
+// BindingsPerPlayer set the size of those stacks.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -129,7 +137,8 @@ public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null,
     IReadOnlyList<SetupStep>? Steps = null,
-    IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null)
+    IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null,
+    Sourced<int>? BindingsPerPlayer = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
@@ -209,19 +218,22 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
     };
 }
 
-// A base game's setup rules. Ruleset names the rules they belong to: base games of one ruleset can be
-// combined in a setup, which then follows the first one's rules.
+// A base game's setup rules, for its box's Ruleset: base games of one ruleset can be combined in a setup,
+// which then follows the first one's rules. ExtraHeroes adds to Heroes at some player counts, as Villains
+// adds a 6th Ally with 5 players; it is part of the table, not a rule note.
 public sealed record SetupRules(
-    Ruleset Ruleset,
     IReadOnlyList<PlayerCountSetup> PlayerCounts,
     Sourced<int> Heroes,
     Sourced<int> MasterStrikes,
     StartingDeck StartingDeck,
     SoloSetup Solo,
-    Rulings Rulings);
+    Rulings Rulings,
+    IReadOnlyList<PlayerCountValue>? ExtraHeroes = null);
 
 public sealed record PlayerCountSetup(int Players, int VillainGroups, int HenchmanGroups, int Bystanders, string Source);
 
+// Each player's two kinds of starting card: S.H.I.E.L.D. Agents and Troopers under First Edition, HYDRA
+// Operatives and Soldiers under Villainous. The ruleset names them.
 public sealed record StartingDeck(Sourced<int> Agents, Sourced<int> Troopers);
 
 public sealed record SoloSetup(
@@ -232,7 +244,11 @@ public sealed record SoloSetup(
     Sourced<int> Bystanders,
     Sourced<int> MasterStrikes,
     Sourced<bool> IgnoresAlwaysLeads,
-    Sourced<int> TwistKosHeroCostingAtMost);
+    IReadOnlyList<PlayRule> PlayRules);
+
+// A rule Solo play adds that changes no setup count, such as KOing a Hero after each Twist. The setup
+// reminds the player of it in a rule note. Label is a short instruction in our own words, never rulebook text.
+public sealed record PlayRule(string Label, string Source);
 
 // The sources of how rules combine, rather than of a single value.
 public sealed record Rulings(

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBoxes, getSetup, ping, type Box, type Setup } from './api/setupApi.ts'
+import { rulesetTerms } from './rulesetTerms.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
 import { SetupSkeleton } from './SetupSkeleton.tsx'
 import { SetupSummary } from './SetupSummary.tsx'
@@ -15,12 +16,17 @@ const WAKE_UP_NOTICE_MS = 3_000
 const PLAYER_COUNT_KEY = 'legendaryPicker.playerCount'
 // Every box the player included, base games and expansions alike.
 const BOXES_KEY = 'legendaryPicker.boxes'
+// The expansions a returning player included before base games became picks (#71). The core box was
+// always in the setup then, so it joins them when they move to BOXES_KEY.
+const OLD_EXPANSIONS_KEY = 'legendaryPicker.expansions'
 // What a first visit includes: the First Edition core box, one base game.
 const DEFAULT_BOXES = ['core']
 
 // Source R in LegendaryPickerService/Data/Boxes/core.json: the archived First Edition rulebook.
 const RULEBOOK_URL =
   'https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf'
+// Source VIL in LegendaryPickerService/Data/Boxes/villains.json: the Legendary: Villains rulebook.
+const VILLAINS_RULEBOOK_URL = 'https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf'
 const REPO_URL = 'https://github.com/RyanGano/LegendaryPicker'
 
 // Storage is a convenience: private browsing or blocked site data must not break the page.
@@ -43,10 +49,30 @@ function savePlayerCount(players: number) {
 
 function loadBoxes(): string[] {
   try {
-    const stored: unknown = JSON.parse(localStorage.getItem(BOXES_KEY) ?? 'null')
-    return Array.isArray(stored) ? stored.filter((id): id is string => typeof id === 'string') : DEFAULT_BOXES
+    migrateExpansions()
+    return readIds(BOXES_KEY) ?? DEFAULT_BOXES
   } catch {
     return DEFAULT_BOXES
+  }
+}
+
+// Moves a returning player's expansions from the old key to the new one once, with the core box they
+// always had, then drops the old key. Picks already under the new key win.
+function migrateExpansions() {
+  const expansions = readIds(OLD_EXPANSIONS_KEY)
+  if (expansions && localStorage.getItem(BOXES_KEY) === null) {
+    saveBoxes([...DEFAULT_BOXES, ...expansions.filter((id) => !DEFAULT_BOXES.includes(id))])
+  }
+  localStorage.removeItem(OLD_EXPANSIONS_KEY)
+}
+
+// A stored list of box ids, or null when there is none or it isn't a list.
+function readIds(key: string): string[] | null {
+  try {
+    const stored: unknown = JSON.parse(localStorage.getItem(key) ?? 'null')
+    return Array.isArray(stored) ? stored.filter((id): id is string => typeof id === 'string') : null
+  } catch {
+    return null
   }
 }
 
@@ -77,8 +103,10 @@ function announcement(status: Status, showWakeUpNotice: boolean) {
       return `Drawing a setup for ${playerCount(status.players)}…${
         showWakeUpNotice ? ' The server may be waking up. This can take up to 30 seconds.' : ''
       }`
-    case 'result':
-      return `Setup for ${playerCount(status.setup.players)} ready. Scheme: ${status.setup.scheme.name}. Mastermind: ${status.setup.mastermind.name}.`
+    case 'result': {
+      const terms = rulesetTerms(status.setup)
+      return `Setup for ${playerCount(status.setup.players)} ready. ${terms.scheme}: ${status.setup.scheme.name}. ${terms.mastermind}: ${status.setup.mastermind.name}.`
+    }
     case 'noEligibleScheme':
       return `${status.message} Pick another player count.`
     case 'error':
@@ -147,6 +175,9 @@ function App() {
   // A setup takes its rules from a base game, so it needs at least one. Until the box list loads
   // there is nothing to check, and the API decides.
   const needsBaseGame = boxes.length > 0 && !boxes.some((box) => box.baseGame && isIncluded(box))
+  // Boxes of different rulesets, such as the core box and Villains, can't be combined yet.
+  const mixesRulesets = new Set(boxes.filter(isIncluded).map((box) => box.ruleset ?? 'firstEdition')).size > 1
+  const blocked = needsBaseGame || mixesRulesets
   // Base games first, then expansions, each in the API's order.
   const listedBoxes = [...boxes.filter((box) => box.baseGame), ...boxes.filter((box) => !box.baseGame)]
 
@@ -157,8 +188,10 @@ function App() {
     try {
       const available = await boxesRequest.current
       const drawn = available.filter(isIncluded)
-      // A draw started before the box list loaded may turn out to have no base game; the picker now says so.
-      if (available.length > 0 && !drawn.some((box) => box.baseGame)) {
+      // A draw started before the box list loaded may turn out to have no base game, or boxes that can't be
+      // combined; the picker now says so.
+      const rulesets = new Set(drawn.map((box) => box.ruleset ?? 'firstEdition'))
+      if (available.length > 0 && (!drawn.some((box) => box.baseGame) || rulesets.size > 1)) {
         setStatus({ kind: 'idle' })
         return
       }
@@ -181,7 +214,7 @@ function App() {
           <h1 className="wordmark">
             Legendary <span>Picker</span>
           </h1>
-          <p className="tagline">A random legal setup for Marvel Legendary First Edition and its expansions.</p>
+          <p className="tagline">A random legal setup for Marvel Legendary First Edition, Villains and their expansions.</p>
         </div>
       </header>
 
@@ -222,19 +255,24 @@ function App() {
                   ))}
                 </div>
                 {needsBaseGame && <p className="box-hint">Pick a base game to draw a setup.</p>}
+                {!needsBaseGame && mixesRulesets && (
+                  <p className="box-hint">
+                    The ticked boxes follow different rules, First Edition and Villainous, which can't be combined yet.
+                  </p>
+                )}
               </>
             )}
             <button
               type="button"
               className="primary"
-              disabled={players === null || loading || needsBaseGame}
+              disabled={players === null || loading || blocked}
               onClick={generate}
             >
               Generate
             </button>
             {status.kind === 'idle' && (
               <p className="intro">
-                Get a random legal setup and a checklist for laying it out, following the First Edition rules.
+                Get a random legal setup and a checklist for laying it out, following the official rules.
               </p>
             )}
           </section>
@@ -291,6 +329,10 @@ function App() {
           Setup rules follow the{' '}
           <a href={RULEBOOK_URL} target="_blank" rel="noreferrer">
             First Edition rulebook
+          </a>
+          , the{' '}
+          <a href={VILLAINS_RULEBOOK_URL} target="_blank" rel="noreferrer">
+            Villains rulebook
           </a>{' '}
           and official clarifications.
         </p>

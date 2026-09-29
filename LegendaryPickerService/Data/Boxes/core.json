@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "core",
   "name": "Marvel Legendary First Edition core box",
+  "ruleset": "firstEdition",
   "catalogSource": "R p.22; C1; C2",
   "sources": [
     { "key": "R", "url": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf" },
@@ -178,7 +179,6 @@
     { "id": "core_term_scheme-twist", "name": "Scheme Twist", "kind": "keyword", "summary": "Drawing a Twist from the Villain Deck advances the evil plan: resolve the Twist line on the Scheme card. The Twist is then KO'd, unless the Scheme sends it elsewhere.", "source": "R", "page": 10 }
   ],
   "setup": {
-    "ruleset": "firstEdition",
     "playerCounts": [
       { "players": 2, "villainGroups": 2, "henchmanGroups": 1, "bystanders": 2, "source": "R pp.4-6" },
       { "players": 3, "villainGroups": 3, "henchmanGroups": 1, "bystanders": 8, "source": "R pp.4-6" },
@@ -199,7 +199,9 @@
       "bystanders": { "value": 1, "source": "R p.20" },
       "masterStrikes": { "value": 1, "source": "R p.20" },
       "ignoresAlwaysLeads": { "value": true, "source": "R p.20" },
-      "twistKosHeroCostingAtMost": { "value": 6, "source": "R p.20" }
+      "playRules": [
+        { "label": "After each Twist, KO a Hero costing 6 or less from the HQ", "source": "R p.20" }
+      ]
     },
     "rulings": {
       "alwaysLeadsFillsSlot": "R p.6",

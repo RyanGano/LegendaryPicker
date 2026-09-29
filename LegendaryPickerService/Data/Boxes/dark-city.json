@@ -1,7 +1,8 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "dark-city",
   "name": "Dark City",
+  "ruleset": "firstEdition",
   "catalogSource": "DC p.2; C1; C2",
   "sources": [
     { "key": "DC", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf" }

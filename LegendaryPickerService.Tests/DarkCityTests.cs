@@ -43,7 +43,7 @@ public class DarkCityTests
     {
         Assert.Equal(["core", "dark-city"], Catalog.Boxes.Select(box => box.Id).Take(2));
         Assert.Equal(DarkCityName, DarkCity.Name);
-        Assert.Equal(4, DarkCity.SchemaVersion);
+        Assert.Equal(5, DarkCity.SchemaVersion);
         Assert.False(DarkCity.IsBaseGame);
     }
 

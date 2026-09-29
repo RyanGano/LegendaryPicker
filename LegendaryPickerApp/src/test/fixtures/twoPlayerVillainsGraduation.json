@@ -1,0 +1,296 @@
+{
+  "kind": "setup",
+  "players": 2,
+  "ruleset": "villainous",
+  "scheme": {
+    "id": "villains_scheme_graduation-at-xaviers-x-academy",
+    "name": "Graduation at Xavier's X-Academy",
+    "terms": [
+      "villains_term_plot-twist"
+    ]
+  },
+  "mastermind": {
+    "id": "villains_mastermind_odin",
+    "name": "Odin",
+    "terms": [
+      "villains_term_always-leads",
+      "villains_term_command-strike",
+      "villains_term_commander-tactic",
+      "villains_term_fight"
+    ]
+  },
+  "villainGroups": [
+    {
+      "id": "villains_villain_marvel-knights",
+      "name": "Marvel Knights",
+      "terms": [
+        "villains_term_fight",
+        "villains_term_overrun"
+      ]
+    },
+    {
+      "id": "villains_villain_x-men-first-class",
+      "name": "X-Men First Class",
+      "terms": [
+        "villains_term_ambush",
+        "villains_term_fight",
+        "villains_term_overrun",
+        "villains_term_x-treme-attack"
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "id": "villains_henchman_asgardian-warriors",
+      "name": "Asgardian Warriors",
+      "terms": [
+        "villains_term_fight"
+      ]
+    }
+  ],
+  "heroes": [
+    {
+      "id": "villains_hero_ultron",
+      "name": "Ultron",
+      "terms": [
+        "villains_term_tech",
+        "villains_term_dodge",
+        "villains_term_kidnap-a-bystander"
+      ]
+    },
+    {
+      "id": "villains_hero_enchantress",
+      "name": "Enchantress",
+      "terms": [
+        "villains_term_foes-of-asgard",
+        "villains_term_covert",
+        "villains_term_ranged"
+      ]
+    },
+    {
+      "id": "villains_hero_electro",
+      "name": "Electro",
+      "terms": [
+        "villains_term_sinister-six",
+        "villains_term_instinct",
+        "villains_term_ranged",
+        "villains_term_dodge"
+      ]
+    },
+    {
+      "id": "villains_hero_mystique",
+      "name": "Mystique",
+      "terms": [
+        "villains_term_brotherhood",
+        "villains_term_covert",
+        "villains_term_instinct",
+        "villains_term_tech",
+        "villains_term_dodge"
+      ]
+    },
+    {
+      "id": "villains_hero_magneto",
+      "name": "Magneto",
+      "terms": [
+        "villains_term_brotherhood",
+        "villains_term_ranged",
+        "villains_term_strength",
+        "villains_term_dodge"
+      ]
+    }
+  ],
+  "villainDeck": {
+    "twists": 8,
+    "masterStrikes": 5,
+    "villainCards": 16,
+    "henchmanCards": 10,
+    "bystanders": 2,
+    "outsideHeroCards": 0,
+    "total": 41
+  },
+  "heroDeck": {
+    "heroCards": 70,
+    "total": 70
+  },
+  "twistsBesideScheme": 0,
+  "stacks": {
+    "bystanders": 31,
+    "bindings": 30,
+    "madameHydra": 12,
+    "newRecruits": 15
+  },
+  "playerDeck": {
+    "agents": 8,
+    "troopers": 4
+  },
+  "moves": [
+    {
+      "card": "bystander",
+      "from": "bystanders",
+      "to": "besideScheme",
+      "count": 8,
+      "total": 8
+    }
+  ],
+  "outsideHeroes": [],
+  "outsideHenchmen": [],
+  "steps": [],
+  "notes": [
+    {
+      "text": "Plot moves 8 Bystanders beside it",
+      "citation": "Card",
+      "link": null
+    },
+    {
+      "text": "Odin always leads Asgardian Warriors",
+      "citation": "VIL p.6",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    }
+  ],
+  "glossary": [
+    {
+      "id": "villains_term_brotherhood",
+      "name": "Brotherhood",
+      "kind": "team",
+      "summary": "An Ally team of mutants who believe their kind should rule. In Villains its members are Juggernaut, Magneto, Mystique and Sabretooth.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_foes-of-asgard",
+      "name": "Foes of Asgard",
+      "kind": "team",
+      "summary": "An Ally team of enemies of Thor's home realm. In Villains its members are Enchantress and Loki.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_sinister-six",
+      "name": "Sinister Six",
+      "kind": "team",
+      "summary": "An Ally team of Spider-Man's foes who band together against him. In Villains its members are Dr. Octopus, Electro, Green Goblin, Kraven, Mysterio and Venom.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_covert",
+      "name": "Covert",
+      "kind": "class",
+      "summary": "An Ally class that wins through deceit, cunning schemes and subtle powers.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_instinct",
+      "name": "Instinct",
+      "kind": "class",
+      "summary": "An Ally class that relies on ferocity, fast reactions and keen senses.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_ranged",
+      "name": "Ranged",
+      "kind": "class",
+      "summary": "An Ally class that attacks from afar with blasts, beams and elemental or mental power.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_strength",
+      "name": "Strength",
+      "kind": "class",
+      "summary": "An Ally class whose power is raw might, iron will or command of others.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_tech",
+      "name": "Tech",
+      "kind": "class",
+      "summary": "An Ally class armed with weapons, gadgets, inventions and advanced science.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_always-leads",
+      "name": "Always Leads",
+      "kind": "keyword",
+      "summary": "Names the Adversary Group or Backup Adversary group this Commander brings to every game. It takes one of the setup's group slots; random draws fill the rest.",
+      "citation": "VIL p.6",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_ambush",
+      "name": "Ambush",
+      "kind": "keyword",
+      "summary": "Triggers as this Adversary arrives in the city. If its arrival pushes another Adversary out, resolve that overrun first.",
+      "citation": "VIL p.9",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_command-strike",
+      "name": "Command Strike",
+      "kind": "keyword",
+      "summary": "When a Command Strike comes off the Adversary Deck, the Commander acts in person: resolve the Command Strike line on its card, then KO the Strike.",
+      "citation": "VIL p.10",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_commander-tactic",
+      "name": "Commander Tactic",
+      "kind": "keyword",
+      "summary": "Beating the Commander's Attack takes one of its four face-down Tactics at random for your Victory Pile, with its Fight effect. Taking all four wins.",
+      "citation": "VIL p.13",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_dodge",
+      "name": "Dodge",
+      "kind": "keyword",
+      "summary": "On your turn you can discard this card from your hand to draw a replacement, ignoring its other text. Dodging is not playing the card.",
+      "citation": "VIL p.14",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_fight",
+      "name": "Fight",
+      "kind": "keyword",
+      "summary": "Triggers when a player spends enough Attack to defeat this card.",
+      "citation": "VIL p.12",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_kidnap-a-bystander",
+      "name": "Kidnap a Bystander",
+      "kind": "keyword",
+      "summary": "Take the top Bystander of the Bystander Deck into your Victory Pile. It never takes a Bystander an Adversary guards; defeat that Adversary for it.",
+      "citation": "VIL p.15",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_overrun",
+      "name": "Overrun",
+      "kind": "keyword",
+      "summary": "Triggers when this Adversary is pushed out past the last city space, after it KOs a cheap Ally from the Lair and any guarded Bystanders cost each player a discard.",
+      "citation": "VIL p.8",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_plot-twist",
+      "name": "Plot Twist",
+      "kind": "keyword",
+      "summary": "Drawing a Plot Twist from the Adversary Deck moves the Commander's plan forward: resolve the Twist line on the Plot, then KO the Twist unless the Plot says otherwise.",
+      "citation": "VIL p.9",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    },
+    {
+      "id": "villains_term_x-treme-attack",
+      "name": "X-Treme Attack",
+      "kind": "keyword",
+      "summary": "This Adversary gets +1 Attack for every other Adversary with X-Treme Attack in the city, so these teams grow stronger together.",
+      "citation": "VIL p.14",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf"
+    }
+  ]
+}
