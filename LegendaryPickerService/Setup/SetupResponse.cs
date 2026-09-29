@@ -24,10 +24,12 @@ public abstract record SetupResponse
         var mastermind = glossary.Component(setup.Mastermind.Id, setup.Mastermind.Name, setup.Mastermind.Terms);
         var villainGroups = setup.VillainGroups.Select(group => glossary.Component(group.Id, group.Name, group.Terms)).ToList();
         var henchmanGroups = setup.HenchmanGroups.Select(group => glossary.Component(group.Id, group.Name, group.Terms)).ToList();
-        var heroes = setup.Heroes.Select(hero => glossary.Component(
-            hero.Id, hero.Name, [.. hero.Team is null ? [] : new[] { hero.Team }, .. hero.Classes, .. hero.Terms])).ToList();
+        Component Hero(Hero hero) => glossary.Component(
+            hero.Id, hero.Name, [.. hero.Team is null ? [] : new[] { hero.Team }, .. hero.Classes, .. hero.Terms]);
+        var heroes = setup.Heroes.Select(Hero).ToList();
+        var outsideHeroes = setup.OutsideHeroes.Select(outside => new OutsideHeroBody(Hero(outside.Hero), outside.To, outside.Cards)).ToList();
 
-        Component[] components = [scheme, mastermind, .. villainGroups, .. henchmanGroups, .. heroes];
+        Component[] components = [scheme, mastermind, .. villainGroups, .. henchmanGroups, .. heroes, .. outsideHeroes.Select(outside => outside.Hero)];
 
         return new SetupBody(
             setup.Players,
@@ -42,6 +44,7 @@ public abstract record SetupResponse
             setup.Stacks,
             setup.PlayerDeck,
             setup.Moves,
+            outsideHeroes,
             setup.Notes,
             glossary.Entries(components.SelectMany(component => component.Terms)));
     }
@@ -85,6 +88,7 @@ public sealed record SetupBody(
     SetupStacks Stacks,
     PlayerDeck PlayerDeck,
     IReadOnlyList<MovedCards> Moves,
+    IReadOnlyList<OutsideHeroBody> OutsideHeroes,
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<GlossaryEntry> Glossary) : SetupResponse
 {
@@ -101,6 +105,10 @@ public sealed record NoEligibleSchemeBody(int Players, string Message) : SetupRe
 // A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the
 // glossary terms it uses (for a Hero, its team and classes too).
 public sealed record Component(string Id, string Name, IReadOnlyList<string> Terms);
+
+// A Hero drawn outside the Hero Deck, the pile its cards go to ("villainDeck", "besideScheme" or
+// "setAside"), and how many cards that is.
+public sealed record OutsideHeroBody(Component Hero, Pile To, int Cards);
 
 // One glossary term the setup uses: kind is "team", "class" or "keyword"; citation is the source
 // key and page (for example "R p.9"), and link is where that source is published. Box names the

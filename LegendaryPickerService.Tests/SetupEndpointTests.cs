@@ -84,6 +84,26 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
+    public async Task A_Hero_outside_the_Hero_Deck_is_listed_with_its_pile_and_cards()
+    {
+        // Test Song with Dr. Doom; Gambit is the first Hero left after the Hero Deck's five.
+        var client = Client(new ScriptedRandom(8, 0), BoxCatalog.Load(HeroRulesTests.FixtureDirectory));
+
+        var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,heroes");
+
+        var expected = JsonNode.Parse("""
+            [{
+              "hero": { "id": "core_hero_gambit", "name": "Gambit", "terms": ["core_term_x-men", "core_term_covert", "core_term_instinct", "core_term_ranged"] },
+              "to": "villainDeck",
+              "cards": 14
+            }]
+            """);
+        Assert.True(JsonNode.DeepEquals(expected, body!["outsideHeroes"]), body["outsideHeroes"]?.ToJsonString());
+        Assert.Equal(14, (int?)body["villainDeck"]!["outsideHeroCards"]);
+        Assert.Equal(55, (int?)body["villainDeck"]!["total"]);
+    }
+
+    [Fact]
     public async Task No_eligible_Scheme_is_a_200_with_kind_noEligibleScheme()
     {
         // A catalog without Masterminds leaves no Scheme a legal completion.
@@ -389,12 +409,13 @@ public sealed class SetupEndpointTests : IDisposable
             { "id": "core_hero_deadpool", "name": "Deadpool", "terms": ["core_term_covert", "core_term_instinct", "core_term_tech"] },
             { "id": "core_hero_emma-frost", "name": "Emma Frost", "terms": ["core_term_x-men", "core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"] }
           ],
-          "villainDeck": { "twists": 8, "masterStrikes": 5, "villainCards": 16, "henchmanCards": 10, "bystanders": 2, "total": 41 },
+          "villainDeck": { "twists": 8, "masterStrikes": 5, "villainCards": 16, "henchmanCards": 10, "bystanders": 2, "outsideHeroCards": 0, "total": 41 },
           "heroDeck": { "heroCards": 70, "total": 70 },
           "twistsBesideScheme": 0,
           "stacks": { "wounds": 30, "officers": 30, "bystanders": 28 },
           "playerDeck": { "agents": 8, "troopers": 4 },
           "moves": [],
+          "outsideHeroes": [],
           "notes": [
             {
               "text": "Red Skull always leads HYDRA",

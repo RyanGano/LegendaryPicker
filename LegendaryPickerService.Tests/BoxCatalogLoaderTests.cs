@@ -375,6 +375,50 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Fact]
+    public void Rejects_a_required_Hero_no_box_declares()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["requiredHeroes"] = JsonNode.Parse("""[{ "heroId": "core_hero_nova", "source": "Card" }]"""));
+
+        AssertRejected("core_scheme_legacy-virus references Hero core_hero_nova, which no loaded box declares");
+    }
+
+    [Fact]
+    public void Rejects_a_Hero_count_whose_team_is_a_class()
+    {
+        WriteCoreBox(core =>
+            LegacyVirusSetup(core)["heroCounts"] = JsonNode.Parse("""[{ "team": "core_term_tech", "atLeast": 1, "source": "Card" }]"""));
+
+        AssertRejected("core_scheme_legacy-virus references core_term_tech as a team term, but it is a class term");
+    }
+
+    [Theory]
+    [InlineData("""{ "team": "core_term_x-men", "heroName": "Storm", "atLeast": 1, "source": "Card" }""", "has a Hero count that names both a team and a Hero Name")]
+    [InlineData("""{ "atLeast": 1, "source": "Card" }""", "has a Hero count that names neither a team nor a Hero Name")]
+    [InlineData("""{ "heroName": "Storm", "atLeast": 1, "exactly": 1, "source": "Card" }""", "has a Hero count with both atLeast and exactly")]
+    [InlineData("""{ "heroName": "Storm", "source": "Card" }""", "has a Hero count with neither atLeast nor exactly")]
+    [InlineData("""{ "heroName": "Storm", "atLeast": 0, "source": "Card" }""", "has a Hero count of 0")]
+    public void Rejects_a_Hero_count_that_is_not_one_bound_on_one_thing(string count, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["heroCounts"] = new JsonArray(JsonNode.Parse(count)));
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
+    [Theory]
+    [InlineData("""{ "to": "heroDeck", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
+        "puts Heroes outside the Hero Deck in heroDeck; they go to villainDeck, besideScheme, setAside")]
+    [InlineData("""{ "to": "villainDeck", "hero": "core_hero_storm", "team": "core_term_x-men", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
+        "chooses Heroes outside the Hero Deck by more than one of hero, heroName and team")]
+    [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 0, "source": "Card" }] }""",
+        "setup.outsideHeroes[0].count has value 0; values are at least 1")]
+    public void Rejects_Heroes_outside_the_Hero_Deck_with_no_legal_draw(string outside, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["outsideHeroes"] = new JsonArray(JsonNode.Parse(outside)));
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
+    [Fact]
     public void Rejects_two_boxes_with_the_same_id()
     {
         WriteCoreBox(_ => { });
@@ -462,6 +506,8 @@ public sealed class BoxCatalogLoaderTests : IDisposable
 
     private static JsonObject SecretInvasionMove(JsonObject core) =>
         Scheme(core, "core_scheme_secret-invasion-of-the-skrull-shapeshifters")["setup"]!["moves"]![0]!.AsObject();
+
+    private static JsonObject LegacyVirusSetup(JsonObject core) => Scheme(core, "core_scheme_legacy-virus")["setup"]!.AsObject();
 
     private static JsonObject Term(JsonObject box, string id) => Entry(box, "glossary", id);
 

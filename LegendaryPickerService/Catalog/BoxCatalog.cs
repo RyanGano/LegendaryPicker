@@ -130,6 +130,7 @@ public sealed partial class BoxCatalog
             ValidateRuleSources(path, box, sourceKeys);
             ValidatePlayerCounts(path, box);
             ValidateMoves(path, box);
+            ValidateHeroRules(path, box);
 
             // Every setup includes its base game, so the base game's stacks can't be left to an expansion;
             // a stack it forgot to list would otherwise come out as 0.
@@ -169,6 +170,19 @@ public sealed partial class BoxCatalog
                 {
                     throw new InvalidDataException($"{path}: {owner} references {groupId} as a {kind} group, but it is a {found} group.");
                 }
+            }
+        }
+
+        var heroes = files
+            .SelectMany(file => file.Box.Heroes)
+            .Select(hero => hero.Id)
+            .ToHashSet(StringComparer.Ordinal);
+
+        foreach (var (path, box) in files)
+        {
+            foreach (var (owner, heroId) in HeroReferences(box).Where(reference => !heroes.Contains(reference.HeroId)))
+            {
+                throw new InvalidDataException($"{path}: {owner} references Hero {heroId}{Unresolved(heroId)}.");
             }
         }
 
@@ -294,6 +308,49 @@ public sealed partial class BoxCatalog
         }
     }
 
+    // A Hero constraint counts Heroes by one thing, a team or a Hero Name, against one bound. Heroes drawn
+    // outside the Hero Deck go to a pile of their own rather than a stack or the Hero Deck, and are
+    // chosen by at most one of a Hero, a Hero Name or a team.
+    private static void ValidateHeroRules(string path, Box box)
+    {
+        foreach (var scheme in box.Schemes)
+        {
+            foreach (var count in scheme.Setup.HeroCounts ?? [])
+            {
+                if ((count.Team is null) == (count.HeroName is null))
+                {
+                    throw new InvalidDataException($"{path}: {scheme.Id} has a Hero count that names {(count.Team is null ? "neither a team nor" : "both a team and")} a Hero Name; it names one of them.");
+                }
+
+                if ((count.AtLeast is null) == (count.Exactly is null))
+                {
+                    throw new InvalidDataException($"{path}: {scheme.Id} has a Hero count with {(count.AtLeast is null ? "neither atLeast nor" : "both atLeast and")} exactly; it has one of them.");
+                }
+
+                if (count.AtLeast < 1 || count.Exactly < 0)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} has a Hero count of {count.AtLeast ?? count.Exactly}; atLeast is at least 1 and exactly at least 0.");
+                }
+            }
+
+            foreach (var outside in scheme.Setup.OutsideHeroes ?? [])
+            {
+                if (!OutsideHeroes.Destinations.Contains(outside.To))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} puts Heroes outside the Hero Deck in {WireName(outside.To)}; they go to {string.Join(", ", OutsideHeroes.Destinations.Select(WireName))}.");
+                }
+
+                if (new[] { outside.Hero, outside.HeroName, outside.Team }.Count(choice => choice is not null) > 1)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} chooses Heroes outside the Hero Deck by more than one of hero, heroName and team.");
+                }
+            }
+        }
+    }
+
     private static string WireName<T>(T value) where T : struct, Enum => JsonNamingPolicy.CamelCase.ConvertName(value.ToString());
 
     private static void CheckPlayerCounts(string path, string rule, IEnumerable<IEnumerable<int>> entries)
@@ -343,7 +400,12 @@ public sealed partial class BoxCatalog
             .Concat(box.Schemes.SelectMany(s =>
                 (s.Setup.RequiredGroups ?? []).Select(g => (s.Id, g.GroupId, g.GroupType))));
 
-    // A Hero's team and classes, then every component's keywords.
+    // The Heroes a Scheme requires or draws outside the Hero Deck by id.
+    private static IEnumerable<(string Owner, string HeroId)> HeroReferences(Box box) =>
+        box.Schemes.SelectMany(s => (s.Setup.RequiredHeroes ?? []).Select(h => (s.Id, h.HeroId))
+            .Concat((s.Setup.OutsideHeroes ?? []).Where(o => o.Hero is not null).Select(o => (s.Id, o.Hero!))));
+
+    // A Hero's team and classes, then every component's keywords, then the teams a Scheme's Hero rules name.
     private static IEnumerable<(string Owner, string TermId, TermKind Kind)> TermReferences(Box box) =>
         box.Heroes.SelectMany(h => (h.Team is null ? [] : new[] { (h.Id, h.Team, TermKind.Team) })
                 .Concat(h.Classes.Select(c => (h.Id, c, TermKind.Class)))
@@ -351,7 +413,12 @@ public sealed partial class BoxCatalog
             .Concat(box.VillainGroups.SelectMany(g => g.Terms.Select(t => (g.Id, t, TermKind.Keyword))))
             .Concat(box.HenchmanGroups.SelectMany(g => g.Terms.Select(t => (g.Id, t, TermKind.Keyword))))
             .Concat(box.Masterminds.SelectMany(m => m.Terms.Select(t => (m.Id, t, TermKind.Keyword))))
-            .Concat(box.Schemes.SelectMany(s => s.Terms.Select(t => (s.Id, t, TermKind.Keyword))));
+            .Concat(box.Schemes.SelectMany(s => s.Terms.Select(t => (s.Id, t, TermKind.Keyword))))
+            .Concat(box.Schemes.SelectMany(s =>
+                (s.Setup.HeroCounts ?? []).Select(c => c.Team)
+                    .Concat((s.Setup.OutsideHeroes ?? []).Select(o => o.Team))
+                    .OfType<string>()
+                    .Select(team => (s.Id, team, TermKind.Team))));
 
     // Every rule value and setup effect a rule note can cite, named by where it sits in the box file.
     private static IEnumerable<(string Rule, string Source)> RuleSources(Box box)
@@ -401,6 +468,9 @@ public sealed partial class BoxCatalog
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
             foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
+            foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);
+            foreach (var count in effect.HeroCounts ?? []) yield return ($"{scheme.Id} setup.heroCounts", count.Source);
+            if (effect.DistinctHeroNames is { } distinct) yield return ($"{scheme.Id} setup.distinctHeroNames", distinct.Source);
         }
 
         foreach (var (rule, values) in PlayerCountLists(box))
@@ -410,7 +480,7 @@ public sealed partial class BoxCatalog
     }
 
     // Every list of per-player-count values in a box: the Masterminds' setup effects, then each Scheme's,
-    // with its moves last.
+    // with its moves and Heroes outside the Hero Deck last.
     private static IEnumerable<(string Rule, IReadOnlyList<PlayerCountValue> Values)> PlayerCountLists(Box box)
     {
         foreach (var mastermind in box.Masterminds)
@@ -429,6 +499,11 @@ public sealed partial class BoxCatalog
             foreach (var (move, index) in (scheme.Setup.Moves ?? []).Select((move, index) => (move, index)))
             {
                 yield return ($"{scheme.Id} setup.moves[{index}].count", move.Count);
+            }
+
+            foreach (var (outside, index) in (scheme.Setup.OutsideHeroes ?? []).Select((outside, index) => (outside, index)))
+            {
+                yield return ($"{scheme.Id} setup.outsideHeroes[{index}].count", outside.Count);
             }
         }
     }

@@ -52,8 +52,13 @@ public sealed record BoxComponents(
     Sourced<int>? Officers = null,
     Sourced<int>? Sidekicks = null);
 
-// Team, Classes and Terms name glossary term ids. Team is null for an unaffiliated Hero.
-public sealed record Hero(string Id, string Name, string? Team, IReadOnlyList<string> Classes, IReadOnlyList<string> Terms);
+// Team, Classes and Terms name glossary term ids. Team is null for an unaffiliated Hero. HeroName is the
+// Hero Name several Heroes can share, such as two versions of one character; it is left out when the
+// Hero's own name is its Hero Name.
+public sealed record Hero(string Id, string Name, string? Team, IReadOnlyList<string> Classes, IReadOnlyList<string> Terms, string? HeroName = null)
+{
+    public string NameOfHero => HeroName ?? Name;
+}
 
 public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> Terms);
 
@@ -100,6 +105,10 @@ public sealed record SchemeSetup(
     IReadOnlyList<RequiredGroup>? RequiredGroups = null,
     IReadOnlyList<CardMove>? Moves = null,
     Sourced<int>? TwistsBesideScheme = null,
+    IReadOnlyList<RequiredHero>? RequiredHeroes = null,
+    IReadOnlyList<HeroCount>? HeroCounts = null,
+    Sourced<bool>? DistinctHeroNames = null,
+    IReadOnlyList<OutsideHeroes>? OutsideHeroes = null,
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
@@ -108,6 +117,22 @@ public sealed record SchemeSetup(
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
 
+// A Hero a Scheme puts in the Hero Deck. Like a required group, it fills one of the Hero slots.
+public sealed record RequiredHero(string HeroId, string Source);
+
+// How many of the Hero Deck's Heroes must be of a team (a team term id) or have a Hero Name: at least
+// AtLeast, or exactly Exactly. Each constraint names one of Team and HeroName and one of the two counts.
+public sealed record HeroCount(string Source, string? Team = null, string? HeroName = null, int? AtLeast = null, int? Exactly = null);
+
+// Heroes a Scheme draws outside the Hero Deck, whose cards all go To one pile: the Villain Deck, beside
+// the Scheme, or a set-aside stack. Count says how many Heroes at each player count. Hero names the one
+// Hero to draw, HeroName limits the draw to Heroes with that Hero Name and Team to Heroes of that team;
+// with none of them any Hero not in the Hero Deck can be drawn.
+public sealed record OutsideHeroes(
+    Pile To, IReadOnlyList<PlayerCountValue> Count, string? Hero = null, string? HeroName = null, string? Team = null)
+{
+    public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.BesideScheme, Pile.SetAside];
+}
 // A kind of card a Scheme can move during setup.
 public enum CardKind
 {
@@ -121,13 +146,15 @@ public enum CardKind
 
 // A deck, pile or shared stack cards are laid out in. A move takes cards from the pile its card kind
 // comes from and puts them in one of the destinations: the Villain Deck, the Hero Deck, beside the
-// Scheme, or each player's starting deck.
+// Scheme, or each player's starting deck. Heroes drawn outside the Hero Deck can also go to a stack of
+// their own, set aside.
 public enum Pile
 {
     VillainDeck,
     HeroDeck,
     BesideScheme,
     StartingDecks,
+    SetAside,
     Bystanders,
     Wounds,
     Officers,

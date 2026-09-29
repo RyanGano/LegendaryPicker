@@ -14,6 +14,9 @@ import twoBoxesTestHeist from './test/fixtures/twoBoxesTestHeist.json'
 // Drawn from the core box and the service's test-only card-moves fixture expansion.
 import twoBoxesHenchmanArmy from './test/fixtures/twoBoxesHenchmanArmy.json'
 import twoBoxesTestWounded from './test/fixtures/twoBoxesTestWounded.json'
+// Drawn from the core box and the service's test-only Hero rules fixture expansion.
+import twoBoxesTestSong from './test/fixtures/twoBoxesTestSong.json'
+import twoBoxesTestVault from './test/fixtures/twoBoxesTestVault.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -285,6 +288,39 @@ describe('SetupChecklist', () => {
     renderChecklist(legacyVirusThreePlayers)
 
     expect(within(section('Shared stacks')).queryByText('Sidekicks')).not.toBeInTheDocument()
+  })
+
+  it("lists a Hero outside the Hero Deck in its own section and counts its cards in the Villain Deck's total", () => {
+    renderChecklist(twoBoxesTestSong)
+
+    expect(rows('Heroes outside the Hero Deck')).toEqual(['Gambit to the Villain Deck 14'])
+    expect(rows('Villain Deck')).toEqual([
+      'Scheme Twists 8',
+      'Master Strikes 5',
+      'Brotherhood, Enemies of Asgard 2 Villain Groups 16',
+      'Doombot Legion 1 Henchman Group 10',
+      'Bystanders 2',
+      'Cards of the Heroes outside the Hero Deck 14',
+      'Total 55',
+    ])
+    // The Hero is laid out, and ticked, in its own section; the Villain Deck line only adds up the total.
+    expect(within(section('Heroes outside the Hero Deck')).getAllByRole('checkbox')).toHaveLength(1)
+    expect(within(section('Villain Deck')).getAllByRole('checkbox')).toHaveLength(5)
+  })
+
+  it('lists Heroes set aside outside the Hero Deck without adding them to a deck', () => {
+    renderChecklist(twoBoxesTestVault)
+
+    expect(rows('Heroes outside the Hero Deck')).toEqual(['Gambit to a stack set aside 14', 'Rogue to a stack set aside 14'])
+    expect(rows('Villain Deck')).not.toContain('Cards of the Heroes outside the Hero Deck 0')
+    expect(rows('Villain Deck')).toContain('Total 41')
+  })
+
+  it('renders a setup from an API that predates Heroes outside the Hero Deck as having none', () => {
+    // This body was captured before the API listed Heroes outside the Hero Deck.
+    renderChecklist(twoPlayerCosmicCube)
+
+    expect(screen.queryByRole('region', { name: 'Heroes outside the Hero Deck' })).not.toBeInTheDocument()
   })
 
   it('renders a setup from an API that predates moves as having none', () => {
