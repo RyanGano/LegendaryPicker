@@ -24,13 +24,16 @@ export type GlossaryEntry = {
   box?: string
 }
 
-// Each deck's total counts the cards the setup's moves put in it and take out of it.
+// Each deck's total counts the cards the setup's moves put in it and take out of it. outsideHeroCards
+// counts the cards of the Heroes outside the Hero Deck that go into the Villain Deck; an API from
+// before them leaves it out.
 export type VillainDeck = {
   twists: number
   masterStrikes: number
   villainCards: number
   henchmanCards: number
   bystanders: number
+  outsideHeroCards?: number
   total: number
 }
 
@@ -41,13 +44,15 @@ export type HeroDeck = {
 
 export type CardKind = 'hero' | 'henchman' | 'bystander' | 'wound' | 'officer' | 'sidekick'
 
-// The destinations a move can put cards in, then the shared stacks it can take them from. Hero cards
-// come from the Hero Deck and Henchmen from the Villain Deck.
+// The destinations a move can put cards in, then the stack set aside that only Heroes outside the Hero
+// Deck go to, then the shared stacks a move can take cards from. Hero cards come from the Hero Deck and
+// Henchmen from the Villain Deck.
 export type Pile =
   | 'villainDeck'
   | 'heroDeck'
   | 'besideScheme'
   | 'startingDecks'
+  | 'setAside'
   | 'bystanders'
   | 'wounds'
   | 'officers'
@@ -61,6 +66,14 @@ export type Move = {
   to: Pile
   count: number
   total: number
+}
+
+// A Hero a Scheme draws outside the Hero Deck: all its cards go to one pile, the Villain Deck, beside
+// the Scheme, or a stack set aside.
+export type OutsideHero = {
+  hero: Component
+  to: Pile
+  cards: number
 }
 
 // sidekicks is left out when no included box has Sidekicks.
@@ -99,6 +112,8 @@ export type Setup = {
   playerDeck: PlayerDeck
   // Left out by an API from before card moves.
   moves?: Move[]
+  // Left out by an API from before Heroes outside the Hero Deck.
+  outsideHeroes?: OutsideHero[]
   notes: RuleNote[]
   // One entry per term any drawn component uses: teams, then classes, then keywords.
   glossary: GlossaryEntry[]

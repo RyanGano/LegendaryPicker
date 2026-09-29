@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 3,
+  "id": "heroes",
+  "name": "Heroes Fixture",
+  "catalogSource": "R p.1",
+  "sources": [
+    { "key": "R", "url": "https://example.test/heroes-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [
+    { "id": "heroes_hero_test-jean-grey", "name": "Test Jean Grey", "heroName": "Test Jean", "team": "core_term_x-men", "classes": ["core_term_ranged"], "terms": [] },
+    { "id": "heroes_hero_test-phoenix", "name": "Test Phoenix", "heroName": "Test Jean", "team": "core_term_x-men", "classes": ["core_term_ranged"], "terms": [] },
+    { "id": "heroes_hero_test-nova-rider", "name": "Test Nova Rider", "heroName": "Test Nova", "team": null, "classes": ["core_term_strength"], "terms": [] },
+    { "id": "heroes_hero_test-nova-prime", "name": "Test Nova Prime", "heroName": "Test Nova", "team": null, "classes": ["core_term_strength"], "terms": [] },
+    { "id": "heroes_hero_test-spider-girl", "name": "Test Spider-Girl", "team": "core_term_spider-friends", "classes": ["core_term_instinct"], "terms": [] }
+  ],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [],
+  "schemes": [
+    {
+      "id": "heroes_scheme_test-song",
+      "name": "Test Song",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "outsideHeroes": [{ "to": "villainDeck", "count": [{ "players": null, "value": 1, "source": "Card" }] }]
+      }
+    },
+    {
+      "id": "heroes_scheme_test-demons",
+      "name": "Test Demons",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "outsideHeroes": [{ "to": "villainDeck", "heroName": "Test Jean", "count": [{ "players": null, "value": 1, "source": "Card" }] }]
+      }
+    },
+    {
+      "id": "heroes_scheme_test-summons",
+      "name": "Test Summons",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "requiredHeroes": [{ "heroId": "heroes_hero_test-nova-rider", "source": "Card" }]
+      }
+    },
+    {
+      "id": "heroes_scheme_test-web",
+      "name": "Test Web",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "heroCounts": [{ "team": "core_term_spider-friends", "atLeast": 1, "source": "Card" }]
+      }
+    },
+    {
+      "id": "heroes_scheme_test-corps",
+      "name": "Test Corps",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "heroCounts": [{ "heroName": "Test Nova", "exactly": 2, "source": "Card" }]
+      }
+    },
+    {
+      "id": "heroes_scheme_test-impossible-corps",
+      "name": "Test Impossible Corps",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "heroCounts": [{ "heroName": "Test Nova", "exactly": 3, "source": "Card" }]
+      }
+    },
+    {
+      "id": "heroes_scheme_test-unique",
+      "name": "Test Unique",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "requiredHeroes": [{ "heroId": "heroes_hero_test-jean-grey", "source": "Card" }],
+        "distinctHeroNames": { "value": true, "source": "Card" }
+      }
+    },
+    {
+      "id": "heroes_scheme_test-vault",
+      "name": "Test Vault",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "outsideHeroes": [
+          {
+            "to": "setAside",
+            "team": "core_term_x-men",
+            "count": [
+              { "players": [1], "value": 1, "source": "R p.2" },
+              { "players": [2, 3, 4, 5], "value": 2, "source": "Card" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "heroes_scheme_test-lair",
+      "name": "Test Lair",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "outsideHeroes": [{ "to": "besideScheme", "hero": "heroes_hero_test-phoenix", "count": [{ "players": null, "value": 1, "source": "Card" }] }]
+      }
+    },
+    {
+      "id": "heroes_scheme_test-missing-guest",
+      "name": "Test Missing Guest",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "outsideHeroes": [{ "to": "villainDeck", "heroName": "Test Nobody", "count": [{ "players": null, "value": 1, "source": "Card" }] }]
+      }
+    }
+  ],
+  "glossary": []
+}

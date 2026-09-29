@@ -7,8 +7,9 @@ import { TermKind } from './TermChips.tsx'
 // state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
 export function SetupChecklist({ setup }: { setup: Setup }) {
-  // An API from before card moves leaves moves out; the site can deploy first, so read that as none.
-  const { villainDeck, heroDeck, stacks, playerDeck, moves = [] } = setup
+  // An API from before card moves or Heroes outside the Hero Deck leaves them out; the site can deploy
+  // first, so read that as none.
+  const { villainDeck, heroDeck, stacks, playerDeck, moves = [], outsideHeroes = [] } = setup
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
@@ -42,6 +43,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <Item label="Bystanders" count={villainDeck.bystanders} />
         <MovedIn moves={moves} to="villainDeck" />
         <MovedOut moves={moves} from="villainDeck" />
+        <OutsideHeroCards count={villainDeck.outsideHeroCards} />
         <Total count={villainDeck.total} />
       </Section>
 
@@ -58,6 +60,14 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <MovedOut moves={moves} from="heroDeck" />
         <Total count={heroDeck.total} />
       </Section>
+
+      {outsideHeroes.length > 0 && (
+        <Section title="Heroes outside the Hero Deck" kind="hero">
+          {outsideHeroes.map((outside) => (
+            <Item key={outside.hero.id} label={outside.hero.name} detail={INTO[outside.to]} count={outside.cards} />
+          ))}
+        </Section>
+      )}
 
       <Section title="Shared stacks" kind="wound">
         <Item label="Wounds" count={stacks.wounds} />
@@ -177,6 +187,18 @@ function MovedOut({ moves, from }: { moves: Move[]; from: Pile }) {
   )
 }
 
+// The cards of the Heroes outside the Hero Deck that go into the Villain Deck. They are laid out, and
+// ticked, in their own section, so here they only show what the total holds.
+function OutsideHeroCards({ count = 0 }: { count?: number }) {
+  return (
+    count > 0 && (
+      <li className="row">
+        <span className="label">Cards of the Heroes outside the Hero Deck</span> <span className="count">{count}</span>
+      </li>
+    )
+  )
+}
+
 const CARD_NAMES: Record<CardKind, string> = {
   hero: 'Hero cards',
   henchman: 'Henchmen',
@@ -191,18 +213,21 @@ const PILE_NAMES: Record<Pile, string> = {
   heroDeck: 'Hero Deck',
   besideScheme: 'pile beside the Scheme',
   startingDecks: 'starting decks',
+  setAside: 'stack set aside',
   bystanders: 'Bystander stack',
   wounds: 'Wound stack',
   officers: 'Officer stack',
   sidekicks: 'Sidekick stack',
 }
 
-// Where a move puts cards. Moves only go to the four destinations, never to a stack.
+// Where a move, or a Hero outside the Hero Deck, puts cards. Moves only go to the four destinations and
+// those Heroes to the Villain Deck, beside the Scheme or a stack set aside, never to a shared stack.
 const INTO: Record<Pile, string> = {
   villainDeck: 'to the Villain Deck',
   heroDeck: 'to the Hero Deck',
   besideScheme: 'beside the Scheme',
   startingDecks: 'to each starting deck',
+  setAside: 'to a stack set aside',
   bystanders: 'to the Bystander stack',
   wounds: 'to the Wound stack',
   officers: 'to the Officer stack',
@@ -217,8 +242,8 @@ function Total({ count }: { count: number }) {
   )
 }
 
-// Lines ticked against lines to lay out. Totals and the cards moved out of a deck have no tick box,
-// so they don't count.
+// Lines ticked against lines to lay out. Totals, the cards moved out of a deck and the Villain Deck's
+// line for the Heroes outside the Hero Deck have no tick box, so they don't count.
 function tickProgress(article: HTMLElement) {
   const boxes = [...article.querySelectorAll<HTMLInputElement>('.row input[type="checkbox"]')]
   return { ticked: boxes.filter((box) => box.checked).length, total: boxes.length }

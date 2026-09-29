@@ -4,7 +4,8 @@ namespace LegendaryPickerService.Setup;
 
 // Draws a random legal setup the way players would at the table: the Scheme from those allowed
 // at the player count, then a Mastermind that can complete it, then the groups they require, then
-// the remaining Villain and Henchman Groups, then the Heroes. Each draw goes through the
+// the remaining Villain and Henchman Groups, then the Heroes, then any Heroes the Scheme draws outside
+// the Hero Deck. Each draw goes through the
 // IRandomSource and picks from the options left, in catalog order, so a fixed sequence of draws
 // always gives the same setup.
 //
@@ -59,6 +60,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.VillainGroups).ToList();
         private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).ToList();
         private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).ToList();
+        private readonly Dictionary<(string Scheme, int Heroes), bool> _heroesFit = [];
 
         private bool Solo => row is null;
 
@@ -92,7 +94,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             var villainGroups = FillSlots(_villainGroups, g => g.Id, g => g.Name, GroupType.Villain, plan.VillainGroups, plan.Scheme, mastermind, notes);
             var henchmanGroups = FillSlots(_henchmanGroups, g => g.Id, g => g.Name, GroupType.Henchman, plan.HenchmanGroups, plan.Scheme, mastermind, notes);
-            var heroes = DrawMany(_heroes, plan.Heroes);
+            var (heroes, outside) = DrawHeroes(plan);
 
             if (Solo)
             {
@@ -114,7 +116,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     henchmanGroups.Sum(group => Solo ? rules.Solo.HenchmanCards.Value : BoxOf(group.Id).Components.HenchmanGroupCards.Value),
                     plan.Bystanders,
                     plan.MovedIn(Pile.VillainDeck),
-                    plan.MovedOut(Pile.VillainDeck)),
+                    plan.MovedOut(Pile.VillainDeck),
+                    outside.Where(hero => hero.To == Pile.VillainDeck).Sum(hero => hero.Cards)),
                 new HeroDeck(heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value), plan.MovedOut(Pile.HeroDeck), plan.MovedIn(Pile.HeroDeck)),
                 plan.TwistsBeside,
                 new SetupStacks(
@@ -126,6 +129,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                         : null),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value),
                 plan.Moves,
+                outside,
                 notes,
                 boxes);
         }
@@ -190,6 +194,39 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(Card($"Scheme puts {beside.Value} Twists beside it", beside.Source));
             }
 
+            foreach (var required in effect.RequiredHeroes ?? [])
+            {
+                notes.Add(Card($"Scheme requires {HeroNamed(required.HeroId)}", required.Source));
+            }
+
+            foreach (var count in effect.HeroCounts ?? [])
+            {
+                var (bound, value) = count.AtLeast is { } atLeast ? ("at least", atLeast) : ("exactly", count.Exactly!.Value);
+                notes.Add(Card($"Scheme requires {bound} {value} {HeroesOf(value, count.Team, count.HeroName)}", count.Source));
+            }
+
+            if (effect.DistinctHeroNames is { Value: true } distinct)
+            {
+                notes.Add(Card("Scheme allows no two Heroes with the same Hero Name", distinct.Source));
+            }
+
+            var outside = new List<OutsideDraw>();
+            foreach (var rule in effect.OutsideHeroes ?? [])
+            {
+                if (ForPlayers(rule.Count) is not { } count)
+                {
+                    continue;
+                }
+
+                outside.Add(new OutsideDraw(rule, count.Value));
+                var which = rule.Hero is { } heroId
+                    ? HeroNamed(heroId)
+                    : $"{count.Value} extra {HeroesOf(count.Value, rule.Team, rule.HeroName)}";
+                notes.Add(Card(
+                    $"Scheme draws {which} outside the Hero Deck and puts {(count.Value == 1 ? "its" : "their")} cards {Onto(rule.To)}",
+                    count.Source));
+            }
+
             var twists = ForPlayers(effect.Twists)
                 ?? throw new InvalidDataException($"{scheme.Id} has no Twist count for {players} players.");
 
@@ -205,6 +242,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 bystanders,
                 wounds,
                 moves,
+                outside,
                 notes);
 
             return Add(plan, effect, "Scheme", schemeBox);
@@ -255,7 +293,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return required.All(group => GroupIds().Contains(group.GroupId))
                 && Slots(plan.VillainGroups, GroupType.Villain) <= _villainGroups.Count
                 && Slots(plan.HenchmanGroups, GroupType.Henchman) <= _henchmanGroups.Count
-                && plan.Heroes <= _heroes.Count
+                && HeroesFit(plan)
                 && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
                 && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (Solo
                     ? rules.Solo.HenchmanCards.Value
@@ -313,6 +351,78 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             chosen.AddRange(DrawMany(pool.Except(chosen).ToList(), slots - chosen.Count));
             return chosen;
         }
+
+        // Draws the Hero Deck's Heroes, the Scheme's required Heroes first, then each Hero the Scheme draws
+        // outside the Hero Deck. Every draw picks from the Heroes that leave the rest of the setup's Heroes
+        // drawable within the Scheme's Hero rules, so the draw never reaches a dead end.
+        private (List<Hero> Deck, List<OutsideHero> Outside) DrawHeroes(SetupPlan plan)
+        {
+            var rules = HeroRulesOf(plan);
+            var deck = RequiredHeroes(plan)!;
+            while (deck.Count < rules.DeckSlots)
+            {
+                deck.Add(DrawOne(_heroes.Where(hero => rules.CanComplete([.. deck, hero], [])).ToList()));
+            }
+
+            var outside = new List<Hero>();
+            while (outside.Count < rules.OutsideSlots.Count)
+            {
+                outside.Add(DrawOne(_heroes.Where(hero => rules.CanComplete(deck, [.. outside, hero])).ToList()));
+            }
+
+            return (deck, outside
+                .Zip(rules.OutsideSlots, (hero, rule) => new OutsideHero(hero, rule.To, BoxOf(hero.Id).Components.HeroCards.Value))
+                .ToList());
+        }
+
+        // Whether the included Heroes can meet the plan's Hero rules. Eligibility asks this for every Scheme
+        // and Mastermind pair, but the answer depends only on the Scheme and its number of Hero slots, so
+        // each is searched once per draw rather than once per Mastermind.
+        private bool HeroesFit(SetupPlan plan)
+        {
+            var key = (plan.Scheme.Id, plan.Heroes);
+            if (!_heroesFit.TryGetValue(key, out var fits))
+            {
+                fits = RequiredHeroes(plan) is { } required && HeroRulesOf(plan).CanComplete(required, []);
+                _heroesFit[key] = fits;
+            }
+
+            return fits;
+        }
+
+        // The Scheme's required Heroes, or null when one is not in an included box.
+        private List<Hero>? RequiredHeroes(SetupPlan plan)
+        {
+            var required = (plan.Scheme.Setup.RequiredHeroes ?? [])
+                .Select(rule => _heroes.FirstOrDefault(hero => hero.Id == rule.HeroId))
+                .ToList();
+            return required.Contains(null) ? null : required.OfType<Hero>().ToList();
+        }
+
+        // Required Heroes fill Hero Deck slots, so a Scheme that requires more Heroes than it has slots
+        // uses them all. Each of the Scheme's draws outside the Hero Deck takes one slot per Hero.
+        private HeroRules HeroRulesOf(SetupPlan plan) => new(
+            _heroes,
+            Math.Max(plan.Heroes, plan.Scheme.Setup.RequiredHeroes?.Count ?? 0),
+            plan.Scheme.Setup,
+            plan.Outside.SelectMany(draw => Enumerable.Repeat(draw.Rule, draw.Count)).ToList());
+
+        // "X-Men Heroes", "Jean Grey Hero" or "Heroes": what count Heroes of a team or a Hero Name are called.
+        private string HeroesOf(int count, string? team, string? heroName)
+        {
+            var kind = team is null ? heroName : boxes.SelectMany(box => box.Glossary).FirstOrDefault(term => term.Id == team)?.Name ?? team;
+            return $"{(kind is null ? "" : kind + " ")}{(count == 1 ? "Hero" : "Heroes")}";
+        }
+
+        private string HeroNamed(string heroId) => _heroes.FirstOrDefault(hero => hero.Id == heroId)?.Name ?? heroId;
+
+        private static string Onto(Pile to) => to switch
+        {
+            Pile.VillainDeck => "into the Villain Deck",
+            Pile.BesideScheme => "beside the Scheme",
+            Pile.SetAside => "in a stack set aside",
+            _ => throw new ArgumentOutOfRangeException(nameof(to), to, null),
+        };
 
         private List<T> DrawMany<T>(IEnumerable<T> options, int count)
         {
@@ -391,10 +501,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int Bystanders,
         int Wounds,
         IReadOnlyList<MovedCards> Moves,
+        IReadOnlyList<OutsideDraw> Outside,
         IReadOnlyList<RuleNote> Notes)
     {
         public int MovedIn(Pile to) => Moves.Where(move => move.To == to).Sum(move => move.Count);
 
         public int MovedOut(Pile from) => Moves.Where(move => move.From == from).Sum(move => move.Total);
     }
+
+    // How many Heroes one of the Scheme's draws outside the Hero Deck takes at this player count.
+    private sealed record OutsideDraw(OutsideHeroes Rule, int Count);
 }
