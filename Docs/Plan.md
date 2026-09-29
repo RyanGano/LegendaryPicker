@@ -137,7 +137,7 @@ Box id `fantastic-four`, file `LegendaryPickerService/Data/Boxes/fantastic-four.
 
 Box id `paint-the-town-red`, file `LegendaryPickerService/Data/Boxes/paint-the-town-red.json`. Counts (PTTR p.2): 5 Heroes × 14 cards, 2 Villain Groups × 8, 2 Masterminds and 4 Schemes. Like Fantastic Four it has no Henchman Groups and lists 0 cards per Henchman Group. It adds no Twists, Master Strikes, Bystanders, Wounds or Officers. Names, teams, classes and the keywords each card uses come from C1 and C2, which agree.
 
-- **Heroes:** Black Cat, Scarlet Spider, Spider-Woman, Symbiote Spider-Man (Spider Friends, the core box's team term); Moon Knight (Marvel Knights, Dark City's team term). Symbiote Spider-Man's card name differs from the core box's Spider-Man, so it carries no shared Hero Name.
+- **Heroes:** Black Cat, Scarlet Spider, Spider-Woman, Symbiote Spider-Man (Spider Friends, the core box's team term); Moon Knight (Marvel Knights, Dark City's team term). Symbiote Spider-Man has the Hero Name Spider-Man, which it shares with the core box's Spider-Man, as Dark City's Wolverine (X-Force) shares Wolverine.
 - **Villain Groups:** Maximum Carnage, Sinister Six.
 - **Masterminds (Always Leads, Card):** Carnage (Maximum Carnage), Mysterio (Sinister Six). Neither changes the setup.
 - **Glossary (PTTR p.1):** keywords Wall-Crawl and Feast. Its teams are already defined by the core box and Dark City.

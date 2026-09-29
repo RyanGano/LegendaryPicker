@@ -138,20 +138,72 @@ public class PaintTheTownRedTests
 
     // Its teams are the core box's Spider Friends and Dark City's Marvel Knights, so it adds no team term.
     [Theory]
-    [InlineData("Black Cat", "Spider Friends", "Covert Instinct", "Rescue a Bystander Wall-Crawl")]
-    [InlineData("Moon Knight", "Marvel Knights", "Instinct Tech", "Rescue a Bystander Wall-Crawl")]
-    [InlineData("Scarlet Spider", "Spider Friends", "Covert Instinct Strength", "Wall-Crawl")]
-    [InlineData("Spider-Woman", "Spider Friends", "Covert Ranged Strength", "Wall-Crawl")]
-    [InlineData("Symbiote Spider-Man", "Spider Friends", "Covert Instinct Ranged Strength", "Wall-Crawl")]
-    public void Hero_lists_its_team_classes_and_keywords(string hero, string team, string classes, string keywords)
+    [InlineData("Black Cat", "Black Cat", "Spider Friends", "Covert Instinct", "Rescue a Bystander Wall-Crawl")]
+    [InlineData("Moon Knight", "Moon Knight", "Marvel Knights", "Instinct Tech", "Rescue a Bystander Wall-Crawl")]
+    [InlineData("Scarlet Spider", "Scarlet Spider", "Spider Friends", "Covert Instinct Strength", "Wall-Crawl")]
+    [InlineData("Spider-Woman", "Spider-Woman", "Spider Friends", "Covert Ranged Strength", "Wall-Crawl")]
+    [InlineData("Symbiote Spider-Man", "Spider-Man", "Spider Friends", "Covert Instinct Ranged Strength", "Wall-Crawl")]
+    public void Hero_lists_its_Hero_Name_team_classes_and_keywords(string hero, string heroName, string team, string classes, string keywords)
     {
         var entry = PaintTheTownRed.Heroes.Single(h => h.Name == hero);
 
         Assert.Equal(team, TermName(entry.Team!));
         Assert.Equal(classes, string.Join(" ", entry.Classes.Select(TermName)));
         Assert.Equal(keywords, string.Join(" ", entry.Terms.Select(TermName)));
-        Assert.Equal(hero, entry.NameOfHero);
+        Assert.Equal(heroName, entry.NameOfHero);
     }
+
+    // Hero Name is the character, so Symbiote Spider-Man and the core box's Spider-Man are two Heroes with one
+    // Hero Name. A made-up Scheme that needs exactly 2 Spider-Man Heroes can only be completed if they share it.
+    [Fact]
+    public void Symbiote_Spider_Man_shares_the_Hero_Name_Spider_Man_with_the_core_box()
+    {
+        using var directory = new DirectoryWithout(fileName: null);
+        File.WriteAllText(System.IO.Path.Combine(directory.Path, "spider-names.json"), SpiderNamesBox);
+        var generator = new SetupGenerator(BoxCatalog.Load(directory.Path));
+
+        // At 2 players the core box allows 8 Schemes and Paint the Town Red 3, so draw 11 is the made-up Scheme.
+        var random = new ScriptedRandom(11);
+        var setup = Assert.IsType<SetupResult>(generator.Generate(2, ["core", "paint-the-town-red", "spider-names"], random));
+
+        Assert.Equal(12, random.Options[0]);
+        Assert.Equal("Test Two Spider-Men", setup.Scheme.Name);
+        Assert.Equal(
+            ["core_hero_spider-man", "paint-the-town-red_hero_symbiote-spider-man"],
+            setup.Heroes.Where(hero => hero.Id.EndsWith("spider-man")).Select(hero => hero.Id));
+    }
+
+    private const string SpiderNamesBox = """
+        {
+          "schemaVersion": 3,
+          "id": "spider-names",
+          "name": "Spider Names Fixture",
+          "catalogSource": "R p.1",
+          "sources": [{ "key": "R", "url": "https://example.test/spider-names.pdf" }],
+          "components": {
+            "heroCards": { "value": 14, "source": "R p.1" },
+            "villainGroupCards": { "value": 8, "source": "R p.1" },
+            "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+            "schemeTwists": { "value": 0, "source": "R p.1" }
+          },
+          "heroes": [],
+          "villainGroups": [],
+          "henchmanGroups": [],
+          "masterminds": [],
+          "schemes": [
+            {
+              "id": "spider-names_scheme_test-two-spider-men",
+              "name": "Test Two Spider-Men",
+              "terms": ["core_term_scheme-twist"],
+              "setup": {
+                "twists": [{ "players": null, "value": 8, "source": "Card" }],
+                "heroCounts": [{ "heroName": "Spider-Man", "exactly": 2, "source": "Card" }]
+              }
+            }
+          ],
+          "glossary": []
+        }
+        """;
 
     [Theory]
     [InlineData("Maximum Carnage", "Ambush Escape Fight Feast")]
@@ -286,12 +338,13 @@ public class PaintTheTownRedTests
             .Concat(setup.Heroes.Select(hero => hero.Id))
             .Concat(setup.OutsideHeroes.Select(outside => outside.Hero.Id));
 
-    // A copy of the box directory without one box file, so a catalog loaded from it has never seen that box.
+    // A copy of the box directory without one box file (or with all of them when fileName is null), so a
+    // catalog loaded from it has never seen that box.
     private sealed class DirectoryWithout : IDisposable
     {
         public string Path { get; } = Directory.CreateTempSubdirectory("legendary-without-").FullName;
 
-        public DirectoryWithout(string fileName)
+        public DirectoryWithout(string? fileName)
         {
             foreach (var file in Directory.GetFiles(BoxCatalog.DefaultDirectory, "*.json").Where(file => System.IO.Path.GetFileName(file) != fileName))
             {

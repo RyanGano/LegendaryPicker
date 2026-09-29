@@ -17,7 +17,7 @@
     { "id": "paint-the-town-red_hero_moon-knight", "name": "Moon Knight", "team": "dark-city_term_marvel-knights", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["core_term_rescue-a-bystander", "paint-the-town-red_term_wall-crawl"] },
     { "id": "paint-the-town-red_hero_scarlet-spider", "name": "Scarlet Spider", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["paint-the-town-red_term_wall-crawl"] },
     { "id": "paint-the-town-red_hero_spider-woman", "name": "Spider-Woman", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["paint-the-town-red_term_wall-crawl"] },
-    { "id": "paint-the-town-red_hero_symbiote-spider-man", "name": "Symbiote Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["paint-the-town-red_term_wall-crawl"] }
+    { "id": "paint-the-town-red_hero_symbiote-spider-man", "name": "Symbiote Spider-Man", "heroName": "Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["paint-the-town-red_term_wall-crawl"] }
   ],
   "villainGroups": [
     { "id": "paint-the-town-red_villain_maximum-carnage", "name": "Maximum Carnage", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "paint-the-town-red_term_feast"] },
