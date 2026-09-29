@@ -269,6 +269,24 @@ describe('SetupChecklist', () => {
     expect(rows('Shared stacks')).toEqual(['Wounds 28', 'S.H.I.E.L.D. Officers 30', 'Bystanders 28'])
   })
 
+  it('adds a Sidekick stack to lay out when an included box has Sidekicks', async () => {
+    const user = userEvent.setup()
+    renderChecklist(twoBoxesTestHeist)
+
+    expect(rows('Shared stacks')).toEqual(['Wounds 30', 'S.H.I.E.L.D. Officers 30', 'Bystanders 28', 'Sidekicks 16'])
+    expect(screen.getByRole('status')).toHaveTextContent('0 of 14 laid out')
+
+    await user.click(within(section('Shared stacks')).getByRole('checkbox', { name: 'Sidekicks 16' }))
+
+    expect(screen.getByRole('status')).toHaveTextContent('1 of 14 laid out')
+  })
+
+  it('leaves out the Sidekick stack when no included box has Sidekicks', () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    expect(within(section('Shared stacks')).queryByText('Sidekicks')).not.toBeInTheDocument()
+  })
+
   it('renders a setup from an API that predates moves as having none', () => {
     // The site and the API deploy separately, so the site can briefly talk to an API without moves.
     const { moves: _moves, ...withoutMoves } = soloSecretInvasion

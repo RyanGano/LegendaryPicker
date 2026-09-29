@@ -63,6 +63,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <Item label="Wounds" count={stacks.wounds} />
         <Item label="S.H.I.E.L.D. Officers" count={stacks.officers} />
         <Item label="Bystanders" count={stacks.bystanders} />
+        {stacks.sidekicks !== undefined && <Item label="Sidekicks" count={stacks.sidekicks} />}
       </Section>
 
       <Section title={`Starting deck per player · ${plural(setup.players, 'player')}`} kind="shield">
