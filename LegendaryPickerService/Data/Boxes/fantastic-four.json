@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 3,
+  "id": "fantastic-four",
+  "name": "Fantastic Four",
+  "catalogSource": "FF p.2; C1; C2",
+  "sources": [
+    { "key": "FF", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Fantastic-4-Rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "FF p.2" },
+    "villainGroupCards": { "value": 8, "source": "FF p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "FF p.2" },
+    "schemeTwists": { "value": 0, "source": "FF p.2" }
+  },
+  "heroes": [
+    { "id": "fantastic-four_hero_human-torch", "name": "Human Torch", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_instinct", "core_term_ranged"], "terms": ["fantastic-four_term_focus"] },
+    { "id": "fantastic-four_hero_invisible-woman", "name": "Invisible Woman", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["core_term_rescue-a-bystander", "fantastic-four_term_focus"] },
+    { "id": "fantastic-four_hero_mr-fantastic", "name": "Mr. Fantastic", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["fantastic-four_term_focus"] },
+    { "id": "fantastic-four_hero_silver-surfer", "name": "Silver Surfer", "team": null, "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["fantastic-four_term_focus"] },
+    { "id": "fantastic-four_hero_thing", "name": "Thing", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["core_term_rescue-a-bystander", "fantastic-four_term_focus"] }
+  ],
+  "villainGroups": [
+    { "id": "fantastic-four_villain_heralds-of-galactus", "name": "Heralds of Galactus", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "fantastic-four_term_cosmic-threat"] },
+    { "id": "fantastic-four_villain_subterranea", "name": "Subterranea", "terms": ["core_term_ambush", "core_term_fight", "fantastic-four_term_burrow"] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "fantastic-four_mastermind_galactus",
+      "name": "Galactus",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "core_term_rescue-a-bystander", "fantastic-four_term_cosmic-threat"],
+      "alwaysLeads": { "groupId": "fantastic-four_villain_heralds-of-galactus", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "fantastic-four_mastermind_mole-man",
+      "name": "Mole Man",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "alwaysLeads": { "groupId": "fantastic-four_villain_subterranea", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "fantastic-four_scheme_bathe-the-earth-in-cosmic-rays",
+      "name": "Bathe the Earth in Cosmic Rays",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 6, "source": "Card" }]
+      }
+    },
+    {
+      "id": "fantastic-four_scheme_flood-the-planet-with-melted-glaciers",
+      "name": "Flood the Planet with Melted Glaciers",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    },
+    {
+      "id": "fantastic-four_scheme_invincible-force-field",
+      "name": "Invincible Force Field",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 7, "source": "Card" }]
+      }
+    },
+    {
+      "id": "fantastic-four_scheme_pull-reality-into-the-negative-zone",
+      "name": "Pull Reality Into the Negative Zone",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "fantastic-four_term_fantastic-four", "name": "Fantastic Four", "kind": "team", "summary": "A Hero team. In this box its members are Human Torch, Invisible Woman, Mr. Fantastic and Thing; the box's Silver Surfer belongs to no team.", "source": "FF", "page": 1 },
+    { "id": "fantastic-four_term_focus", "name": "Focus", "kind": "keyword", "summary": "Trade the Recruit shown for the effect it buys. After playing the card you can buy that effect again and again until your turn ends, as long as your Recruit lasts.", "source": "FF", "page": 1 },
+    { "id": "fantastic-four_term_burrow", "name": "Burrow", "kind": "keyword", "summary": "After you fight this Villain, if no Villain was in the Streets, it digs back into the Streets instead of leaving the city. Its Fight effects and any rescued Bystanders still count.", "source": "FF", "page": 1 },
+    { "id": "fantastic-four_term_cosmic-threat", "name": "Cosmic Threat", "kind": "keyword", "summary": "Once a turn, reveal cards of the listed class: this enemy loses 3 Attack for each one. When several classes are listed, as on Galactus, pick one of them.", "source": "FF", "page": 1 }
+  ]
+}

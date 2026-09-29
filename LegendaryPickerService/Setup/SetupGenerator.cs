@@ -307,7 +307,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
                 && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (Solo
                     ? rules.Solo.HenchmanCards.Value
-                    : boxes.Min(box => box.Components.HenchmanGroupCards.Value))
+                    : _henchmanGroups.Select(group => BoxOf(group.Id).Components.HenchmanGroupCards.Value).DefaultIfEmpty(0).Min())
                 && plan.Bystanders + plan.MovedOut(Pile.Bystanders) <= Supply(components => components.Bystanders)
                 && plan.MovedOut(Pile.Wounds) <= plan.Wounds
                 && plan.MovedOut(Pile.Officers) <= Supply(components => components.Officers)
