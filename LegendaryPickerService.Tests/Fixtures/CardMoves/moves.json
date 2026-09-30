@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "moves",
   "name": "Moves Fixture",
   "ruleset": "firstEdition",

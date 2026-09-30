@@ -13,7 +13,7 @@ namespace LegendaryPickerService.Catalog;
 // kebab-case segment. References name a full id, so a box can reference another box's groups.
 public sealed partial class BoxCatalog
 {
-    public const int SchemaVersion = 5;
+    public const int SchemaVersion = 6;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
@@ -146,6 +146,8 @@ public sealed partial class BoxCatalog
                     throw new InvalidDataException($"{path}: base game {box.Id} has a setup section but no components.{name}.");
                 }
             }
+
+            ValidateUses(path, box);
         }
 
         // A setup names its cards by display name, so two Heroes, groups, Masterminds or Schemes sharing
@@ -383,6 +385,36 @@ public sealed partial class BoxCatalog
             }
         }
     }
+
+    // A part listed twice would say nothing more. A base game's rules can use only parts it supplies, since a
+    // setup can include it alone.
+    private static void ValidateUses(string path, Box box)
+    {
+        foreach (var (owner, uses) in UseLists(box))
+        {
+            if (uses.GroupBy(use => use.Part).FirstOrDefault(part => part.Count() > 1) is { } twice)
+            {
+                throw new InvalidDataException($"{path}: {owner} lists part {WireName(twice.Key)} more than once.");
+            }
+        }
+
+        foreach (var use in box.Setup?.Uses ?? [])
+        {
+            if (!(box.Components.Supplies(use.Part)?.Value > 0))
+            {
+                throw new InvalidDataException(
+                    $"{path}: base game {box.Id} uses {WireName(use.Part)} in setup.uses but has no components.{WireName(use.Part)}.");
+            }
+        }
+    }
+
+    // The parts each card, and a base game's rules, list as used.
+    private static IEnumerable<(string Owner, IReadOnlyList<PartUse> Uses)> UseLists(Box box) =>
+        Cards(box).Where(card => card.Uses is not null).Select(card => ($"{card.Id} uses", card.Uses!))
+            .Concat(box.Setup is { } setup ? [("setup.uses", setup.Uses)] : []);
+
+    private static IEnumerable<ICard> Cards(Box box) =>
+        box.Heroes.Cast<ICard>().Concat(box.VillainGroups).Concat(box.HenchmanGroups).Concat(box.Masterminds).Concat(box.Schemes);
 
     // A Hero constraint counts Heroes by one thing, a team or a Hero Name, against one bound. Heroes drawn
     // outside the Hero Deck go to a pile of their own rather than a stack or the Hero Deck, and are
@@ -633,6 +665,7 @@ public sealed partial class BoxCatalog
             yield return ("setup.rulings.alwaysLeadsFillsSlot", setup.Rulings.AlwaysLeadsFillsSlot);
             yield return ("setup.rulings.requiredGroupDisplacesAlwaysLeads", setup.Rulings.RequiredGroupDisplacesAlwaysLeads);
             yield return ("setup.rulings.schemeOverridesSolo", setup.Rulings.SchemeOverridesSolo);
+            yield return ("setup.rulings.unusedPartsLeftOut", setup.Rulings.UnusedPartsLeftOut);
             if (setup.Mixing is { } mixing)
             {
                 yield return ("setup.mixing.rules", mixing.Rules);
@@ -669,6 +702,11 @@ public sealed partial class BoxCatalog
         foreach (var (owner, steps) in StepLists(box))
         {
             foreach (var step in steps) yield return ($"{owner} setup.steps", step.Source);
+        }
+
+        foreach (var (owner, uses) in UseLists(box))
+        {
+            foreach (var use in uses) yield return (owner, use.Source);
         }
     }
 

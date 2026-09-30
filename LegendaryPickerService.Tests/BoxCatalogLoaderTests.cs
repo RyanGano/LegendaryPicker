@@ -94,6 +94,40 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         Assert.Equal(Ruleset.Villainous, Assert.Single(BoxCatalog.Load(_directory).Boxes).Ruleset);
     }
 
+    [Fact]
+    public void Rejects_a_card_that_lists_a_part_twice()
+    {
+        WriteCoreBox(core => Entry(core, "villainGroups", "core_villain_hydra")["uses"]!.AsArray()
+            .Add(new JsonObject { ["part"] = "wounds", ["source"] = "Card" }));
+
+        AssertRejected("core_villain_hydra uses lists part wounds more than once");
+    }
+
+    [Fact]
+    public void Rejects_a_part_use_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => Entry(core, "heroes", "core_hero_hulk")["uses"]![0]!["source"] = "X9 p.3");
+
+        AssertRejected("core_hero_hulk uses cites source X9, which is not in this box's sources");
+    }
+
+    [Fact]
+    public void Rejects_a_part_that_is_not_a_stack()
+    {
+        WriteCoreBox(core => Entry(core, "heroes", "core_hero_hulk")["uses"]![0]!["part"] = "bystanders");
+
+        AssertRejected("heroes[7].uses[0].part");
+    }
+
+    // A base game can be included alone, so its rules can use only the parts it supplies.
+    [Fact]
+    public void Rejects_a_base_game_whose_rules_use_a_part_it_does_not_supply()
+    {
+        WriteCoreBox(core => core["setup"]!["uses"]!.AsArray().Add(new JsonObject { ["part"] = "sidekicks", ["source"] = "R p.12" }));
+
+        AssertRejected("base game core uses sidekicks in setup.uses but has no components.sidekicks");
+    }
+
     [Theory]
     [InlineData("  ", "setup.solo has a play rule with no label")]
     [InlineData("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen",
@@ -127,11 +161,11 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     {
         WriteCoreBox(core =>
         {
-            core["schemaVersion"] = 6;
-            core["fieldOnlyVersion6Has"] = true;
+            core["schemaVersion"] = 7;
+            core["fieldOnlyVersion7Has"] = true;
         });
 
-        AssertRejected("schemaVersion 6; this service reads version 5");
+        AssertRejected("schemaVersion 7; this service reads version 6");
     }
 
     [Theory]
@@ -795,10 +829,13 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         File.WriteAllText(Path.Combine(_directory, fileName), box.ToJsonString(), new UTF8Encoding(byteOrderMark));
 
     // Turns a copy of the core box into a Villainous base game, with the Villainous stacks in place of
-    // Wounds and Officers.
+    // Wounds and Officers, which its rules recruit from.
     private static void AsVillainous(JsonObject core)
     {
         core["ruleset"] = "villainous";
+        core["setup"]!["uses"] = new JsonArray(
+            new JsonObject { ["part"] = "madameHydra", ["source"] = "R p.12" },
+            new JsonObject { ["part"] = "newRecruits", ["source"] = "R p.12" });
         var components = core["components"]!.AsObject();
         components.Remove("wounds");
         components.Remove("officers");

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "fixture",
   "name": "Fixture Expansion",
   "ruleset": "firstEdition",
@@ -18,10 +18,11 @@
   },
   "heroes": [
     { "id": "fixture_hero_test-pilot", "name": "Test Pilot", "team": "core_term_avengers", "classes": ["core_term_tech"], "terms": ["fixture_term_overdrive"] },
-    { "id": "fixture_hero_test-medic", "name": "Test Medic", "team": null, "classes": ["core_term_covert"], "terms": [] }
+    { "id": "fixture_hero_test-medic", "name": "Test Medic", "team": null, "classes": ["core_term_covert"], "terms": [] },
+    { "id": "fixture_hero_test-warden", "name": "Test Warden", "team": null, "classes": ["core_term_tech"], "terms": [], "uses": [{ "part": "bindings", "source": "Card" }] }
   ],
   "villainGroups": [
-    { "id": "fixture_villain_test-cult", "name": "Test Cult", "terms": ["core_term_fight", "fixture_term_overdrive"] }
+    { "id": "fixture_villain_test-cult", "name": "Test Cult", "terms": ["core_term_fight", "fixture_term_overdrive"], "uses": [{ "part": "sidekicks", "source": "Card" }] }
   ],
   "henchmanGroups": [
     { "id": "fixture_henchman_test-drones", "name": "Test Drones", "terms": ["core_term_fight"] }

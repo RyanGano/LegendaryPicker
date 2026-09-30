@@ -33,12 +33,27 @@ public class FantasticFourTests
 
     // Catalog
 
+    // The Fantastic Four cards whose text gives Wounds (C1, C2).
+    [Fact]
+    public void Fantastic_Four_cards_that_give_Wounds_list_them()
+    {
+        ICard[] cards = [.. FantasticFour.Heroes, .. FantasticFour.VillainGroups, .. FantasticFour.HenchmanGroups, .. FantasticFour.Masterminds, .. FantasticFour.Schemes];
+        Assert.Equal(
+            [
+                "fantastic-four_hero_human-torch: Wounds",
+                "fantastic-four_villain_heralds-of-galactus: Wounds",
+                "fantastic-four_mastermind_mole-man: Wounds",
+            ],
+            cards.Where(card => card.Parts.Any()).Select(card => $"{card.Id}: {string.Join(" ", card.Parts)}"));
+        Assert.All(cards.SelectMany(card => card.Uses ?? []), use => Assert.Equal("Card", use.Source));
+    }
+
     [Fact]
     public void Fantastic_Four_is_an_expansion_listed_after_Dark_City()
     {
         Assert.Equal(["core", "dark-city", "fantastic-four"], Catalog.Boxes.Select(box => box.Id).Take(3));
         Assert.Equal(FantasticFourName, FantasticFour.Name);
-        Assert.Equal(5, FantasticFour.SchemaVersion);
+        Assert.Equal(6, FantasticFour.SchemaVersion);
         Assert.False(FantasticFour.IsBaseGame);
     }
 

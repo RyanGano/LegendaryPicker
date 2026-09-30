@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "paint-the-town-red",
   "name": "Paint the Town Red",
   "ruleset": "firstEdition",
@@ -21,8 +21,8 @@
     { "id": "paint-the-town-red_hero_symbiote-spider-man", "name": "Symbiote Spider-Man", "heroName": "Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["paint-the-town-red_term_wall-crawl"] }
   ],
   "villainGroups": [
-    { "id": "paint-the-town-red_villain_maximum-carnage", "name": "Maximum Carnage", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "paint-the-town-red_term_feast"] },
-    { "id": "paint-the-town-red_villain_sinister-six", "name": "Sinister Six", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"] }
+    { "id": "paint-the-town-red_villain_maximum-carnage", "name": "Maximum Carnage", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "paint-the-town-red_term_feast"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "paint-the-town-red_villain_sinister-six", "name": "Sinister Six", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"], "uses": [{ "part": "wounds", "source": "Card" }] }
   ],
   "henchmanGroups": [],
   "masterminds": [
@@ -30,6 +30,7 @@
       "id": "paint-the-town-red_mastermind_carnage",
       "name": "Carnage",
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "paint-the-town-red_term_feast"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
       "alwaysLeads": { "groupId": "paint-the-town-red_villain_maximum-carnage", "groupType": "villain", "source": "Card" }
     },
     {

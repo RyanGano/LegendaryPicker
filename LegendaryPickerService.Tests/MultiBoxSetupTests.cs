@@ -7,8 +7,9 @@ namespace LegendaryPickerService.Tests;
 // made-up expansion. Catalog order puts the fixture's cards after the core box's, so at 2 players
 // the Schemes are the core box's 8 then 8 Test Heist, and the Masterminds the core box's 4 then 4 Test Tyrant.
 // Test Heist requires HYDRA, citing the fixture's own source R, and puts 35 Bystanders in the Villain
-// Deck; Test Tyrant always leads Test Cult. The fixture adds 11 Bystanders, 5 Wounds and 16 Sidekicks
-// to the core box's 30 Bystanders, 30 Wounds and 30 Officers.
+// Deck; Test Tyrant always leads Test Cult, which uses Sidekicks. The fixture adds 11 Bystanders, 5 Wounds
+// and 16 Sidekicks to the core box's 30 Bystanders, 30 Wounds and 30 Officers. Its Hero Test Warden uses
+// Bindings, which no First Edition box supplies, so it is never drawn.
 public class MultiBoxSetupTests
 {
     public static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "Boxes");
@@ -76,7 +77,7 @@ public class MultiBoxSetupTests
         var setup = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "fixture"], new ScriptedRandom(1)));
 
         Assert.Equal("Midtown Bank Robbery", setup.Scheme.Name);
-        Assert.Equal(new SetupStacks(35, 30, 29, 16), setup.Stacks);
+        Assert.Equal(new SetupStacks(35, 30, 29), setup.Stacks);
     }
 
     [Fact]
@@ -101,14 +102,37 @@ public class MultiBoxSetupTests
         Assert.Equal(35, midtown.Stacks.Wounds);
     }
 
+    // Test Tyrant always leads Test Cult, which uses Sidekicks. Midtown Bank Robbery and Dr. Doom's first
+    // groups and Heroes use none, so the fixture's Sidekicks are left out, with a note.
     [Fact]
-    public void Sidekicks_appear_only_when_an_included_box_provides_them()
+    public void Sidekicks_are_laid_out_only_when_a_drawn_card_uses_them()
     {
-        var withFixture = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "fixture"], new ScriptedRandom(1)));
-        var coreAlone = Assert.IsType<SetupResult>(Generator.Generate(2, ["core"], new ScriptedRandom(1)));
+        var cult = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "fixture"], new ScriptedRandom(8, 4)));
+        var midtown = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "fixture"], new ScriptedRandom(1)));
 
-        Assert.Equal(16, withFixture.Stacks.Sidekicks);
-        Assert.Null(coreAlone.Stacks.Sidekicks);
+        Assert.Contains(cult.VillainGroups, group => group.Name == "Test Cult");
+        Assert.Equal(16, cult.Stacks.Sidekicks);
+        Assert.DoesNotContain(cult.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
+        Assert.Null(midtown.Stacks.Sidekicks);
+        Assert.Contains(
+            new RuleNote("Leave out the Sidekick stack: no drawn card uses it", "D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87", CoreName),
+            midtown.Notes);
+    }
+
+    // No First Edition box supplies Bindings, so Test Warden, which uses them, is not among the 17 Heroes
+    // the first Hero draw picks from, and no draw takes it.
+    [Fact]
+    public void A_card_that_uses_a_part_no_included_box_supplies_is_dropped_before_the_draw()
+    {
+        var random = new ScriptedRandom(7, 3);
+        Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "fixture"], random));
+        Assert.Equal(17, random.Options[4]);
+
+        for (var seed = 0; seed < 40; seed++)
+        {
+            var setup = Assert.IsType<SetupResult>(Generator.Generate(5, ["core", "fixture"], new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
+            Assert.DoesNotContain(setup.Heroes, hero => hero.Name == "Test Warden");
+        }
     }
 
     [Fact]

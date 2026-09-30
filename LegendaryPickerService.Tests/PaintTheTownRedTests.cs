@@ -33,12 +33,27 @@ public class PaintTheTownRedTests
 
     // Catalog
 
+    // The Paint the Town Red cards whose text gives Wounds (C1, C2).
+    [Fact]
+    public void Paint_the_Town_Red_cards_that_give_Wounds_list_them()
+    {
+        ICard[] cards = [.. PaintTheTownRed.Heroes, .. PaintTheTownRed.VillainGroups, .. PaintTheTownRed.HenchmanGroups, .. PaintTheTownRed.Masterminds, .. PaintTheTownRed.Schemes];
+        Assert.Equal(
+            [
+                "paint-the-town-red_villain_maximum-carnage: Wounds",
+                "paint-the-town-red_villain_sinister-six: Wounds",
+                "paint-the-town-red_mastermind_carnage: Wounds",
+            ],
+            cards.Where(card => card.Parts.Any()).Select(card => $"{card.Id}: {string.Join(" ", card.Parts)}"));
+        Assert.All(cards.SelectMany(card => card.Uses ?? []), use => Assert.Equal("Card", use.Source));
+    }
+
     [Fact]
     public void Paint_the_Town_Red_is_an_expansion_listed_after_Fantastic_Four()
     {
         Assert.Equal(["core", "dark-city", "fantastic-four", "paint-the-town-red"], Catalog.Boxes.Select(box => box.Id).Take(4));
         Assert.Equal(PaintTheTownRedName, PaintTheTownRed.Name);
-        Assert.Equal(5, PaintTheTownRed.SchemaVersion);
+        Assert.Equal(6, PaintTheTownRed.SchemaVersion);
         Assert.False(PaintTheTownRed.IsBaseGame);
     }
 
@@ -180,7 +195,7 @@ public class PaintTheTownRedTests
 
     private const string SpiderNamesBox = """
         {
-          "schemaVersion": 5,
+          "schemaVersion": 6,
           "id": "spider-names",
           "name": "Spider Names Fixture",
           "ruleset": "firstEdition",

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "fantastic-four",
   "name": "Fantastic Four",
   "ruleset": "firstEdition",
@@ -14,14 +14,14 @@
     "schemeTwists": { "value": 0, "source": "FF p.2" }
   },
   "heroes": [
-    { "id": "fantastic-four_hero_human-torch", "name": "Human Torch", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_instinct", "core_term_ranged"], "terms": ["fantastic-four_term_focus"] },
+    { "id": "fantastic-four_hero_human-torch", "name": "Human Torch", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_instinct", "core_term_ranged"], "terms": ["fantastic-four_term_focus"], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "fantastic-four_hero_invisible-woman", "name": "Invisible Woman", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["core_term_rescue-a-bystander", "fantastic-four_term_focus"] },
     { "id": "fantastic-four_hero_mr-fantastic", "name": "Mr. Fantastic", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["fantastic-four_term_focus"] },
     { "id": "fantastic-four_hero_silver-surfer", "name": "Silver Surfer", "team": null, "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["fantastic-four_term_focus"] },
     { "id": "fantastic-four_hero_thing", "name": "Thing", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["core_term_rescue-a-bystander", "fantastic-four_term_focus"] }
   ],
   "villainGroups": [
-    { "id": "fantastic-four_villain_heralds-of-galactus", "name": "Heralds of Galactus", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "fantastic-four_term_cosmic-threat"] },
+    { "id": "fantastic-four_villain_heralds-of-galactus", "name": "Heralds of Galactus", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "fantastic-four_term_cosmic-threat"], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "fantastic-four_villain_subterranea", "name": "Subterranea", "terms": ["core_term_ambush", "core_term_fight", "fantastic-four_term_burrow"] }
   ],
   "henchmanGroups": [],
@@ -36,6 +36,7 @@
       "id": "fantastic-four_mastermind_mole-man",
       "name": "Mole Man",
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
       "alwaysLeads": { "groupId": "fantastic-four_villain_subterranea", "groupType": "villain", "source": "Card" }
     }
   ],
