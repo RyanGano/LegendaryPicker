@@ -70,7 +70,7 @@ When the final listed product has been processed, leave `Next` unset until anoth
 | Marvel Studios' Ant-Man and the Wasp (Dec 2023/Jan 2024) | Expansion · Revised | Partial: 200-card total and new mechanics verified; category totals, setups, Always Leads, and Hero metadata need official card-level verification; C1 face metadata indexed; image, copy-count, and setup gaps remain as documented; [card-face research](./marvel-studios-ant-man-and-the-wasp.md) | `Docs/BoxResearch/marvel-studios-ant-man-and-the-wasp.md` |
 | 2099 (Apr 2024) | Expansion · Revised | Partial: official total known; C1 per-face metadata indexed but no direct image URLs; itemized contents, setup values, components, and unverified copy counts remain open; [card-face research](./2099.md) | `Docs/BoxResearch/2099.md` |
 | Weapon X (Oct 2024) | Expansion · Revised | Partial: C1 per-face metadata indexed but no direct image URLs; third Scheme setup, Always Leads, and Loved Ones components remain open; [card-face research](./weapon-x.md) | `Docs/BoxResearch/weapon-x.md` |
-| Legendary: Marvel Second Edition (Jun 2026) | Base game · Revised | Queued · roadmap #34; never substitute its rules for First Edition | `Docs/BoxResearch/second-edition.md` |
+| Legendary: Marvel Second Edition (Jun 2026) | Base game · Revised | Partial: official inventory and base setup verified; C1 per-face metadata indexed but no direct image URLs; group identities, card-level setups, and Always Leads remain open (end of current roadmap); [card-face research](./second-edition.md) | `Docs/BoxResearch/second-edition.md` |
 
 ## Open collection and implementation work
 
