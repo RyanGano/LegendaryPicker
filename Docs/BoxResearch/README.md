@@ -31,7 +31,7 @@ When the final listed product has been processed, leave `Next` unset until anoth
 
 | Product (release order) | Product / ruleset | Status | Data record |
 |---|---|---|---|
-| Marvel Legendary First Edition core box (Nov 2012) | Base game · First Edition | Integrated; physical-card verification remains open in [#11](https://github.com/RyanGano/LegendaryPicker/issues/11) | `LegendaryPickerService/Data/Boxes/core.json` |
+| Marvel Legendary First Edition core box (Nov 2012) | Base game · First Edition | Integrated; Research partial: C1 per-face values and Hero metadata indexed; missing copy counts/fields and sourced setup interpretations remain incomplete; [#11](https://github.com/RyanGano/LegendaryPicker/issues/11) remains open; [card-face research](./core.md) | `LegendaryPickerService/Data/Boxes/core.json` |
 | Dark City (Jun 2013) | Expansion · First Edition | Integrated | `LegendaryPickerService/Data/Boxes/dark-city.json` |
 | Fantastic Four (Oct 2013) | Expansion · First Edition | Integrated | `LegendaryPickerService/Data/Boxes/fantastic-four.json` |
 | Paint the Town Red (Mar 2014) | Expansion · First Edition | Integrated | `LegendaryPickerService/Data/Boxes/paint-the-town-red.json` |
