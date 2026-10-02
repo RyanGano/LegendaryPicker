@@ -32,7 +32,7 @@ When the final listed product has been processed, leave `Next` unset until anoth
 | Product (release order) | Product / ruleset | Status | Data record |
 |---|---|---|---|
 | Marvel Legendary First Edition core box (Nov 2012) | Base game · First Edition | Integrated; Research partial: C1 per-face values and Hero metadata indexed; missing copy counts/fields and sourced setup interpretations remain incomplete; [#11](https://github.com/RyanGano/LegendaryPicker/issues/11) remains open; [card-face research](./core.md) | `LegendaryPickerService/Data/Boxes/core.json` |
-| Dark City (Jun 2013) | Expansion · First Edition | Integrated | `LegendaryPickerService/Data/Boxes/dark-city.json` |
+| Dark City (Jun 2013) | Expansion · First Edition | Integrated; Research partial: C1 face metadata indexed; image, copy-count, and setup gaps remain as documented; [card-face research](./dark-city.md) | `LegendaryPickerService/Data/Boxes/dark-city.json` |
 | Fantastic Four (Oct 2013) | Expansion · First Edition | Integrated | `LegendaryPickerService/Data/Boxes/fantastic-four.json` |
 | Paint the Town Red (Mar 2014) | Expansion · First Edition | Integrated | `LegendaryPickerService/Data/Boxes/paint-the-town-red.json` |
 | Legendary: Villains (Jul 2014) | Base game · Villainous | Partial: 6 of 8 Plots are cataloged; the remaining two are tracked in [#84](https://github.com/RyanGano/LegendaryPicker/issues/84) | `LegendaryPickerService/Data/Boxes/villains.json` |
