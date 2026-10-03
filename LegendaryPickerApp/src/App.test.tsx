@@ -147,7 +147,7 @@ describe('App', () => {
     expect(await screen.findByRole('heading', { name: 'Setup for 3 players' })).toHaveFocus()
   })
 
-  it('announces the draw and then the result through the live region', async () => {
+  it('announces the draw and then the result through the live region, leaving the count to the focused heading', async () => {
     let answer!: () => void
     setupAnswers.push(() => new Promise((resolve) => (answer = () => resolve(Response.json(setup)))))
     const user = userEvent.setup()
@@ -161,9 +161,8 @@ describe('App', () => {
     expect(announced()).toBe('Drawing a setup for 3 players…')
 
     answer()
-    await screen.findByRole('heading', { name: 'Setup for 3 players' })
-
-    expect(announced()).toBe('Setup for 3 players ready. Scheme: Midtown Bank Robbery. Mastermind: Magneto.')
+    expect(await screen.findByRole('heading', { name: 'Setup for 3 players' })).toHaveFocus()
+    expect(announced()).toBe('Setup ready. Scheme: Midtown Bank Robbery. Mastermind: Magneto.')
   })
 
   it('announces a failed draw and a count with no legal Scheme', async () => {
@@ -247,6 +246,28 @@ describe('App', () => {
     ])
   })
 
+  it('names the count Generate another draws once it differs from the setup on screen', async () => {
+    setupAnswers.push(() => json(setup), () => json({ ...setup, players: 4 }))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    const actionBar = await screen.findByRole('group', { name: 'Setup actions' })
+    await user.click(screen.getByRole('button', { name: '4' }))
+
+    expect(screen.getByRole('heading', { name: 'Setup for 3 players' })).toBeInTheDocument()
+    expect(within(actionBar).getByRole('paragraph')).toHaveTextContent('3 players')
+
+    await user.click(within(actionBar).getByRole('button', { name: 'Generate another · 4 players' }))
+
+    expect(await screen.findByRole('heading', { name: 'Setup for 4 players' })).toBeInTheDocument()
+    const nextBar = screen.getByRole('group', { name: 'Setup actions' })
+    expect(within(nextBar).getByRole('paragraph')).toHaveTextContent('4 players')
+    expect(within(nextBar).getByRole('button', { name: 'Generate another' })).toBeInTheDocument()
+    expect(setupRequests().at(-1)).toMatch(/players=4&boxes=core$/)
+  })
+
   it('clears the ticks on Generate another', async () => {
     setupAnswers.push(() => json(setup), () => json(setup))
     const user = userEvent.setup()
@@ -284,6 +305,20 @@ describe('App', () => {
     await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
 
     expect(screen.queryByText(intro)).not.toBeInTheDocument()
+  })
+
+  it('keeps the intro when the first draw fails', async () => {
+    setupAnswers.push(() => Promise.reject(new TypeError('Failed to fetch')))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('button', { name: 'Retry' })
+
+    expect(
+      screen.getByText('Get a random legal setup and a checklist for laying it out, following the official rules.'),
+    ).toBeInTheDocument()
   })
 
   it('shows a skeleton of the result while a request is pending', async () => {
@@ -513,7 +548,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Generate' }))
 
     expect(await screen.findByRole('heading', { name: 'Setup for 3 players', level: 2 })).toBeInTheDocument()
-    expect(announced()).toBe('Setup for 3 players ready. Plot: Crush HYDRA. Mastermind: Magneto.')
+    expect(announced()).toBe('Setup ready. Plot: Crush HYDRA. Mastermind: Magneto.')
 
     await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' }))
     await user.click(screen.getByRole('checkbox', { name: 'Fixture Expansion' }))

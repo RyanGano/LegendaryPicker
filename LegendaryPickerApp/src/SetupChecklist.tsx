@@ -118,7 +118,9 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       </Section>
 
       {steps.length > 0 && (
-        <Section title="Other setup steps" kind="scheme">
+        // No card type's accent: the steps come from the Scheme and the Mastermind alike, and the API
+        // doesn't say which printed each one.
+        <Section title="Other setup steps">
           {/* Keyed by position: a Scheme and its Mastermind can print the same step. */}
           {steps.map((step, index) => (
             <Item key={index} label={step} />
