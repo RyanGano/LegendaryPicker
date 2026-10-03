@@ -1,12 +1,13 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "villains",
   "name": "Legendary: Villains",
   "ruleset": "villainous",
   "catalogSource": "VIL p.22; C1; C2",
   "sources": [
     { "key": "VIL", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf" },
-    { "key": "D-mixed", "url": "https://github.com/RyanGano/LegendaryPicker/issues/85" }
+    { "key": "D-mixed", "url": "https://github.com/RyanGano/LegendaryPicker/issues/85" },
+    { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "VIL p.7" },
@@ -22,13 +23,13 @@
     { "id": "villains_hero_bullseye", "name": "Bullseye", "team": "villains_term_crime-syndicate", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_ranged"], "terms": ["villains_term_dodge"] },
     { "id": "villains_hero_dr-octopus", "name": "Dr. Octopus", "team": "villains_term_sinister-six", "classes": ["villains_term_strength", "villains_term_tech"], "terms": [] },
     { "id": "villains_hero_electro", "name": "Electro", "team": "villains_term_sinister-six", "classes": ["villains_term_instinct", "villains_term_ranged"], "terms": ["villains_term_dodge"] },
-    { "id": "villains_hero_enchantress", "name": "Enchantress", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_ranged"], "terms": [] },
+    { "id": "villains_hero_enchantress", "name": "Enchantress", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_ranged"], "terms": [], "uses": [{ "part": "newRecruits", "source": "Card" }] },
     { "id": "villains_hero_green-goblin", "name": "Green Goblin", "team": "villains_term_sinister-six", "classes": ["villains_term_instinct", "villains_term_tech"], "terms": ["villains_term_dodge", "villains_term_kidnap-a-bystander"] },
     { "id": "villains_hero_juggernaut", "name": "Juggernaut", "team": "villains_term_brotherhood", "classes": ["villains_term_strength"], "terms": [] },
-    { "id": "villains_hero_kingpin", "name": "Kingpin", "team": "villains_term_crime-syndicate", "classes": ["villains_term_covert", "villains_term_strength", "villains_term_tech"], "terms": [] },
+    { "id": "villains_hero_kingpin", "name": "Kingpin", "team": "villains_term_crime-syndicate", "classes": ["villains_term_covert", "villains_term_strength", "villains_term_tech"], "terms": [], "uses": [{ "part": "newRecruits", "source": "Card" }] },
     { "id": "villains_hero_kraven", "name": "Kraven", "team": "villains_term_sinister-six", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_strength"], "terms": ["villains_term_dodge"] },
-    { "id": "villains_hero_loki", "name": "Loki", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_ranged"], "terms": [] },
-    { "id": "villains_hero_magneto", "name": "Magneto", "team": "villains_term_brotherhood", "classes": ["villains_term_ranged", "villains_term_strength"], "terms": ["villains_term_dodge"] },
+    { "id": "villains_hero_loki", "name": "Loki", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_ranged"], "terms": [], "uses": [{ "part": "bindings", "source": "Card" }, { "part": "newRecruits", "source": "Card" }] },
+    { "id": "villains_hero_magneto", "name": "Magneto", "team": "villains_term_brotherhood", "classes": ["villains_term_ranged", "villains_term_strength"], "terms": ["villains_term_dodge"], "uses": [{ "part": "bindings", "source": "Card" }] },
     { "id": "villains_hero_mysterio", "name": "Mysterio", "team": "villains_term_sinister-six", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_ranged", "villains_term_tech"], "terms": ["villains_term_dodge"] },
     { "id": "villains_hero_mystique", "name": "Mystique", "team": "villains_term_brotherhood", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_tech"], "terms": ["villains_term_dodge"] },
     { "id": "villains_hero_sabretooth", "name": "Sabretooth", "team": "villains_term_brotherhood", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_strength"], "terms": [] },
@@ -36,17 +37,17 @@
     { "id": "villains_hero_venom", "name": "Venom", "team": "villains_term_sinister-six", "classes": ["villains_term_instinct", "villains_term_strength"], "terms": ["villains_term_kidnap-a-bystander"] }
   ],
   "villainGroups": [
-    { "id": "villains_villain_avengers", "name": "Avengers", "terms": ["villains_term_ambush", "villains_term_demolish", "villains_term_elusive", "villains_term_fight", "villains_term_overrun"] },
-    { "id": "villains_villain_defenders", "name": "Defenders", "terms": ["villains_term_ambush", "villains_term_fight", "villains_term_overrun"] },
-    { "id": "villains_villain_marvel-knights", "name": "Marvel Knights", "terms": ["villains_term_fight", "villains_term_overrun"] },
-    { "id": "villains_villain_spider-friends", "name": "Spider Friends", "terms": ["villains_term_elusive", "villains_term_fight", "villains_term_overrun"] },
-    { "id": "villains_villain_uncanny-avengers", "name": "Uncanny Avengers", "terms": ["villains_term_ambush", "villains_term_fight", "villains_term_overrun", "villains_term_x-treme-attack"] },
-    { "id": "villains_villain_uncanny-x-men", "name": "Uncanny X-Men", "terms": ["villains_term_ambush", "villains_term_elusive", "villains_term_fight", "villains_term_x-treme-attack"] },
+    { "id": "villains_villain_avengers", "name": "Avengers", "terms": ["villains_term_ambush", "villains_term_demolish", "villains_term_elusive", "villains_term_fight", "villains_term_overrun"], "uses": [{ "part": "bindings", "source": "Card" }] },
+    { "id": "villains_villain_defenders", "name": "Defenders", "terms": ["villains_term_ambush", "villains_term_fight", "villains_term_overrun"], "uses": [{ "part": "bindings", "source": "Card" }] },
+    { "id": "villains_villain_marvel-knights", "name": "Marvel Knights", "terms": ["villains_term_fight", "villains_term_overrun"], "uses": [{ "part": "bindings", "source": "Card" }] },
+    { "id": "villains_villain_spider-friends", "name": "Spider Friends", "terms": ["villains_term_elusive", "villains_term_fight", "villains_term_overrun"], "uses": [{ "part": "bindings", "source": "Card" }] },
+    { "id": "villains_villain_uncanny-avengers", "name": "Uncanny Avengers", "terms": ["villains_term_ambush", "villains_term_fight", "villains_term_overrun", "villains_term_x-treme-attack"], "uses": [{ "part": "bindings", "source": "Card" }] },
+    { "id": "villains_villain_uncanny-x-men", "name": "Uncanny X-Men", "terms": ["villains_term_ambush", "villains_term_elusive", "villains_term_fight", "villains_term_x-treme-attack"], "uses": [{ "part": "bindings", "source": "Card" }] },
     { "id": "villains_villain_x-men-first-class", "name": "X-Men First Class", "terms": ["villains_term_ambush", "villains_term_fight", "villains_term_overrun", "villains_term_x-treme-attack"] }
   ],
   "henchmanGroups": [
     { "id": "villains_henchman_asgardian-warriors", "name": "Asgardian Warriors", "terms": ["villains_term_fight"] },
-    { "id": "villains_henchman_cops", "name": "Cops", "terms": ["villains_term_fight"] },
+    { "id": "villains_henchman_cops", "name": "Cops", "terms": ["villains_term_fight"], "uses": [{ "part": "newRecruits", "source": "Card" }] },
     { "id": "villains_henchman_multiple-man", "name": "Multiple Man", "terms": ["villains_term_fight"] },
     { "id": "villains_henchman_shield-assault-squad", "name": "S.H.I.E.L.D. Assault Squad", "terms": ["villains_term_fight"] }
   ],
@@ -55,24 +56,28 @@
       "id": "villains_mastermind_dr-strange",
       "name": "Dr. Strange",
       "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_fight"],
+      "uses": [{ "part": "bindings", "source": "Card" }],
       "alwaysLeads": { "groupId": "villains_villain_defenders", "groupType": "villain", "source": "Card" }
     },
     {
       "id": "villains_mastermind_nick-fury",
       "name": "Nick Fury",
       "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_demolish", "villains_term_fight"],
+      "uses": [{ "part": "madameHydra", "source": "Card" }],
       "alwaysLeads": { "groupId": "villains_villain_avengers", "groupType": "villain", "source": "Card" }
     },
     {
       "id": "villains_mastermind_odin",
       "name": "Odin",
       "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_fight"],
+      "uses": [{ "part": "bindings", "source": "Card" }],
       "alwaysLeads": { "groupId": "villains_henchman_asgardian-warriors", "groupType": "henchman", "source": "Card" }
     },
     {
       "id": "villains_mastermind_professor-x",
       "name": "Professor X",
       "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_fight"],
+      "uses": [{ "part": "bindings", "source": "Card" }],
       "alwaysLeads": { "groupId": "villains_villain_x-men-first-class", "groupType": "villain", "source": "Card" }
     }
   ],
@@ -81,6 +86,7 @@
       "id": "villains_scheme_build-an-underground-megavault-prison",
       "name": "Build an Underground MegaVault Prison",
       "terms": ["villains_term_plot-twist"],
+      "uses": [{ "part": "bindings", "source": "Card" }],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "bindingsPerPlayer": { "value": 5, "source": "Card" }
@@ -90,6 +96,7 @@
       "id": "villains_scheme_crush-hydra",
       "name": "Crush HYDRA",
       "terms": ["villains_term_plot-twist"],
+      "uses": [{ "part": "madameHydra", "source": "Card" }, { "part": "newRecruits", "source": "Card" }],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }]
       }
@@ -185,10 +192,12 @@
         { "label": "After each Command Strike, play another card from the Adversary Deck", "source": "VIL p.20" }
       ]
     },
+    "uses": [{ "part": "madameHydra", "source": "VIL p.11" }, { "part": "newRecruits", "source": "VIL p.11" }],
     "rulings": {
       "alwaysLeadsFillsSlot": "VIL p.6",
       "requiredGroupDisplacesAlwaysLeads": "VIL p.18",
-      "schemeOverridesSolo": "VIL p.18"
+      "schemeOverridesSolo": "VIL p.18",
+      "unusedPartsLeftOut": "D-uses"
     },
     "mixing": {
       "rules": "D-mixed",

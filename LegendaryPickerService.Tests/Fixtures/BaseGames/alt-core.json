@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "alt-core",
   "name": "Alternate Core Fixture",
   "ruleset": "firstEdition",
@@ -131,10 +131,12 @@
         }
       ]
     },
+    "uses": [{ "part": "officers", "source": "R p.3" }],
     "rulings": {
       "alwaysLeadsFillsSlot": "R p.2",
       "requiredGroupDisplacesAlwaysLeads": "R p.2",
-      "schemeOverridesSolo": "R p.3"
+      "schemeOverridesSolo": "R p.3",
+      "unusedPartsLeftOut": "R p.3"
     }
   }
 }

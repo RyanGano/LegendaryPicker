@@ -38,12 +38,31 @@ public class DarkCityTests
 
     // Catalog
 
+    // The Dark City cards whose text gives Wounds (C1, C2); Dark City supplies none, so they need the core box.
+    [Fact]
+    public void Dark_City_cards_that_give_Wounds_list_them()
+    {
+        ICard[] cards = [.. DarkCity.Heroes, .. DarkCity.VillainGroups, .. DarkCity.HenchmanGroups, .. DarkCity.Masterminds, .. DarkCity.Schemes];
+        Assert.Equal(
+            [
+                "dark-city_hero_colossus: Wounds",
+                "dark-city_villain_emissaries-of-evil: Wounds",
+                "dark-city_villain_four-horsemen: Wounds",
+                "dark-city_villain_streets-of-new-york: Wounds",
+                "dark-city_villain_underworld: Wounds",
+                "dark-city_mastermind_mephisto: Wounds",
+                "dark-city_mastermind_stryfe: Wounds",
+            ],
+            cards.Where(card => card.Parts.Any()).Select(card => $"{card.Id}: {string.Join(" ", card.Parts)}"));
+        Assert.All(cards.SelectMany(card => card.Uses ?? []), use => Assert.Equal("Card", use.Source));
+    }
+
     [Fact]
     public void Dark_City_is_an_expansion_listed_after_the_core_box()
     {
         Assert.Equal(["core", "dark-city"], Catalog.Boxes.Select(box => box.Id).Take(2));
         Assert.Equal(DarkCityName, DarkCity.Name);
-        Assert.Equal(5, DarkCity.SchemaVersion);
+        Assert.Equal(6, DarkCity.SchemaVersion);
         Assert.False(DarkCity.IsBaseGame);
     }
 

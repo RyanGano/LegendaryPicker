@@ -73,10 +73,10 @@ public sealed record OutsideHero(Hero Hero, Pile To, int Cards);
 public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Cards);
 
 // Each stack holds the cards the included boxes of the drawn cards' rulesets add to it, or the size the
-// Scheme sets, less what the setup moves out. A stack none of those boxes has is null and left out of the
-// response: a First Edition setup has no Bindings, Madame HYDRA or New Recruits, a Villainous one no Wounds
-// or Officers, and only some boxes have Sidekicks. A mixed setup lays out every stack. Every base game has
-// Bystanders.
+// Scheme sets, less what the setup moves out. A stack is laid out only when the setup's rules or one of its
+// drawn cards use it (D-uses); any other is null and left out of the response. So a First Edition setup has
+// no Bindings, Madame HYDRA or New Recruits, a Villainous one no Wounds or Officers, and Wounds, Bindings and
+// Sidekicks appear only when a drawn card uses them. Every setup lays out Bystanders.
 public sealed record SetupStacks(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Wounds,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Officers,

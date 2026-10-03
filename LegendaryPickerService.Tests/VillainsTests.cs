@@ -31,12 +31,43 @@ public class VillainsTests
 
     // Catalog
 
+    // The Villains cards whose text gives Bindings or takes New Recruits or Madame HYDRA (C1, C2). Players recruit
+    // from the Madame HYDRA and New Recruit stacks in every Villainous game (VIL p.11).
+    [Fact]
+    public void Villains_cards_that_take_from_a_stack_list_it()
+    {
+        ICard[] cards = [.. Villains.Heroes, .. Villains.VillainGroups, .. Villains.HenchmanGroups, .. Villains.Masterminds, .. Villains.Schemes];
+        Assert.Equal(
+            [
+                "villains_hero_enchantress: NewRecruits",
+                "villains_hero_kingpin: NewRecruits",
+                "villains_hero_loki: Bindings NewRecruits",
+                "villains_hero_magneto: Bindings",
+                "villains_villain_avengers: Bindings",
+                "villains_villain_defenders: Bindings",
+                "villains_villain_marvel-knights: Bindings",
+                "villains_villain_spider-friends: Bindings",
+                "villains_villain_uncanny-avengers: Bindings",
+                "villains_villain_uncanny-x-men: Bindings",
+                "villains_henchman_cops: NewRecruits",
+                "villains_mastermind_dr-strange: Bindings",
+                "villains_mastermind_nick-fury: MadameHydra",
+                "villains_mastermind_odin: Bindings",
+                "villains_mastermind_professor-x: Bindings",
+                "villains_scheme_build-an-underground-megavault-prison: Bindings",
+                "villains_scheme_crush-hydra: MadameHydra NewRecruits",
+            ],
+            cards.Where(card => card.Parts.Any()).Select(card => $"{card.Id}: {string.Join(" ", card.Parts)}"));
+        Assert.All(cards.SelectMany(card => card.Uses ?? []), use => Assert.Equal("Card", use.Source));
+        Assert.Equal([new PartUse(Part.MadameHydra, "VIL p.11"), new PartUse(Part.NewRecruits, "VIL p.11")], Villains.Setup!.Uses);
+    }
+
     [Fact]
     public void Villains_is_a_Villainous_base_game_listed_after_the_expansions_before_it()
     {
         Assert.Equal(["core", "dark-city", "fantastic-four", "paint-the-town-red", "villains"], Catalog.Boxes.Select(box => box.Id));
         Assert.Equal("Legendary: Villains", Villains.Name);
-        Assert.Equal(5, Villains.SchemaVersion);
+        Assert.Equal(6, Villains.SchemaVersion);
         Assert.True(Villains.IsBaseGame);
         Assert.Equal(Ruleset.Villainous, Villains.Ruleset);
     }
@@ -104,7 +135,7 @@ public class VillainsTests
         Assert.Equal((1, "VIL p.7"), (sixthAlly.Value, sixthAlly.Source));
         Assert.Equal(new Sourced<int>(5, "VIL p.6"), setup.MasterStrikes);
         Assert.Equal(new StartingDeck(new Sourced<int>(8, "VIL p.5"), new Sourced<int>(4, "VIL p.5")), setup.StartingDeck);
-        Assert.Equal(new Rulings("VIL p.6", "VIL p.18", "VIL p.18"), setup.Rulings);
+        Assert.Equal(new Rulings("VIL p.6", "VIL p.18", "VIL p.18", "D-uses"), setup.Rulings);
     }
 
     [Fact]
@@ -148,7 +179,11 @@ public class VillainsTests
     public void The_rulebook_and_the_owner_decision_on_mixed_setups_are_the_source_keys()
     {
         Assert.Equal(
-            [new SourceLink("VIL", Rulebook), new SourceLink("D-mixed", "https://github.com/RyanGano/LegendaryPicker/issues/85")],
+            [
+                new SourceLink("VIL", Rulebook),
+                new SourceLink("D-mixed", "https://github.com/RyanGano/LegendaryPicker/issues/85"),
+                new SourceLink("D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87"),
+            ],
             Villains.Sources);
         Assert.Equal("VIL p.22; C1; C2", Villains.CatalogSource);
     }

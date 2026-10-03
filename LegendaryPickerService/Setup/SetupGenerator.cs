@@ -17,6 +17,9 @@ namespace LegendaryPickerService.Setup;
 // so no later draw can change the rules the counts came from. A pair whose rules have no included base game
 // can't be set up and is dropped before the draw.
 //
+// The setup lays out a stack only when its rules or a drawn card use it (D-uses, #87). A card that uses a stack
+// no included box of its own ruleset supplies can't be set up, so it is dropped before the draw.
+//
 // Every count and rule comes from the box data; nothing here compares a card name.
 public sealed class SetupGenerator(BoxCatalog catalog)
 {
@@ -113,9 +116,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         IReadOnlyList<Box> boxes, IReadOnlyList<Box> pool, Box rulesBox, Box? mixingBox, SetupRules rules, int players, PlayerCountSetup? row,
         IRandomSource random)
     {
-        private readonly List<VillainGroup> _villainGroups = pool.SelectMany(box => box.VillainGroups).ToList();
-        private readonly List<HenchmanGroup> _henchmanGroups = pool.SelectMany(box => box.HenchmanGroups).ToList();
-        private readonly List<Hero> _heroes = pool.SelectMany(box => box.Heroes).ToList();
+        private readonly List<VillainGroup> _villainGroups = pool.SelectMany(box => box.VillainGroups).Where(group => Supplied(boxes, group)).ToList();
+        private readonly List<HenchmanGroup> _henchmanGroups = pool.SelectMany(box => box.HenchmanGroups).Where(group => Supplied(boxes, group)).ToList();
+        private readonly List<Hero> _heroes = pool.SelectMany(box => box.Heroes).Where(hero => Supplied(boxes, hero)).ToList();
         private readonly Dictionary<(string Scheme, int Heroes), bool> _heroesFit = [];
 
         // The words the ruleset's rulebook uses, for rule notes. A setup whose drawn cards follow both rulesets
@@ -133,7 +136,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // with none follows the other ruleset's rules, drawn from that ruleset's boxes alone.
         public List<SetupPlan> Completions(Scheme scheme)
         {
-            if (!pool.Any(box => box.Schemes.Contains(scheme)))
+            if (!pool.Any(box => box.Schemes.Contains(scheme)) || !Supplied(boxes, scheme))
             {
                 return [];
             }
@@ -141,6 +144,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // A Mastermind whose Always Leads group is not in the pool cannot be set up legally.
             var plan = Plan(scheme);
             return pool.SelectMany(box => box.Masterminds)
+                .Where(mastermind => Supplied(boxes, mastermind))
                 .Where(mastermind => IgnoresAlwaysLeads || GroupIds().Contains(mastermind.AlwaysLeads.GroupId))
                 .Where(mastermind => RulesetOf(scheme.Id) == rulesBox.Ruleset || RulesetOf(mastermind.Id) == rulesBox.Ruleset)
                 .Select(mastermind => WithMastermind(plan, mastermind))
@@ -162,16 +166,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var (heroes, outside) = DrawHeroes(plan);
 
             // The rulesets of the drawn cards decide which boxes' stacks are laid out, and whether the setup is mixed.
-            var drawn = new[] { plan.Scheme.Id, mastermind.Id }
-                .Concat(villainGroups.Select(group => group.Id))
-                .Concat(henchmanGroups.Select(group => group.Id))
-                .Concat(outsideHenchmen.Select(group => group.Group.Id))
-                .Concat(heroes.Select(hero => hero.Id))
-                .Concat(outside.Select(hero => hero.Hero.Id))
-                .Select(RulesetOf)
-                .ToHashSet();
+            ICard[] cards =
+            [
+                plan.Scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(group => group.Group),
+                .. heroes, .. outside.Select(hero => hero.Hero),
+            ];
+            var drawn = cards.Select(card => RulesetOf(card.Id)).ToHashSet();
             var stackBoxes = boxes.Where(box => drawn.Contains(box.Ruleset)).ToList();
             var mixed = drawn.Count > 1;
+
+            // The parts the setup lays out: those its rules use, which in a mixed setup are the recruit stacks of
+            // every included base game (VIL p.21), and those its drawn cards use (D-uses).
+            var rulesUse = mixed ? boxes.Where(box => box.IsBaseGame).SelectMany(box => box.Setup!.Uses) : rules.Uses;
+            var used = rulesUse.Select(use => use.Part).Concat(cards.SelectMany(card => card.Parts)).ToHashSet();
 
             // A mixed setup's notes name its parts in both rulesets' words, so its plan's notes are written again.
             var notes = new List<RuleNote>();
@@ -187,8 +194,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             notes.AddRange(slotNotes);
 
-            // A mixed setup draws from shared pools, lays out every stack, and lets the players choose between
-            // the starting decks of the included base games (VIL p.21).
+            // A mixed setup draws from shared pools, lays out every included base game's recruit stacks, and lets
+            // the players choose between the starting decks of the included base games (VIL p.21).
             IReadOnlyList<Ruleset>? choices = null;
             if (mixed)
             {
@@ -196,7 +203,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(Note(
                     "Mixed sets: Schemes and Plots, Masterminds and Commanders, Heroes and Allies and the groups each come from one pool",
                     mixing.Pools, mixingBox));
-                notes.Add(Note("Mixed sets: lay out every Wound, Bindings and recruit stack, and shuffle all Bystanders together", mixing.Stacks, mixingBox));
+                notes.Add(Note(
+                    "Mixed sets: lay out the recruit stacks of every included base game, and shuffle all Bystanders together",
+                    mixing.Stacks, mixingBox));
                 var teams = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).Distinct().ToList();
                 if (teams.Count > 1)
                 {
@@ -205,6 +214,17 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                         $"Mixed sets: the players choose {string.Join(" or ", teams.Select(RulesetTerms.StartingTeam))} starting decks",
                         mixing.StartingDeckChoice, mixingBox));
                 }
+            }
+
+            // A stack the boxes of the drawn cards' rulesets supply but nothing in the setup uses is left out.
+            var leftOut = Enum.GetValues<Part>()
+                .Where(part => !used.Contains(part) && stackBoxes.Any(box => box.Components.Supplies(part) is not null))
+                .ToList();
+            if (leftOut.Count > 0)
+            {
+                notes.Add(Note(
+                    $"Leave out the {string.Join(" and ", leftOut.Select(StackName))} {(leftOut.Count == 1 ? "stack: no drawn card uses it" : "stacks: no drawn card uses them")}",
+                    rules.Rulings.UnusedPartsLeftOut, rulesBox));
             }
 
             if (Solo)
@@ -226,11 +246,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     LinkOf(source, mixingBox));
             }
 
-            // What the boxes of the drawn cards' rulesets hold between them, and a stack's size, or null when none
-            // of them has that stack, so the setup leaves it out.
-            int Supplied(Func<BoxComponents, Sourced<int>?> count) => stackBoxes.Sum(box => count(box.Components)?.Value ?? 0);
-            int? Stack(Func<BoxComponents, Sourced<int>?> count, int size) =>
-                stackBoxes.Any(box => count(box.Components) is not null) ? size : null;
+            // What the boxes of the drawn cards' rulesets hold of a part between them, and a part's stack size,
+            // or null when nothing in the setup uses the part, so the setup leaves it out.
+            int Supply(Part part) => stackBoxes.Sum(box => box.Components.Supplies(part)?.Value ?? 0);
+            int? Stack(Part part, int size) => used.Contains(part) ? size : null;
 
             return new SetupResult(
                 players,
@@ -256,13 +275,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     outsideHenchmen.Where(outside => outside.To == Pile.HeroDeck).Sum(outside => outside.Cards)),
                 plan.TwistsBeside,
                 new SetupStacks(
-                    Stack(components => components.Wounds, (plan.Wounds ?? Supplied(components => components.Wounds)) - plan.MovedOut(Pile.Wounds)),
-                    Stack(components => components.Officers, Supplied(components => components.Officers) - plan.MovedOut(Pile.Officers)),
-                    Supplied(components => components.Bystanders) - plan.Bystanders - plan.MovedOut(Pile.Bystanders),
-                    Stack(components => components.Sidekicks, Supplied(components => components.Sidekicks) - plan.MovedOut(Pile.Sidekicks)),
-                    Stack(components => components.Bindings, plan.Bindings ?? Supplied(components => components.Bindings)),
-                    Stack(components => components.MadameHydra, Supplied(components => components.MadameHydra)),
-                    Stack(components => components.NewRecruits, Supplied(components => components.NewRecruits))),
+                    Stack(Part.Wounds, (plan.Wounds ?? Supply(Part.Wounds)) - plan.MovedOut(Pile.Wounds)),
+                    Stack(Part.Officers, Supply(Part.Officers) - plan.MovedOut(Pile.Officers)),
+                    stackBoxes.Sum(box => box.Components.Bystanders?.Value ?? 0) - plan.Bystanders - plan.MovedOut(Pile.Bystanders),
+                    Stack(Part.Sidekicks, Supply(Part.Sidekicks) - plan.MovedOut(Pile.Sidekicks)),
+                    Stack(Part.Bindings, plan.Bindings ?? Supply(Part.Bindings)),
+                    Stack(Part.MadameHydra, Supply(Part.MadameHydra)),
+                    Stack(Part.NewRecruits, Supply(Part.NewRecruits))),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value, choices),
                 plan.Moves,
                 outside,
@@ -319,7 +338,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     $"{bystanders} Bystanders in the {_terms.VillainDeck}", $"puts {bystanders} Bystanders in the {_terms.VillainDeck}", schemeBystanders.Source));
             }
 
-            // The Wound and Bindings stacks hold what the boxes supply unless the Scheme sets their size.
+            // The Wound and Bindings stacks hold what the boxes supply unless the Scheme sets their size. A Scheme
+            // that sets one stack's size sets that stack only.
             int? wounds = null;
             if (effect.WoundsPerPlayer is { } woundsPerPlayer)
             {
@@ -682,6 +702,26 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private static string? LinkOf(string citation, Box from) =>
             from.Sources.FirstOrDefault(source => source.Key == citation.Split(' ')[0])?.Url;
     }
+
+    // A card is set up only when an included box of its own ruleset supplies every part it uses. Those boxes'
+    // stacks are laid out in every setup that draws the card.
+    private static bool Supplied(IReadOnlyList<Box> boxes, ICard card)
+    {
+        var ruleset = boxes.Single(box => card.Id.StartsWith(box.Id + "_", StringComparison.Ordinal)).Ruleset;
+        return card.Parts.All(part => boxes.Any(box => box.Ruleset == ruleset && box.Components.Supplies(part)?.Value > 0));
+    }
+
+    // What a part's stack is called in a rule note.
+    private static string StackName(Part part) => part switch
+    {
+        Part.Wounds => "Wound",
+        Part.Officers => "S.H.I.E.L.D. Officer",
+        Part.Sidekicks => "Sidekick",
+        Part.Bindings => "Bindings",
+        Part.MadameHydra => "Madame HYDRA",
+        Part.NewRecruits => "New Recruit",
+        _ => throw new ArgumentOutOfRangeException(nameof(part), part, null),
+    };
 
     // The counts a setup uses, from the rules and the setup effects of its Scheme and, once one is
     // paired with it, its Mastermind. HenchmanCards is the Scheme's count of cards of each Henchman

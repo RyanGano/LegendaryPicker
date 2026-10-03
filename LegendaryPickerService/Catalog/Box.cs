@@ -66,26 +66,86 @@ public sealed record BoxComponents(
     Sourced<int>? Sidekicks = null,
     Sourced<int>? Bindings = null,
     Sourced<int>? MadameHydra = null,
-    Sourced<int>? NewRecruits = null);
+    Sourced<int>? NewRecruits = null)
+{
+    // What the box adds to a part's stack, or null when it adds none.
+    public Sourced<int>? Supplies(Part part) => part switch
+    {
+        Part.Wounds => Wounds,
+        Part.Officers => Officers,
+        Part.Sidekicks => Sidekicks,
+        Part.Bindings => Bindings,
+        Part.MadameHydra => MadameHydra,
+        Part.NewRecruits => NewRecruits,
+        _ => throw new ArgumentOutOfRangeException(nameof(part), part, null),
+    };
+}
+
+// A part of the game a card or a base game's rules can use, which a setup lays out only when something in it
+// uses the part (owner decision D-uses, #87). So far the parts are the shared stacks other than Bystanders,
+// which every setup lays out. Written camelCase in box files ("madameHydra").
+public enum Part
+{
+    Wounds,
+    Officers,
+    Sidekicks,
+    Bindings,
+    MadameHydra,
+    NewRecruits,
+}
+
+// A part a card or a base game's rules use, with its source: Card for a card whose text gains, captures or
+// otherwise takes cards from the part's stack, or the rulebook page for the rules.
+public sealed record PartUse(Part Part, string Source);
+
+// A Hero, group, Mastermind or Scheme a setup can draw. Uses lists the parts its card text uses; it is left out
+// when the card uses none.
+public interface ICard
+{
+    string Id { get; }
+
+    IReadOnlyList<PartUse>? Uses { get; }
+
+    // The parts a setup that draws this card must lay out.
+    IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part);
+}
 
 // Team, Classes and Terms name glossary term ids. Team is null for an unaffiliated Hero. HeroName is the
 // Hero Name several Heroes can share, such as two versions of one character; it is left out when the
 // Hero's own name is its Hero Name.
-public sealed record Hero(string Id, string Name, string? Team, IReadOnlyList<string> Classes, IReadOnlyList<string> Terms, string? HeroName = null)
+public sealed record Hero(
+    string Id, string Name, string? Team, IReadOnlyList<string> Classes, IReadOnlyList<string> Terms, string? HeroName = null,
+    IReadOnlyList<PartUse>? Uses = null) : ICard
 {
     public string NameOfHero => HeroName ?? Name;
 }
 
-public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> Terms);
+public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null) : ICard;
 
-public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string> Terms);
+public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null) : ICard;
 
 // Setup is null for a Mastermind whose card does not change the setup.
-public sealed record Mastermind(string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup AlwaysLeads, SetupEffects? Setup = null);
+public sealed record Mastermind(
+    string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup AlwaysLeads, SetupEffects? Setup = null,
+    IReadOnlyList<PartUse>? Uses = null) : ICard;
 
 public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source);
 
-public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms, SchemeSetup Setup);
+public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms, SchemeSetup Setup, IReadOnlyList<PartUse>? Uses = null) : ICard
+{
+    // A Scheme also uses the stacks its Setup line sizes or moves cards from, so its uses needn't repeat them.
+    public IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part)
+        .Concat(Setup.WoundsPerPlayer is null ? [] : [Part.Wounds])
+        .Concat(Setup.BindingsPerPlayer is null ? [] : [Part.Bindings])
+        .Concat((Setup.Moves ?? []).Select(move => move.Card switch
+        {
+            CardKind.Wound => Part.Wounds,
+            CardKind.Officer => Part.Officers,
+            CardKind.Sidekick => Part.Sidekicks,
+            _ => (Part?)null,
+        }).OfType<Part>())
+        .Distinct();
+}
 
 public enum TermKind
 {
@@ -220,9 +280,10 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
 }
 
 // A base game's setup rules, for its box's Ruleset: base games of one ruleset can be combined in a setup,
-// which then follows the first one's rules. ExtraHeroes adds to Heroes at some player counts, as Villains
-// adds a 6th Ally with 5 players; it is part of the table, not a rule note. Mixing is present on a base
-// game whose rules cover a setup that also includes boxes of another ruleset.
+// which then follows the first one's rules. Uses lists the parts the rules themselves use in every setup
+// that follows them, such as the stacks players recruit from. ExtraHeroes adds to Heroes at some player
+// counts, as Villains adds a 6th Ally with 5 players; it is part of the table, not a rule note. Mixing is
+// present on a base game whose rules cover a setup that also includes boxes of another ruleset.
 public sealed record SetupRules(
     IReadOnlyList<PlayerCountSetup> PlayerCounts,
     Sourced<int> Heroes,
@@ -230,6 +291,7 @@ public sealed record SetupRules(
     StartingDeck StartingDeck,
     SoloSetup Solo,
     Rulings Rulings,
+    IReadOnlyList<PartUse> Uses,
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     Mixing? Mixing = null);
 
@@ -260,18 +322,21 @@ public sealed record Rulings(
     // When a Scheme's required groups leave no slot for the Always Leads group, the Always Leads group is dropped.
     string RequiredGroupDisplacesAlwaysLeads,
     // A Scheme's Setup line overrides the Solo setup.
-    string SchemeOverridesSolo);
+    string SchemeOverridesSolo,
+    // A part no drawn card or rule uses is left out of the setup, even where the rulebook lays it out.
+    string UnusedPartsLeftOut);
 
 // The sources of a base game's rules for mixing its ruleset with another in one setup. A draw with any card
 // of this base game's ruleset follows this base game's rules; a draw with none follows its own ruleset's
-// base game. A draw with cards of both rulesets also uses the mixed setup: shared pools, every stack, and a
-// choice of starting deck.
+// base game. A draw with cards of both rulesets also uses the mixed setup: shared pools, the recruit stacks
+// of every included base game with all Bystanders together, and a choice of starting deck.
 public sealed record Mixing(
     // Which base game's rules a draw that includes boxes of several rulesets follows.
     string Rules,
     // Schemes, Masterminds, Heroes and groups are each drawn from one pool across the rulesets.
     string Pools,
-    // Every included stack is laid out, and all Bystanders are shuffled together.
+    // Players can recruit from the recruit stacks of every included base game, and all Bystanders are
+    // shuffled together.
     string Stacks,
     // The players choose which base game's starting deck everyone uses.
     string StartingDeckChoice);

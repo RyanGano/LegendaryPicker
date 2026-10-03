@@ -12,6 +12,7 @@ public class MixedRulesetsTests
     private const string Rulebook = "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf";
     private const string CoreRulebook = "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf";
     private const string Decision = "https://github.com/RyanGano/LegendaryPicker/issues/85";
+    private const string UsesDecision = "https://github.com/RyanGano/LegendaryPicker/issues/87";
     private const string VillainsBox = "Legendary: Villains";
 
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
@@ -56,7 +57,8 @@ public class MixedRulesetsTests
 
     // Crush HYDRA is a Villainous Plot, so the Villains table (a 6th Ally with 5 players, VIL p.7) and the
     // Villains Solo (VIL pp.19-20) apply; Dr. Doom and the first groups and Heroes left are Heroic, so the
-    // setup is mixed: every stack of both base games, all Bystanders, and a choice of starting deck.
+    // setup is mixed: the recruit stacks of both base games, all Bystanders, and a choice of starting deck.
+    // Brotherhood uses Wounds, but no drawn card uses Bindings, so they are left out.
     [Theory]
     [InlineData(1)]
     [InlineData(5)]
@@ -71,7 +73,7 @@ public class MixedRulesetsTests
         var solo = players == 1;
         Assert.Equal(solo ? 3 : 6, setup.Heroes.Count);
         Assert.Equal(new VillainDeck(8, 5, solo ? 8 : 32, solo ? 3 : 20, solo ? 1 : 12, 0), setup.VillainDeck);
-        Assert.Equal(new SetupStacks(30, 30, 30 + 41 - setup.VillainDeck.Bystanders, Bindings: 30, MadameHydra: 12, NewRecruits: 15), setup.Stacks);
+        Assert.Equal(new SetupStacks(30, 30, 30 + 41 - setup.VillainDeck.Bystanders, MadameHydra: 12, NewRecruits: 15), setup.Stacks);
         Assert.Equal((8, 4), (setup.PlayerDeck.Agents, setup.PlayerDeck.Troopers));
         Assert.Equal([Ruleset.FirstEdition, Ruleset.Villainous], setup.PlayerDeck.Choices);
 
@@ -81,8 +83,11 @@ public class MixedRulesetsTests
                 "VIL pp.20-21", Rulebook, VillainsBox),
             setup.Notes);
         Assert.Contains(
-            new RuleNote("Mixed sets: lay out every Wound, Bindings and recruit stack, and shuffle all Bystanders together", "VIL p.21", Rulebook, VillainsBox),
+            new RuleNote(
+                "Mixed sets: lay out the recruit stacks of every included base game, and shuffle all Bystanders together",
+                "VIL p.21", Rulebook, VillainsBox),
             setup.Notes);
+        Assert.Contains(new RuleNote("Leave out the Bindings stack: no drawn card uses it", "D-uses", UsesDecision, VillainsBox), setup.Notes);
         Assert.Contains(new RuleNote("Mixed sets: the players choose S.H.I.E.L.D. or HYDRA starting decks", "VIL p.21", Rulebook, VillainsBox), setup.Notes);
         if (solo)
         {
@@ -149,6 +154,51 @@ public class MixedRulesetsTests
         Assert.Equal(18, setup.Stacks.Wounds);
     }
 
+    // A mixed setup lays out Wounds and Bindings only where a drawn card uses them (D-uses). Dr. Strange's card
+    // gives Bindings, and Legacy Virus sets the Wound stack alone. In Solo, Nick Fury, X-Men First Class (the
+    // 14th of the 7 Heroic and 7 Villainous groups), Doombot Legion and the first three Heroes use neither,
+    // so Midtown Bank Robbery leaves both out; with Legacy Virus the Wounds are back and the Bindings stay out.
+    // The recruit stacks of both base games stay, since players recruit from them (VIL p.21).
+    [Fact]
+    public void A_mixed_setup_lays_out_Wounds_and_Bindings_only_when_a_drawn_card_uses_them()
+    {
+        var strange = Draw(3, CoreAndVillains, "Legacy Virus", "Dr. Strange");
+        Assert.True(strange.Mixed);
+        Assert.Equal(18, strange.Stacks.Wounds);
+        Assert.Equal(30, strange.Stacks.Bindings);
+
+        var midtown = Draw(1, CoreAndVillains, "Midtown Bank Robbery", "Nick Fury", 13, 0, 0, 0, 0);
+        Assert.True(midtown.Mixed);
+        Assert.Equal(["X-Men First Class"], midtown.VillainGroups.Select(group => group.Name));
+        Assert.Equal(["Doombot Legion"], midtown.HenchmanGroups.Select(group => group.Name));
+        Assert.Equal(["Black Widow", "Captain America", "Cyclops"], midtown.Heroes.Select(hero => hero.Name));
+        Assert.Equal(new SetupStacks(null, 30, 30 + 41 - 12, MadameHydra: 12, NewRecruits: 15), midtown.Stacks);
+        Assert.Contains(new RuleNote("Leave out the Wound and Bindings stacks: no drawn card uses them", "D-uses", UsesDecision, VillainsBox), midtown.Notes);
+
+        var legacyVirus = Draw(1, CoreAndVillains, "Legacy Virus", "Nick Fury", 13, 0, 0, 0, 0);
+        Assert.Equal(new SetupStacks(6, 30, 30 + 41 - 1, MadameHydra: 12, NewRecruits: 15), legacyVirus.Stacks);
+        Assert.Contains(new RuleNote("Leave out the Bindings stack: no drawn card uses it", "D-uses", UsesDecision, VillainsBox), legacyVirus.Notes);
+    }
+
+    // Villains with Dark City has no box that supplies Wounds, so Mephisto, Stryfe and the Dark City cards that
+    // give Wounds can't be set up and are never drawn.
+    [Theory]
+    [InlineData(1)]
+    [InlineData(3)]
+    [InlineData(5)]
+    public void A_card_whose_Wounds_no_included_box_supplies_is_never_drawn(int players)
+    {
+        string[] boxes = ["villains", "dark-city"];
+        for (var seed = 0; seed < 40; seed++)
+        {
+            var setup = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
+
+            ICard[] cards = [setup.Scheme, setup.Mastermind, .. setup.VillainGroups, .. setup.HenchmanGroups, .. setup.Heroes];
+            Assert.DoesNotContain(cards, card => card.Parts.Contains(Part.Wounds));
+            Assert.Null(setup.Stacks.Wounds);
+        }
+    }
+
     // Villains with Heroic expansions and no Heroic base game: a draw with no Villainous card would need the
     // First Edition rules, which no included box has, so every draw holds a Villainous Plot or Commander.
     [Theory]
@@ -186,11 +236,12 @@ public class MixedRulesetsTests
         Assert.Null(setup.Stacks.Officers);
     }
 
-    private static SetupResult Draw(int players, string[] boxes, string scheme, string mastermind)
+    // Draws the named Scheme and Mastermind, then the scripted draws that follow them.
+    private static SetupResult Draw(int players, string[] boxes, string scheme, string mastermind, params int[] rest)
     {
         var schemeIndex = IndexOf(players, boxes, scheme);
         return Assert.IsType<SetupResult>(
-            Generator.Generate(players, boxes, new ScriptedRandom(schemeIndex, IndexOf(players, boxes, mastermind, schemeIndex))));
+            Generator.Generate(players, boxes, new ScriptedRandom([schemeIndex, IndexOf(players, boxes, mastermind, schemeIndex), .. rest])));
     }
 
     // Where a Scheme, or with schemeIndex a Mastermind, sits among the draw's options, found by drawing each.

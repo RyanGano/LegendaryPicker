@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "dark-city",
   "name": "Dark City",
   "ruleset": "firstEdition",
@@ -19,7 +19,7 @@
     { "id": "dark-city_hero_bishop", "name": "Bishop", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged", "core_term_tech"], "terms": [] },
     { "id": "dark-city_hero_blade", "name": "Blade", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": [] },
     { "id": "dark-city_hero_cable", "name": "Cable", "team": "dark-city_term_x-force", "classes": ["core_term_covert", "core_term_ranged", "core_term_tech"], "terms": ["dark-city_term_teleport"] },
-    { "id": "dark-city_hero_colossus", "name": "Colossus", "team": "dark-city_term_x-force", "classes": ["core_term_covert", "core_term_strength"], "terms": [] },
+    { "id": "dark-city_hero_colossus", "name": "Colossus", "team": "dark-city_term_x-force", "classes": ["core_term_covert", "core_term_strength"], "terms": [], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "dark-city_hero_daredevil", "name": "Daredevil", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": [] },
     { "id": "dark-city_hero_domino", "name": "Domino", "team": "dark-city_term_x-force", "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": ["dark-city_term_versatile"] },
     { "id": "dark-city_hero_elektra", "name": "Elektra", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_instinct"], "terms": [] },
@@ -34,12 +34,12 @@
     { "id": "dark-city_hero_wolverine-x-force", "name": "Wolverine (X-Force)", "heroName": "Wolverine", "team": "dark-city_term_x-force", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": [] }
   ],
   "villainGroups": [
-    { "id": "dark-city_villain_emissaries-of-evil", "name": "Emissaries of Evil", "terms": ["core_term_ambush", "core_term_escape"] },
-    { "id": "dark-city_villain_four-horsemen", "name": "Four Horsemen", "terms": ["core_term_escape", "core_term_fight"] },
+    { "id": "dark-city_villain_emissaries-of-evil", "name": "Emissaries of Evil", "terms": ["core_term_ambush", "core_term_escape"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "dark-city_villain_four-horsemen", "name": "Four Horsemen", "terms": ["core_term_escape", "core_term_fight"], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "dark-city_villain_marauders", "name": "Marauders", "terms": ["core_term_ambush", "core_term_fight"] },
     { "id": "dark-city_villain_mutant-liberation-front", "name": "Mutant Liberation Front", "terms": ["core_term_escape", "core_term_fight"] },
-    { "id": "dark-city_villain_streets-of-new-york", "name": "Streets of New York", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "dark-city_term_bribe"] },
-    { "id": "dark-city_villain_underworld", "name": "Underworld", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "dark-city_term_teleport"] }
+    { "id": "dark-city_villain_streets-of-new-york", "name": "Streets of New York", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "dark-city_term_bribe"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "dark-city_villain_underworld", "name": "Underworld", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "dark-city_term_teleport"], "uses": [{ "part": "wounds", "source": "Card" }] }
   ],
   "henchmanGroups": [
     { "id": "dark-city_henchman_maggia-goons", "name": "Maggia Goons", "terms": ["core_term_fight", "dark-city_term_bribe"] },
@@ -62,6 +62,7 @@
       "id": "dark-city_mastermind_mephisto",
       "name": "Mephisto",
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
       "alwaysLeads": { "groupId": "dark-city_villain_underworld", "groupType": "villain", "source": "Card" }
     },
     {
@@ -74,6 +75,7 @@
       "id": "dark-city_mastermind_stryfe",
       "name": "Stryfe",
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
       "alwaysLeads": { "groupId": "dark-city_villain_mutant-liberation-front", "groupType": "villain", "source": "Card" }
     }
   ],

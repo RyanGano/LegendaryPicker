@@ -13,7 +13,7 @@ public class CoreBoxCatalogTests
     public void Core_box_is_the_First_Edition_core_box()
     {
         Assert.Equal("Marvel Legendary First Edition core box", Core.Name);
-        Assert.Equal(5, Core.SchemaVersion);
+        Assert.Equal(6, Core.SchemaVersion);
         Assert.True(Core.IsBaseGame);
         Assert.Equal(Ruleset.FirstEdition, Core.Ruleset);
     }
@@ -286,7 +286,29 @@ public class CoreBoxCatalogTests
     [Fact]
     public void Rulings_cite_the_rulebook_and_the_designer()
     {
-        Assert.Equal(new Rulings("R p.6", "D1", "D2"), Core.Setup!.Rulings);
+        Assert.Equal(new Rulings("R p.6", "D1", "D2", "D-uses"), Core.Setup!.Rulings);
+    }
+
+    // The rules let players recruit S.H.I.E.L.D. Officers in every game (R p.12); Wounds are laid out only
+    // when a drawn card's text gains, takes or sizes them.
+    [Fact]
+    public void The_rules_use_the_Officers_and_the_cards_that_take_from_a_stack_list_it()
+    {
+        Assert.Equal([new PartUse(Part.Officers, "R p.12")], Core.Setup!.Uses);
+        Assert.Equal("D-uses", Core.Setup.Rulings.UnusedPartsLeftOut);
+
+        ICard[] cards = [.. Core.Heroes, .. Core.VillainGroups, .. Core.HenchmanGroups, .. Core.Masterminds, .. Core.Schemes];
+        Assert.Equal(
+            [
+                "core_hero_deadpool: Wounds", "core_hero_hulk: Wounds", "core_hero_nick-fury: Officers",
+                "core_villain_brotherhood: Wounds", "core_villain_enemies-of-asgard: Wounds", "core_villain_hydra: Wounds Officers",
+                "core_villain_masters-of-evil: Wounds", "core_villain_radiation: Wounds", "core_villain_spider-foes: Wounds",
+                "core_mastermind_loki: Wounds", "core_mastermind_magneto: Wounds",
+                "core_scheme_legacy-virus: Wounds",
+                "core_scheme_unleash-the-power-of-the-cosmic-cube: Wounds",
+            ],
+            cards.Where(card => card.Parts.Any()).Select(card => $"{card.Id}: {string.Join(" ", card.Parts)}"));
+        Assert.All(cards.SelectMany(card => card.Uses ?? []), use => Assert.Equal("Card", use.Source));
     }
 
     [Fact]
@@ -298,6 +320,7 @@ public class CoreBoxCatalogTests
                 new SourceLink("F", "https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ"),
                 new SourceLink("D1", "https://boardgamegeek.com/thread/993341/article/12653573"),
                 new SourceLink("D2", "https://boardgamegeek.com/thread/884926"),
+                new SourceLink("D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87"),
             ],
             Core.Sources);
     }
@@ -308,8 +331,8 @@ public class CoreBoxCatalogTests
         var sources = RuleSources().ToList();
 
         // 1 catalog + 7 components + 4 player-count rows + 2 + 2 starting deck + 8 solo
-        // + 3 rulings + 4 Always Leads + 20 Scheme setup values.
-        Assert.Equal(51, sources.Count);
+        // + 4 rulings + 1 part the rules use + 4 Always Leads + 20 Scheme setup values + 14 parts cards use.
+        Assert.Equal(67, sources.Count);
         Assert.All(sources, source => Assert.False(string.IsNullOrWhiteSpace(source)));
     }
 
@@ -440,8 +463,13 @@ public class CoreBoxCatalogTests
         yield return setup.Rulings.AlwaysLeadsFillsSlot;
         yield return setup.Rulings.RequiredGroupDisplacesAlwaysLeads;
         yield return setup.Rulings.SchemeOverridesSolo;
+        yield return setup.Rulings.UnusedPartsLeftOut;
+        foreach (var use in setup.Uses) yield return use.Source;
 
         foreach (var mastermind in Core.Masterminds) yield return mastermind.AlwaysLeads.Source;
+
+        ICard[] cards = [.. Core.Heroes, .. Core.VillainGroups, .. Core.HenchmanGroups, .. Core.Masterminds, .. Core.Schemes];
+        foreach (var use in cards.SelectMany(card => card.Uses ?? [])) yield return use.Source;
 
         foreach (var effect in Core.Schemes.Select(scheme => scheme.Setup))
         {

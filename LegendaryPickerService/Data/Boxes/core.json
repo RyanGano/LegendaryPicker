@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "core",
   "name": "Marvel Legendary First Edition core box",
   "ruleset": "firstEdition",
@@ -8,7 +8,8 @@
     { "key": "R", "url": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf" },
     { "key": "F", "url": "https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ" },
     { "key": "D1", "url": "https://boardgamegeek.com/thread/993341/article/12653573" },
-    { "key": "D2", "url": "https://boardgamegeek.com/thread/884926" }
+    { "key": "D2", "url": "https://boardgamegeek.com/thread/884926" },
+    { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "R p.22" },
@@ -23,13 +24,13 @@
     { "id": "core_hero_black-widow", "name": "Black Widow", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_tech"], "terms": ["core_term_rescue-a-bystander"] },
     { "id": "core_hero_captain-america", "name": "Captain America", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": [] },
     { "id": "core_hero_cyclops", "name": "Cyclops", "team": "core_term_x-men", "classes": ["core_term_ranged", "core_term_strength"], "terms": [] },
-    { "id": "core_hero_deadpool", "name": "Deadpool", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": [] },
+    { "id": "core_hero_deadpool", "name": "Deadpool", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": [], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "core_hero_emma-frost", "name": "Emma Frost", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": [] },
     { "id": "core_hero_gambit", "name": "Gambit", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged"], "terms": [] },
     { "id": "core_hero_hawkeye", "name": "Hawkeye", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["core_term_rescue-a-bystander"] },
-    { "id": "core_hero_hulk", "name": "Hulk", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_strength"], "terms": [] },
+    { "id": "core_hero_hulk", "name": "Hulk", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_strength"], "terms": [], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "core_hero_iron-man", "name": "Iron Man", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": [] },
-    { "id": "core_hero_nick-fury", "name": "Nick Fury", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_strength", "core_term_tech"], "terms": [] },
+    { "id": "core_hero_nick-fury", "name": "Nick Fury", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_strength", "core_term_tech"], "terms": [], "uses": [{ "part": "officers", "source": "Card" }] },
     { "id": "core_hero_rogue", "name": "Rogue", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_strength"], "terms": [] },
     { "id": "core_hero_spider-man", "name": "Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["core_term_rescue-a-bystander"] },
     { "id": "core_hero_storm", "name": "Storm", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["core_term_rescue-a-bystander"] },
@@ -37,13 +38,13 @@
     { "id": "core_hero_wolverine", "name": "Wolverine", "team": "core_term_x-men", "classes": ["core_term_instinct"], "terms": [] }
   ],
   "villainGroups": [
-    { "id": "core_villain_brotherhood", "name": "Brotherhood", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"] },
-    { "id": "core_villain_enemies-of-asgard", "name": "Enemies of Asgard", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"] },
-    { "id": "core_villain_hydra", "name": "HYDRA", "terms": ["core_term_escape", "core_term_fight"] },
-    { "id": "core_villain_masters-of-evil", "name": "Masters of Evil", "terms": ["core_term_escape", "core_term_fight", "core_term_rescue-a-bystander"] },
-    { "id": "core_villain_radiation", "name": "Radiation", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "core_term_rescue-a-bystander"] },
+    { "id": "core_villain_brotherhood", "name": "Brotherhood", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "core_villain_enemies-of-asgard", "name": "Enemies of Asgard", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "core_villain_hydra", "name": "HYDRA", "terms": ["core_term_escape", "core_term_fight"], "uses": [{ "part": "wounds", "source": "Card" }, { "part": "officers", "source": "Card" }] },
+    { "id": "core_villain_masters-of-evil", "name": "Masters of Evil", "terms": ["core_term_escape", "core_term_fight", "core_term_rescue-a-bystander"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "core_villain_radiation", "name": "Radiation", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "core_term_rescue-a-bystander"], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "core_villain_skrulls", "name": "Skrulls", "terms": ["core_term_ambush", "core_term_fight"] },
-    { "id": "core_villain_spider-foes", "name": "Spider-Foes", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"] }
+    { "id": "core_villain_spider-foes", "name": "Spider-Foes", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"], "uses": [{ "part": "wounds", "source": "Card" }] }
   ],
   "henchmanGroups": [
     { "id": "core_henchman_doombot-legion", "name": "Doombot Legion", "terms": ["core_term_fight"] },
@@ -62,12 +63,14 @@
       "id": "core_mastermind_loki",
       "name": "Loki",
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
       "alwaysLeads": { "groupId": "core_villain_enemies-of-asgard", "groupType": "villain", "source": "Card" }
     },
     {
       "id": "core_mastermind_magneto",
       "name": "Magneto",
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "core_term_rescue-a-bystander"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
       "alwaysLeads": { "groupId": "core_villain_brotherhood", "groupType": "villain", "source": "Card" }
     },
     {
@@ -82,6 +85,7 @@
       "id": "core_scheme_legacy-virus",
       "name": "Legacy Virus",
       "terms": ["core_term_scheme-twist"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "woundsPerPlayer": { "value": 6, "source": "Card" }
@@ -154,6 +158,7 @@
       "id": "core_scheme_unleash-the-power-of-the-cosmic-cube",
       "name": "Unleash the Power of the Cosmic Cube",
       "terms": ["core_term_scheme-twist"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }]
       }
@@ -203,10 +208,12 @@
         { "label": "After each Twist, KO a Hero costing 6 or less from the HQ", "source": "R p.20" }
       ]
     },
+    "uses": [{ "part": "officers", "source": "R p.12" }],
     "rulings": {
       "alwaysLeadsFillsSlot": "R p.6",
       "requiredGroupDisplacesAlwaysLeads": "D1",
-      "schemeOverridesSolo": "D2"
+      "schemeOverridesSolo": "D2",
+      "unusedPartsLeftOut": "D-uses"
     }
   }
 }

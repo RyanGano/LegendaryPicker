@@ -69,6 +69,9 @@ _Avoid_: Extra Henchman Group, which is the setup effect that adds a Henchman Gr
 **Always Leads group**:
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability.
 
+**Part in use**:
+A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders. A card uses a stack when its text takes cards from it, as Hulk gives Wounds, or when its Setup line sizes it, as Legacy Virus sets the Wound stack; the rules use the stacks players recruit from. A card that uses a part no included box supplies is dropped before the draw.
+
 **Required group**:
 A group a Scheme names as required (for example, Skrulls). Like an Always Leads group, it fills a group slot.
 
@@ -85,7 +88,7 @@ The number of players in a game; the First Edition core rules use it to determin
 The one-player mode defined in the First Edition core rulebook: three Heroes, one Villain Group, three cards from one Henchman Group, one Bystander, one Master Strike, and the Scheme's normal Twists. It ignores Always Leads and excludes *Super Hero Civil War* and *Negative Zone Prison Breakout*. A Scheme's own Setup line overrides these Solo values.
 
 **Mixed setup**:
-A setup whose drawn cards come from both rulesets, Heroic and Villainous. It follows the Villains rules and the Villains rulebook's combined setup (pp.20-21): shared pools for every card type, every stack of the included boxes, all Bystanders shuffled together, and a choice of S.H.I.E.L.D. or HYDRA starting decks when both base games are included. Each card keeps its own side's name (a Plot, a Mastermind); a part holding both kinds is named by both words.
+A setup whose drawn cards come from both rulesets, Heroic and Villainous. It follows the Villains rules and the Villains rulebook's combined setup (pp.20-21): shared pools for every card type, the recruit stacks of every included base game, all Bystanders shuffled together, and a choice of S.H.I.E.L.D. or HYDRA starting decks when both base games are included. Each card keeps its own side's name (a Plot, a Mastermind); a part holding both kinds is named by both words.
 
 **Villainous Solo mode**:
 The one-player mode in the Villains rulebook: three Allies, one Adversary Group, three cards from one Backup Adversary group, one Bystander, five Command Strikes, and the Plot's normal Twists. It ignores Always Leads; each Plot Twist also sends a cheap Lair Ally under the Ally Deck, and each Command Strike plays another card. The rulebook titles it Advanced Solo Mode, but it is Villains' only one-player mode.
@@ -113,7 +116,7 @@ A complete legal setup selected without player-selected card preferences; only o
 How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind from those that can complete it, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then any Henchman Groups outside the Villain Deck, then draw the Heroes, then any Heroes outside the Hero Deck. Each draw is equally likely among the remaining options that still leave a legal setup.
 
 **Setup checklist**:
-What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists beside the Scheme; any Heroes outside the Hero Deck and where their cards go; the shared stacks the included boxes have (Wounds and S.H.I.E.L.D. Officers, or under Villainous Bindings, Madame HYDRA and New Recruits; Bystanders; and Sidekicks when an included box has them), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
+What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists beside the Scheme; any Heroes outside the Hero Deck and where their cards go; the Bystanders and each other shared stack that is a part in use (Wounds, S.H.I.E.L.D. Officers, Bindings, Madame HYDRA, New Recruits or Sidekicks), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
 
 **Rule note**:
 One short line naming a rule that changed a setup, with its citation (for example "R p.6") and a link to the source when one is published. Never card or rulebook text.
