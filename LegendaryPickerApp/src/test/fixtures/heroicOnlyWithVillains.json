@@ -300,8 +300,8 @@
     }
   ],
   "rulesReason": {
-    "text": "First Edition rules: the setup has no Villainous cards",
+    "text": "First Edition rules: no Villainous Plot or Commander",
     "citation": "D-mixed",
-    "link": "https://github.com/RyanGano/LegendaryPicker/issues/85"
+    "link": "https://github.com/RyanGano/LegendaryPicker/issues/88"
   }
 }

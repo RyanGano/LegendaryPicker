@@ -97,7 +97,7 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal("villainous", (string?)body!["ruleset"]);
         Assert.True((bool?)body["mixed"]);
         var reason = """
-            { "text": "Villains rules: the setup includes Villainous cards", "citation": "D-mixed", "link": "https://github.com/RyanGano/LegendaryPicker/issues/85" }
+            { "text": "Villains rules: the Plot is Crush HYDRA", "citation": "D-mixed", "link": "https://github.com/RyanGano/LegendaryPicker/issues/88" }
             """;
         Assert.True(JsonNode.DeepEquals(JsonNode.Parse(reason), body["rulesReason"]), body["rulesReason"]?.ToJsonString());
         Assert.Equal(("Crush HYDRA", "villainous"), ((string?)body["scheme"]!["name"], (string?)body["scheme"]!["ruleset"]));
@@ -110,11 +110,11 @@ public sealed class SetupEndpointTests : IDisposable
     [Fact]
     public async Task A_Heroic_only_setup_with_Villains_included_says_why_and_is_not_mixed()
     {
-        // Legacy Virus with Dr. Doom: no Villainous card, so First Edition rules and no mixed fields.
+        // Legacy Virus with Dr. Doom and then the first cards left, all core: First Edition rules and no mixed fields.
         var body = await Client(new ScriptedRandom(0, 0)).GetFromJsonAsync<JsonObject>("/api/setup?players=3&boxes=core,villains");
 
         Assert.Equal("firstEdition", (string?)body!["ruleset"]);
-        Assert.Equal("First Edition rules: the setup has no Villainous cards", (string?)body["rulesReason"]!["text"]);
+        Assert.Equal("First Edition rules: no Villainous Plot or Commander", (string?)body["rulesReason"]!["text"]);
         Assert.False(body.ContainsKey("mixed"));
         Assert.False(body["scheme"]!.AsObject().ContainsKey("ruleset"));
         Assert.True(JsonNode.DeepEquals(JsonNode.Parse("""{ "agents": 8, "troopers": 4 }"""), body["playerDeck"]), body["playerDeck"]?.ToJsonString());

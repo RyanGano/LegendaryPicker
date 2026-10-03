@@ -9,13 +9,12 @@ namespace LegendaryPickerService.Setup;
 // through the IRandomSource and picks from the options left, in catalog order, so a fixed sequence of draws
 // always gives the same setup.
 //
-// When the included boxes follow more than one ruleset, the drawn cards decide which rules apply (#85): a
-// setup with any card of the mixing base game's ruleset (Villainous) follows that base game's rules, and one
-// with none follows the other ruleset's base game. The counts depend on those rules, so the Scheme and
-// Mastermind decide them: a pair with a Villainous card draws the rest from every included box under the
-// Villains rules, and an all-Heroic pair draws the rest from the Heroic boxes only under First Edition rules,
-// so no later draw can change the rules the counts came from. A pair whose rules have no included base game
-// can't be set up and is dropped before the draw.
+// When the included boxes follow more than one ruleset, the Scheme and Mastermind decide which rules apply
+// (D-mixed, #85, #88): a pair with a card of the mixing base game's ruleset (a Villains Plot or Commander)
+// follows that base game's rules, and any other pair follows its own ruleset's base game. Every other card is
+// drawn from every included box whatever the pair, so no Hero or group is locked out by it, and since the pair
+// fixed the rules first, no later draw can change the rules the counts came from. A pair whose rules have no
+// included base game can't be set up and is dropped before the draw.
 //
 // The setup lays out a stack only when its rules or a drawn card use it (D-uses, #87). A card that uses a stack
 // no included box of its own ruleset supplies can't be set up, so it is dropped before the draw.
@@ -41,14 +40,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             ? boxes.First(box => box.Setup?.Mixing is not null)
             : null;
 
-        // One set of rules per ruleset that has an included base game. The mixing base game's rules draw from
-        // every included box; any other ruleset's draw from its own boxes.
+        // One set of rules per ruleset that has an included base game, each drawing from every included box.
         var draws = boxes.Where(box => box.IsBaseGame)
             .GroupBy(box => box.Ruleset)
             .Select(rulesets =>
             {
                 var rulesBox = rulesets.Key == mixingBox?.Ruleset ? mixingBox : rulesets.First();
-                var pool = rulesBox == mixingBox ? boxes : boxes.Where(box => box.Ruleset == rulesets.Key).ToList();
                 var rules = rulesBox.Setup!;
                 var row = rules.PlayerCounts.SingleOrDefault(r => r.Players == players);
                 if (players != 1 && row is null)
@@ -57,7 +54,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                         $"Supported player counts are 1 (Solo) and {string.Join(", ", rules.PlayerCounts.Select(r => r.Players))}.");
                 }
 
-                return new TableDraw(boxes, pool, rulesBox, mixingBox, rules, players, row, random);
+                return new TableDraw(boxes, rulesBox, mixingBox, rules, players, row, random);
             })
             .ToList();
 
@@ -109,16 +106,16 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         return draw.Finish(plan);
     }
 
-    // One set of rules a table draw can follow: the included boxes, the boxes it draws cards from (pool), the
-    // base game whose rules they are, the mixing base game when the included boxes follow more than one
-    // ruleset, and the random source. row is the player-count table row, or null in Solo.
+    // One set of rules a table draw can follow: the included boxes, which it draws every card from, the base
+    // game whose rules they are, the mixing base game when the included boxes follow more than one ruleset,
+    // and the random source. row is the player-count table row, or null in Solo.
     private sealed class TableDraw(
-        IReadOnlyList<Box> boxes, IReadOnlyList<Box> pool, Box rulesBox, Box? mixingBox, SetupRules rules, int players, PlayerCountSetup? row,
+        IReadOnlyList<Box> boxes, Box rulesBox, Box? mixingBox, SetupRules rules, int players, PlayerCountSetup? row,
         IRandomSource random)
     {
-        private readonly List<VillainGroup> _villainGroups = pool.SelectMany(box => box.VillainGroups).Where(group => Supplied(boxes, group)).ToList();
-        private readonly List<HenchmanGroup> _henchmanGroups = pool.SelectMany(box => box.HenchmanGroups).Where(group => Supplied(boxes, group)).ToList();
-        private readonly List<Hero> _heroes = pool.SelectMany(box => box.Heroes).Where(hero => Supplied(boxes, hero)).ToList();
+        private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.VillainGroups).Where(group => Supplied(boxes, group)).ToList();
+        private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).Where(group => Supplied(boxes, group)).ToList();
+        private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).Where(hero => Supplied(boxes, hero)).ToList();
         private readonly Dictionary<(string Scheme, int Heroes), bool> _heroesFit = [];
 
         // The words the ruleset's rulebook uses, for rule notes. A setup whose drawn cards follow both rulesets
@@ -131,22 +128,20 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // The Scheme's completions under these rules: each Mastermind that pairs with it here and leaves a legal
         // setup, as the Scheme's plan with the Mastermind's effects added, since a Mastermind's setup effects
-        // can ask for more cards. A pair follows these rules when both its cards are in the pool and at least
-        // one is of this ruleset: under the mixing base game's rules a pair needs a Villainous card, and a pair
-        // with none follows the other ruleset's rules, drawn from that ruleset's boxes alone.
+        // can ask for more cards. A pair is completed here only when these are the rules it follows.
         public List<SetupPlan> Completions(Scheme scheme)
         {
-            if (!pool.Any(box => box.Schemes.Contains(scheme)) || !Supplied(boxes, scheme))
+            if (!Supplied(boxes, scheme))
             {
                 return [];
             }
 
-            // A Mastermind whose Always Leads group is not in the pool cannot be set up legally.
+            // A Mastermind whose Always Leads group is not included cannot be set up legally.
             var plan = Plan(scheme);
-            return pool.SelectMany(box => box.Masterminds)
+            return boxes.SelectMany(box => box.Masterminds)
                 .Where(mastermind => Supplied(boxes, mastermind))
                 .Where(mastermind => IgnoresAlwaysLeads || GroupIds().Contains(mastermind.AlwaysLeads.GroupId))
-                .Where(mastermind => RulesetOf(scheme.Id) == rulesBox.Ruleset || RulesetOf(mastermind.Id) == rulesBox.Ruleset)
+                .Where(mastermind => RulesOf(scheme, mastermind) == rulesBox.Ruleset)
                 .Select(mastermind => WithMastermind(plan, mastermind))
                 .Where(Fits)
                 .ToList();
@@ -160,6 +155,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             var villainGroups = FillSlots(_villainGroups, g => g.Id, g => g.Name, GroupType.Villain, plan.VillainGroups, plan.Scheme, mastermind, slotNotes);
             var henchmanGroups = FillSlots(_henchmanGroups, g => g.Id, g => g.Name, GroupType.Henchman, plan.HenchmanGroups, plan.Scheme, mastermind, slotNotes);
+            // Each Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
             var outsideHenchmen = plan.OutsideHenchmen
                 .Zip(DrawMany(_henchmanGroups.Except(henchmanGroups), plan.OutsideHenchmen.Count), (draw, group) => new OutsideHenchmanGroup(group, draw.To, draw.Cards))
                 .ToList();
@@ -175,9 +171,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var stackBoxes = boxes.Where(box => drawn.Contains(box.Ruleset)).ToList();
             var mixed = drawn.Count > 1;
 
-            // The parts the setup lays out: those its rules use, which in a mixed setup are the recruit stacks of
-            // every included base game (VIL p.21), and those its drawn cards use (D-uses).
-            var rulesUse = mixed ? boxes.Where(box => box.IsBaseGame).SelectMany(box => box.Setup!.Uses) : rules.Uses;
+            // The parts the setup lays out: those its rules use, and those its drawn cards use (D-uses). Under the
+            // mixing base game's rules a mixed setup's rules use the recruit stacks of every included base game
+            // (VIL p.21); under the other rules its cards of the mixing ruleset bring only what they use (#88).
+            var mixingRules = rulesBox == mixingBox;
+            var rulesUse = mixed && mixingRules ? boxes.Where(box => box.IsBaseGame).SelectMany(box => box.Setup!.Uses) : rules.Uses;
             var used = rulesUse.Select(use => use.Part).Concat(cards.SelectMany(card => card.Parts)).ToHashSet();
 
             // A mixed setup's notes name its parts in both rulesets' words, so its plan's notes are written again.
@@ -194,8 +192,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             notes.AddRange(slotNotes);
 
-            // A mixed setup draws from shared pools, lays out every included base game's recruit stacks, and lets
-            // the players choose between the starting decks of the included base games (VIL p.21).
+            // A mixed setup draws from shared pools and shuffles all Bystanders together (VIL pp.20-21). Under the
+            // mixing base game's rules it also lays out every included base game's recruit stacks and lets the
+            // players choose between the starting decks of the included base games (VIL p.21); under the other
+            // rules it keeps that ruleset's starting deck (#88).
             IReadOnlyList<Ruleset>? choices = null;
             if (mixed)
             {
@@ -204,10 +204,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     "Mixed sets: Schemes and Plots, Masterminds and Commanders, Heroes and Allies and the groups each come from one pool",
                     mixing.Pools, mixingBox));
                 notes.Add(Note(
-                    "Mixed sets: lay out the recruit stacks of every included base game, and shuffle all Bystanders together",
+                    mixingRules
+                        ? "Mixed sets: lay out the recruit stacks of every included base game, and shuffle all Bystanders together"
+                        : "Mixed sets: shuffle all Bystanders together",
                     mixing.Stacks, mixingBox));
                 var teams = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).Distinct().ToList();
-                if (teams.Count > 1)
+                if (mixingRules && teams.Count > 1)
                 {
                     choices = teams;
                     notes.Add(Note(
@@ -216,7 +218,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 }
             }
 
-            // A stack the boxes of the drawn cards' rulesets supply but nothing in the setup uses is left out.
+            // A stack the boxes of the drawn cards' rulesets supply but nothing in the setup uses is left out,
+            // Wounds included (D-readings).
             var leftOut = Enum.GetValues<Part>()
                 .Where(part => !used.Contains(part) && stackBoxes.Any(box => box.Components.Supplies(part) is not null))
                 .ToList();
@@ -232,16 +235,28 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.AddRange(rules.Solo.PlayRules.Select(rule => Note($"Solo: {rule.Label}", rule.Source, rulesBox)));
             }
 
-            // With boxes of more than one ruleset included, the result says which rules its cards gave it.
+            // With boxes of more than one ruleset included, the result names the card that decided its rules
+            // ("Villains rules: the Commander is Dr. Strange"), or says the pair has no card of the mixing ruleset.
             RuleNote? reason = null;
             if (mixingBox is not null)
             {
                 var source = mixingBox.Setup!.Mixing!.Rules;
-                var side = RulesetTerms.Side(mixingBox.Ruleset);
+                var words = RulesetTerms.For(mixingBox.Ruleset);
+                var deciders = new List<string>();
+                if (RulesetOf(plan.Scheme.Id) == mixingBox.Ruleset)
+                {
+                    deciders.Add($"the {words.Scheme} is {plan.Scheme.Name}");
+                }
+
+                if (RulesetOf(mastermind.Id) == mixingBox.Ruleset)
+                {
+                    deciders.Add($"the {words.Mastermind} is {mastermind.Name}");
+                }
+
                 reason = new RuleNote(
-                    drawn.Contains(mixingBox.Ruleset)
-                        ? $"{RulesetTerms.RulesName(rulesBox.Ruleset)} rules: the setup includes {side} cards"
-                        : $"{RulesetTerms.RulesName(rulesBox.Ruleset)} rules: the setup has no {side} cards",
+                    deciders.Count > 0
+                        ? $"{RulesetTerms.RulesName(rulesBox.Ruleset)} rules: {string.Join(" and ", deciders)}"
+                        : $"{RulesetTerms.RulesName(rulesBox.Ruleset)} rules: no {RulesetTerms.Side(mixingBox.Ruleset)} {words.Scheme} or {words.Mastermind}",
                     source,
                     LinkOf(source, mixingBox));
             }
@@ -305,7 +320,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             RuleNote Card(string text, string source) => Note(text, source, schemeBox);
 
             // A Scheme value that replaces a Solo value cites the ruling that the Scheme wins;
-            // otherwise the card itself is the source.
+            // otherwise the card itself is the source. A Scheme rule overrides a normal rule unless the rules
+            // say otherwise, so a Scheme that sets a count replaces the Solo count (D-readings).
             // What the Scheme's own ruleset calls it, which every note here starts with.
             var schemeWord = SchemeWord(scheme);
             RuleNote Replaces(string soloText, string text, string source) => Solo
@@ -456,7 +472,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // Adds each effect that applies at this player count to the plan's counts, and each setup step to
         // its steps, with a note citing the card that prints it. An effect only adds to the count, so it
-        // replaces no Solo value.
+        // replaces no Solo value: a Scheme's "+N Heroes" applies on top of the Solo count (D-readings).
         private SetupPlan Add(SetupPlan plan, SetupEffects effects, string by, Box from)
         {
             var notes = new List<RuleNote>(plan.Notes);
@@ -497,18 +513,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         {
             var sides = new[] { RulesetOf(plan.Scheme.Id), RulesetOf(plan.Mastermind!.Id) };
             int Supply(Func<BoxComponents, Sourced<int>?> count) =>
-                pool.Where(box => sides.Contains(box.Ruleset)).Sum(box => count(box.Components)?.Value ?? 0);
+                boxes.Where(box => sides.Contains(box.Ruleset)).Sum(box => count(box.Components)?.Value ?? 0);
             var required = plan.Scheme.Setup.RequiredGroups ?? [];
             int Slots(int slots, GroupType type) => Math.Max(slots, required.Count(group => group.GroupType == type));
             var henchmanGroupCards = _henchmanGroups.Select(group => BoxOf(group.Id).Components.HenchmanGroupCards.Value).DefaultIfEmpty(0).Min();
 
-            // A Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use.
+            // A Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
             return required.All(group => GroupIds().Contains(group.GroupId))
                 && Slots(plan.VillainGroups, GroupType.Villain) <= _villainGroups.Count
                 && Slots(plan.HenchmanGroups, GroupType.Henchman) + plan.OutsideHenchmen.Count <= _henchmanGroups.Count
                 && plan.OutsideHenchmen.All(draw => draw.Cards <= henchmanGroupCards)
                 && HeroesFit(plan)
-                && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * pool.Min(box => box.Components.HeroCards.Value)
+                && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
                 && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (plan.HenchmanCards ?? (Solo
                     ? rules.Solo.HenchmanCards.Value
                     : henchmanGroupCards))
@@ -690,6 +706,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private Box BoxOf(string id) => boxes.Single(box => id.StartsWith(box.Id + "_", StringComparison.Ordinal));
 
         private Ruleset RulesetOf(string id) => BoxOf(id).Ruleset;
+
+        // The ruleset whose rules a Scheme and Mastermind pair follows (D-mixed, #88): the mixing base game's when
+        // either card is of its ruleset, so a Villains Plot or Commander means the Villains rules; otherwise the
+        // pair's own, since only two rulesets exist and a pair with no card of the mixing one shares the other.
+        private Ruleset RulesOf(Scheme scheme, Mastermind mastermind) =>
+            mixingBox is not null && RulesetOf(mastermind.Id) == mixingBox.Ruleset ? mixingBox.Ruleset : RulesetOf(scheme.Id);
 
         // What the Scheme's own ruleset calls it: a Villainous Scheme is a Plot.
         private string SchemeWord(Scheme scheme) => RulesetTerms.For(RulesetOf(scheme.Id)).Scheme;

@@ -20,13 +20,13 @@ An additional product that adds content to the Marvel Legendary game system. An 
 A box that can be played on its own and carries setup rules, such as the First Edition core box or Legendary: Villains. A base game is an optional pick like any other box, but every setup includes at least one.
 
 **Ruleset**:
-The rules a box's cards are played under, separate from the box itself: First Edition for the core box and its Heroic expansions, and Villainous for Legendary: Villains. A setup follows one ruleset. Boxes of both can be included together; the drawn cards then decide it: no Villainous card means First Edition, any Villainous card means Villainous (owner decision, #85).
+The rules a box's cards are played under, separate from the box itself: First Edition for the core box and its Heroic expansions, and Villainous for Legendary: Villains. A setup follows one ruleset. Boxes of both can be included together; the Scheme and Mastermind then decide it: a Villainous Plot or Commander means Villainous, otherwise First Edition (owner decisions, #85, #88). Every other card is drawn from every included box whatever the ruleset.
 
 **Villainous terms**:
 The words a Villainous setup uses for the parts of a setup, one-to-one with the First Edition terms this glossary defines (Villains rulebook p.21): Ally for Hero, Adversary Group for Villain Group, Backup Adversary group for Henchman Group, Commander for Mastermind, Commander Tactic for Mastermind Tactic, Plot for Scheme, Plot Twist for Scheme Twist, Command Strike for Master Strike, Overrun for Escape, Adversary Deck for Villain Deck, Ally Deck for Hero Deck, and kidnapping for rescuing a Bystander. The code keeps the First Edition names. Bindings are not Wounds, and Madame HYDRA and New Recruits are not S.H.I.E.L.D. Officers: each is a stack of its own. HYDRA Operatives and Soldiers are the Villainous starting deck.
 
 **Included box**:
-A base game or expansion selected to contribute its cards to a particular setup. No box is mandatory, but at least one included box is a base game. Each ruleset's rules come from its first included base game in catalog order, and the drawn cards decide which ruleset a setup follows; every other included box adds cards but no setup rules of its own.
+A base game or expansion selected to contribute its cards to a particular setup. No box is mandatory, but at least one included box is a base game. Each ruleset's rules come from its first included base game in catalog order, and the Scheme and Mastermind decide which ruleset a setup follows; every other included box adds cards but no setup rules of its own.
 
 _Avoid_: Set, when referring to a product; it can also mean a card group.
 
@@ -88,7 +88,7 @@ The number of players in a game; the First Edition core rules use it to determin
 The one-player mode defined in the First Edition core rulebook: three Heroes, one Villain Group, three cards from one Henchman Group, one Bystander, one Master Strike, and the Scheme's normal Twists. It ignores Always Leads and excludes *Super Hero Civil War* and *Negative Zone Prison Breakout*. A Scheme's own Setup line overrides these Solo values.
 
 **Mixed setup**:
-A setup whose drawn cards come from both rulesets, Heroic and Villainous. It follows the Villains rules and the Villains rulebook's combined setup (pp.20-21): shared pools for every card type, the recruit stacks of every included base game, all Bystanders shuffled together, and a choice of S.H.I.E.L.D. or HYDRA starting decks when both base games are included. Each card keeps its own side's name (a Plot, a Mastermind); a part holding both kinds is named by both words.
+A setup whose drawn cards come from both rulesets, Heroic and Villainous. It draws from shared pools for every card type and shuffles all Bystanders together (Villains rulebook pp.20-21). With a Villainous Plot or Commander it follows the Villains rules and the rest of the combined setup: the recruit stacks of every included base game, and a choice of S.H.I.E.L.D. or HYDRA starting decks when both base games are included. Otherwise it follows the First Edition rules, and its Villainous cards bring only the parts they use. Each card keeps its own side's name (a Plot, a Mastermind); a part holding both kinds is named by both words.
 
 **Villainous Solo mode**:
 The one-player mode in the Villains rulebook: three Allies, one Adversary Group, three cards from one Backup Adversary group, one Bystander, five Command Strikes, and the Plot's normal Twists. It ignores Always Leads; each Plot Twist also sends a cheap Lair Ally under the Ally Deck, and each Command Strike plays another card. The rulebook titles it Advanced Solo Mode, but it is Villains' only one-player mode.

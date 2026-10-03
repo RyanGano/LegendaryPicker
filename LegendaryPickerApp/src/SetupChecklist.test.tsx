@@ -26,8 +26,8 @@ import twoPlayerVillainsGraduation from './test/fixtures/twoPlayerVillainsGradua
 // A live mixed draw from the core box and Legendary: Villains with 3 players: the Plot Crush HYDRA with the
 // Mastermind Magneto, and Heroes and Allies together, under the Villains rules.
 import mixedCrushHydra from './test/fixtures/mixedCrushHydra.json'
-// A live draw from the core box and Legendary: Villains with 2 players that drew no Villainous card, so it
-// follows the First Edition rules: Replace Earth's Leaders with Killbots and Loki.
+// A live draw from the core box and Legendary: Villains with 2 players whose Scheme and Mastermind are Heroic,
+// so it follows the First Edition rules: Replace Earth's Leaders with Killbots and Loki, and only core cards.
 import heroicOnlyWithVillains from './test/fixtures/heroicOnlyWithVillains.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
@@ -357,17 +357,17 @@ describe('SetupChecklist', () => {
   it('says which rules the setup follows and why when the included boxes follow more than one ruleset', () => {
     renderChecklist(mixedCrushHydra)
 
-    const reason = screen.getByText(/^Villains rules: the setup includes Villainous cards/)
+    const reason = screen.getByText(/^Villains rules: the Plot is Crush HYDRA/)
     expect(within(reason).getByRole('link', { name: 'D-mixed' })).toHaveAttribute(
       'href',
-      'https://github.com/RyanGano/LegendaryPicker/issues/85',
+      'https://github.com/RyanGano/LegendaryPicker/issues/88',
     )
   })
 
   it('lays out a Heroic-only draw with Villains included as a First Edition setup', () => {
     renderChecklist(heroicOnlyWithVillains)
 
-    expect(screen.getByText(/^First Edition rules: the setup has no Villainous cards/)).toBeInTheDocument()
+    expect(screen.getByText(/^First Edition rules: no Villainous Plot or Commander/)).toBeInTheDocument()
     expect(rows('Shared stacks')).toEqual(['Wounds 30', 'S.H.I.E.L.D. Officers 30', 'Bystanders 12'])
     expect(rows('Starting deck per player · 2 players')).toEqual(['S.H.I.E.L.D. Agents 8', 'S.H.I.E.L.D. Troopers 4'])
     expect(tileNames('Heroes')).toEqual(['Thor', 'Cyclops', 'Nick Fury', 'Black Widow', 'Hulk'])

@@ -8,6 +8,7 @@ namespace LegendaryPickerService.Setup;
 // Group, a Plot a Scheme, the Adversary Deck the Villain Deck, and so on.
 public sealed record RulesetTerms(
     string Scheme,
+    string Mastermind,
     string Hero,
     string Heroes,
     string VillainGroup,
@@ -21,17 +22,17 @@ public sealed record RulesetTerms(
     string Twists)
 {
     public static readonly RulesetTerms FirstEdition = new(
-        "Scheme", "Hero", "Heroes", "Villain Group", "Villain Groups", "Henchman Group", "Henchman Groups",
+        "Scheme", "Mastermind", "Hero", "Heroes", "Villain Group", "Villain Groups", "Henchman Group", "Henchman Groups",
         "Henchman", "Henchmen", "Villain Deck", "Hero Deck", "Twists");
 
     public static readonly RulesetTerms Villainous = new(
-        "Plot", "Ally", "Allies", "Adversary Group", "Adversary Groups", "Backup Adversary group", "Backup Adversary groups",
+        "Plot", "Commander", "Ally", "Allies", "Adversary Group", "Adversary Groups", "Backup Adversary group", "Backup Adversary groups",
         "Backup Adversary", "Backup Adversaries", "Adversary Deck", "Ally Deck", "Plot Twists");
 
     // A setup that draws Heroic and Villainous cards together names a part by both words, since its cards
     // may be either (VIL p.21 treats them as equivalent).
     public static readonly RulesetTerms Mixed = new(
-        "Scheme or Plot", "Hero or Ally", "Heroes or Allies", "Villain or Adversary Group", "Villain or Adversary Groups",
+        "Scheme or Plot", "Mastermind or Commander", "Hero or Ally", "Heroes or Allies", "Villain or Adversary Group", "Villain or Adversary Groups",
         "Henchman or Backup Adversary group", "Henchman or Backup Adversary groups", "Henchman or Backup Adversary",
         "Henchmen or Backup Adversaries", "Villain or Adversary Deck", "Hero or Ally Deck", "Scheme Twists or Plot Twists");
 

@@ -6,7 +6,7 @@
   "catalogSource": "VIL p.22; C1; C2",
   "sources": [
     { "key": "VIL", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf" },
-    { "key": "D-mixed", "url": "https://github.com/RyanGano/LegendaryPicker/issues/85" },
+    { "key": "D-mixed", "url": "https://github.com/RyanGano/LegendaryPicker/issues/88" },
     { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" }
   ],
   "components": {

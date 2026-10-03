@@ -89,9 +89,9 @@ export type OutsideHenchmen = {
   cards: number
 }
 
-// A stack is left out when no included box has it: a First Edition setup has Wounds and S.H.I.E.L.D.
-// Officers, a Villainous one Bindings, Madame HYDRA and New Recruits, a mixed one all of them, and only
-// some boxes have Sidekicks.
+// A stack is left out when nothing in the setup uses it: its rules use their recruit stacks (S.H.I.E.L.D.
+// Officers, or Madame HYDRA and New Recruits), and a drawn card brings any other stack it uses. Every setup
+// lays out Bystanders.
 export type SetupStacks = {
   wounds?: number
   officers?: number
@@ -104,15 +104,16 @@ export type SetupStacks = {
 
 // The two kinds of starting card each player gets: S.H.I.E.L.D. Agents and Troopers, or under the
 // Villainous ruleset HYDRA Operatives and Soldiers. choices lists the rulesets whose starting decks the
-// players choose between, present only in a mixed setup that includes base games of both.
+// players choose between, present only in a mixed setup under the Villains rules that includes base games
+// of both.
 export type PlayerDeck = {
   agents: number
   troopers: number
   choices?: Ruleset[]
 }
 
-// The rules a box's cards are played under. A setup follows one ruleset, which its drawn cards decide when
-// the included boxes follow more than one.
+// The rules a box's cards are played under. A setup follows one ruleset, which its Scheme and Mastermind
+// decide when the included boxes follow more than one.
 export type Ruleset = 'firstEdition' | 'villainous'
 
 // box names the box the rule comes from, and is present only when the setup includes more than one box.

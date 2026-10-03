@@ -5,7 +5,8 @@ namespace LegendaryPickerService.Setup;
 // A Scheme's rules on the Heroes of one setup: how many Hero Deck slots there are, the Scheme's required
 // Heroes and Hero counts, whether two Heroes may share a Hero Name, and each Hero it draws outside the Hero
 // Deck. It answers whether a partial choice of Heroes can still be completed, so the generator can drop a
-// Scheme whose rules the included Heroes can't meet and keep every draw away from a dead end.
+// Scheme whose rules the included Heroes can't meet and keep every draw away from a dead end. A Hero count
+// counts only the Heroes in the Hero Deck, never those drawn outside it (D-readings).
 internal sealed class HeroRules
 {
     private readonly IReadOnlyList<Hero> _heroes;

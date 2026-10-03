@@ -4,16 +4,18 @@ using LegendaryPickerService.Setup;
 namespace LegendaryPickerService.Tests;
 
 // Setups that include Heroic (First Edition) and Villainous boxes together, against the real box files. The
-// drawn cards decide the rules (owner decision D-mixed, #85): no Villainous card means First Edition rules in
-// full; any Villainous card means the Villains rules, and Heroic cards drawn with it make a mixed setup under
-// the Villains rulebook's combined setup (VIL pp.20-21).
+// Scheme and Mastermind decide the rules (owner decision D-mixed, #85, #88): a Villainous Plot or Commander
+// means the Villains rules, with the Villains rulebook's combined setup (VIL pp.20-21) when Heroic cards are
+// drawn with it; otherwise the First Edition rules apply, and any Villainous card drawn brings only the parts
+// it uses. Every other card is drawn from every included box whatever the pair.
 public class MixedRulesetsTests
 {
     private const string Rulebook = "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf";
     private const string CoreRulebook = "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf";
-    private const string Decision = "https://github.com/RyanGano/LegendaryPicker/issues/85";
+    private const string Decision = "https://github.com/RyanGano/LegendaryPicker/issues/88";
     private const string UsesDecision = "https://github.com/RyanGano/LegendaryPicker/issues/87";
     private const string VillainsBox = "Legendary: Villains";
+    private const string CoreBox = "Marvel Legendary First Edition core box";
 
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
     private static readonly SetupGenerator Generator = new(Catalog);
@@ -26,8 +28,8 @@ public class MixedRulesetsTests
         Assert.Null(Generator.CheckBoxes(["villains", "dark-city", "fantastic-four", "paint-the-town-red"]));
     }
 
-    // Legacy Virus and Dr. Doom are both Heroic, so the rest is drawn from the Heroic boxes under the core rules:
-    // 5 Heroes with 5 players, the core Solo, and only the Heroic stacks and starting deck.
+    // Legacy Virus and Dr. Doom are both Heroic, so the core rules apply: 5 Heroes with 5 players, the core Solo.
+    // The first groups and Heroes left are the core box's, so only the Heroic stacks and starting deck are laid out.
     [Theory]
     [InlineData(1)]
     [InlineData(5)]
@@ -37,7 +39,7 @@ public class MixedRulesetsTests
 
         Assert.Equal(Ruleset.FirstEdition, setup.Ruleset);
         Assert.False(setup.Mixed);
-        Assert.Equal(new RuleNote("First Edition rules: the setup has no Villainous cards", "D-mixed", Decision), setup.RulesReason);
+        Assert.Equal(new RuleNote("First Edition rules: no Villainous Plot or Commander", "D-mixed", Decision), setup.RulesReason);
         Assert.All(ComponentIds(setup), id => Assert.StartsWith("core_", id));
 
         var solo = players == 1;
@@ -55,6 +57,54 @@ public class MixedRulesetsTests
         }
     }
 
+    // A Heroic Scheme and Mastermind lock nothing out (#88): with Legacy Virus and Dr. Doom the groups and Heroes
+    // are drawn from both boxes, here the Adversary Group Avengers (the 8th of 14 groups) and the Ally Loki (the
+    // 24th of 30), and the setup still follows the First Edition rules: 5 Heroes or 1 Master Strike in Solo, the
+    // core Solo and the S.H.I.E.L.D. starting deck with no choice. Avengers and Loki bring the Bindings and Loki
+    // the New Recruits they use; Madame HYDRA, which nothing uses, stays out.
+    [Theory]
+    [InlineData(1, new[] { 7, 0, 23, 0, 0 })]
+    [InlineData(5, new[] { 7, 0, 0, 0, 0, 23, 0, 0, 0, 0 })]
+    public void A_Heroic_Scheme_and_Mastermind_draw_Allies_and_Adversaries_under_the_First_Edition_rules(int players, int[] rest)
+    {
+        var scheme = IndexOf(players, CoreAndVillains, "Legacy Virus");
+        var mastermind = IndexOf(players, CoreAndVillains, "Dr. Doom", scheme);
+        var random = new ScriptedRandom([scheme, mastermind, .. rest]);
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(players, CoreAndVillains, random));
+
+        var solo = players == 1;
+        Assert.Equal(14, random.Options[2]);
+        Assert.Equal(30, random.Options[solo ? 4 : 7]);
+        Assert.Equal(Ruleset.FirstEdition, setup.Ruleset);
+        Assert.True(setup.Mixed);
+        Assert.Equal(new RuleNote("First Edition rules: no Villainous Plot or Commander", "D-mixed", Decision), setup.RulesReason);
+        Assert.Equal(
+            solo ? ["Avengers"] : ["Avengers", "Brotherhood", "Enemies of Asgard", "HYDRA"],
+            setup.VillainGroups.Select(group => group.Name));
+        Assert.Equal(
+            solo ? ["Loki", "Black Widow", "Captain America"] : ["Loki", "Black Widow", "Captain America", "Cyclops", "Deadpool"],
+            setup.Heroes.Select(hero => hero.Name));
+        Assert.Equal("villains_hero_loki", setup.Heroes[0].Id);
+        Assert.Equal(solo ? 1 : 5, setup.VillainDeck.MasterStrikes);
+        Assert.Equal(
+            new SetupStacks(6 * players, 30, 30 + 41 - setup.VillainDeck.Bystanders, Bindings: 30, NewRecruits: 15),
+            setup.Stacks);
+        Assert.Equal(new PlayerDeck(8, 4), setup.PlayerDeck);
+
+        Assert.Contains(
+            new RuleNote(
+                "Mixed sets: Schemes and Plots, Masterminds and Commanders, Heroes and Allies and the groups each come from one pool",
+                "VIL pp.20-21", Rulebook, VillainsBox),
+            setup.Notes);
+        Assert.Contains(new RuleNote("Mixed sets: shuffle all Bystanders together", "VIL p.21", Rulebook, VillainsBox), setup.Notes);
+        Assert.Contains(new RuleNote("Leave out the Madame HYDRA stack: no drawn card uses it", "D-uses", UsesDecision, CoreBox), setup.Notes);
+        Assert.DoesNotContain(setup.Notes, note => note.Text.Contains("recruit stacks", StringComparison.Ordinal) || note.Text.Contains("starting decks", StringComparison.Ordinal));
+        if (solo)
+        {
+            Assert.Equal(new RuleNote("Solo: After each Twist, KO a Hero costing 6 or less from the HQ", "R p.20", CoreRulebook, CoreBox), setup.Notes[^1]);
+        }
+    }
+
     // Crush HYDRA is a Villainous Plot, so the Villains table (a 6th Ally with 5 players, VIL p.7) and the
     // Villains Solo (VIL pp.19-20) apply; Dr. Doom and the first groups and Heroes left are Heroic, so the
     // setup is mixed: the recruit stacks of both base games, all Bystanders, and a choice of starting deck.
@@ -68,7 +118,7 @@ public class MixedRulesetsTests
 
         Assert.Equal(Ruleset.Villainous, setup.Ruleset);
         Assert.True(setup.Mixed);
-        Assert.Equal(new RuleNote("Villains rules: the setup includes Villainous cards", "D-mixed", Decision), setup.RulesReason);
+        Assert.Equal(new RuleNote("Villains rules: the Plot is Crush HYDRA", "D-mixed", Decision), setup.RulesReason);
 
         var solo = players == 1;
         Assert.Equal(solo ? 3 : 6, setup.Heroes.Count);
@@ -118,7 +168,7 @@ public class MixedRulesetsTests
         Assert.All(ComponentIds(setup), id => Assert.StartsWith("villains_", id));
         Assert.Equal(Ruleset.Villainous, setup.Ruleset);
         Assert.False(setup.Mixed);
-        Assert.Equal(new RuleNote("Villains rules: the setup includes Villainous cards", "D-mixed", Decision), setup.RulesReason);
+        Assert.Equal(new RuleNote("Villains rules: the Plot is Resurrect Heroes with Norn Stones and the Commander is Professor X", "D-mixed", Decision), setup.RulesReason);
         Assert.Equal(players == 1 ? 3 : 6, setup.Heroes.Count);
         Assert.Null(setup.Stacks.Wounds);
         Assert.Null(setup.Stacks.Officers);
@@ -150,6 +200,7 @@ public class MixedRulesetsTests
         var setup = Draw(3, CoreAndVillains, "Legacy Virus", "Dr. Strange");
 
         Assert.Equal(Ruleset.Villainous, setup.Ruleset);
+        Assert.Equal(new RuleNote("Villains rules: the Commander is Dr. Strange", "D-mixed", Decision), setup.RulesReason);
         Assert.Contains(new RuleNote("Scheme sets the Wound stack to 6 per player", "Card", null, "Marvel Legendary First Edition core box"), setup.Notes);
         Assert.Equal(18, setup.Stacks.Wounds);
     }
@@ -215,8 +266,19 @@ public class MixedRulesetsTests
             var setup = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
 
             Assert.Equal(Ruleset.Villainous, setup.Ruleset);
-            Assert.Contains(new[] { setup.Scheme.Id, setup.Mastermind.Id }, id => id.StartsWith("villains_", StringComparison.Ordinal));
-            Assert.Equal("Villains rules: the setup includes Villainous cards", setup.RulesReason?.Text);
+            var deciders = new List<string>();
+            if (setup.Scheme.Id.StartsWith("villains_", StringComparison.Ordinal))
+            {
+                deciders.Add($"the Plot is {setup.Scheme.Name}");
+            }
+
+            if (setup.Mastermind.Id.StartsWith("villains_", StringComparison.Ordinal))
+            {
+                deciders.Add($"the Commander is {setup.Mastermind.Name}");
+            }
+
+            Assert.NotEmpty(deciders);
+            Assert.Equal($"Villains rules: {string.Join(" and ", deciders)}", setup.RulesReason?.Text);
             Assert.Null(setup.PlayerDeck.Choices);
         }
     }
