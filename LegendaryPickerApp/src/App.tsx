@@ -91,11 +91,14 @@ type Status =
   | { kind: 'noEligibleScheme'; message: string }
   | { kind: 'error' }
 
-// What the live region reads out for each state. The loading and result lines are short on purpose:
-// the checklist itself is read once the player moves into it, starting from the focused heading.
-function announcement(status: Status, showWakeUpNotice: boolean) {
-  const playerCount = (players: number) => (players === 1 ? '1 player' : `${players} players`)
+function playerCount(players: number) {
+  return players === 1 ? '1 player' : `${players} players`
+}
 
+// What the live region reads out for each state. The loading and result lines are short on purpose:
+// the checklist itself is read once the player moves into it, starting from the focused heading. That
+// heading already says the player count, so the result line leaves it out rather than say it twice.
+function announcement(status: Status, showWakeUpNotice: boolean) {
   switch (status.kind) {
     case 'idle':
       return ''
@@ -105,7 +108,7 @@ function announcement(status: Status, showWakeUpNotice: boolean) {
       }`
     case 'result': {
       const terms = setupTerms(status.setup)
-      return `Setup for ${playerCount(status.setup.players)} ready. ${terms.scheme}: ${status.setup.scheme.name}. ${terms.mastermind}: ${status.setup.mastermind.name}.`
+      return `Setup ready. ${terms.scheme}: ${status.setup.scheme.name}. ${terms.mastermind}: ${status.setup.mastermind.name}.`
     }
     case 'noEligibleScheme':
       return `${status.message} Pick another player count.`
@@ -119,6 +122,9 @@ function App() {
   const [boxes, setBoxes] = useState<Box[]>([])
   const [included, setIncluded] = useState<string[]>(loadBoxes)
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
+  // The intro explains the app until there is a setup on screen to explain it instead, so a first draw
+  // that fails or finds no legal Scheme keeps it.
+  const [shownSetup, setShownSetup] = useState(false)
   const [showWakeUpNotice, setShowWakeUpNotice] = useState(false)
 
   // Wake the API while the player is still choosing a count. Strict mode may repeat this harmlessly.
@@ -191,11 +197,12 @@ function App() {
         return
       }
       const response = await getSetup(players, drawn.map((box) => box.id))
-      setStatus(
-        response.kind === 'setup'
-          ? { kind: 'result', setup: response }
-          : { kind: 'noEligibleScheme', message: response.message },
-      )
+      if (response.kind === 'setup') {
+        setStatus({ kind: 'result', setup: response })
+        setShownSetup(true)
+      } else {
+        setStatus({ kind: 'noEligibleScheme', message: response.message })
+      }
     } catch {
       setStatus({ kind: 'error' })
     }
@@ -260,7 +267,7 @@ function App() {
             >
               Generate
             </button>
-            {status.kind === 'idle' && (
+            {!shownSetup && (
               <p className="intro">
                 Get a random legal setup and a checklist for laying it out, following the official rules.
               </p>
@@ -302,12 +309,15 @@ function App() {
           )}
         </section>
 
-        {/* Outside the status so it can stick while the drawn cards above the checklist scroll by. */}
+        {/* Outside the status so it can stick while the drawn cards above the checklist scroll by. It
+            names the count of the setup on screen; once the player picks another count, the button says
+            it draws for that one. */}
         {status.kind === 'result' && (
           <div className="action-bar" role="group" aria-label="Setup actions">
-            <p className="action-players">{players === 1 ? '1 player' : `${players} players`}</p>
+            <p className="action-players">{playerCount(status.setup.players)}</p>
             <button type="button" className="primary" onClick={generate}>
               Generate another
+              {players !== null && players !== status.setup.players && ` · ${playerCount(players)}`}
             </button>
           </div>
         )}

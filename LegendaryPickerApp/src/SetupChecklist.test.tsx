@@ -529,6 +529,14 @@ describe('SetupChecklist', () => {
     expect(rows('Hero Deck')).toEqual(['Deadpool, Hulk, Cyclops, Storm, Black Widow, Iron Man 6 Heroes 84', 'Total 72'])
   })
 
+  it('heads the setup steps like the notes, with no card type accent, since a step can come from either card', () => {
+    renderChecklist(twoBoxesTestVigil)
+
+    expect(section('Other setup steps')).not.toHaveClass('scheme')
+    expect(section('Other setup steps')).not.toHaveClass('mastermind')
+    expect(section('Other setup steps').className).toBe(section('Why this setup').className)
+  })
+
   it('lists the setup steps the Scheme and Mastermind print as lines to tick, after the starting decks', async () => {
     const user = userEvent.setup()
     renderChecklist(twoBoxesTestVigil)
