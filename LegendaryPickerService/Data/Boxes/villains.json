@@ -93,6 +93,28 @@
       }
     },
     {
+      "id": "villains_scheme_cage-villains-in-power-suppressing-cells",
+      "name": "Cage Villains in Power-Suppressing Cells",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "cardsBeside": [
+          { "groupId": "villains_henchman_cops", "groupType": "henchman", "count": [{ "players": null, "value": 2, "source": "Card" }], "perPlayer": true }
+        ]
+      }
+    },
+    {
+      "id": "villains_scheme_crown-thor-king-of-asgard",
+      "name": "Crown Thor King of Asgard",
+      "terms": ["villains_term_overrun", "villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "cardsBeside": [
+          { "groupId": "villains_villain_avengers", "groupType": "villain", "card": "Thor", "count": [{ "players": null, "value": 1, "source": "Card" }] }
+        ]
+      }
+    },
+    {
       "id": "villains_scheme_crush-hydra",
       "name": "Crush HYDRA",
       "terms": ["villains_term_plot-twist"],

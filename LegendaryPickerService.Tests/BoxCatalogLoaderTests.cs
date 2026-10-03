@@ -596,6 +596,24 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected($"core_scheme_legacy-virus {expected}");
     }
 
+    [Theory]
+    [InlineData("""{ "groupId": "core_henchman_nobody", "groupType": "henchman", "count": [{ "players": null, "value": 2, "source": "Card" }] }""",
+        "references henchman group core_henchman_nobody, which no loaded box declares")]
+    [InlineData("""{ "groupId": "core_villain_hydra", "groupType": "henchman", "count": [{ "players": null, "value": 2, "source": "Card" }] }""",
+        "references core_villain_hydra as a henchman group, but it is a villain group")]
+    [InlineData("""{ "groupId": "core_villain_hydra", "groupType": "villain", "count": [{ "players": null, "value": 0, "source": "Card" }] }""",
+        "setup.cardsBeside[0].count has value 0; values are at least 1")]
+    [InlineData("""{ "groupId": "core_villain_hydra", "groupType": "villain", "count": [{ "players": null, "value": 1, "source": "Rumor" }] }""",
+        "setup.cardsBeside[0].count cites source Rumor, which is not in this box's sources")]
+    [InlineData("""{ "groupId": "core_villain_hydra", "groupType": "villain", "card": " ", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
+        "sets a card of core_villain_hydra beside it with an empty card name")]
+    public void Rejects_cards_beside_the_Scheme_without_a_group_a_count_or_a_card_name(string beside, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["cardsBeside"] = new JsonArray(JsonNode.Parse(beside)));
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
     // Each of these rules is well formed, but no draw can meet it: without the check the Scheme would
     // silently drop out of every draw.
     [Theory]

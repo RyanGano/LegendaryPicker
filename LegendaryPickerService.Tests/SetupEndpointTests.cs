@@ -75,7 +75,7 @@ public sealed class SetupEndpointTests : IDisposable
     public async Task A_Villains_setup_names_its_ruleset_and_lists_only_the_Villainous_stacks()
     {
         // Graduation at Xavier's X-Academy with Dr. Strange: 8 Bystanders beside the Plot, 2 in the Adversary Deck.
-        var body = await Client(new ScriptedRandom(2, 0)).GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=villains");
+        var body = await Client(new ScriptedRandom(4, 0)).GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=villains");
 
         Assert.Equal("villainous", (string?)body!["ruleset"]);
         Assert.Equal("Graduation at Xavier's X-Academy", (string?)body["scheme"]!["name"]);
@@ -91,8 +91,8 @@ public sealed class SetupEndpointTests : IDisposable
     [Fact]
     public async Task A_mixed_setup_says_why_it_follows_the_Villains_rules_and_names_each_cards_ruleset()
     {
-        // Crush HYDRA, the 10th Scheme or Plot, with Dr. Doom: a Villainous Plot drawn with Heroic cards.
-        var body = await Client(new ScriptedRandom(9, 0)).GetFromJsonAsync<JsonObject>("/api/setup?players=3&boxes=core,villains");
+        // Crush HYDRA, the 12th Scheme or Plot, with Dr. Doom: a Villainous Plot drawn with Heroic cards.
+        var body = await Client(new ScriptedRandom(11, 0)).GetFromJsonAsync<JsonObject>("/api/setup?players=3&boxes=core,villains");
 
         Assert.Equal("villainous", (string?)body!["ruleset"]);
         Assert.True((bool?)body["mixed"]);
@@ -556,6 +556,7 @@ public sealed class SetupEndpointTests : IDisposable
           "moves": [],
           "outsideHeroes": [],
           "outsideHenchmen": [],
+          "cardsBeside": [],
           "steps": [],
           "notes": [
             {

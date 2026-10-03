@@ -28,15 +28,17 @@ public sealed record SetupResult(
     IReadOnlyList<MovedCards> Moves,
     IReadOnlyList<OutsideHero> OutsideHeroes,
     IReadOnlyList<OutsideHenchmanGroup> OutsideHenchmen,
+    IReadOnlyList<GroupCardsBeside> CardsBeside,
     IReadOnlyList<string> Steps,
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<Box> Boxes,
     bool Mixed = false,
     RuleNote? RulesReason = null) : GenerationResult;
 
-// MovedIn and MovedOut count the cards the setup's moves put in the deck and take out of it. The
-// response lists each move under the setup's moves instead, so they are left out of it. OutsideHeroCards
-// counts the cards of the Heroes drawn outside the Hero Deck that go into the Villain Deck.
+// MovedIn and MovedOut count the cards the setup's moves put in the deck and take out of it, and SetBeside
+// the cards of its drawn groups the Scheme sets beside it. The response lists each move under the setup's
+// moves and each group's cards under its cards beside the Scheme instead, so they are left out of it.
+// OutsideHeroCards counts the cards of the Heroes drawn outside the Hero Deck that go into the Villain Deck.
 public sealed record VillainDeck(
     int Twists,
     int MasterStrikes,
@@ -45,9 +47,10 @@ public sealed record VillainDeck(
     int Bystanders,
     [property: JsonIgnore] int MovedIn,
     [property: JsonIgnore] int MovedOut = 0,
-    int OutsideHeroCards = 0)
+    int OutsideHeroCards = 0,
+    [property: JsonIgnore] int SetBeside = 0)
 {
-    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MovedIn - MovedOut;
+    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MovedIn - MovedOut - SetBeside;
 }
 
 // OutsideHenchmanCards counts the Henchmen of the Henchman Groups drawn outside the Villain Deck that go into
@@ -71,6 +74,11 @@ public sealed record OutsideHero(Hero Hero, Pile To, int Cards);
 // A Henchman Group a Scheme draws outside the Villain Deck, and the pile Cards of its cards go to. The rest
 // of the group stays out of the game.
 public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Cards);
+
+// Cards of a group the Scheme sets beside it: Count of them, or the one named Card. FromVillainDeck is how many
+// fewer cards the group puts in the Villain Deck because of it, or 0 when the group isn't drawn or its cards
+// left over still fill its share of the deck.
+public sealed record GroupCardsBeside(ICard Group, string? Card, int Count, int FromVillainDeck);
 
 // Each stack holds the cards the included boxes of the drawn cards' rulesets add to it, or the size the
 // Scheme sets, less what the setup moves out. A stack is laid out only when the setup's rules or one of its

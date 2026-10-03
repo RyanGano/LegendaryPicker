@@ -5,9 +5,10 @@ namespace LegendaryPickerService.Tests;
 
 // The Legendary: Villains box file (Data/Boxes/villains.json), pinned to its rulebook (VIL) and the card
 // catalogs. Villains is a base game on the Villainous ruleset, drawn alone: its Plots in catalog order are
-// 0 Build an Underground MegaVault Prison, 1 Crush HYDRA, 2 Graduation at Xavier's X-Academy, 3 Infiltrate
-// the Lair with Spies, 4 Mass Produce War Machine Armor and 5 Resurrect Heroes with Norn Stones, at every
-// player count; its Commanders are 0 Dr. Strange, 1 Nick Fury, 2 Odin and 3 Professor X.
+// 0 Build an Underground MegaVault Prison, 1 Cage Villains in Power-Suppressing Cells, 2 Crown Thor King of
+// Asgard, 3 Crush HYDRA, 4 Graduation at Xavier's X-Academy, 5 Infiltrate the Lair with Spies, 6 Mass Produce
+// War Machine Armor and 7 Resurrect Heroes with Norn Stones, at every player count; its Commanders are
+// 0 Dr. Strange, 1 Nick Fury, 2 Odin and 3 Professor X.
 public class VillainsTests
 {
     private const string Rulebook = "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf";
@@ -19,12 +20,19 @@ public class VillainsTests
     private static readonly string[] PlotNames =
     [
         "Build an Underground MegaVault Prison",
+        "Cage Villains in Power-Suppressing Cells",
+        "Crown Thor King of Asgard",
         "Crush HYDRA",
         "Graduation at Xavier's X-Academy",
         "Infiltrate the Lair with Spies",
         "Mass Produce War Machine Armor",
         "Resurrect Heroes with Norn Stones",
     ];
+
+    private const int CageVillains = 1;
+    private const int CrownThor = 2;
+    private const int CrushHydra = 3;
+    private const int MassProduce = 6;
 
     private const int DrStrange = 0;
     private const int Odin = 2;
@@ -89,11 +97,8 @@ public class VillainsTests
         Assert.All(Villains.Masterminds, mastermind => Assert.Null(mastermind.Setup));
     }
 
-    // Two of the eight Plots are left out. Cage Villains in Power-Suppressing Cells stacks Cops beside the Plot
-    // from the Cop Backup group whether or not it is drawn, and Crown Thor King of Asgard sets one Avengers card
-    // beside the Plot; no setup field takes some cards of a group out of the draw.
     [Fact]
-    public void Villains_has_6_of_the_8_Plots_each_with_8_Plot_Twists()
+    public void Villains_has_all_8_Plots_each_with_8_Plot_Twists()
     {
         Assert.Equal(PlotNames, Villains.Schemes.Select(scheme => scheme.Name));
         Assert.All(Villains.Schemes, scheme => Assert.Equal(new PlayerCountValue(null, 8, "Card"), Assert.Single(scheme.Setup.Twists)));
@@ -230,25 +235,25 @@ public class VillainsTests
     [InlineData(0, 1, "25 40 5", "Plot sets the Bindings stack to 5 per player|Card")]
     [InlineData(0, 2, "41 39 10", "Plot sets the Bindings stack to 5 per player|Card")]
     [InlineData(0, 5, "77 29 25", "Plot sets the Bindings stack to 5 per player|Card")]
-    [InlineData(1, 1, "25 40 30", "")]
-    [InlineData(1, 2, "41 39 30", "")]
-    [InlineData(1, 5, "77 29 30", "")]
-    [InlineData(2, 1, "25 32 30", "Plot moves 8 Bystanders beside it|Card")]
-    [InlineData(2, 2, "41 31 30", "Plot moves 8 Bystanders beside it|Card")]
-    [InlineData(2, 5, "77 21 30", "Plot moves 8 Bystanders beside it|Card")]
-    [InlineData(3, 1, "25 19 30", "Plot moves 21 Bystanders beside it|Card")]
-    [InlineData(3, 2, "41 18 30", "Plot moves 21 Bystanders beside it|Card")]
-    [InlineData(3, 5, "77 8 30", "Plot moves 21 Bystanders beside it|Card")]
-    [InlineData(4, 1, "32 40 30", "Plot overrides Solo: 10 Backup Adversaries of each Backup Adversary group|VIL p.18;Plot requires S.H.I.E.L.D. Assault Squad|Card")]
-    [InlineData(4, 2, "41 39 30", "Plot requires S.H.I.E.L.D. Assault Squad|Card")]
-    [InlineData(4, 5, "77 29 30", "Plot requires S.H.I.E.L.D. Assault Squad|Card")]
-    [InlineData(5, 1, "25 40 30", "")]
-    [InlineData(5, 2, "41 39 30", "")]
-    [InlineData(5, 5, "77 29 30", "")]
+    [InlineData(3, 1, "25 40 30", "")]
+    [InlineData(3, 2, "41 39 30", "")]
+    [InlineData(3, 5, "77 29 30", "")]
+    [InlineData(4, 1, "25 32 30", "Plot moves 8 Bystanders beside it|Card")]
+    [InlineData(4, 2, "41 31 30", "Plot moves 8 Bystanders beside it|Card")]
+    [InlineData(4, 5, "77 21 30", "Plot moves 8 Bystanders beside it|Card")]
+    [InlineData(5, 1, "25 19 30", "Plot moves 21 Bystanders beside it|Card")]
+    [InlineData(5, 2, "41 18 30", "Plot moves 21 Bystanders beside it|Card")]
+    [InlineData(5, 5, "77 8 30", "Plot moves 21 Bystanders beside it|Card")]
+    [InlineData(6, 1, "32 40 30", "Plot overrides Solo: 10 Backup Adversaries of each Backup Adversary group|VIL p.18;Plot requires S.H.I.E.L.D. Assault Squad|Card")]
+    [InlineData(6, 2, "41 39 30", "Plot requires S.H.I.E.L.D. Assault Squad|Card")]
+    [InlineData(6, 5, "77 29 30", "Plot requires S.H.I.E.L.D. Assault Squad|Card")]
+    [InlineData(7, 1, "25 40 30", "")]
+    [InlineData(7, 2, "41 39 30", "")]
+    [InlineData(7, 5, "77 29 30", "")]
     public void Each_Plot_sets_up_as_its_card_says(int plot, int players, string deckBystandersBindings, string plotNotes)
     {
         var setup = Draw(players, plot, DrStrange);
-        var massProduce = plot == 4;
+        var massProduce = plot == MassProduce;
 
         Assert.Equal(PlotNames[plot], setup.Scheme.Name);
         Assert.Equal("Dr. Strange", setup.Mastermind.Name);
@@ -299,12 +304,12 @@ public class VillainsTests
     }
 
     [Theory]
-    [InlineData(2, "Plot moves 8 Bystanders beside it")]
-    [InlineData(3, "Plot moves 21 Bystanders beside it")]
+    [InlineData(4, "Plot moves 8 Bystanders beside it")]
+    [InlineData(5, "Plot moves 21 Bystanders beside it")]
     public void A_Plot_that_stacks_Bystanders_beside_it_moves_them_from_the_Bystander_stack(int plot, string note)
     {
         var setup = Draw(2, plot, DrStrange);
-        var count = plot == 2 ? 8 : 21;
+        var count = plot == 4 ? 8 : 21;
 
         Assert.Equal([new MovedCards(CardKind.Bystander, Pile.Bystanders, Pile.BesideScheme, count, count)], setup.Moves);
         Assert.Contains(new RuleNote(note, "Card", null), setup.Notes);
@@ -315,7 +320,7 @@ public class VillainsTests
     [Fact]
     public void Mass_Produce_War_Machine_Armor_displaces_Odins_Asgardian_Warriors_with_2_players()
     {
-        var setup = Draw(2, 4, Odin);
+        var setup = Draw(2, MassProduce, Odin);
 
         Assert.Equal(["S.H.I.E.L.D. Assault Squad"], setup.HenchmanGroups.Select(group => group.Name));
         Assert.Contains(
@@ -331,10 +336,71 @@ public class VillainsTests
     [InlineData(3, "Professor X always leads X-Men First Class", "X-Men First Class")]
     public void Each_Commander_brings_its_Always_Leads_group(int commander, string note, string group)
     {
-        var setup = Draw(3, 1, commander);
+        var setup = Draw(3, CrushHydra, commander);
 
         Assert.Contains(group, setup.VillainGroups.Select(g => g.Name).Concat(setup.HenchmanGroups.Select(g => g.Name)));
         Assert.Contains(new RuleNote(note, "VIL p.6", Rulebook), setup.Notes);
+    }
+
+    // Cage Villains in Power-Suppressing Cells stacks 2 Cops per player beside it (Card). Those Cops don't count as
+    // a Backup Adversary group in the Adversary Deck (VIL p.17), so Cops can still be drawn as one, with what is
+    // left of its 10 cards. With Dr. Strange the draws after the Commander pick the next Adversary Group, then the
+    // Backup Adversary groups: 0 Asgardian Warriors, 1 Cops.
+    [Theory]
+    [InlineData(1, new[] { 0, 0 }, "Asgardian Warriors", 2, 0, 25)]
+    [InlineData(1, new[] { 0, 1 }, "Cops", 2, 0, 25)]
+    [InlineData(2, new[] { 0, 0 }, "Asgardian Warriors", 4, 0, 41)]
+    [InlineData(2, new[] { 0, 1 }, "Cops", 4, 4, 37)]
+    [InlineData(5, new int[0], "Asgardian Warriors Multiple Man", 10, 0, 77)]
+    public void Cage_Villains_stacks_2_Cops_per_player_beside_the_Plot(
+        int players, int[] draws, string backups, int cops, int fromDeck, int deckTotal)
+    {
+        var setup = Assert.IsType<SetupResult>(
+            Generator.Generate(players, ["villains"], new ScriptedRandom([CageVillains, DrStrange, .. draws])));
+
+        Assert.Equal(PlotNames[CageVillains], setup.Scheme.Name);
+        Assert.Equal(backups, string.Join(" ", setup.HenchmanGroups.Select(group => group.Name)));
+        Assert.Equal(
+            [new GroupCardsBeside(Villains.HenchmanGroups.Single(group => group.Name == "Cops"), null, cops, fromDeck)],
+            setup.CardsBeside);
+        Assert.Equal(deckTotal, setup.VillainDeck.Total);
+        Assert.Contains(new RuleNote($"Plot sets {cops} Cops beside it, 2 per player", "Card", null), setup.Notes);
+    }
+
+    // With 5 players all 10 Cops sit beside the Plot, so none are left to draw as a Backup Adversary group.
+    [Fact]
+    public void Cage_Villains_with_5_players_never_draws_Cops_into_the_Adversary_Deck()
+    {
+        for (var seed = 0; seed < 40; seed++)
+        {
+            var setup = Assert.IsType<SetupResult>(
+                Generator.Generate(5, ["villains"], new CyclingRandom(CageVillains, seed, seed + 1, seed + 2, seed + 3, seed + 4)));
+
+            Assert.Equal(PlotNames[CageVillains], setup.Scheme.Name);
+            Assert.DoesNotContain("Cops", setup.HenchmanGroups.Select(group => group.Name));
+        }
+    }
+
+    // Crown Thor King of Asgard sets the Thor Adversary beside it (Card) whether or not the Avengers are in the
+    // Adversary Deck (VIL p.17); when they are, the Avengers put their other 7 cards in it.
+    [Theory]
+    [InlineData(1, new[] { 0 }, "Avengers", 1, 24)]
+    [InlineData(2, new[] { 0 }, "Defenders Avengers", 1, 40)]
+    [InlineData(2, new[] { 1 }, "Defenders Marvel Knights", 0, 41)]
+    [InlineData(5, new int[0], "Defenders Avengers Marvel Knights Spider Friends", 1, 76)]
+    public void Crown_Thor_sets_the_Thor_Adversary_beside_the_Plot(int players, int[] draws, string groups, int fromDeck, int deckTotal)
+    {
+        var setup = Assert.IsType<SetupResult>(
+            Generator.Generate(players, ["villains"], new ScriptedRandom([CrownThor, DrStrange, .. draws])));
+
+        Assert.Equal(PlotNames[CrownThor], setup.Scheme.Name);
+        Assert.Equal(groups, string.Join(" ", setup.VillainGroups.Select(group => group.Name)));
+        Assert.Equal(setup.VillainGroups.Count * 8, setup.VillainDeck.VillainCards);
+        Assert.Equal(
+            [new GroupCardsBeside(Villains.VillainGroups.Single(group => group.Name == "Avengers"), "Thor", 1, fromDeck)],
+            setup.CardsBeside);
+        Assert.Equal(deckTotal, setup.VillainDeck.Total);
+        Assert.Contains(new RuleNote("Plot sets Thor of Avengers beside it", "Card", null), setup.Notes);
     }
 
     // Which boxes a draw comes from.
