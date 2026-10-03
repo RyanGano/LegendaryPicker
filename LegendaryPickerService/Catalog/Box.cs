@@ -19,7 +19,7 @@ public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
 // The rules a box's cards are played under, separate from the box: First Edition for the core box and the
 // Heroic expansions, and Villainous for Legendary: Villains. Written camelCase in box files ("firstEdition").
 // A setup can include boxes of both when a base game gives rules for mixing them (SetupRules.Mixing); the
-// cards it draws then decide which ruleset it follows (#73, #85).
+// Scheme and Mastermind it draws then decide which ruleset it follows (#73, #85, #88).
 public enum Ruleset
 {
     FirstEdition,
@@ -326,12 +326,14 @@ public sealed record Rulings(
     // A part no drawn card or rule uses is left out of the setup, even where the rulebook lays it out.
     string UnusedPartsLeftOut);
 
-// The sources of a base game's rules for mixing its ruleset with another in one setup. A draw with any card
-// of this base game's ruleset follows this base game's rules; a draw with none follows its own ruleset's
-// base game. A draw with cards of both rulesets also uses the mixed setup: shared pools, the recruit stacks
-// of every included base game with all Bystanders together, and a choice of starting deck.
+// The sources of a base game's rules for mixing its ruleset with another in one setup. A draw whose Scheme or
+// Mastermind is of this base game's ruleset follows this base game's rules; any other draw follows its own
+// ruleset's base game. A draw with cards of both rulesets draws from shared pools with all Bystanders
+// together, and under this base game's rules also lays out the recruit stacks of every included base game
+// and offers a choice of starting deck.
 public sealed record Mixing(
-    // Which base game's rules a draw that includes boxes of several rulesets follows.
+    // Which base game's rules a draw that includes boxes of several rulesets follows, decided by its Scheme
+    // and Mastermind.
     string Rules,
     // Schemes, Masterminds, Heroes and groups are each drawn from one pool across the rulesets.
     string Pools,

@@ -10,8 +10,8 @@ public sealed record NoEligibleScheme(int Players) : GenerationResult;
 
 // A legal random setup and the checklist for laying it out, under the Ruleset whose rules it follows.
 // Steps are the labels of the setup steps its Scheme and Mastermind print that change no count, Scheme first.
-// When the included boxes follow more than one ruleset, the drawn cards decide the Ruleset and RulesReason
-// says why; Mixed is true when the drawn cards themselves come from more than one ruleset.
+// When the included boxes follow more than one ruleset, the Scheme and Mastermind decide the Ruleset and
+// RulesReason says why; Mixed is true when the drawn cards themselves come from more than one ruleset.
 public sealed record SetupResult(
     int Players,
     Ruleset Ruleset,

@@ -181,7 +181,7 @@ public class VillainsTests
         Assert.Equal(
             [
                 new SourceLink("VIL", Rulebook),
-                new SourceLink("D-mixed", "https://github.com/RyanGano/LegendaryPicker/issues/85"),
+                new SourceLink("D-mixed", "https://github.com/RyanGano/LegendaryPicker/issues/88"),
                 new SourceLink("D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87"),
             ],
             Villains.Sources);
