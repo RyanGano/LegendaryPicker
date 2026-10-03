@@ -98,11 +98,15 @@ public enum Part
 // otherwise takes cards from the part's stack, or the rulebook page for the rules.
 public sealed record PartUse(Part Part, string Source);
 
-// A Hero, group, Mastermind or Scheme a setup can draw. Uses lists the parts its card text uses; it is left out
-// when the card uses none.
+// A Hero, group, Mastermind or Scheme a setup can draw, with its display name and the keywords it uses. Uses lists
+// the parts its card text uses; it is left out when the card uses none.
 public interface ICard
 {
     string Id { get; }
+
+    string Name { get; }
+
+    IReadOnlyList<string> Terms { get; }
 
     IReadOnlyList<PartUse>? Uses { get; }
 
@@ -199,10 +203,18 @@ public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null,
     IReadOnlyList<SetupStep>? Steps = null,
     IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null,
-    Sourced<int>? BindingsPerPlayer = null)
+    Sourced<int>? BindingsPerPlayer = null,
+    IReadOnlyList<CardsBeside>? CardsBeside = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
+
+// Cards of one group a Scheme sets beside it, whether or not the group is drawn: Count cards at each player
+// count, multiplied by the player count when PerPlayer. Card names the one card of the group to set aside, such
+// as "Thor" of the Avengers; without it any of the group's cards will do. The cards leave the group, so a drawn
+// group puts only what is left of it in the Villain Deck.
+public sealed record CardsBeside(
+    string GroupId, GroupType GroupType, IReadOnlyList<PlayerCountValue> Count, bool PerPlayer = false, string? Card = null);
 
 // A Hero a Scheme puts in the Hero Deck. Like a required group, it fills one of the Hero slots.
 public sealed record RequiredHero(string HeroId, string Source);

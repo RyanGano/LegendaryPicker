@@ -16,6 +16,10 @@ namespace LegendaryPickerService.Setup;
 // fixed the rules first, no later draw can change the rules the counts came from. A pair whose rules have no
 // included base game can't be set up and is dropped before the draw.
 //
+// A Scheme can set cards of a group beside it whether or not the group is drawn (#84). Those cards fill no group
+// slot (VIL p.17); a drawn group puts only what is left of it in the Villain Deck, and one with nothing left can't
+// be drawn there.
+//
 // The setup lays out a stack only when its rules or a drawn card use it (D-uses, #87). A card that uses a stack
 // no included box of its own ruleset supplies can't be set up, so it is dropped before the draw.
 //
@@ -153,19 +157,37 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var mastermind = plan.Mastermind!;
             var slotNotes = new List<RuleNote>();
 
-            var villainGroups = FillSlots(_villainGroups, g => g.Id, g => g.Name, GroupType.Villain, plan.VillainGroups, plan.Scheme, mastermind, slotNotes);
-            var henchmanGroups = FillSlots(_henchmanGroups, g => g.Id, g => g.Name, GroupType.Henchman, plan.HenchmanGroups, plan.Scheme, mastermind, slotNotes);
+            // A group the Scheme sets every card of beside it has none left for the Villain Deck, so it isn't drawn there.
+            var villainGroups = FillSlots(
+                _villainGroups.Where(g => DeckCards(plan, g.Id, GroupType.Villain) > 0).ToList(), g => g.Id, g => g.Name, GroupType.Villain,
+                plan.VillainGroups, plan.Scheme, mastermind, slotNotes);
+            var henchmanGroups = FillSlots(
+                _henchmanGroups.Where(g => DeckCards(plan, g.Id, GroupType.Henchman) > 0).ToList(), g => g.Id, g => g.Name, GroupType.Henchman,
+                plan.HenchmanGroups, plan.Scheme, mastermind, slotNotes);
             // Each Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
             var outsideHenchmen = plan.OutsideHenchmen
                 .Zip(DrawMany(_henchmanGroups.Except(henchmanGroups), plan.OutsideHenchmen.Count), (draw, group) => new OutsideHenchmanGroup(group, draw.To, draw.Cards))
                 .ToList();
             var (heroes, outside) = DrawHeroes(plan);
 
+            // The cards of each group the Scheme sets beside it, and how many fewer the group puts in the Villain
+            // Deck when it is drawn there too.
+            var inDeck = villainGroups.Select(g => g.Id).Concat(henchmanGroups.Select(g => g.Id)).ToHashSet();
+            var beside = plan.Beside
+                .Select(draw =>
+                {
+                    var (id, type) = (draw.Rule.GroupId, draw.Rule.GroupType);
+                    var fromDeck = inDeck.Contains(id) ? ShareOfDeck(plan, id, type) - DeckCards(plan, id, type) : 0;
+                    return new GroupCardsBeside(GroupOf(id), draw.Rule.Card, draw.Count, fromDeck);
+                })
+                .ToList();
+
             // The rulesets of the drawn cards decide which boxes' stacks are laid out, and whether the setup is mixed.
+            // The groups whose cards sit beside the Scheme count among them.
             ICard[] cards =
             [
                 plan.Scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(group => group.Group),
-                .. heroes, .. outside.Select(hero => hero.Hero),
+                .. heroes, .. outside.Select(hero => hero.Hero), .. beside.Select(cards => cards.Group),
             ];
             var drawn = cards.Select(card => RulesetOf(card.Id)).ToHashSet();
             var stackBoxes = boxes.Where(box => drawn.Contains(box.Ruleset)).ToList();
@@ -277,12 +299,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 new VillainDeck(
                     plan.Twists,
                     plan.MasterStrikes,
-                    villainGroups.Sum(group => BoxOf(group.Id).Components.VillainGroupCards.Value),
-                    henchmanGroups.Sum(group => plan.HenchmanCards ?? (Solo ? rules.Solo.HenchmanCards.Value : BoxOf(group.Id).Components.HenchmanGroupCards.Value)),
+                    villainGroups.Sum(group => ShareOfDeck(plan, group.Id, GroupType.Villain)),
+                    henchmanGroups.Sum(group => ShareOfDeck(plan, group.Id, GroupType.Henchman)),
                     plan.Bystanders,
                     plan.MovedIn(Pile.VillainDeck),
                     plan.MovedOut(Pile.VillainDeck),
-                    outside.Where(hero => hero.To == Pile.VillainDeck).Sum(hero => hero.Cards)),
+                    outside.Where(hero => hero.To == Pile.VillainDeck).Sum(hero => hero.Cards),
+                    beside.Sum(cards => cards.FromVillainDeck)),
                 new HeroDeck(
                     heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value),
                     plan.MovedOut(Pile.HeroDeck),
@@ -301,6 +324,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 plan.Moves,
                 outside,
                 outsideHenchmen,
+                beside,
                 plan.Steps,
                 notes,
                 boxes,
@@ -438,6 +462,21 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     cards.Source));
             }
 
+            var cardsBeside = new List<BesideDraw>();
+            foreach (var rule in effect.CardsBeside ?? [])
+            {
+                if (ForPlayers(rule.Count) is not { } count)
+                {
+                    continue;
+                }
+
+                var each = rule.PerPlayer ? count.Value * players : count.Value;
+                cardsBeside.Add(new BesideDraw(rule, each));
+                var group = GroupIds().Contains(rule.GroupId) ? GroupOf(rule.GroupId).Name : rule.GroupId;
+                var what = rule.Card is { } card ? $"{card} of {group}" : $"{each} {group}";
+                notes.Add(Card($"{schemeWord} sets {what} beside it{(rule.PerPlayer ? $", {count.Value} per player" : "")}", count.Source));
+            }
+
             var twists = ForPlayers(effect.Twists)
                 ?? throw new InvalidDataException($"{scheme.Id} has no Twist count for {players} players.");
 
@@ -457,6 +496,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 moves,
                 outside,
                 outsideHenchmen,
+                cardsBeside,
                 [],
                 notes);
 
@@ -518,10 +558,21 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             int Slots(int slots, GroupType type) => Math.Max(slots, required.Count(group => group.GroupType == type));
             var henchmanGroupCards = _henchmanGroups.Select(group => BoxOf(group.Id).Components.HenchmanGroupCards.Value).DefaultIfEmpty(0).Min();
 
+            // The Scheme sets cards beside it from included groups only, never more than a group holds. A group it
+            // sets every card of beside it can't fill a slot in the Villain Deck, so a Scheme that requires that
+            // group, or a Mastermind that always leads it, is dropped.
+            bool InDeck(string id, GroupType type) => GroupIds().Contains(id) && DeckCards(plan, id, type) > 0;
+            int Drawable(IEnumerable<string> ids, GroupType type) => ids.Count(id => InDeck(id, type));
+            var leads = plan.Mastermind.AlwaysLeads;
+
             // A Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
-            return required.All(group => GroupIds().Contains(group.GroupId))
-                && Slots(plan.VillainGroups, GroupType.Villain) <= _villainGroups.Count
-                && Slots(plan.HenchmanGroups, GroupType.Henchman) + plan.OutsideHenchmen.Count <= _henchmanGroups.Count
+            return required.All(group => InDeck(group.GroupId, group.GroupType))
+                && (IgnoresAlwaysLeads || InDeck(leads.GroupId, leads.GroupType))
+                && plan.Beside.All(draw => GroupIds().Contains(draw.Rule.GroupId)
+                    && Beside(plan, draw.Rule.GroupId) <= GroupCards(draw.Rule.GroupId, draw.Rule.GroupType))
+                && Slots(plan.VillainGroups, GroupType.Villain) <= Drawable(_villainGroups.Select(g => g.Id), GroupType.Villain)
+                && Slots(plan.HenchmanGroups, GroupType.Henchman) + plan.OutsideHenchmen.Count
+                    <= Drawable(_henchmanGroups.Select(g => g.Id), GroupType.Henchman)
                 && plan.OutsideHenchmen.All(draw => draw.Cards <= henchmanGroupCards)
                 && HeroesFit(plan)
                 && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
@@ -670,6 +721,29 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         private T DrawOne<T>(IReadOnlyList<T> options) => options[random.Next(options.Count)];
 
+        // How many cards a group puts in the Villain Deck when the Scheme sets none of them beside it: all of a
+        // Villain Group, and of a Henchman Group the Scheme's count, Solo's, or all of it.
+        private int ShareOfDeck(SetupPlan plan, string groupId, GroupType type) => type == GroupType.Villain
+            ? GroupCards(groupId, type)
+            : plan.HenchmanCards ?? (Solo ? rules.Solo.HenchmanCards.Value : GroupCards(groupId, type));
+
+        // How many cards a group puts in the Villain Deck once the Scheme has set some of them beside it: its share,
+        // or what is left of the group when that is fewer. With none left the group can't be drawn there.
+        private int DeckCards(SetupPlan plan, string groupId, GroupType type) =>
+            Math.Min(ShareOfDeck(plan, groupId, type), GroupCards(groupId, type) - Beside(plan, groupId));
+
+        private int GroupCards(string groupId, GroupType type) => type == GroupType.Villain
+            ? BoxOf(groupId).Components.VillainGroupCards.Value
+            : BoxOf(groupId).Components.HenchmanGroupCards.Value;
+
+        // How many of a group's cards the Scheme sets beside it.
+        private static int Beside(SetupPlan plan, string groupId) =>
+            plan.Beside.Where(draw => draw.Rule.GroupId == groupId).Sum(draw => draw.Count);
+
+        // An included Villain or Henchman Group.
+        private ICard GroupOf(string groupId) =>
+            _villainGroups.Cast<ICard>().Concat(_henchmanGroups).Single(group => group.Id == groupId);
+
         private HashSet<string> GroupIds() =>
             _villainGroups.Select(g => g.Id).Concat(_henchmanGroups.Select(g => g.Id)).ToHashSet();
 
@@ -765,6 +839,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         IReadOnlyList<MovedCards> Moves,
         IReadOnlyList<OutsideDraw> Outside,
         IReadOnlyList<HenchmenDraw> OutsideHenchmen,
+        IReadOnlyList<BesideDraw> Beside,
         IReadOnlyList<string> Steps,
         IReadOnlyList<RuleNote> Notes)
     {
@@ -778,4 +853,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
     // How many cards of a Henchman Group the Scheme draws outside the Villain Deck at this player count, and where they go.
     private sealed record HenchmenDraw(Pile To, int Cards);
+
+    // How many cards of a group the Scheme sets beside it at this player count.
+    private sealed record BesideDraw(CardsBeside Rule, int Count);
 }

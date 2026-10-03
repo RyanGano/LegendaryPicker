@@ -89,6 +89,16 @@ export type OutsideHenchmen = {
   cards: number
 }
 
+// Cards of a group the Scheme sets beside it, whether or not the group is drawn: count of them, or, when card is
+// present, that one card of the group. fromVillainDeck is how many fewer cards the group puts in the Villain Deck
+// because of it (0 when it isn't drawn there); the Villain Deck's total already leaves them out.
+export type CardsBeside = {
+  group: Component
+  card?: string
+  count: number
+  fromVillainDeck: number
+}
+
 // A stack is left out when nothing in the setup uses it: its rules use their recruit stacks (S.H.I.E.L.D.
 // Officers, or Madame HYDRA and New Recruits), and a drawn card brings any other stack it uses. Every setup
 // lays out Bystanders.
@@ -149,6 +159,8 @@ export type Setup = {
   outsideHeroes?: OutsideHero[]
   // Left out by an API from before Henchman Groups outside the Villain Deck.
   outsideHenchmen?: OutsideHenchmen[]
+  // Left out by an API from before cards of a group beside the Scheme.
+  cardsBeside?: CardsBeside[]
   // The setup steps the Scheme and Mastermind print that change no count, Scheme first, each a short
   // instruction. Left out by an API from before setup steps.
   steps?: string[]

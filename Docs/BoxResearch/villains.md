@@ -1,6 +1,6 @@
 # Legendary: Villains (Jul 2014)
 
-**Research status: Partial.** The official rulebook resolves the Cops/Backup Adversary question and clarifies part of Crown Thor's setup. Full card-level setup values for the two omitted Plots still need the physical cards or clear scans; [#84](https://github.com/RyanGano/LegendaryPicker/issues/84) remains open.
+**Research status: Partial.** The official rulebook resolves the Cops/Backup Adversary question and clarifies part of Crown Thor's setup, and the Setup lines of the two Plots #84 added were read from clear card images (Card, linked below). Other per-face values remain unverified.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -8,7 +8,8 @@
 | VIL | [Upper Deck Legendary: Villains rulebook](https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf) | Rules and setup (pp.5–7), specific Plot clarifications (p.17), contents (p.22). |
 | C1 | [master-strike structured villains card catalog](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/villains.ts) | Per-face titles, group/type, indexed printed numeric values/icons and direct image links; ability prose is omitted and is not rules evidence. |
 | C1 metadata | [teams](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/teams.ts), [Hero classes](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/heroClasses.ts), [keywords](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/keywords.ts), and [card types](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/cardTypes.ts) | Labels for C1 team/class/keyword/type icon identifiers. |
-| #84 | [Missing Villains Plots issue](https://github.com/RyanGano/LegendaryPicker/issues/84) | Identifies the two absent Plots and remaining implementation/evidence gaps; not evidence for card facts. |
+| #84 | [Missing Villains Plots issue](https://github.com/RyanGano/LegendaryPicker/issues/84) | Identified the two Plots then absent; not evidence for card facts. |
+| Card | The printed card: [Cage Villains in Power-Suppressing Cells](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/23Scheme(3).png) and [Crown Thor King of Asgard](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/26Scheme(6).png) card images | The two Plots' printed Setup lines. |
 | Catalog | [`villains.json`](../../LegendaryPickerService/Data/Boxes/villains.json) | Existing runtime catalog pointer; not independent evidence for card text. |
 | Runtime | [`villains.json`](../../LegendaryPickerService/Data/Boxes/villains.json) | Existing runtime catalog and its cited setup/rules sources; not duplicated here. |
 | #34 / queue | [Release-order roadmap](https://github.com/RyanGano/LegendaryPicker/issues/34) and [`Docs/BoxResearch/README.md`](README.md) | Release order, product status, and ruleset classification. |
@@ -17,7 +18,16 @@
 
 - **Cage Villains in Power-Suppressing Cells:** Cops placed beside this Plot do not count as a Backup Adversary Group in the Adversary Deck (VIL p.17). This resolves the issue's question about whether the set-aside Cops occupy a Backup-group slot; it does not establish the Plot's exact setup counts.
 - **Crown Thor King of Asgard:** The rulebook's clarification says the Thor Adversary is set beside this Plot whether or not the Avengers group is in the Adversary Deck (VIL p.17). An overrun during the Plot also resolves Thor's regular Overrun effects along with the Plot's added effects (VIL p.17).
-- The existing runtime catalog contains 6 of the product's 8 Plots. Its remaining Plot inventory and card-level setup details are not copied here; see `villains.json`.
+- The runtime catalog contains all 8 of the product's Plots; their card-level setup details are not copied here; see `villains.json`.
+
+## Plot Setup lines read from card images
+
+Each value below was read from the linked card image's Setup line and is cited `Card` in `villains.json` (#84).
+
+| Plot | Plot Twists | Set beside the Plot | Card image |
+|---|---:|---|---|
+| Cage Villains in Power-Suppressing Cells | 8 | 2 Cops per player | [image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/23Scheme(3).png) |
+| Crown Thor King of Asgard | 8 | The Thor Adversary (of the Avengers) | [image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/26Scheme(6).png) |
 
 ## Card-by-card catalog
 
@@ -65,11 +75,11 @@ The entries above are C1-listed Adversary titles and group mappings. Their print
 - **Plots:** Build an Underground MegaVault Prison; Cage Villains in Power-Suppressing Cells; Crown Thor King of Asgard; Crush HYDRA; Graduation at Xavier's X-Academy; Infiltrate the Lair with Spies; Mass Produce War Machine Armor; Resurrect Heroes with Norn Stones.
 - **Other named shared-card faces in C1:** Bystander; Computer Hacker; Engineer; Public Speaker; Rock Star; Bindings; Madame HYDRA; New Recruit. C1 does not establish the relevant supply counts or printed card behavior.
 
-The rulebook verifies that **Cage Villains in Power-Suppressing Cells** excludes set-aside Cops from the Backup Adversary Group count (VIL p.17), but not the Plot's exact card counts or full card values. It verifies that **Crown Thor King of Asgard** sets Thor beside the Plot regardless of whether Avengers are in the Adversary Deck and that an Overrun resolves Thor's regular Overrun effects as well as the Plot effect (VIL p.17). Other per-face values, setup details, terms, and abilities remain **Unverified**.
+The rulebook verifies that **Cage Villains in Power-Suppressing Cells** excludes set-aside Cops from the Backup Adversary Group count (VIL p.17); the Plot's own card gives its counts (see *Plot Setup lines read from card images*). It verifies that **Crown Thor King of Asgard** sets Thor beside the Plot regardless of whether Avengers are in the Adversary Deck and that an Overrun resolves Thor's regular Overrun effects as well as the Plot effect (VIL p.17). Other per-face values, setup details, terms, and abilities remain **Unverified**.
 
 ## Open evidence gap
 
-The rulebook clarification does not provide every printed Setup value for either missing Plot. Verify the number and source group of cards set beside each Plot, any required group or player-count condition, and all other setup steps against the Plot cards or clear scans. Do not use C1/C2 community text to fill these rule values. No runtime changes are made in this research record.
+None for the Plots' Setup lines, which the card images above settle. Per-face values listed as **Unverified** elsewhere in this record stay unverified.
 
 The setup table lists 12 Madame HYDRA and 41 Bystanders (VIL p.5); the contents list gives 15 and 42, respectively (VIL p.22). The existing catalog follows the Game Setup instructions, as recorded in `Docs/Plan.md`. This research does not change that existing decision.
 

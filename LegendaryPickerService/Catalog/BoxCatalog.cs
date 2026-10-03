@@ -349,7 +349,8 @@ public sealed partial class BoxCatalog
 
     // A move puts cards somewhere they can be laid out from, never back where they came from, and
     // one into the starting decks already puts its count in each player's deck. Henchmen drawn outside
-    // the Villain Deck go only where a Scheme is known to put them.
+    // the Villain Deck go only where a Scheme is known to put them. A card set beside the Scheme by name
+    // needs a name the player can find.
     private static void ValidateMoves(string path, Box box)
     {
         foreach (var scheme in box.Schemes)
@@ -381,6 +382,14 @@ public sealed partial class BoxCatalog
                 {
                     throw new InvalidDataException(
                         $"{path}: {scheme.Id} puts Henchmen from outside the Villain Deck in {WireName(outside.To)}; they go to {string.Join(", ", OutsideHenchmen.Destinations.Select(WireName))}.");
+                }
+            }
+
+            foreach (var beside in scheme.Setup.CardsBeside ?? [])
+            {
+                if (beside.Card is { } card && string.IsNullOrWhiteSpace(card))
+                {
+                    throw new InvalidDataException($"{path}: {scheme.Id} sets a card of {beside.GroupId} beside it with an empty card name.");
                 }
             }
         }
@@ -612,7 +621,8 @@ public sealed partial class BoxCatalog
     private static IEnumerable<(string Owner, string GroupId, GroupType GroupType)> GroupReferences(Box box) =>
         box.Masterminds.Select(m => (m.Id, m.AlwaysLeads.GroupId, m.AlwaysLeads.GroupType))
             .Concat(box.Schemes.SelectMany(s =>
-                (s.Setup.RequiredGroups ?? []).Select(g => (s.Id, g.GroupId, g.GroupType))));
+                (s.Setup.RequiredGroups ?? []).Select(g => (s.Id, g.GroupId, g.GroupType))
+                    .Concat((s.Setup.CardsBeside ?? []).Select(b => (s.Id, b.GroupId, b.GroupType)))));
 
     // The Heroes a Scheme requires or draws outside the Hero Deck by id.
     private static IEnumerable<(string Owner, string HeroId)> HeroReferences(Box box) =>
@@ -734,8 +744,8 @@ public sealed partial class BoxCatalog
     };
 
     // Every list of per-player-count values in a box: the base game's extra Heroes, the Masterminds' setup
-    // effects, then each Scheme's, with its moves, Heroes outside the Hero Deck and Henchmen outside the
-    // Villain Deck last.
+    // effects, then each Scheme's, with its moves, Heroes outside the Hero Deck, Henchmen outside the Villain
+    // Deck and cards beside it last.
     private static IEnumerable<(string Rule, IReadOnlyList<PlayerCountValue> Values)> PlayerCountLists(Box box)
     {
         if (box.Setup?.ExtraHeroes is { } extraHeroes)
@@ -770,6 +780,11 @@ public sealed partial class BoxCatalog
             foreach (var (outside, index) in (scheme.Setup.OutsideHenchmen ?? []).Select((outside, index) => (outside, index)))
             {
                 yield return ($"{scheme.Id} setup.outsideHenchmen[{index}].cards", outside.Cards);
+            }
+
+            foreach (var (beside, index) in (scheme.Setup.CardsBeside ?? []).Select((beside, index) => (beside, index)))
+            {
+                yield return ($"{scheme.Id} setup.cardsBeside[{index}].count", beside.Count);
             }
         }
     }

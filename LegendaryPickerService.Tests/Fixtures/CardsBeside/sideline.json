@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 6,
+  "id": "sideline",
+  "name": "Sideline Fixture",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.1",
+  "sources": [
+    { "key": "R", "url": "https://example.test/sideline-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [],
+  "schemes": [
+    {
+      "id": "sideline_scheme_test-holding-cells",
+      "name": "Test Holding Cells",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "cardsBeside": [
+          { "groupId": "core_henchman_doombot-legion", "groupType": "henchman", "count": [{ "players": null, "value": 10, "source": "Card" }] }
+        ]
+      }
+    },
+    {
+      "id": "sideline_scheme_test-overfull-cells",
+      "name": "Test Overfull Cells",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "cardsBeside": [
+          { "groupId": "core_henchman_sentinel", "groupType": "henchman", "count": [{ "players": null, "value": 4, "source": "Card" }], "perPlayer": true }
+        ]
+      }
+    }
+  ],
+  "glossary": []
+}

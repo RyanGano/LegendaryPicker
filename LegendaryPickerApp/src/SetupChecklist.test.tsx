@@ -23,6 +23,11 @@ import twoBoxesTestVigil from './test/fixtures/twoBoxesTestVigil.json'
 import twoBoxesDailyBugle from './test/fixtures/twoBoxesDailyBugle.json'
 // A live draw from Legendary: Villains alone, on the Villainous ruleset: Graduation at Xavier's X-Academy with Odin.
 import twoPlayerVillainsGraduation from './test/fixtures/twoPlayerVillainsGraduation.json'
+// Live draws from Legendary: Villains alone with 2 players whose Plot sets cards of a group beside it: Cage
+// Villains in Power-Suppressing Cells with Dr. Strange and Cops drawn too, and Crown Thor King of Asgard with Nick
+// Fury, who brings the Avengers.
+import twoPlayerVillainsCageVillains from './test/fixtures/twoPlayerVillainsCageVillains.json'
+import twoPlayerVillainsCrownThor from './test/fixtures/twoPlayerVillainsCrownThor.json'
 // A live mixed draw from the core box and Legendary: Villains with 3 players: the Plot Crush HYDRA with the
 // Mastermind Magneto, and Heroes and Allies together, under the Villains rules.
 import mixedCrushHydra from './test/fixtures/mixedCrushHydra.json'
@@ -299,6 +304,37 @@ describe('SetupChecklist', () => {
     renderChecklist(twoPlayerVillainsGraduation)
 
     expect(rows('Shared stacks')).toEqual(['Bindings 30', 'Madame HYDRA 12', 'New Recruits 15', 'Bystanders 31'])
+  })
+
+  it('lays out the Cops a Plot sets beside it and takes them out of the drawn Cops in the Adversary Deck', () => {
+    renderChecklist(twoPlayerVillainsCageVillains)
+
+    expect(rows('Beside the Plot')).toEqual(['Cops 4'])
+    expect(rows('Adversary Deck')).toEqual([
+      'Plot Twists 8',
+      'Command Strikes 5',
+      'Defenders, X-Men First Class 2 Adversary Groups 16',
+      'Cops 1 Backup Adversary group 10',
+      'Bystanders 2',
+      'Cops set beside the Plot −4',
+      'Total 37',
+    ])
+  })
+
+  it('names the one card of a group a Plot sets beside it', () => {
+    renderChecklist(twoPlayerVillainsCrownThor)
+
+    expect(rows('Beside the Plot')).toEqual(['Thor of Avengers 1'])
+    expect(rows('Adversary Deck')).toContain('Thor set beside the Plot −1')
+    expect(rows('Adversary Deck')).toContain('Total 40')
+  })
+
+  it('counts the cards beside the Plot as a line to tick, and the cards set aside from the deck as none', () => {
+    renderChecklist(twoPlayerVillainsCageVillains)
+
+    expect(within(section('Beside the Plot')).getAllByRole('checkbox')).toHaveLength(1)
+    const setAside = within(section('Adversary Deck')).getByText('Cops set beside the Plot').closest('li')!
+    expect(within(setAside).queryByRole('checkbox')).not.toBeInTheDocument()
   })
 
   it("names each card of a mixed setup by its own side's word and a mixed part by both", () => {

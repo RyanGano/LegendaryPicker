@@ -33,10 +33,15 @@ public abstract record SetupResponse
             .Select(outside => new OutsideHenchmenBody(glossary.Component(outside.Group.Id, outside.Group.Name, outside.Group.Terms), outside.To, outside.Cards))
             .ToList();
 
+        var cardsBeside = setup.CardsBeside
+            .Select(beside => new CardsBesideBody(
+                glossary.Component(beside.Group.Id, beside.Group.Name, beside.Group.Terms), beside.Card, beside.Count, beside.FromVillainDeck))
+            .ToList();
+
         Component[] components =
         [
             scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(outside => outside.Group),
-            .. heroes, .. outsideHeroes.Select(outside => outside.Hero),
+            .. heroes, .. outsideHeroes.Select(outside => outside.Hero), .. cardsBeside.Select(beside => beside.Group),
         ];
 
         return new SetupBody(
@@ -55,6 +60,7 @@ public abstract record SetupResponse
             setup.Moves,
             outsideHeroes,
             outsideHenchmen,
+            cardsBeside,
             setup.Steps,
             setup.Notes,
             glossary.Entries(components.SelectMany(component => component.Terms)),
@@ -115,6 +121,7 @@ public sealed record SetupBody(
     IReadOnlyList<MovedCards> Moves,
     IReadOnlyList<OutsideHeroBody> OutsideHeroes,
     IReadOnlyList<OutsideHenchmenBody> OutsideHenchmen,
+    IReadOnlyList<CardsBesideBody> CardsBeside,
     IReadOnlyList<string> Steps,
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<GlossaryEntry> Glossary,
@@ -149,6 +156,15 @@ public sealed record OutsideHeroBody(Component Hero, Pile To, int Cards);
 // A Henchman Group a Scheme draws outside the Villain Deck, the pile its cards go to ("heroDeck"), and
 // how many of its cards that is.
 public sealed record OutsideHenchmenBody(Component Group, Pile To, int Cards);
+
+// Cards of a group the Scheme sets beside it: count of them, or, when card is present, that one card of the group.
+// fromVillainDeck is how many fewer cards the group puts in the Villain Deck because of it, 0 when the group isn't
+// drawn there.
+public sealed record CardsBesideBody(
+    Component Group,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Card,
+    int Count,
+    int FromVillainDeck);
 
 // One glossary term the setup uses: kind is "team", "class" or "keyword"; citation is the source
 // key and page (for example "R p.9"), and link is where that source is published. Box names the

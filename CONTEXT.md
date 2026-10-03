@@ -44,6 +44,11 @@ A change a Scheme's or Mastermind's card makes to the setup. It either sets a co
 **Card move**:
 A setup effect that moves cards of one kind from where they come from (the Hero Deck, the Henchman Groups in the Villain Deck, or a shared stack) to the Villain Deck, the Hero Deck, beside the Scheme, or each player's starting deck, for example Secret Invasion's 12 Hero cards into the Villain Deck. Its count can depend on the player count, be per player, or have a Solo value.
 
+**Cards beside the Scheme**:
+Cards of one named group a Scheme sets beside it, whether or not that group is drawn, for example Cage Villains' 2 Cops per player or Crown Thor's Thor of the Avengers. They fill no group slot (VIL p.17). A drawn group puts only what is left of it in the Villain Deck, and a group with nothing left can't be drawn there.
+
+_Avoid_: Card move, which moves cards of a kind from the drawn groups or a stack rather than from one named group.
+
 **Setup step**:
 A setup effect that changes no count but still has to be done while laying out, for example placing a token on the Scheme or splitting the Villain Deck into piles. The Setup checklist lists it as a line to tick, and a rule note cites the card or rule that prints it. Its label is a short instruction of at most 15 words in our own words, never card text.
 
@@ -116,7 +121,7 @@ A complete legal setup selected without player-selected card preferences; only o
 How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind from those that can complete it, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then any Henchman Groups outside the Villain Deck, then draw the Heroes, then any Heroes outside the Hero Deck. Each draw is equally likely among the remaining options that still leave a legal setup.
 
 **Setup checklist**:
-What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists beside the Scheme; any Heroes outside the Hero Deck and where their cards go; the Bystanders and each other shared stack that is a part in use (Wounds, S.H.I.E.L.D. Officers, Bindings, Madame HYDRA, New Recruits or Sidekicks), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
+What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists and any cards of a group beside the Scheme; any Heroes outside the Hero Deck and where their cards go; the Bystanders and each other shared stack that is a part in use (Wounds, S.H.I.E.L.D. Officers, Bindings, Madame HYDRA, New Recruits or Sidekicks), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
 
 **Rule note**:
 One short line naming a rule that changed a setup, with its citation (for example "R p.6") and a link to the source when one is published. Never card or rulebook text.

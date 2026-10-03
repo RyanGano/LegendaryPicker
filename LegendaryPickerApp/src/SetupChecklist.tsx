@@ -1,5 +1,5 @@
 import { Fragment, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import type { CardKind, Component, Move, Pile, Setup, SetupStacks } from './api/setupApi.ts'
+import type { CardKind, CardsBeside, Component, Move, Pile, Setup, SetupStacks } from './api/setupApi.ts'
 import { cardTerms, setupTerms, startingDeckTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { TermKind } from './TermChips.tsx'
 
@@ -10,8 +10,8 @@ import { TermKind } from './TermChips.tsx'
 // local state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
 export function SetupChecklist({ setup }: { setup: Setup }) {
-  // An API from before card moves, Heroes outside the Hero Deck, Henchman Groups outside the Villain Deck or
-  // setup steps leaves them out; the site can deploy first, so read that as none.
+  // An API from before card moves, Heroes outside the Hero Deck, Henchman Groups outside the Villain Deck, cards
+  // of a group beside the Scheme or setup steps leaves them out; the site can deploy first, so read that as none.
   const {
     villainDeck,
     heroDeck,
@@ -20,6 +20,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     moves = [],
     outsideHeroes = [],
     outsideHenchmen = [],
+    cardsBeside = [],
     steps = [],
   } = setup
   const t = setupTerms(setup)
@@ -60,14 +61,22 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <Item label="Bystanders" count={villainDeck.bystanders} />
         <MovedIn moves={moves} to="villainDeck" terms={t} />
         <MovedOut moves={moves} from="villainDeck" terms={t} />
+        <SetBeside cardsBeside={cardsBeside} terms={t} />
         <OutsideHeroCards count={villainDeck.outsideHeroCards} terms={t} />
         <Total count={villainDeck.total} />
       </Section>
 
-      {(setup.twistsBesideScheme > 0 || moves.some((move) => move.to === 'besideScheme')) && (
+      {(setup.twistsBesideScheme > 0 || moves.some((move) => move.to === 'besideScheme') || cardsBeside.length > 0) && (
         <Section title={`Beside the ${t.scheme}`} kind="scheme">
           {setup.twistsBesideScheme > 0 && <Item label={t.twists} count={setup.twistsBesideScheme} />}
           <MovedIn moves={moves} to="besideScheme" terms={t} />
+          {cardsBeside.map((beside) => (
+            <Item
+              key={beside.group.id}
+              label={beside.card ? <>{beside.card} of {names([beside.group])}</> : names([beside.group])}
+              count={beside.count}
+            />
+          ))}
         </Section>
       )}
 
@@ -237,6 +246,20 @@ function MovedOut({ moves, from, terms }: { moves: Move[]; from: Pile; terms: Ru
   )
 }
 
+// The cards of its drawn groups the Scheme sets beside it, which the group doesn't put in the Villain Deck. They are
+// laid out, and ticked, beside the Scheme, so here they are only taken away.
+function SetBeside({ cardsBeside, terms }: { cardsBeside: CardsBeside[]; terms: RulesetTerms }) {
+  return cardsBeside.map(
+    (beside) =>
+      beside.fromVillainDeck > 0 && (
+        <li key={beside.group.id} className="row">
+          <span className="label">{`${beside.card ?? beside.group.name} set beside the ${terms.scheme}`}</span>{' '}
+          <span className="count">−{beside.fromVillainDeck}</span>
+        </li>
+      ),
+  )
+}
+
 // The cards of the Heroes outside the Hero Deck that go into the Villain Deck. They are laid out, and
 // ticked, in their own section, so here they only show what the total holds.
 function OutsideHeroCards({ count = 0, terms }: { count?: number; terms: RulesetTerms }) {
@@ -311,8 +334,8 @@ function Total({ count }: { count: number }) {
   )
 }
 
-// Lines ticked against lines to lay out. Totals, the cards moved out of a deck and the Villain Deck's
-// line for the Heroes outside the Hero Deck have no tick box, so they don't count.
+// Lines ticked against lines to lay out. Totals, the cards moved out of a deck or set beside the Scheme, and the
+// Villain Deck's line for the Heroes outside the Hero Deck have no tick box, so they don't count.
 function tickProgress(article: HTMLElement) {
   const boxes = [...article.querySelectorAll<HTMLInputElement>('.row input[type="checkbox"]')]
   return { ticked: boxes.filter((box) => box.checked).length, total: boxes.length }
