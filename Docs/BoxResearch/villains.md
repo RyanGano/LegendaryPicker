@@ -359,3 +359,27 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Verified `uses` (#98)
+
+Each card with a `uses` entry in this box's runtime file is listed below with the printed face whose text takes cards from that stack. Every entry was checked against the linked image and none contradicted the data. Source key `Card`.
+
+### Checked against the printed face
+
+- **Enchantress** — New Recruits: printed card text on **Enchant the Senses** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/enchantress-04.png)).
+- **Kingpin** — New Recruits: printed card text on **Pull the Strings** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/kingpin-03-1.png)); **Recruitment Day** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/kingpin-04-1.png)); **Import Illegal Weapons** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/kingpin-02-1.png)); **Endless Underlings** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/kingpin-01-1.png)).
+- **Loki** — Bindings, New Recruits: printed card text on **Illusionary Bindings** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/loki-04-1.png)); **All Humans Are Expendable** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/loki-03-1.png)).
+- **Magneto** — Bindings: printed card text on **Magnetic Levitation** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/magneto-03-1.png)).
+- **Avengers** — Bindings: printed card text on **Captain America** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/avengers-01.png)); **Iron Man** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/avengers-06.png)).
+- **Defenders** — Bindings: printed card text on **Namor, The Sub-Mariner** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/defenders-01.png)).
+- **Marvel Knights** — Bindings: printed card text on **Elektra** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/marvel-knights-02.png)); **Ghost Rider** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/marvel-knights-01.png)).
+- **Spider Friends** — Bindings: printed card text on **Spider-Man** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/spider-friends-04.png)).
+- **Uncanny Avengers** — Bindings: printed card text on **Wolverine** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/uncanny-avengers-03.png)).
+- **Uncanny X-Men** — Bindings: printed card text on **Colossus** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/uncanny-x-men-03.png)); **Storm** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/uncanny-x-men-04.png)).
+- **Cops** — New Recruits: printed card text on **Cops** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Henchmen/cops.png)).
+- **Dr. Strange** — Bindings: printed card text on **Crimson Bands of Cyttorak** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/dr-strange-03.png)).
+- **Nick Fury** — Madame HYDRA: printed card text on **Bounty on Fury's Head** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/nick-fury-03-1.png)).
+- **Odin** — Bindings: printed card text on **Divine Justice** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/odin-02.png)).
+- **Professor X** — Bindings: printed card text on **Telepathic Imprisonment** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/professor-x-02-1.png)).
+- **Build an Underground MegaVault Prison** — Bindings: printed card text on **Build an Underground MegaVault Prison** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/21Scheme(1).png)).
+- **Crush HYDRA** — Madame HYDRA, New Recruits: printed card text on **Crush HYDRA** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/22Scheme(2).png)).

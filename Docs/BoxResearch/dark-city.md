@@ -270,3 +270,17 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Verified `uses` (#98)
+
+Each card with a `uses` entry in this box's runtime file is listed below with the printed face whose text takes cards from that stack. Every entry was checked against the linked image and none contradicted the data. Source key `Card`.
+
+### Checked against the printed face
+
+- **Stryfe** — Wounds: printed card text on **Swift Vengeance** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/stryfe-05.png)); **Tide of Retribution** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/stryfe-04.png)).
+- **Colossus** — Wounds: printed card text on **Draw Their Fire** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/colossus-04.png)).
+- **Emissaries of Evil** — Wounds: printed card text on **Rhino** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/emissaries-of-evil-01.png)).
+- **Four Horsemen** — Wounds: printed card text on **War** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/four-horsemen-01-1.png)).
+- **Streets of New York** — Wounds: printed card text on **Tombstone** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/streets-of-new-york-04.png)).
+- **Underworld** — Wounds: printed card text on **Blackheart** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/underworld-01.png)); **Lilith, Daughter of Dracula** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/underworld-04.png)).
+- **Mephisto** — Wounds: printed card text on **Mephisto** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/mephisto-01.png)); **Pain Begets Pain** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/mephisto-04.png)).
