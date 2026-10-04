@@ -472,6 +472,27 @@ describe('App', () => {
     expect(screen.queryByText('Pick a base game to draw a setup.')).not.toBeInTheDocument()
   })
 
+  it('disables Generate while Heroic and Villainous boxes are ticked without a base game that mixes them', async () => {
+    const mixingVillains: Box = { ...villains, mixesRulesets: true }
+    const coreBox: Box = { ...core, mixesRulesets: false }
+    const fearItself: Box = { id: 'fear-itself', name: 'Fear Itself', baseGame: false, ruleset: 'villainous', mixesRulesets: false }
+    boxesAnswer = () => json([coreBox, mixingVillains, fearItself])
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '3' }))
+    const hint = 'Heroic and Villainous boxes mix only with Legendary: Villains. Tick it too to draw a setup.'
+
+    await user.click(await screen.findByRole('checkbox', { name: 'Fear Itself' }))
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
+    expect(screen.getByText(hint)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('checkbox', { name: 'Legendary: Villains Base game' }))
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
+    expect(screen.queryByText(hint)).not.toBeInTheDocument()
+  })
+
   it('draws from the core box and every ticked expansion', async () => {
     boxesAnswer = () => json([core, fixture])
     setupAnswers.push(() => json(setup))

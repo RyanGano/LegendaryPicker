@@ -47,11 +47,11 @@ export type HeroDeck = {
   total: number
 }
 
-export type CardKind = 'hero' | 'henchman' | 'bystander' | 'wound' | 'officer' | 'sidekick'
+export type CardKind = 'hero' | 'henchman' | 'bystander' | 'wound' | 'officer' | 'sidekick' | 'binding' | 'twist'
 
 // The destinations a move can put cards in, among them a stack set aside, which Heroes outside the Hero
-// Deck can go to as well, then the shared stacks a move can take cards from. Hero cards come from the Hero Deck and
-// Henchmen from the Villain Deck.
+// Deck can go to as well, then the shared stacks a move can take cards from and the Twists the Villain Deck doesn't
+// use. Hero cards come from the Hero Deck and Henchmen from the Villain Deck.
 export type Pile =
   | 'villainDeck'
   | 'heroDeck'
@@ -62,6 +62,8 @@ export type Pile =
   | 'wounds'
   | 'officers'
   | 'sidekicks'
+  | 'bindings'
+  | 'twists'
 
 // Cards a Scheme moves during setup. count is what the destination gets (into the starting decks,
 // what each player's deck gets); total is what leaves from.
@@ -179,13 +181,15 @@ export type NoEligibleScheme = {
 
 export type SetupResponse = Setup | NoEligibleScheme
 
-// A box a setup can include. A base game supplies the setup rules; an expansion adds cards. An API from
-// before rulesets leaves ruleset out.
+// A box a setup can include. A base game supplies the setup rules; an expansion adds cards. mixesRulesets is true
+// for a base game with rules for mixing rulesets, which a setup with boxes of more than one ruleset needs. An API
+// from before rulesets leaves ruleset out, and one from before mixesRulesets leaves that out.
 export type Box = {
   id: string
   name: string
   baseGame: boolean
   ruleset?: Ruleset
+  mixesRulesets?: boolean
 }
 
 // A sleeping App Service instance takes 10-30 seconds to wake, so give up well after that.

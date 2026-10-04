@@ -1,6 +1,6 @@
 # Fear Itself (March 2015)
 
-**Research status: Partial.** The official insert verifies component totals, several mechanics, and Heroic-set substitutions. No allowed Plot or Commander card-front scan was available in the reviewed sources, so setup lines and Always Leads remain unverified.
+**Research status: Partial; integrated (#96).** The official insert verifies component totals, several mechanics, and Heroic-set substitutions. The three Plot fronts and the Commander front linked below were read for #96: they give each Plot's Twists and Setup line, The Traitor's 2+ player limit, and Always Leads The Mighty. Ally face copy counts remain unverified. Runtime data: `LegendaryPickerService/Data/Boxes/fear-itself.json`.
 
 ## Sources
 
@@ -130,7 +130,7 @@ FI pp.1–2: when fighting an enemy with N Uru-Enchanted Weapons, reveal N cards
 - **Demolish (FI p.2):** Each player checks the cost of the top Ally card, returns that card beneath its deck, then discards a hand card with the same cost.
 - **Heroic-set substitutions (FI p.2):** If the Villains base game is absent and the original Heroic set is used, replace Madame HYDRA gains with S.H.I.E.L.D. Officers, New Recruit gains with +1, Bindings with Wounds, and HYDRA team references with S.H.I.E.L.D. The insert confirms Fear Itself can be combined with Heroic and/or Villainous products.
 
-The reviewed insert does not specify the complete player limits, Twist counts, required groups or Allies, moves, other piles, or setup steps for all three Plots. The issue's claim that one Plot is limited to 2+ players and another creates a Binding deck is unverified; no physical cards or clear scans were available to check it in this pass.
+The insert does not give the Plots' player limits, Twist counts, moves or setup steps; the scanned Plot fronts do (see Plot faces). They confirm the issue's leads: The Traitor is for 2+ players and builds its Betrayal Deck from 3 Bindings per player and a 9th Twist. No Plot requires a group or Ally.
 
 ## Required parts and glossary
 
@@ -159,9 +159,9 @@ Each summary is under 40 words and paraphrases the cited insert.
 
 ## Open questions and evidence gaps
 
-1. Verify each Plot's player limits, Twists, setup values, required groups/Allies, moves, piles, and setup steps from its printed card or an official clarification.
-2. Check the reported 2+ player-only Plot and Binding deck against an allowed source; the issue is only a lead.
-3. Verify Uru-Enchanted Iron Man's Always Leads group and any setup effect from the Commander card.
+1. Resolved for #96: each Plot's Twists, player limit and Setup line, and The Traitor's Betrayal Deck, come from the scanned Plot fronts.
+2. Resolved for #96: The Traitor prints the 2+ player limit and the Bindings deck.
+3. Resolved for #96: the Commander front prints Always Leads The Mighty and no setup effect.
 4. Verify Ally shared Hero Names, teams, classes, terms, and all printed card identities from the product cards and cite the applicable rules pages.
 5. Reconcile the named roster against the physical 100-card contents; the official insert supplies counts, not a full card manifest.
 

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 6,
+  "id": "fear-itself",
+  "name": "Fear Itself",
+  "ruleset": "villainous",
+  "catalogSource": "FI p.2; C1",
+  "sources": [
+    { "key": "FI", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Fear_Itself.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "FI p.2" },
+    "villainGroupCards": { "value": 8, "source": "FI p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "FI p.2" },
+    "schemeTwists": { "value": 0, "source": "FI p.2" }
+  },
+  "heroes": [
+    { "id": "fear-itself_hero_greithoth-breaker-of-wills", "name": "Greithoth, Breaker of Wills", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_strength"], "terms": ["fear-itself_term_thrown-artifact"] },
+    { "id": "fear-itself_hero_kuurth-breaker-of-stone", "name": "Kuurth, Breaker of Stone", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_ranged", "villains_term_strength"], "terms": ["fear-itself_term_thrown-artifact"] },
+    { "id": "fear-itself_hero_nerkkod-breaker-of-oceans", "name": "Nerkkod, Breaker of Oceans", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_ranged", "villains_term_strength"], "terms": ["fear-itself_term_thrown-artifact"], "uses": [{ "part": "newRecruits", "source": "Card" }] },
+    { "id": "fear-itself_hero_nul-breaker-of-worlds", "name": "Nul, Breaker of Worlds", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_instinct", "villains_term_strength"], "terms": ["villains_term_demolish", "fear-itself_term_thrown-artifact"], "uses": [{ "part": "bindings", "source": "Card" }] },
+    { "id": "fear-itself_hero_skadi", "name": "Skadi", "team": "fear-itself_term_hydra", "classes": ["villains_term_covert", "villains_term_strength", "villains_term_tech"], "terms": ["fear-itself_term_thrown-artifact"], "uses": [{ "part": "madameHydra", "source": "Card" }] },
+    { "id": "fear-itself_hero_skirn-breaker-of-men", "name": "Skirn, Breaker of Men", "team": "villains_term_foes-of-asgard", "classes": ["villains_term_covert", "villains_term_instinct", "villains_term_ranged", "villains_term_strength"], "terms": ["fear-itself_term_thrown-artifact"], "uses": [{ "part": "newRecruits", "source": "Card" }] }
+  ],
+  "villainGroups": [
+    { "id": "fear-itself_villain_the-mighty", "name": "The Mighty", "terms": ["villains_term_ambush", "villains_term_overrun", "fear-itself_term_uru-enchanted-weapons", "fear-itself_term_fight-or-fail"], "uses": [{ "part": "bindings", "source": "Card" }] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "fear-itself_mastermind_uru-enchanted-iron-man",
+      "name": "Uru-Enchanted Iron Man",
+      "terms": ["villains_term_always-leads", "villains_term_command-strike", "villains_term_commander-tactic", "villains_term_demolish", "villains_term_fight", "fear-itself_term_uru-enchanted-weapons"],
+      "uses": [{ "part": "bindings", "source": "Card" }],
+      "alwaysLeads": { "groupId": "fear-itself_villain_the-mighty", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "fear-itself_scheme_fear-itself",
+      "name": "Fear Itself",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 10, "source": "Card" }],
+        "steps": [
+          { "label": "Start the Fear Level at 8 and keep 8 Allies in the Lair", "source": "Card" },
+          { "label": "Lay the 6th to 8th Lair Allies in a second row under the Lair", "source": "FI p.2" }
+        ]
+      }
+    },
+    {
+      "id": "fear-itself_scheme_last-stand-at-avengers-tower",
+      "name": "Last Stand at Avengers Tower",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 6, "source": "Card" }]
+      }
+    },
+    {
+      "id": "fear-itself_scheme_the-traitor",
+      "name": "The Traitor",
+      "terms": ["villains_term_plot-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "allowedPlayerCounts": { "value": [2, 3, 4, 5], "source": "Card" },
+        "moves": [
+          { "card": "binding", "to": "setAside", "count": [{ "players": null, "value": 3, "source": "Card" }], "perPlayer": true },
+          { "card": "twist", "to": "setAside", "count": [{ "players": null, "value": 1, "source": "Card" }] }
+        ],
+        "steps": [{ "label": "Shuffle the set-aside Bindings and Twist face down as the Betrayal Deck", "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "fear-itself_term_hydra", "name": "HYDRA", "kind": "team", "summary": "An Ally team: the secret criminal army that Skadi, the Serpent's herald, commands. In Fear Itself its one member is Skadi.", "source": "FI", "page": 1 },
+    { "id": "fear-itself_term_thrown-artifact", "name": "Thrown Artifact", "kind": "keyword", "summary": "An Ally that stays in front of you between turns once you play it. On your turn, put it on the bottom of your deck to use its throw ability.", "source": "FI", "page": 1 },
+    { "id": "fear-itself_term_uru-enchanted-weapons", "name": "Uru-Enchanted Weapons", "kind": "keyword", "summary": "Before fighting this enemy, reveal one Adversary Deck card per weapon; it gains Attack equal to their Victory Points. Fall short and the fight fails, ending your fighting this turn.", "source": "FI", "page": 1 },
+    { "id": "fear-itself_term_fight-or-fail", "name": "Fight or Fail", "kind": "keyword", "summary": "Resolve this effect whether you defeat the enemy or its Uru-Enchanted Weapons make the fight fail.", "source": "FI", "page": 1 }
+  ]
+}

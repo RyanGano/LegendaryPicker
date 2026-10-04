@@ -8,7 +8,8 @@ namespace LegendaryPickerService.Tests;
 // so at 2–4 players they are 8 Test Rescue (20 Bystanders into the Hero Deck, 12 in Solo), 9 Test
 // Henchman Army (6 Henchmen into the Hero Deck), 10 Test Muster (2 Officers per player into the Villain
 // Deck), 11 Test Wounded (1 Wound into each starting deck) and 12 Test Lookout (3 Bystanders beside the
-// Scheme). Mastermind draw 0 is Dr. Doom, who leads a Henchman Group.
+// Scheme). Test Betrayal (8 Twists and 4 more set aside, 12 of the core box's 11) is never eligible.
+// Mastermind draw 0 is Dr. Doom, who leads a Henchman Group.
 public sealed class CardMovesTests
 {
     private static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "CardMoves");
@@ -59,6 +60,19 @@ public sealed class CardMovesTests
 
         Assert.Equal(schemes, random.Options[0]);
         Assert.Equal(ninth, setup.Scheme.Name);
+    }
+
+    // Twists a Scheme moves come from those the Villain Deck leaves, so they count against the boxes' Twists
+    // with the Scheme's own.
+    [Fact]
+    public void A_Scheme_whose_Twist_move_the_boxes_cannot_supply_is_dropped()
+    {
+        var random = new ScriptedRandom(8, 0);
+
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, random));
+
+        Assert.Equal(13, random.Options[0]);
+        Assert.Equal("Test Rescue", setup.Scheme.Name);
     }
 
     // The fixture box has no Henchman Groups and lists 0 cards per group, as Fantastic Four does; only the

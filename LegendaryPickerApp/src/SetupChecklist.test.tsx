@@ -24,6 +24,9 @@ import twoBoxesDailyBugle from './test/fixtures/twoBoxesDailyBugle.json'
 // A live draw from the core box and Guardians of the Galaxy with 2 players: Intergalactic Kree Nega-Bomb with
 // Thanos, which sets 6 Bystanders aside and lays out the Shard supply for Groot and Infinity Gems.
 import twoBoxesNegaBomb from './test/fixtures/twoBoxesNegaBomb.json'
+// A live draw from Legendary: Villains and Fear Itself with 2 players: The Traitor with Dr. Strange, whose Betrayal
+// Deck sets 3 Bindings per player and a 9th Twist aside.
+import twoBoxesTraitor from './test/fixtures/twoBoxesTraitor.json'
 // A live draw from Legendary: Villains alone, on the Villainous ruleset: Graduation at Xavier's X-Academy with Odin.
 import twoPlayerVillainsGraduation from './test/fixtures/twoPlayerVillainsGraduation.json'
 // Live draws from Legendary: Villains alone with 2 players whose Plot sets cards of a group beside it: Cage
@@ -528,6 +531,15 @@ describe('SetupChecklist', () => {
       'Set aside',
       'Hero Deck',
     ])
+  })
+
+  it('lays out the Bindings and the Twist a Plot sets aside, and leaves the Bindings stack the rest', () => {
+    renderChecklist(twoBoxesTraitor)
+
+    expect(rows('Set aside')).toEqual(['Bindings from the Bindings stack 6', 'Plot Twists from the unused Twists 1'])
+    expect(rows('Adversary Deck')).toContain('Plot Twists 8')
+    expect(rows('Shared stacks')).toContain('Bindings 24')
+    expect(rows('Other setup steps')).toEqual(['Shuffle the set-aside Bindings and Twist face down as the Betrayal Deck'])
   })
 
   it('leaves out the Set aside section when the Scheme sets no cards aside', () => {

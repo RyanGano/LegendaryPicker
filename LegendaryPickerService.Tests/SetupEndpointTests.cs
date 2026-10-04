@@ -224,11 +224,27 @@ public sealed class SetupEndpointTests : IDisposable
 
         var expected = JsonNode.Parse("""
             [
-              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition" },
-              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition" }
+              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition", "mixesRulesets": false },
+              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition", "mixesRulesets": false }
             ]
             """);
         Assert.True(JsonNode.DeepEquals(expected, JsonNode.Parse(body)), body);
+    }
+
+    // Only Legendary: Villains has rules for mixing rulesets, so the app can tell a player who ticks the core box and
+    // the Villainous Fear Itself without it why no setup can be drawn.
+    [Fact]
+    public async Task Boxes_says_which_base_game_can_mix_rulesets()
+    {
+        var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
+
+        Assert.Equal(
+            [
+                "core firstEdition base", "dark-city firstEdition", "fantastic-four firstEdition", "fear-itself villainous",
+                "guardians-of-the-galaxy firstEdition", "paint-the-town-red firstEdition", "villains villainous base mixes",
+            ],
+            boxes!.Select(box =>
+                $"{box!["id"]} {box["ruleset"]}{((bool)box["baseGame"]! ? " base" : "")}{((bool)box["mixesRulesets"]! ? " mixes" : "")}"));
     }
 
     [Fact]
