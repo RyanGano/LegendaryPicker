@@ -54,7 +54,8 @@ public sealed record SourceLink(string Key, string Url);
 // the box adds nothing to is left out. A box's special cards of a stack, such as Special Bystanders
 // shuffled in with the Bystanders, count toward that stack. Bindings, Madame HYDRA and New Recruits are
 // the Villainous stacks; the Villains rulebook says they are not the same cards as Wounds and Officers,
-// so each is a stack of its own.
+// so each is a stack of its own. Shards are tokens rather than cards, but a setup lays out their supply the
+// same way.
 public sealed record BoxComponents(
     Sourced<int> HeroCards,
     Sourced<int> VillainGroupCards,
@@ -66,7 +67,8 @@ public sealed record BoxComponents(
     Sourced<int>? Sidekicks = null,
     Sourced<int>? Bindings = null,
     Sourced<int>? MadameHydra = null,
-    Sourced<int>? NewRecruits = null)
+    Sourced<int>? NewRecruits = null,
+    Sourced<int>? Shards = null)
 {
     // What the box adds to a part's stack, or null when it adds none.
     public Sourced<int>? Supplies(Part part) => part switch
@@ -77,13 +79,14 @@ public sealed record BoxComponents(
         Part.Bindings => Bindings,
         Part.MadameHydra => MadameHydra,
         Part.NewRecruits => NewRecruits,
+        Part.Shards => Shards,
         _ => throw new ArgumentOutOfRangeException(nameof(part), part, null),
     };
 }
 
 // A part of the game a card or a base game's rules can use, which a setup lays out only when something in it
 // uses the part (owner decision D-uses, #87). So far the parts are the shared stacks other than Bystanders,
-// which every setup lays out. Written camelCase in box files ("madameHydra").
+// which every setup lays out, and the Shard supply (#95). Written camelCase in box files ("madameHydra").
 public enum Part
 {
     Wounds,
@@ -92,6 +95,7 @@ public enum Part
     Bindings,
     MadameHydra,
     NewRecruits,
+    Shards,
 }
 
 // A part a card or a base game's rules use, with its source: Card for a card whose text gains, captures or
@@ -141,6 +145,7 @@ public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms,
     public IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part)
         .Concat(Setup.WoundsPerPlayer is null ? [] : [Part.Wounds])
         .Concat(Setup.BindingsPerPlayer is null ? [] : [Part.Bindings])
+        .Concat(Setup.ShardSupply is null ? [] : [Part.Shards])
         .Concat((Setup.Moves ?? []).Select(move => move.Card switch
         {
             CardKind.Wound => Part.Wounds,
@@ -182,7 +187,7 @@ public sealed record SetupStep(string Label, string Source);
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
 // Heroes, HenchmanCards and VillainDeckBystanders set a count, replacing the table or Solo value.
 // HenchmanCards is how many cards of each Henchman Group go in the Villain Deck. WoundsPerPlayer and
-// BindingsPerPlayer set the size of those stacks.
+// BindingsPerPlayer set the size of those stacks, and ShardSupply how many Shards the supply holds.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -204,7 +209,8 @@ public sealed record SchemeSetup(
     IReadOnlyList<SetupStep>? Steps = null,
     IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null,
     Sourced<int>? BindingsPerPlayer = null,
-    IReadOnlyList<CardsBeside>? CardsBeside = null)
+    IReadOnlyList<CardsBeside>? CardsBeside = null,
+    Sourced<int>? ShardSupply = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
@@ -254,8 +260,8 @@ public enum CardKind
 
 // A deck, pile or shared stack cards are laid out in. A move takes cards from the pile its card kind
 // comes from and puts them in one of the destinations: the Villain Deck, the Hero Deck, beside the
-// Scheme, or each player's starting deck. Heroes drawn outside the Hero Deck can also go to a stack of
-// their own, set aside.
+// Scheme, each player's starting deck, or a stack of their own set aside, such as Guardians of the Galaxy's
+// Nega-Bomb Deck of Bystanders (#95).
 public enum Pile
 {
     VillainDeck,
@@ -274,7 +280,7 @@ public enum Pile
 // A move into the starting decks puts Count cards in each one, so it is already per player.
 public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountValue> Count, bool PerPlayer = false)
 {
-    public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.HeroDeck, Pile.BesideScheme, Pile.StartingDecks];
+    public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.HeroDeck, Pile.BesideScheme, Pile.StartingDecks, Pile.SetAside];
 
     // The pile the cards come from, which the card kind decides, so a box file never names it.
     // Hero cards come from the drawn Heroes and Henchmen from the drawn Henchman Groups, so both

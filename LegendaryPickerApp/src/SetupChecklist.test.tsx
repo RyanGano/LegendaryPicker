@@ -21,6 +21,9 @@ import twoBoxesTestVault from './test/fixtures/twoBoxesTestVault.json'
 import twoBoxesTestVigil from './test/fixtures/twoBoxesTestVigil.json'
 // Drawn from the core box and Paint the Town Red: Invade the Daily Bugle News HQ.
 import twoBoxesDailyBugle from './test/fixtures/twoBoxesDailyBugle.json'
+// A live draw from the core box and Guardians of the Galaxy with 2 players: Intergalactic Kree Nega-Bomb with
+// Thanos, which sets 6 Bystanders aside and lays out the Shard supply for Groot and Infinity Gems.
+import twoBoxesNegaBomb from './test/fixtures/twoBoxesNegaBomb.json'
 // A live draw from Legendary: Villains alone, on the Villainous ruleset: Graduation at Xavier's X-Academy with Odin.
 import twoPlayerVillainsGraduation from './test/fixtures/twoPlayerVillainsGraduation.json'
 // Live draws from Legendary: Villains alone with 2 players whose Plot sets cards of a group beside it: Cage
@@ -499,6 +502,49 @@ describe('SetupChecklist', () => {
     await user.click(within(section('Shared stacks')).getByRole('checkbox', { name: 'Sidekicks 16' }))
 
     expect(screen.getByRole('status')).toHaveTextContent('1 of 14 laid out')
+  })
+
+  it('lays out the Shard supply when a drawn card uses Shards', () => {
+    renderChecklist(twoBoxesNegaBomb)
+
+    expect(rows('Shared stacks')).toEqual(['Wounds 30', 'S.H.I.E.L.D. Officers 30', 'Bystanders 22', 'Shards 18'])
+  })
+
+  it('leaves out the Shard supply when no drawn card uses Shards', () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    expect(within(section('Shared stacks')).queryByText('Shards')).not.toBeInTheDocument()
+  })
+
+  it('lays out the Bystanders a Scheme sets aside in a section of their own, after the Villain Deck', () => {
+    renderChecklist(twoBoxesNegaBomb)
+
+    expect(rows('Set aside')).toEqual(['Bystanders from the Bystander stack 6'])
+    expect(within(section('Set aside')).getAllByRole('checkbox')).toHaveLength(1)
+    expect(rows('Other setup steps')).toEqual(['Shuffle the set-aside Bystanders face down as the Nega-Bomb Deck'])
+    const headings = screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)
+    expect(headings.slice(headings.indexOf('Villain Deck'), headings.indexOf('Hero Deck') + 1)).toEqual([
+      'Villain Deck',
+      'Set aside',
+      'Hero Deck',
+    ])
+  })
+
+  it('leaves out the Set aside section when the Scheme sets no cards aside', () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    expect(screen.queryByRole('region', { name: 'Set aside' })).not.toBeInTheDocument()
+  })
+
+  it('explains Shards in the terms the setup uses', () => {
+    renderChecklist(twoBoxesNegaBomb)
+
+    const shard = within(section('Terms in this setup')).getByText('Shard').closest('li')!
+    expect(shard).toHaveTextContent('A token from a shared supply.')
+    expect(within(shard).getByRole('link', { name: 'GG p.1' })).toHaveAttribute(
+      'href',
+      'https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf',
+    )
   })
 
   it('leaves out the Sidekick stack when no included box has Sidekicks', () => {

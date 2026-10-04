@@ -73,7 +73,7 @@ public class VillainsTests
     [Fact]
     public void Villains_is_a_Villainous_base_game_listed_after_the_expansions_before_it()
     {
-        Assert.Equal(["core", "dark-city", "fantastic-four", "paint-the-town-red", "villains"], Catalog.Boxes.Select(box => box.Id));
+        Assert.Equal(["core", "dark-city", "fantastic-four", "guardians-of-the-galaxy", "paint-the-town-red", "villains"], Catalog.Boxes.Select(box => box.Id));
         Assert.Equal("Legendary: Villains", Villains.Name);
         Assert.Equal(6, Villains.SchemaVersion);
         Assert.True(Villains.IsBaseGame);

@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 6,
+  "id": "guardians-of-the-galaxy",
+  "name": "Guardians of the Galaxy",
+  "ruleset": "firstEdition",
+  "catalogSource": "GG p.2; C1; C2",
+  "sources": [
+    { "key": "GG", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "GG p.2" },
+    "villainGroupCards": { "value": 8, "source": "GG p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "GG p.2" },
+    "schemeTwists": { "value": 0, "source": "GG p.2" },
+    "shards": { "value": 18, "source": "GG p.2" }
+  },
+  "heroes": [
+    { "id": "guardians-of-the-galaxy_hero_drax-the-destroyer", "name": "Drax the Destroyer", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["guardians-of-the-galaxy_term_artifact", "guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "shards", "source": "Card" }] },
+    { "id": "guardians-of-the-galaxy_hero_gamora", "name": "Gamora", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["guardians-of-the-galaxy_term_artifact", "guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "shards", "source": "Card" }] },
+    { "id": "guardians-of-the-galaxy_hero_groot", "name": "Groot", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_covert", "core_term_strength"], "terms": ["guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "shards", "source": "Card" }] },
+    { "id": "guardians-of-the-galaxy_hero_rocket-raccoon", "name": "Rocket Raccoon", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["guardians-of-the-galaxy_term_artifact", "guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "shards", "source": "Card" }] },
+    { "id": "guardians-of-the-galaxy_hero_star-lord", "name": "Star-Lord", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_covert", "core_term_ranged", "core_term_tech"], "terms": ["guardians-of-the-galaxy_term_artifact", "guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "shards", "source": "Card" }] }
+  ],
+  "villainGroups": [
+    { "id": "guardians-of-the-galaxy_villain_infinity-gems", "name": "Infinity Gems", "terms": ["core_term_ambush", "core_term_fight", "guardians-of-the-galaxy_term_artifact", "guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "shards", "source": "Card" }] },
+    { "id": "guardians-of-the-galaxy_villain_kree-starforce", "name": "Kree Starforce", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "wounds", "source": "Card" }, { "part": "shards", "source": "Card" }] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "guardians-of-the-galaxy_mastermind_supreme-intelligence-of-the-kree",
+      "name": "Supreme Intelligence of the Kree",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "guardians-of-the-galaxy_term_shard"],
+      "uses": [{ "part": "shards", "source": "Card" }],
+      "alwaysLeads": { "groupId": "guardians-of-the-galaxy_villain_kree-starforce", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "guardians-of-the-galaxy_mastermind_thanos",
+      "name": "Thanos",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "guardians-of-the-galaxy_term_artifact"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
+      "alwaysLeads": { "groupId": "guardians-of-the-galaxy_villain_infinity-gems", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "guardians-of-the-galaxy_scheme_forge-the-infinity-gauntlet",
+      "name": "Forge the Infinity Gauntlet",
+      "terms": ["core_term_scheme-twist", "guardians-of-the-galaxy_term_artifact", "guardians-of-the-galaxy_term_shard"],
+      "uses": [{ "part": "shards", "source": "Card" }],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "requiredGroups": [{ "groupId": "guardians-of-the-galaxy_villain_infinity-gems", "groupType": "villain", "source": "Card" }]
+      }
+    },
+    {
+      "id": "guardians-of-the-galaxy_scheme_intergalactic-kree-nega-bomb",
+      "name": "Intergalactic Kree Nega-Bomb",
+      "terms": ["core_term_scheme-twist", "core_term_rescue-a-bystander"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [{ "card": "bystander", "to": "setAside", "count": [{ "players": null, "value": 6, "source": "Card" }] }],
+        "steps": [{ "label": "Shuffle the set-aside Bystanders face down as the Nega-Bomb Deck", "source": "Card" }]
+      }
+    },
+    {
+      "id": "guardians-of-the-galaxy_scheme_the-kree-skrull-war",
+      "name": "The Kree-Skrull War",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "requiredGroups": [
+          { "groupId": "guardians-of-the-galaxy_villain_kree-starforce", "groupType": "villain", "source": "Card" },
+          { "groupId": "core_villain_skrulls", "groupType": "villain", "source": "Card" }
+        ]
+      }
+    },
+    {
+      "id": "guardians-of-the-galaxy_scheme_unite-the-shards",
+      "name": "Unite the Shards",
+      "terms": ["core_term_scheme-twist", "guardians-of-the-galaxy_term_shard"],
+      "setup": {
+        "twists": [
+          { "players": [1], "value": 6, "source": "Card" },
+          { "players": [2], "value": 7, "source": "Card" },
+          { "players": [3], "value": 8, "source": "Card" },
+          { "players": [4], "value": 9, "source": "Card" },
+          { "players": [5], "value": 10, "source": "Card" }
+        ],
+        "shardSupply": { "value": 30, "source": "Card" }
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "name": "Guardians of the Galaxy", "kind": "team", "summary": "A Hero team. In this box its members are Drax the Destroyer, Gamora, Groot, Rocket Raccoon and Star-Lord.", "source": "GG", "page": 1 },
+    { "id": "guardians-of-the-galaxy_term_shard", "name": "Shard", "kind": "keyword", "summary": "A token from a shared supply. Return one to the supply for +1 Attack, now or on a later turn; each Shard sitting on a Villain or Mastermind adds 1 to its Attack.", "source": "GG", "page": 1 },
+    { "id": "guardians-of-the-galaxy_term_artifact", "name": "Artifact", "kind": "keyword", "summary": "A card you put in front of you when you play it. It stays there between turns, and you can usually use its ability once on each of your turns.", "source": "GG", "page": 1 }
+  ]
+}

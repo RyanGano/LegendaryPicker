@@ -84,7 +84,7 @@ public sealed record GroupCardsBeside(ICard Group, string? Card, int Count, int 
 // Scheme sets, less what the setup moves out. A stack is laid out only when the setup's rules or one of its
 // drawn cards use it (D-uses); any other is null and left out of the response. So a First Edition setup has
 // no Bindings, Madame HYDRA or New Recruits, a Villainous one no Wounds or Officers, and Wounds, Bindings and
-// Sidekicks appear only when a drawn card uses them. Every setup lays out Bystanders.
+// Sidekicks appear only when a drawn card uses them, as does the Shard supply (#95). Every setup lays out Bystanders.
 public sealed record SetupStacks(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Wounds,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Officers,
@@ -92,7 +92,8 @@ public sealed record SetupStacks(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Sidekicks = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Bindings = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? MadameHydra = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? NewRecruits = null);
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? NewRecruits = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Shards = null);
 
 // Each player's starting deck: S.H.I.E.L.D. Agents and Troopers, or under Villainous HYDRA Operatives and Soldiers.
 // Choices lists the rulesets whose starting decks the players choose between in a mixed setup that includes

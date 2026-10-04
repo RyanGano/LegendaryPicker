@@ -51,7 +51,7 @@ public class PaintTheTownRedTests
     [Fact]
     public void Paint_the_Town_Red_is_an_expansion_listed_after_Fantastic_Four()
     {
-        Assert.Equal(["core", "dark-city", "fantastic-four", "paint-the-town-red"], Catalog.Boxes.Select(box => box.Id).Take(4));
+        Assert.Equal(["core", "dark-city", "fantastic-four", "guardians-of-the-galaxy", "paint-the-town-red"], Catalog.Boxes.Select(box => box.Id).Take(5));
         Assert.Equal(PaintTheTownRedName, PaintTheTownRed.Name);
         Assert.Equal(6, PaintTheTownRed.SchemaVersion);
         Assert.False(PaintTheTownRed.IsBaseGame);

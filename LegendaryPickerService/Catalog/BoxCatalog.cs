@@ -697,6 +697,7 @@ public sealed partial class BoxCatalog
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
             if (effect.BindingsPerPlayer is { } bindings) yield return ($"{scheme.Id} setup.bindingsPerPlayer", bindings.Source);
+            if (effect.ShardSupply is { } shards) yield return ($"{scheme.Id} setup.shardSupply", shards.Source);
             foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
             foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);
@@ -732,7 +733,7 @@ public sealed partial class BoxCatalog
     [
         ("bystanders", components.Bystanders), ("wounds", components.Wounds), ("officers", components.Officers),
         ("sidekicks", components.Sidekicks), ("bindings", components.Bindings), ("madameHydra", components.MadameHydra),
-        ("newRecruits", components.NewRecruits),
+        ("newRecruits", components.NewRecruits), ("shards", components.Shards),
     ];
 
     // The stacks a base game of each ruleset lays out (R p.22; VIL p.5).
