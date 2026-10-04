@@ -80,6 +80,12 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         </Section>
       )}
 
+      {moves.some((move) => move.to === 'setAside') && (
+        <Section title="Set aside" kind="scheme">
+          <MovedIn moves={moves} to="setAside" terms={t} />
+        </Section>
+      )}
+
       <Section title={t.heroDeck} kind="hero">
         <Item
           label={names(setup.heroes)}
@@ -283,6 +289,7 @@ const STACKS: [keyof SetupStacks, string][] = [
   ['newRecruits', 'New Recruits'],
   ['bystanders', 'Bystanders'],
   ['sidekicks', 'Sidekicks'],
+  ['shards', 'Shards'],
 ]
 
 function cardNames(terms: RulesetTerms): Record<CardKind, string> {
@@ -310,7 +317,7 @@ function pileNames(terms: RulesetTerms): Record<Pile, string> {
   }
 }
 
-// Where a move, or a Hero outside the Hero Deck, puts cards. Moves only go to the four destinations and
+// Where a move, or a Hero outside the Hero Deck, puts cards. Moves only go to the five destinations and
 // those Heroes to the Villain Deck, beside the Scheme or a stack set aside, never to a shared stack.
 function into(terms: RulesetTerms): Record<Pile, string> {
   return {

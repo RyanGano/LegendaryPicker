@@ -49,8 +49,8 @@ export type HeroDeck = {
 
 export type CardKind = 'hero' | 'henchman' | 'bystander' | 'wound' | 'officer' | 'sidekick'
 
-// The destinations a move can put cards in, then the stack set aside that only Heroes outside the Hero
-// Deck go to, then the shared stacks a move can take cards from. Hero cards come from the Hero Deck and
+// The destinations a move can put cards in, among them a stack set aside, which Heroes outside the Hero
+// Deck can go to as well, then the shared stacks a move can take cards from. Hero cards come from the Hero Deck and
 // Henchmen from the Villain Deck.
 export type Pile =
   | 'villainDeck'
@@ -100,8 +100,8 @@ export type CardsBeside = {
 }
 
 // A stack is left out when nothing in the setup uses it: its rules use their recruit stacks (S.H.I.E.L.D.
-// Officers, or Madame HYDRA and New Recruits), and a drawn card brings any other stack it uses. Every setup
-// lays out Bystanders.
+// Officers, or Madame HYDRA and New Recruits), and a drawn card brings any other stack it uses, the Shard
+// supply included. Every setup lays out Bystanders.
 export type SetupStacks = {
   wounds?: number
   officers?: number
@@ -110,6 +110,7 @@ export type SetupStacks = {
   bindings?: number
   madameHydra?: number
   newRecruits?: number
+  shards?: number
 }
 
 // The two kinds of starting card each player gets: S.H.I.E.L.D. Agents and Troopers, or under the

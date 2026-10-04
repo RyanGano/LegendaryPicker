@@ -183,10 +183,9 @@ Hero team/class icon labels and per-face copy counts, along with the missing Vil
 
 ## Implementation notes
 
-- This record is research only; it does not change runtime data or code. Guardians is an expansion with First Edition rules, not a separate base-game setup table (project queue).
-- The project tracks implementation dependencies in [#87](https://github.com/RyanGano/LegendaryPicker/issues/87) and [#88](https://github.com/RyanGano/LegendaryPicker/issues/88); they do not block research.
-- The model described in `Docs/Plan.md` has no Shard-token component field. Its card moves cover Hero, Henchman, Bystander, Wound, Officer, and Sidekick cards, with destinations limited to the Villain Deck, Hero Deck, beside the Scheme, or starting decks. It does not describe a separate set-aside Bystander deck.
-- The card model's listed kinds do not represent an Infinity Gem changing from a Villain into an Artifact after defeat. Confirm the exact data requirements during integration rather than assuming an existing field covers this.
+- The box is integrated as `LegendaryPickerService/Data/Boxes/guardians-of-the-galaxy.json` (#95). Guardians is an expansion with First Edition rules, not a separate base-game setup table (project queue).
+- The runtime file (#95) models Shards as a part with an 18-token supply (`components.shards`), Unite the Shards' 30 as `shardSupply`, and the Nega-Bomb Deck as a move of 6 Bystanders to a stack set aside (`to: setAside`) with a setup step.
+- An Infinity Gem changing from a Villain into an Artifact after defeat happens during play, so the runtime file does not model it.
 
 ## Open questions and evidence gaps
 
@@ -292,3 +291,29 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Verified `uses` (#95)
+
+Each card with a `uses` entry in this box's runtime file is listed below with the printed face whose text gains Shards or gives Wounds. Hero, Mastermind-front and Scheme entries rest on the local scans summarized above; Villain and Tactic entries rest on C1's structured fields for the linked face, whose image was not reviewed in this change. Source key `Card`.
+
+### Printed faces behind each entry
+
+- **Drax the Destroyer** — Shards: **The Destroyer** (`drax-04.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/drax-02.png)).
+- **Gamora** — Shards: **Bounty Hunter** (`gamora-01.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/gamora-04.png)); **Deadliest Woman in the Universe**; **Godslayer Blade**.
+- **Groot** — Shards: **Groot and Branches** (`groot-02.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/groot-02.png)); **Prune the Growths**.
+- **Rocket Raccoon** — Shards: **Incoming Detector** (`rocket-02.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/rocket-02.png)); **Trigger Happy**.
+- **Star-Lord** — Shards: **Element Guns** (`star-lord-03.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/star-lord-03.png)); **Sentient Starship**.
+- **Infinity Gems** — Shards: **Mind Gem** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/infinity-gems-01.png)) and the other Gems' Ambush lines.
+- **Kree Starforce** — Shards: **Supremor** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-04.png)); Wounds: **Korath the Pursuer** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-06.png)), **Ronan the Accuser** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-08.png)).
+- **Supreme Intelligence of the Kree** — Shards: its Master Strike (`mm-supreme-intelligence.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/supreme-intelligence-of-the-kree-01.png)).
+- **Thanos** — Wounds: the **God of Death** Tactic ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/thanos-02.png)).
+- **Forge the Infinity Gauntlet** — Shards: its Twist (`scheme-forge-infinity-gauntlet.png`).
+- **Intergalactic Kree Nega-Bomb** — Wounds: its Twist (`scheme-kree-nega-bomb.png`).
+- **Unite the Shards** — Shards: its Setup line sizes the supply (`scheme-unite-shards.png`), so the runtime file records it as `shardSupply` rather than a `uses` entry.
+
+### Runtime choices for the open gaps
+
+- **Unite the Shards' 30 Shards:** the runtime file follows the card (`shardSupply` 30) although the insert lists 18 tokens; listed as an open question in `Docs/Plan.md`.
+- **Hero teams and classes:** taken from C1 (team Guardians of the Galaxy; each Hero's classes are the union of its faces' class icons). The team term cites GG p.1, which introduces the Guardians as the box's Heroes.
+- **Villain manifest:** C1's per-face copy counts sum to 8 per group, matching GG p.2, which resolves the 13-versus-16 lead count above.
+- **The Kree-Skrull War in Solo:** both required groups fill the Villain Group slots, as GG p.2 says the deck will be larger than normal; no extra Villain Group effect is recorded.
