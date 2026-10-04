@@ -324,3 +324,23 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Verified `uses` (#98)
+
+Each card with a `uses` entry in this box's runtime file is listed below with the printed face whose text takes cards from that stack. Every entry was checked against the linked image and none contradicted the data. Source key `Card`.
+
+### Checked against the printed face
+
+- **Deadpool** — Wounds: printed card text on **Random Acts of Unkindness** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/deadpool-01.png)).
+- **Hulk** — Wounds: printed card text on **Unstoppable Hulk** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/hulk-04.png)); **Crazed Rampage** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/hulk-02.png)).
+- **Nick Fury** — S.H.I.E.L.D. Officers: printed card text on **Battlefield Promotion** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/nick-fury-04.png)).
+- **Brotherhood** — Wounds: printed card text on **Sabretooth** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/brotherhood-01.png)).
+- **Enemies of Asgard** — Wounds: printed card text on **Frost Giant** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/enemies-of-asgard-04.png)); **Ymir, Frost Giant King** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/enemies-of-asgard-01.png)).
+- **Radiation** — Wounds: printed card text on **Zzzax** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/radiation-01.png)).
+- **Spider-Foes** — Wounds: printed card text on **The Lizard** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/spider-foes-02.png)); **Venom** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/spider-foes-04.png)).
+- **Loki** — Wounds: printed card text on **Loki** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/loki-01.png)).
+- **HYDRA** — Wounds, S.H.I.E.L.D. Officers: printed card text on **HYDRA Kidnappers** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/hydra-01.png)); **Viper** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/hydra-04.png)).
+- **Masters of Evil** — Wounds: printed card text on **Ultron** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/masters-of-evil-04.png)).
+- **Magneto** — Wounds: printed card text on **Crushing Shockwave** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/magneto-03.png)).
+- **Legacy Virus** — Wounds: printed card text on **The Legacy Virus** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/4Scheme(35).png)).
+- **Unleash the Power of the Cosmic Cube** — Wounds: printed card text on **Unleash the Power of the Cosmic Cube** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/6Scheme(37).png)).
