@@ -317,7 +317,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     Stack(Part.Officers, Supply(Part.Officers) - plan.MovedOut(Pile.Officers)),
                     stackBoxes.Sum(box => box.Components.Bystanders?.Value ?? 0) - plan.Bystanders - plan.MovedOut(Pile.Bystanders),
                     Stack(Part.Sidekicks, Supply(Part.Sidekicks) - plan.MovedOut(Pile.Sidekicks)),
-                    Stack(Part.Bindings, plan.Bindings ?? Supply(Part.Bindings)),
+                    Stack(Part.Bindings, (plan.Bindings ?? Supply(Part.Bindings)) - plan.MovedOut(Pile.Bindings)),
                     Stack(Part.MadameHydra, Supply(Part.MadameHydra)),
                     Stack(Part.NewRecruits, Supply(Part.NewRecruits)),
                     Stack(Part.Shards, plan.Shards ?? Supply(Part.Shards))),
@@ -593,7 +593,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 && plan.MovedOut(Pile.Wounds) <= (plan.Wounds ?? Supply(components => components.Wounds))
                 && plan.MovedOut(Pile.Officers) <= Supply(components => components.Officers)
                 && plan.MovedOut(Pile.Sidekicks) <= Supply(components => components.Sidekicks)
-                && plan.Twists + plan.TwistsBeside <= Supply(components => components.SchemeTwists);
+                && plan.MovedOut(Pile.Bindings) <= (plan.Bindings ?? Supply(components => components.Bindings))
+                && plan.Twists + plan.TwistsBeside + plan.MovedOut(Pile.Twists) <= Supply(components => components.SchemeTwists);
         }
 
         // Fills one group type's slots: the Scheme's required groups first, then the Always Leads
@@ -771,6 +772,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             (CardKind.Officer, false) => "S.H.I.E.L.D. Officers",
             (CardKind.Sidekick, true) => "Sidekick",
             (CardKind.Sidekick, false) => "Sidekicks",
+            (CardKind.Binding, true) => "Binding",
+            (CardKind.Binding, false) => "Bindings",
+            (CardKind.Twist, true) => _terms.Twist,
+            (CardKind.Twist, false) => _terms.Twists,
             _ => throw new ArgumentOutOfRangeException(nameof(card), card, null),
         };
 

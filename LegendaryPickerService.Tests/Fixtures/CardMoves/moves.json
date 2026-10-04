@@ -79,6 +79,17 @@
           { "card": "bystander", "to": "besideScheme", "count": [{ "players": null, "value": 3, "source": "Card" }] }
         ]
       }
+    },
+    {
+      "id": "moves_scheme_test-betrayal",
+      "name": "Test Betrayal",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "moves": [
+          { "card": "twist", "to": "setAside", "count": [{ "players": null, "value": 4, "source": "Card" }] }
+        ]
+      }
     }
   ],
   "glossary": []

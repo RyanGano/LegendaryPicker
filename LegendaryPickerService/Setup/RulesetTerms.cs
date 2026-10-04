@@ -19,22 +19,24 @@ public sealed record RulesetTerms(
     string Henchmen,
     string VillainDeck,
     string HeroDeck,
-    string Twists)
+    string Twists,
+    string Twist)
 {
     public static readonly RulesetTerms FirstEdition = new(
         "Scheme", "Mastermind", "Hero", "Heroes", "Villain Group", "Villain Groups", "Henchman Group", "Henchman Groups",
-        "Henchman", "Henchmen", "Villain Deck", "Hero Deck", "Twists");
+        "Henchman", "Henchmen", "Villain Deck", "Hero Deck", "Twists", "Twist");
 
     public static readonly RulesetTerms Villainous = new(
         "Plot", "Commander", "Ally", "Allies", "Adversary Group", "Adversary Groups", "Backup Adversary group", "Backup Adversary groups",
-        "Backup Adversary", "Backup Adversaries", "Adversary Deck", "Ally Deck", "Plot Twists");
+        "Backup Adversary", "Backup Adversaries", "Adversary Deck", "Ally Deck", "Plot Twists", "Plot Twist");
 
     // A setup that draws Heroic and Villainous cards together names a part by both words, since its cards
     // may be either (VIL p.21 treats them as equivalent).
     public static readonly RulesetTerms Mixed = new(
         "Scheme or Plot", "Mastermind or Commander", "Hero or Ally", "Heroes or Allies", "Villain or Adversary Group", "Villain or Adversary Groups",
         "Henchman or Backup Adversary group", "Henchman or Backup Adversary groups", "Henchman or Backup Adversary",
-        "Henchmen or Backup Adversaries", "Villain or Adversary Deck", "Hero or Ally Deck", "Scheme Twists or Plot Twists");
+        "Henchmen or Backup Adversaries", "Villain or Adversary Deck", "Hero or Ally Deck", "Scheme Twists or Plot Twists",
+        "Scheme Twist or Plot Twist");
 
     public static RulesetTerms For(Ruleset ruleset) => ruleset switch
     {

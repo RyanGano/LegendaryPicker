@@ -160,6 +160,8 @@ function destinations(t: RulesetTerms): Record<Pile, string> {
     wounds: 'Goes to Wound stack',
     officers: 'Goes to Officer stack',
     sidekicks: 'Goes to Sidekick stack',
+    bindings: 'Goes to Bindings stack',
+    twists: 'Goes to unused Twists',
   }
 }
 

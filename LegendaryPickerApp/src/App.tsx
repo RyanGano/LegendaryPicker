@@ -76,6 +76,25 @@ function readIds(key: string): string[] | null {
   }
 }
 
+// Why the ticked boxes can't be drawn from, or null when they can. A setup takes its rules from a base game, so it
+// needs one, and boxes of more than one ruleset also need a base game with rules for mixing them. Until the box list
+// loads there is nothing to check, and an API from before mixesRulesets doesn't say which base game has those rules;
+// either way the API decides.
+function boxHint(available: Box[], included: string[]): string | null {
+  const ticked = available.filter((box) => included.includes(box.id))
+  if (available.length > 0 && !ticked.some((box) => box.baseGame)) {
+    return 'Pick a base game to draw a setup.'
+  }
+  const mixers = available.filter((box) => box.mixesRulesets)
+  const rulesets = new Set(ticked.map((box) => box.ruleset))
+  if (available.some((box) => box.mixesRulesets !== undefined) && rulesets.size > 1 && !ticked.some((box) => box.mixesRulesets)) {
+    return mixers.length > 0
+      ? `Heroic and Villainous boxes mix only with ${mixers.map((box) => box.name).join(' or ')}. Tick it too to draw a setup.`
+      : "Heroic and Villainous boxes can't be drawn together."
+  }
+  return null
+}
+
 function saveBoxes(ids: string[]) {
   try {
     localStorage.setItem(BOXES_KEY, JSON.stringify(ids))
@@ -178,9 +197,7 @@ function App() {
 
   // Stored ids the API no longer lists are ignored.
   const isIncluded = (box: Box) => included.includes(box.id)
-  // A setup takes its rules from a base game, so it needs at least one. Until the box list loads
-  // there is nothing to check, and the API decides.
-  const needsBaseGame = boxes.length > 0 && !boxes.some((box) => box.baseGame && isIncluded(box))
+  const hint = boxHint(boxes, included)
   // Base games first, then expansions, each in the API's order.
   const listedBoxes = [...boxes.filter((box) => box.baseGame), ...boxes.filter((box) => !box.baseGame)]
 
@@ -191,8 +208,8 @@ function App() {
     try {
       const available = await boxesRequest.current
       const drawn = available.filter(isIncluded)
-      // A draw started before the box list loaded may turn out to have no base game; the picker now says so.
-      if (available.length > 0 && !drawn.some((box) => box.baseGame)) {
+      // A draw started before the box list loaded may turn out to have boxes it can't draw from; the picker now says so.
+      if (boxHint(available, included) !== null) {
         setStatus({ kind: 'idle' })
         return
       }
@@ -256,13 +273,13 @@ function App() {
                     </label>
                   ))}
                 </div>
-                {needsBaseGame && <p className="box-hint">Pick a base game to draw a setup.</p>}
+                {hint && <p className="box-hint">{hint}</p>}
               </>
             )}
             <button
               type="button"
               className="primary"
-              disabled={players === null || loading || needsBaseGame}
+              disabled={players === null || loading || hint !== null}
               onClick={generate}
             >
               Generate

@@ -1,0 +1,366 @@
+{
+  "kind": "setup",
+  "players": 2,
+  "ruleset": "villainous",
+  "scheme": {
+    "id": "fear-itself_scheme_the-traitor",
+    "name": "The Traitor",
+    "terms": [
+      "villains_term_plot-twist"
+    ],
+    "box": "Fear Itself"
+  },
+  "mastermind": {
+    "id": "villains_mastermind_dr-strange",
+    "name": "Dr. Strange",
+    "terms": [
+      "villains_term_always-leads",
+      "villains_term_command-strike",
+      "villains_term_commander-tactic",
+      "villains_term_fight"
+    ],
+    "box": "Legendary: Villains"
+  },
+  "villainGroups": [
+    {
+      "id": "villains_villain_defenders",
+      "name": "Defenders",
+      "terms": [
+        "villains_term_ambush",
+        "villains_term_fight",
+        "villains_term_overrun"
+      ],
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "fear-itself_villain_the-mighty",
+      "name": "The Mighty",
+      "terms": [
+        "fear-itself_term_uru-enchanted-weapons",
+        "fear-itself_term_fight-or-fail",
+        "villains_term_ambush",
+        "villains_term_overrun"
+      ],
+      "box": "Fear Itself"
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "id": "villains_henchman_cops",
+      "name": "Cops",
+      "terms": [
+        "villains_term_fight"
+      ],
+      "box": "Legendary: Villains"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "villains_hero_electro",
+      "name": "Electro",
+      "terms": [
+        "villains_term_sinister-six",
+        "villains_term_instinct",
+        "villains_term_ranged",
+        "villains_term_dodge"
+      ],
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "fear-itself_hero_greithoth-breaker-of-wills",
+      "name": "Greithoth, Breaker of Wills",
+      "terms": [
+        "villains_term_foes-of-asgard",
+        "villains_term_covert",
+        "villains_term_instinct",
+        "villains_term_strength",
+        "fear-itself_term_thrown-artifact"
+      ],
+      "box": "Fear Itself"
+    },
+    {
+      "id": "villains_hero_ultron",
+      "name": "Ultron",
+      "terms": [
+        "villains_term_tech",
+        "villains_term_dodge",
+        "villains_term_kidnap-a-bystander"
+      ],
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_hero_sabretooth",
+      "name": "Sabretooth",
+      "terms": [
+        "villains_term_brotherhood",
+        "villains_term_covert",
+        "villains_term_instinct",
+        "villains_term_strength"
+      ],
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_hero_juggernaut",
+      "name": "Juggernaut",
+      "terms": [
+        "villains_term_brotherhood",
+        "villains_term_strength"
+      ],
+      "box": "Legendary: Villains"
+    }
+  ],
+  "villainDeck": {
+    "twists": 8,
+    "masterStrikes": 5,
+    "villainCards": 16,
+    "henchmanCards": 10,
+    "bystanders": 2,
+    "outsideHeroCards": 0,
+    "total": 41
+  },
+  "heroDeck": {
+    "heroCards": 70,
+    "total": 70
+  },
+  "twistsBesideScheme": 0,
+  "stacks": {
+    "bystanders": 39,
+    "bindings": 24,
+    "madameHydra": 12,
+    "newRecruits": 15
+  },
+  "playerDeck": {
+    "agents": 8,
+    "troopers": 4
+  },
+  "moves": [
+    {
+      "card": "binding",
+      "from": "bindings",
+      "to": "setAside",
+      "count": 6,
+      "total": 6
+    },
+    {
+      "card": "twist",
+      "from": "twists",
+      "to": "setAside",
+      "count": 1,
+      "total": 1
+    }
+  ],
+  "outsideHeroes": [],
+  "outsideHenchmen": [],
+  "cardsBeside": [],
+  "steps": [
+    "Shuffle the set-aside Bindings and Twist face down as the Betrayal Deck"
+  ],
+  "notes": [
+    {
+      "text": "Plot moves 6 Bindings into a stack set aside, 3 per player",
+      "citation": "Card",
+      "link": null,
+      "box": "Fear Itself"
+    },
+    {
+      "text": "Plot moves 1 Plot Twist into a stack set aside",
+      "citation": "Card",
+      "link": null,
+      "box": "Fear Itself"
+    },
+    {
+      "text": "Plot adds a setup step: Shuffle the set-aside Bindings and Twist face down as the Betrayal Deck",
+      "citation": "Card",
+      "link": null,
+      "box": "Fear Itself"
+    },
+    {
+      "text": "Dr. Strange always leads Defenders",
+      "citation": "VIL p.6",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    }
+  ],
+  "glossary": [
+    {
+      "id": "villains_term_brotherhood",
+      "name": "Brotherhood",
+      "kind": "team",
+      "summary": "An Ally team of mutants who believe their kind should rule. In Villains its members are Juggernaut, Magneto, Mystique and Sabretooth.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_foes-of-asgard",
+      "name": "Foes of Asgard",
+      "kind": "team",
+      "summary": "An Ally team of enemies of Thor's home realm. In Villains its members are Enchantress and Loki.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_sinister-six",
+      "name": "Sinister Six",
+      "kind": "team",
+      "summary": "An Ally team of Spider-Man's foes who band together against him. In Villains its members are Dr. Octopus, Electro, Green Goblin, Kraven, Mysterio and Venom.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_covert",
+      "name": "Covert",
+      "kind": "class",
+      "summary": "An Ally class that wins through deceit, cunning schemes and subtle powers.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_instinct",
+      "name": "Instinct",
+      "kind": "class",
+      "summary": "An Ally class that relies on ferocity, fast reactions and keen senses.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_ranged",
+      "name": "Ranged",
+      "kind": "class",
+      "summary": "An Ally class that attacks from afar with blasts, beams and elemental or mental power.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_strength",
+      "name": "Strength",
+      "kind": "class",
+      "summary": "An Ally class whose power is raw might, iron will or command of others.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_tech",
+      "name": "Tech",
+      "kind": "class",
+      "summary": "An Ally class armed with weapons, gadgets, inventions and advanced science.",
+      "citation": "VIL p.19",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "fear-itself_term_thrown-artifact",
+      "name": "Thrown Artifact",
+      "kind": "keyword",
+      "summary": "An Ally that stays in front of you between turns once you play it. On your turn, put it on the bottom of your deck to use its throw ability.",
+      "citation": "FI p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Fear_Itself.pdf",
+      "box": "Fear Itself"
+    },
+    {
+      "id": "fear-itself_term_uru-enchanted-weapons",
+      "name": "Uru-Enchanted Weapons",
+      "kind": "keyword",
+      "summary": "Before fighting this enemy, reveal one Adversary Deck card per weapon; it gains Attack equal to their Victory Points. Fall short and the fight fails, ending your fighting this turn.",
+      "citation": "FI p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Fear_Itself.pdf",
+      "box": "Fear Itself"
+    },
+    {
+      "id": "fear-itself_term_fight-or-fail",
+      "name": "Fight or Fail",
+      "kind": "keyword",
+      "summary": "Resolve this effect whether you defeat the enemy or its Uru-Enchanted Weapons make the fight fail.",
+      "citation": "FI p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Fear_Itself.pdf",
+      "box": "Fear Itself"
+    },
+    {
+      "id": "villains_term_always-leads",
+      "name": "Always Leads",
+      "kind": "keyword",
+      "summary": "Names the Adversary Group or Backup Adversary group this Commander brings to every game. It takes one of the setup's group slots; random draws fill the rest.",
+      "citation": "VIL p.6",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_ambush",
+      "name": "Ambush",
+      "kind": "keyword",
+      "summary": "Triggers as this Adversary arrives in the city. If its arrival pushes another Adversary out, resolve that overrun first.",
+      "citation": "VIL p.9",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_command-strike",
+      "name": "Command Strike",
+      "kind": "keyword",
+      "summary": "When a Command Strike comes off the Adversary Deck, the Commander acts in person: resolve the Command Strike line on its card, then KO the Strike.",
+      "citation": "VIL p.10",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_commander-tactic",
+      "name": "Commander Tactic",
+      "kind": "keyword",
+      "summary": "Beating the Commander's Attack takes one of its four face-down Tactics at random for your Victory Pile, with its Fight effect. Taking all four wins.",
+      "citation": "VIL p.13",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_dodge",
+      "name": "Dodge",
+      "kind": "keyword",
+      "summary": "On your turn you can discard this card from your hand to draw a replacement, ignoring its other text. Dodging is not playing the card.",
+      "citation": "VIL p.14",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_fight",
+      "name": "Fight",
+      "kind": "keyword",
+      "summary": "Triggers when a player spends enough Attack to defeat this card.",
+      "citation": "VIL p.12",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_kidnap-a-bystander",
+      "name": "Kidnap a Bystander",
+      "kind": "keyword",
+      "summary": "Take the top Bystander of the Bystander Deck into your Victory Pile. It never takes a Bystander an Adversary guards; defeat that Adversary for it.",
+      "citation": "VIL p.15",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_overrun",
+      "name": "Overrun",
+      "kind": "keyword",
+      "summary": "Triggers when this Adversary is pushed out past the last city space, after it KOs a cheap Ally from the Lair and any guarded Bystanders cost each player a discard.",
+      "citation": "VIL p.8",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    },
+    {
+      "id": "villains_term_plot-twist",
+      "name": "Plot Twist",
+      "kind": "keyword",
+      "summary": "Drawing a Plot Twist from the Adversary Deck moves the Commander's plan forward: resolve the Twist line on the Plot, then KO the Twist unless the Plot says otherwise.",
+      "citation": "VIL p.9",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf",
+      "box": "Legendary: Villains"
+    }
+  ]
+}

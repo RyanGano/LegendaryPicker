@@ -300,6 +300,8 @@ function cardNames(terms: RulesetTerms): Record<CardKind, string> {
     wound: 'Wounds',
     officer: 'S.H.I.E.L.D. Officers',
     sidekick: 'Sidekicks',
+    binding: 'Bindings',
+    twist: terms.twists,
   }
 }
 
@@ -314,6 +316,8 @@ function pileNames(terms: RulesetTerms): Record<Pile, string> {
     wounds: 'Wound stack',
     officers: 'Officer stack',
     sidekicks: 'Sidekick stack',
+    bindings: 'Bindings stack',
+    twists: 'unused Twists',
   }
 }
 
@@ -330,6 +334,8 @@ function into(terms: RulesetTerms): Record<Pile, string> {
     wounds: 'to the Wound stack',
     officers: 'to the Officer stack',
     sidekicks: 'to the Sidekick stack',
+    bindings: 'to the Bindings stack',
+    twists: 'to the unused Twists',
   }
 }
 

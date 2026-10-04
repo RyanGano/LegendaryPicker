@@ -151,6 +151,7 @@ public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms,
             CardKind.Wound => Part.Wounds,
             CardKind.Officer => Part.Officers,
             CardKind.Sidekick => Part.Sidekicks,
+            CardKind.Binding => Part.Bindings,
             _ => (Part?)null,
         }).OfType<Part>())
         .Distinct();
@@ -247,7 +248,8 @@ public sealed record OutsideHenchmen(Pile To, IReadOnlyList<PlayerCountValue> Ca
     public static readonly Pile[] Destinations = [Pile.HeroDeck];
 }
 
-// A kind of card a Scheme can move during setup.
+// A kind of card a Scheme can move during setup. A Twist comes from the Twists the Villain Deck doesn't use, as
+// The Traitor adds a 9th Twist to its Betrayal Deck (#96).
 public enum CardKind
 {
     Hero,
@@ -256,12 +258,15 @@ public enum CardKind
     Wound,
     Officer,
     Sidekick,
+    Binding,
+    Twist,
 }
 
 // A deck, pile or shared stack cards are laid out in. A move takes cards from the pile its card kind
 // comes from and puts them in one of the destinations: the Villain Deck, the Hero Deck, beside the
 // Scheme, each player's starting deck, or a stack of their own set aside, such as Guardians of the Galaxy's
-// Nega-Bomb Deck of Bystanders (#95).
+// Nega-Bomb Deck of Bystanders (#95). Twists is the Twists the boxes hold beyond those the Villain Deck and the
+// Scheme use.
 public enum Pile
 {
     VillainDeck,
@@ -273,6 +278,8 @@ public enum Pile
     Wounds,
     Officers,
     Sidekicks,
+    Bindings,
+    Twists,
 }
 
 // A Scheme moving cards of one kind from their own pile to another during setup. Count says how many
@@ -284,7 +291,7 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
 
     // The pile the cards come from, which the card kind decides, so a box file never names it.
     // Hero cards come from the drawn Heroes and Henchmen from the drawn Henchman Groups, so both
-    // leave a deck; every other kind comes from its shared stack.
+    // leave a deck; Twists come from those left over, and every other kind from its shared stack.
     public Pile From() => Card switch
     {
         CardKind.Hero => Pile.HeroDeck,
@@ -293,6 +300,8 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
         CardKind.Wound => Pile.Wounds,
         CardKind.Officer => Pile.Officers,
         CardKind.Sidekick => Pile.Sidekicks,
+        CardKind.Binding => Pile.Bindings,
+        CardKind.Twist => Pile.Twists,
         _ => throw new ArgumentOutOfRangeException(nameof(Card), Card, null),
     };
 }
