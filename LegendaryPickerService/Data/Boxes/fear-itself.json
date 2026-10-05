@@ -5,7 +5,8 @@
   "ruleset": "villainous",
   "catalogSource": "FI p.2; C1",
   "sources": [
-    { "key": "FI", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Fear_Itself.pdf" }
+    { "key": "FI", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Fear_Itself.pdf" },
+    { "key": "D-heroic", "url": "https://github.com/RyanGano/LegendaryPicker/issues/110" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "FI p.2" },
@@ -66,7 +67,7 @@
           { "card": "binding", "to": "setAside", "count": [{ "players": null, "value": 3, "source": "Card" }], "perPlayer": true },
           { "card": "twist", "to": "setAside", "count": [{ "players": null, "value": 1, "source": "Card" }] }
         ],
-        "steps": [{ "label": "Shuffle the set-aside Bindings and Twist face down as the Betrayal Deck", "source": "Card" }]
+        "steps": [{ "label": "Shuffle all the set-aside cards face down as the Betrayal Deck", "source": "Card" }]
       }
     }
   ],
@@ -75,5 +76,13 @@
     { "id": "fear-itself_term_thrown-artifact", "name": "Thrown Artifact", "kind": "keyword", "summary": "An Ally that stays in front of you between turns once you play it. On your turn, put it on the bottom of your deck to use its throw ability.", "source": "FI", "page": 1 },
     { "id": "fear-itself_term_uru-enchanted-weapons", "name": "Uru-Enchanted Weapons", "kind": "keyword", "summary": "Before fighting this enemy, reveal one Adversary Deck card per weapon; it gains Attack equal to their Victory Points. Fall short and the fight fails, ending your fighting this turn.", "source": "FI", "page": 1 },
     { "id": "fear-itself_term_fight-or-fail", "name": "Fight or Fail", "kind": "keyword", "summary": "Resolve this effect whether you defeat the enemy or its Uru-Enchanted Weapons make the fight fail.", "source": "FI", "page": 1 }
-  ]
+  ],
+  "otherRuleset": {
+    "source": "D-heroic",
+    "standIns": [
+      { "part": "bindings", "with": "wounds", "source": "FI p.2" },
+      { "part": "madameHydra", "with": "officers", "source": "FI p.2" },
+      { "part": "newRecruits", "source": "FI p.2" }
+    ]
+  }
 }

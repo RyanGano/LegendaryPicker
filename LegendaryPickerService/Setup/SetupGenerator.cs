@@ -23,6 +23,10 @@ namespace LegendaryPickerService.Setup;
 // The setup lays out a stack only when its rules or a drawn card use it (D-uses, #87). A card that uses a stack
 // no included box of its own ruleset supplies can't be set up, so it is dropped before the draw.
 //
+// An expansion can be played without a base game of its own ruleset when its box says how (OtherRuleset, D-heroic,
+// #110): its Schemes and Masterminds then follow the included base game's rules, and each part it uses that no
+// included box supplies is replaced by its stand-in, as Fear Itself's Bindings become Wounds (FI p.2).
+//
 // Every count and rule comes from the box data; nothing here compares a card name.
 public sealed class SetupGenerator(BoxCatalog catalog)
 {
@@ -41,8 +45,16 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         var boxes = catalog.Boxes.Where(box => includedBoxes.Contains(box.Id)).ToList();
         var mixingBox = boxes.Select(box => box.Ruleset).Distinct().Count() > 1
-            ? boxes.First(box => box.Setup?.Mixing is not null)
+            ? boxes.FirstOrDefault(box => box.Setup?.Mixing is not null)
             : null;
+
+        // The stand-ins of the parts no included box supplies, from the first included box that gives one.
+        var standIns = boxes
+            .SelectMany(box => (box.OtherRuleset?.StandIns ?? []).Select(standIn => new ActiveStandIn(standIn, box)))
+            .Where(active => !boxes.Any(box => box.Components.Supplies(active.Rule.Part)?.Value > 0))
+            .DistinctBy(active => active.Rule.Part)
+            .ToDictionary(active => active.Rule.Part);
+        var baseRulesets = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).ToHashSet();
 
         // One set of rules per ruleset that has an included base game, each drawing from every included box.
         var draws = boxes.Where(box => box.IsBaseGame)
@@ -58,7 +70,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                         $"Supported player counts are 1 (Solo) and {string.Join(", ", rules.PlayerCounts.Select(r => r.Players))}.");
                 }
 
-                return new TableDraw(boxes, rulesBox, mixingBox, rules, players, row, random);
+                return new TableDraw(boxes, rulesBox, mixingBox, baseRulesets, standIns, rules, players, row, random);
             })
             .ToList();
 
@@ -66,7 +78,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     }
 
     // Why a set of box ids can't be drawn from, or null when it can. A setup needs at least one base game for
-    // its rules, and boxes of different rulesets need a base game that gives rules for mixing them.
+    // its rules, and boxes of different rulesets need a base game that gives rules for mixing them, unless the base
+    // games are of one ruleset and every box of the other can be played under it (D-heroic).
     public string? CheckBoxes(IReadOnlyCollection<string> includedBoxes)
     {
         if (includedBoxes.FirstOrDefault(id => catalog.Boxes.All(box => box.Id != id)) is { } unknown)
@@ -80,7 +93,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return "Include at least one base game.";
         }
 
-        return included.Select(box => box.Ruleset).Distinct().Count() > 1 && !included.Any(box => box.Setup?.Mixing is not null)
+        var baseRulesets = included.Where(box => box.IsBaseGame).Select(box => box.Ruleset).ToHashSet();
+        return included.Select(box => box.Ruleset).Distinct().Count() > 1
+            && !included.Any(box => box.Setup?.Mixing is not null)
+            && (baseRulesets.Count > 1 || included.Any(box => !baseRulesets.Contains(box.Ruleset) && box.OtherRuleset is null))
             ? $"{string.Join(" and ", included.Select(box => box.Name))} follow different rulesets, and no included base game has rules for mixing them."
             : null;
     }
@@ -111,15 +127,17 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     }
 
     // One set of rules a table draw can follow: the included boxes, which it draws every card from, the base
-    // game whose rules they are, the mixing base game when the included boxes follow more than one ruleset,
-    // and the random source. row is the player-count table row, or null in Solo.
+    // game whose rules they are, the mixing base game when the included boxes follow more than one ruleset and
+    // one of them has mixing rules, the rulesets of the included base games, the stand-ins of the parts no
+    // included box supplies, and the random source. row is the player-count table row, or null in Solo.
     private sealed class TableDraw(
-        IReadOnlyList<Box> boxes, Box rulesBox, Box? mixingBox, SetupRules rules, int players, PlayerCountSetup? row,
+        IReadOnlyList<Box> boxes, Box rulesBox, Box? mixingBox, IReadOnlySet<Ruleset> baseRulesets,
+        IReadOnlyDictionary<Part, ActiveStandIn> standIns, SetupRules rules, int players, PlayerCountSetup? row,
         IRandomSource random)
     {
-        private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.VillainGroups).Where(group => Supplied(boxes, group)).ToList();
-        private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).Where(group => Supplied(boxes, group)).ToList();
-        private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).Where(hero => Supplied(boxes, hero)).ToList();
+        private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.VillainGroups).Where(group => Supplied(boxes, standIns, group)).ToList();
+        private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).Where(group => Supplied(boxes, standIns, group)).ToList();
+        private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).Where(hero => Supplied(boxes, standIns, hero)).ToList();
         private readonly Dictionary<(string Scheme, int Heroes), bool> _heroesFit = [];
 
         // The words the ruleset's rulebook uses, for rule notes. A setup whose drawn cards follow both rulesets
@@ -135,7 +153,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // can ask for more cards. A pair is completed here only when these are the rules it follows.
         public List<SetupPlan> Completions(Scheme scheme)
         {
-            if (!Supplied(boxes, scheme))
+            if (!Supplied(boxes, standIns, scheme))
             {
                 return [];
             }
@@ -143,7 +161,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // A Mastermind whose Always Leads group is not included cannot be set up legally.
             var plan = Plan(scheme);
             return boxes.SelectMany(box => box.Masterminds)
-                .Where(mastermind => Supplied(boxes, mastermind))
+                .Where(mastermind => Supplied(boxes, standIns, mastermind))
                 .Where(mastermind => IgnoresAlwaysLeads || GroupIds().Contains(mastermind.AlwaysLeads.GroupId))
                 .Where(mastermind => RulesOf(scheme, mastermind) == rulesBox.Ruleset)
                 .Select(mastermind => WithMastermind(plan, mastermind))
@@ -190,15 +208,21 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .. heroes, .. outside.Select(hero => hero.Hero), .. beside.Select(cards => cards.Group),
             ];
             var drawn = cards.Select(card => RulesetOf(card.Id)).ToHashSet();
-            var stackBoxes = boxes.Where(box => drawn.Contains(box.Ruleset)).ToList();
             var mixed = drawn.Count > 1;
+
+            // The rules' own ruleset lays out its stacks too, which a pair played under another ruleset's base game
+            // (D-heroic) doesn't otherwise bring.
+            var stackBoxes = boxes.Where(box => drawn.Contains(box.Ruleset) || box.Ruleset == rulesBox.Ruleset).ToList();
 
             // The parts the setup lays out: those its rules use, and those its drawn cards use (D-uses). Under the
             // mixing base game's rules a mixed setup's rules use the recruit stacks of every included base game
             // (VIL p.21); under the other rules its cards of the mixing ruleset bring only what they use (#88).
             var mixingRules = rulesBox == mixingBox;
             var rulesUse = mixed && mixingRules ? boxes.Where(box => box.IsBaseGame).SelectMany(box => box.Setup!.Uses) : rules.Uses;
-            var used = rulesUse.Select(use => use.Part).Concat(cards.SelectMany(card => card.Parts)).ToHashSet();
+            // A part no included box supplies is replaced by its stand-in (D-heroic, FI p.2).
+            var cardParts = cards.SelectMany(card => card.Parts).ToHashSet();
+            var used = rulesUse.Select(use => use.Part).Concat(cardParts.Select(StandInFor).OfType<Part>()).ToHashSet();
+            var stoodIn = standIns.Values.Where(active => cardParts.Contains(active.Rule.Part)).ToList();
 
             // A mixed setup's notes name its parts in both rulesets' words, so its plan's notes are written again.
             var notes = new List<RuleNote>();
@@ -214,14 +238,24 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             notes.AddRange(slotNotes);
 
+            // Each stand-in the drawn cards need, with the part it replaces, which works too for a player who has it.
+            foreach (var active in stoodIn)
+            {
+                notes.Add(Note(
+                    active.Rule.With is { } with
+                        ? $"No included box has {StackName(active.Rule.Part)} cards: use {StackName(with)} cards for them, or {StackName(active.Rule.Part)} cards if you have them"
+                        : $"No included box has {StackName(active.Rule.Part)} cards: a card that gains one gives +1 Recruit instead",
+                    active.Rule.Source, active.From));
+            }
+
             // A mixed setup draws from shared pools and shuffles all Bystanders together (VIL pp.20-21). Under the
             // mixing base game's rules it also lays out every included base game's recruit stacks and lets the
             // players choose between the starting decks of the included base games (VIL p.21); under the other
             // rules it keeps that ruleset's starting deck (#88).
             IReadOnlyList<Ruleset>? choices = null;
-            if (mixed)
+            if (mixed && mixingBox is not null)
             {
-                var mixing = mixingBox!.Setup!.Mixing!;
+                var mixing = mixingBox.Setup!.Mixing!;
                 notes.Add(Note(
                     "Mixed sets: Schemes and Plots, Masterminds and Commanders, Heroes and Allies and the groups each come from one pool",
                     mixing.Pools, mixingBox));
@@ -259,8 +293,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             // With boxes of more than one ruleset included, the result names the card that decided its rules
             // ("Villains rules: the Commander is Dr. Strange"), or says the pair has no card of the mixing ruleset.
+            // Without a mixing base game, every card plays under the one included base game's rules (D-heroic).
             RuleNote? reason = null;
-            if (mixingBox is not null)
+            if (boxes.Any(box => !baseRulesets.Contains(box.Ruleset)) && mixingBox is null)
+            {
+                var other = boxes.First(box => !baseRulesets.Contains(box.Ruleset));
+                var source = other.OtherRuleset!.Source;
+                reason = new RuleNote(
+                    $"{RulesetTerms.RulesName(rulesBox.Ruleset)} rules: no {RulesetTerms.Side(other.Ruleset)} base game is included",
+                    source,
+                    LinkOf(source, other));
+            }
+            else if (mixingBox is not null)
             {
                 var source = mixingBox.Setup!.Mixing!.Rules;
                 var words = RulesetTerms.For(mixingBox.Ruleset);
@@ -330,7 +374,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes,
                 boxes,
                 mixed,
-                reason);
+                reason,
+                stoodIn.Select(active => active.Rule).ToList());
         }
 
         // The counts one Scheme sets at this player count: the player-count table or Solo,
@@ -413,9 +458,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
                 var each = move.PerPlayer ? count.Value * players : count.Value;
                 var total = move.To == Pile.StartingDecks ? each * players : each;
-                moves.Add(new MovedCards(move.Card, move.From(), move.To, each, total));
+
+                // A card whose stack no included box supplies comes from its stand-in's (D-heroic, FI p.2).
+                var card = CardMove.PartOf(move.Card) is { } part && StandInFor(part) is { } standIn && CardMove.KindOf(standIn) is { } kind
+                    ? move with { Card = kind }
+                    : move;
+                moves.Add(new MovedCards(card.Card, card.From(), card.To, each, total));
                 notes.Add(Card(
-                    $"{schemeWord} moves {each} {CardName(move.Card, each)} {Into(move.To)}{(move.PerPlayer ? $", {count.Value} per player" : "")}",
+                    $"{schemeWord} moves {each} {CardName(card.Card, each)} {Into(card.To)}{(card.PerPlayer ? $", {count.Value} per player" : "")}",
                     count.Source));
             }
 
@@ -561,7 +611,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // own rulesets, which every setup it completes lays out.
         private bool Fits(SetupPlan plan)
         {
-            var sides = new[] { RulesetOf(plan.Scheme.Id), RulesetOf(plan.Mastermind!.Id) };
+            var sides = new[] { RulesetOf(plan.Scheme.Id), RulesetOf(plan.Mastermind!.Id), rulesBox.Ruleset };
             int Supply(Func<BoxComponents, Sourced<int>?> count) =>
                 boxes.Where(box => sides.Contains(box.Ruleset)).Sum(box => count(box.Components)?.Value ?? 0);
             var required = plan.Scheme.Setup.RequiredGroups ?? [];
@@ -800,8 +850,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // The ruleset whose rules a Scheme and Mastermind pair follows (D-mixed, #88): the mixing base game's when
         // either card is of its ruleset, so a Villains Plot or Commander means the Villains rules; otherwise the
         // pair's own, since only two rulesets exist and a pair with no card of the mixing one shares the other.
-        private Ruleset RulesOf(Scheme scheme, Mastermind mastermind) =>
-            mixingBox is not null && RulesetOf(mastermind.Id) == mixingBox.Ruleset ? mixingBox.Ruleset : RulesetOf(scheme.Id);
+        // A pair of a ruleset with no included base game follows the included base game's rules when the boxes of
+        // its cards of that ruleset can be played under another's (D-heroic), and is otherwise dropped.
+        private Ruleset RulesOf(Scheme scheme, Mastermind mastermind)
+        {
+            var ruleset = mixingBox is not null && RulesetOf(mastermind.Id) == mixingBox.Ruleset ? mixingBox.Ruleset : RulesetOf(scheme.Id);
+            var pair = new[] { BoxOf(scheme.Id), BoxOf(mastermind.Id) }.Where(box => box.Ruleset == ruleset);
+            return baseRulesets.Contains(ruleset) || pair.Any(box => box.OtherRuleset is null) ? ruleset : baseRulesets.Single();
+        }
+
+        // The part a setup lays out for a card that uses this one: the part itself, its stand-in when no included box
+        // supplies it, or null when the stand-in needs no part.
+        private Part? StandInFor(Part part) => standIns.TryGetValue(part, out var active) ? active.Rule.With : part;
 
         // What the Scheme's own ruleset calls it: a Villainous Scheme is a Plot.
         private string SchemeWord(Scheme scheme) => RulesetTerms.For(RulesetOf(scheme.Id)).Scheme;
@@ -815,13 +875,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             from.Sources.FirstOrDefault(source => source.Key == citation.Split(' ')[0])?.Url;
     }
 
-    // A card is set up only when an included box of its own ruleset supplies every part it uses. Those boxes'
-    // stacks are laid out in every setup that draws the card.
-    private static bool Supplied(IReadOnlyList<Box> boxes, ICard card)
+    // A card is set up only when an included box of its own ruleset supplies every part it uses, or the part has a
+    // stand-in some included box supplies, or one that needs no part (D-heroic). Those boxes' stacks are laid out in
+    // every setup that draws the card.
+    private static bool Supplied(IReadOnlyList<Box> boxes, IReadOnlyDictionary<Part, ActiveStandIn> standIns, ICard card)
     {
         var ruleset = boxes.Single(box => card.Id.StartsWith(box.Id + "_", StringComparison.Ordinal)).Ruleset;
-        return card.Parts.All(part => boxes.Any(box => box.Ruleset == ruleset && box.Components.Supplies(part)?.Value > 0));
+        return card.Parts.All(part => standIns.TryGetValue(part, out var active)
+            ? active.Rule.With is not { } with || boxes.Any(box => box.Components.Supplies(with)?.Value > 0)
+            : boxes.Any(box => box.Ruleset == ruleset && box.Components.Supplies(part)?.Value > 0));
     }
+
+    // A stand-in that applies to a setup, and the box that gives it.
+    private sealed record ActiveStandIn(StandIn Rule, Box From);
 
     // What a part's stack is called in a rule note.
     private static string StackName(Part part) => part switch

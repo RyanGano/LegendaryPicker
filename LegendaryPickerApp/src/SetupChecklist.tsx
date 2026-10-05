@@ -22,6 +22,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     outsideHenchmen = [],
     cardsBeside = [],
     steps = [],
+    standIns = [],
   } = setup
   const t = setupTerms(setup)
   const villainTerms = cardTerms(setup, setup.villainGroups)
@@ -119,7 +120,19 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       <Section title="Shared stacks" kind="wound">
         {STACKS.map(([stack, label]) => {
           const count = stacks[stack]
-          return count !== undefined && <Item key={stack} label={label} count={count} />
+          // A stack standing in for one no included box has, as Wounds for Bindings, says so; the rule notes say the
+          // real cards work too.
+          const standingIn = standIns.filter((standIn) => standIn.with === stack).map((standIn) => STACK_NAMES[standIn.part])
+          return (
+            count !== undefined && (
+              <Item
+                key={stack}
+                label={label}
+                detail={standingIn.length > 0 ? `Standing in for ${standingIn.join(' and ')}` : undefined}
+                count={count}
+              />
+            )
+          )
         })}
       </Section>
 
@@ -281,16 +294,17 @@ function OutsideHeroCards({ count = 0, terms }: { count?: number; terms: Ruleset
 
 // The shared stacks in the order they are laid out, each shown only when the setup has it. Bindings,
 // Madame HYDRA and New Recruits are Villainous cards of their own, not other names for Wounds and Officers.
-const STACKS: [keyof SetupStacks, string][] = [
-  ['wounds', 'Wounds'],
-  ['bindings', 'Bindings'],
-  ['officers', 'S.H.I.E.L.D. Officers'],
-  ['madameHydra', 'Madame HYDRA'],
-  ['newRecruits', 'New Recruits'],
-  ['bystanders', 'Bystanders'],
-  ['sidekicks', 'Sidekicks'],
-  ['shards', 'Shards'],
-]
+const STACK_NAMES: Record<keyof SetupStacks, string> = {
+  wounds: 'Wounds',
+  bindings: 'Bindings',
+  officers: 'S.H.I.E.L.D. Officers',
+  madameHydra: 'Madame HYDRA',
+  newRecruits: 'New Recruits',
+  bystanders: 'Bystanders',
+  sidekicks: 'Sidekicks',
+  shards: 'Shards',
+}
+const STACKS = Object.entries(STACK_NAMES) as [keyof SetupStacks, string][]
 
 function cardNames(terms: RulesetTerms): Record<CardKind, string> {
   return {

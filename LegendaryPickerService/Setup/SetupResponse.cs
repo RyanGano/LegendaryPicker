@@ -65,7 +65,8 @@ public abstract record SetupResponse
             setup.Notes,
             glossary.Entries(components.SelectMany(component => component.Terms)),
             setup.Mixed,
-            setup.RulesReason);
+            setup.RulesReason,
+            setup.StandIns is { Count: > 0 } standIns ? standIns : null);
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
@@ -104,7 +105,9 @@ public abstract record SetupResponse
 
 // Ruleset is written camelCase, as in box files ("firstEdition"): the ruleset whose rules the setup follows.
 // Mixed is true, and written only then, when the drawn cards come from more than one ruleset. RulesReason says
-// why the setup follows its ruleset, and is written only when the included boxes follow more than one.
+// why the setup follows its ruleset, and is written only when the included boxes follow more than one. StandIns
+// lists each part the drawn cards use that no included box supplies and what replaces it ("with", null when
+// nothing does), written only when there is one, so the checklist can say a stack stands in for another.
 public sealed record SetupBody(
     int Players,
     Ruleset Ruleset,
@@ -126,7 +129,8 @@ public sealed record SetupBody(
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<GlossaryEntry> Glossary,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Mixed = false,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RuleNote? RulesReason = null) : SetupResponse
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RuleNote? RulesReason = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<StandIn>? StandIns = null) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";

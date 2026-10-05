@@ -71,11 +71,13 @@ app.MapMethods("/api/health", ["GET", "HEAD"], (HttpRequest request) =>
 
 // The boxes a player can include in a setup. A base game supplies setup rules; an expansion adds cards.
 // Each names its ruleset, and MixesRulesets says whether it is a base game with rules for mixing rulesets, which a
-// setup that includes boxes of more than one ruleset needs.
+// setup that includes boxes of more than one ruleset needs, unless each box of a ruleset with no included base game
+// is an expansion that PlaysWithOtherRulesets: one that can be played under another ruleset's base game (D-heroic).
 app.MapGet("/api/boxes", (BoxCatalog catalog) =>
     Results.Ok(catalog.Boxes.Select(box => new
     {
         box.Id, box.Name, BaseGame = box.IsBaseGame, box.Ruleset, MixesRulesets = box.Setup?.Mixing is not null,
+        PlaysWithOtherRulesets = box.OtherRuleset is not null,
     })));
 
 // players is read as text so a non-number gets the same ProblemDetails as an out-of-range count.

@@ -224,27 +224,45 @@ public sealed class SetupEndpointTests : IDisposable
 
         var expected = JsonNode.Parse("""
             [
-              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition", "mixesRulesets": false },
-              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition", "mixesRulesets": false }
+              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition", "mixesRulesets": false, "playsWithOtherRulesets": false },
+              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition", "mixesRulesets": false, "playsWithOtherRulesets": false }
             ]
             """);
         Assert.True(JsonNode.DeepEquals(expected, JsonNode.Parse(body)), body);
     }
 
-    // Only Legendary: Villains has rules for mixing rulesets, so the app can tell a player who ticks the core box and
-    // the Villainous Fear Itself without it why no setup can be drawn.
+    // Only Legendary: Villains has rules for mixing rulesets, and only Fear Itself can be played without a base game of
+    // its own ruleset (D-heroic), so the app can tell a player which ticked boxes can't be drawn together.
     [Fact]
-    public async Task Boxes_says_which_base_game_can_mix_rulesets()
+    public async Task Boxes_says_which_base_game_can_mix_rulesets_and_which_expansion_plays_with_other_rulesets()
     {
         var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
 
         Assert.Equal(
             [
-                "core firstEdition base", "dark-city firstEdition", "fantastic-four firstEdition", "fear-itself villainous",
+                "core firstEdition base", "dark-city firstEdition", "fantastic-four firstEdition", "fear-itself villainous plays",
                 "guardians-of-the-galaxy firstEdition", "paint-the-town-red firstEdition", "villains villainous base mixes",
             ],
             boxes!.Select(box =>
-                $"{box!["id"]} {box["ruleset"]}{((bool)box["baseGame"]! ? " base" : "")}{((bool)box["mixesRulesets"]! ? " mixes" : "")}"));
+                $"{box!["id"]} {box["ruleset"]}{((bool)box["baseGame"]! ? " base" : "")}{((bool)box["mixesRulesets"]! ? " mixes" : "")}"
+                + ((bool)box["playsWithOtherRulesets"]! ? " plays" : "")));
+    }
+
+    // The core box and Fear Itself alone draw a setup that says the core box's Wounds stand in for Bindings (D-heroic).
+    [Fact]
+    public async Task The_core_box_and_Fear_Itself_return_a_setup_with_Wounds_standing_in_for_Bindings()
+    {
+        // The Traitor (Plot 10 after the core box's 8 Schemes) and Uru-Enchanted Iron Man (after the 4 core Masterminds).
+        var client = Client(new ScriptedRandom(10, 4));
+
+        var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,fear-itself");
+
+        Assert.Equal("firstEdition", (string?)body!["ruleset"]);
+        Assert.True(JsonNode.DeepEquals(
+            JsonNode.Parse("""[{ "part": "bindings", "source": "FI p.2", "with": "wounds" }]"""), body["standIns"]), body["standIns"]?.ToJsonString());
+        Assert.Equal(24, (int?)body["stacks"]!["wounds"]);
+        Assert.False(body["stacks"]!.AsObject().ContainsKey("bindings"));
+        Assert.Equal("wound", (string?)body["moves"]![0]!["card"]);
     }
 
     [Fact]
