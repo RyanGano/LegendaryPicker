@@ -371,7 +371,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     plan.MovedOut(Pile.VillainDeck),
                     outside.Where(hero => hero.To == Pile.VillainDeck).Sum(hero => hero.Cards),
                     beside.Sum(cards => cards.FromVillainDeck),
-                    outsideMasterminds.Sum(other => other.Tactics ?? 0)),
+                    outsideMasterminds.Sum(other => other.Tactics ?? 0),
+                    plan.Scheme.Setup.OwnTactics?.Value ?? 0),
                 new HeroDeck(
                     heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value),
                     plan.MovedOut(Pile.HeroDeck),
@@ -559,6 +560,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 var group = GroupIds().Contains(rule.GroupId) ? GroupOf(rule.GroupId).Name : rule.GroupId;
                 var what = rule.Card is { } card ? $"{card} of {group}" : $"{each} {group}";
                 notes.Add(Card($"{schemeWord} sets {what} beside it{(rule.PerPlayer ? $", {count.Value} per player" : "")}", count.Source));
+            }
+
+            if (effect.OwnTactics is { } ownTactics)
+            {
+                notes.Add(Card($"{schemeWord} shuffles the {ownTactics.Value} Tactics of its {_terms.Mastermind} into the {_terms.VillainDeck}", ownTactics.Source));
             }
 
             var otherMasterminds = new List<MastermindsDraw>();

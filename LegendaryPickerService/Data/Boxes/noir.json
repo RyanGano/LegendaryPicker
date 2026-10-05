@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 7,
+  "id": "noir",
+  "name": "Noir",
+  "ruleset": "firstEdition",
+  "catalogSource": "N p.2; C1",
+  "about": {"released": {"value": "2017-02", "source": "Q"}},
+  "sources": [
+    {"key": "N", "url": "https://upperdeck.com/wp-content/uploads/2024/05/2017_LegendaryNOIR_Rules.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "N p.2"}, "villainGroupCards": {"value": 8, "source": "N p.2"}, "henchmanGroupCards": {"value": 0, "source": "N p.2"}, "schemeTwists": {"value": 0, "source": "N p.2"}},
+  "heroes": [
+    {"id": "noir_hero_angel-noir", "name": "Angel Noir", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["noir_term_investigate"]},
+    {"id": "noir_hero_daredevil-noir", "name": "Daredevil Noir", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["noir_term_investigate"]},
+    {"id": "noir_hero_iron-man-noir", "name": "Iron Man Noir", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["noir_term_investigate"]},
+    {"id": "noir_hero_luke-cage-noir", "name": "Luke Cage Noir", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_strength"], "terms": ["noir_term_investigate"]},
+    {"id": "noir_hero_spider-man-noir", "name": "Spider-Man Noir", "team": "core_term_spider-friends", "classes": ["core_term_instinct", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["noir_term_investigate", "core_term_rescue-a-bystander"]}
+  ],
+  "villainGroups": [
+    {"id": "noir_villain_goblin-s-freak-show", "name": "Goblin's Freak Show", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "noir_term_hidden-witnesses"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "noir_villain_x-men-noir", "name": "X-Men Noir", "terms": ["core_term_escape", "core_term_fight", "noir_term_investigate"]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "noir_mastermind_charles-xavier-professor-of-crime", "name": "Charles Xavier, Professor of Crime", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "noir_term_hidden-witnesses", "noir_term_investigate"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "noir_villain_x-men-noir", "groupType": "villain", "source": "Card"}},
+    {"id": "noir_mastermind_the-goblin-underworld-boss", "name": "The Goblin, Underworld Boss", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "noir_term_hidden-witnesses", "noir_term_investigate"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "noir_villain_goblin-s-freak-show", "groupType": "villain", "source": "Card"}}
+  ],
+  "schemes": [
+    {"id": "noir_scheme_find-the-split-personality-killer", "name": "Find the Split Personality Killer", "terms": ["core_term_scheme-twist", "noir_term_investigate"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}]}},
+    {"id": "noir_scheme_silence-the-witnesses", "name": "Silence the Witnesses", "terms": ["core_term_scheme-twist", "noir_term_hidden-witnesses"], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}]}},
+    {"id": "noir_scheme_five-families-of-crime", "name": "Five Families of Crime", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "extraVillainGroups": [{"players": null, "value": 2, "source": "Card"}], "steps": [{"label": "Deal the Villain Deck into 5 shuffled piles, one over each city space", "source": "Card"}]}},
+    {"id": "noir_scheme_hidden-heart-of-darkness", "name": "Hidden Heart of Darkness", "terms": ["core_term_scheme-twist", "core_term_mastermind-tactic", "noir_term_investigate"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "ownTactics": {"value": 4, "source": "Card"}}}
+  ],
+  "glossary": [
+    {"id": "noir_term_investigate", "name": "Investigate", "kind": "keyword", "summary": "Look at the top two cards of a deck, take one that fits and draw it, then return the rest to the top or bottom in any order.", "source": "N", "page": 1},
+    {"id": "noir_term_hidden-witnesses", "name": "Hidden Witnesses", "kind": "keyword", "summary": "Face-down Bystanders held by a card. A Villain holding any cannot be fought until you pay 2 Recruit per witness to rescue them.", "source": "N", "page": 1}
+  ]
+}
