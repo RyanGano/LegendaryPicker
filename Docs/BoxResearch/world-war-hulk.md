@@ -1,6 +1,6 @@
 # World War Hulk (June 2018)
 
-**Research status: Partial.** The official insert verifies the 400-card breakdown and several rules, but not individual card setup text or the complete component manifest.
+**Research status: Partial; integrated (#143).** The official insert verifies the 400-card breakdown and several rules. The Scheme Setup lines, Always Leads and the Wound uses in `LegendaryPickerService/Data/Boxes/world-war-hulk.json` were read from the C1-linked card faces (`Card`); per-face copy counts and which Transformed card belongs to which Transforming card remain unverified.
 
 ## Sources
 
@@ -68,7 +68,7 @@ Summaries are original paraphrases under 40 words. The insert does not establish
 
 ## Setup and implementation gaps
 
-Verify every Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps, and every Mastermind's Always Leads mapping and setup effect from the product cards. Verify the Special Bystander card identities, Hero metadata, and exact Transformation Pile requirements/card associations. This record changes no runtime data or code.
+Every Scheme's Twists and Setup line, and every Mastermind's Always Leads and Start of Game effect, were read from the card faces linked below and are in the box file (#143); no Scheme prints a player limit. The Special Bystander identities and the exact Transformed-card associations remain as C1 gives them. Wounded Fury is recorded as using no part, since it only counts Wounds already in a discard pile (owner question on #143).
 
 ## Structured card-face metadata (C1)
 

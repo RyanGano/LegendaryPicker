@@ -154,6 +154,10 @@ public sealed record Hero(
     IReadOnlyList<PartUse>? Uses = null) : ICard
 {
     public string NameOfHero => HeroName ?? Name;
+
+    // Whether a word is in the Hero Name as the card prints it: "Hulk" is in She-Hulk and Hulkbuster Iron Man, not in
+    // Bruce Banner.
+    public bool HasInHeroName(string word) => NameOfHero.Contains(word, StringComparison.Ordinal);
 }
 
 public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null) : ICard;
@@ -278,20 +282,29 @@ public sealed record CardsBeside(
 // A Hero a Scheme puts in the Hero Deck. Like a required group, it fills one of the Hero slots.
 public sealed record RequiredHero(string HeroId, string Source);
 
-// How many of the Hero Deck's Heroes must be of a team (a team term id) or have a Hero Name: at least
-// AtLeast, or exactly Exactly. Each constraint names one of Team and HeroName and one of the two counts.
-public sealed record HeroCount(string Source, string? Team = null, string? HeroName = null, int? AtLeast = null, int? Exactly = null);
+// How many of the Hero Deck's Heroes must be of a team (a team term id), have a Hero Name, or have a word in their
+// Hero Name, as Fall of the Hulks' two Heroes with "Hulk" in their Hero Names (#143): at least AtLeast, or exactly
+// Exactly. Each constraint names one of Team, HeroName and HeroNameContains and one of the two counts.
+public sealed record HeroCount(
+    string Source, string? Team = null, string? HeroName = null, int? AtLeast = null, int? Exactly = null, string? HeroNameContains = null)
+{
+    public bool Matches(Hero hero) =>
+        Team is { } team ? hero.Team == team
+        : HeroNameContains is { } word ? hero.HasInHeroName(word)
+        : hero.NameOfHero == HeroName;
+}
 
 // Heroes a Scheme draws outside the Hero Deck, whose cards all go To one pile: the Villain Deck, beside
 // the Scheme, or a set-aside stack. Count says how many Heroes at each player count. Hero names the one
-// Hero to draw, HeroName limits the draw to Heroes with that Hero Name and Team to Heroes of that team;
-// with none of them any Hero not in the Hero Deck can be drawn. HeroNames limits the draw to Heroes with any of
+// Hero to draw, HeroName limits the draw to Heroes with that Hero Name, HeroNameContains to Heroes with that word in
+// their Hero Name, as Shoot Hulk into Space's extra Hulk (#143), and Team to Heroes of that team; with none of them any
+// Hero not in the Hero Deck can be drawn. HeroNames limits the draw to Heroes with any of
 // those Hero Names, with the source that says they all count (an owner decision, as every Jean Grey does for Dark
 // City's Transform Citizens into Demons, #122). OtherBox lets a draw limited by Hero Name take a Hero from a box the
 // setup doesn't include when no included Hero has the name, as The Dark Phoenix Saga's Jean Grey (#138).
 public sealed record OutsideHeroes(
     Pile To, IReadOnlyList<PlayerCountValue> Count, string? Hero = null, string? HeroName = null, string? Team = null,
-    Sourced<string[]>? HeroNames = null, OtherBox? OtherBox = null)
+    Sourced<string[]>? HeroNames = null, OtherBox? OtherBox = null, string? HeroNameContains = null)
 {
     public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.BesideScheme, Pile.SetAside];
 }

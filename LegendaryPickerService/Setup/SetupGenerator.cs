@@ -529,7 +529,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             foreach (var count in effect.HeroCounts ?? [])
             {
                 var (bound, value) = count.AtLeast is { } atLeast ? ("at least", atLeast) : ("exactly", count.Exactly!.Value);
-                notes.Add(Card($"{schemeWord} requires {bound} {value} {HeroesOf(value, count.Team, count.HeroName)}", count.Source));
+                notes.Add(Card($"{schemeWord} requires {bound} {value} {HeroesOf(value, count.Team, count.HeroName, count.HeroNameContains)}", count.Source));
             }
 
             if (effect.TeamSplit is { } split)
@@ -554,7 +554,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 outside.Add(new OutsideDraw(rule, count.Value));
                 var which = rule.Hero is { } heroId
                     ? HeroNamed(heroId)
-                    : $"{count.Value} extra {HeroesOf(count.Value, rule.Team, rule.HeroName ?? (rule.HeroNames is { } any ? string.Join(" or ", any.Value) : null))}";
+                    : $"{count.Value} extra {HeroesOf(count.Value, rule.Team, rule.HeroName ?? (rule.HeroNames is { } any ? string.Join(" or ", any.Value) : null), rule.HeroNameContains)}";
                 notes.Add(Card(
                     $"{schemeWord} draws {which} outside the {_terms.HeroDeck} and puts {(count.Value == 1 ? "its" : "their")} cards {Onto(rule.To)}",
                     count.Source));
@@ -832,10 +832,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         }
 
         // "X-Men Heroes", "Jean Grey Hero" or "Heroes": what count Heroes of a team or a Hero Name are called.
-        private string HeroesOf(int count, string? team, string? heroName)
+        // nameContains is a word the Heroes have in their Hero Names: 'Heroes with "Hulk" in their Hero Names'.
+        private string HeroesOf(int count, string? team, string? heroName, string? nameContains = null)
         {
             var kind = team is null ? heroName : boxes.SelectMany(box => box.Glossary).FirstOrDefault(term => term.Id == team)?.Name ?? team;
-            return $"{(kind is null ? "" : kind + " ")}{(count == 1 ? _terms.Hero : _terms.Heroes)}";
+            var heroes = $"{(kind is null ? "" : kind + " ")}{(count == 1 ? _terms.Hero : _terms.Heroes)}";
+            return nameContains is null ? heroes : $"{heroes} with \"{nameContains}\" in {(count == 1 ? "its Hero Name" : "their Hero Names")}";
         }
 
         // Any loaded Hero, since a Scheme's named Hero is drawn even when no included box supplies a part it uses.

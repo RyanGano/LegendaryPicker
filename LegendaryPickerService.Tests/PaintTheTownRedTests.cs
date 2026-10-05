@@ -298,7 +298,7 @@ public class PaintTheTownRedTests
     [InlineData(5)]
     public void Without_Paint_the_Town_Red_included_it_changes_no_draw(int players)
     {
-        using var withoutIt = new DirectoryWithout("paint-the-town-red.json", "secret-wars-volume-2.json", "spider-man-homecoming.json");
+        using var withoutIt = new DirectoryWithout("paint-the-town-red.json", "secret-wars-volume-2.json", "spider-man-homecoming.json", "world-war-hulk.json");
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four"];
 

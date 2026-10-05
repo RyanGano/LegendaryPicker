@@ -413,7 +413,7 @@ public class SecretWarsVolume1Tests
     [InlineData(5)]
     public void Without_Secret_Wars_Volume_1_included_it_changes_no_draw(int players)
     {
-        using var withoutIt = new DirectoryWithout("secret-wars-volume-1.json", "secret-wars-volume-2.json", "civil-war.json", "x-men.json", "champions.json");
+        using var withoutIt = new DirectoryWithout("secret-wars-volume-1.json", "secret-wars-volume-2.json", "civil-war.json", "x-men.json", "champions.json", "world-war-hulk.json");
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy"];
 

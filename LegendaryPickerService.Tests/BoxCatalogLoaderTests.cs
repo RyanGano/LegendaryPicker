@@ -713,8 +713,9 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Theory]
-    [InlineData("""{ "team": "core_term_x-men", "heroName": "Storm", "atLeast": 1, "source": "Card" }""", "has a Hero count that names both a team and a Hero Name")]
-    [InlineData("""{ "atLeast": 1, "source": "Card" }""", "has a Hero count that names neither a team nor a Hero Name")]
+    [InlineData("""{ "team": "core_term_x-men", "heroName": "Storm", "atLeast": 1, "source": "Card" }""", "has a Hero count that names more than one of team, heroName and heroNameContains")]
+    [InlineData("""{ "heroName": "Storm", "heroNameContains": "Storm", "atLeast": 1, "source": "Card" }""", "has a Hero count that names more than one of team, heroName and heroNameContains")]
+    [InlineData("""{ "atLeast": 1, "source": "Card" }""", "has a Hero count that names none of team, heroName and heroNameContains")]
     [InlineData("""{ "heroName": "Storm", "atLeast": 1, "exactly": 1, "source": "Card" }""", "has a Hero count with both atLeast and exactly")]
     [InlineData("""{ "heroName": "Storm", "source": "Card" }""", "has a Hero count with neither atLeast nor exactly")]
     [InlineData("""{ "heroName": "Storm", "atLeast": 0, "source": "Card" }""", "has a Hero count of 0")]
@@ -729,7 +730,9 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     [InlineData("""{ "to": "heroDeck", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
         "puts Heroes outside the Hero Deck in heroDeck; they go to villainDeck, besideScheme, setAside")]
     [InlineData("""{ "to": "villainDeck", "hero": "core_hero_storm", "team": "core_term_x-men", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
-        "chooses Heroes outside the Hero Deck by more than one of hero, heroName, heroNames and team")]
+        "chooses Heroes outside the Hero Deck by more than one of hero, heroName, heroNames, heroNameContains and team")]
+    [InlineData("""{ "to": "villainDeck", "heroName": "Storm", "heroNameContains": "Storm", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
+        "chooses Heroes outside the Hero Deck by more than one of hero, heroName, heroNames, heroNameContains and team")]
     [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 0, "source": "Card" }] }""",
         "setup.outsideHeroes[0].count has value 0; values are at least 1")]
     public void Rejects_Heroes_outside_the_Hero_Deck_with_no_legal_draw(string outside, string expected)
@@ -871,10 +874,22 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("core_scheme_legacy-virus counts 2 Heroes of Storm, which core doesn't hold; its own Heroes must meet it.");
     }
 
+    // The core box's only Hero with "Hulk" in its Hero Name is Hulk.
+    [Fact]
+    public void Rejects_a_count_by_a_word_in_Hero_Names_the_boxs_own_Heroes_cannot_meet()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["heroCounts"] = JsonNode.Parse(
+            """[{ "heroNameContains": "Hulk", "exactly": 2, "source": "Card" }]"""));
+
+        AssertRejected("core_scheme_legacy-virus counts 2 Heroes with \"Hulk\" in their Hero Names, which core doesn't hold; its own Heroes must meet it.");
+    }
+
     // A Scheme's Hero rules are met by its own box's Heroes (D-scheme-first, #138); an outside draw by Hero Name can
     // take another box's Hero only when otherBox allows it, and only a draw by Hero Name can.
     [Theory]
     [InlineData("""{ "to": "villainDeck", "heroName": "Nova", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
+        "setup.outsideHeroes[0] draws 1 Heroes core doesn't hold; its own Heroes must meet it, or otherBox allows another box's.")]
+    [InlineData("""{ "to": "setAside", "heroNameContains": "Nova", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
         "setup.outsideHeroes[0] draws 1 Heroes core doesn't hold; its own Heroes must meet it, or otherBox allows another box's.")]
     [InlineData("""{ "to": "villainDeck", "team": "core_term_x-men", "count": [{ "players": null, "value": 1, "source": "Card" }], "otherBox": { "source": "R p.20" } }""",
         "setup.outsideHeroes[0] has otherBox; only a draw limited by heroName or heroNames has one, with no substitute.")]

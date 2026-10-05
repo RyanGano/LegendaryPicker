@@ -73,7 +73,7 @@ public class VillainsTests
     [Fact]
     public void Villains_is_a_Villainous_base_game_listed_after_the_expansions_before_it()
     {
-        Assert.Equal(["captain-america-75th-anniversary", "champions", "civil-war", "core", "dark-city", "deadpool", "fantastic-four", "fear-itself", "guardians-of-the-galaxy", "noir", "paint-the-town-red", "secret-wars-volume-1", "secret-wars-volume-2", "spider-man-homecoming", "villains", "x-men"], Catalog.Boxes.Select(box => box.Id));
+        Assert.Equal(["captain-america-75th-anniversary", "champions", "civil-war", "core", "dark-city", "deadpool", "fantastic-four", "fear-itself", "guardians-of-the-galaxy", "noir", "paint-the-town-red", "secret-wars-volume-1", "secret-wars-volume-2", "spider-man-homecoming", "villains", "world-war-hulk", "x-men"], Catalog.Boxes.Select(box => box.Id));
         Assert.Equal("Legendary: Villains", Villains.Name);
         Assert.Equal(7, Villains.SchemaVersion);
         Assert.True(Villains.IsBaseGame);

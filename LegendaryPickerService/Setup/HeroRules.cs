@@ -48,7 +48,7 @@ internal sealed class HeroRules
         var rules = outsideSlots.Distinct().ToList();
         _kinds = heroes.ToDictionary(hero => hero, hero => string.Join(
             '|',
-            string.Concat(_counts.Select(count => Matches(count, hero) ? '1' : '0')),
+            string.Concat(_counts.Select(count => count.Matches(hero) ? '1' : '0')),
             string.Concat(rules.Select(rule => Selects(rule, hero) ? '1' : '0')),
             sharedNames.Contains(hero.NameOfHero) ? hero.NameOfHero : ""));
     }
@@ -61,6 +61,7 @@ internal sealed class HeroRules
         (rule.Hero is null || hero.Id == rule.Hero)
         && (rule.HeroName is null || hero.NameOfHero == rule.HeroName)
         && (rule.HeroNames is null || rule.HeroNames.Value.Contains(hero.NameOfHero))
+        && (rule.HeroNameContains is null || hero.HasInHeroName(rule.HeroNameContains))
         && (rule.Team is null || hero.Team == rule.Team);
 
     // Whether the Heroes chosen so far can be completed: every Hero outside the Hero Deck, then the rest of
@@ -144,7 +145,7 @@ internal sealed class HeroRules
         {
             var left = DeckSlots - deck.Count;
             var needs = _counts
-                .Select(count => (Count: count, Have: deck.Count(hero => Matches(count, hero))))
+                .Select(count => (Count: count, Have: deck.Count(hero => count.Matches(hero))))
                 .Select(need => (need.Count, need.Have, Needed: (need.Count.AtLeast ?? need.Count.Exactly!.Value) - need.Have))
                 .ToList();
             var neededByTeams = needs
@@ -156,7 +157,7 @@ internal sealed class HeroRules
                 return false;
             }
 
-            return needs.All(need => need.Needed <= 0 || Enough(from, need.Needed, hero => Matches(need.Count, hero)));
+            return needs.All(need => need.Needed <= 0 || Enough(from, need.Needed, hero => need.Count.Matches(hero)));
         }
 
         // The Heroes of one draw are tried in catalog order, so each set of them is tried once. The Hero
@@ -207,9 +208,6 @@ internal sealed class HeroRules
 
         return From(0, []);
     }
-
-    private static bool Matches(HeroCount count, Hero hero) =>
-        count.Team is { } team ? hero.Team == team : hero.NameOfHero == count.HeroName;
 
     // A Hero is used once per setup and, when no two Heroes may share a Hero Name, only while no chosen Hero
     // has its Hero Name.
