@@ -42,6 +42,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\HeroRules\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Schemes count or draw Heroes by a word in their Hero Names, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\HeroNameWords\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\HeroNameWords\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Schemes ask for Heroes of different teams the draw picks, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\TeamSplit\*.json" CopyToOutputDirectory="PreserveNewest" />

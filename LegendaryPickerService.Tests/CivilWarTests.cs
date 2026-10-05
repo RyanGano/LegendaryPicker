@@ -359,7 +359,7 @@ public class CivilWarTests
     [InlineData(5)]
     public void Without_Civil_War_included_it_changes_no_draw(int players)
     {
-        using var withoutIt = new DirectoryWithout("civil-war.json", "x-men.json", "champions.json");
+        using var withoutIt = new DirectoryWithout("civil-war.json", "x-men.json", "champions.json", "world-war-hulk.json");
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary"];
 

@@ -62,10 +62,10 @@ A Civil War Hero card printed as two half-cards. It is one card for every count,
 The name a setup shows for a Hero, Villain Group, Henchman Group, Mastermind or Scheme. No two of one kind share a display name across the boxes, so the player can always tell which card to use. A new version of a character takes a distinguishing name: its printed card title when that differs (Symbiote Spider-Man), otherwise the title with its version in brackets (Wolverine (X-Force)). It keeps the shared Hero Name.
 
 **Hero constraint**:
-A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team or with a Hero Name; a team split, exactly some number of Heroes of each of several different teams the draw picks (Avengers vs. X-Men: 3 of one team and 3 of another); or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, which the Scheme's own box's Heroes can always meet (#138).
+A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team, with a Hero Name, or with a word in their Hero Names (Fall of the Hulks: exactly 2 with "Hulk"); a team split, exactly some number of Heroes of each of several different teams the draw picks (Avengers vs. X-Men: 3 of one team and 3 of another); or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, which the Scheme's own box's Heroes can always meet (#138).
 
 **Hero outside the Hero Deck**:
-A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to the Villain Deck, beside the Scheme, or a stack set aside. The draw can name the Hero, or limit it to a Hero Name, a list of Hero Names (every Jean Grey for Transform Citizens into Demons) or a team.
+A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to the Villain Deck, beside the Scheme, or a stack set aside. The draw can name the Hero, or limit it to a Hero Name, a list of Hero Names (every Jean Grey for Transform Citizens into Demons), a word in the Hero Name ("Hulk" for Shoot Hulk into Space) or a team.
 
 _Avoid_: Extra Hero, which is the setup effect that adds a Hero to the Hero Deck.
 

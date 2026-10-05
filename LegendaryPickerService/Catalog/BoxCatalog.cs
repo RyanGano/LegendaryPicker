@@ -572,10 +572,10 @@ public sealed partial class BoxCatalog
             foreach (var count in setup.HeroCounts ?? [])
             {
                 var needed = count.AtLeast ?? count.Exactly!.Value;
-                if (box.Heroes.Count(hero => count.Team is { } team ? hero.Team == team : hero.NameOfHero == count.HeroName) < needed)
+                if (box.Heroes.Count(count.Matches) < needed)
                 {
                     throw new InvalidDataException(
-                        $"{path}: {scheme.Id} counts {needed} Heroes of {count.Team ?? count.HeroName}, which {box.Id} doesn't hold; its own Heroes must meet it.");
+                        $"{path}: {scheme.Id} counts {needed} Heroes {(count.HeroNameContains is { } word ? $"with \"{word}\" in their Hero Names" : $"of {count.Team ?? count.HeroName}")}, which {box.Id} doesn't hold; its own Heroes must meet it.");
                 }
             }
 
@@ -588,7 +588,7 @@ public sealed partial class BoxCatalog
                 }
 
                 var most = outside.Count.Max(count => count.Value);
-                if (outside.OtherBox is null && (outside.HeroName is not null || outside.HeroNames is not null || outside.Team is not null)
+                if (outside.OtherBox is null && (outside.HeroName is not null || outside.HeroNames is not null || outside.Team is not null || outside.HeroNameContains is not null)
                     && box.Heroes.Count(hero => HeroRules.Selects(outside, hero)) < most)
                 {
                     throw new InvalidDataException(
@@ -679,9 +679,9 @@ public sealed partial class BoxCatalog
     private static IEnumerable<ICard> Cards(Box box) =>
         box.Heroes.Cast<ICard>().Concat(box.VillainGroups).Concat(box.HenchmanGroups).Concat(box.Masterminds).Concat(box.Schemes);
 
-    // A Hero constraint counts Heroes by one thing, a team or a Hero Name, against one bound. Heroes drawn
-    // outside the Hero Deck go to a pile of their own rather than a stack or the Hero Deck, and are
-    // chosen by at most one of a Hero, a Hero Name or a team. There is one of each Hero, so a rule that
+    // A Hero constraint counts Heroes by one thing, a team, a Hero Name or a word in it, against one bound. Heroes
+    // drawn outside the Hero Deck go to a pile of their own rather than a stack or the Hero Deck, and are
+    // chosen by at most one of a Hero, a Hero Name, a word in it or a team. There is one of each Hero, so a rule that
     // needs one Hero twice, or both in the Hero Deck and outside it, has no draw.
     private static void ValidateHeroRules(string path, Box box)
     {
@@ -689,9 +689,11 @@ public sealed partial class BoxCatalog
         {
             foreach (var count in scheme.Setup.HeroCounts ?? [])
             {
-                if ((count.Team is null) == (count.HeroName is null))
+                var choices = new[] { count.Team, count.HeroName, count.HeroNameContains }.Count(choice => choice is not null);
+                if (choices != 1)
                 {
-                    throw new InvalidDataException($"{path}: {scheme.Id} has a Hero count that names {(count.Team is null ? "neither a team nor" : "both a team and")} a Hero Name; it names one of them.");
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} has a Hero count that names {(choices == 0 ? "none" : "more than one")} of team, heroName and heroNameContains; it names one of them.");
                 }
 
                 if ((count.AtLeast is null) == (count.Exactly is null))
@@ -760,10 +762,10 @@ public sealed partial class BoxCatalog
                         $"{path}: {scheme.Id} puts Heroes outside the Hero Deck in {WireName(outside.To)}; they go to {string.Join(", ", OutsideHeroes.Destinations.Select(WireName))}.");
                 }
 
-                if (new object?[] { outside.Hero, outside.HeroName, outside.Team, outside.HeroNames }.Count(choice => choice is not null) > 1)
+                if (new object?[] { outside.Hero, outside.HeroName, outside.Team, outside.HeroNames, outside.HeroNameContains }.Count(choice => choice is not null) > 1)
                 {
                     throw new InvalidDataException(
-                        $"{path}: {scheme.Id} chooses Heroes outside the Hero Deck by more than one of hero, heroName, heroNames and team.");
+                        $"{path}: {scheme.Id} chooses Heroes outside the Hero Deck by more than one of hero, heroName, heroNames, heroNameContains and team.");
                 }
 
                 if (outside.HeroNames is { Value.Length: < 2 })
@@ -817,7 +819,9 @@ public sealed partial class BoxCatalog
         // to fill every slot, with a team of their own for each team a team split asks for.
         var teams = counts.Select(count => count.Team).Concat(outside.Select(rule => rule.Team)).Concat(named.Select(hero => hero.Team))
             .Concat(split.Select((_, index) => $"stand-in-team_{index}")).Append(null).Distinct();
-        var names = counts.Select(count => count.HeroName).Concat(outside.Select(rule => rule.HeroName)).Concat(outside.SelectMany(rule => rule.HeroNames?.Value ?? [])).Concat(named.Select(hero => hero.NameOfHero)).Append(null).Distinct().ToList();
+        // A word a rule looks for in Hero Names is a stand-in's whole Hero Name.
+        var names = counts.Select(count => count.HeroName ?? count.HeroNameContains).Concat(outside.Select(rule => rule.HeroName ?? rule.HeroNameContains))
+            .Concat(outside.SelectMany(rule => rule.HeroNames?.Value ?? [])).Concat(named.Select(hero => hero.NameOfHero)).Append(null).Distinct().ToList();
         var standIns = teams
             .SelectMany(team => names.SelectMany(name => Enumerable.Range(0, deckSlots + outside.Count).Select(_ => (Team: team, Name: name))))
             .Select((standIn, index) => new Hero($"stand-in_{index}", standIn.Name ?? $"stand-in {index}", standIn.Team, [], []))

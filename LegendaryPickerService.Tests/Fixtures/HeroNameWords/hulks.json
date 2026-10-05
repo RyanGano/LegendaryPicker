@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 7,
+  "id": "hulks",
+  "name": "Hulks Fixture",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.1",
+  "about": { "released": { "value": "2020-01", "source": "R p.1" } },
+  "sources": [
+    { "key": "R", "url": "https://example.test/hulks-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [
+    { "id": "hulks_hero_test-banner", "name": "Test Banner", "team": null, "classes": ["core_term_tech"], "terms": [] },
+    { "id": "hulks_hero_test-she-hulk", "name": "Test She-Hulk", "team": null, "classes": ["core_term_strength"], "terms": [] },
+    { "id": "hulks_hero_test-hulkling", "name": "Test Hulkling", "team": null, "classes": ["core_term_strength"], "terms": [] }
+  ],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [],
+  "schemes": [
+    {
+      "id": "hulks_scheme_test-fall",
+      "name": "Test Fall",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "heroCounts": [{ "heroNameContains": "Hulk", "exactly": 2, "source": "Card" }]
+      }
+    },
+    {
+      "id": "hulks_scheme_test-exile",
+      "name": "Test Exile",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "outsideHeroes": [{ "to": "setAside", "heroNameContains": "Hulk", "count": [{ "players": null, "value": 1, "source": "Card" }] }]
+      }
+    }
+  ],
+  "glossary": []
+}
