@@ -5,10 +5,9 @@ namespace LegendaryPickerService.Tests;
 
 // The Secret Wars Volume 1 box file (Data/Boxes/secret-wars-volume-1.json), pinned to the rules insert (SW1), the
 // card catalog and the card faces it links, and drawn with the core box. Catalog order puts its cards after the core
-// box's, so at 2–5 players its Schemes are 8 Corrupt the Next Generation of Heroes to 14 Smash Two Dimensions Together;
-// Solo allows 6 core Schemes, so there they are 6 to 12. Its Masterminds are 4 Madelyne Pryor, Goblin Queen,
-// 5 Nimrod, Super Sentinel, 6 Wasteland Hulk and 7 Zombie Green Goblin. Build an Army of Annihilation is left out:
-// its Setup line names Annihilation Wave Henchmen, which no box has.
+// box's, so at 2–5 players its Schemes are 8 Build an Army of Annihilation to 15 Smash Two Dimensions Together;
+// Solo allows 6 core Schemes, so there they are 6 to 13. Its Masterminds are 4 Madelyne Pryor, Goblin Queen,
+// 5 Nimrod, Super Sentinel, 6 Wasteland Hulk and 7 Zombie Green Goblin.
 public class SecretWarsVolume1Tests
 {
     private const string SecretWarsName = "Secret Wars Volume 1";
@@ -23,6 +22,7 @@ public class SecretWarsVolume1Tests
 
     private static readonly string[] SchemeNames =
     [
+        "Build an Army of Annihilation",
         "Corrupt the Next Generation of Heroes",
         "Crush Them With My Bare Hands",
         "Dark Alliance",
@@ -58,7 +58,7 @@ public class SecretWarsVolume1Tests
     }
 
     [Fact]
-    public void Secret_Wars_Volume_1_has_the_14_Heroes_6_Villain_Groups_3_Henchman_Groups_4_Masterminds_and_7_of_its_8_Schemes()
+    public void Secret_Wars_Volume_1_has_the_14_Heroes_6_Villain_Groups_3_Henchman_Groups_4_Masterminds_and_its_8_Schemes()
     {
         Assert.Equal(
             [
@@ -124,6 +124,14 @@ public class SecretWarsVolume1Tests
     {
         var schemes = SecretWars.Schemes.ToDictionary(scheme => scheme.Name);
 
+        // The 10 Henchmen go in the KO pile; which group they come from is the owner's decision (D-ko-henchmen).
+        var army = schemes["Build an Army of Annihilation"];
+        Assert.Equal(["all: 9 Card"], Twists(army));
+        var koPile = Assert.Single(army.Setup.OutsideHenchmen!);
+        Assert.Equal(Pile.KoPile, koPile.To);
+        Assert.Equal([new PlayerCountValue(null, 10, "Card")], koPile.Cards);
+        Assert.Equal([new SetupStep("Any Henchman Group outside the Villain Deck stands in for the Annihilation Wave", "D-ko-henchmen")], army.Setup.Steps);
+
         var corrupt = schemes["Corrupt the Next Generation of Heroes"];
         Assert.Equal(["all: 8 Card"], Twists(corrupt));
         var move = Assert.Single(corrupt.Setup.Moves!);
@@ -140,6 +148,7 @@ public class SecretWarsVolume1Tests
         var second = Assert.Single(alliance.Setup.OutsideMasterminds!);
         Assert.Equal((Pile.SetAside, (Sourced<int>?)null), (second.To, second.Tactics));
         Assert.Equal([new PlayerCountValue(null, 1, "Card")], second.Count);
+        Assert.Equal(new Sourced<string>("Twist 1", "Card"), second.Joins);
 
         // 2 Twists in each player's Villain Deck.
         var fragmented = schemes["Fragmented Realities"];
@@ -194,7 +203,7 @@ public class SecretWarsVolume1Tests
 
         Assert.All(ids, id => Assert.Matches("^secret-wars-volume-1_(hero|villain|henchman|mastermind|scheme|term)_[a-z0-9]+(-[a-z0-9]+)*$", id));
         Assert.Equal(
-            [new SourceLink("SW1", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules_Secret_Wars_v1.pdf"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
+            [new SourceLink("SW1", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules_Secret_Wars_v1.pdf"), new SourceLink("D-ko-henchmen", "https://github.com/RyanGano/LegendaryPicker/issues/116"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
             SecretWars.Sources);
         Assert.Equal("SW1 p.2; C1", SecretWars.CatalogSource);
     }
@@ -206,7 +215,7 @@ public class SecretWarsVolume1Tests
         Assert.Equal(
             [
                 "Illuminati team SW1 p.1", "Cabal team SW1 p.1", "Multiclass keyword SW1 p.1", "Sidekick keyword SW1 p.1",
-                "Rise of the Living Dead keyword SW1 p.1", "Cross-Dimensional Rampage keyword SW1 p.1", "Multiple Masterminds keyword SW1 p.1",
+                "Rise of the Living Dead keyword SW1 p.1", "Cross-Dimensional Rampage keyword SW1 p.1", "Ambition keyword SW1 p.1", "Multiple Masterminds keyword SW1 p.1",
             ],
             SecretWars.Glossary.Select(term => $"{term.Name} {term.Kind.ToString().ToLowerInvariant()} {term.Source} p.{term.Page}"));
     }
@@ -241,6 +250,9 @@ public class SecretWarsVolume1Tests
     // first core Heroes use no Sidekicks, so only Corrupt the Next Generation lays them out, less the 10 it moves.
 
     [Theory]
+    [InlineData("Build an Army of Annihilation", 1, 9, 1, 8, 3, 1, 0, 0, 22, 30, null)]
+    [InlineData("Build an Army of Annihilation", 2, 9, 5, 16, 10, 2, 0, 0, 42, 29, null)]
+    [InlineData("Build an Army of Annihilation", 5, 9, 5, 32, 20, 12, 0, 0, 78, 19, null)]
     [InlineData("Corrupt the Next Generation of Heroes", 1, 8, 1, 8, 3, 1, 10, 0, 31, 30, 5)]
     [InlineData("Corrupt the Next Generation of Heroes", 2, 8, 5, 16, 10, 2, 10, 0, 51, 29, 5)]
     [InlineData("Corrupt the Next Generation of Heroes", 5, 8, 5, 32, 20, 12, 10, 0, 87, 19, 5)]
@@ -291,7 +303,7 @@ public class SecretWarsVolume1Tests
     [Fact]
     public void A_Hero_that_gains_Sidekicks_lays_out_the_Sidekick_stack()
     {
-        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(13, Madelyne, 0, 0, 21)));
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(14, Madelyne, 0, 0, 21)));
 
         Assert.Equal("Magik", setup.Heroes[0].Name);
         Assert.Equal(15, setup.Stacks.Sidekicks);
@@ -328,6 +340,29 @@ public class SecretWarsVolume1Tests
         Assert.Equal(("Dr. Doom", Pile.SetAside, (int?)null), (second.Mastermind.Name, second.To, second.Tactics));
         Assert.Equal(["Limbo", "Brotherhood"], setup.VillainGroups.Select(group => group.Name));
         Assert.Contains(new RuleNote("Scheme draws 1 other Mastermind and sets it aside", "Card", null, SecretWarsName), setup.Notes);
+        Assert.Equal("Twist 1", second.Joins);
+        Assert.Contains(new RuleNote("Scheme: the Mastermind set aside joins on Twist 1", "Card", null, SecretWarsName), setup.Notes);
+    }
+
+    // The 10 Annihilation Wave Henchmen are 10 cards of any one Henchman Group the Villain Deck doesn't use (D-ko-henchmen).
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(5)]
+    public void Build_an_Army_of_Annihilation_puts_the_Henchmen_of_a_group_the_Villain_Deck_lacks_in_the_KO_pile(int players)
+    {
+        var setup = Draw(players, "Build an Army of Annihilation", Madelyne);
+
+        var outside = Assert.Single(setup.OutsideHenchmen);
+        Assert.Equal((Pile.KoPile, 10), (outside.To, outside.Cards));
+        Assert.DoesNotContain(outside.Group, setup.HenchmanGroups);
+        Assert.Equal(new HeroDeck(players == 1 ? 42 : 70, 0), setup.HeroDeck);
+        Assert.Contains(
+            new RuleNote("Scheme draws 1 extra Henchman Group outside the Villain Deck and puts 10 of its Henchmen into the KO pile", "Card", null, SecretWarsName),
+            setup.Notes);
+        Assert.Contains(
+            new RuleNote("Scheme adds a setup step: Any Henchman Group outside the Villain Deck stands in for the Annihilation Wave", "D-ko-henchmen", "https://github.com/RyanGano/LegendaryPicker/issues/116", SecretWarsName),
+            setup.Notes);
     }
 
     [Fact]

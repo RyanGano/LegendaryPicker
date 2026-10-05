@@ -174,6 +174,8 @@ function destinations(t: RulesetTerms): Record<Pile, string> {
     sidekicks: 'Goes to Sidekick stack',
     bindings: 'Goes to Bindings stack',
     twists: 'Goes to unused Twists',
+    ambitions: 'Goes to Ambition supply',
+    koPile: 'Goes to KO pile',
   }
 }
 

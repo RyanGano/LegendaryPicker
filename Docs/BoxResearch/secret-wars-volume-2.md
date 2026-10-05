@@ -69,7 +69,7 @@ Summaries are original paraphrases under 40 words. Card-level class/term usage a
 
 The insert does not list any of the eight Scheme setup lines or four Masterminds' Always Leads and setup effects. Verify player limits, counts, required groups/Heroes, and any moves or set-aside parts from the physical cards. The catalog names and official aggregate counts do not establish the complete printed card manifest; no physical cards or clear scans were available in this pass.
 
-Volume 2 continues the roadmap's multiple-Mastermind and Mastermind-variant capabilities (#34, G7/G9); optional Ambition mode remains excluded. This record does not change runtime data or code.
+Volume 2 continues the roadmap's multiple-Mastermind and Mastermind-variant capabilities (#34, G7/G9); optional Ambition mode remains excluded. Sinister Ambitions (6 Twists; adds 10 random Ambition cards to the Villain Deck, per the card face linked below) is in the runtime data as of #119, and Secret Wars joins its set-aside Masterminds on Twists 1-3 (#122).
 
 ## Structured card-face metadata (C1)
 

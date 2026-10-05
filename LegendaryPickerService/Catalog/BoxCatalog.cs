@@ -280,6 +280,12 @@ public sealed partial class BoxCatalog
             CheckLabels(path, owner, "setup step", steps.Select(step => step.Label));
         }
 
+        // When a set-aside Mastermind joins is shown on the checklist, so it is held to the same limits.
+        foreach (var scheme in box.Schemes)
+        {
+            CheckLabels(path, scheme.Id, "joins", (scheme.Setup.OutsideMasterminds ?? []).Select(outside => outside.Joins?.Value).OfType<string>());
+        }
+
         if (box.Setup is { } setup)
         {
             CheckLabels(path, "setup.solo", "play rule", setup.Solo.PlayRules.Select(rule => rule.Label));
@@ -413,6 +419,12 @@ public sealed partial class BoxCatalog
                 {
                     throw new InvalidDataException(
                         $"{path}: {scheme.Id} draws other Masterminds into {WireName(outside.To)}; tactics says how many of each one's Tactics go to the villainDeck, and only there.");
+                }
+
+                if (outside.To != Pile.SetAside && outside.Joins is not null)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} draws other Masterminds into {WireName(outside.To)}; joins says when one comes into play, and only for those set aside.");
                 }
 
                 if (outside.Tactics is { Value: < 1 } tactics)
@@ -555,10 +567,16 @@ public sealed partial class BoxCatalog
                         $"{path}: {scheme.Id} puts Heroes outside the Hero Deck in {WireName(outside.To)}; they go to {string.Join(", ", OutsideHeroes.Destinations.Select(WireName))}.");
                 }
 
-                if (new[] { outside.Hero, outside.HeroName, outside.Team }.Count(choice => choice is not null) > 1)
+                if (new object?[] { outside.Hero, outside.HeroName, outside.Team, outside.HeroNames }.Count(choice => choice is not null) > 1)
                 {
                     throw new InvalidDataException(
-                        $"{path}: {scheme.Id} chooses Heroes outside the Hero Deck by more than one of hero, heroName and team.");
+                        $"{path}: {scheme.Id} chooses Heroes outside the Hero Deck by more than one of hero, heroName, heroNames and team.");
+                }
+
+                if (outside.HeroNames is { Value.Length: < 2 })
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} setup.outsideHeroes[{index}] lists fewer than 2 heroNames; use heroName for one.");
                 }
             }
         }
@@ -604,7 +622,7 @@ public sealed partial class BoxCatalog
         // Stand-ins of each team and Hero Name, including none and a Hero Name of their own, enough of each
         // to fill every slot.
         var teams = counts.Select(count => count.Team).Concat(outside.Select(rule => rule.Team)).Concat(named.Select(hero => hero.Team)).Append(null).Distinct();
-        var names = counts.Select(count => count.HeroName).Concat(outside.Select(rule => rule.HeroName)).Concat(named.Select(hero => hero.NameOfHero)).Append(null).Distinct().ToList();
+        var names = counts.Select(count => count.HeroName).Concat(outside.Select(rule => rule.HeroName)).Concat(outside.SelectMany(rule => rule.HeroNames?.Value ?? [])).Concat(named.Select(hero => hero.NameOfHero)).Append(null).Distinct().ToList();
         var standIns = teams
             .SelectMany(team => names.SelectMany(name => Enumerable.Range(0, deckSlots + outside.Count).Select(_ => (Team: team, Name: name))))
             .Select((standIn, index) => new Hero($"stand-in_{index}", standIn.Name ?? $"stand-in {index}", standIn.Team, [], []))
@@ -767,6 +785,12 @@ public sealed partial class BoxCatalog
             foreach (var outside in effect.OutsideMasterminds ?? [])
             {
                 if (outside.Tactics is { } tactics) yield return ($"{scheme.Id} setup.outsideMasterminds.tactics", tactics.Source);
+                if (outside.Joins is { } joins) yield return ($"{scheme.Id} setup.outsideMasterminds.joins", joins.Source);
+            }
+
+            foreach (var outside in effect.OutsideHeroes ?? [])
+            {
+                if (outside.HeroNames is { } heroNames) yield return ($"{scheme.Id} setup.outsideHeroes.heroNames", heroNames.Source);
             }
         }
 
@@ -804,7 +828,7 @@ public sealed partial class BoxCatalog
     [
         ("bystanders", components.Bystanders), ("wounds", components.Wounds), ("officers", components.Officers),
         ("sidekicks", components.Sidekicks), ("bindings", components.Bindings), ("madameHydra", components.MadameHydra),
-        ("newRecruits", components.NewRecruits), ("shards", components.Shards),
+        ("newRecruits", components.NewRecruits), ("shards", components.Shards), ("ambitions", components.Ambitions),
     ];
 
     // The stacks a base game of each ruleset lays out (R p.22; VIL p.5).

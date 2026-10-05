@@ -167,6 +167,24 @@ describe('SetupChecklist', () => {
     expect(tile('Other Mastermind', 'Loki')).toHaveTextContent('Set aside')
   })
 
+  it('says when a set-aside Mastermind joins the game', () => {
+    const setup = structuredClone(twoBoxesDarkAlliance) as Setup
+    setup.outsideMasterminds![0].joins = 'Twist 1'
+    renderChecklist(setup)
+
+    expect(rows('Set aside')).toEqual([expect.stringContaining('Loki')])
+    expect(rows('Set aside')[0]).toContain('1 other Mastermind, joins on Twist 1')
+  })
+
+  it('lays out the Henchmen the Scheme puts in the KO pile in a section of their own', () => {
+    const setup = structuredClone(twoBoxesDailyBugle) as Setup
+    setup.outsideHenchmen![0].to = 'koPile'
+    renderChecklist(setup)
+
+    expect(rows('KO pile')).toEqual([expect.stringContaining('Savage Land Mutates')])
+    expect(tile('Henchman Groups', 'Savage Land Mutates')).toHaveTextContent('Goes to KO pile')
+  })
+
   it('tags no tile when the Scheme draws nothing outside the decks', () => {
     renderChecklist(killbots)
 

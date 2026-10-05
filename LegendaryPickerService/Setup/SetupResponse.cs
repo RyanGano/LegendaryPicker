@@ -44,7 +44,8 @@ public abstract record SetupResponse
             .Select(outside => new OutsideMastermindBody(
                 glossary.Component(outside.Mastermind.Id, outside.Mastermind.Name, outside.To == Pile.SetAside ? outside.Mastermind.Terms : []),
                 outside.To,
-                outside.Tactics))
+                outside.Tactics,
+                outside.Joins))
             .ToList();
 
         Component[] components =
@@ -170,16 +171,18 @@ public sealed record Component(
 // "setAside"), and how many cards that is.
 public sealed record OutsideHeroBody(Component Hero, Pile To, int Cards);
 
-// A Henchman Group a Scheme draws outside the Villain Deck, the pile its cards go to ("heroDeck"), and
+// A Henchman Group a Scheme draws outside the Villain Deck, the pile its cards go to ("heroDeck" or "koPile"), and
 // how many of its cards that is.
 public sealed record OutsideHenchmenBody(Component Group, Pile To, int Cards);
 
 // A Mastermind a Scheme draws besides its own: set aside whole ("setAside"), or tactics of its Tactics into the
-// Villain Deck ("villainDeck"); tactics is written only then.
+// Villain Deck ("villainDeck"); tactics is written only then. joins says when a set-aside one comes into play, and is
+// written only when the Scheme says.
 public sealed record OutsideMastermindBody(
     Component Mastermind,
     Pile To,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Tactics);
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Tactics,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Joins = null);
 
 // Cards of a group the Scheme sets beside it: count of them, or, when card is present, that one card of the group.
 // fromVillainDeck is how many fewer cards the group puts in the Villain Deck because of it, 0 when the group isn't

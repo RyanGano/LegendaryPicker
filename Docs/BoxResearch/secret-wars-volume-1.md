@@ -1,6 +1,6 @@
 # Secret Wars Volume 1 (August 2015)
 
-**Research status: Partial.** The official insert gives extensive rules and aggregate counts, but its listed categories total 348 rather than its stated 350 cards. For integration (#113) the Scheme Setup lines, each Always Leads and the parts cards use were read from the card faces C1 links; the runtime data is `LegendaryPickerService/Data/Boxes/secret-wars-volume-1.json`. Build an Army of Annihilation is left out: its Setup line names 10 extra "Annihilation Wave" Henchmen, a group no box has.
+**Research status: Partial.** The official insert gives extensive rules and aggregate counts, but its listed categories total 348 rather than its stated 350 cards. For integration (#113) the Scheme Setup lines, each Always Leads and the parts cards use were read from the card faces C1 links; the runtime data is `LegendaryPickerService/Data/Boxes/secret-wars-volume-1.json`. Build an Army of Annihilation (#116) names 10 extra "Annihilation Wave" Henchmen, a group no box has; the owner decided any one Henchman Group not in the Villain Deck stands in, with its 10 cards in the KO pile (D-ko-henchmen). Its Setup line is 9 Twists (card face above), and Dark Alliance's second Mastermind joins at Twist 1.
 
 ## Sources
 

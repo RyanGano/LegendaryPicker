@@ -192,7 +192,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // The Masterminds the Scheme draws besides its own, from the included ones the setup doesn't otherwise use.
             var otherMasterminds = new Queue<Mastermind>(DrawMany(_masterminds.Where(other => other != mastermind), plan.OutsideMasterminds.Sum(draw => draw.Count)));
             var outsideMasterminds = plan.OutsideMasterminds
-                .SelectMany(draw => Enumerable.Range(0, draw.Count).Select(_ => new OutsideMastermind(otherMasterminds.Dequeue(), draw.Rule.To, draw.Rule.Tactics?.Value)))
+                .SelectMany(draw => Enumerable.Range(0, draw.Count).Select(_ => new OutsideMastermind(otherMasterminds.Dequeue(), draw.Rule.To, draw.Rule.Tactics?.Value, draw.Rule.Joins?.Value)))
                 .ToList();
 
             // The cards of each group the Scheme sets beside it, and how many fewer the group puts in the Villain
@@ -293,13 +293,15 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .ToList();
             if (leftOut.Count > 0)
             {
-                // The Shards are a supply rather than a stack of cards, and the glossary calls them that.
-                var stacks = leftOut.Where(part => part != Part.Shards).Select(StackName).ToList();
+                // The Shards are a supply rather than a stack of cards, and the glossary calls them that; the Ambition
+                // cards stay in their box until a Scheme draws some.
+                var stacks = leftOut.Where(part => part is not (Part.Shards or Part.Ambitions)).Select(StackName).ToList();
                 var named = new List<string>();
                 if (stacks.Count > 0) named.Add($"{string.Join(" and ", stacks)} {(stacks.Count == 1 ? "stack" : "stacks")}");
                 if (leftOut.Contains(Part.Shards)) named.Add("Shard supply");
+                if (leftOut.Contains(Part.Ambitions)) named.Add("Ambition cards");
                 notes.Add(Note(
-                    $"Leave out the {string.Join(" and the ", named)}: no drawn card uses {(leftOut.Count == 1 ? "it" : "them")}",
+                    $"Leave out the {string.Join(" and the ", named)}: no drawn card uses {(leftOut.Count == 1 && leftOut[0] != Part.Ambitions ? "it" : "them")}",
                     rules.Rulings.UnusedPartsLeftOut, rulesBox));
             }
 
@@ -512,10 +514,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 outside.Add(new OutsideDraw(rule, count.Value));
                 var which = rule.Hero is { } heroId
                     ? HeroNamed(heroId)
-                    : $"{count.Value} extra {HeroesOf(count.Value, rule.Team, rule.HeroName)}";
+                    : $"{count.Value} extra {HeroesOf(count.Value, rule.Team, rule.HeroName ?? (rule.HeroNames is { } any ? string.Join(" or ", any.Value) : null))}";
                 notes.Add(Card(
                     $"{schemeWord} draws {which} outside the {_terms.HeroDeck} and puts {(count.Value == 1 ? "its" : "their")} cards {Onto(rule.To)}",
                     count.Source));
+                if (rule.HeroNames is { } names)
+                {
+                    notes.Add(Card($"{schemeWord} takes any of {string.Join(" and ", names.Value)} as its {_terms.Hero}", names.Source));
+                }
             }
 
             var outsideHenchmen = new List<HenchmenDraw>();
@@ -560,6 +566,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(rule.Tactics is { } tactics
                     ? Card($"{schemeWord} draws {which} and shuffles {tactics.Value * count.Value} of {(count.Value == 1 ? "its" : "their")} Tactics into the {_terms.VillainDeck}", tactics.Source)
                     : Card($"{schemeWord} draws {which} and sets {(count.Value == 1 ? "it" : "them")} aside", count.Source));
+                if (rule.Joins is { } joins)
+                {
+                    notes.Add(Card($"{schemeWord}: the {_terms.Mastermind}{(count.Value == 1 ? " set aside joins" : "s set aside join")} on {joins.Value}", joins.Source));
+                }
             }
 
             var twists = ForPlayers(effect.Twists)
@@ -671,6 +681,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 && plan.MovedOut(Pile.Officers) <= Supply(components => components.Officers)
                 && plan.MovedOut(Pile.Sidekicks) <= Supply(components => components.Sidekicks)
                 && plan.MovedOut(Pile.Bindings) <= (plan.Bindings ?? Supply(components => components.Bindings))
+                && plan.MovedOut(Pile.Ambitions) <= Supply(components => components.Ambitions)
                 && plan.Twists + plan.TwistsBeside + plan.MovedOut(Pile.Twists) <= Supply(components => components.SchemeTwists);
         }
 
@@ -790,6 +801,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             Pile.VillainDeck => $"into the {_terms.VillainDeck}",
             Pile.BesideScheme => $"beside the {_terms.Scheme}",
             Pile.SetAside => "in a stack set aside",
+            Pile.KoPile => "into the KO pile",
             _ => throw new ArgumentOutOfRangeException(nameof(to), to, null),
         };
 
@@ -853,6 +865,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             (CardKind.Binding, false) => "Bindings",
             (CardKind.Twist, true) => _terms.Twist,
             (CardKind.Twist, false) => _terms.Twists,
+            (CardKind.Ambition, true) => "Ambition card",
+            (CardKind.Ambition, false) => "Ambition cards",
             _ => throw new ArgumentOutOfRangeException(nameof(card), card, null),
         };
 
@@ -863,6 +877,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             Pile.BesideScheme => "beside it",
             Pile.StartingDecks => "into each starting deck",
             Pile.SetAside => "into a stack set aside",
+            Pile.KoPile => "into the KO pile",
             _ => throw new ArgumentOutOfRangeException(nameof(to), to, null),
         };
 
@@ -926,6 +941,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         Part.MadameHydra => "Madame HYDRA",
         Part.NewRecruits => "New Recruit",
         Part.Shards => "Shard",
+        Part.Ambitions => "Ambition",
         _ => throw new ArgumentOutOfRangeException(nameof(part), part, null),
     };
 

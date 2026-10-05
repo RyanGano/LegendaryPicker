@@ -82,8 +82,8 @@ public sealed record OutsideHero(Hero Hero, Pile To, int Cards);
 public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Cards);
 
 // A Mastermind a Scheme draws besides its own, and the pile it goes to: set aside whole until the Scheme brings it
-// into play, or Tactics of its Tactics into the Villain Deck. Tactics is null when it is set aside.
-public sealed record OutsideMastermind(Mastermind Mastermind, Pile To, int? Tactics);
+// into play, or Tactics of its Tactics into the Villain Deck. Tactics is null when it is set aside. Joins says when a set-aside Mastermind comes into play, when the Scheme says.
+public sealed record OutsideMastermind(Mastermind Mastermind, Pile To, int? Tactics, string? Joins = null);
 
 // Cards of a group the Scheme sets beside it: Count of them, or the one named Card. FromVillainDeck is how many
 // fewer cards the group puts in the Villain Deck because of it, or 0 when the group isn't drawn or its cards

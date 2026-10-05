@@ -32,7 +32,8 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
   const heroTerms = cardTerms(setup, setup.heroes)
   const decks = startingDeckTerms(setup)
   const tyrants = outsideMasterminds.filter((other) => other.to === 'villainDeck').map((other) => other.mastermind)
-  const setAside = outsideMasterminds.filter((other) => other.to === 'setAside').map((other) => other.mastermind)
+  const setAside = outsideMasterminds.filter((other) => other.to === 'setAside')
+  const joins = setAside.find((other) => other.joins)?.joins
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
@@ -95,7 +96,28 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       {(moves.some((move) => move.to === 'setAside') || setAside.length > 0) && (
         <Section title="Set aside" kind="scheme">
           <MovedIn moves={moves} to="setAside" terms={t} />
-          {setAside.length > 0 && <Item label={names(setAside)} detail={plural(setAside.length, `other ${t.mastermind}`)} />}
+          {setAside.length > 0 && (
+            <Item
+              label={names(setAside.map((other) => other.mastermind))}
+              detail={`${plural(setAside.length, `other ${t.mastermind}`)}${joins ? `, ${setAside.length === 1 ? 'joins' : 'join'} on ${joins}` : ''}`}
+            />
+          )}
+        </Section>
+      )}
+
+      {outsideHenchmen.some((outside) => outside.to === 'koPile') && (
+        <Section title="KO pile" kind="henchman">
+          {outsideHenchmen.map(
+            (outside) =>
+              outside.to === 'koPile' && (
+                <Item
+                  key={outside.group.id}
+                  label={names([outside.group])}
+                  detail={`${t.henchmen} of an extra ${t.henchmanGroup}`}
+                  count={outside.cards}
+                />
+              ),
+          )}
         </Section>
       )}
 
@@ -328,6 +350,7 @@ function cardNames(terms: RulesetTerms): Record<CardKind, string> {
     sidekick: 'Sidekicks',
     binding: 'Bindings',
     twist: terms.twists,
+    ambition: 'Ambition cards',
   }
 }
 
@@ -344,6 +367,8 @@ function pileNames(terms: RulesetTerms): Record<Pile, string> {
     sidekicks: 'Sidekick stack',
     bindings: 'Bindings stack',
     twists: 'unused Twists',
+    ambitions: 'Ambition supply',
+    koPile: 'KO pile',
   }
 }
 
@@ -362,6 +387,8 @@ function into(terms: RulesetTerms): Record<Pile, string> {
     sidekicks: 'to the Sidekick stack',
     bindings: 'to the Bindings stack',
     twists: 'to the unused Twists',
+    ambitions: 'to the Ambition supply',
+    koPile: 'to the KO pile',
   }
 }
 
