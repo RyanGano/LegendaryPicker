@@ -148,6 +148,7 @@ public sealed partial class BoxCatalog
             }
 
             ValidateUses(path, box);
+            ValidateOtherRuleset(path, box);
         }
 
         // A setup names its cards by display name, so two Heroes, groups, Masterminds or Schemes sharing
@@ -414,6 +415,31 @@ public sealed partial class BoxCatalog
                 throw new InvalidDataException(
                     $"{path}: base game {box.Id} uses {WireName(use.Part)} in setup.uses but has no components.{WireName(use.Part)}.");
             }
+        }
+    }
+
+    // Only an expansion plays under another ruleset's base game: a base game brings its own rules. A part stands in
+    // for itself or twice would say nothing.
+    private static void ValidateOtherRuleset(string path, Box box)
+    {
+        if (box.OtherRuleset is not { } other)
+        {
+            return;
+        }
+
+        if (box.IsBaseGame)
+        {
+            throw new InvalidDataException($"{path}: base game {box.Id} has an otherRuleset section; only an expansion has one.");
+        }
+
+        if (other.StandIns.GroupBy(standIn => standIn.Part).FirstOrDefault(part => part.Count() > 1) is { } twice)
+        {
+            throw new InvalidDataException($"{path}: otherRuleset.standIns lists part {WireName(twice.Key)} more than once.");
+        }
+
+        if (other.StandIns.FirstOrDefault(standIn => standIn.With == standIn.Part) is { } itself)
+        {
+            throw new InvalidDataException($"{path}: otherRuleset.standIns has {WireName(itself.Part)} stand in for itself.");
         }
     }
 
@@ -718,6 +744,12 @@ public sealed partial class BoxCatalog
         foreach (var (owner, uses) in UseLists(box))
         {
             foreach (var use in uses) yield return (owner, use.Source);
+        }
+
+        if (box.OtherRuleset is { } other)
+        {
+            yield return ("otherRuleset.source", other.Source);
+            foreach (var standIn in other.StandIns) yield return ($"otherRuleset.standIns ({WireName(standIn.Part)})", standIn.Source);
         }
     }
 

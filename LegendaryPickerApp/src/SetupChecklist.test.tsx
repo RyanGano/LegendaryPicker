@@ -27,6 +27,9 @@ import twoBoxesNegaBomb from './test/fixtures/twoBoxesNegaBomb.json'
 // A live draw from Legendary: Villains and Fear Itself with 2 players: The Traitor with Dr. Strange, whose Betrayal
 // Deck sets 3 Bindings per player and a 9th Twist aside.
 import twoBoxesTraitor from './test/fixtures/twoBoxesTraitor.json'
+// A live draw from the core box and Fear Itself alone with 2 players: The Traitor with Uru-Enchanted Iron Man, under the
+// First Edition rules, with the core box's Wounds standing in for Bindings.
+import coreAndFearItselfTraitor from './test/fixtures/coreAndFearItselfTraitor.json'
 // A live draw from Legendary: Villains alone, on the Villainous ruleset: Graduation at Xavier's X-Academy with Odin.
 import twoPlayerVillainsGraduation from './test/fixtures/twoPlayerVillainsGraduation.json'
 // Live draws from Legendary: Villains alone with 2 players whose Plot sets cards of a group beside it: Cage
@@ -539,7 +542,17 @@ describe('SetupChecklist', () => {
     expect(rows('Set aside')).toEqual(['Bindings from the Bindings stack 6', 'Plot Twists from the unused Twists 1'])
     expect(rows('Adversary Deck')).toContain('Plot Twists 8')
     expect(rows('Shared stacks')).toContain('Bindings 24')
-    expect(rows('Other setup steps')).toEqual(['Shuffle the set-aside Bindings and Twist face down as the Betrayal Deck'])
+    expect(rows('Other setup steps')).toEqual(['Shuffle all the set-aside cards face down as the Betrayal Deck'])
+  })
+
+  it('lays out Wounds standing in for Bindings when no included box has Bindings', () => {
+    renderChecklist(coreAndFearItselfTraitor)
+
+    expect(rows('Set aside')).toEqual(['Wounds from the Wound stack 6', 'Scheme Twists or Plot Twists from the unused Twists 1'])
+    expect(rows('Shared stacks')).toEqual(['Wounds Standing in for Bindings 24', 'S.H.I.E.L.D. Officers 30', 'Bystanders 28'])
+    expect(
+      screen.getByText('No included box has Bindings cards: use Wound cards for them, or Bindings cards if you have them'),
+    ).toBeInTheDocument()
   })
 
   it('leaves out the Set aside section when the Scheme sets no cards aside', () => {

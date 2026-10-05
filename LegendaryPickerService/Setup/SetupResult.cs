@@ -12,6 +12,7 @@ public sealed record NoEligibleScheme(int Players) : GenerationResult;
 // Steps are the labels of the setup steps its Scheme and Mastermind print that change no count, Scheme first.
 // When the included boxes follow more than one ruleset, the Scheme and Mastermind decide the Ruleset and
 // RulesReason says why; Mixed is true when the drawn cards themselves come from more than one ruleset.
+// StandIns are the parts no included box supplies that the drawn cards use, each replaced by its stand-in (D-heroic).
 public sealed record SetupResult(
     int Players,
     Ruleset Ruleset,
@@ -33,7 +34,8 @@ public sealed record SetupResult(
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<Box> Boxes,
     bool Mixed = false,
-    RuleNote? RulesReason = null) : GenerationResult;
+    RuleNote? RulesReason = null,
+    IReadOnlyList<StandIn>? StandIns = null) : GenerationResult;
 
 // MovedIn and MovedOut count the cards the setup's moves put in the deck and take out of it, and SetBeside
 // the cards of its drawn groups the Scheme sets beside it. The response lists each move under the setup's

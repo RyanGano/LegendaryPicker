@@ -21,6 +21,7 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 - Generation is a table draw (Scheme, Mastermind, required groups, remaining groups, Heroes), replacing the earlier "uniform over distinct setups" wording.
 - Unsourced conflicts fall back to the base Legendary rules; expansion rules apply only when that box is included.
 - The planning "cases" are GitHub issues; each issue lists the fixed-result test cases it must pass.
+- Owner decision D-heroic (2026-10-04, #110): Fear Itself works without Legendary: Villains. With a Heroic base game and Fear Itself but no Villainous base game, every pair follows the First Edition rules, and Fear Itself's `otherRuleset.standIns` (FI p.2) replace parts no included box supplies: Wounds for Bindings (the player may use Bindings), S.H.I.E.L.D. Officers for Madame HYDRA, and +1 Recruit for a New Recruit gain.
 
 ## Research artifacts
 

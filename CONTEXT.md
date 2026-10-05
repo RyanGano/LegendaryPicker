@@ -20,7 +20,7 @@ An additional product that adds content to the Marvel Legendary game system. An 
 A box that can be played on its own and carries setup rules, such as the First Edition core box or Legendary: Villains. A base game is an optional pick like any other box, but every setup includes at least one.
 
 **Ruleset**:
-The rules a box's cards are played under, separate from the box itself: First Edition for the core box and its Heroic expansions, and Villainous for Legendary: Villains and its Villainous expansions, such as Fear Itself. A setup follows one ruleset. Boxes of both can be included together; the Scheme and Mastermind then decide it: a Villainous Plot or Commander means Villainous, otherwise First Edition (owner decisions, #85, #88). Every other card is drawn from every included box whatever the ruleset.
+The rules a box's cards are played under, separate from the box itself: First Edition for the core box and its Heroic expansions, and Villainous for Legendary: Villains and its Villainous expansions, such as Fear Itself. A setup follows one ruleset. Boxes of both can be included together; the Scheme and Mastermind then decide it: a Villainous Plot or Commander means Villainous, otherwise First Edition (owner decisions, #85, #88). Every other card is drawn from every included box whatever the ruleset. An expansion whose box says it can be played without a base game of its own ruleset, as Fear Itself can, follows the included base game's rules when none of its own is included (owner decision, #110).
 
 **Villainous terms**:
 The words a Villainous setup uses for the parts of a setup, one-to-one with the First Edition terms this glossary defines (Villains rulebook p.21): Ally for Hero, Adversary Group for Villain Group, Backup Adversary group for Henchman Group, Commander for Mastermind, Commander Tactic for Mastermind Tactic, Plot for Scheme, Plot Twist for Scheme Twist, Command Strike for Master Strike, Overrun for Escape, Adversary Deck for Villain Deck, Ally Deck for Hero Deck, and kidnapping for rescuing a Bystander. The code keeps the First Edition names. Bindings are not Wounds, and Madame HYDRA and New Recruits are not S.H.I.E.L.D. Officers: each is a stack of its own. HYDRA Operatives and Soldiers are the Villainous starting deck.
@@ -76,6 +76,9 @@ The Villain Group or Henchman Group required by a selected Mastermind's "Always 
 
 **Part in use**:
 A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack and Unite the Shards the Shard supply; the rules use the stacks players recruit from. A card that uses a part no included box supplies is dropped before the draw.
+
+**Stand-in**:
+A part a setup lays out in place of one no included box supplies, as an expansion's rules allow when it is played without its own ruleset's base game: with the core box and Fear Itself alone, Wounds stand in for Bindings and S.H.I.E.L.D. Officers for Madame HYDRA (Fear Itself insert, owner decision #110). The player can use the real cards if they have them.
 
 **Shard supply**:
 The shared pool of Shard tokens Guardians of the Galaxy adds (18, GG p.2), which players, Villains and Masterminds gain from. It is a part in use like a stack: laid out only when a drawn card gains or spends Shards, holding what the included boxes supply unless the Scheme sets its size.

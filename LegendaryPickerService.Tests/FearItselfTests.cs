@@ -11,12 +11,14 @@ public class FearItselfTests
 {
     private const string FearItselfName = "Fear Itself";
     private const string Insert = "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Fear_Itself.pdf";
+    private const string OwnerDecision = "https://github.com/RyanGano/LegendaryPicker/issues/110";
 
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
     private static readonly Box FearItself = Catalog.Boxes.Single(box => box.Id == "fear-itself");
     private static readonly SetupGenerator Generator = new(Catalog);
 
     private static readonly string[] Boxes = ["villains", "fear-itself"];
+    private static readonly string[] CoreAndFearItself = ["core", "fear-itself"];
 
     private const int FearItselfPlot = 0;
     private const int LastStand = 1;
@@ -105,15 +107,15 @@ public class FearItselfTests
                 (CardKind.Twist, Pile.SetAside, false, new PlayerCountValue(null, 1, "Card")),
             ],
             traitor.Setup.Moves!.Select(move => (move.Card, move.To, move.PerPlayer, Assert.Single(move.Count))));
-        Assert.Equal([new SetupStep("Shuffle the set-aside Bindings and Twist face down as the Betrayal Deck", "Card")], traitor.Setup.Steps);
+        Assert.Equal([new SetupStep("Shuffle all the set-aside cards face down as the Betrayal Deck", "Card")], traitor.Setup.Steps);
 
         Assert.All([fear, lastStand], plot => Assert.Null(plot.Setup.AllowedPlayerCounts));
     }
 
     [Fact]
-    public void The_rules_insert_is_the_one_source_key_and_its_glossary_adds_HYDRA_and_three_keywords()
+    public void The_rules_insert_and_the_owner_decision_are_the_source_keys_and_its_glossary_adds_HYDRA_and_three_keywords()
     {
-        Assert.Equal([new SourceLink("FI", Insert)], FearItself.Sources);
+        Assert.Equal([new SourceLink("FI", Insert), new SourceLink("D-heroic", OwnerDecision)], FearItself.Sources);
         Assert.Equal("FI p.2; C1", FearItself.CatalogSource);
         Assert.Equal(
             ["HYDRA team FI p.1", "Thrown Artifact keyword FI p.1", "Uru-Enchanted Weapons keyword FI p.1", "Fight or Fail keyword FI p.1"],
@@ -196,7 +198,7 @@ public class FearItselfTests
             setup.Moves);
         Assert.Equal(8, setup.VillainDeck.Twists);
         Assert.Equal(30 - bindings, setup.Stacks.Bindings);
-        Assert.Equal(["Shuffle the set-aside Bindings and Twist face down as the Betrayal Deck"], setup.Steps);
+        Assert.Equal(["Shuffle all the set-aside cards face down as the Betrayal Deck"], setup.Steps);
         Assert.Contains(new RuleNote($"Plot moves {bindings} Bindings into a stack set aside, 3 per player", "Card", null, FearItselfName), setup.Notes);
         Assert.Contains(new RuleNote("Plot moves 1 Plot Twist into a stack set aside", "Card", null, FearItselfName), setup.Notes);
     }
@@ -229,15 +231,134 @@ public class FearItselfTests
             setup.Notes);
     }
 
-    // Without a Villainous base game Fear Itself's Plots and Commander have no rules to follow, and its insert's Heroic
-    // substitutions are not modelled, so the core box and Fear Itself alone are refused.
+    // Without a Villainous base game (D-heroic, #110)
+
+    // The insert lets Fear Itself be played with Heroic sets alone (FI p.2), and the owner decided it should be: its
+    // Plots and Commander then follow the core box's rules, and parts no included box has get stand-ins.
     [Fact]
-    public void Fear_Itself_with_only_Heroic_base_games_is_refused()
+    public void Fear_Itself_can_be_drawn_with_the_core_box_alone()
     {
+        var other = FearItself.OtherRuleset!;
+        Assert.Equal("D-heroic", other.Source);
         Assert.Equal(
-            "Marvel Legendary First Edition core box and Fear Itself follow different rulesets, and no included base game has rules for mixing them.",
-            Generator.CheckBoxes(["core", "fear-itself"]));
+            [
+                new StandIn(Part.Bindings, "FI p.2", Part.Wounds),
+                new StandIn(Part.MadameHydra, "FI p.2", Part.Officers),
+                new StandIn(Part.NewRecruits, "FI p.2"),
+            ],
+            other.StandIns);
+        Assert.Null(Generator.CheckBoxes(["core", "fear-itself"]));
         Assert.Null(Generator.CheckBoxes(["core", "villains", "fear-itself"]));
+    }
+
+    // Core Schemes come first: 8 of them, then Fear Itself's Plots. Uru-Enchanted Iron Man follows the 4 core
+    // Masterminds. The core box's 30 Wounds stand in for the Bindings The Mighty and Iron Man use.
+    [Theory]
+    [InlineData(FearItselfPlot, 2, 10, 30)]
+    [InlineData(FearItselfPlot, 5, 10, 30)]
+    [InlineData(LastStand, 2, 6, 30)]
+    [InlineData(LastStand, 5, 6, 30)]
+    [InlineData(TheTraitor, 2, 8, 24)]
+    [InlineData(TheTraitor, 5, 8, 15)]
+    public void Each_Plot_with_the_core_box_alone_follows_the_First_Edition_rules_with_Wounds_for_Bindings(
+        int plot, int players, int twists, int wounds)
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(players, CoreAndFearItself, new ScriptedRandom(8 + plot, 4)));
+
+        Assert.Equal((FearItself.Schemes[plot].Name, "Uru-Enchanted Iron Man"), (setup.Scheme.Name, setup.Mastermind.Name));
+        Assert.Equal(Ruleset.FirstEdition, setup.Ruleset);
+        Assert.Equal(
+            new RuleNote("First Edition rules: no Villainous base game is included", "D-heroic", OwnerDecision),
+            setup.RulesReason);
+        Assert.Equal("The Mighty", setup.VillainGroups[0].Name);
+        Assert.Equal(twists, setup.VillainDeck.Twists);
+        Assert.Equal(new PlayerDeck(8, 4, null), setup.PlayerDeck);
+        Assert.Equal(wounds, setup.Stacks.Wounds);
+        Assert.Null(setup.Stacks.Bindings);
+        Assert.Contains(new StandIn(Part.Bindings, "FI p.2", Part.Wounds), setup.StandIns!);
+        Assert.Contains(
+            new RuleNote(
+                "No included box has Bindings cards: use Wound cards for them, or Bindings cards if you have them", "FI p.2", Insert, FearItselfName),
+            setup.Notes);
+    }
+
+    // The Betrayal Deck takes Wounds in place of Bindings when no included box has Bindings.
+    [Theory]
+    [InlineData(2, 6)]
+    [InlineData(5, 15)]
+    public void The_Traitor_with_the_core_box_alone_sets_aside_Wounds(int players, int wounds)
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(players, CoreAndFearItself, new ScriptedRandom(8 + TheTraitor, 4)));
+
+        Assert.Equal(
+            [
+                new MovedCards(CardKind.Wound, Pile.Wounds, Pile.SetAside, wounds, wounds),
+                new MovedCards(CardKind.Twist, Pile.Twists, Pile.SetAside, 1, 1),
+            ],
+            setup.Moves);
+        Assert.Equal(30 - wounds, setup.Stacks.Wounds);
+        Assert.Contains(new RuleNote($"Plot moves {wounds} Wounds into a stack set aside, 3 per player", "Card", null, FearItselfName), setup.Notes);
+    }
+
+    // With Villains included its Bindings are used, so nothing stands in for them.
+    [Fact]
+    public void The_Traitor_with_the_core_box_and_Villains_still_sets_aside_Bindings()
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "villains", "fear-itself"], new ScriptedRandom(8 + TheTraitor, 4)));
+
+        Assert.Equal(("The Traitor", Ruleset.Villainous), (setup.Scheme.Name, setup.Ruleset));
+        Assert.Equal(new MovedCards(CardKind.Binding, Pile.Bindings, Pile.SetAside, 6, 6), setup.Moves[0]);
+        Assert.Equal(24, setup.Stacks.Bindings);
+        Assert.Empty(setup.StandIns!);
+    }
+
+    // Every Plot can be drawn with the core box alone at 2 and 5 players, whatever the other draws.
+    [Theory]
+    [InlineData(2)]
+    [InlineData(5)]
+    public void Every_Plot_is_drawable_with_the_core_box_alone(int players)
+    {
+        foreach (var plot in new[] { FearItselfPlot, LastStand, TheTraitor })
+        {
+            for (var seed = 0; seed < 20; seed++)
+            {
+                var random = new CyclingRandom(8 + plot, seed, seed + 3, seed + 1, seed + 4, seed + 1, seed + 5, seed + 9, seed + 2, seed + 6);
+                var setup = Assert.IsType<SetupResult>(Generator.Generate(players, CoreAndFearItself, random));
+                Assert.Equal(FearItself.Schemes[plot].Name, setup.Scheme.Name);
+                Assert.Equal(Ruleset.FirstEdition, setup.Ruleset);
+                Assert.Null(setup.Stacks.Bindings);
+            }
+        }
+    }
+
+    // Skadi gains Madame HYDRA, so with the core box alone she uses its S.H.I.E.L.D. Officers instead (FI p.2).
+    [Fact]
+    public void Skadi_with_the_core_box_alone_uses_SHIELD_Officers_for_Madame_HYDRA()
+    {
+        // Legacy Virus and Dr. Doom, two core Villain Groups, then Skadi (Hero 19: 15 core, then Fear Itself's).
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, CoreAndFearItself, new ScriptedRandom(0, 0, 0, 0, 19)));
+
+        Assert.Equal("Skadi", setup.Heroes[0].Name);
+        Assert.Equal(30, setup.Stacks.Officers);
+        Assert.Null(setup.Stacks.MadameHydra);
+        Assert.Contains(new StandIn(Part.MadameHydra, "FI p.2", Part.Officers), setup.StandIns!);
+        Assert.Contains(
+            new RuleNote(
+                "No included box has Madame HYDRA cards: use S.H.I.E.L.D. Officer cards for them, or Madame HYDRA cards if you have them",
+                "FI p.2", Insert, FearItselfName),
+            setup.Notes);
+    }
+
+    // A core Scheme and Mastermind with no drawn card that uses a missing part need no stand-in.
+    [Fact]
+    public void A_core_draw_with_the_core_box_and_Fear_Itself_needs_no_stand_in_when_no_card_uses_a_missing_part()
+    {
+        // Legacy Virus and Dr. Doom, then the first options: core Villain Groups and Heroes.
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, CoreAndFearItself, new ScriptedRandom(0, 0)));
+
+        Assert.DoesNotContain(ComponentIds(setup), id => id.StartsWith("fear-itself_"));
+        Assert.Empty(setup.StandIns!);
+        Assert.Equal("First Edition rules: no Villainous base game is included", setup.RulesReason!.Text);
     }
 
     // With the core box and Villains, a Heroic Scheme and Mastermind keep the First Edition rules (#88), and Skadi, a

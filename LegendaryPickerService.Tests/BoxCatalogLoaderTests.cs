@@ -369,6 +369,32 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("setup.mixing.stacks cites source X9, which is not in this box's sources");
     }
 
+    // Only an expansion can be played under another ruleset's base game (D-heroic), and each of its stand-ins replaces
+    // one part with another.
+    [Theory]
+    [InlineData(true, """{ "source": "R p.6", "standIns": [] }""", "base game core has an otherRuleset section; only an expansion has one")]
+    [InlineData(false, """{ "source": "X9", "standIns": [] }""", "otherRuleset.source cites source X9, which is not in this box's sources")]
+    [InlineData(false, """{ "source": "R p.6", "standIns": [{ "part": "bindings", "with": "wounds", "source": "X9 p.2" }] }""",
+        "otherRuleset.standIns (bindings) cites source X9, which is not in this box's sources")]
+    [InlineData(false, """{ "source": "R p.6", "standIns": [{ "part": "bindings", "with": "wounds", "source": "R p.6" }, { "part": "bindings", "source": "R p.6" }] }""",
+        "otherRuleset.standIns lists part bindings more than once")]
+    [InlineData(false, """{ "source": "R p.6", "standIns": [{ "part": "wounds", "with": "wounds", "source": "R p.6" }] }""",
+        "otherRuleset.standIns has wounds stand in for itself")]
+    public void Rejects_a_malformed_other_ruleset_section(bool baseGame, string otherRuleset, string expected)
+    {
+        WriteCoreBox(core =>
+        {
+            if (!baseGame)
+            {
+                core.Remove("setup");
+            }
+
+            core["otherRuleset"] = JsonNode.Parse(otherRuleset);
+        });
+
+        AssertRejected(expected);
+    }
+
     [Fact]
     public void Rejects_a_Scheme_effect_citing_a_source_key_the_box_does_not_list()
     {

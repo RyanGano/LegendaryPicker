@@ -115,6 +115,14 @@ export type SetupStacks = {
   shards?: number
 }
 
+// A part the drawn cards use that no included box supplies, and the part that stands in for it, null when none
+// does (a New Recruit gain gives +1 Recruit instead). Only stacks with a tick box have a stand-in to name.
+export type StandIn = {
+  part: keyof SetupStacks
+  source: string
+  with: keyof SetupStacks | null
+}
+
 // The two kinds of starting card each player gets: S.H.I.E.L.D. Agents and Troopers, or under the
 // Villainous ruleset HYDRA Operatives and Soldiers. choices lists the rulesets whose starting decks the
 // players choose between, present only in a mixed setup under the Villains rules that includes base games
@@ -146,6 +154,8 @@ export type Setup = {
   mixed?: boolean
   // Why the setup follows its ruleset, present only when the included boxes follow more than one.
   rulesReason?: RuleNote
+  // Present only when a drawn card uses a part no included box supplies, such as Bindings with no Villains box.
+  standIns?: StandIn[]
   scheme: Component
   mastermind: Component
   villainGroups: Component[]
@@ -182,14 +192,17 @@ export type NoEligibleScheme = {
 export type SetupResponse = Setup | NoEligibleScheme
 
 // A box a setup can include. A base game supplies the setup rules; an expansion adds cards. mixesRulesets is true
-// for a base game with rules for mixing rulesets, which a setup with boxes of more than one ruleset needs. An API
-// from before rulesets leaves ruleset out, and one from before mixesRulesets leaves that out.
+// for a base game with rules for mixing rulesets, which a setup with boxes of more than one ruleset needs, unless
+// every box of the ruleset with no ticked base game playsWithOtherRulesets: an expansion that can be played under the
+// other ruleset's base game. An API from before rulesets leaves ruleset out, and one from before mixesRulesets or
+// playsWithOtherRulesets leaves that out.
 export type Box = {
   id: string
   name: string
   baseGame: boolean
   ruleset?: Ruleset
   mixesRulesets?: boolean
+  playsWithOtherRulesets?: boolean
 }
 
 // A sleeping App Service instance takes 10-30 seconds to wake, so give up well after that.

@@ -19,7 +19,8 @@ public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
 // The rules a box's cards are played under, separate from the box: First Edition for the core box and the
 // Heroic expansions, and Villainous for Legendary: Villains. Written camelCase in box files ("firstEdition").
 // A setup can include boxes of both when a base game gives rules for mixing them (SetupRules.Mixing); the
-// Scheme and Mastermind it draws then decide which ruleset it follows (#73, #85, #88).
+// Scheme and Mastermind it draws then decide which ruleset it follows (#73, #85, #88). An expansion with an
+// OtherRuleset section can also be included with base games of the other ruleset alone, whose rules it follows (#110).
 public enum Ruleset
 {
     FirstEdition,
@@ -40,11 +41,22 @@ public sealed record Box(
     IReadOnlyList<Mastermind> Masterminds,
     IReadOnlyList<Scheme> Schemes,
     IReadOnlyList<GlossaryTerm> Glossary,
-    SetupRules? Setup = null)
+    SetupRules? Setup = null,
+    OtherRuleset? OtherRuleset = null)
 {
     // Only a base game supplies setup rules; an expansion's box file has no setup section.
     public bool IsBaseGame => Setup is not null;
 }
+
+// An expansion's rules for playing it without a base game of its own ruleset, under an included base game of
+// another, as Fear Itself's insert allows with Heroic sets alone (FI p.2, #110). Source cites the rule that its
+// Schemes and Masterminds then follow that base game's rules. StandIns are the parts it replaces when no included
+// box supplies them.
+public sealed record OtherRuleset(string Source, IReadOnlyList<StandIn> StandIns);
+
+// A part a setup replaces when no included box supplies it: cards that use Part use With instead, as Wounds stand in
+// for Bindings (FI p.2). With is null when the replacement needs no part, as a New Recruit gain becomes +1 Recruit.
+public sealed record StandIn(Part Part, string Source, Part? With = null);
 
 // Where a source key (the part of a Source before the first space, such as "R" in "R p.20") is published.
 // "Card" has no link: it is the printed card itself.
@@ -146,14 +158,7 @@ public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms,
         .Concat(Setup.WoundsPerPlayer is null ? [] : [Part.Wounds])
         .Concat(Setup.BindingsPerPlayer is null ? [] : [Part.Bindings])
         .Concat(Setup.ShardSupply is null ? [] : [Part.Shards])
-        .Concat((Setup.Moves ?? []).Select(move => move.Card switch
-        {
-            CardKind.Wound => Part.Wounds,
-            CardKind.Officer => Part.Officers,
-            CardKind.Sidekick => Part.Sidekicks,
-            CardKind.Binding => Part.Bindings,
-            _ => (Part?)null,
-        }).OfType<Part>())
+        .Concat((Setup.Moves ?? []).Select(move => CardMove.PartOf(move.Card)).OfType<Part>())
         .Distinct();
 }
 
@@ -303,6 +308,26 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
         CardKind.Binding => Pile.Bindings,
         CardKind.Twist => Pile.Twists,
         _ => throw new ArgumentOutOfRangeException(nameof(Card), Card, null),
+    };
+
+    // The part whose stack a kind of card comes from, or null for a kind that comes from a deck or the Twists.
+    public static Part? PartOf(CardKind card) => card switch
+    {
+        CardKind.Wound => Part.Wounds,
+        CardKind.Officer => Part.Officers,
+        CardKind.Sidekick => Part.Sidekicks,
+        CardKind.Binding => Part.Bindings,
+        _ => null,
+    };
+
+    // The kind of card a part's stack holds, or null for a part with no card kind a Scheme moves.
+    public static CardKind? KindOf(Part part) => part switch
+    {
+        Part.Wounds => CardKind.Wound,
+        Part.Officers => CardKind.Officer,
+        Part.Sidekicks => CardKind.Sidekick,
+        Part.Bindings => CardKind.Binding,
+        _ => null,
     };
 }
 

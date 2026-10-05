@@ -475,14 +475,21 @@ describe('App', () => {
   it('disables Generate while Heroic and Villainous boxes are ticked without a base game that mixes them', async () => {
     const mixingVillains: Box = { ...villains, mixesRulesets: true }
     const coreBox: Box = { ...core, mixesRulesets: false }
-    const fearItself: Box = { id: 'fear-itself', name: 'Fear Itself', baseGame: false, ruleset: 'villainous', mixesRulesets: false }
-    boxesAnswer = () => json([coreBox, mixingVillains, fearItself])
+    const villainousFixture: Box = {
+      id: 'villainous-fixture',
+      name: 'Villainous Fixture',
+      baseGame: false,
+      ruleset: 'villainous',
+      mixesRulesets: false,
+      playsWithOtherRulesets: false,
+    }
+    boxesAnswer = () => json([coreBox, mixingVillains, villainousFixture])
     const user = userEvent.setup()
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
     const hint = 'Heroic and Villainous boxes mix only with Legendary: Villains. Tick it too to draw a setup.'
 
-    await user.click(await screen.findByRole('checkbox', { name: 'Fear Itself' }))
+    await user.click(await screen.findByRole('checkbox', { name: 'Villainous Fixture' }))
 
     expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
     expect(screen.getByText(hint)).toBeInTheDocument()
@@ -491,6 +498,28 @@ describe('App', () => {
 
     expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
     expect(screen.queryByText(hint)).not.toBeInTheDocument()
+  })
+
+  it('enables Generate for the core box and an expansion that plays with other rulesets, such as Fear Itself', async () => {
+    const mixingVillains: Box = { ...villains, mixesRulesets: true }
+    const coreBox: Box = { ...core, mixesRulesets: false }
+    const fearItself: Box = {
+      id: 'fear-itself',
+      name: 'Fear Itself',
+      baseGame: false,
+      ruleset: 'villainous',
+      mixesRulesets: false,
+      playsWithOtherRulesets: true,
+    }
+    boxesAnswer = () => json([coreBox, mixingVillains, fearItself])
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '3' }))
+
+    await user.click(await screen.findByRole('checkbox', { name: 'Fear Itself' }))
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
+    expect(screen.queryByText(/mix only with/)).not.toBeInTheDocument()
   })
 
   it('draws from the core box and every ticked expansion', async () => {

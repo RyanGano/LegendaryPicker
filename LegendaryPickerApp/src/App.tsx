@@ -77,9 +77,10 @@ function readIds(key: string): string[] | null {
 }
 
 // Why the ticked boxes can't be drawn from, or null when they can. A setup takes its rules from a base game, so it
-// needs one, and boxes of more than one ruleset also need a base game with rules for mixing them. Until the box list
-// loads there is nothing to check, and an API from before mixesRulesets doesn't say which base game has those rules;
-// either way the API decides.
+// needs one, and boxes of more than one ruleset also need a base game with rules for mixing them, unless the base
+// games are of one ruleset and every box of the other plays with other rulesets (Fear Itself with the core box). Until
+// the box list loads there is nothing to check, and an API from before mixesRulesets doesn't say which base game has
+// those rules; either way the API decides.
 function boxHint(available: Box[], included: string[]): string | null {
   const ticked = available.filter((box) => included.includes(box.id))
   if (available.length > 0 && !ticked.some((box) => box.baseGame)) {
@@ -87,7 +88,15 @@ function boxHint(available: Box[], included: string[]): string | null {
   }
   const mixers = available.filter((box) => box.mixesRulesets)
   const rulesets = new Set(ticked.map((box) => box.ruleset))
-  if (available.some((box) => box.mixesRulesets !== undefined) && rulesets.size > 1 && !ticked.some((box) => box.mixesRulesets)) {
+  const baseRulesets = new Set(ticked.filter((box) => box.baseGame).map((box) => box.ruleset))
+  const playsUnderBaseGame =
+    baseRulesets.size === 1 && ticked.every((box) => baseRulesets.has(box.ruleset) || box.playsWithOtherRulesets)
+  if (
+    available.some((box) => box.mixesRulesets !== undefined) &&
+    rulesets.size > 1 &&
+    !ticked.some((box) => box.mixesRulesets) &&
+    !playsUnderBaseGame
+  ) {
     return mixers.length > 0
       ? `Heroic and Villainous boxes mix only with ${mixers.map((box) => box.name).join(' or ')}. Tick it too to draw a setup.`
       : "Heroic and Villainous boxes can't be drawn together."
