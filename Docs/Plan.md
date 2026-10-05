@@ -341,5 +341,17 @@ Box id `spider-man-homecoming`, file `LegendaryPickerService/Data/Boxes/spider-m
 
 **Keywords (SM p.1):** Danger Sense, Striker and Coordinate are new; Wall-Crawl reuses Paint the Town Red's term, so that box's exclusion test also drops this box. Research: [`Docs/BoxResearch/spider-man-homecoming.md`](BoxResearch/spider-man-homecoming.md).
 
+## Champions (February 2018)
+
+Box id `champions`, file `LegendaryPickerService/Data/Boxes/champions.json`, a First Edition expansion (#136). Counts (CH p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 double-sided Masterminds and 4 Schemes; no Henchman Groups, Scheme Twists or Bystanders. Names, teams, classes and keywords come from C1; the Scheme Setup lines and Always Leads were read from the card faces it links (`Card`).
+
+**Heroes:** all five are on the new Champions team (C1): Gwenpool, Ms. Marvel, Nova, Totally Awesome Hulk and Viv Vision. No display name clashes with another box.
+
+**Masterminds:** Fin Fang Foom leads Monsters Unleashed and Pagliacci leads Wrecking Crew (Card). Each has an Epic side with the same Tactics (CH p.2); the setup draws the normal side and adds the step "Optional: play the Epic side instead; the Tactics stay the same".
+
+**Schemes (Card):** Clash of the Monsters Unleashed (10 Twists, 6 Wounds per player, all 8 Monsters Unleashed Villains set beside it as the Monster Pit through `cardsBeside`, so the group takes no Villain Group slot and Fin Fang Foom, who always leads it, is never drawn with this Scheme); Divide and Conquer (8, 7 Heroes, a step to sort the Hero Deck by class); Hypnotize Every Human (8, an extra Henchman Group, no Bystanders in the Villain Deck); Steal All Oxygen on Earth (8, a step to start the Oxygen Level at 8). Every Scheme uses existing capabilities.
+
+**Keywords (CH pp.1-2):** Cheering Crowds, Versatile and Demolish are defined in this box's own glossary (First Edition expansions do not share Villainous terms); Size-Changing reuses Civil War's term, so the Civil War and Secret Wars Volume 1 exclusion tests also drop this box. Cheering Crowds returns Bystanders to the Bystander Stack, which every setup has. Wounds are the only part a card uses: Totally Awesome Hulk (Growing Pains), Fin Fang Foom (the Multipronged Assault Tactic) and Pagliacci (the Commedia Dell'Morte Tactic) each gain one (Card), so each lays out the Wound Stack. Research: [`Docs/BoxResearch/champions.md`](BoxResearch/champions.md).
+
 ## Open questions
 

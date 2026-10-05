@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 7,
+  "id": "champions",
+  "name": "Champions",
+  "ruleset": "firstEdition",
+  "catalogSource": "CH p.2; C1",
+  "about": {"released": {"value": "2018-02", "source": "Q"}},
+  "sources": [
+    {"key": "CH", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/17-marvel-legendary-champions-rules.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "CH p.2"}, "villainGroupCards": {"value": 8, "source": "CH p.2"}, "henchmanGroupCards": {"value": 0, "source": "CH p.2"}, "schemeTwists": {"value": 0, "source": "CH p.2"}},
+  "heroes": [
+    {"id": "champions_hero_gwenpool", "name": "Gwenpool", "team": "champions_term_champions", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["champions_term_versatile", "civil-war_term_size-changing", "champions_term_cheering-crowds", "champions_term_demolish"]},
+    {"id": "champions_hero_ms-marvel", "name": "Ms. Marvel", "team": "champions_term_champions", "classes": ["core_term_covert", "core_term_strength"], "terms": ["civil-war_term_size-changing", "champions_term_versatile", "champions_term_cheering-crowds"]},
+    {"id": "champions_hero_nova", "name": "Nova", "team": "champions_term_champions", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["champions_term_versatile", "champions_term_cheering-crowds", "civil-war_term_size-changing"]},
+    {"id": "champions_hero_totally-awesome-hulk", "name": "Totally Awesome Hulk", "team": "champions_term_champions", "classes": ["core_term_strength", "core_term_tech"], "terms": ["civil-war_term_size-changing", "champions_term_cheering-crowds"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "champions_hero_viv-vision", "name": "Viv Vision", "team": "champions_term_champions", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["civil-war_term_size-changing", "champions_term_versatile", "champions_term_cheering-crowds"]}
+  ],
+  "villainGroups": [
+    {"id": "champions_villain_monsters-unleashed", "name": "Monsters Unleashed", "terms": ["civil-war_term_size-changing", "champions_term_demolish"]},
+    {"id": "champions_villain_wrecking-crew", "name": "Wrecking Crew", "terms": ["champions_term_demolish"]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "champions_mastermind_fin-fang-foom", "name": "Fin Fang Foom", "terms": ["core_term_always-leads", "core_term_master-strike", "core_term_mastermind-tactic", "civil-war_term_size-changing", "champions_term_demolish"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "champions_villain_monsters-unleashed", "groupType": "villain", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "CH p.2"}]}},
+    {"id": "champions_mastermind_pagliacci", "name": "Pagliacci", "terms": ["core_term_always-leads", "core_term_master-strike", "core_term_mastermind-tactic", "champions_term_demolish", "champions_term_versatile"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "champions_villain_wrecking-crew", "groupType": "villain", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "CH p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "champions_scheme_clash-of-the-monsters-unleashed", "name": "Clash of the Monsters Unleashed", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 10, "source": "Card"}], "woundsPerPlayer": {"value": 6, "source": "Card"}, "cardsBeside": [{"groupId": "champions_villain_monsters-unleashed", "groupType": "villain", "count": [{"players": null, "value": 8, "source": "Card"}]}], "steps": [{"label": "Shuffle the 8 Monsters Unleashed Villains into a face-down Monster Pit deck", "source": "Card"}]}},
+    {"id": "champions_scheme_divide-and-conquer", "name": "Divide and Conquer", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "heroes": [{"players": null, "value": 7, "source": "Card"}], "steps": [{"label": "Sort the Hero Deck into five smaller decks by Hero Class, under the HQ spaces", "source": "Card"}]}},
+    {"id": "champions_scheme_hypnotize-every-human", "name": "Hypnotize Every Human", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "extraHenchmanGroups": [{"players": null, "value": 1, "source": "Card"}], "villainDeckBystanders": {"value": 0, "source": "Card"}}},
+    {"id": "champions_scheme_steal-all-oxygen-on-earth", "name": "Steal All Oxygen on Earth", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "steps": [{"label": "Start the Oxygen Level at 8", "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "champions_term_champions", "name": "Champions", "kind": "team", "summary": "A Hero team. In this box all five Heroes belong to it.", "source": "CH", "page": 1},
+    {"id": "champions_term_cheering-crowds", "name": "Cheering Crowds", "kind": "keyword", "summary": "Return a Bystander from your Victory Pile to the bottom of the Bystander Stack to play the card a second time in a row.", "source": "CH", "page": 1},
+    {"id": "champions_term_versatile", "name": "Versatile", "kind": "keyword", "summary": "Take the card's number as Recruit or as Attack when you play it, never split between them.", "source": "CH", "page": 1},
+    {"id": "champions_term_demolish", "name": "Demolish", "kind": "keyword", "summary": "Reveal the Hero Deck's top card once, noting its cost, and put it on the bottom. Each player then discards a card of that cost from their hand.", "source": "CH", "page": 2}
+  ]
+}
