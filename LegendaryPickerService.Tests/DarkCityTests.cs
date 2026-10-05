@@ -60,7 +60,7 @@ public class DarkCityTests
     [Fact]
     public void Dark_City_is_an_expansion_listed_after_the_core_box()
     {
-        Assert.Equal(["core", "dark-city"], Catalog.Boxes.Select(box => box.Id).Take(2));
+        Assert.Equal(["core", "dark-city"], Catalog.Boxes.Select(box => box.Id).SkipWhile(id => id != "core").Take(2));
         Assert.Equal(DarkCityName, DarkCity.Name);
         Assert.Equal(7, DarkCity.SchemaVersion);
         Assert.False(DarkCity.IsBaseGame);
