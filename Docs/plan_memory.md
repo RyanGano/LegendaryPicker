@@ -25,6 +25,7 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 - Owner decision D-shards (2026-10-04, #107): the Shard tokens are double-sided, so Guardians of the Galaxy's 18 tokens cover Unite the Shards' 30 Shards. A setup lays out all the Shard tokens from the included boxes, with no stand-ins, and never drops the Scheme for lack of Shards.
 - `/api/boxes` lists base games first, then by release month (`about.released`, #106); the draw still uses catalog (file) order.
 - Secret Wars Volume 1 (#113) is integrated with its Sidekick stack. Schemes can now draw other Masterminds (`setup.outsideMasterminds`): Dark Alliance sets one aside, Master of Tyrants shuffles 4 Tactics each of 3 into the Villain Deck. Build an Army of Annihilation is left out pending an owner decision: its "Annihilation Wave" Henchmen exist in no box.
+- Secret Wars Volume 2 (#117) is integrated: 16 Heroes, 6 Villain Groups, 3 Henchman Groups, 4 Masterminds and 7 of 8 Schemes, read from the C1-linked card faces (`Card`). Sinister Ambitions is left out pending an owner decision: it adds 10 Ambition cards, which no box models yet (D4 excludes only the Ambition play mode). Secret Wars sets 3 other Masterminds aside (its Twists 1-3 add one each); The Mark of Khonshu requires Khonshu Guardians and adds one outside Hero to the Villain Deck. The box reuses Secret Wars Volume 1, Paint the Town Red and Dark City terms, so those exclusion tests also drop it.
 
 ## Research artifacts
 

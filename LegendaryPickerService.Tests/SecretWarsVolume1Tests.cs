@@ -378,7 +378,7 @@ public class SecretWarsVolume1Tests
     [InlineData(5)]
     public void Without_Secret_Wars_Volume_1_included_it_changes_no_draw(int players)
     {
-        using var withoutIt = new DirectoryWithout("secret-wars-volume-1.json");
+        using var withoutIt = new DirectoryWithout("secret-wars-volume-1.json", "secret-wars-volume-2.json");
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy"];
 
@@ -409,14 +409,15 @@ public class SecretWarsVolume1Tests
             .Concat(setup.Heroes.Select(hero => hero.Id))
             .Concat(setup.OutsideHeroes.Select(outside => outside.Hero.Id));
 
-    // A copy of the box directory without one box file, so a catalog loaded from it has never seen that box.
+    // A copy of the box directory without one box file and the later box that reuses its terms, so a catalog loaded from
+    // it has never seen that box.
     private sealed class DirectoryWithout : IDisposable
     {
         public string Path { get; } = Directory.CreateTempSubdirectory("legendary-without-").FullName;
 
-        public DirectoryWithout(string fileName)
+        public DirectoryWithout(string fileName, string dependent)
         {
-            foreach (var file in Directory.GetFiles(BoxCatalog.DefaultDirectory, "*.json").Where(file => System.IO.Path.GetFileName(file) != fileName))
+            foreach (var file in Directory.GetFiles(BoxCatalog.DefaultDirectory, "*.json").Where(file => System.IO.Path.GetFileName(file) != fileName && System.IO.Path.GetFileName(file) != dependent))
             {
                 File.Copy(file, System.IO.Path.Combine(Path, System.IO.Path.GetFileName(file)));
             }
