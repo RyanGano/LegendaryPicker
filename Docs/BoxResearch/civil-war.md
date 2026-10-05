@@ -1,6 +1,6 @@
 # Civil War (August 2016)
 
-**Research status: Partial.** The official insert verifies 370 cards, several new mechanisms, and shared-stack additions; full Scheme/Mastermind setup lines and card metadata still need card-level checks.
+**Research status: Partial; integrated (#125).** The official insert verifies 370 cards, several new mechanisms, and shared-stack additions. The Scheme Setup lines, Always Leads and part uses were read from the C1-linked card faces and the C2 card index and are in `LegendaryPickerService/Data/Boxes/civil-war.json`; per-face copy counts remain as indexed below.
 
 ## Sources
 

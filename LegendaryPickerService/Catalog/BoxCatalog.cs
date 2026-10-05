@@ -444,7 +444,8 @@ public sealed partial class BoxCatalog
     }
 
     // A part listed twice would say nothing more. A base game's rules can use only parts it supplies, since a
-    // setup can include it alone.
+    // setup can include it alone. Special Bystanders come into a setup with their box, so the parts they use must be
+    // the box's own too, and only a box with Bystanders has them.
     private static void ValidateUses(string path, Box box)
     {
         foreach (var (owner, uses) in UseLists(box))
@@ -461,6 +462,20 @@ public sealed partial class BoxCatalog
             {
                 throw new InvalidDataException(
                     $"{path}: base game {box.Id} uses {WireName(use.Part)} in setup.uses but has no components.{WireName(use.Part)}.");
+            }
+        }
+
+        if (box.BystanderUses is { } bystanderUses)
+        {
+            if (!(box.Components.Bystanders?.Value > 0))
+            {
+                throw new InvalidDataException($"{path}: box {box.Id} has bystanderUses but no components.bystanders.");
+            }
+
+            foreach (var use in bystanderUses.Where(use => !(box.Components.Supplies(use.Part)?.Value > 0)))
+            {
+                throw new InvalidDataException(
+                    $"{path}: box {box.Id} uses {WireName(use.Part)} in bystanderUses but has no components.{WireName(use.Part)}.");
             }
         }
     }
@@ -493,7 +508,8 @@ public sealed partial class BoxCatalog
     // The parts each card, and a base game's rules, list as used.
     private static IEnumerable<(string Owner, IReadOnlyList<PartUse> Uses)> UseLists(Box box) =>
         Cards(box).Where(card => card.Uses is not null).Select(card => ($"{card.Id} uses", card.Uses!))
-            .Concat(box.Setup is { } setup ? [("setup.uses", setup.Uses)] : []);
+            .Concat(box.Setup is { } setup ? [("setup.uses", setup.Uses)] : [])
+            .Concat(box.BystanderUses is { } bystanderUses ? [("bystanderUses", bystanderUses)] : []);
 
     private static IEnumerable<ICard> Cards(Box box) =>
         box.Heroes.Cast<ICard>().Concat(box.VillainGroups).Concat(box.HenchmanGroups).Concat(box.Masterminds).Concat(box.Schemes);
@@ -523,6 +539,12 @@ public sealed partial class BoxCatalog
                     throw new InvalidDataException(
                         $"{path}: {scheme.Id} has a Hero count of {count.AtLeast ?? count.Exactly}; atLeast is at least 1 and exactly at least 0.");
                 }
+            }
+
+            if (scheme.Setup.TeamSplit is { } split && (split.Value.Length < 2 || split.Value.Any(count => count < 1)))
+            {
+                throw new InvalidDataException(
+                    $"{path}: {scheme.Id} has setup.teamSplit [{string.Join(", ", split.Value)}]; it lists at least 2 teams, each with at least 1 Hero.");
             }
 
             var required = new HashSet<string>();
@@ -616,12 +638,14 @@ public sealed partial class BoxCatalog
         var outside = (setup.OutsideHeroes ?? [])
             .SelectMany(rule => Enumerable.Repeat(rule, rule.Count.SingleOrDefault(count => count.Players?.Contains(players) ?? true)?.Value ?? 0))
             .ToList();
-        var deckSlots = required.Count + counts.Sum(count => count.AtLeast ?? count.Exactly!.Value);
+        var split = setup.TeamSplit?.Value ?? [];
+        var deckSlots = required.Count + counts.Sum(count => count.AtLeast ?? count.Exactly!.Value) + split.Sum();
         var named = required.Concat(outside.Select(rule => rule.Hero).OfType<string>().Select(id => heroes[id])).Distinct().ToList();
 
         // Stand-ins of each team and Hero Name, including none and a Hero Name of their own, enough of each
-        // to fill every slot.
-        var teams = counts.Select(count => count.Team).Concat(outside.Select(rule => rule.Team)).Concat(named.Select(hero => hero.Team)).Append(null).Distinct();
+        // to fill every slot, with a team of their own for each team a team split asks for.
+        var teams = counts.Select(count => count.Team).Concat(outside.Select(rule => rule.Team)).Concat(named.Select(hero => hero.Team))
+            .Concat(split.Select((_, index) => $"stand-in-team_{index}")).Append(null).Distinct();
         var names = counts.Select(count => count.HeroName).Concat(outside.Select(rule => rule.HeroName)).Concat(outside.SelectMany(rule => rule.HeroNames?.Value ?? [])).Concat(named.Select(hero => hero.NameOfHero)).Append(null).Distinct().ToList();
         var standIns = teams
             .SelectMany(team => names.SelectMany(name => Enumerable.Range(0, deckSlots + outside.Count).Select(_ => (Team: team, Name: name))))
@@ -642,6 +666,7 @@ public sealed partial class BoxCatalog
         return required.Select((_, i) => ($"setup.requiredHeroes[{i}]", setup with { RequiredHeroes = Except(required, i) }))
             .Concat(counts.Select((_, i) => ($"setup.heroCounts[{i}]", setup with { HeroCounts = Except(counts, i) })))
             .Concat(setup.DistinctHeroNames?.Value == true ? [("setup.distinctHeroNames", setup with { DistinctHeroNames = null })] : [])
+            .Concat(setup.TeamSplit is not null ? [("setup.teamSplit", setup with { TeamSplit = null })] : [])
             .Concat(outside.Select((_, i) => ($"setup.outsideHeroes[{i}]", setup with { OutsideHeroes = Except(outside, i) })));
     }
 
@@ -782,6 +807,7 @@ public sealed partial class BoxCatalog
             foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);
             foreach (var count in effect.HeroCounts ?? []) yield return ($"{scheme.Id} setup.heroCounts", count.Source);
             if (effect.DistinctHeroNames is { } distinct) yield return ($"{scheme.Id} setup.distinctHeroNames", distinct.Source);
+            if (effect.TeamSplit is { } split) yield return ($"{scheme.Id} setup.teamSplit", split.Source);
             foreach (var outside in effect.OutsideMasterminds ?? [])
             {
                 if (outside.Tactics is { } tactics) yield return ($"{scheme.Id} setup.outsideMasterminds.tactics", tactics.Source);

@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 7,
+  "id": "civil-war",
+  "name": "Civil War",
+  "ruleset": "firstEdition",
+  "catalogSource": "CW p.2; C1; C2",
+  "about": { "released": { "value": "2016-08", "source": "Q" } },
+  "sources": [
+    { "key": "CW", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Civil_War_Rules.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "CW p.2" },
+    "villainGroupCards": { "value": 8, "source": "CW p.2" },
+    "henchmanGroupCards": { "value": 10, "source": "CW p.2" },
+    "schemeTwists": { "value": 0, "source": "CW p.2" },
+    "bystanders": { "value": 7, "source": "CW p.2" },
+    "wounds": { "value": 15, "source": "CW p.2" },
+    "sidekicks": { "value": 15, "source": "CW p.2" }
+  },
+  "bystanderUses": [{ "part": "sidekicks", "source": "Card" }],
+  "heroes": [
+    { "id": "civil-war_hero_captain-america-secret-avenger", "name": "Captain America, Secret Avenger", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["civil-war_term_divided-card", "secret-wars-volume-1_term_sidekick"], "uses": [{ "part": "sidekicks", "source": "Card" }] },
+    { "id": "civil-war_hero_cloak-and-dagger", "name": "Cloak & Dagger", "heroName": "Cloak", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["civil-war_term_divided-card", "civil-war_term_phasing"] },
+    { "id": "civil-war_hero_daredevil-civil-war", "name": "Daredevil (Civil War)", "heroName": "Daredevil", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["civil-war_term_divided-card", "secret-wars-volume-1_term_sidekick"], "uses": [{ "part": "sidekicks", "source": "Card" }] },
+    { "id": "civil-war_hero_falcon", "name": "Falcon", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["civil-war_term_divided-card", "secret-wars-volume-1_term_sidekick"], "uses": [{ "part": "sidekicks", "source": "Card" }] },
+    { "id": "civil-war_hero_goliath", "name": "Goliath", "team": "core_term_avengers", "classes": ["core_term_strength", "core_term_tech"], "terms": ["civil-war_term_divided-card", "civil-war_term_size-changing"] },
+    { "id": "civil-war_hero_hercules", "name": "Hercules", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["civil-war_term_divided-card", "core_term_rescue-a-bystander"] },
+    { "id": "civil-war_hero_hulkling", "name": "Hulkling", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_strength"], "terms": ["civil-war_term_divided-card", "civil-war_term_size-changing"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "civil-war_hero_luke-cage", "name": "Luke Cage", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["civil-war_term_divided-card", "civil-war_term_fortify"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "civil-war_hero_patriot", "name": "Patriot", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["civil-war_term_divided-card"] },
+    { "id": "civil-war_hero_peter-parker", "name": "Peter Parker", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["civil-war_term_divided-card", "core_term_rescue-a-bystander", "secret-wars-volume-1_term_sidekick"], "uses": [{ "part": "sidekicks", "source": "Card" }] },
+    { "id": "civil-war_hero_speedball", "name": "Speedball", "team": "civil-war_term_new-warriors", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["civil-war_term_divided-card", "core_term_rescue-a-bystander"] },
+    { "id": "civil-war_hero_stature", "name": "Stature", "team": "core_term_avengers", "classes": ["core_term_strength", "core_term_tech"], "terms": ["civil-war_term_divided-card", "civil-war_term_size-changing"] },
+    { "id": "civil-war_hero_storm-and-black-panther", "name": "Storm & Black Panther", "heroName": "Storm", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["civil-war_term_divided-card", "secret-wars-volume-1_term_sidekick"], "uses": [{ "part": "sidekicks", "source": "Card" }] },
+    { "id": "civil-war_hero_tigra", "name": "Tigra", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["civil-war_term_divided-card", "secret-wars-volume-1_term_sidekick"], "uses": [{ "part": "sidekicks", "source": "Card" }] },
+    { "id": "civil-war_hero_vision", "name": "Vision", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["civil-war_term_divided-card", "civil-war_term_size-changing", "civil-war_term_phasing"] },
+    { "id": "civil-war_hero_wiccan", "name": "Wiccan", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["civil-war_term_divided-card", "civil-war_term_phasing"] }
+  ],
+  "villainGroups": [
+    { "id": "civil-war_villain_csa-special-marshals", "name": "CSA Special Marshals", "terms": ["core_term_escape", "core_term_fight", "civil-war_term_size-changing", "civil-war_term_fortify"] },
+    { "id": "civil-war_villain_great-lakes-avengers", "name": "Great Lakes Avengers", "terms": ["core_term_escape", "core_term_fight", "civil-war_term_size-changing", "civil-war_term_fortify"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "civil-war_villain_heroes-for-hire", "name": "Heroes for Hire", "terms": ["core_term_escape", "core_term_fight", "dark-city_term_bribe", "civil-war_term_fortify"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "civil-war_villain_registration-enforcers", "name": "Registration Enforcers", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "civil-war_term_size-changing"] },
+    { "id": "civil-war_villain_s-h-i-e-l-d-elite", "name": "S.H.I.E.L.D. Elite", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "civil-war_term_shield-clearance", "civil-war_term_fortify"], "uses": [{ "part": "wounds", "source": "Card" }, { "part": "officers", "source": "Card" }] },
+    { "id": "civil-war_villain_superhuman-registration-act", "name": "Superhuman Registration Act", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "civil-war_term_size-changing", "civil-war_term_fortify"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "civil-war_villain_thunderbolts", "name": "Thunderbolts", "terms": ["core_term_escape", "core_term_fight", "civil-war_term_fortify"], "uses": [{ "part": "wounds", "source": "Card" }] }
+  ],
+  "henchmanGroups": [
+    { "id": "civil-war_henchman_cape-killers", "name": "Cape-Killers", "terms": ["core_term_fight", "civil-war_term_shield-clearance"] },
+    { "id": "civil-war_henchman_mandroid", "name": "Mandroid", "terms": ["core_term_fight"] }
+  ],
+  "masterminds": [
+    {
+      "id": "civil-war_mastermind_authoritarian-iron-man",
+      "name": "Authoritarian Iron Man",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "civil-war_term_fortify"],
+      "alwaysLeads": { "groupId": "civil-war_villain_superhuman-registration-act", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "civil-war_mastermind_baron-helmut-zemo",
+      "name": "Baron Helmut Zemo",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
+      "alwaysLeads": { "groupId": "civil-war_villain_thunderbolts", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "civil-war_mastermind_maria-hill-director-of-s-h-i-e-l-d",
+      "name": "Maria Hill, Director of S.H.I.E.L.D.",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "civil-war_term_shield-clearance"],
+      "uses": [{ "part": "officers", "source": "Card" }],
+      "alwaysLeads": { "groupId": "civil-war_villain_s-h-i-e-l-d-elite", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "civil-war_mastermind_misty-knight",
+      "name": "Misty Knight",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "dark-city_term_bribe", "civil-war_term_fortify"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
+      "alwaysLeads": { "groupId": "civil-war_villain_heroes-for-hire", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "civil-war_mastermind_ragnarok",
+      "name": "Ragnarok",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "alwaysLeads": { "groupId": "civil-war_villain_registration-enforcers", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "civil-war_scheme_avengers-vs-x-men",
+      "name": "Avengers vs. X-Men",
+      "terms": ["core_term_scheme-twist"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
+      "setup": {
+        "twists": [{ "players": null, "value": 9, "source": "Card" }],
+        "heroes": [{ "players": null, "value": 6, "source": "Card" }],
+        "teamSplit": { "value": [3, 3], "source": "Card" }
+      }
+    },
+    {
+      "id": "civil-war_scheme_dark-reign-of-h-a-m-m-e-r-officers",
+      "name": "Dark Reign of H.A.M.M.E.R. Officers",
+      "terms": ["core_term_scheme-twist", "civil-war_term_shield-clearance"],
+      "uses": [{ "part": "officers", "source": "Card" }],
+      "setup": {
+        "twists": [{ "players": null, "value": 7, "source": "Card" }]
+      }
+    },
+    {
+      "id": "civil-war_scheme_epic-super-hero-civil-war",
+      "name": "Epic Super Hero Civil War",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": [1, 2, 3], "value": 9, "source": "Card" }, { "players": [4, 5], "value": 6, "source": "Card" }],
+        "heroes": [{ "players": [1], "value": 4, "source": "Card" }]
+      }
+    },
+    {
+      "id": "civil-war_scheme_imprison-unregistered-superhumans",
+      "name": "Imprison Unregistered Superhumans",
+      "terms": ["core_term_scheme-twist", "civil-war_term_fortify"],
+      "setup": {
+        "twists": [{ "players": null, "value": 11, "source": "Card" }]
+      }
+    },
+    {
+      "id": "civil-war_scheme_nitro-the-supervillain-threatens-crowds",
+      "name": "Nitro the Supervillain Threatens Crowds",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    },
+    {
+      "id": "civil-war_scheme_predict-future-crime",
+      "name": "Predict Future Crime",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 6, "source": "Card" }],
+        "extraVillainGroups": [{ "players": null, "value": 1, "source": "Card" }]
+      }
+    },
+    {
+      "id": "civil-war_scheme_reveal-heroes-secret-identities",
+      "name": "Reveal Heroes' Secret Identities",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 6, "source": "Card" }],
+        "heroes": [{ "players": null, "value": 7, "source": "Card" }]
+      }
+    },
+    {
+      "id": "civil-war_scheme_united-states-split-by-civil-war",
+      "name": "United States Split by Civil War",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 10, "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "civil-war_term_new-warriors", "name": "New Warriors", "kind": "team", "summary": "A Hero team. In Civil War its one member is Speedball.", "source": "CW", "page": 1 },
+    { "id": "civil-war_term_divided-card", "name": "Divided Card", "kind": "keyword", "summary": "One card printed as two halves. You pick a half when you play it and use only that half; before then it has both halves' classes, teams and Hero Names. Sort it by its left half.", "source": "CW", "page": 1 },
+    { "id": "civil-war_term_size-changing", "name": "Size-Changing", "kind": "keyword", "summary": "The card is 2 cheaper to recruit, or the Villain 2 cheaper to fight, once you have played a card of the shown class this turn.", "source": "CW", "page": 1 },
+    { "id": "civil-war_term_phasing", "name": "Phasing", "kind": "keyword", "summary": "On your turn you may trade this card in your hand for the top card of your deck. That trade is neither playing nor drawing a card.", "source": "CW", "page": 1 },
+    { "id": "civil-war_term_fortify", "name": "Fortify", "kind": "keyword", "summary": "A Villain parks itself on a named place, such as the Mastermind or a stack, and blocks or changes it until a player defeats that Villain. A place already fortified stays as it is.", "source": "CW", "page": 2 },
+    { "id": "civil-war_term_shield-clearance", "name": "S.H.I.E.L.D. Clearance", "kind": "keyword", "summary": "To fight this enemy you also discard a S.H.I.E.L.D. Hero, or two for Double Clearance.", "source": "CW", "page": 2 }
+  ]
+}
