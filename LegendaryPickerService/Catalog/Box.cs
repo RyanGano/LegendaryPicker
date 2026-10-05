@@ -218,6 +218,8 @@ public sealed record SetupStep(string Label, string Source);
 // 3 of another (#125). OwnTactics is how many of the drawn Mastermind's own Tactics the Scheme shuffles into the
 // Villain Deck as Villains, as Noir's Hidden Heart of Darkness does (#130). Wounds sets the Wound stack to a size
 // whatever the player count, as Anti-Mutant Hatred's 30 Wounds (#132); a Scheme sets it this way or per player, not both.
+// ExtraHenchmanCards is how many cards each Henchman Group the Scheme's ExtraHenchmanGroups adds puts in the Villain Deck,
+// in place of the usual count, Solo's 3 or HenchmanCards, as Scavenge Alien Weaponry's 10 Smugglers even in Solo (#134).
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -243,7 +245,8 @@ public sealed record SchemeSetup(
     IReadOnlyList<OutsideMasterminds>? OutsideMasterminds = null,
     Sourced<int[]>? TeamSplit = null,
     Sourced<int>? OwnTactics = null,
-    Sourced<int>? Wounds = null)
+    Sourced<int>? Wounds = null,
+    Sourced<int>? ExtraHenchmanCards = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 // Cards, for a Henchman Group, is how many of its cards go in the Villain Deck in place of the usual count, as

@@ -67,6 +67,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\Horde\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Schemes give their extra Henchman Group a card count of its own, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\ExtraHenchmen\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\ExtraHenchmen\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Schemes set cards of a group beside them, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\CardsBeside\*.json" CopyToOutputDirectory="PreserveNewest" />
