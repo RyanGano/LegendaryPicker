@@ -301,5 +301,11 @@ Box id `civil-war`, file `LegendaryPickerService/Data/Boxes/civil-war.json`, a F
 
 **Parts cards use (Card, #87):** Sidekicks: Captain America, Secret Avenger, Daredevil (Civil War), Falcon, Peter Parker, Storm & Black Panther, Tigra, and the Aspiring Hero Bystander (`bystanderUses`: whenever Civil War is included its Bystanders are, so the Sidekick stack is laid out). Wounds: Hulkling, Luke Cage, Great Lakes Avengers, Heroes for Hire, S.H.I.E.L.D. Elite, Superhuman Registration Act, Thunderbolts, Baron Helmut Zemo, Misty Knight and Avengers vs. X-Men. Officers: S.H.I.E.L.D. Elite, Maria Hill and Dark Reign of H.A.M.M.E.R. Officers. Research: [`Docs/BoxResearch/civil-war.md`](BoxResearch/civil-war.md).
 
+## Deadpool (October 2016)
+
+Box id `deadpool`, file `LegendaryPickerService/Data/Boxes/deadpool.json`, a First Edition expansion (#128). Counts (DP p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 Masterminds and 4 Schemes; no new Henchman Group or shared stack. Names, teams and classes come from C1; the Scheme Setup lines, Always Leads and part uses were read from the card faces C1 links and are cited `Card`. The box's Deadpool Hero is named Deadpool (Mercs for Money) (Hero Name Deadpool) because the core box has a Deadpool Hero. Deadpool Kills the Marvel Universe and Deadpool Writes a Scheme need a Deadpool Hero; both the core box's and this box's count (most literal reading of the card). Deadpool Kills the Marvel Universe uses 4 Heroes with 2 players and 6 or 5 Twists. Deadpool Wants a Chimichanga puts 12 Bystanders in the Villain Deck and adds a Villain Group with 3-5 players. Everybody Hates Deadpool needs at least 1 Mercs for Money Hero. Revenge and the Chimichanga and Bounty play rules are not setup.
+
+**Parts cards use (Card, #87):** Wounds: Deadpool (It'll Grow Back), Deadpool's Friends (Sluggo), Evil Deadpool Corpse (Wolverinepool), both Masterminds, and the Chimichanga, Writes a Scheme and Everybody Hates Deadpool Twists. Other Hero and Villain faces gave no further parts. Research: [`Docs/BoxResearch/deadpool.md`](BoxResearch/deadpool.md).
+
 ## Open questions
 

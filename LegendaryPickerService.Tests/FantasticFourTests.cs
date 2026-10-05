@@ -51,7 +51,7 @@ public class FantasticFourTests
     [Fact]
     public void Fantastic_Four_is_an_expansion_listed_after_Dark_City()
     {
-        Assert.Equal(["core", "dark-city", "fantastic-four"], Catalog.Boxes.Select(box => box.Id).SkipWhile(id => id != "core").Take(3));
+        Assert.Equal(["core", "dark-city", "fantastic-four"], Catalog.Boxes.Select(box => box.Id).Where(id => id is "core" or "dark-city" or "fantastic-four"));
         Assert.Equal(FantasticFourName, FantasticFour.Name);
         Assert.Equal(7, FantasticFour.SchemaVersion);
         Assert.False(FantasticFour.IsBaseGame);
