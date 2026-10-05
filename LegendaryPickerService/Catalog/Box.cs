@@ -76,7 +76,7 @@ public sealed record SourceLink(string Key, string Url);
 // Scheme draws from rather than a stack players use (#119). Bindings, Madame HYDRA and New Recruits are
 // the Villainous stacks; the Villains rulebook says they are not the same cards as Wounds and Officers,
 // so each is a stack of its own. Shards are tokens rather than cards, but a setup lays out their supply the
-// same way.
+// same way. Horrors are X-Men's Horror cards (XM p.2), a stack a setup lays out only when a drawn card plays them (#132).
 public sealed record BoxComponents(
     Sourced<int> HeroCards,
     Sourced<int> VillainGroupCards,
@@ -90,7 +90,8 @@ public sealed record BoxComponents(
     Sourced<int>? MadameHydra = null,
     Sourced<int>? NewRecruits = null,
     Sourced<int>? Shards = null,
-    Sourced<int>? Ambitions = null)
+    Sourced<int>? Ambitions = null,
+    Sourced<int>? Horrors = null)
 {
     // What the box adds to a part's stack, or null when it adds none.
     public Sourced<int>? Supplies(Part part) => part switch
@@ -103,13 +104,15 @@ public sealed record BoxComponents(
         Part.NewRecruits => NewRecruits,
         Part.Shards => Shards,
         Part.Ambitions => Ambitions,
+        Part.Horrors => Horrors,
         _ => throw new ArgumentOutOfRangeException(nameof(part), part, null),
     };
 }
 
 // A part of the game a card or a base game's rules can use, which a setup lays out only when something in it
 // uses the part (owner decision D-uses, #87). So far the parts are the shared stacks other than Bystanders,
-// which every setup lays out, the Shard supply (#95) and the Ambition cards (#119). Written camelCase in box files ("madameHydra").
+// which every setup lays out, the Shard supply (#95), the Ambition cards (#119) and the Horrors (#132). Written camelCase in box
+// files ("madameHydra").
 public enum Part
 {
     Wounds,
@@ -120,6 +123,7 @@ public enum Part
     NewRecruits,
     Shards,
     Ambitions,
+    Horrors,
 }
 
 // A part a card or a base game's rules use, with its source: Card for a card whose text gains, captures or
@@ -156,18 +160,23 @@ public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> 
 
 public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null) : ICard;
 
-// Setup is null for a Mastermind whose card does not change the setup.
+// Setup is null for a Mastermind whose card does not change the setup. AlsoLeads is a second group its card always
+// leads, picked from several, as Deathbird leads a Shi'ar Henchman Group as well as the Shi'ar Imperial Guard (#132).
 public sealed record Mastermind(
     string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup AlwaysLeads, SetupEffects? Setup = null,
-    IReadOnlyList<PartUse>? Uses = null) : ICard;
+    IReadOnlyList<PartUse>? Uses = null, AlsoLeadsGroup? AlsoLeads = null) : ICard;
 
 public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source);
+
+// Groups of one type a Mastermind always leads one of, besides its Always Leads group: the setup takes one of them
+// that is drawn already, or draws one of those included into a slot, which it fills as the Always Leads group does.
+public sealed record AlsoLeadsGroup(IReadOnlyList<string> GroupIds, GroupType GroupType, string Source);
 
 public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms, SchemeSetup Setup, IReadOnlyList<PartUse>? Uses = null) : ICard
 {
     // A Scheme also uses the stacks its Setup line sizes or moves cards from, so its uses needn't repeat them.
     public IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part)
-        .Concat(Setup.WoundsPerPlayer is null ? [] : [Part.Wounds])
+        .Concat(Setup.WoundsPerPlayer is null && Setup.Wounds is null ? [] : [Part.Wounds])
         .Concat(Setup.BindingsPerPlayer is null ? [] : [Part.Bindings])
         .Concat((Setup.Moves ?? []).Select(move => CardMove.PartOf(move.Card)).OfType<Part>())
         .Distinct();
@@ -207,7 +216,8 @@ public sealed record SetupStep(string Label, string Source);
 // BindingsPerPlayer set the size of those stacks. TeamSplit asks for Heroes of as many different teams as it has
 // values, that many of each team, with the teams left to the draw, as Avengers vs. X-Men's 3 Heroes of one team and
 // 3 of another (#125). OwnTactics is how many of the drawn Mastermind's own Tactics the Scheme shuffles into the
-// Villain Deck as Villains, as Noir's Hidden Heart of Darkness does (#130).
+// Villain Deck as Villains, as Noir's Hidden Heart of Darkness does (#130). Wounds sets the Wound stack to a size
+// whatever the player count, as Anti-Mutant Hatred's 30 Wounds (#132); a Scheme sets it this way or per player, not both.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -232,10 +242,13 @@ public sealed record SchemeSetup(
     IReadOnlyList<CardsBeside>? CardsBeside = null,
     IReadOnlyList<OutsideMasterminds>? OutsideMasterminds = null,
     Sourced<int[]>? TeamSplit = null,
-    Sourced<int>? OwnTactics = null)
+    Sourced<int>? OwnTactics = null,
+    Sourced<int>? Wounds = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
-public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
+// Cards, for a Henchman Group, is how many of its cards go in the Villain Deck in place of the usual count, as
+// Alien Brood Encounters adds 10 Brood even in Solo (#132); it is left out to use the usual count.
+public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source, int? Cards = null);
 
 // Cards of one group a Scheme sets beside it, whether or not the group is drawn: Count cards at each player
 // count, multiplied by the player count when PerPlayer. Card names the one card of the group to set aside, such

@@ -1,0 +1,376 @@
+{
+  "kind": "setup",
+  "players": 2,
+  "ruleset": "firstEdition",
+  "scheme": {
+    "id": "x-men_scheme_horror-of-horrors",
+    "name": "Horror of Horrors",
+    "terms": [
+      "core_term_scheme-twist",
+      "x-men_term_horror"
+    ],
+    "box": "X-Men"
+  },
+  "mastermind": {
+    "id": "x-men_mastermind_onslaught",
+    "name": "Onslaught",
+    "terms": [
+      "core_term_always-leads",
+      "core_term_fight",
+      "core_term_master-strike",
+      "core_term_mastermind-tactic",
+      "x-men_term_dominate",
+      "x-men_term_horror"
+    ],
+    "box": "X-Men"
+  },
+  "villainGroups": [
+    {
+      "id": "x-men_villain_dark-descendants",
+      "name": "Dark Descendants",
+      "terms": [
+        "core_term_ambush",
+        "core_term_escape",
+        "core_term_fight",
+        "x-men_term_x-gene",
+        "x-men_term_dominate",
+        "x-men_term_trap"
+      ],
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_villain_hellfire-club",
+      "name": "Hellfire Club",
+      "terms": [
+        "core_term_ambush",
+        "core_term_escape",
+        "core_term_master-strike",
+        "secret-wars-volume-1_term_multiple-masterminds",
+        "x-men_term_dominate",
+        "x-men_term_trap"
+      ],
+      "box": "X-Men"
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "id": "x-men_henchman_shi-ar-patrol-craft",
+      "name": "Shi'ar Patrol Craft",
+      "terms": [
+        "core_term_fight",
+        "x-men_term_soaring-flight"
+      ],
+      "box": "X-Men"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "x-men_hero_colossus-and-wolverine",
+      "name": "Colossus & Wolverine",
+      "terms": [
+        "core_term_x-men",
+        "core_term_instinct",
+        "core_term_strength",
+        "civil-war_term_divided-card",
+        "x-men_term_x-gene",
+        "x-men_term_berserk",
+        "x-men_term_soaring-flight"
+      ],
+      "box": "X-Men"
+    },
+    {
+      "id": "core_hero_wolverine",
+      "name": "Wolverine",
+      "terms": [
+        "core_term_x-men",
+        "core_term_instinct"
+      ],
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "x-men_hero_x-23",
+      "name": "X-23",
+      "terms": [
+        "core_term_x-men",
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_tech",
+        "x-men_term_x-gene",
+        "x-men_term_berserk"
+      ],
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_hero_havok",
+      "name": "Havok",
+      "terms": [
+        "core_term_x-men",
+        "core_term_ranged",
+        "core_term_tech",
+        "x-men_term_x-gene",
+        "x-men_term_berserk",
+        "x-men_term_lightshow"
+      ],
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_hero_kitty-pryde",
+      "name": "Kitty Pryde",
+      "terms": [
+        "core_term_x-men",
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_ranged",
+        "core_term_tech",
+        "x-men_term_x-gene",
+        "x-men_term_soaring-flight"
+      ],
+      "box": "X-Men"
+    }
+  ],
+  "villainDeck": {
+    "twists": 6,
+    "masterStrikes": 5,
+    "villainCards": 16,
+    "henchmanCards": 10,
+    "bystanders": 2,
+    "outsideHeroCards": 0,
+    "total": 39
+  },
+  "heroDeck": {
+    "heroCards": 70,
+    "total": 70
+  },
+  "twistsBesideScheme": 0,
+  "stacks": {
+    "wounds": 30,
+    "officers": 30,
+    "bystanders": 37,
+    "horrors": 20
+  },
+  "playerDeck": {
+    "agents": 8,
+    "troopers": 4
+  },
+  "moves": [],
+  "outsideHeroes": [],
+  "outsideHenchmen": [],
+  "cardsBeside": [],
+  "steps": [
+    "Optional: play the Epic side instead; it also brings Horrors into the game"
+  ],
+  "notes": [
+    {
+      "text": "Onslaught adds a setup step: Optional: play the Epic side instead; it also brings Horrors into the game",
+      "citation": "XM p.2",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_XMen_Rules.pdf",
+      "box": "X-Men"
+    },
+    {
+      "text": "Onslaught always leads Dark Descendants",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    }
+  ],
+  "glossary": [
+    {
+      "id": "core_term_x-men",
+      "name": "X-Men",
+      "kind": "team",
+      "summary": "A Hero team. In the core box its members are Cyclops, Emma Frost, Gambit, Rogue, Storm and Wolverine.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_covert",
+      "name": "Covert",
+      "kind": "class",
+      "summary": "A Hero class of fighters who prefer trickery and careful plans to open force.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_instinct",
+      "name": "Instinct",
+      "kind": "class",
+      "summary": "A Hero class of fighters who trust their gut and their senses in close combat.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_ranged",
+      "name": "Ranged",
+      "kind": "class",
+      "summary": "A Hero class of fighters who deal damage from a distance, by any kind of projected power.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_strength",
+      "name": "Strength",
+      "kind": "class",
+      "summary": "A Hero class of fighters whose power is might, whether of body or of will and leadership.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_tech",
+      "name": "Tech",
+      "kind": "class",
+      "summary": "A Hero class of fighters whose power comes from gear and science rather than the body.",
+      "citation": "R p.18",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "civil-war_term_divided-card",
+      "name": "Divided Card",
+      "kind": "keyword",
+      "summary": "One card printed as two halves. You pick a half when you play it and use only that half; before then it has both halves' classes, teams and Hero Names. Sort it by its left half.",
+      "citation": "CW p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Civil_War_Rules.pdf",
+      "box": "Civil War"
+    },
+    {
+      "id": "core_term_always-leads",
+      "name": "Always Leads",
+      "kind": "keyword",
+      "summary": "Names the one Villain or Henchman Group this Mastermind brings to every game. That group takes one of the setup's group slots; random draws fill the rest.",
+      "citation": "R p.6",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_ambush",
+      "name": "Ambush",
+      "kind": "keyword",
+      "summary": "Triggers as this Villain arrives in the city from the Villain Deck. When its arrival shoves another Villain out of the city, resolve that escape before this effect.",
+      "citation": "R p.9",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_escape",
+      "name": "Escape",
+      "kind": "keyword",
+      "summary": "Triggers when this Villain is shoved past the final city space and escapes, in addition to the standard escape penalties.",
+      "citation": "R p.9",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_fight",
+      "name": "Fight",
+      "kind": "keyword",
+      "summary": "Triggers when a player spends enough Attack to defeat this card.",
+      "citation": "R p.13",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_master-strike",
+      "name": "Master Strike",
+      "kind": "keyword",
+      "summary": "Drawing a Master Strike from the Villain Deck makes the Mastermind act in person: resolve the Master Strike line on its card. The Strike card is then KO'd.",
+      "citation": "R p.10",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_mastermind-tactic",
+      "name": "Mastermind Tactic",
+      "kind": "keyword",
+      "summary": "Beating the Mastermind's Attack wins one of its four face-down Tactics at random: keep it for Victory Points and do its Fight effect. Take all four to win.",
+      "citation": "R p.14",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "core_term_scheme-twist",
+      "name": "Scheme Twist",
+      "kind": "keyword",
+      "summary": "Drawing a Twist from the Villain Deck advances the evil plan: resolve the Twist line on the Scheme card. The Twist is then KO'd, unless the Scheme sends it elsewhere.",
+      "citation": "R p.10",
+      "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf",
+      "box": "Marvel Legendary First Edition core box"
+    },
+    {
+      "id": "secret-wars-volume-1_term_multiple-masterminds",
+      "name": "Multiple Masterminds",
+      "kind": "keyword",
+      "summary": "Some escaping Villains and some Schemes put another Mastermind in play. Players must beat every Mastermind to win, and each one resolves its own Master Strike.",
+      "citation": "SW1 p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules_Secret_Wars_v1.pdf",
+      "box": "Secret Wars Volume 1"
+    },
+    {
+      "id": "x-men_term_x-gene",
+      "name": "X-Gene",
+      "kind": "keyword",
+      "summary": "A bonus you get only if your discard pile already holds a card of the class shown. Each card gives its bonus once, however many matches you have.",
+      "citation": "XM p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_XMen_Rules.pdf",
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_term_berserk",
+      "name": "Berserk",
+      "kind": "keyword",
+      "summary": "Throw away the top card of your deck and gain Attack equal to the Attack printed on it.",
+      "citation": "XM p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_XMen_Rules.pdf",
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_term_soaring-flight",
+      "name": "Soaring Flight",
+      "kind": "keyword",
+      "summary": "A Hero recruited with this skips your discard pile: it waits aside until the turn ends, then goes into your new hand as a bonus card.",
+      "citation": "XM p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_XMen_Rules.pdf",
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_term_lightshow",
+      "name": "Lightshow",
+      "kind": "keyword",
+      "summary": "Play two or more Lightshow cards in a turn to use one Lightshow bonus among them, never more than one a turn.",
+      "citation": "XM p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_XMen_Rules.pdf",
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_term_dominate",
+      "name": "Dominate",
+      "kind": "keyword",
+      "summary": "An enemy keeps Heroes tucked under it and grows 1 stronger for each. Beating it deals those Heroes out to the players' discard piles.",
+      "citation": "XM p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_XMen_Rules.pdf",
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_term_trap",
+      "name": "Trap",
+      "kind": "keyword",
+      "summary": "A Villain Deck card that sets a task for the turn instead of entering the city. Meet it to score the Trap, or KO it and take its penalty.",
+      "citation": "XM p.1",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_XMen_Rules.pdf",
+      "box": "X-Men"
+    },
+    {
+      "id": "x-men_term_horror",
+      "name": "Horror",
+      "kind": "keyword",
+      "summary": "Extra hazard cards that make the game harder. Epic Masterminds and some Schemes play them, and players may add any number at the start.",
+      "citation": "XM p.2",
+      "link": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_XMen_Rules.pdf",
+      "box": "X-Men"
+    }
+  ]
+}

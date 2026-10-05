@@ -180,6 +180,48 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Theory]
+    [InlineData("[]", "core_mastermind_dr-doom alsoLeads lists []")]
+    [InlineData("""["core_henchman_sentinel", "core_henchman_sentinel"]""", "core_mastermind_dr-doom alsoLeads lists [core_henchman_sentinel, core_henchman_sentinel]")]
+    [InlineData("""["core_henchman_doombot-legion"]""", "core_mastermind_dr-doom alsoLeads lists [core_henchman_doombot-legion]")]
+    [InlineData("""["core_henchman_test-bots"]""", "core_mastermind_dr-doom references henchman group core_henchman_test-bots")]
+    public void Rejects_other_Always_Leads_groups_that_give_no_real_choice(string groupIds, string expected)
+    {
+        WriteCoreBox(core => Mastermind(core, "core_mastermind_dr-doom")["alsoLeads"] =
+            JsonNode.Parse($$"""{ "groupIds": {{groupIds}}, "groupType": "henchman", "source": "Card" }"""));
+
+        AssertRejected(expected);
+    }
+
+    [Theory]
+    [InlineData("core_villain_skrulls", "villain", 8, "requires core_villain_skrulls with 8 cards; a card count is for a henchman group and at least 1.")]
+    [InlineData("core_henchman_sentinel", "henchman", 0, "requires core_henchman_sentinel with 0 cards; a card count is for a henchman group and at least 1.")]
+    [InlineData("core_henchman_sentinel", "henchman", 11, "requires 11 cards of core_henchman_sentinel, which has 10.")]
+    public void Rejects_a_required_group_card_count_no_Villain_Deck_can_hold(string groupId, string groupType, int cards, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["requiredGroups"] =
+            JsonNode.Parse($$"""[{ "groupId": "{{groupId}}", "groupType": "{{groupType}}", "source": "Card", "cards": {{cards}} }]"""));
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
+    [Fact]
+    public void Rejects_a_Wound_stack_size_beside_a_per_player_one()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["wounds"] = JsonNode.Parse("""{ "value": 30, "source": "Card" }"""));
+
+        AssertRejected("core_scheme_legacy-virus has setup.wounds 30; it is at least 1, and a Scheme sets either setup.wounds or setup.woundsPerPlayer.");
+    }
+
+    [Fact]
+    public void Rejects_a_Wound_stack_size_below_1()
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_portals-to-the-dark-dimension")["setup"]!["wounds"] =
+            JsonNode.Parse("""{ "value": 0, "source": "Card" }"""));
+
+        AssertRejected("core_scheme_portals-to-the-dark-dimension has setup.wounds 0");
+    }
+
+    [Theory]
     [InlineData("  ", "setup.solo has a play rule with no label")]
     [InlineData("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen",
         "setup.solo has a 16-word play rule label; labels are at most 15 words")]

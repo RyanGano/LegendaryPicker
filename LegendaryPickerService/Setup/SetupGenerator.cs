@@ -387,7 +387,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     Stack(Part.Bindings, (plan.Bindings ?? Supply(Part.Bindings)) - plan.MovedOut(Pile.Bindings)),
                     Stack(Part.MadameHydra, Supply(Part.MadameHydra)),
                     Stack(Part.NewRecruits, Supply(Part.NewRecruits)),
-                    Stack(Part.Shards, Supply(Part.Shards))),
+                    Stack(Part.Shards, Supply(Part.Shards)),
+                    Stack(Part.Horrors, Supply(Part.Horrors))),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value, choices),
                 plan.Moves,
                 outside,
@@ -455,6 +456,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 wounds = woundsPerPlayer.Value * players;
                 notes.Add(Card($"{schemeWord} sets the Wound stack to {woundsPerPlayer.Value} per player", woundsPerPlayer.Source));
+            }
+
+            if (effect.Wounds is { } woundStack)
+            {
+                wounds = woundStack.Value;
+                notes.Add(Card($"{schemeWord} sets the Wound stack to {woundStack.Value}", woundStack.Source));
             }
 
             int? bindings = null;
@@ -674,10 +681,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             bool InDeck(string id, GroupType type) => GroupIds().Contains(id) && DeckCards(plan, id, type) > 0;
             int Drawable(IEnumerable<string> ids, GroupType type) => ids.Count(id => InDeck(id, type));
             var leads = plan.Mastermind.AlwaysLeads;
+            var alsoLeads = plan.Mastermind.AlsoLeads;
 
             // A Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
             return required.All(group => InDeck(group.GroupId, group.GroupType))
                 && (IgnoresAlwaysLeads || InDeck(leads.GroupId, leads.GroupType))
+                && (IgnoresAlwaysLeads || alsoLeads is null || alsoLeads.GroupIds.Any(id => InDeck(id, alsoLeads.GroupType)))
                 && plan.Beside.All(draw => GroupIds().Contains(draw.Rule.GroupId)
                     && Beside(plan, draw.Rule.GroupId) <= GroupCards(draw.Rule.GroupId, draw.Rule.GroupType))
                 && Slots(plan.VillainGroups, GroupType.Villain) <= Drawable(_villainGroups.Select(g => g.Id), GroupType.Villain)
@@ -691,6 +700,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     ? rules.Solo.HenchmanCards.Value
                     : henchmanGroupCards))
                 && plan.Bystanders + plan.MovedOut(Pile.Bystanders) <= Supply(components => components.Bystanders)
+                && (plan.Wounds ?? 0) <= Supply(components => components.Wounds)
                 && plan.MovedOut(Pile.Wounds) <= (plan.Wounds ?? Supply(components => components.Wounds))
                 && plan.MovedOut(Pile.Officers) <= Supply(components => components.Officers)
                 && plan.MovedOut(Pile.Sidekicks) <= Supply(components => components.Sidekicks)
@@ -711,7 +721,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 var group = pool.Single(g => id(g) == required.GroupId);
                 chosen.Add(group);
-                notes.Add(Note($"{SchemeWord(scheme)} requires {name(group)}", required.Source, BoxOf(scheme.Id)));
+                notes.Add(Note(
+                    required.Cards is { } cards
+                        ? $"{SchemeWord(scheme)} requires {name(group)}, {cards} of its {CardName(CardKind.Henchman, cards)} in the {_terms.VillainDeck}"
+                        : $"{SchemeWord(scheme)} requires {name(group)}",
+                    required.Source, BoxOf(scheme.Id)));
             }
 
             var leads = mastermind.AlwaysLeads;
@@ -739,6 +753,32 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
                         notes.Add(Note($"{mastermind.Name} always leads {name(group)}", rules.Rulings.AlwaysLeadsFillsSlot, rulesBox));
                     }
+                }
+            }
+
+            // The Mastermind's second group, one of several: one already chosen serves, or one is drawn into a slot left.
+            // Solo's note that it ignores Always Leads covers this group too.
+            if (mastermind.AlsoLeads is { } also && also.GroupType == type && !IgnoresAlwaysLeads)
+            {
+                var options = pool.Where(g => also.GroupIds.Contains(id(g))).ToList();
+                var group = chosen.FirstOrDefault(options.Contains);
+                if (group is null && chosen.Count >= slots)
+                {
+                    notes.Add(Note(
+                        $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(name))}, so {mastermind.Name}'s other Always Leads group is dropped",
+                        rules.Rulings.RequiredGroupDisplacesAlwaysLeads, rulesBox));
+                }
+                else
+                {
+                    if (group is null)
+                    {
+                        group = DrawOne(options);
+                        chosen.Add(group);
+                    }
+
+                    notes.Add(Note(
+                        $"{mastermind.Name} also always leads {name(group)}, one of {string.Join(" and ", options.Select(name))}",
+                        also.Source, BoxOf(mastermind.Id)));
                 }
             }
 
@@ -837,9 +877,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // How many cards a group puts in the Villain Deck when the Scheme sets none of them beside it: all of a
         // Villain Group, and of a Henchman Group the Scheme's count, Solo's, or all of it.
+        // A Henchman Group the Scheme requires with a count of its own puts that many in.
         private int ShareOfDeck(SetupPlan plan, string groupId, GroupType type) => type == GroupType.Villain
             ? GroupCards(groupId, type)
-            : plan.HenchmanCards ?? (Solo ? rules.Solo.HenchmanCards.Value : GroupCards(groupId, type));
+            : (plan.Scheme.Setup.RequiredGroups ?? []).FirstOrDefault(group => group.GroupId == groupId)?.Cards
+                ?? plan.HenchmanCards ?? (Solo ? rules.Solo.HenchmanCards.Value : GroupCards(groupId, type));
 
         // How many cards a group puts in the Villain Deck once the Scheme has set some of them beside it: its share,
         // or what is left of the group when that is fewer. With none left the group can't be drawn there.
@@ -956,6 +998,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         Part.NewRecruits => "New Recruit",
         Part.Shards => "Shard",
         Part.Ambitions => "Ambition",
+        Part.Horrors => "Horror",
         _ => throw new ArgumentOutOfRangeException(nameof(part), part, null),
     };
 

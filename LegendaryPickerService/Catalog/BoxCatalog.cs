@@ -140,6 +140,7 @@ public sealed partial class BoxCatalog
             ValidatePlayerCounts(path, box);
             ValidateMoves(path, box);
             ValidateHeroRules(path, box);
+            ValidateLeadsAndCounts(path, box);
 
             // A setup can include a base game and no expansion, so a base game's stacks can't be left to
             // an expansion; a stack it forgot to list would otherwise come out as 0 or be left out.
@@ -198,6 +199,20 @@ public sealed partial class BoxCatalog
                 if (found != kind)
                 {
                     throw new InvalidDataException($"{path}: {owner} references {groupId} as a {kind} group, but it is a {found} group.");
+                }
+            }
+
+            // A required Henchman Group can't put more cards in the Villain Deck than it has.
+            foreach (var scheme in box.Schemes)
+            {
+                foreach (var group in (scheme.Setup.RequiredGroups ?? []).Where(group => group.Cards is not null))
+                {
+                    var size = files.Single(file => file.Box.Id == group.GroupId.Split('_')[0]).Box.Components.HenchmanGroupCards.Value;
+                    if (group.Cards > size)
+                    {
+                        throw new InvalidDataException(
+                            $"{path}: {scheme.Id} requires {group.Cards} cards of {group.GroupId}, which has {size}.");
+                    }
                 }
             }
         }
@@ -439,6 +454,44 @@ public sealed partial class BoxCatalog
                 {
                     throw new InvalidDataException($"{path}: {scheme.Id} sets a card of {beside.GroupId} beside it with an empty card name.");
                 }
+            }
+        }
+    }
+
+    // A Mastermind's other Always Leads groups name at least one group, each once and none its Always Leads group, so
+    // the choice is real. A required group's own card count is for a Henchman Group and at least 1. A Scheme sets the
+    // Wound stack to a size or per player, not both, and to at least 1 Wound.
+    private static void ValidateLeadsAndCounts(string path, Box box)
+    {
+        foreach (var mastermind in box.Masterminds)
+        {
+            if (mastermind.AlsoLeads is not { } also)
+            {
+                continue;
+            }
+
+            if (also.GroupIds.Count == 0 || also.GroupIds.Distinct().Count() != also.GroupIds.Count || also.GroupIds.Contains(mastermind.AlwaysLeads.GroupId))
+            {
+                throw new InvalidDataException(
+                    $"{path}: {mastermind.Id} alsoLeads lists [{string.Join(", ", also.GroupIds)}]; it lists at least one group, each once, and not its alwaysLeads group.");
+            }
+        }
+
+        foreach (var scheme in box.Schemes)
+        {
+            foreach (var group in scheme.Setup.RequiredGroups ?? [])
+            {
+                if (group.Cards is { } cards && (group.GroupType != GroupType.Henchman || cards < 1))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} requires {group.GroupId} with {cards} cards; a card count is for a henchman group and at least 1.");
+                }
+            }
+
+            if (scheme.Setup.Wounds is { } wounds && (wounds.Value < 1 || scheme.Setup.WoundsPerPlayer is not null))
+            {
+                throw new InvalidDataException(
+                    $"{path}: {scheme.Id} has setup.wounds {wounds.Value}; it is at least 1, and a Scheme sets either setup.wounds or setup.woundsPerPlayer.");
             }
         }
     }
@@ -730,6 +783,7 @@ public sealed partial class BoxCatalog
 
     private static IEnumerable<(string Owner, string GroupId, GroupType GroupType)> GroupReferences(Box box) =>
         box.Masterminds.Select(m => (m.Id, m.AlwaysLeads.GroupId, m.AlwaysLeads.GroupType))
+            .Concat(box.Masterminds.SelectMany(m => (m.AlsoLeads?.GroupIds ?? []).Select(id => (m.Id, id, m.AlsoLeads!.GroupType))))
             .Concat(box.Schemes.SelectMany(s =>
                 (s.Setup.RequiredGroups ?? []).Select(g => (s.Id, g.GroupId, g.GroupType))
                     .Concat((s.Setup.CardsBeside ?? []).Select(b => (s.Id, b.GroupId, b.GroupType)))));
@@ -799,6 +853,7 @@ public sealed partial class BoxCatalog
         foreach (var mastermind in box.Masterminds)
         {
             yield return ($"{mastermind.Id} alwaysLeads", mastermind.AlwaysLeads.Source);
+            if (mastermind.AlsoLeads is { } also) yield return ($"{mastermind.Id} alsoLeads", also.Source);
         }
 
         foreach (var scheme in box.Schemes)
@@ -807,6 +862,7 @@ public sealed partial class BoxCatalog
             if (effect.AllowedPlayerCounts is { } allowed) yield return ($"{scheme.Id} setup.allowedPlayerCounts", allowed.Source);
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
+            if (effect.Wounds is { } woundStack) yield return ($"{scheme.Id} setup.wounds", woundStack.Source);
             if (effect.BindingsPerPlayer is { } bindings) yield return ($"{scheme.Id} setup.bindingsPerPlayer", bindings.Source);
             foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
@@ -862,6 +918,7 @@ public sealed partial class BoxCatalog
         ("bystanders", components.Bystanders), ("wounds", components.Wounds), ("officers", components.Officers),
         ("sidekicks", components.Sidekicks), ("bindings", components.Bindings), ("madameHydra", components.MadameHydra),
         ("newRecruits", components.NewRecruits), ("shards", components.Shards), ("ambitions", components.Ambitions),
+        ("horrors", components.Horrors),
     ];
 
     // The stacks a base game of each ruleset lays out (R p.22; VIL p.5).

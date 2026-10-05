@@ -80,10 +80,10 @@ A Mastermind a Scheme draws besides the setup's own, from the other included Mas
 _Avoid_: Second Mastermind as a setup term; a rule note can use the Scheme's own words.
 
 **Always Leads group**:
-The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability.
+The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability. A few Masterminds also always lead one of several groups, as Deathbird leads the Shi'ar Imperial Guard and a Shi'ar Henchman Group; that second group fills a slot the same way.
 
 **Part in use**:
-A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack or Unite the Shards fills the Shard supply; the rules use the stacks players recruit from. Special Bystanders, which every setup shuffles in with the other Bystanders, bring the parts they use too, so Civil War's Aspiring Hero, which gains a Sidekick when rescued, lays the Sidekick stack out whenever Civil War is included (#125). A card that uses a part no included box supplies is dropped before the draw.
+A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, X-Men's Horrors, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack or Unite the Shards fills the Shard supply; the rules use the stacks players recruit from. Special Bystanders, which every setup shuffles in with the other Bystanders, bring the parts they use too, so Civil War's Aspiring Hero, which gains a Sidekick when rescued, lays the Sidekick stack out whenever Civil War is included (#125). A card that uses a part no included box supplies is dropped before the draw.
 
 **Stand-in**:
 A part a setup lays out in place of one no included box supplies, as an expansion's rules allow when it is played without its own ruleset's base game: with the core box and Fear Itself alone, Wounds stand in for Bindings and S.H.I.E.L.D. Officers for Madame HYDRA (Fear Itself insert, owner decision #110). The player can use the real cards if they have them.
@@ -92,7 +92,10 @@ A part a setup lays out in place of one no included box supplies, as an expansio
 The shared pool of Shard tokens Guardians of the Galaxy adds (18 double-sided tokens, GG p.2), which players, Villains and Masterminds gain from. It is a part in use like a stack: laid out only when a drawn card gains or spends Shards, holding all the Shard tokens the included boxes supply (the tokens' two sides cover even Unite the Shards' 30 Shards, owner decision #107).
 
 **Required group**:
-A group a Scheme names as required (for example, Skrulls). Like an Always Leads group, it fills a group slot.
+A group a Scheme names as required (for example, Skrulls). Like an Always Leads group, it fills a group slot. A Scheme can say how many of a required Henchman Group's cards go in, as Alien Brood Encounters adds all 10 Brood even in Solo.
+
+**Horrors**:
+X-Men's 20 Horror cards, which make a game harder (XM p.2). A part in use: the setup lays them out only when a drawn card plays them, as Horror of Horrors does. A Mastermind's Epic side also brings them in, but the setup draws the normal side and only offers the Epic side as a step.
 
 **Villain Group**:
 A named set of 8 Villain cards selected as one setup component.

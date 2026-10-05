@@ -120,7 +120,7 @@ export type CardsBeside = {
 
 // A stack is left out when nothing in the setup uses it: its rules use their recruit stacks (S.H.I.E.L.D.
 // Officers, or Madame HYDRA and New Recruits), and a drawn card brings any other stack it uses, the Shard
-// supply included. Every setup lays out Bystanders.
+// supply and X-Men's Horrors included. Every setup lays out Bystanders.
 export type SetupStacks = {
   wounds?: number
   officers?: number
@@ -130,6 +130,7 @@ export type SetupStacks = {
   madameHydra?: number
   newRecruits?: number
   shards?: number
+  horrors?: number
 }
 
 // A part the drawn cards use that no included box supplies, and the part that stands in for it, null when none

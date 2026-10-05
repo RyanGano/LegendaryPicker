@@ -340,6 +340,7 @@ const STACK_NAMES: Record<keyof SetupStacks, string> = {
   bystanders: 'Bystanders',
   sidekicks: 'Sidekicks',
   shards: 'Shards',
+  horrors: 'Horrors',
 }
 const STACKS = Object.entries(STACK_NAMES) as [keyof SetupStacks, string][]
 
