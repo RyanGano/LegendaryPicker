@@ -265,6 +265,27 @@ public class CivilWarTests
         }
     }
 
+    // The team split's search stays fast with every box included, where many teams could take each side (#93). One scripted
+    // draw at 5 players. It takes about 0.3 s alone and took about 3 s before #93, so the 1.5 s budget leaves room for a slow
+    // runner yet still fails on a return to multi-second draws.
+    [Fact]
+    public void Avengers_vs_X_Men_draws_quickly_with_every_box()
+    {
+        var everyBox = Catalog.Boxes.Select(box => box.Id).ToList();
+        var schemes = Catalog.Boxes.SelectMany(box => box.Schemes)
+            .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(5) ?? true)
+            .ToList();
+        var random = new ScriptedRandom(schemes.FindIndex(scheme => scheme.Name == "Avengers vs. X-Men"));
+
+        var timer = System.Diagnostics.Stopwatch.StartNew();
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(5, everyBox, random));
+        timer.Stop();
+
+        Assert.Equal("Avengers vs. X-Men", setup.Scheme.Name);
+        Assert.Equal([3, 3], setup.Heroes.GroupBy(hero => hero.Team).Select(team => team.Count()));
+        Assert.InRange(timer.ElapsedMilliseconds, 0, 1500);
+    }
+
     // The Officer case: Dark Reign of H.A.M.M.E.R. Officers and Maria Hill make Officers Villains, so they lay the Officers out.
     [Theory]
     [InlineData("Dark Reign of H.A.M.M.E.R. Officers", Ragnarok)]
