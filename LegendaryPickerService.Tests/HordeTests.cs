@@ -6,8 +6,8 @@ namespace LegendaryPickerService.Tests;
 // The X-Men capabilities (#132), using Fixtures/Horde: a copy of the core box and a made-up expansion. Its Mastermind,
 // Test Commander, always leads Test Guard and also one of Test Drones and Test Gunships (alsoLeads). Catalog order puts
 // its Schemes after the core box's 8 (6 in Solo): Test Patrol (plain), Test Infestation (requires all 10 Test Swarm
-// as an extra Henchman Group), Test Nest (requires Test Swarm with no extra slot), Test Riot (a 20-Wound stack), Test
-// Flood (a 40-Wound stack, more than the core box's 30, so never drawn) and Test Dread (uses Horrors). Mastermind draw
+// as an extra Henchman Group), Test Nest (requires Test Swarm with no extra slot), Test Riot (a 20-Wound stack) and Test
+// Dread (uses Horrors). Mastermind draw
 // 0 is Dr. Doom and 4 is Test Commander.
 public sealed class HordeTests
 {
@@ -82,17 +82,6 @@ public sealed class HordeTests
         Assert.Equal("Test Riot", setup.Scheme.Name);
         Assert.Equal(20, setup.Stacks.Wounds);
         Assert.Contains(new RuleNote("Scheme sets the Wound stack to 20", "Card", null, FixtureName), setup.Notes);
-    }
-
-    // The core box's 8 Schemes and the fixture's 6, less Test Flood, whose 40 Wounds no included box can supply.
-    [Fact]
-    public void A_Scheme_whose_Wound_stack_is_larger_than_the_boxes_supply_is_dropped()
-    {
-        var random = new ScriptedRandom();
-
-        Generator.Generate(2, Boxes, random);
-
-        Assert.Equal(13, random.Options[0]);
     }
 
     [Fact]

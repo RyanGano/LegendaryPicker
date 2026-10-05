@@ -71,15 +71,6 @@
       }
     },
     {
-      "id": "heroes_scheme_test-impossible-corps",
-      "name": "Test Impossible Corps",
-      "terms": ["core_term_scheme-twist"],
-      "setup": {
-        "twists": [{ "players": null, "value": 8, "source": "Card" }],
-        "heroCounts": [{ "heroName": "Test Nova", "exactly": 3, "source": "Card" }]
-      }
-    },
-    {
       "id": "heroes_scheme_test-unique",
       "name": "Test Unique",
       "terms": ["core_term_scheme-twist"],
@@ -117,12 +108,12 @@
       }
     },
     {
-      "id": "heroes_scheme_test-missing-guest",
-      "name": "Test Missing Guest",
+      "id": "heroes_scheme_test-guest-star",
+      "name": "Test Guest Star",
       "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
-        "outsideHeroes": [{ "to": "villainDeck", "heroName": "Test Nobody", "count": [{ "players": null, "value": 1, "source": "Card" }] }]
+        "outsideHeroes": [{ "to": "villainDeck", "heroName": "Test Visitor", "count": [{ "players": null, "value": 1, "source": "Card" }], "otherBox": { "source": "R p.3" } }]
       }
     }
   ],

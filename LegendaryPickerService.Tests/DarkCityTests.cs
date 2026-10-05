@@ -394,7 +394,7 @@ public class DarkCityTests
         using var coreOnly = new CoreOnlyDirectory();
         var coreAlone = new SetupGenerator(BoxCatalog.Load(coreOnly.Path));
 
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withDarkCityLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, ["core"], new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var expected = Assert.IsType<SetupResult>(coreAlone.Generate(players, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));

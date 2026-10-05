@@ -24,6 +24,7 @@
       "name": "Test Rescue",
       "terms": ["core_term_scheme-twist"],
       "setup": {
+        "allowedPlayerCounts": { "value": [1, 2, 3, 4], "source": "Card" },
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "moves": [
           {
@@ -42,6 +43,7 @@
       "name": "Test Henchman Army",
       "terms": ["core_term_scheme-twist"],
       "setup": {
+        "allowedPlayerCounts": { "value": [2, 3, 4, 5], "source": "Card" },
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "moves": [
           { "card": "henchman", "to": "heroDeck", "count": [{ "players": null, "value": 6, "source": "Card" }] }
@@ -78,17 +80,6 @@
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "moves": [
           { "card": "bystander", "to": "besideScheme", "count": [{ "players": null, "value": 3, "source": "Card" }] }
-        ]
-      }
-    },
-    {
-      "id": "moves_scheme_test-betrayal",
-      "name": "Test Betrayal",
-      "terms": ["core_term_scheme-twist"],
-      "setup": {
-        "twists": [{ "players": null, "value": 8, "source": "Card" }],
-        "moves": [
-          { "card": "twist", "to": "setAside", "count": [{ "players": null, "value": 4, "source": "Card" }] }
         ]
       }
     }

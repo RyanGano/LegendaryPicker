@@ -2,27 +2,33 @@ using LegendaryPickerService.Catalog;
 
 namespace LegendaryPickerService.Setup;
 
-// Draws a random legal setup the way players would at the table: the Scheme from those allowed
-// at the player count, then a Mastermind that can complete it, then the groups they require, then
-// the remaining Villain and Henchman Groups, then any Henchman Groups the Scheme draws outside the
+// Draws a random legal setup the way players would at the table: the Scheme from every included Scheme its card
+// allows at the player count, then a Mastermind from those the Scheme doesn't rule out, then the groups they require,
+// then the remaining Villain and Henchman Groups, then any Henchman Groups the Scheme draws outside the
 // Villain Deck, then the Heroes, then any Heroes the Scheme draws outside the Hero Deck, then any other
 // Masterminds the Scheme draws. Each draw goes
 // through the IRandomSource and picks from the options left, in catalog order, so a fixed sequence of draws
 // always gives the same setup.
 //
+// Nothing is checked per draw (D-scheme-first, #138): every requirement a card makes is met inside its own box, which
+// the loader enforces, so any Scheme of the included boxes can be set up with any Mastermind it doesn't exclude. A
+// requirement the box data allows from another box is still in the setup when that box isn't included, since the
+// player owns the card, unless the card gives a substitute, which is drawn from the included cards instead. A part a
+// required card uses that no included box supplies is laid out from the base game that has it.
+//
 // When the included boxes follow more than one ruleset, the Scheme and Mastermind decide which rules apply
 // (D-mixed, #85, #88): a pair with a card of the mixing base game's ruleset (a Villains Plot or Commander)
 // follows that base game's rules, and any other pair follows its own ruleset's base game. Every other card is
 // drawn from every included box whatever the pair, so no Hero or group is locked out by it, and since the pair
-// fixed the rules first, no later draw can change the rules the counts came from. A pair whose rules have no
-// included base game can't be set up and is dropped before the draw.
+// fixed the rules first, no later draw can change the rules the counts came from. A Mastermind whose pair with the
+// drawn Scheme has no included base game for its rules can't be set up with it, so it isn't drawn.
 //
 // A Scheme can set cards of a group beside it whether or not the group is drawn (#84). Those cards fill no group
 // slot (VIL p.17); a drawn group puts only what is left of it in the Villain Deck, and one with nothing left can't
 // be drawn there.
 //
-// The setup lays out a stack only when its rules or a drawn card use it (D-uses, #87). A card that uses a stack
-// no included box of its own ruleset supplies can't be set up, so it is dropped before the draw.
+// The setup lays out a stack only when its rules or a drawn card use it (D-uses, #87). A Hero, group or Mastermind
+// that uses a stack no included box of its own ruleset supplies isn't drawn, unless the setup requires it.
 //
 // An expansion can be played without a base game of its own ruleset when its box says how (OtherRuleset, D-heroic,
 // #110): its Schemes and Masterminds then follow the included base game's rules, and each part it uses that no
@@ -32,6 +38,9 @@ namespace LegendaryPickerService.Setup;
 public sealed class SetupGenerator(BoxCatalog catalog)
 {
     public const string CoreBoxId = "core";
+
+    // The source key of the owner decision that every requirement is met, from another box when need be (#138).
+    private const string SchemeFirst = "D-scheme-first";
 
     public GenerationResult Generate(int players, IRandomSource random) => Generate(players, [CoreBoxId], random);
 
@@ -71,7 +80,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                         $"Supported player counts are 1 (Solo) and {string.Join(", ", rules.PlayerCounts.Select(r => r.Players))}.");
                 }
 
-                return new TableDraw(boxes, rulesBox, mixingBox, baseRulesets, standIns, rules, players, row, random);
+                return new TableDraw(catalog.Boxes, boxes, rulesBox, mixingBox, baseRulesets, standIns, rules, players, row, random);
             })
             .ToList();
 
@@ -102,37 +111,38 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             : null;
     }
 
-    // Draws the Scheme from those some set of rules can complete, then the Mastermind from the completions
-    // across every set of rules, in catalog order; the rest of the draw follows that pair's rules.
+    // Draws the Scheme from every included Scheme its card allows at the player count, then the Mastermind from the
+    // included ones the Scheme doesn't exclude and some set of rules covers, in catalog order; the rest of the draw
+    // follows that pair's rules.
     private static GenerationResult Run(IReadOnlyList<Box> boxes, IReadOnlyList<TableDraw> draws, int players, IRandomSource random)
     {
-        var masterminds = boxes.SelectMany(box => box.Masterminds).ToList();
-        List<(TableDraw Draw, SetupPlan Plan)> Completions(Scheme scheme) => draws
-            .SelectMany(draw => draw.Completions(scheme).Select(plan => (Draw: draw, Plan: plan)))
-            .OrderBy(completion => masterminds.IndexOf(completion.Plan.Mastermind!))
-            .ToList();
-
         var schemes = boxes.SelectMany(box => box.Schemes)
             .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(players) ?? true)
-            .Where(scheme => Completions(scheme).Count > 0)
             .ToList();
-        if (schemes.Count == 0)
+        var masterminds = draws[0].Masterminds;
+        if (schemes.Count == 0 || masterminds.Count == 0)
         {
             return new NoEligibleScheme(players);
         }
 
-        var schemeDrawn = schemes[random.Next(schemes.Count)];
-        var completions = Completions(schemeDrawn);
-        var (draw, plan) = completions[random.Next(completions.Count)];
-        return draw.Finish(plan);
+        var scheme = schemes[random.Next(schemes.Count)];
+        var excluded = (scheme.ExcludesMasterminds ?? []).Select(exclusion => exclusion.MastermindId).ToHashSet();
+        var pairs = masterminds
+            .Where(mastermind => !excluded.Contains(mastermind.Id))
+            .Select(mastermind => (Mastermind: mastermind, Draw: draws.FirstOrDefault(draw => draw.Follows(scheme, mastermind))))
+            .Where(pair => pair.Draw is not null)
+            .ToList();
+        var (drawn, draw) = pairs[random.Next(pairs.Count)];
+        return draw!.Finish(scheme, drawn);
     }
 
-    // One set of rules a table draw can follow: the included boxes, which it draws every card from, the base
-    // game whose rules they are, the mixing base game when the included boxes follow more than one ruleset and
+    // One set of rules a table draw can follow: every loaded box, which holds the cards a Scheme requires from a box
+    // the setup doesn't include, the included boxes, which it draws every other card from, the base game whose rules
+    // they are, the mixing base game when the included boxes follow more than one ruleset and
     // one of them has mixing rules, the rulesets of the included base games, the stand-ins of the parts no
     // included box supplies, and the random source. row is the player-count table row, or null in Solo.
     private sealed class TableDraw(
-        IReadOnlyList<Box> boxes, Box rulesBox, Box? mixingBox, IReadOnlySet<Ruleset> baseRulesets,
+        IReadOnlyList<Box> catalogBoxes, IReadOnlyList<Box> boxes, Box rulesBox, Box? mixingBox, IReadOnlySet<Ruleset> baseRulesets,
         IReadOnlyDictionary<Part, ActiveStandIn> standIns, SetupRules rules, int players, PlayerCountSetup? row,
         IRandomSource random)
     {
@@ -140,7 +150,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).Where(group => Supplied(boxes, standIns, group)).ToList();
         private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).Where(hero => Supplied(boxes, standIns, hero)).ToList();
         private readonly List<Mastermind> _masterminds = boxes.SelectMany(box => box.Masterminds).Where(mastermind => Supplied(boxes, standIns, mastermind)).ToList();
-        private readonly Dictionary<(string Scheme, int Heroes), bool> _heroesFit = [];
 
         // The words the ruleset's rulebook uses, for rule notes. A setup whose drawn cards follow both rulesets
         // switches to the mixed words once they are drawn.
@@ -150,39 +159,28 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         private bool IgnoresAlwaysLeads => Solo && rules.Solo.IgnoresAlwaysLeads.Value;
 
-        // The Scheme's completions under these rules: each Mastermind that pairs with it here and leaves a legal
-        // setup, as the Scheme's plan with the Mastermind's effects added, since a Mastermind's setup effects
-        // can ask for more cards. A pair is completed here only when these are the rules it follows.
-        public List<SetupPlan> Completions(Scheme scheme)
-        {
-            if (!Supplied(boxes, standIns, scheme))
-            {
-                return [];
-            }
+        // The included Masterminds a setup can draw: those whose parts the included boxes supply.
+        public IReadOnlyList<Mastermind> Masterminds => _masterminds;
 
-            // A Mastermind whose Always Leads group is not included cannot be set up legally.
-            var plan = Plan(scheme);
-            return _masterminds
-                .Where(mastermind => IgnoresAlwaysLeads || GroupIds().Contains(mastermind.AlwaysLeads.GroupId))
-                .Where(mastermind => RulesOf(scheme, mastermind) == rulesBox.Ruleset)
-                .Select(mastermind => WithMastermind(plan, mastermind))
-                .Where(Fits)
-                .ToList();
-        }
+        // Whether a Scheme and Mastermind pair follows these rules.
+        public bool Follows(Scheme scheme, Mastermind mastermind) => RulesOf(scheme, mastermind) == rulesBox.Ruleset;
 
-        // Draws the rest of the setup for a Scheme and Mastermind pair these rules complete.
-        public SetupResult Finish(SetupPlan plan)
+        // Draws the rest of the setup for a Scheme and Mastermind pair that follows these rules.
+        public SetupResult Finish(Scheme scheme, Mastermind mastermind)
         {
-            var mastermind = plan.Mastermind!;
+            var plan = WithMastermind(Plan(scheme), mastermind);
             var slotNotes = new List<RuleNote>();
 
             // A group the Scheme sets every card of beside it has none left for the Villain Deck, so it isn't drawn there.
+            // A required group whose card gives a substitute is replaced by the group drawn for it.
+            var required = new Dictionary<string, RequiredGroup>(plan.Required);
             var villainGroups = FillSlots(
-                _villainGroups.Where(g => DeckCards(plan, g.Id, GroupType.Villain) > 0).ToList(), g => g.Id, g => g.Name, GroupType.Villain,
-                plan.VillainGroups, plan.Scheme, mastermind, slotNotes);
+                _villainGroups.Where(g => DeckCards(plan, g.Id, GroupType.Villain) > 0).ToList(), GroupType.Villain,
+                plan.VillainGroups, plan.Scheme, mastermind, required, slotNotes);
             var henchmanGroups = FillSlots(
-                _henchmanGroups.Where(g => DeckCards(plan, g.Id, GroupType.Henchman) > 0).ToList(), g => g.Id, g => g.Name, GroupType.Henchman,
-                plan.HenchmanGroups, plan.Scheme, mastermind, slotNotes);
+                _henchmanGroups.Where(g => DeckCards(plan, g.Id, GroupType.Henchman) > 0).ToList(), GroupType.Henchman,
+                plan.HenchmanGroups, plan.Scheme, mastermind, required, slotNotes);
+            plan = plan with { Required = required };
             var extraHenchmen = ExtraHenchmanGroups(plan, henchmanGroups.Select(g => g.Id).ToList());
             // Each Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
             var outsideHenchmen = plan.OutsideHenchmen
@@ -204,7 +202,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 {
                     var (id, type) = (draw.Rule.GroupId, draw.Rule.GroupType);
                     var fromDeck = inDeck.Contains(id) ? ShareOfDeck(plan, id, type) - DeckCards(plan, id, type) : 0;
-                    return new GroupCardsBeside(GroupOf(id), draw.Rule.Card, draw.Count, fromDeck);
+                    return new GroupCardsBeside(CatalogGroup(id), draw.Rule.Card, draw.Count, fromDeck);
                 })
                 .ToList();
 
@@ -239,6 +237,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var used = rulesUse.Select(use => use.Part).Concat(cardParts.Select(StandInFor).OfType<Part>()).ToHashSet();
             var stoodIn = standIns.Values.Where(active => cardParts.Contains(active.Rule.Part)).ToList();
 
+            // A part only a required card uses can be one no included box supplies: the first loaded box that has it,
+            // a base game first, lays it out, as the player owns it (D-scheme-first, #138).
+            var borrowed = used
+                .Where(part => !stackBoxes.Any(box => box.Components.Supplies(part)?.Value > 0))
+                .ToDictionary(part => part, part => catalogBoxes.OrderByDescending(box => box.IsBaseGame).First(box => box.Components.Supplies(part)?.Value > 0));
+
             // A mixed setup's notes name its parts in both rulesets' words, so its plan's notes are written again.
             var notes = new List<RuleNote>();
             if (mixed)
@@ -252,6 +256,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             }
 
             notes.AddRange(slotNotes);
+
+            foreach (var (part, from) in borrowed)
+            {
+                notes.Add(Note($"No included box has {StackName(part)} cards: the setup uses those of {from.Name}", SchemeFirst, rulesBox));
+            }
 
             // Each stand-in the drawn cards need, with the part it replaces, which works too for a player who has it.
             foreach (var active in stoodIn)
@@ -351,7 +360,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             // What the boxes of the drawn cards' rulesets hold of a part between them, and a part's stack size,
             // or null when nothing in the setup uses the part, so the setup leaves it out.
-            int Supply(Part part) => stackBoxes.Sum(box => box.Components.Supplies(part)?.Value ?? 0);
+            int Supply(Part part) => borrowed.TryGetValue(part, out var from)
+                ? from.Components.Supplies(part)!.Value
+                : stackBoxes.Sum(box => box.Components.Supplies(part)?.Value ?? 0);
             int? Stack(Part part, int size) => used.Contains(part) ? size : null;
 
             return new SetupResult(
@@ -577,7 +588,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
                 var each = rule.PerPlayer ? count.Value * players : count.Value;
                 cardsBeside.Add(new BesideDraw(rule, each));
-                var group = GroupIds().Contains(rule.GroupId) ? GroupOf(rule.GroupId).Name : rule.GroupId;
+                var group = CatalogGroup(rule.GroupId).Name;
                 var what = rule.Card is { } card ? $"{card} of {group}" : $"{each} {group}";
                 notes.Add(Card($"{schemeWord} sets {what} beside it{(rule.PerPlayer ? $", {count.Value} per player" : "")}", count.Source));
             }
@@ -627,6 +638,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 outsideHenchmen,
                 cardsBeside,
                 otherMasterminds,
+                (effect.RequiredGroups ?? []).ToDictionary(group => group.GroupId),
                 [],
                 notes);
 
@@ -676,71 +688,40 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             };
         }
 
-        // A Scheme, or a Scheme and Mastermind pair, the included cards cannot complete is dropped
-        // before the draw rather than relaxed. The stacks it can count on are those of the boxes of the pair's
-        // own rulesets, which every setup it completes lays out.
-        private bool Fits(SetupPlan plan)
-        {
-            var sides = new[] { RulesetOf(plan.Scheme.Id), RulesetOf(plan.Mastermind!.Id), rulesBox.Ruleset };
-            int Supply(Func<BoxComponents, Sourced<int>?> count) =>
-                boxes.Where(box => sides.Contains(box.Ruleset)).Sum(box => count(box.Components)?.Value ?? 0);
-            var required = plan.Scheme.Setup.RequiredGroups ?? [];
-            int Slots(int slots, GroupType type) => Math.Max(slots, required.Count(group => group.GroupType == type));
-            var henchmanGroupCards = _henchmanGroups.Select(group => BoxOf(group.Id).Components.HenchmanGroupCards.Value).DefaultIfEmpty(0).Min();
-
-            // The Scheme sets cards beside it from included groups only, never more than a group holds. A group it
-            // sets every card of beside it can't fill a slot in the Villain Deck, so a Scheme that requires that
-            // group, or a Mastermind that always leads it, is dropped.
-            bool InDeck(string id, GroupType type) => GroupIds().Contains(id) && DeckCards(plan, id, type) > 0;
-            int Drawable(IEnumerable<string> ids, GroupType type) => ids.Count(id => InDeck(id, type));
-            var leads = plan.Mastermind.AlwaysLeads;
-            var alsoLeads = plan.Mastermind.AlsoLeads;
-
-            // A Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
-            return required.All(group => InDeck(group.GroupId, group.GroupType))
-                && (IgnoresAlwaysLeads || InDeck(leads.GroupId, leads.GroupType))
-                && (IgnoresAlwaysLeads || alsoLeads is null || alsoLeads.GroupIds.Any(id => InDeck(id, alsoLeads.GroupType)))
-                && plan.Beside.All(draw => GroupIds().Contains(draw.Rule.GroupId)
-                    && Beside(plan, draw.Rule.GroupId) <= GroupCards(draw.Rule.GroupId, draw.Rule.GroupType))
-                && Slots(plan.VillainGroups, GroupType.Villain) <= Drawable(_villainGroups.Select(g => g.Id), GroupType.Villain)
-                && Slots(plan.HenchmanGroups, GroupType.Henchman) + plan.OutsideHenchmen.Count
-                    <= Drawable(_henchmanGroups.Select(g => g.Id), GroupType.Henchman)
-                && plan.OutsideHenchmen.All(draw => draw.Cards <= henchmanGroupCards)
-                && (plan.Scheme.Setup.ExtraHenchmanCards is not { } extraCards || ForPlayers(plan.Scheme.Setup.ExtraHenchmanGroups ?? []) is null
-                    || extraCards.Value <= henchmanGroupCards)
-                && plan.OutsideMasterminds.Sum(draw => draw.Count) <= _masterminds.Count(other => other != plan.Mastermind)
-                && HeroesFit(plan)
-                && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
-                && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (plan.HenchmanCards ?? (Solo
-                    ? rules.Solo.HenchmanCards.Value
-                    : henchmanGroupCards))
-                && plan.Bystanders + plan.MovedOut(Pile.Bystanders) <= Supply(components => components.Bystanders)
-                && (plan.Wounds ?? 0) <= Supply(components => components.Wounds)
-                && plan.MovedOut(Pile.Wounds) <= (plan.Wounds ?? Supply(components => components.Wounds))
-                && plan.MovedOut(Pile.Officers) <= Supply(components => components.Officers)
-                && plan.MovedOut(Pile.Sidekicks) <= Supply(components => components.Sidekicks)
-                && plan.MovedOut(Pile.Bindings) <= (plan.Bindings ?? Supply(components => components.Bindings))
-                && plan.MovedOut(Pile.Ambitions) <= Supply(components => components.Ambitions)
-                && plan.Twists + plan.TwistsBeside + plan.MovedOut(Pile.Twists) <= Supply(components => components.SchemeTwists);
-        }
-
         // Fills one group type's slots: the Scheme's required groups first, then the Always Leads
         // group if a slot is left, then draws for the rest. A required group keeps its slot over
-        // the Always Leads group.
+        // the Always Leads group. A required group from a box the setup doesn't include is still drawn, as the
+        // player owns it, unless its card gives a substitute: then a group drawn from the pool takes its place, and
+        // required records the substitute in its place.
         private List<T> FillSlots<T>(
-            List<T> pool, Func<T, string> id, Func<T, string> name, GroupType type, int slots,
-            Scheme scheme, Mastermind mastermind, List<RuleNote> notes)
+            List<T> pool, GroupType type, int slots, Scheme scheme, Mastermind mastermind,
+            Dictionary<string, RequiredGroup> required, List<RuleNote> notes) where T : ICard
         {
             var chosen = new List<T>();
-            foreach (var required in (scheme.Setup.RequiredGroups ?? []).Where(group => group.GroupType == type))
+            foreach (var rule in (scheme.Setup.RequiredGroups ?? []).Where(group => group.GroupType == type))
             {
-                var group = pool.Single(g => id(g) == required.GroupId);
+                var group = (T)CatalogGroup(rule.GroupId);
+                var from = BoxOf(rule.GroupId);
+                var included = boxes.Contains(from);
+                if (!included && rule.OtherBox?.Substitute is { } substitute)
+                {
+                    var standIn = DrawOne(pool.Except(chosen).ToList());
+                    required.Remove(rule.GroupId);
+                    required[standIn.Id] = rule;
+                    chosen.Add(standIn);
+                    notes.Add(Note(
+                        $"{SchemeWord(scheme)} uses {standIn.Name} in place of {group.Name}: {from.Name} isn't included",
+                        substitute, BoxOf(scheme.Id)));
+                    continue;
+                }
+
                 chosen.Add(group);
-                notes.Add(Note(
-                    required.Cards is { } cards
-                        ? $"{SchemeWord(scheme)} requires {name(group)}, {cards} of its {CardName(CardKind.Henchman, cards)} in the {_terms.VillainDeck}"
-                        : $"{SchemeWord(scheme)} requires {name(group)}",
-                    required.Source, BoxOf(scheme.Id)));
+                var text = rule.Cards is { } cards
+                    ? $"{SchemeWord(scheme)} requires {group.Name}, {cards} of its {CardName(CardKind.Henchman, cards)} in the {_terms.VillainDeck}"
+                    : $"{SchemeWord(scheme)} requires {group.Name}";
+                notes.Add(included
+                    ? Note(text, rule.Source, BoxOf(scheme.Id))
+                    : Note($"{text}, from {from.Name}, which isn't included", rule.OtherBox!.Source, BoxOf(scheme.Id)));
             }
 
             var leads = mastermind.AlwaysLeads;
@@ -752,11 +733,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 }
                 else
                 {
-                    var group = pool.Single(g => id(g) == leads.GroupId);
+                    var group = (T)CatalogGroup(leads.GroupId);
                     if (!chosen.Contains(group) && chosen.Count >= slots)
                     {
                         notes.Add(Note(
-                            $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(name))}, so {mastermind.Name}'s Always Leads group {name(group)} is dropped",
+                            $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(g => g.Name))}, so {mastermind.Name}'s Always Leads group {group.Name} is dropped",
                             rules.Rulings.RequiredGroupDisplacesAlwaysLeads, rulesBox));
                     }
                     else
@@ -766,7 +747,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                             chosen.Add(group);
                         }
 
-                        notes.Add(Note($"{mastermind.Name} always leads {name(group)}", rules.Rulings.AlwaysLeadsFillsSlot, rulesBox));
+                        notes.Add(Note($"{mastermind.Name} always leads {group.Name}", rules.Rulings.AlwaysLeadsFillsSlot, rulesBox));
                     }
                 }
             }
@@ -775,12 +756,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // Solo's note that it ignores Always Leads covers this group too.
             if (mastermind.AlsoLeads is { } also && also.GroupType == type && !IgnoresAlwaysLeads)
             {
-                var options = pool.Where(g => also.GroupIds.Contains(id(g))).ToList();
+                var options = pool.Where(g => also.GroupIds.Contains(g.Id)).ToList();
                 var group = chosen.FirstOrDefault(options.Contains);
                 if (group is null && chosen.Count >= slots)
                 {
                     notes.Add(Note(
-                        $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(name))}, so {mastermind.Name}'s other Always Leads group is dropped",
+                        $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(g => g.Name))}, so {mastermind.Name}'s other Always Leads group is dropped",
                         rules.Rulings.RequiredGroupDisplacesAlwaysLeads, rulesBox));
                 }
                 else
@@ -792,7 +773,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     }
 
                     notes.Add(Note(
-                        $"{mastermind.Name} also always leads {name(group)}, one of {string.Join(" and ", options.Select(name))}",
+                        $"{mastermind.Name} also always leads {group.Name}, one of {string.Join(" and ", options.Select(g => g.Name))}",
                         also.Source, BoxOf(mastermind.Id)));
                 }
             }
@@ -803,58 +784,52 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // Draws the Hero Deck's Heroes, the Scheme's required Heroes first, then each Hero the Scheme draws
         // outside the Hero Deck. Every draw picks from the Heroes that leave the rest of the setup's Heroes
-        // drawable within the Scheme's Hero rules, so the draw never reaches a dead end.
+        // drawable within the Scheme's Hero rules, so the draw never reaches a dead end. The Hero Deck draws from the
+        // included Heroes whose parts the included boxes supply, or from every included Hero when the Scheme's Hero
+        // rules need one that uses a part none supplies, which the setup then lays out from the box that has it. A
+        // draw outside the Hero Deck the box data lets take a Hero from another box draws from the loaded Heroes it
+        // allows when no included Hero has one of its Hero Names (D-scheme-first, #138).
         private (List<Hero> Deck, List<OutsideHero> Outside) DrawHeroes(SetupPlan plan)
         {
-            var rules = HeroRulesOf(plan);
-            var deck = RequiredHeroes(plan)!;
+            var setup = plan.Scheme.Setup;
+            var outsideRules = plan.Outside.SelectMany(draw => Enumerable.Repeat(draw.Rule, draw.Count)).ToList();
+
+            // Required Heroes fill Hero Deck slots, so a Scheme that requires more Heroes than it has slots
+            // uses them all. Each of the Scheme's draws outside the Hero Deck takes one slot per Hero.
+            var deckSlots = Math.Max(plan.Heroes, setup.RequiredHeroes?.Count ?? 0);
+            (List<Hero> Pool, List<Hero> Heroes, HeroRules Rules) From(List<Hero> pool)
+            {
+                var fromOtherBoxes = outsideRules
+                    .Where(rule => rule.OtherBox is not null && !pool.Any(hero => HeroRules.Selects(rule, hero)))
+                    .SelectMany(rule => catalogBoxes.SelectMany(box => box.Heroes).Where(hero => HeroRules.Selects(rule, hero)))
+                    .Distinct();
+                var heroes = pool.Concat(fromOtherBoxes).ToList();
+                return (pool, heroes, new HeroRules(heroes, deckSlots, setup, outsideRules));
+            }
+
+            var included = boxes.SelectMany(box => box.Heroes).ToList();
+            var deck = (setup.RequiredHeroes ?? []).Select(rule => included.Single(hero => hero.Id == rule.HeroId)).ToList();
+            var (pool, heroes, rules) = From(_heroes);
+            if (!rules.CanComplete(deck, []))
+            {
+                (pool, heroes, rules) = From(included);
+            }
+
             while (deck.Count < rules.DeckSlots)
             {
-                deck.Add(DrawOne(_heroes.Where(hero => rules.CanComplete([.. deck, hero], [])).ToList()));
+                deck.Add(DrawOne(pool.Where(hero => rules.CanComplete([.. deck, hero], [])).ToList()));
             }
 
             var outside = new List<Hero>();
             while (outside.Count < rules.OutsideSlots.Count)
             {
-                outside.Add(DrawOne(_heroes.Where(hero => rules.CanComplete(deck, [.. outside, hero])).ToList()));
+                outside.Add(DrawOne(heroes.Where(hero => rules.CanComplete(deck, [.. outside, hero])).ToList()));
             }
 
             return (deck, outside
                 .Zip(rules.OutsideSlots, (hero, rule) => new OutsideHero(hero, rule.To, BoxOf(hero.Id).Components.HeroCards.Value))
                 .ToList());
         }
-
-        // Whether the included Heroes can meet the plan's Hero rules. Eligibility asks this for every Scheme
-        // and Mastermind pair, but the answer depends only on the Scheme and its number of Hero slots, so
-        // each is searched once per draw rather than once per Mastermind.
-        private bool HeroesFit(SetupPlan plan)
-        {
-            var key = (plan.Scheme.Id, plan.Heroes);
-            if (!_heroesFit.TryGetValue(key, out var fits))
-            {
-                fits = RequiredHeroes(plan) is { } required && HeroRulesOf(plan).CanComplete(required, []);
-                _heroesFit[key] = fits;
-            }
-
-            return fits;
-        }
-
-        // The Scheme's required Heroes, or null when one is not in an included box.
-        private List<Hero>? RequiredHeroes(SetupPlan plan)
-        {
-            var required = (plan.Scheme.Setup.RequiredHeroes ?? [])
-                .Select(rule => _heroes.FirstOrDefault(hero => hero.Id == rule.HeroId))
-                .ToList();
-            return required.Contains(null) ? null : required.OfType<Hero>().ToList();
-        }
-
-        // Required Heroes fill Hero Deck slots, so a Scheme that requires more Heroes than it has slots
-        // uses them all. Each of the Scheme's draws outside the Hero Deck takes one slot per Hero.
-        private HeroRules HeroRulesOf(SetupPlan plan) => new(
-            _heroes,
-            Math.Max(plan.Heroes, plan.Scheme.Setup.RequiredHeroes?.Count ?? 0),
-            plan.Scheme.Setup,
-            plan.Outside.SelectMany(draw => Enumerable.Repeat(draw.Rule, draw.Count)).ToList());
 
         // "X-Men Heroes", "Jean Grey Hero" or "Heroes": what count Heroes of a team or a Hero Name are called.
         private string HeroesOf(int count, string? team, string? heroName)
@@ -863,7 +838,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return $"{(kind is null ? "" : kind + " ")}{(count == 1 ? _terms.Hero : _terms.Heroes)}";
         }
 
-        private string HeroNamed(string heroId) => _heroes.FirstOrDefault(hero => hero.Id == heroId)?.Name ?? heroId;
+        // Any loaded Hero, since a Scheme's named Hero is drawn even when no included box supplies a part it uses.
+        private string HeroNamed(string heroId) => catalogBoxes.SelectMany(box => box.Heroes).Single(hero => hero.Id == heroId).Name;
 
         private string Onto(Pile to) => to switch
         {
@@ -901,7 +877,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 return new HashSet<string>();
             }
 
-            var placed = (setup.RequiredGroups ?? []).Select(group => group.GroupId).ToHashSet();
+            var placed = plan.Required.Keys.ToHashSet();
             if (!IgnoresAlwaysLeads)
             {
                 placed.Add(plan.Mastermind!.AlwaysLeads.GroupId);
@@ -916,7 +892,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // A Henchman Group the Scheme requires with a count of its own puts that many in.
         private int ShareOfDeck(SetupPlan plan, string groupId, GroupType type) => type == GroupType.Villain
             ? GroupCards(groupId, type)
-            : (plan.Scheme.Setup.RequiredGroups ?? []).FirstOrDefault(group => group.GroupId == groupId)?.Cards
+            : plan.Required.GetValueOrDefault(groupId)?.Cards
                 ?? plan.HenchmanCards ?? (Solo ? rules.Solo.HenchmanCards.Value : GroupCards(groupId, type));
 
         // How many cards a group puts in the Villain Deck once the Scheme has set some of them beside it: its share,
@@ -932,12 +908,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private static int Beside(SetupPlan plan, string groupId) =>
             plan.Beside.Where(draw => draw.Rule.GroupId == groupId).Sum(draw => draw.Count);
 
-        // An included Villain or Henchman Group.
-        private ICard GroupOf(string groupId) =>
-            _villainGroups.Cast<ICard>().Concat(_henchmanGroups).Single(group => group.Id == groupId);
-
-        private HashSet<string> GroupIds() =>
-            _villainGroups.Select(g => g.Id).Concat(_henchmanGroups.Select(g => g.Id)).ToHashSet();
+        // A Villain or Henchman Group of any loaded box, since a Scheme can require one from a box the setup doesn't include.
+        private ICard CatalogGroup(string groupId) =>
+            catalogBoxes.SelectMany(box => box.VillainGroups.Cast<ICard>().Concat(box.HenchmanGroups)).Single(group => group.Id == groupId);
 
         private string CardName(CardKind card, int count) => (card, count == 1) switch
         {
@@ -976,8 +949,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private PlayerCountValue? ForPlayers(IReadOnlyList<PlayerCountValue> values) =>
             values.SingleOrDefault(value => value.Players?.Contains(players) ?? true);
 
-        // Ids start with the declaring box's id, and box ids contain no underscore.
-        private Box BoxOf(string id) => boxes.Single(box => id.StartsWith(box.Id + "_", StringComparison.Ordinal));
+        // Ids start with the declaring box's id, and box ids contain no underscore. A required card can come from a
+        // box the setup doesn't include, so every loaded box is looked in.
+        private Box BoxOf(string id) => catalogBoxes.Single(box => id.StartsWith(box.Id + "_", StringComparison.Ordinal));
 
         private Ruleset RulesetOf(string id) => BoxOf(id).Ruleset;
 
@@ -1040,7 +1014,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
     // The counts a setup uses, from the rules and the setup effects of its Scheme and, once one is
     // paired with it, its Mastermind. HenchmanCards is the Scheme's count of cards of each Henchman
-    // Group, or null when the table or Solo sets it. OutsideHenchmen has one entry per Henchman Group
+    // Group, or null when the table or Solo sets it. Required holds the Scheme's required groups by the id of the
+    // group the setup uses for each, which is a substitute's once one is drawn. OutsideHenchmen has one entry per Henchman Group
     // the Scheme draws outside the Villain Deck.
     private sealed record SetupPlan(
         Scheme Scheme,
@@ -1060,6 +1035,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         IReadOnlyList<HenchmenDraw> OutsideHenchmen,
         IReadOnlyList<BesideDraw> Beside,
         IReadOnlyList<MastermindsDraw> OutsideMasterminds,
+        IReadOnlyDictionary<string, RequiredGroup> Required,
         IReadOnlyList<string> Steps,
         IReadOnlyList<RuleNote> Notes)
     {

@@ -6,13 +6,15 @@
 // A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the
 // glossary terms it uses (for a Hero, its team and classes too), in glossary order. box names the box
 // it comes from, and is present only when the setup includes more than one box. ruleset is its box's
-// ruleset, present only in a mixed setup.
+// ruleset, present only in a mixed setup. notIncluded is true only for a card the Scheme requires from a box
+// the setup doesn't include, which the player owns; box is then always present.
 export type Component = {
   id: string
   name: string
   terms: string[]
   box?: string
   ruleset?: Ruleset
+  notIncluded?: boolean
 }
 
 // One glossary term the setup uses: an original short summary, cited by source key and page

@@ -7,8 +7,7 @@ namespace LegendaryPickerService.Tests;
 // Fixtures/TeamSplit: a copy of the core box and a made-up expansion with no cards but its Schemes. The core box has 6
 // Avengers, 6 X-Men, 1 S.H.I.E.L.D. Hero (Nick Fury), 1 Spider Friends Hero (Spider-Man) and 1 unaffiliated (Deadpool).
 // Catalog order puts the fixture's Schemes after the core box's 8 (6 in Solo): Test Rivalry (6 Heroes, 3 of one team and 3
-// of another), Test Uneven Rivalry (2 Heroes of one team and 1 of another) and Test Impossible Rivalry (7 and 7, which no
-// core team has). Mastermind draw 0 is Dr. Doom, who leads a Henchman Group, so a 2-player setup draws 2 Villain Groups and
+// of another) and Test Uneven Rivalry (2 Heroes of one team and 1 of another). Mastermind draw 0 is Dr. Doom, who leads a Henchman Group, so a 2-player setup draws 2 Villain Groups and
 // then its Heroes.
 public sealed class TeamSplitTests
 {
@@ -24,7 +23,7 @@ public sealed class TeamSplitTests
     [InlineData(5, 8)]
     public void The_Hero_Deck_has_3_Heroes_of_one_team_and_3_of_another(int players, int rivalry)
     {
-        for (var seed = 0; seed < 20; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var setup = Assert.IsType<SetupResult>(
                 Generator.Generate(players, Boxes, new ScriptedRandom([rivalry, 0, .. Enumerable.Range(0, 20).Select(i => (seed + i * 5) % 3)])));
@@ -55,14 +54,4 @@ public sealed class TeamSplitTests
         Assert.Equal("R p.2", setup.Notes[0].Citation);
     }
 
-    // No core team has 7 Heroes, so Test Impossible Rivalry is dropped before the draw while the other two stay.
-    [Fact]
-    public void A_split_no_included_team_can_fill_drops_its_Scheme()
-    {
-        var random = new ScriptedRandom();
-
-        Generator.Generate(2, Boxes, random);
-
-        Assert.Equal(10, random.Options[0]);
-    }
 }

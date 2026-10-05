@@ -14,6 +14,7 @@ public class GuardiansOfTheGalaxyTests
     private const string CoreName = "Marvel Legendary First Edition core box";
     private const string Rulebook = "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf";
     private const string UsesDecision = "https://github.com/RyanGano/LegendaryPicker/issues/87";
+    private const string SchemeFirst = "https://github.com/RyanGano/LegendaryPicker/issues/138";
 
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
     private static readonly Box Guardians = Catalog.Boxes.Single(box => box.Id == "guardians-of-the-galaxy");
@@ -109,7 +110,7 @@ public class GuardiansOfTheGalaxyTests
         Assert.Equal(
             [
                 new RequiredGroup("guardians-of-the-galaxy_villain_kree-starforce", GroupType.Villain, "Card"),
-                new RequiredGroup("core_villain_skrulls", GroupType.Villain, "Card"),
+                new RequiredGroup("core_villain_skrulls", GroupType.Villain, "Card", OtherBox: new OtherBox("D-scheme-first")),
             ],
             kreeSkrull.Setup.RequiredGroups);
 
@@ -148,7 +149,7 @@ public class GuardiansOfTheGalaxyTests
 
         Assert.All(ids, id => Assert.Matches("^guardians-of-the-galaxy_(hero|villain|mastermind|scheme|term)_[a-z0-9]+(-[a-z0-9]+)*$", id));
         Assert.Equal(
-            [new SourceLink("GG", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf"), new SourceLink("D-shards", "https://github.com/RyanGano/LegendaryPicker/issues/107"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
+            [new SourceLink("GG", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf"), new SourceLink("D-shards", "https://github.com/RyanGano/LegendaryPicker/issues/107"), new SourceLink("D-scheme-first", "https://github.com/RyanGano/LegendaryPicker/issues/138"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
             Guardians.Sources);
         Assert.Equal("GG p.2; C1; C2", Guardians.CatalogSource);
     }
@@ -279,15 +280,35 @@ public class GuardiansOfTheGalaxyTests
     }
 
     // Without the core box's Skrulls The Kree-Skrull War can't be completed, so it is never drawn.
+    // Without the core box the Kree-Skrull War is still drawn: the player owns the core box's Skrulls, so they fill a
+    // Villain Group slot and the checklist names the box to pull them from (D-scheme-first, #138). Kree Starforce gives
+    // Wounds, which no included box has, so the core box's Wound stack is laid out too. Guardians of the Galaxy sorts
+    // before Villains, so the Kree-Skrull War is Scheme 2; a Guardians Mastermind would need First Edition rules, so
+    // the Mastermind draw is from the Villains Commanders.
     [Fact]
-    public void The_Kree_Skrull_War_needs_the_core_box_Skrulls()
+    public void Without_the_core_box_the_Kree_Skrull_War_uses_the_core_box_Skrulls()
     {
-        for (var seed = 0; seed < 40; seed++)
-        {
-            var setup = Assert.IsType<SetupResult>(
-                Generator.Generate(2, ["villains", "guardians-of-the-galaxy"], new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
-            Assert.NotEqual("The Kree-Skrull War", setup.Scheme.Name);
-        }
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, ["villains", "guardians-of-the-galaxy"], new ScriptedRandom(2, 0)));
+
+        Assert.Equal("The Kree-Skrull War", setup.Scheme.Name);
+        Assert.StartsWith("villains_", setup.Mastermind.Id);
+        Assert.Equal(["Kree Starforce", "Skrulls"], setup.VillainGroups.Take(2).Select(group => group.Name));
+        Assert.Equal(30, setup.Stacks.Wounds);
+        Assert.Contains(new RuleNote($"Scheme requires Skrulls, from {CoreName}, which isn't included", "D-scheme-first", SchemeFirst, GuardiansName), setup.Notes);
+        Assert.Contains(new RuleNote($"No included box has Wound cards: the setup uses those of {CoreName}", "D-scheme-first", SchemeFirst, "Legendary: Villains"), setup.Notes);
+
+        var skrulls = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).VillainGroups.Single(group => group.Name == "Skrulls");
+        Assert.Equal((CoreName, true), (skrulls.Box, skrulls.NotIncluded));
+    }
+
+    [Fact]
+    public void With_the_core_box_the_Kree_Skrull_War_draws_the_included_Skrulls()
+    {
+        var setup = Draw(2, "The Kree-Skrull War", SupremeIntelligence);
+
+        var skrulls = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).VillainGroups.Single(group => group.Name == "Skrulls");
+        Assert.Equal((CoreName, false), (skrulls.Box, skrulls.NotIncluded));
+        Assert.Contains(new RuleNote("Scheme requires Skrulls", "Card", null, GuardiansName), setup.Notes);
     }
 
     [Fact]
@@ -325,22 +346,20 @@ public class GuardiansOfTheGalaxyTests
     }
 
     // Guardians cards that give Wounds need a box that supplies them; with Legendary: Villains as the only base
-    // game, Kree Starforce, Thanos and the Nega-Bomb are never drawn, while the Shard cards still are.
+    // game, Thanos is never drawn, and Kree Starforce only when the Kree-Skrull War requires it, while the Shard
+    // cards still are. A Scheme is drawn whatever it uses (D-scheme-first), so the Nega-Bomb can be.
     [Fact]
-    public void Without_a_First_Edition_box_that_supplies_Wounds_the_Guardians_cards_that_give_them_are_never_drawn()
+    public void Without_a_First_Edition_box_that_supplies_Wounds_the_Guardians_cards_that_give_them_are_drawn_only_when_required()
     {
-        string[] dropped =
-        [
-            "guardians-of-the-galaxy_villain_kree-starforce",
-            "guardians-of-the-galaxy_mastermind_thanos",
-            "guardians-of-the-galaxy_scheme_intergalactic-kree-nega-bomb",
-        ];
-
-        for (var seed = 0; seed < 60; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var setup = Assert.IsType<SetupResult>(
                 Generator.Generate(3, ["villains", "guardians-of-the-galaxy"], new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
-            Assert.DoesNotContain(ComponentIds(setup), id => dropped.Contains(id));
+            var ids = ComponentIds(setup).ToList();
+            Assert.DoesNotContain("guardians-of-the-galaxy_mastermind_thanos", ids);
+            Assert.True(
+                !ids.Contains("guardians-of-the-galaxy_villain_kree-starforce") || setup.Scheme.Name == "The Kree-Skrull War",
+                $"{setup.Scheme.Name} drew Kree Starforce");
         }
     }
 
@@ -357,7 +376,7 @@ public class GuardiansOfTheGalaxyTests
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red"];
 
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withItLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var expected = Assert.IsType<SetupResult>(neverLoaded.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));

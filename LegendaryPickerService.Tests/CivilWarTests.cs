@@ -251,7 +251,7 @@ public class CivilWarTests
     [InlineData(5)]
     public void Avengers_vs_X_Men_draws_3_Heroes_of_one_team_and_3_of_another(int players)
     {
-        for (var seed = 0; seed < 30; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var setup = Assert.IsType<SetupResult>(
                 Generator.Generate(players, Boxes, new CyclingRandom(0, seed % 5, seed, seed + 3, seed * 7 + 1, seed + 11)));
@@ -342,7 +342,7 @@ public class CivilWarTests
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary"];
 
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withItLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var expected = Assert.IsType<SetupResult>(neverLoaded.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));

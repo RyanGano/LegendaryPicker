@@ -71,15 +71,6 @@
       }
     },
     {
-      "id": "horde_scheme_test-flood",
-      "name": "Test Flood",
-      "terms": ["core_term_scheme-twist"],
-      "setup": {
-        "twists": [{ "players": null, "value": 8, "source": "Card" }],
-        "wounds": { "value": 40, "source": "Card" }
-      }
-    },
-    {
       "id": "horde_scheme_test-dread",
       "name": "Test Dread",
       "terms": ["core_term_scheme-twist"],

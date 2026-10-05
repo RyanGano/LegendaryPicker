@@ -15,14 +15,16 @@
     "schemeTwists": { "value": 0, "source": "R p.1" }
   },
   "heroes": [],
-  "villainGroups": [],
+  "villainGroups": [
+    { "id": "steps_villain_test-lookouts", "name": "Test Lookouts", "terms": [] }
+  ],
   "henchmanGroups": [],
   "masterminds": [
     {
       "id": "steps_mastermind_test-watcher",
       "name": "Test Watcher",
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
-      "alwaysLeads": { "groupId": "core_villain_hydra", "groupType": "villain", "source": "Card" },
+      "alwaysLeads": { "groupId": "steps_villain_test-lookouts", "groupType": "villain", "source": "Card" },
       "setup": {
         "steps": [{ "label": "Put the test lookout token on the first city space", "source": "Card" }]
       }

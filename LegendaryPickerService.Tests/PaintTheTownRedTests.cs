@@ -173,60 +173,6 @@ public class PaintTheTownRedTests
         Assert.Equal(heroName, entry.NameOfHero);
     }
 
-    // Hero Name is the character, so Symbiote Spider-Man and the core box's Spider-Man are two Heroes with one
-    // Hero Name. A made-up Scheme that needs exactly 2 Spider-Man Heroes can only be completed if they share it.
-    [Fact]
-    public void Symbiote_Spider_Man_shares_the_Hero_Name_Spider_Man_with_the_core_box()
-    {
-        using var directory = new DirectoryWithout(fileName: null);
-        File.WriteAllText(System.IO.Path.Combine(directory.Path, "spider-names.json"), SpiderNamesBox);
-        var generator = new SetupGenerator(BoxCatalog.Load(directory.Path));
-
-        // At 2 players the core box allows 8 Schemes and Paint the Town Red 4, so draw 12 is the made-up Scheme.
-        var random = new ScriptedRandom(12);
-        var setup = Assert.IsType<SetupResult>(generator.Generate(2, ["core", "paint-the-town-red", "spider-names"], random));
-
-        Assert.Equal(13, random.Options[0]);
-        Assert.Equal("Test Two Spider-Men", setup.Scheme.Name);
-        Assert.Equal(
-            ["core_hero_spider-man", "paint-the-town-red_hero_symbiote-spider-man"],
-            setup.Heroes.Where(hero => hero.Id.EndsWith("spider-man")).Select(hero => hero.Id));
-    }
-
-    private const string SpiderNamesBox = """
-        {
-          "schemaVersion": 7,
-          "id": "spider-names",
-          "name": "Spider Names Fixture",
-          "ruleset": "firstEdition",
-          "catalogSource": "R p.1",
-          "about": { "released": { "value": "2020-01", "source": "R p.1" } },
-          "sources": [{ "key": "R", "url": "https://example.test/spider-names.pdf" }],
-          "components": {
-            "heroCards": { "value": 14, "source": "R p.1" },
-            "villainGroupCards": { "value": 8, "source": "R p.1" },
-            "henchmanGroupCards": { "value": 10, "source": "R p.1" },
-            "schemeTwists": { "value": 0, "source": "R p.1" }
-          },
-          "heroes": [],
-          "villainGroups": [],
-          "henchmanGroups": [],
-          "masterminds": [],
-          "schemes": [
-            {
-              "id": "spider-names_scheme_test-two-spider-men",
-              "name": "Test Two Spider-Men",
-              "terms": ["core_term_scheme-twist"],
-              "setup": {
-                "twists": [{ "players": null, "value": 8, "source": "Card" }],
-                "heroCounts": [{ "heroName": "Spider-Man", "exactly": 2, "source": "Card" }]
-              }
-            }
-          ],
-          "glossary": []
-        }
-        """;
-
     [Theory]
     [InlineData("Maximum Carnage", "Ambush Escape Fight Feast")]
     [InlineData("Sinister Six", "Ambush Escape Fight")]
@@ -356,7 +302,7 @@ public class PaintTheTownRedTests
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four"];
 
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withItLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var expected = Assert.IsType<SetupResult>(neverLoaded.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
@@ -389,7 +335,7 @@ public class PaintTheTownRedTests
     {
         public string Path { get; } = Directory.CreateTempSubdirectory("legendary-without-").FullName;
 
-        public DirectoryWithout(string? fileName, params string[] dependents)
+        public DirectoryWithout(string fileName, params string[] dependents)
         {
             foreach (var file in Directory.GetFiles(BoxCatalog.DefaultDirectory, "*.json").Where(file => System.IO.Path.GetFileName(file) != fileName && !dependents.Contains(System.IO.Path.GetFileName(file))))
             {

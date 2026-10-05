@@ -62,7 +62,7 @@ A Civil War Hero card printed as two half-cards. It is one card for every count,
 The name a setup shows for a Hero, Villain Group, Henchman Group, Mastermind or Scheme. No two of one kind share a display name across the boxes, so the player can always tell which card to use. A new version of a character takes a distinguishing name: its printed card title when that differs (Symbiote Spider-Man), otherwise the title with its version in brackets (Wolverine (X-Force)). It keeps the shared Hero Name.
 
 **Hero constraint**:
-A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team or with a Hero Name; a team split, exactly some number of Heroes of each of several different teams the draw picks (Avengers vs. X-Men: 3 of one team and 3 of another); or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, and a Scheme whose rules the included Heroes can't meet is dropped before the draw.
+A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team or with a Hero Name; a team split, exactly some number of Heroes of each of several different teams the draw picks (Avengers vs. X-Men: 3 of one team and 3 of another); or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, which the Scheme's own box's Heroes can always meet (#138).
 
 **Hero outside the Hero Deck**:
 A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to the Villain Deck, beside the Scheme, or a stack set aside. The draw can name the Hero, or limit it to a Hero Name, a list of Hero Names (every Jean Grey for Transform Citizens into Demons) or a team.
@@ -70,7 +70,7 @@ A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to
 _Avoid_: Extra Hero, which is the setup effect that adds a Hero to the Hero Deck.
 
 **Henchman Group outside the Villain Deck**:
-A Henchman Group a Scheme draws in addition to the Villain Deck's, from the included groups the setup doesn't already use, which sends some of its cards to the Hero Deck; the rest of the group stays out of the game. A Scheme is dropped before the draw when no such group is left.
+A Henchman Group a Scheme draws in addition to the Villain Deck's, from the included groups the setup doesn't already use, which sends some of its cards to the Hero Deck; the rest of the group stays out of the game.
 
 _Avoid_: Extra Henchman Group, which is the setup effect that adds a Henchman Group to the Villain Deck.
 
@@ -83,7 +83,7 @@ _Avoid_: Second Mastermind as a setup term; a rule note can use the Scheme's own
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability. A few Masterminds also always lead one of several groups, as Deathbird leads the Shi'ar Imperial Guard and a Shi'ar Henchman Group; that second group fills a slot the same way.
 
 **Part in use**:
-A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, X-Men's Horrors, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack or Unite the Shards fills the Shard supply; the rules use the stacks players recruit from. Special Bystanders, which every setup shuffles in with the other Bystanders, bring the parts they use too, so Civil War's Aspiring Hero, which gains a Sidekick when rescued, lays the Sidekick stack out whenever Civil War is included (#125). A card that uses a part no included box supplies is dropped before the draw.
+A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, X-Men's Horrors, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack or Unite the Shards fills the Shard supply; the rules use the stacks players recruit from. Special Bystanders, which every setup shuffles in with the other Bystanders, bring the parts they use too, so Civil War's Aspiring Hero, which gains a Sidekick when rescued, lays the Sidekick stack out whenever Civil War is included (#125). A Hero, group or Mastermind that uses a part no included box supplies is not drawn; a Scheme and the cards it requires are, and the part is laid out from the base game that has it (#138).
 
 **Stand-in**:
 A part a setup lays out in place of one no included box supplies, as an expansion's rules allow when it is played without its own ruleset's base game: with the core box and Fear Itself alone, Wounds stand in for Bindings and S.H.I.E.L.D. Officers for Madame HYDRA (Fear Itself insert, owner decision #110). The player can use the real cards if they have them.
@@ -135,7 +135,13 @@ A game setup that satisfies all applicable official setup rules; legality does n
 A complete legal setup selected without player-selected card preferences; only official setup rules constrain the selection.
 
 **Table draw**:
-How a random setup is selected, mirroring a normal game at the table: draw the Scheme from those allowed at the player count, then the Mastermind from those that can complete it, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then any Henchman Groups outside the Villain Deck, then draw the Heroes, then any Heroes outside the Hero Deck. Each draw is equally likely among the remaining options that still leave a legal setup.
+How a random setup is selected, mirroring a normal game at the table: draw the Scheme from every included Scheme its card allows at the player count, then the Mastermind from the included ones the Scheme doesn't exclude, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then any Henchman Groups outside the Villain Deck, then draw the Heroes, then any Heroes outside the Hero Deck. Each draw is equally likely among the remaining options that still leave a legal setup. Nothing is checked per draw: every requirement a box's cards make is met inside that box, or allowed from another box by its data (owner decision, #138).
+
+**Scheme-first random selection**:
+The table draw's first step: the Scheme comes first, from every included Scheme its card allows at the player count, and everything else follows from it. A Scheme rules a Mastermind out only when its card says so, recorded in its box file as an excluded Mastermind (owner decision, #138).
+
+**Required card from another box**:
+A card a Scheme requires that is in a box the setup doesn't include, as The Kree-Skrull War's core box Skrulls. The setup still uses it, since the player owns it, and the checklist says the Scheme requires it from that box; when the card names a substitute, an included card takes its place instead (owner decision, #138).
 
 **Setup checklist**:
 What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists and any cards of a group beside the Scheme; any cards a Scheme sets aside; any Heroes outside the Hero Deck and where their cards go; the Bystanders and each other shared stack that is a part in use (Wounds, S.H.I.E.L.D. Officers, Bindings, Madame HYDRA, New Recruits, Sidekicks or the Shard supply), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
@@ -149,7 +155,7 @@ A Hero team, Hero class or keyword that a setup component uses (for example Aven
 _Avoid_: Keyword, for teams and classes; a keyword is one kind of glossary term.
 
 **No eligible Scheme**:
-The result when no Scheme in the included boxes can be set up legally at the player count. It is a result, not an error.
+The result when no Scheme in the included boxes is allowed at the player count, or no Mastermind is included. It is a result, not an error.
 
 ## Rules authority
 

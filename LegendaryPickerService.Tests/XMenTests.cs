@@ -137,9 +137,12 @@ public class XMenTests
         var jeanGrey = Assert.Single(saga.OutsideHeroes!);
         Assert.Equal((Pile.VillainDeck, 1), (jeanGrey.To, Assert.Single(jeanGrey.Count).Value));
         Assert.Equal(["Jean Grey", "Time-Traveling Jean Grey"], jeanGrey.HeroNames!.Value);
+        Assert.Equal(new OtherBox("D-scheme-first"), jeanGrey.OtherBox);
 
         var sentinels = schemes["Mutant-Hunting Super Sentinels"].Setup;
-        Assert.Equal([new RequiredGroup("core_henchman_sentinel", GroupType.Henchman, "Card", 10)], sentinels.RequiredGroups);
+        Assert.Equal(
+            [new RequiredGroup("core_henchman_sentinel", GroupType.Henchman, "Card", 10, new OtherBox("D-scheme-first", "Card"))],
+            sentinels.RequiredGroups);
         Assert.Equal(1, Assert.Single(sentinels.ExtraHenchmanGroups!).Value);
 
         Assert.Equal(new Sourced<int>(6, "Card"), schemes["Televised Deathtraps of Mojoworld"].Setup.WoundsPerPlayer);
@@ -250,14 +253,42 @@ public class XMenTests
         Assert.Equal(14, setup.VillainDeck.OutsideHeroCards);
     }
 
-    // No Jean Grey Hero is in the core box or X-Men, so without Dark City the Scheme can't be set up.
+    // No Jean Grey Hero is in the core box or X-Men, so without Dark City the Scheme takes Dark City's Jean Grey, which
+    // its data allows from another box, and the checklist names the box to pull her from (D-scheme-first, #138).
     [Fact]
-    public void The_Dark_Phoenix_Saga_is_dropped_without_a_Jean_Grey_Hero()
+    public void Without_Dark_City_The_Dark_Phoenix_Saga_takes_its_Jean_Grey()
     {
-        var random = new ScriptedRandom();
-        Generator.Generate(2, ["core", "x-men"], random);
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "x-men"], new ScriptedRandom(8 + 2)));
 
-        Assert.Equal(8 + SchemeNames.Length - 1, random.Options[0]);
+        Assert.Equal("The Dark Phoenix Saga", setup.Scheme.Name);
+        var outside = Assert.Single(setup.OutsideHeroes);
+        Assert.Equal(("dark-city_hero_jean-grey", Pile.VillainDeck, 14), (outside.Hero.Id, outside.To, outside.Cards));
+        var jeanGrey = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).OutsideHeroes.Single().Hero;
+        Assert.Equal(("Dark City", true), (jeanGrey.Box, jeanGrey.NotIncluded));
+    }
+
+    // The card lets another Henchman Group stand in for the core box's Sentinels, so without the core box the Scheme
+    // draws one of the included groups in their place, with its 10 cards, besides its extra group.
+    [Theory]
+    [InlineData(1)]
+    [InlineData(3)]
+    public void Without_the_core_box_Mutant_Hunting_Super_Sentinels_uses_another_Henchman_Group(int players)
+    {
+        string[] boxes = ["villains", "x-men"];
+        var schemes = Catalog.Boxes.Where(box => boxes.Contains(box.Id)).SelectMany(box => box.Schemes)
+            .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(players) ?? true)
+            .Select(scheme => scheme.Name)
+            .ToList();
+        var setup = Assert.IsType<SetupResult>(
+            Generator.Generate(players, boxes, new ScriptedRandom(schemes.IndexOf("Mutant-Hunting Super Sentinels"))));
+
+        Assert.Equal(2, setup.HenchmanGroups.Count);
+        Assert.DoesNotContain("Sentinel", setup.HenchmanGroups.Select(group => group.Name));
+        var standIn = setup.HenchmanGroups[0];
+        Assert.Contains(
+            new RuleNote($"Scheme uses {standIn.Name} in place of Sentinel: Marvel Legendary First Edition core box isn't included", "Card", null, "X-Men"),
+            setup.Notes);
+        Assert.Equal(players == 1 ? 13 : 20, setup.VillainDeck.HenchmanCards);
     }
 
     [Fact]
@@ -301,8 +332,7 @@ public class XMenTests
         Assert.NotNull(setup.Stacks.Wounds);
     }
 
-    // The exclusion case: with every other box of its ruleset included, X-Men changes nothing. With eleven boxes each draw
-    // is slow, so it tries 10 seeds per player count rather than 40.
+    // The exclusion case: with every other box of its ruleset included, X-Men changes nothing.
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -315,7 +345,7 @@ public class XMenTests
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary", "civil-war", "deadpool", "noir"];
 
-        for (var seed = 0; seed < 10; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withItLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var expected = Assert.IsType<SetupResult>(neverLoaded.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));

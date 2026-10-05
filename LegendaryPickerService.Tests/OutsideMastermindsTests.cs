@@ -6,9 +6,8 @@ namespace LegendaryPickerService.Tests;
 // Schemes that draw Masterminds besides their own (#113), using Fixtures/OutsideMasterminds: a copy of the core box
 // and a made-up expansion. Catalog order puts the fixture's Schemes after the core box's 8 (6 in Solo): Test Alliance
 // (sets 1 other Mastermind aside), Test Tyrants (shuffles 4 Tactics each of 3 other Masterminds, 2 in Solo, into the
-// Villain Deck), Test Crowd (sets 4 other Masterminds aside, more than the core box's 4 leave) and Test Hideout
-// (shuffles its own Mastermind's 4 Tactics into the Villain Deck, setup.ownTactics). All but Test Crowd require Test
-// Mob, which uses no part. Mastermind draw 0 is Dr. Doom, who uses no part; the others, in order,
+// Villain Deck) and Test Hideout (shuffles its own Mastermind's 4 Tactics into the Villain Deck, setup.ownTactics).
+// Each requires Test Mob, which uses no part. Mastermind draw 0 is Dr. Doom, who uses no part; the others, in order,
 // are Loki and Magneto, who use Wounds, and Red Skull.
 public sealed class OutsideMastermindsTests
 {
@@ -71,20 +70,6 @@ public sealed class OutsideMastermindsTests
         Assert.Equal(53, setup.VillainDeck.Total);
     }
 
-    // Test Crowd needs 4 Masterminds besides its own, and the core box has only 3 more, so it is never drawn.
-    [Theory]
-    [InlineData(1, 9)]
-    [InlineData(2, 11)]
-    [InlineData(5, 11)]
-    public void A_Scheme_that_needs_more_other_Masterminds_than_are_included_is_dropped(int players, int schemes)
-    {
-        var random = new ScriptedRandom();
-
-        Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, random));
-
-        Assert.Equal(schemes, random.Options[0]);
-    }
-
     [Fact]
     public void A_setup_without_the_effect_draws_no_other_Masterminds()
     {
@@ -97,7 +82,6 @@ public sealed class OutsideMastermindsTests
     [Fact]
     public void Own_Tactics_shuffled_into_the_Villain_Deck_count_in_it_and_draw_no_other_Masterminds()
     {
-        // Test Crowd is dropped in Solo, so Test Hideout is the 9th Scheme drawable.
         var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(8, 0)));
 
         Assert.Equal(("Test Hideout", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));

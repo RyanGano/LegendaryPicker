@@ -172,7 +172,12 @@ public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, strin
 // that is drawn already, or draws one of those included into a slot, which it fills as the Always Leads group does.
 public sealed record AlsoLeadsGroup(IReadOnlyList<string> GroupIds, GroupType GroupType, string Source);
 
-public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms, SchemeSetup Setup, IReadOnlyList<PartUse>? Uses = null) : ICard
+// ExcludesMasterminds lists the Masterminds the Scheme's card rules out, recorded when its box is entered: those whose
+// Always Leads group it sets every card of beside it, as Clash of the Monsters Unleashed does Fin Fang Foom's
+// (D-scheme-first, #138). The draw reads the list and computes nothing; a test derives it from the card data.
+public sealed record Scheme(
+    string Id, string Name, IReadOnlyList<string> Terms, SchemeSetup Setup, IReadOnlyList<PartUse>? Uses = null,
+    IReadOnlyList<ExcludedMastermind>? ExcludesMasterminds = null) : ICard
 {
     // A Scheme also uses the stacks its Setup line sizes or moves cards from, so its uses needn't repeat them.
     public IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part)
@@ -181,6 +186,9 @@ public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms,
         .Concat((Setup.Moves ?? []).Select(move => CardMove.PartOf(move.Card)).OfType<Part>())
         .Distinct();
 }
+
+// A Mastermind a Scheme rules out, with the source that says so.
+public sealed record ExcludedMastermind(string MastermindId, string Source);
 
 public enum TermKind
 {
@@ -250,8 +258,15 @@ public sealed record SchemeSetup(
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 // Cards, for a Henchman Group, is how many of its cards go in the Villain Deck in place of the usual count, as
-// Alien Brood Encounters adds 10 Brood even in Solo (#132); it is left out to use the usual count.
-public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source, int? Cards = null);
+// Alien Brood Encounters adds 10 Brood even in Solo (#132); it is left out to use the usual count. A required group
+// is in the Scheme's own box unless OtherBox allows one from another box (D-scheme-first, #138).
+public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source, int? Cards = null, OtherBox? OtherBox = null);
+
+// A Scheme's requirement from another box, allowed by Source. A setup that doesn't include that box still uses the
+// card, which the player owns, and the checklist says the Scheme requires it from that box, as The Kree-Skrull War's
+// Skrulls without the core box. Substitute, the source of the card's own fallback, replaces it instead with any
+// included group of its type, as Mutant-Hunting Super Sentinels takes another Henchman Group for the Sentinels.
+public sealed record OtherBox(string Source, string? Substitute = null);
 
 // Cards of one group a Scheme sets beside it, whether or not the group is drawn: Count cards at each player
 // count, multiplied by the player count when PerPlayer. Card names the one card of the group to set aside, such
@@ -272,10 +287,11 @@ public sealed record HeroCount(string Source, string? Team = null, string? HeroN
 // Hero to draw, HeroName limits the draw to Heroes with that Hero Name and Team to Heroes of that team;
 // with none of them any Hero not in the Hero Deck can be drawn. HeroNames limits the draw to Heroes with any of
 // those Hero Names, with the source that says they all count (an owner decision, as every Jean Grey does for Dark
-// City's Transform Citizens into Demons, #122).
+// City's Transform Citizens into Demons, #122). OtherBox lets a draw limited by Hero Name take a Hero from a box the
+// setup doesn't include when no included Hero has the name, as The Dark Phoenix Saga's Jean Grey (#138).
 public sealed record OutsideHeroes(
     Pile To, IReadOnlyList<PlayerCountValue> Count, string? Hero = null, string? HeroName = null, string? Team = null,
-    Sourced<string[]>? HeroNames = null)
+    Sourced<string[]>? HeroNames = null, OtherBox? OtherBox = null)
 {
     public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.BesideScheme, Pile.SetAside];
 }

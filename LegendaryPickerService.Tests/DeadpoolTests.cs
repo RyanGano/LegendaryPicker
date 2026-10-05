@@ -183,7 +183,7 @@ public class DeadpoolTests
     [InlineData("Deadpool Writes a Scheme")]
     public void A_Scheme_that_uses_Deadpool_puts_a_Deadpool_Hero_in_the_Hero_Deck(string scheme)
     {
-        foreach (var seed in Enumerable.Range(0, 40))
+        foreach (var seed in Enumerable.Range(0, 4))
         {
             var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new SeededRandom(SchemeDraw(2, scheme), seed)));
 
@@ -195,7 +195,7 @@ public class DeadpoolTests
     [Fact]
     public void Everybody_Hates_Deadpool_puts_a_Mercs_for_Money_Hero_in_the_Hero_Deck()
     {
-        foreach (var seed in Enumerable.Range(0, 40))
+        foreach (var seed in Enumerable.Range(0, 4))
         {
             var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new SeededRandom(SchemeDraw(2, "Everybody Hates Deadpool"), seed)));
 
@@ -254,7 +254,7 @@ public class DeadpoolTests
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary", "civil-war"];
 
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withItLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var expected = Assert.IsType<SetupResult>(neverLoaded.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));

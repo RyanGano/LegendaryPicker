@@ -5,10 +5,10 @@ namespace LegendaryPickerService.Tests;
 
 // Schemes that move cards between stacks and decks during setup, using Fixtures/CardMoves: a copy of
 // the core box and a made-up expansion. Catalog order puts the fixture's Schemes after the core box's,
-// so at 2–4 players they are 8 Test Rescue (20 Bystanders into the Hero Deck, 12 in Solo), 9 Test
-// Henchman Army (6 Henchmen into the Hero Deck), 10 Test Muster (2 Officers per player into the Villain
-// Deck), 11 Test Wounded (1 Wound into each starting deck) and 12 Test Lookout (3 Bystanders beside the
-// Scheme). Test Betrayal (8 Twists and 4 more set aside, 12 of the core box's 11) is never eligible.
+// so at 2–4 players they are 8 Test Rescue (20 Bystanders into the Hero Deck, 12 in Solo; 1 to 4 players), 9 Test
+// Henchman Army (6 Henchmen into the Hero Deck; 2 to 5 players), 10 Test Muster (2 Officers per player into the
+// Villain Deck), 11 Test Wounded (1 Wound into each starting deck) and 12 Test Lookout (3 Bystanders beside the
+// Scheme). In Solo Test Rescue is 6, Test Muster 7 and Test Wounded 8.
 // Mastermind draw 0 is Dr. Doom, who leads a Henchman Group.
 public sealed class CardMovesTests
 {
@@ -48,33 +48,6 @@ public sealed class CardMovesTests
             setup.Notes[0]);
     }
 
-    [Theory]
-    [InlineData(4, 13, "Test Rescue")]
-    [InlineData(5, 12, "Test Henchman Army")]
-    public void A_Scheme_whose_move_the_Bystander_stack_cannot_supply_is_dropped(int players, int schemes, string ninth)
-    {
-        // Five players put 12 Bystanders in the Villain Deck, which leaves 18 of the 30 for Test Rescue's 20.
-        var random = new ScriptedRandom(8, 0);
-
-        var setup = Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, random));
-
-        Assert.Equal(schemes, random.Options[0]);
-        Assert.Equal(ninth, setup.Scheme.Name);
-    }
-
-    // Twists a Scheme moves come from those the Villain Deck leaves, so they count against the boxes' Twists
-    // with the Scheme's own.
-    [Fact]
-    public void A_Scheme_whose_Twist_move_the_boxes_cannot_supply_is_dropped()
-    {
-        var random = new ScriptedRandom(8, 0);
-
-        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, random));
-
-        Assert.Equal(13, random.Options[0]);
-        Assert.Equal("Test Rescue", setup.Scheme.Name);
-    }
-
     // The fixture box has no Henchman Groups and lists 0 cards per group, as Fantastic Four does; only the
     // groups a setup can draw decide how many Henchmen a Scheme can move.
     [Fact]
@@ -89,21 +62,6 @@ public sealed class CardMovesTests
         Assert.Equal(76, setup.HeroDeck.Total);
         Assert.Equal([new MovedCards(CardKind.Henchman, Pile.VillainDeck, Pile.HeroDeck, 6, 6)], setup.Moves);
         Assert.Equal(new RuleNote("Scheme moves 6 Henchmen into the Hero Deck", "Card", null, FixtureName), setup.Notes[0]);
-    }
-
-    [Fact]
-    public void A_Scheme_that_moves_more_Henchmen_than_Solo_draws_is_not_eligible_in_Solo()
-    {
-        // Solo draws 3 cards of 1 Henchman Group, too few for Test Henchman Army's 6.
-        var schemes = new ScriptedRandom();
-        Generator.Generate(1, Boxes, schemes);
-
-        var drawn = Enumerable.Range(0, schemes.Options[0])
-            .Select(scheme => Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(scheme))).Scheme.Name)
-            .ToList();
-
-        Assert.Equal(["Test Rescue", "Test Muster", "Test Wounded", "Test Lookout"], drawn[^4..]);
-        Assert.DoesNotContain("Test Henchman Army", drawn);
     }
 
     [Theory]

@@ -10,8 +10,9 @@ namespace LegendaryPickerService.Tests;
 // (1 extra Hero into the Villain Deck), 9 Test Demons (1 extra Test Jean Hero into the Villain Deck),
 // 10 Test Summons (requires Test Nova Rider), 11 Test Web (at least 1 Spider Friends Hero), 12 Test
 // Corps (exactly 2 Test Nova Heroes), 13 Test Unique (requires Test Jean Grey, no two Heroes with the same
-// Hero Name), 14 Test Vault (2 extra X-Men Heroes set aside, 1 in Solo) and 15 Test Lair (Test Phoenix
-// beside the Scheme). Solo allows 6 core Schemes, so there Test Vault is 12. Mastermind draw 0 is Dr. Doom,
+// Hero Name), 14 Test Vault (2 extra X-Men Heroes set aside, 1 in Solo), 15 Test Lair (Test Phoenix
+// beside the Scheme) and 16 Test Guest Star (1 Test Visitor, from the Visitors fixture, into the Villain Deck).
+// Solo allows 6 core Schemes, so there Test Vault is 12. Mastermind draw 0 is Dr. Doom,
 // who leads a Henchman Group, so a 2-player setup draws 2 Villain Groups and then its Heroes.
 public sealed class HeroRulesTests
 {
@@ -108,20 +109,22 @@ public sealed class HeroRulesTests
         Assert.Equal(new RuleNote("Scheme requires exactly 2 Test Nova Heroes", "Card", null, FixtureName), setup.Notes[0]);
     }
 
-    [Fact]
-    public void Schemes_whose_Hero_rules_the_included_Heroes_cannot_meet_are_dropped()
+    // Test Guest Star draws a Test Visitor outside the Hero Deck, which only the Visitors fixture holds, and its draw may
+    // take the Hero from another box (otherBox). Without that box the setup still uses the Hero the player owns, and the
+    // checklist says which box to pull it from; with it, the Hero is an ordinary included one.
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void A_Hero_a_Scheme_may_take_from_another_box_is_drawn_whether_or_not_that_box_is_included(bool visitors)
     {
-        // Test Impossible Corps needs 3 Test Nova Heroes of the 2 there are, and Test Missing Guest a Hero Name no Hero has.
-        var schemes = new ScriptedRandom();
-        Generator.Generate(2, Boxes, schemes);
+        string[] boxes = visitors ? ["core", "heroes", "visitors"] : Boxes;
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, boxes, new ScriptedRandom(16, 0)));
 
-        var drawn = Enumerable.Range(0, schemes.Options[0])
-            .Select(scheme => Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(scheme))).Scheme.Name)
-            .ToList();
-
-        Assert.Equal(
-            ["Test Song", "Test Demons", "Test Summons", "Test Web", "Test Corps", "Test Unique", "Test Vault", "Test Lair"],
-            drawn[8..]);
+        Assert.Equal("Test Guest Star", setup.Scheme.Name);
+        Assert.Equal([new OutsideHero(Hero("visitors_hero_test-visitor"), Pile.VillainDeck, 14)], setup.OutsideHeroes);
+        Assert.DoesNotContain(Hero("visitors_hero_test-visitor"), setup.Heroes);
+        var guest = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).OutsideHeroes.Single().Hero;
+        Assert.Equal(("Visitors Fixture", !visitors), (guest.Box, guest.NotIncluded));
     }
 
     [Fact]

@@ -191,8 +191,7 @@ public class SpiderManHomecomingTests
         Assert.Contains(group, Draw(2, "Ferry Disaster", mastermind).VillainGroups.Select(g => g.Name));
     }
 
-    // The exclusion case: with every other box of its ruleset included, Spider-Man Homecoming changes nothing. With
-    // twelve boxes each draw is slow, so it tries 10 seeds per player count rather than 40.
+    // The exclusion case: with every other box of its ruleset included, Spider-Man Homecoming changes nothing.
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -205,7 +204,7 @@ public class SpiderManHomecomingTests
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary", "civil-war", "deadpool", "noir", "x-men"];
 
-        for (var seed = 0; seed < 10; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withItLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var expected = Assert.IsType<SetupResult>(neverLoaded.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));

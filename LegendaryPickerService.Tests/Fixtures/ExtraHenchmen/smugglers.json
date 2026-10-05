@@ -38,16 +38,6 @@
         "extraHenchmanGroups": [{ "players": null, "value": 1, "source": "Card" }],
         "extraHenchmanCards": { "value": 6, "source": "Card" }
       }
-    },
-    {
-      "id": "smugglers_scheme_test-overload",
-      "name": "Test Overload",
-      "terms": ["core_term_scheme-twist"],
-      "setup": {
-        "twists": [{ "players": null, "value": 7, "source": "Card" }],
-        "extraHenchmanGroups": [{ "players": null, "value": 1, "source": "Card" }],
-        "extraHenchmanCards": { "value": 12, "source": "Card" }
-      }
     }
   ],
   "glossary": []

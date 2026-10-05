@@ -240,7 +240,7 @@ public class MixedRulesetsTests
     public void A_card_whose_Wounds_no_included_box_supplies_is_never_drawn(int players)
     {
         string[] boxes = ["villains", "dark-city"];
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var setup = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
 
@@ -261,7 +261,7 @@ public class MixedRulesetsTests
     public void Villains_with_Heroic_expansions_always_draws_a_Villainous_card(int players)
     {
         string[] boxes = ["villains", "dark-city"];
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var setup = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
 

@@ -15,14 +15,16 @@
     "schemeTwists": { "value": 0, "source": "R p.1" }
   },
   "heroes": [],
-  "villainGroups": [],
+  "villainGroups": [
+    { "id": "effects_villain_test-recruits", "name": "Test Recruits", "terms": [] }
+  ],
   "henchmanGroups": [],
   "masterminds": [
     {
       "id": "effects_mastermind_test-recruiter",
       "name": "Test Recruiter",
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
-      "alwaysLeads": { "groupId": "core_villain_hydra", "groupType": "villain", "source": "Card" },
+      "alwaysLeads": { "groupId": "effects_villain_test-recruits", "groupType": "villain", "source": "Card" },
       "setup": {
         "extraHeroes": [{ "players": null, "value": 1, "source": "Card" }]
       }

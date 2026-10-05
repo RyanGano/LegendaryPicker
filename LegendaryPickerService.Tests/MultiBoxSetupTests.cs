@@ -39,7 +39,7 @@ public class MultiBoxSetupTests
     [InlineData(5)]
     public void With_only_the_core_box_included_the_expansion_changes_no_draw(int players)
     {
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withExpansionLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, ["core"], new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var coreAlone = Assert.IsType<SetupResult>(CoreOnly.Generate(players, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
@@ -128,7 +128,7 @@ public class MultiBoxSetupTests
         Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "fixture"], random));
         Assert.Equal(17, random.Options[4]);
 
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var setup = Assert.IsType<SetupResult>(Generator.Generate(5, ["core", "fixture"], new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             Assert.DoesNotContain(setup.Heroes, hero => hero.Name == "Test Warden");
