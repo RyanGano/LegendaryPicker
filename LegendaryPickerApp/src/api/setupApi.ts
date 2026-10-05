@@ -31,6 +31,7 @@ export type GlossaryEntry = {
 // Each deck's total counts the cards the setup's moves put in it and take out of it. outsideHeroCards
 // counts the cards of the Heroes outside the Hero Deck that go into the Villain Deck; an API from
 // before them leaves it out. mastermindTactics counts the Tactics of other Masterminds the Scheme shuffles in,
+// present only when there are any. ownTactics counts the drawn Mastermind's own Tactics the Scheme shuffles in, also
 // present only when there are any.
 export type VillainDeck = {
   twists: number
@@ -40,6 +41,7 @@ export type VillainDeck = {
   bystanders: number
   outsideHeroCards?: number
   mastermindTactics?: number
+  ownTactics?: number
   total: number
 }
 

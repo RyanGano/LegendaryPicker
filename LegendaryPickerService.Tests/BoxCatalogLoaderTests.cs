@@ -171,6 +171,14 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("core_scheme_legacy-virus has setup.teamSplit");
     }
 
+    [Fact]
+    public void Rejects_own_Tactics_below_1()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["ownTactics"] = JsonNode.Parse("""{ "value": 0, "source": "Card" }"""));
+
+        AssertRejected("core_scheme_legacy-virus shuffles 0 Tactics of its Mastermind into the villainDeck; setup.ownTactics is at least 1.");
+    }
+
     [Theory]
     [InlineData("  ", "setup.solo has a play rule with no label")]
     [InlineData("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen",

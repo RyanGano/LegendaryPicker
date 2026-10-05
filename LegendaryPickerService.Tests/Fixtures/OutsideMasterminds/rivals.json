@@ -55,6 +55,16 @@
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "outsideMasterminds": [{ "to": "setAside", "count": [{ "players": null, "value": 4, "source": "Card" }] }]
       }
+    },
+    {
+      "id": "rivals_scheme_test-hideout",
+      "name": "Test Hideout",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "requiredGroups": [{ "groupId": "rivals_villain_test-mob", "groupType": "villain", "source": "Card" }],
+        "ownTactics": { "value": 4, "source": "Card" }
+      }
     }
   ],
   "glossary": []

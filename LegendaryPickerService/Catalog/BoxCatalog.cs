@@ -541,6 +541,12 @@ public sealed partial class BoxCatalog
                 }
             }
 
+            if (scheme.Setup.OwnTactics is { Value: < 1 } ownTactics)
+            {
+                throw new InvalidDataException(
+                    $"{path}: {scheme.Id} shuffles {ownTactics.Value} Tactics of its Mastermind into the villainDeck; setup.ownTactics is at least 1.");
+            }
+
             if (scheme.Setup.TeamSplit is { } split && (split.Value.Length < 2 || split.Value.Any(count => count < 1)))
             {
                 throw new InvalidDataException(
@@ -808,6 +814,7 @@ public sealed partial class BoxCatalog
             foreach (var count in effect.HeroCounts ?? []) yield return ($"{scheme.Id} setup.heroCounts", count.Source);
             if (effect.DistinctHeroNames is { } distinct) yield return ($"{scheme.Id} setup.distinctHeroNames", distinct.Source);
             if (effect.TeamSplit is { } split) yield return ($"{scheme.Id} setup.teamSplit", split.Source);
+            if (effect.OwnTactics is { } ownTactics) yield return ($"{scheme.Id} setup.ownTactics", ownTactics.Source);
             foreach (var outside in effect.OutsideMasterminds ?? [])
             {
                 if (outside.Tactics is { } tactics) yield return ($"{scheme.Id} setup.outsideMasterminds.tactics", tactics.Source);

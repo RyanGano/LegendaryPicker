@@ -48,6 +48,9 @@ import heroicOnlyWithVillains from './test/fixtures/heroicOnlyWithVillains.json'
 // Dark Alliance with Wasteland Hulk, setting Loki aside.
 import twoBoxesMasterOfTyrants from './test/fixtures/twoBoxesMasterOfTyrants.json'
 import twoBoxesDarkAlliance from './test/fixtures/twoBoxesDarkAlliance.json'
+// A live draw from the core box and Noir with 2 players: Hidden Heart of Darkness with Charles Xavier, Professor of
+// Crime, who shuffles his own 4 Tactics into the Villain Deck.
+import noirHiddenHeart from './test/fixtures/noirHiddenHeart.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -583,6 +586,13 @@ describe('SetupChecklist', () => {
     )
     expect(rows('Villain Deck').at(-1)).toBe('Total 53')
     expect(within(section('Villain Deck')).getAllByRole('checkbox')).toHaveLength(6)
+  })
+
+  it("lays out the Mastermind's own Tactics in the Villain Deck, with a tick box, in its total", () => {
+    renderChecklist(noirHiddenHeart)
+
+    expect(rows('Villain Deck')).toContain('Charles Xavier, Professor of Crime Noir Tactics of its Mastermind 4')
+    expect(rows('Villain Deck').at(-1)).toBe('Total 45')
   })
 
   it('lays out a Mastermind the Scheme sets aside in the Set aside section', () => {

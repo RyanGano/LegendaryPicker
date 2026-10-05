@@ -43,7 +43,8 @@ public sealed record SetupResult(
 // the cards of its drawn groups the Scheme sets beside it. The response lists each move under the setup's
 // moves and each group's cards under its cards beside the Scheme instead, so they are left out of it.
 // OutsideHeroCards counts the cards of the Heroes drawn outside the Hero Deck that go into the Villain Deck, and
-// MastermindTactics the Tactics of other Masterminds the Scheme shuffles into it, written only when there are any.
+// MastermindTactics the Tactics of other Masterminds the Scheme shuffles into it, and OwnTactics the drawn Mastermind's
+// own Tactics it shuffles in, each written only when there are any.
 public sealed record VillainDeck(
     int Twists,
     int MasterStrikes,
@@ -54,9 +55,10 @@ public sealed record VillainDeck(
     [property: JsonIgnore] int MovedOut = 0,
     int OutsideHeroCards = 0,
     [property: JsonIgnore] int SetBeside = 0,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int MastermindTactics = 0)
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int MastermindTactics = 0,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int OwnTactics = 0)
 {
-    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MastermindTactics + MovedIn - MovedOut - SetBeside;
+    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MastermindTactics + OwnTactics + MovedIn - MovedOut - SetBeside;
 }
 
 // OutsideHenchmanCards counts the Henchmen of the Henchman Groups drawn outside the Villain Deck that go into

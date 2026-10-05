@@ -76,6 +76,9 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
             count={villainDeck.mastermindTactics}
           />
         )}
+        {villainDeck.ownTactics !== undefined && (
+          <Item label={names([setup.mastermind])} detail={`Tactics of its ${t.mastermind}`} count={villainDeck.ownTactics} />
+        )}
         <Total count={villainDeck.total} />
       </Section>
 

@@ -206,7 +206,8 @@ public sealed record SetupStep(string Label, string Source);
 // HenchmanCards is how many cards of each Henchman Group go in the Villain Deck. WoundsPerPlayer and
 // BindingsPerPlayer set the size of those stacks. TeamSplit asks for Heroes of as many different teams as it has
 // values, that many of each team, with the teams left to the draw, as Avengers vs. X-Men's 3 Heroes of one team and
-// 3 of another (#125).
+// 3 of another (#125). OwnTactics is how many of the drawn Mastermind's own Tactics the Scheme shuffles into the
+// Villain Deck as Villains, as Noir's Hidden Heart of Darkness does (#130).
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -230,7 +231,8 @@ public sealed record SchemeSetup(
     Sourced<int>? BindingsPerPlayer = null,
     IReadOnlyList<CardsBeside>? CardsBeside = null,
     IReadOnlyList<OutsideMasterminds>? OutsideMasterminds = null,
-    Sourced<int[]>? TeamSplit = null)
+    Sourced<int[]>? TeamSplit = null,
+    Sourced<int>? OwnTactics = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
