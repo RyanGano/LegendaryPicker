@@ -136,21 +136,27 @@ internal sealed class HeroRules
         }
 
         // Whether the Hero Deck's counts can still be met from position from: none is past its exact bound,
-        // and each has enough usable Heroes left for what it still needs.
+        // the slots left can hold what they still need, and each has enough usable Heroes left for it. A Hero
+        // has one team, so counts of different teams need different Heroes, and the slots left must hold the
+        // most each team still needs, added up. Those cheap checks come before any search for usable Heroes,
+        // so each way of a team split that the Heroes chosen so far rule out fails at once (#93).
         bool CountsReachable(int from)
         {
             var left = DeckSlots - deck.Count;
-            foreach (var count in _counts)
+            var needs = _counts
+                .Select(count => (Count: count, Have: deck.Count(hero => Matches(count, hero))))
+                .Select(need => (need.Count, need.Have, Needed: (need.Count.AtLeast ?? need.Count.Exactly!.Value) - need.Have))
+                .ToList();
+            var neededByTeams = needs
+                .Where(need => need.Count.Team is not null && need.Needed > 0)
+                .GroupBy(need => need.Count.Team)
+                .Sum(team => team.Max(need => need.Needed));
+            if (neededByTeams > left || needs.Any(need => need.Have > need.Count.Exactly || need.Needed > left))
             {
-                var have = deck.Count(hero => Matches(count, hero));
-                var needed = (count.AtLeast ?? count.Exactly!.Value) - have;
-                if (have > count.Exactly || needed > left || (needed > 0 && !Enough(from, needed, hero => Matches(count, hero))))
-                {
-                    return false;
-                }
+                return false;
             }
 
-            return true;
+            return needs.All(need => need.Needed <= 0 || Enough(from, need.Needed, hero => Matches(need.Count, hero)));
         }
 
         // The Heroes of one draw are tried in catalog order, so each set of them is tried once. The Hero
