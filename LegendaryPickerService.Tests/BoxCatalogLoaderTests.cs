@@ -222,6 +222,17 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Theory]
+    [InlineData("core_scheme_negative-zone-prison-breakout", 0)]
+    [InlineData("core_scheme_legacy-virus", 10)]
+    public void Rejects_an_extra_Henchman_Group_card_count_below_1_or_with_no_extra_group(string scheme, int cards)
+    {
+        WriteCoreBox(core => Scheme(core, scheme)["setup"]!["extraHenchmanCards"] =
+            JsonNode.Parse($$"""{ "value": {{cards}}, "source": "Card" }"""));
+
+        AssertRejected($"{scheme} has setup.extraHenchmanCards {cards}; it is at least 1, and only with setup.extraHenchmanGroups.");
+    }
+
+    [Theory]
     [InlineData("  ", "setup.solo has a play rule with no label")]
     [InlineData("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen",
         "setup.solo has a 16-word play rule label; labels are at most 15 words")]

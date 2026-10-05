@@ -183,6 +183,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var henchmanGroups = FillSlots(
                 _henchmanGroups.Where(g => DeckCards(plan, g.Id, GroupType.Henchman) > 0).ToList(), g => g.Id, g => g.Name, GroupType.Henchman,
                 plan.HenchmanGroups, plan.Scheme, mastermind, slotNotes);
+            var extraHenchmen = ExtraHenchmanGroups(plan, henchmanGroups.Select(g => g.Id).ToList());
             // Each Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
             var outsideHenchmen = plan.OutsideHenchmen
                 .Zip(DrawMany(_henchmanGroups.Except(henchmanGroups), plan.OutsideHenchmen.Count), (draw, group) => new OutsideHenchmanGroup(group, draw.To, draw.Cards))
@@ -365,7 +366,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     plan.Twists,
                     plan.MasterStrikes,
                     villainGroups.Sum(group => ShareOfDeck(plan, group.Id, GroupType.Villain)),
-                    henchmanGroups.Sum(group => ShareOfDeck(plan, group.Id, GroupType.Henchman)),
+                    henchmanGroups.Sum(group => extraHenchmen.Contains(group.Id)
+                        ? plan.Scheme.Setup.ExtraHenchmanCards!.Value
+                        : ShareOfDeck(plan, group.Id, GroupType.Henchman)),
                     plan.Bystanders,
                     plan.MovedIn(Pile.VillainDeck),
                     plan.MovedOut(Pile.VillainDeck),
@@ -439,6 +442,16 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     $"{henchmanCards} {_terms.Henchmen} of each {_terms.HenchmanGroup}",
                     $"puts {henchmanCards} {_terms.Henchmen} of each {_terms.HenchmanGroup} in the {_terms.VillainDeck}",
                     schemeHenchmen.Source));
+            }
+
+            // The Scheme's own count for the extra Henchman Groups it adds wins over Solo's 3 too (D-readings).
+            if (effect.ExtraHenchmanCards is { } extraCards && ForPlayers(effect.ExtraHenchmanGroups ?? []) is { } extraGroups)
+            {
+                var which = extraGroups.Value == 1 ? $"its extra {_terms.HenchmanGroup}" : $"each of its extra {_terms.HenchmanGroups}";
+                notes.Add(Replaces(
+                    $"{extraCards.Value} {_terms.Henchmen} of {which}",
+                    $"puts {extraCards.Value} {_terms.Henchmen} of {which} in the {_terms.VillainDeck}",
+                    extraCards.Source));
             }
 
             var bystanders = Solo ? rules.Solo.Bystanders.Value : row!.Bystanders;
@@ -693,6 +706,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 && Slots(plan.HenchmanGroups, GroupType.Henchman) + plan.OutsideHenchmen.Count
                     <= Drawable(_henchmanGroups.Select(g => g.Id), GroupType.Henchman)
                 && plan.OutsideHenchmen.All(draw => draw.Cards <= henchmanGroupCards)
+                && (plan.Scheme.Setup.ExtraHenchmanCards is not { } extraCards || ForPlayers(plan.Scheme.Setup.ExtraHenchmanGroups ?? []) is null
+                    || extraCards.Value <= henchmanGroupCards)
                 && plan.OutsideMasterminds.Sum(draw => draw.Count) <= _masterminds.Count(other => other != plan.Mastermind)
                 && HeroesFit(plan)
                 && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
@@ -874,6 +889,27 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         }
 
         private T DrawOne<T>(IReadOnlyList<T> options) => options[random.Next(options.Count)];
+
+        // The drawn Henchman Groups that are the Scheme's extra groups when it gives them a card count of their own: the
+        // last of those drawn into open slots, as every drawn group is random, never a group the Scheme requires or the
+        // Mastermind leads. Empty when the Scheme gives no count or adds no group at this player count.
+        private IReadOnlySet<string> ExtraHenchmanGroups(SetupPlan plan, IReadOnlyList<string> drawn)
+        {
+            var setup = plan.Scheme.Setup;
+            if (setup.ExtraHenchmanCards is null || ForPlayers(setup.ExtraHenchmanGroups ?? []) is not { } extra)
+            {
+                return new HashSet<string>();
+            }
+
+            var placed = (setup.RequiredGroups ?? []).Select(group => group.GroupId).ToHashSet();
+            if (!IgnoresAlwaysLeads)
+            {
+                placed.Add(plan.Mastermind!.AlwaysLeads.GroupId);
+                placed.UnionWith(plan.Mastermind.AlsoLeads?.GroupIds ?? []);
+            }
+
+            return drawn.Where(id => !placed.Contains(id)).TakeLast(extra.Value).ToHashSet();
+        }
 
         // How many cards a group puts in the Villain Deck when the Scheme sets none of them beside it: all of a
         // Villain Group, and of a Henchman Group the Scheme's count, Solo's, or all of it.

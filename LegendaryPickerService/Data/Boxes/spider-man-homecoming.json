@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 7,
+  "id": "spider-man-homecoming",
+  "name": "Spider-Man Homecoming",
+  "ruleset": "firstEdition",
+  "catalogSource": "SM p.2; C1",
+  "about": {"released": {"value": "2017-10", "source": "Q"}},
+  "sources": [
+    {"key": "SM", "url": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_SMHC_Rules.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "SM p.2"}, "villainGroupCards": {"value": 8, "source": "SM p.2"}, "henchmanGroupCards": {"value": 0, "source": "SM p.2"}, "schemeTwists": {"value": 0, "source": "SM p.2"}},
+  "heroes": [
+    {"id": "spider-man-homecoming_hero_happy-hogan", "name": "Happy Hogan", "team": null, "classes": ["core_term_instinct", "core_term_tech"], "terms": ["spider-man-homecoming_term_coordinate", "spider-man-homecoming_term_danger-sense", "spider-man-homecoming_term_striker"]},
+    {"id": "spider-man-homecoming_hero_high-tech-spider-man", "name": "High Tech Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_tech"], "terms": ["paint-the-town-red_term_wall-crawl", "spider-man-homecoming_term_danger-sense", "spider-man-homecoming_term_coordinate"]},
+    {"id": "spider-man-homecoming_hero_peter-parker-homecoming", "name": "Peter Parker, Homecoming", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["paint-the-town-red_term_wall-crawl", "spider-man-homecoming_term_danger-sense", "spider-man-homecoming_term_coordinate"]},
+    {"id": "spider-man-homecoming_hero_peter-s-allies", "name": "Peter's Allies", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["spider-man-homecoming_term_coordinate"]},
+    {"id": "spider-man-homecoming_hero_tony-stark", "name": "Tony Stark", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["spider-man-homecoming_term_coordinate", "spider-man-homecoming_term_danger-sense"]}
+  ],
+  "villainGroups": [
+    {"id": "spider-man-homecoming_villain_salvagers", "name": "Salvagers", "terms": ["spider-man-homecoming_term_striker"]},
+    {"id": "spider-man-homecoming_villain_vulture-tech", "name": "Vulture Tech", "terms": ["spider-man-homecoming_term_striker", "spider-man-homecoming_term_danger-sense", "paint-the-town-red_term_wall-crawl"]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "spider-man-homecoming_mastermind_adrian-toomes", "name": "Adrian Toomes", "terms": ["core_term_always-leads", "core_term_master-strike", "core_term_mastermind-tactic", "spider-man-homecoming_term_striker", "spider-man-homecoming_term_danger-sense"], "alwaysLeads": {"groupId": "spider-man-homecoming_villain_salvagers", "groupType": "villain", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "SM p.2"}]}},
+    {"id": "spider-man-homecoming_mastermind_vulture", "name": "Vulture", "terms": ["core_term_always-leads", "core_term_master-strike", "core_term_mastermind-tactic", "spider-man-homecoming_term_striker", "spider-man-homecoming_term_danger-sense"], "alwaysLeads": {"groupId": "spider-man-homecoming_villain_vulture-tech", "groupType": "villain", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "SM p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "spider-man-homecoming_scheme_distract-the-hero", "name": "Distract the Hero", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "heroCounts": [{"team": "core_term_spider-friends", "atLeast": 1, "source": "Card"}]}},
+    {"id": "spider-man-homecoming_scheme_explosion-at-the-washington-monument", "name": "Explosion at the Washington Monument", "terms": ["core_term_scheme-twist"], "uses": [{"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "moves": [{"card": "bystander", "to": "setAside", "count": [{"players": null, "value": 18, "source": "Card"}]}, {"card": "wound", "to": "setAside", "count": [{"players": null, "value": 14, "source": "Card"}]}], "steps": [{"label": "Divide the set-aside Bystanders and Wounds into eight face-down Floor decks", "source": "Card"}]}},
+    {"id": "spider-man-homecoming_scheme_ferry-disaster", "name": "Ferry Disaster", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 9, "source": "Card"}], "steps": [{"label": "Place the Bystander stack above the Sewers as the Ferry", "source": "Card"}]}},
+    {"id": "spider-man-homecoming_scheme_scavenge-alien-weaponry", "name": "Scavenge Alien Weaponry", "terms": ["core_term_scheme-twist", "spider-man-homecoming_term_striker"], "setup": {"twists": [{"players": null, "value": 7, "source": "Card"}], "extraHenchmanGroups": [{"players": null, "value": 1, "source": "Card"}], "extraHenchmanCards": {"value": 10, "source": "Card"}}}
+  ],
+  "glossary": [
+    {"id": "spider-man-homecoming_term_danger-sense", "name": "Danger Sense", "kind": "keyword", "summary": "Peek at the stated number of Villain Deck cards, gain a bonus for each Villain among them, then put them back on top in any order.", "source": "SM", "page": 1},
+    {"id": "spider-man-homecoming_term_striker", "name": "Striker", "kind": "keyword", "summary": "A bonus that grows with each Master Strike in the KO pile or stacked beside the Mastermind.", "source": "SM", "page": 1},
+    {"id": "spider-man-homecoming_term_coordinate", "name": "Coordinate", "kind": "keyword", "summary": "On another player's turn, swap a Coordinate card from your hand for a fresh draw to let them play a copy of it, if they accept.", "source": "SM", "page": 1}
+  ]
+}

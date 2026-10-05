@@ -493,6 +493,12 @@ public sealed partial class BoxCatalog
                 throw new InvalidDataException(
                     $"{path}: {scheme.Id} has setup.wounds {wounds.Value}; it is at least 1, and a Scheme sets either setup.wounds or setup.woundsPerPlayer.");
             }
+
+            if (scheme.Setup.ExtraHenchmanCards is { } extraCards && (extraCards.Value < 1 || scheme.Setup.ExtraHenchmanGroups is null))
+            {
+                throw new InvalidDataException(
+                    $"{path}: {scheme.Id} has setup.extraHenchmanCards {extraCards.Value}; it is at least 1, and only with setup.extraHenchmanGroups.");
+            }
         }
     }
 
@@ -863,6 +869,7 @@ public sealed partial class BoxCatalog
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
             if (effect.Wounds is { } woundStack) yield return ($"{scheme.Id} setup.wounds", woundStack.Source);
+            if (effect.ExtraHenchmanCards is { } extraCards) yield return ($"{scheme.Id} setup.extraHenchmanCards", extraCards.Source);
             if (effect.BindingsPerPlayer is { } bindings) yield return ($"{scheme.Id} setup.bindingsPerPlayer", bindings.Source);
             foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);

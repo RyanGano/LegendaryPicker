@@ -352,7 +352,7 @@ public class PaintTheTownRedTests
     [InlineData(5)]
     public void Without_Paint_the_Town_Red_included_it_changes_no_draw(int players)
     {
-        using var withoutIt = new DirectoryWithout("paint-the-town-red.json", "secret-wars-volume-2.json");
+        using var withoutIt = new DirectoryWithout("paint-the-town-red.json", "secret-wars-volume-2.json", "spider-man-homecoming.json");
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four"];
 
@@ -389,9 +389,9 @@ public class PaintTheTownRedTests
     {
         public string Path { get; } = Directory.CreateTempSubdirectory("legendary-without-").FullName;
 
-        public DirectoryWithout(string? fileName, string? dependent = null)
+        public DirectoryWithout(string? fileName, params string[] dependents)
         {
-            foreach (var file in Directory.GetFiles(BoxCatalog.DefaultDirectory, "*.json").Where(file => System.IO.Path.GetFileName(file) != fileName && System.IO.Path.GetFileName(file) != dependent))
+            foreach (var file in Directory.GetFiles(BoxCatalog.DefaultDirectory, "*.json").Where(file => System.IO.Path.GetFileName(file) != fileName && !dependents.Contains(System.IO.Path.GetFileName(file))))
             {
                 File.Copy(file, System.IO.Path.Combine(Path, System.IO.Path.GetFileName(file)));
             }

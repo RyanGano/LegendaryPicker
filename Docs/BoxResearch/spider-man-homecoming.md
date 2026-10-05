@@ -1,6 +1,6 @@
 # Spider-Man Homecoming (October 2017)
 
-**Research status: Partial.** The official insert verifies the product counts and several mechanics; printed card images supply the setup facts summarized below.
+**Research status: Partial; integrated (#134).** The official insert verifies the product counts and several mechanics; printed card images supply the setup facts summarized below.
 
 ## Sources
 
