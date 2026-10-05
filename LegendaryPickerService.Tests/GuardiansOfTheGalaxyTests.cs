@@ -321,7 +321,7 @@ public class GuardiansOfTheGalaxyTests
 
         Assert.Equal(("Legacy Virus", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));
         Assert.Null(setup.Stacks.Shards);
-        Assert.Contains(new RuleNote("Leave out the Shard stack: no drawn card uses it", "D-uses", UsesDecision, CoreName), setup.Notes);
+        Assert.Contains(new RuleNote("Leave out the Shard supply: no drawn card uses it", "D-uses", UsesDecision, CoreName), setup.Notes);
     }
 
     // Guardians cards that give Wounds need a box that supplies them; with Legendary: Villains as the only base

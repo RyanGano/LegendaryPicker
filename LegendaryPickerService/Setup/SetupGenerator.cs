@@ -281,8 +281,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .ToList();
             if (leftOut.Count > 0)
             {
+                // The Shards are a supply rather than a stack of cards, and the glossary calls them that.
+                var stacks = leftOut.Where(part => part != Part.Shards).Select(StackName).ToList();
+                var named = new List<string>();
+                if (stacks.Count > 0) named.Add($"{string.Join(" and ", stacks)} {(stacks.Count == 1 ? "stack" : "stacks")}");
+                if (leftOut.Contains(Part.Shards)) named.Add("Shard supply");
                 notes.Add(Note(
-                    $"Leave out the {string.Join(" and ", leftOut.Select(StackName))} {(leftOut.Count == 1 ? "stack: no drawn card uses it" : "stacks: no drawn card uses them")}",
+                    $"Leave out the {string.Join(" and the ", named)}: no drawn card uses {(leftOut.Count == 1 ? "it" : "them")}",
                     rules.Rulings.UnusedPartsLeftOut, rulesBox));
             }
 

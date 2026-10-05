@@ -293,7 +293,7 @@ Use official rulebooks/inserts, official clarifications, or the directly linked 
 
 ## Verified `uses` (#95)
 
-Each card with a `uses` entry in this box's runtime file is listed below with the printed face whose text gains Shards or gives Wounds. Hero, Mastermind-front and Scheme entries rest on the local scans summarized above; Villain and Tactic entries rest on C1's structured fields for the linked face, whose image was not reviewed in this change. Source key `Card`.
+Each card with a `uses` entry in this box's runtime file is listed below with the printed face whose text gains Shards or gives Wounds. Hero, Mastermind-front and Scheme entries rest on the local scans summarized above. The Wound entries for Kree Starforce and Thanos were confirmed by opening the linked card images (#108); the other Villain and Tactic entries rest on C1's structured fields for the linked face, whose image was not reviewed. Source key `Card`.
 
 ### Printed faces behind each entry
 
@@ -303,12 +303,16 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 - **Rocket Raccoon** — Shards: **Incoming Detector** (`rocket-02.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/rocket-02.png)); **Trigger Happy**.
 - **Star-Lord** — Shards: **Element Guns** (`star-lord-03.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/star-lord-03.png)); **Sentient Starship**.
 - **Infinity Gems** — Shards: **Mind Gem** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/infinity-gems-01.png)) and the other Gems' Ambush lines.
-- **Kree Starforce** — Shards: **Supremor** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-04.png)); Wounds: **Korath the Pursuer** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-06.png)), **Ronan the Accuser** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-08.png)).
+- **Kree Starforce** — Shards: **Supremor** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-04.png)); Wounds: **Korath the Pursuer** (its Escape gives each player a Wound; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-06.png)) and **Ronan the Accuser** (its Ambush and Escape give a Wound to the most-accused player; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/kree-starforce-08.png)), both card images opened and confirmed in #108.
 - **Supreme Intelligence of the Kree** — Shards: its Master Strike (`mm-supreme-intelligence.png`; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/supreme-intelligence-of-the-kree-01.png)).
-- **Thanos** — Wounds: the **God of Death** Tactic ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/thanos-02.png)).
+- **Thanos** — Wounds: the **God of Death** Tactic (its Fight gives other players Wounds; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/thanos-02.png)), card image opened and confirmed in #108.
 - **Forge the Infinity Gauntlet** — Shards: its Twist (`scheme-forge-infinity-gauntlet.png`).
 - **Intergalactic Kree Nega-Bomb** — Wounds: its Twist (`scheme-kree-nega-bomb.png`).
 - **Unite the Shards** — Shards: its Setup line fills the supply (`scheme-unite-shards.png`).
+
+### Glossary summaries (#108)
+
+The Shard and Artifact summaries in the runtime file were compared with GG p.1 and reworded in our own words. They state that players, Villains and Masterminds gain Shards from the shared supply, that a player can spend one for +1 and keep the rest, that each Shard on a Villain or Mastermind adds 1, and that an Artifact stays in play across turns with its ability usable once per turn. The insert prints the spend value as an icon, which the text extraction cannot name; the summary says Attack, as the Gamora card's own Attack line does.
 
 ### Runtime choices for the open gaps
 

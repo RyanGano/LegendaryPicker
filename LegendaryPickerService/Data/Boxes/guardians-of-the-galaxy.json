@@ -98,7 +98,7 @@
   ],
   "glossary": [
     { "id": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "name": "Guardians of the Galaxy", "kind": "team", "summary": "A Hero team. In this box its members are Drax the Destroyer, Gamora, Groot, Rocket Raccoon and Star-Lord.", "source": "GG", "page": 1 },
-    { "id": "guardians-of-the-galaxy_term_shard", "name": "Shard", "kind": "keyword", "summary": "A token from a shared supply. Return one to the supply for +1 Attack, now or on a later turn; each Shard sitting on a Villain or Mastermind adds 1 to its Attack.", "source": "GG", "page": 1 },
-    { "id": "guardians-of-the-galaxy_term_artifact", "name": "Artifact", "kind": "keyword", "summary": "A card you put in front of you when you play it. It stays there between turns, and you can usually use its ability once on each of your turns.", "source": "GG", "page": 1 }
+    { "id": "guardians-of-the-galaxy_term_shard", "name": "Shard", "kind": "keyword", "summary": "A token gained from a shared supply by players, Villains and Masterminds. A player can spend one for +1 Attack, saving any they like for later; each one on a Villain or Mastermind adds 1 to its Attack.", "source": "GG", "page": 1 },
+    { "id": "guardians-of-the-galaxy_term_artifact", "name": "Artifact", "kind": "keyword", "summary": "A card that stays in front of you after you play it, instead of being discarded at the end of your turn. Its ability can usually be used once on each of your turns.", "source": "GG", "page": 1 }
   ]
 }
