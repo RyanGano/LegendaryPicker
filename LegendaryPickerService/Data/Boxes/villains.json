@@ -1,13 +1,15 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "id": "villains",
   "name": "Legendary: Villains",
   "ruleset": "villainous",
   "catalogSource": "VIL p.22; C1; C2",
+  "about": { "released": { "value": "2014-07", "source": "Q" } },
   "sources": [
     { "key": "VIL", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf" },
     { "key": "D-mixed", "url": "https://github.com/RyanGano/LegendaryPicker/issues/88" },
-    { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" }
+    { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "VIL p.7" },

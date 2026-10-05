@@ -1,11 +1,13 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "id": "guardians-of-the-galaxy",
   "name": "Guardians of the Galaxy",
   "ruleset": "firstEdition",
   "catalogSource": "GG p.2; C1; C2",
+  "about": { "released": { "value": "2014-10", "source": "Q" } },
   "sources": [
-    { "key": "GG", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf" }
+    { "key": "GG", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "GG p.2" },

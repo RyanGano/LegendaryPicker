@@ -12,6 +12,9 @@ public enum GroupType
 
 public sealed record Sourced<T>(T Value, string Source);
 
+// Facts about the product itself, for listing it. Released is the year and month it first came out, as "2014-10" (#106).
+public sealed record About(Sourced<string> Released);
+
 // A count that can depend on the player count. Players is null when the value
 // applies at every player count the Scheme allows; player count 1 is Solo.
 public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
@@ -33,6 +36,7 @@ public sealed record Box(
     string Name,
     Ruleset Ruleset,
     string CatalogSource,
+    About About,
     IReadOnlyList<SourceLink> Sources,
     BoxComponents Components,
     IReadOnlyList<Hero> Heroes,

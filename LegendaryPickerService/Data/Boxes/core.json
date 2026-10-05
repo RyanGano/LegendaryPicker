@@ -1,15 +1,17 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "id": "core",
   "name": "Marvel Legendary First Edition core box",
   "ruleset": "firstEdition",
   "catalogSource": "R p.22; C1; C2",
+  "about": { "released": { "value": "2012-11", "source": "Q" } },
   "sources": [
     { "key": "R", "url": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf" },
     { "key": "F", "url": "https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ" },
     { "key": "D1", "url": "https://boardgamegeek.com/thread/993341/article/12653573" },
     { "key": "D2", "url": "https://boardgamegeek.com/thread/884926" },
-    { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" }
+    { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "R p.22" },

@@ -231,6 +231,16 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.True(JsonNode.DeepEquals(expected, JsonNode.Parse(body)), body);
     }
 
+    [Fact]
+    public async Task Boxes_come_base_games_first_then_by_release_month()
+    {
+        var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
+
+        Assert.Equal(
+            ["core", "villains", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "fear-itself"],
+            boxes!.Select(box => (string)box!["id"]!));
+    }
+
     // Only Legendary: Villains has rules for mixing rulesets, and only Fear Itself can be played without a base game of
     // its own ruleset (D-heroic), so the app can tell a player which ticked boxes can't be drawn together.
     [Fact]
@@ -240,8 +250,8 @@ public sealed class SetupEndpointTests : IDisposable
 
         Assert.Equal(
             [
-                "core firstEdition base", "dark-city firstEdition", "fantastic-four firstEdition", "fear-itself villainous plays",
-                "guardians-of-the-galaxy firstEdition", "paint-the-town-red firstEdition", "villains villainous base mixes",
+                "core firstEdition base", "villains villainous base mixes", "dark-city firstEdition", "fantastic-four firstEdition",
+                "paint-the-town-red firstEdition", "guardians-of-the-galaxy firstEdition", "fear-itself villainous plays",
             ],
             boxes!.Select(box =>
                 $"{box!["id"]} {box["ruleset"]}{((bool)box["baseGame"]! ? " base" : "")}{((bool)box["mixesRulesets"]! ? " mixes" : "")}"

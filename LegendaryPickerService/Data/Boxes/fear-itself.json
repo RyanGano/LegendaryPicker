@@ -1,12 +1,14 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "id": "fear-itself",
   "name": "Fear Itself",
   "ruleset": "villainous",
   "catalogSource": "FI p.2; C1",
+  "about": { "released": { "value": "2015-03", "source": "Q" } },
   "sources": [
     { "key": "FI", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Fear_Itself.pdf" },
-    { "key": "D-heroic", "url": "https://github.com/RyanGano/LegendaryPicker/issues/110" }
+    { "key": "D-heroic", "url": "https://github.com/RyanGano/LegendaryPicker/issues/110" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "FI p.2" },

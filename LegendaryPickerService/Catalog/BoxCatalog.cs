@@ -13,7 +13,7 @@ namespace LegendaryPickerService.Catalog;
 // kebab-case segment. References name a full id, so a box can reference another box's groups.
 public sealed partial class BoxCatalog
 {
-    public const int SchemaVersion = 6;
+    public const int SchemaVersion = 7;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
@@ -38,6 +38,9 @@ public sealed partial class BoxCatalog
 
     [GeneratedRegex("^[a-z0-9]+(-[a-z0-9]+)*$")]
     private static partial Regex Segment();
+
+    [GeneratedRegex("^(19|20)[0-9]{2}-(0[1-9]|1[0-2])$")]
+    private static partial Regex Released();
 
     public IReadOnlyList<Box> Boxes { get; }
 
@@ -130,6 +133,7 @@ public sealed partial class BoxCatalog
                 }
             }
 
+            ValidateReleased(path, box);
             ValidateTerms(path, box, sourceKeys);
             ValidateSteps(path, box);
             ValidateRuleSources(path, box, sourceKeys);
@@ -303,6 +307,16 @@ public sealed partial class BoxCatalog
             {
                 throw new InvalidDataException($"{path}: {owner} lists the {what} \"{label}\" twice.");
             }
+        }
+    }
+
+    // The release month orders the box list, so it must be a real year-month; its source is checked with the other rule sources.
+    private static void ValidateReleased(string path, Box box)
+    {
+        if (!Released().IsMatch(box.About.Released.Value))
+        {
+            throw new InvalidDataException(
+                $"{path}: box {box.Id} has released {box.About.Released.Value}; a release is a year and month such as 2014-10.");
         }
     }
 
@@ -673,6 +687,7 @@ public sealed partial class BoxCatalog
     // Every rule value and setup effect a rule note can cite, named by where it sits in the box file.
     private static IEnumerable<(string Rule, string Source)> RuleSources(Box box)
     {
+        yield return ("about.released", box.About.Released.Source);
         var components = box.Components;
         yield return ("components.heroCards", components.HeroCards.Source);
         yield return ("components.villainGroupCards", components.VillainGroupCards.Source);

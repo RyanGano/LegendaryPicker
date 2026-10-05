@@ -62,7 +62,7 @@ public class DarkCityTests
     {
         Assert.Equal(["core", "dark-city"], Catalog.Boxes.Select(box => box.Id).Take(2));
         Assert.Equal(DarkCityName, DarkCity.Name);
-        Assert.Equal(6, DarkCity.SchemaVersion);
+        Assert.Equal(7, DarkCity.SchemaVersion);
         Assert.False(DarkCity.IsBaseGame);
     }
 
@@ -162,7 +162,7 @@ public class DarkCityTests
     public void The_rules_insert_is_the_one_source_key()
     {
         Assert.Equal(
-            [new SourceLink("DC", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf")],
+            [new SourceLink("DC", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
             DarkCity.Sources);
         Assert.Equal("DC p.2; C1; C2", DarkCity.CatalogSource);
     }

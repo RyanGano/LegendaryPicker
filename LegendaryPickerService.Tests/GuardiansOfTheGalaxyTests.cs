@@ -38,7 +38,7 @@ public class GuardiansOfTheGalaxyTests
     public void Guardians_of_the_Galaxy_is_an_expansion_with_the_Shard_tokens_of_the_rules_insert()
     {
         Assert.Equal(GuardiansName, Guardians.Name);
-        Assert.Equal(6, Guardians.SchemaVersion);
+        Assert.Equal(7, Guardians.SchemaVersion);
         Assert.False(Guardians.IsBaseGame);
         Assert.Equal(Ruleset.FirstEdition, Guardians.Ruleset);
 
@@ -148,7 +148,7 @@ public class GuardiansOfTheGalaxyTests
 
         Assert.All(ids, id => Assert.Matches("^guardians-of-the-galaxy_(hero|villain|mastermind|scheme|term)_[a-z0-9]+(-[a-z0-9]+)*$", id));
         Assert.Equal(
-            [new SourceLink("GG", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf")],
+            [new SourceLink("GG", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
             Guardians.Sources);
         Assert.Equal("GG p.2; C1; C2", Guardians.CatalogSource);
     }
