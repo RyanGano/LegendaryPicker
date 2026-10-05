@@ -30,7 +30,8 @@ export type GlossaryEntry = {
 
 // Each deck's total counts the cards the setup's moves put in it and take out of it. outsideHeroCards
 // counts the cards of the Heroes outside the Hero Deck that go into the Villain Deck; an API from
-// before them leaves it out.
+// before them leaves it out. mastermindTactics counts the Tactics of other Masterminds the Scheme shuffles in,
+// present only when there are any.
 export type VillainDeck = {
   twists: number
   masterStrikes: number
@@ -38,6 +39,7 @@ export type VillainDeck = {
   henchmanCards: number
   bystanders: number
   outsideHeroCards?: number
+  mastermindTactics?: number
   total: number
 }
 
@@ -89,6 +91,14 @@ export type OutsideHenchmen = {
   group: Component
   to: Pile
   cards: number
+}
+
+// A Mastermind a Scheme draws besides its own: set aside whole until the Scheme brings it into play, or tactics of
+// its Tactics into the Villain Deck, where they play as Villains.
+export type OutsideMastermind = {
+  mastermind: Component
+  to: Pile
+  tactics?: number
 }
 
 // Cards of a group the Scheme sets beside it, whether or not the group is drawn: count of them, or, when card is
@@ -174,6 +184,8 @@ export type Setup = {
   outsideHenchmen?: OutsideHenchmen[]
   // Left out by an API from before cards of a group beside the Scheme.
   cardsBeside?: CardsBeside[]
+  // Present only when the Scheme draws Masterminds besides its own.
+  outsideMasterminds?: OutsideMastermind[]
   // The setup steps the Scheme and Mastermind print that change no count, Scheme first, each a short
   // instruction. Left out by an API from before setup steps.
   steps?: string[]

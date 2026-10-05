@@ -364,8 +364,9 @@ public sealed partial class BoxCatalog
 
     // A move puts cards somewhere they can be laid out from, never back where they came from, and
     // one into the starting decks already puts its count in each player's deck. Henchmen drawn outside
-    // the Villain Deck go only where a Scheme is known to put them. A card set beside the Scheme by name
-    // needs a name the player can find.
+    // the Villain Deck go only where a Scheme is known to put them, as do other Masterminds a Scheme draws, and
+    // only Tactics of those go into the Villain Deck. A card set beside the Scheme by name needs a name the player
+    // can find.
     private static void ValidateMoves(string path, Box box)
     {
         foreach (var scheme in box.Schemes)
@@ -397,6 +398,26 @@ public sealed partial class BoxCatalog
                 {
                     throw new InvalidDataException(
                         $"{path}: {scheme.Id} puts Henchmen from outside the Villain Deck in {WireName(outside.To)}; they go to {string.Join(", ", OutsideHenchmen.Destinations.Select(WireName))}.");
+                }
+            }
+
+            foreach (var outside in scheme.Setup.OutsideMasterminds ?? [])
+            {
+                if (!OutsideMasterminds.Destinations.Contains(outside.To))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} puts other Masterminds in {WireName(outside.To)}; they go to {string.Join(", ", OutsideMasterminds.Destinations.Select(WireName))}.");
+                }
+
+                if ((outside.To == Pile.VillainDeck) != (outside.Tactics is not null))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} draws other Masterminds into {WireName(outside.To)}; tactics says how many of each one's Tactics go to the villainDeck, and only there.");
+                }
+
+                if (outside.Tactics is { Value: < 1 } tactics)
+                {
+                    throw new InvalidDataException($"{path}: {scheme.Id} puts {tactics.Value} Tactics of each other Mastermind in the villainDeck; values are at least 1.");
                 }
             }
 
@@ -743,6 +764,10 @@ public sealed partial class BoxCatalog
             foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);
             foreach (var count in effect.HeroCounts ?? []) yield return ($"{scheme.Id} setup.heroCounts", count.Source);
             if (effect.DistinctHeroNames is { } distinct) yield return ($"{scheme.Id} setup.distinctHeroNames", distinct.Source);
+            foreach (var outside in effect.OutsideMasterminds ?? [])
+            {
+                if (outside.Tactics is { } tactics) yield return ($"{scheme.Id} setup.outsideMasterminds.tactics", tactics.Source);
+            }
         }
 
         foreach (var (rule, values) in PlayerCountLists(box))
@@ -792,7 +817,7 @@ public sealed partial class BoxCatalog
 
     // Every list of per-player-count values in a box: the base game's extra Heroes, the Masterminds' setup
     // effects, then each Scheme's, with its moves, Heroes outside the Hero Deck, Henchmen outside the Villain
-    // Deck and cards beside it last.
+    // Deck, cards beside it and other Masterminds last.
     private static IEnumerable<(string Rule, IReadOnlyList<PlayerCountValue> Values)> PlayerCountLists(Box box)
     {
         if (box.Setup?.ExtraHeroes is { } extraHeroes)
@@ -832,6 +857,11 @@ public sealed partial class BoxCatalog
             foreach (var (beside, index) in (scheme.Setup.CardsBeside ?? []).Select((beside, index) => (beside, index)))
             {
                 yield return ($"{scheme.Id} setup.cardsBeside[{index}].count", beside.Count);
+            }
+
+            foreach (var (outside, index) in (scheme.Setup.OutsideMasterminds ?? []).Select((outside, index) => (outside, index)))
+            {
+                yield return ($"{scheme.Id} setup.outsideMasterminds[{index}].count", outside.Count);
             }
         }
     }

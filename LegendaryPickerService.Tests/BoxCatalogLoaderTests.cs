@@ -650,6 +650,26 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Theory]
+    [InlineData("""{ "to": "heroDeck", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
+        "puts other Masterminds in heroDeck; they go to villainDeck, setAside")]
+    [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 3, "source": "Card" }] }""",
+        "draws other Masterminds into villainDeck; tactics says how many of each one's Tactics go to the villainDeck, and only there")]
+    [InlineData("""{ "to": "setAside", "count": [{ "players": null, "value": 1, "source": "Card" }], "tactics": { "value": 4, "source": "Card" } }""",
+        "draws other Masterminds into setAside; tactics says how many of each one's Tactics go to the villainDeck, and only there")]
+    [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 3, "source": "Card" }], "tactics": { "value": 0, "source": "Card" } }""",
+        "puts 0 Tactics of each other Mastermind in the villainDeck; values are at least 1")]
+    [InlineData("""{ "to": "setAside", "count": [{ "players": null, "value": 0, "source": "Card" }] }""",
+        "setup.outsideMasterminds[0].count has value 0; values are at least 1")]
+    [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 3, "source": "Card" }], "tactics": { "value": 4, "source": "Rumor" } }""",
+        "setup.outsideMasterminds.tactics cites source Rumor, which is not in this box's sources")]
+    public void Rejects_other_Masterminds_with_no_legal_draw(string outside, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["outsideMasterminds"] = new JsonArray(JsonNode.Parse(outside)));
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
+    [Theory]
     [InlineData("""{ "groupId": "core_henchman_nobody", "groupType": "henchman", "count": [{ "players": null, "value": 2, "source": "Card" }] }""",
         "references henchman group core_henchman_nobody, which no loaded box declares")]
     [InlineData("""{ "groupId": "core_villain_hydra", "groupType": "henchman", "count": [{ "players": null, "value": 2, "source": "Card" }] }""",

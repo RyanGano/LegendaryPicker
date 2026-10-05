@@ -6,14 +6,14 @@ import { TermChips } from './TermChips.tsx'
 // What the players are playing, before how to lay it out: the setup's heading, the drawn Scheme
 // and Mastermind as cards, then every Hero and group as its own tile. The Heroes a Scheme draws outside
 // the Hero Deck, and the Henchman Groups it draws outside the Villain Deck, follow the others of their
-// type, each with a line saying where its cards go. Under each name sit the chips for the glossary terms
+// type, each with a line saying where its cards go; other Masterminds it draws get tiles of their own. Under each name sit the chips for the glossary terms
 // that component uses. When the setup includes more than one box, the box each one comes from sits under
 // its name. Card types use the words of the setup's ruleset, or in a mixed setup each card's own ruleset's.
 // When the included boxes follow more than one ruleset, a line under the heading says which rules the
 // setup follows and why. On a wide screen this sits beside the checklist.
 export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?: Ref<HTMLHeadingElement> }) {
   // An API from before them leaves these out; read that as none.
-  const { outsideHeroes = [], outsideHenchmen = [] } = setup
+  const { outsideHeroes = [], outsideHenchmen = [], outsideMasterminds = [] } = setup
   const glossary = new Map(setup.glossary.map((entry) => [entry.id, entry]))
   const t = setupTerms(setup)
   const chipsOf = (component: Component) => (
@@ -55,6 +55,18 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
             tags={alwaysLeadsNotes(setup.notes)}
           />
         </div>
+        {outsideMasterminds.length > 0 && (
+          <TileGroup
+            title={[`Other ${t.mastermind}`, `Other ${t.mastermind}s`]}
+            kind="mastermind"
+            components={[]}
+            outside={outsideMasterminds.map(({ mastermind, to }) => ({
+              component: mastermind,
+              destination: to === 'villainDeck' ? `Tactics go to ${t.villainDeck}` : goesTo[to],
+            }))}
+            chipsOf={chipsOf}
+          />
+        )}
         <TileGroup
           title={[heroTerms.hero, heroTerms.heroes]}
           kind="hero"
