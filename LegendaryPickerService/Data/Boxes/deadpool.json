@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 7,
+  "id": "deadpool",
+  "name": "Deadpool",
+  "ruleset": "firstEdition",
+  "catalogSource": "DP p.2; C1",
+  "about": {"released": {"value": "2016-10", "source": "Q"}},
+  "sources": [
+    {"key": "DP", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Deadpool_RulesSheet.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "DP p.2"}, "villainGroupCards": {"value": 8, "source": "DP p.2"}, "henchmanGroupCards": {"value": 0, "source": "DP p.2"}, "schemeTwists": {"value": 0, "source": "DP p.2"}},
+  "heroes": [
+    {"id": "deadpool_hero_bob-agent-of-hydra", "name": "Bob, Agent of HYDRA", "team": "deadpool_term_hydra", "classes": ["core_term_covert", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"]},
+    {"id": "deadpool_hero_deadpool-mercs-for-money", "name": "Deadpool (Mercs for Money)", "heroName": "Deadpool", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "deadpool_hero_slapstick", "name": "Slapstick", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["deadpool_term_excessive-violence", "core_term_rescue-a-bystander"]},
+    {"id": "deadpool_hero_solo", "name": "Solo", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"]},
+    {"id": "deadpool_hero_stingray", "name": "Stingray", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"]}
+  ],
+  "villainGroups": [
+    {"id": "deadpool_villain_deadpool-s-friends", "name": "Deadpool's Friends", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "deadpool_term_excessive-violence", "deadpool_term_revenge"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "deadpool_villain_evil-deadpool-corpse", "name": "Evil Deadpool Corpse", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "deadpool_term_excessive-violence", "deadpool_term_revenge"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "deadpool_mastermind_evil-deadpool", "name": "Evil Deadpool", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "deadpool_term_revenge"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "deadpool_villain_evil-deadpool-corpse", "groupType": "villain", "source": "Card"}},
+    {"id": "deadpool_mastermind_macho-gomez", "name": "Macho Gomez", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "deadpool_term_revenge", "core_term_rescue-a-bystander"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "deadpool_villain_deadpool-s-friends", "groupType": "villain", "source": "Card"}}
+  ],
+  "schemes": [
+    {"id": "deadpool_scheme_deadpool-kills-the-marvel-universe", "name": "Deadpool Kills the Marvel Universe", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": [1, 2, 3], "value": 6, "source": "Card"}, {"players": [4, 5], "value": 5, "source": "Card"}], "heroes": [{"players": [2], "value": 4, "source": "Card"}], "heroCounts": [{"heroName": "Deadpool", "atLeast": 1, "source": "Card"}]}},
+    {"id": "deadpool_scheme_deadpool-wants-a-chimichanga", "name": "Deadpool Wants a Chimichanga", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}], "villainDeckBystanders": {"value": 12, "source": "Card"}, "extraVillainGroups": [{"players": [3, 4, 5], "value": 1, "source": "Card"}]}, "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "deadpool_scheme_deadpool-writes-a-scheme", "name": "Deadpool Writes a Scheme", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}], "heroCounts": [{"heroName": "Deadpool", "atLeast": 1, "source": "Card"}]}, "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "deadpool_scheme_everybody-hates-deadpool", "name": "Everybody Hates Deadpool", "terms": ["core_term_scheme-twist", "deadpool_term_revenge"], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}], "heroCounts": [{"team": "deadpool_term_mercs-for-money", "atLeast": 1, "source": "Card"}]}, "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "glossary": [
+    {"id": "deadpool_term_mercs-for-money", "name": "Mercs for Money", "kind": "team", "summary": "A Hero team. In this box its members are Deadpool, Slapstick, Solo and Stingray.", "source": "DP", "page": 1},
+    {"id": "deadpool_term_hydra", "name": "HYDRA", "kind": "team", "summary": "A Hero team. In this box its one member is Bob, Agent of HYDRA.", "source": "DP", "page": 1},
+    {"id": "deadpool_term_excessive-violence", "name": "Excessive Violence", "kind": "keyword", "summary": "Once a turn, pay one Attack more than a fight costs to trigger every Excessive Violence ability on cards you played this turn. Villains with it trigger too.", "source": "DP", "page": 1},
+    {"id": "deadpool_term_revenge", "name": "Revenge", "kind": "keyword", "summary": "A Villain with Revenge gains Attack for each Villain of the named group in your Victory Pile. Masterminds do not count as Villains for this.", "source": "DP", "page": 2}
+  ]
+}
