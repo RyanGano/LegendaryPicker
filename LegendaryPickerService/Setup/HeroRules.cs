@@ -14,6 +14,10 @@ internal sealed class HeroRules
     private readonly bool _distinctNames;
     private readonly Dictionary<Hero, string> _kinds;
 
+    // With a team split, the rules for each way of giving its counts to different teams of the included Heroes, as
+    // exact team counts; the Heroes can be completed when any one of them can.
+    private readonly List<HeroRules>? _splits;
+
     // heroes are the included Heroes in catalog order; outsideSlots has one entry per Hero drawn outside
     // the Hero Deck, in the order the Scheme lists its draws.
     public HeroRules(IReadOnlyList<Hero> heroes, int deckSlots, SchemeSetup scheme, IReadOnlyList<OutsideHeroes> outsideSlots)
@@ -23,6 +27,17 @@ internal sealed class HeroRules
         _distinctNames = scheme.DistinctHeroNames?.Value ?? false;
         DeckSlots = deckSlots;
         OutsideSlots = outsideSlots;
+
+        if (scheme.TeamSplit is { } split)
+        {
+            _splits = TeamsFor(heroes, split.Value)
+                .Select(teams => new HeroRules(heroes, deckSlots, scheme with
+                {
+                    TeamSplit = null,
+                    HeroCounts = [.. _counts, .. teams.Zip(split.Value, (team, count) => new HeroCount(split.Source, Team: team, Exactly: count))],
+                }, outsideSlots))
+                .ToList();
+        }
 
         // A Hero's kind: which counts it matches, which draws outside the Hero Deck it fits, and, when no
         // two Heroes may share a Hero Name, its Hero Name if another included Hero has it too. Heroes of one
@@ -58,6 +73,11 @@ internal sealed class HeroRules
     // search to the few kinds of Hero the rules tell apart rather than every combination of Heroes.
     public bool CanComplete(IReadOnlyList<Hero> chosenDeck, IReadOnlyList<Hero> chosenOutside)
     {
+        if (_splits is not null)
+        {
+            return _splits.Any(rules => rules.CanComplete(chosenDeck, chosenOutside));
+        }
+
         var deck = new List<Hero>();
         var outside = new List<Hero>();
 
@@ -159,6 +179,27 @@ internal sealed class HeroRules
         }
 
         return deck.Count <= DeckSlots && FillOutside(0);
+    }
+
+    // Each way of giving a team split's counts to different teams, one team per count, from the teams with at least
+    // that many included Heroes. Counts that are equal are given teams in catalog order, so no way is listed twice.
+    private static IEnumerable<string[]> TeamsFor(IReadOnlyList<Hero> heroes, int[] counts)
+    {
+        var teams = heroes.Select(hero => hero.Team).OfType<string>().Distinct().ToList();
+        IEnumerable<string[]> From(int index, string[] chosen)
+        {
+            if (index == counts.Length)
+            {
+                return [chosen];
+            }
+
+            var after = index > 0 && counts[index - 1] == counts[index] ? teams.IndexOf(chosen[index - 1]) + 1 : 0;
+            return teams.Skip(after)
+                .Where(team => !chosen.Contains(team) && heroes.Count(hero => hero.Team == team) >= counts[index])
+                .SelectMany(team => From(index + 1, [.. chosen, team]));
+        }
+
+        return From(0, []);
     }
 
     private static bool Matches(HeroCount count, Hero hero) =>

@@ -229,9 +229,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var rulesUse = mixed && mixingRules ? boxes.Where(box => box.IsBaseGame).SelectMany(box => box.Setup!.Uses) : rules.Uses;
             // A part no included box supplies is replaced by its stand-in (D-heroic, FI p.2).
             // Tactics shuffled into the Villain Deck play with no abilities, so their Mastermind brings no parts (#113).
+            // Every setup shuffles all the included Bystanders together, so special Bystanders bring their parts too (#125).
             var cardParts = cards
                 .Except(outsideMasterminds.Where(other => other.To == Pile.VillainDeck).Select(other => other.Mastermind))
                 .SelectMany(card => card.Parts)
+                .Concat(stackBoxes.Where(box => box.Components.Bystanders?.Value > 0).SelectMany(box => box.BystanderUses ?? []).Select(use => use.Part))
                 .ToHashSet();
             var used = rulesUse.Select(use => use.Part).Concat(cardParts.Select(StandInFor).OfType<Part>()).ToHashSet();
             var stoodIn = standIns.Values.Where(active => cardParts.Contains(active.Rule.Part)).ToList();
@@ -496,6 +498,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 var (bound, value) = count.AtLeast is { } atLeast ? ("at least", atLeast) : ("exactly", count.Exactly!.Value);
                 notes.Add(Card($"{schemeWord} requires {bound} {value} {HeroesOf(value, count.Team, count.HeroName)}", count.Source));
+            }
+
+            if (effect.TeamSplit is { } split)
+            {
+                var parts = split.Value.Select((count, index) => $"{count} {HeroesOf(count, null, null)} of {(index == 0 ? "one team" : "another")}");
+                notes.Add(Card($"{schemeWord} requires {string.Join(" and ", parts)}", split.Source));
             }
 
             if (effect.DistinctHeroNames is { Value: true } distinct)

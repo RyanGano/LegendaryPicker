@@ -30,6 +30,9 @@ public enum Ruleset
     Villainous,
 }
 
+// BystanderUses lists the parts the box's special Bystanders use, such as Civil War's Aspiring Hero gaining a Sidekick
+// when rescued. Every setup shuffles all included Bystanders together, so a setup with the box's Bystanders lays these
+// parts out whatever it draws (#125).
 public sealed record Box(
     int SchemaVersion,
     string Id,
@@ -46,7 +49,8 @@ public sealed record Box(
     IReadOnlyList<Scheme> Schemes,
     IReadOnlyList<GlossaryTerm> Glossary,
     SetupRules? Setup = null,
-    OtherRuleset? OtherRuleset = null)
+    OtherRuleset? OtherRuleset = null,
+    IReadOnlyList<PartUse>? BystanderUses = null)
 {
     // Only a base game supplies setup rules; an expansion's box file has no setup section.
     public bool IsBaseGame => Setup is not null;
@@ -200,7 +204,9 @@ public sealed record SetupStep(string Label, string Source);
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
 // Heroes, HenchmanCards and VillainDeckBystanders set a count, replacing the table or Solo value.
 // HenchmanCards is how many cards of each Henchman Group go in the Villain Deck. WoundsPerPlayer and
-// BindingsPerPlayer set the size of those stacks.
+// BindingsPerPlayer set the size of those stacks. TeamSplit asks for Heroes of as many different teams as it has
+// values, that many of each team, with the teams left to the draw, as Avengers vs. X-Men's 3 Heroes of one team and
+// 3 of another (#125).
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -223,7 +229,8 @@ public sealed record SchemeSetup(
     IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null,
     Sourced<int>? BindingsPerPlayer = null,
     IReadOnlyList<CardsBeside>? CardsBeside = null,
-    IReadOnlyList<OutsideMasterminds>? OutsideMasterminds = null)
+    IReadOnlyList<OutsideMasterminds>? OutsideMasterminds = null,
+    Sourced<int[]>? TeamSplit = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);

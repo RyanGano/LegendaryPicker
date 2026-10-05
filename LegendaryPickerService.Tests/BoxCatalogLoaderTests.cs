@@ -128,6 +128,49 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("base game core uses sidekicks in setup.uses but has no components.sidekicks");
     }
 
+    // Special Bystanders come into a setup with their box, so the parts they use must be that box's own.
+    [Fact]
+    public void Rejects_Bystanders_that_use_a_part_their_box_does_not_supply()
+    {
+        WriteCoreBox(core => core["bystanderUses"] = JsonNode.Parse("""[{ "part": "sidekicks", "source": "Card" }]"""));
+
+        AssertRejected("box core uses sidekicks in bystanderUses but has no components.sidekicks");
+    }
+
+    [Fact]
+    public void Rejects_Bystander_uses_on_a_box_with_no_Bystanders()
+    {
+        WriteCoreBox(_ => { });
+        WriteBox("pets.json", JsonNode.Parse("""
+            {
+              "schemaVersion": 7, "id": "pets", "name": "Pets", "ruleset": "firstEdition", "catalogSource": "R p.1",
+              "about": { "released": { "value": "2020-01", "source": "R p.1" } },
+              "sources": [{ "key": "R", "url": "https://example.test/pets.pdf" }],
+              "components": {
+                "heroCards": { "value": 14, "source": "R p.1" }, "villainGroupCards": { "value": 8, "source": "R p.1" },
+                "henchmanGroupCards": { "value": 10, "source": "R p.1" }, "schemeTwists": { "value": 0, "source": "R p.1" },
+                "sidekicks": { "value": 15, "source": "R p.1" }
+              },
+              "bystanderUses": [{ "part": "sidekicks", "source": "Card" }],
+              "heroes": [], "villainGroups": [], "henchmanGroups": [], "masterminds": [], "schemes": [], "glossary": []
+            }
+            """)!.AsObject());
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains("pets.json: box pets has bystanderUses but no components.bystanders", error.Message);
+    }
+
+    [Theory]
+    [InlineData("[3]")]
+    [InlineData("[3, 0]")]
+    public void Rejects_a_team_split_that_is_not_two_or_more_teams_of_at_least_one_Hero(string split)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["teamSplit"] = JsonNode.Parse($$"""{ "value": {{split}}, "source": "Card" }"""));
+
+        AssertRejected("core_scheme_legacy-virus has setup.teamSplit");
+    }
+
     [Theory]
     [InlineData("  ", "setup.solo has a play rule with no label")]
     [InlineData("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen",

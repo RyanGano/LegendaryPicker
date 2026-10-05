@@ -53,13 +53,16 @@ _Avoid_: Card move, which moves cards of a kind from the drawn groups or a stack
 A setup effect that changes no count but still has to be done while laying out, for example placing a token on the Scheme or splitting the Villain Deck into piles. The Setup checklist lists it as a line to tick, and a rule note cites the card or rule that prints it. Its label is a short instruction of at most 15 words in our own words, never card text.
 
 **Hero Name**:
-The character a Hero card set is for (for example Jean Grey). Different Heroes can share a Hero Name, such as two versions of one character; a Hero with no other version has its own name as its Hero Name.
+The character a Hero card set is for (for example Jean Grey). Different Heroes can share a Hero Name, such as two versions of one character; a Hero with no other version has its own name as its Hero Name. A Hero of Divided Cards takes the Hero Name on their left half, which setup and sorting use (CW p.1): Storm for Storm & Black Panther.
+
+**Divided Card**:
+A Civil War Hero card printed as two half-cards. It is one card for every count, so a Hero of Divided Cards is still 14 cards, and it sorts by its left half's Hero Name.
 
 **Display name**:
 The name a setup shows for a Hero, Villain Group, Henchman Group, Mastermind or Scheme. No two of one kind share a display name across the boxes, so the player can always tell which card to use. A new version of a character takes a distinguishing name: its printed card title when that differs (Symbiote Spider-Man), otherwise the title with its version in brackets (Wolverine (X-Force)). It keeps the shared Hero Name.
 
 **Hero constraint**:
-A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team or with a Hero Name; or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, and a Scheme whose rules the included Heroes can't meet is dropped before the draw.
+A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team or with a Hero Name; a team split, exactly some number of Heroes of each of several different teams the draw picks (Avengers vs. X-Men: 3 of one team and 3 of another); or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, and a Scheme whose rules the included Heroes can't meet is dropped before the draw.
 
 **Hero outside the Hero Deck**:
 A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to the Villain Deck, beside the Scheme, or a stack set aside. The draw can name the Hero, or limit it to a Hero Name, a list of Hero Names (every Jean Grey for Transform Citizens into Demons) or a team.
@@ -80,7 +83,7 @@ _Avoid_: Second Mastermind as a setup term; a rule note can use the Scheme's own
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability.
 
 **Part in use**:
-A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack or Unite the Shards fills the Shard supply; the rules use the stacks players recruit from. A card that uses a part no included box supplies is dropped before the draw.
+A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack or Unite the Shards fills the Shard supply; the rules use the stacks players recruit from. Special Bystanders, which every setup shuffles in with the other Bystanders, bring the parts they use too, so Civil War's Aspiring Hero, which gains a Sidekick when rescued, lays the Sidekick stack out whenever Civil War is included (#125). A card that uses a part no included box supplies is dropped before the draw.
 
 **Stand-in**:
 A part a setup lays out in place of one no included box supplies, as an expansion's rules allow when it is played without its own ruleset's base game: with the core box and Fear Itself alone, Wounds stand in for Bindings and S.H.I.E.L.D. Officers for Madame HYDRA (Fear Itself insert, owner decision #110). The player can use the real cards if they have them.
