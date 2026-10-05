@@ -338,7 +338,7 @@ public class CivilWarTests
     [InlineData(5)]
     public void Without_Civil_War_included_it_changes_no_draw(int players)
     {
-        using var withoutIt = new DirectoryWithout("civil-war.json");
+        using var withoutIt = new DirectoryWithout("civil-war.json", "x-men.json");
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary"];
 
@@ -365,14 +365,15 @@ public class CivilWarTests
             .Concat(setup.Heroes.Select(hero => hero.Id))
             .Concat(setup.OutsideHeroes.Select(outside => outside.Hero.Id));
 
-    // A copy of the box directory without one box file, so a catalog loaded from it has never seen that box.
+    // A copy of the box directory without some box files, so a catalog loaded from it has never seen those boxes. X-Men's
+    // Divided Cards use Civil War's term, so it can't load without Civil War.
     private sealed class DirectoryWithout : IDisposable
     {
         public string Path { get; } = Directory.CreateTempSubdirectory("legendary-without-").FullName;
 
-        public DirectoryWithout(string fileName)
+        public DirectoryWithout(params string[] fileNames)
         {
-            foreach (var file in Directory.GetFiles(BoxCatalog.DefaultDirectory, "*.json").Where(file => System.IO.Path.GetFileName(file) != fileName))
+            foreach (var file in Directory.GetFiles(BoxCatalog.DefaultDirectory, "*.json").Where(file => !fileNames.Contains(System.IO.Path.GetFileName(file))))
             {
                 File.Copy(file, System.IO.Path.Combine(Path, System.IO.Path.GetFileName(file)));
             }

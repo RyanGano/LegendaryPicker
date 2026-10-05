@@ -60,6 +60,13 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\OutsideMasterminds\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Mastermind also leads one of two Henchman Groups, whose Schemes set a required group's
+       card count or the Wound stack's size, and whose Scheme uses Horrors, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\Horde\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\Horde\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Schemes set cards of a group beside them, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\CardsBeside\*.json" CopyToOutputDirectory="PreserveNewest" />

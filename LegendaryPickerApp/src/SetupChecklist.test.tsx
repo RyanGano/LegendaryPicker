@@ -51,6 +51,9 @@ import twoBoxesDarkAlliance from './test/fixtures/twoBoxesDarkAlliance.json'
 // A live draw from the core box and Noir with 2 players: Hidden Heart of Darkness with Charles Xavier, Professor of
 // Crime, who shuffles his own 4 Tactics into the Villain Deck.
 import noirHiddenHeart from './test/fixtures/noirHiddenHeart.json'
+// A live draw from the core box and X-Men with 2 players: Horror of Horrors with Onslaught, which lays out the 20 Horrors
+// and offers Onslaught's Epic side as a setup step.
+import xMenHorrorOfHorrors from './test/fixtures/xMenHorrorOfHorrors.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -556,6 +559,19 @@ describe('SetupChecklist', () => {
     renderChecklist(twoBoxesNegaBomb)
 
     expect(rows('Shared stacks')).toEqual(['Wounds 30', 'S.H.I.E.L.D. Officers 30', 'Bystanders 22', 'Shards 18'])
+  })
+
+  it('lays out the Horrors when a drawn card uses them', () => {
+    renderChecklist(xMenHorrorOfHorrors)
+
+    expect(rows('Shared stacks')).toEqual(['Wounds 30', 'S.H.I.E.L.D. Officers 30', 'Bystanders 37', 'Horrors 20'])
+    expect(rows('Other setup steps')).toEqual(['Optional: play the Epic side instead; it also brings Horrors into the game'])
+  })
+
+  it('leaves out the Horrors when no drawn card uses them', () => {
+    renderChecklist(legacyVirusThreePlayers)
+
+    expect(within(section('Shared stacks')).queryByText('Horrors')).not.toBeInTheDocument()
   })
 
   it('leaves out the Shard supply when no drawn card uses Shards', () => {

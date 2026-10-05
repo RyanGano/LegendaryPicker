@@ -1,6 +1,6 @@
 # X-Men (June 2017)
 
-**Research status: Partial.** The official insert provides the 394-card breakdown and extensive mechanics, but not the full card manifest or individual Scheme/Mastermind setup lines. C1's Special Bystander names also exceed the official type count.
+**Research status: Partial; integrated (#132).** The official insert provides the 394-card breakdown and extensive mechanics, but not the full card manifest or individual Scheme/Mastermind setup lines. The Scheme Setup lines, Always Leads and part uses are now read from C1 and its card-image links into `LegendaryPickerService/Data/Boxes/x-men.json` (see the X-Men section of `Docs/Plan.md`). C1's Special Bystander names still exceed the official type count, and the token names remain open.
 
 ## Sources
 
