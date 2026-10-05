@@ -13,7 +13,7 @@ public class CoreBoxCatalogTests
     public void Core_box_is_the_First_Edition_core_box()
     {
         Assert.Equal("Marvel Legendary First Edition core box", Core.Name);
-        Assert.Equal(6, Core.SchemaVersion);
+        Assert.Equal(7, Core.SchemaVersion);
         Assert.True(Core.IsBaseGame);
         Assert.Equal(Ruleset.FirstEdition, Core.Ruleset);
     }
@@ -321,6 +321,7 @@ public class CoreBoxCatalogTests
                 new SourceLink("D1", "https://boardgamegeek.com/thread/993341/article/12653573"),
                 new SourceLink("D2", "https://boardgamegeek.com/thread/884926"),
                 new SourceLink("D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87"),
+                new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"),
             ],
             Core.Sources);
     }

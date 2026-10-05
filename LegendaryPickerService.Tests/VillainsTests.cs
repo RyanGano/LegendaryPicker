@@ -75,7 +75,7 @@ public class VillainsTests
     {
         Assert.Equal(["core", "dark-city", "fantastic-four", "fear-itself", "guardians-of-the-galaxy", "paint-the-town-red", "villains"], Catalog.Boxes.Select(box => box.Id));
         Assert.Equal("Legendary: Villains", Villains.Name);
-        Assert.Equal(6, Villains.SchemaVersion);
+        Assert.Equal(7, Villains.SchemaVersion);
         Assert.True(Villains.IsBaseGame);
         Assert.Equal(Ruleset.Villainous, Villains.Ruleset);
     }
@@ -188,6 +188,7 @@ public class VillainsTests
                 new SourceLink("VIL", Rulebook),
                 new SourceLink("D-mixed", "https://github.com/RyanGano/LegendaryPicker/issues/88"),
                 new SourceLink("D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87"),
+                new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"),
             ],
             Villains.Sources);
         Assert.Equal("VIL p.22; C1; C2", Villains.CatalogSource);

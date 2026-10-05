@@ -1,11 +1,13 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "id": "paint-the-town-red",
   "name": "Paint the Town Red",
   "ruleset": "firstEdition",
   "catalogSource": "PTTR p.2; C1; C2",
+  "about": { "released": { "value": "2014-03", "source": "Q" } },
   "sources": [
-    { "key": "PTTR", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf" }
+    { "key": "PTTR", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "PTTR p.2" },

@@ -53,7 +53,7 @@ public class PaintTheTownRedTests
     {
         Assert.Equal(["core", "dark-city", "fantastic-four", "fear-itself", "guardians-of-the-galaxy", "paint-the-town-red"], Catalog.Boxes.Select(box => box.Id).Take(6));
         Assert.Equal(PaintTheTownRedName, PaintTheTownRed.Name);
-        Assert.Equal(6, PaintTheTownRed.SchemaVersion);
+        Assert.Equal(7, PaintTheTownRed.SchemaVersion);
         Assert.False(PaintTheTownRed.IsBaseGame);
     }
 
@@ -143,7 +143,7 @@ public class PaintTheTownRedTests
     public void The_rules_insert_is_the_one_source_key()
     {
         Assert.Equal(
-            [new SourceLink("PTTR", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf")],
+            [new SourceLink("PTTR", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
             PaintTheTownRed.Sources);
         Assert.Equal("PTTR p.2; C1; C2", PaintTheTownRed.CatalogSource);
     }
@@ -195,11 +195,12 @@ public class PaintTheTownRedTests
 
     private const string SpiderNamesBox = """
         {
-          "schemaVersion": 6,
+          "schemaVersion": 7,
           "id": "spider-names",
           "name": "Spider Names Fixture",
           "ruleset": "firstEdition",
           "catalogSource": "R p.1",
+          "about": { "released": { "value": "2020-01", "source": "R p.1" } },
           "sources": [{ "key": "R", "url": "https://example.test/spider-names.pdf" }],
           "components": {
             "heroCards": { "value": 14, "source": "R p.1" },

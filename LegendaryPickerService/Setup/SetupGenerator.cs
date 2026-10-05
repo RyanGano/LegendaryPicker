@@ -281,8 +281,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .ToList();
             if (leftOut.Count > 0)
             {
+                // The Shards are a supply rather than a stack of cards, and the glossary calls them that.
+                var stacks = leftOut.Where(part => part != Part.Shards).Select(StackName).ToList();
+                var named = new List<string>();
+                if (stacks.Count > 0) named.Add($"{string.Join(" and ", stacks)} {(stacks.Count == 1 ? "stack" : "stacks")}");
+                if (leftOut.Contains(Part.Shards)) named.Add("Shard supply");
                 notes.Add(Note(
-                    $"Leave out the {string.Join(" and ", leftOut.Select(StackName))} {(leftOut.Count == 1 ? "stack: no drawn card uses it" : "stacks: no drawn card uses them")}",
+                    $"Leave out the {string.Join(" and the ", named)}: no drawn card uses {(leftOut.Count == 1 ? "it" : "them")}",
                     rules.Rulings.UnusedPartsLeftOut, rulesBox));
             }
 
@@ -364,7 +369,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     Stack(Part.Bindings, (plan.Bindings ?? Supply(Part.Bindings)) - plan.MovedOut(Pile.Bindings)),
                     Stack(Part.MadameHydra, Supply(Part.MadameHydra)),
                     Stack(Part.NewRecruits, Supply(Part.NewRecruits)),
-                    Stack(Part.Shards, plan.Shards ?? Supply(Part.Shards))),
+                    Stack(Part.Shards, Supply(Part.Shards))),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value, choices),
                 plan.Moves,
                 outside,
@@ -438,14 +443,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 bindings = bindingsPerPlayer.Value * players;
                 notes.Add(Card($"{schemeWord} sets the Bindings stack to {bindingsPerPlayer.Value} per player", bindingsPerPlayer.Source));
-            }
-
-            // The Shard supply holds what the boxes supply unless the Scheme sets how many Shards it holds.
-            int? shards = null;
-            if (effect.ShardSupply is { } shardSupply)
-            {
-                shards = shardSupply.Value;
-                notes.Add(Card($"{schemeWord} puts {shards} Shards in the supply", shardSupply.Source));
             }
 
             var moves = new List<MovedCards>();
@@ -552,7 +549,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 bystanders,
                 wounds,
                 bindings,
-                shards,
                 moves,
                 outside,
                 outsideHenchmen,
@@ -919,7 +915,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int Bystanders,
         int? Wounds,
         int? Bindings,
-        int? Shards,
         IReadOnlyList<MovedCards> Moves,
         IReadOnlyList<OutsideDraw> Outside,
         IReadOnlyList<HenchmenDraw> OutsideHenchmen,

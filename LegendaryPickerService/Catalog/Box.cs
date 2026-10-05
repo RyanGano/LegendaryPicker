@@ -12,6 +12,9 @@ public enum GroupType
 
 public sealed record Sourced<T>(T Value, string Source);
 
+// Facts about the product itself, for listing it. Released is the year and month it first came out, as "2014-10" (#106).
+public sealed record About(Sourced<string> Released);
+
 // A count that can depend on the player count. Players is null when the value
 // applies at every player count the Scheme allows; player count 1 is Solo.
 public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
@@ -33,6 +36,7 @@ public sealed record Box(
     string Name,
     Ruleset Ruleset,
     string CatalogSource,
+    About About,
     IReadOnlyList<SourceLink> Sources,
     BoxComponents Components,
     IReadOnlyList<Hero> Heroes,
@@ -157,7 +161,6 @@ public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms,
     public IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part)
         .Concat(Setup.WoundsPerPlayer is null ? [] : [Part.Wounds])
         .Concat(Setup.BindingsPerPlayer is null ? [] : [Part.Bindings])
-        .Concat(Setup.ShardSupply is null ? [] : [Part.Shards])
         .Concat((Setup.Moves ?? []).Select(move => CardMove.PartOf(move.Card)).OfType<Part>())
         .Distinct();
 }
@@ -193,7 +196,7 @@ public sealed record SetupStep(string Label, string Source);
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
 // Heroes, HenchmanCards and VillainDeckBystanders set a count, replacing the table or Solo value.
 // HenchmanCards is how many cards of each Henchman Group go in the Villain Deck. WoundsPerPlayer and
-// BindingsPerPlayer set the size of those stacks, and ShardSupply how many Shards the supply holds.
+// BindingsPerPlayer set the size of those stacks.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -215,8 +218,7 @@ public sealed record SchemeSetup(
     IReadOnlyList<SetupStep>? Steps = null,
     IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null,
     Sourced<int>? BindingsPerPlayer = null,
-    IReadOnlyList<CardsBeside>? CardsBeside = null,
-    Sourced<int>? ShardSupply = null)
+    IReadOnlyList<CardsBeside>? CardsBeside = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);

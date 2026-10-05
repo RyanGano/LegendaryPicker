@@ -1,11 +1,13 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "id": "dark-city",
   "name": "Dark City",
   "ruleset": "firstEdition",
   "catalogSource": "DC p.2; C1; C2",
+  "about": { "released": { "value": "2013-06", "source": "Q" } },
   "sources": [
-    { "key": "DC", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf" }
+    { "key": "DC", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "DC p.2" },

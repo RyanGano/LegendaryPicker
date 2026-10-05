@@ -38,7 +38,7 @@ public class GuardiansOfTheGalaxyTests
     public void Guardians_of_the_Galaxy_is_an_expansion_with_the_Shard_tokens_of_the_rules_insert()
     {
         Assert.Equal(GuardiansName, Guardians.Name);
-        Assert.Equal(6, Guardians.SchemaVersion);
+        Assert.Equal(7, Guardians.SchemaVersion);
         Assert.False(Guardians.IsBaseGame);
         Assert.Equal(Ruleset.FirstEdition, Guardians.Ruleset);
 
@@ -115,10 +115,10 @@ public class GuardiansOfTheGalaxyTests
 
         // Twists equal to the number of players plus 5.
         Assert.Equal(["1: 6 Card", "2: 7 Card", "3: 8 Card", "4: 9 Card", "5: 10 Card"], Twists(unite));
-        Assert.Equal(new Sourced<int>(30, "Card"), unite.Setup.ShardSupply);
+        // The Shard tokens are double-sided, so the box covers the Scheme's 30 Shards: it lays out all of them (D-shards).
+        Assert.Equal([new SetupStep("Put all the Shard tokens from the included boxes in the supply", "D-shards")], unite.Setup.Steps);
 
-        Assert.Equal([negaBomb], Guardians.Schemes.Where(scheme => scheme.Setup.Moves is not null || scheme.Setup.Steps is not null));
-        Assert.Equal([unite], Guardians.Schemes.Where(scheme => scheme.Setup.ShardSupply is not null));
+        Assert.Equal([negaBomb], Guardians.Schemes.Where(scheme => scheme.Setup.Moves is not null));
         Assert.All(Guardians.Schemes, scheme => Assert.Null(scheme.Setup.AllowedPlayerCounts));
 
         static IEnumerable<string> Twists(Scheme scheme) =>
@@ -148,7 +148,7 @@ public class GuardiansOfTheGalaxyTests
 
         Assert.All(ids, id => Assert.Matches("^guardians-of-the-galaxy_(hero|villain|mastermind|scheme|term)_[a-z0-9]+(-[a-z0-9]+)*$", id));
         Assert.Equal(
-            [new SourceLink("GG", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf")],
+            [new SourceLink("GG", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf"), new SourceLink("D-shards", "https://github.com/RyanGano/LegendaryPicker/issues/107"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
             Guardians.Sources);
         Assert.Equal("GG p.2; C1; C2", Guardians.CatalogSource);
     }
@@ -211,9 +211,9 @@ public class GuardiansOfTheGalaxyTests
     [InlineData("The Kree-Skrull War", 1, 8, 1, 16, 3, 1, 29, 42, 30, 29, 18)]
     [InlineData("The Kree-Skrull War", 2, 8, 5, 16, 10, 2, 41, 70, 30, 28, 18)]
     [InlineData("The Kree-Skrull War", 5, 8, 5, 32, 20, 12, 77, 70, 30, 18, 18)]
-    [InlineData("Unite the Shards", 1, 6, 1, 8, 3, 1, 19, 42, 30, 29, 30)]
-    [InlineData("Unite the Shards", 2, 7, 5, 16, 10, 2, 40, 70, 30, 28, 30)]
-    [InlineData("Unite the Shards", 5, 10, 5, 32, 20, 12, 79, 70, 30, 18, 30)]
+    [InlineData("Unite the Shards", 1, 6, 1, 8, 3, 1, 19, 42, 30, 29, 18)]
+    [InlineData("Unite the Shards", 2, 7, 5, 16, 10, 2, 40, 70, 30, 28, 18)]
+    [InlineData("Unite the Shards", 5, 10, 5, 32, 20, 12, 79, 70, 30, 18, 18)]
     public void Scheme_lays_out_its_decks_and_stacks(
         string scheme, int players, int twists, int strikes, int villainCards, int henchmanCards, int bystanders,
         int villainDeck, int heroDeck, int? wounds, int bystanderStack, int shards)
@@ -291,13 +291,13 @@ public class GuardiansOfTheGalaxyTests
     }
 
     [Fact]
-    public void Unite_the_Shards_puts_30_Shards_in_the_supply()
+    public void Unite_the_Shards_lays_out_all_the_Shard_tokens_rather_than_a_count_of_30()
     {
         var setup = Draw(3, "Unite the Shards", SupremeIntelligence);
 
         Assert.Equal(8, setup.VillainDeck.Twists);
-        Assert.Equal(30, setup.Stacks.Shards);
-        Assert.Contains(new RuleNote("Scheme puts 30 Shards in the supply", "Card", null, GuardiansName), setup.Notes);
+        Assert.Equal(18, setup.Stacks.Shards);
+        Assert.Equal(["Put all the Shard tokens from the included boxes in the supply"], setup.Steps);
     }
 
     [Theory]
@@ -321,7 +321,7 @@ public class GuardiansOfTheGalaxyTests
 
         Assert.Equal(("Legacy Virus", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));
         Assert.Null(setup.Stacks.Shards);
-        Assert.Contains(new RuleNote("Leave out the Shard stack: no drawn card uses it", "D-uses", UsesDecision, CoreName), setup.Notes);
+        Assert.Contains(new RuleNote("Leave out the Shard supply: no drawn card uses it", "D-uses", UsesDecision, CoreName), setup.Notes);
     }
 
     // Guardians cards that give Wounds need a box that supplies them; with Legendary: Villains as the only base

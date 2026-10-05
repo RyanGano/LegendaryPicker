@@ -32,7 +32,7 @@ public class FearItselfTests
     public void Fear_Itself_is_a_Villainous_expansion_with_the_cards_of_the_rules_insert()
     {
         Assert.Equal(FearItselfName, FearItself.Name);
-        Assert.Equal(6, FearItself.SchemaVersion);
+        Assert.Equal(7, FearItself.SchemaVersion);
         Assert.False(FearItself.IsBaseGame);
         Assert.Equal(Ruleset.Villainous, FearItself.Ruleset);
 
@@ -115,7 +115,7 @@ public class FearItselfTests
     [Fact]
     public void The_rules_insert_and_the_owner_decision_are_the_source_keys_and_its_glossary_adds_HYDRA_and_three_keywords()
     {
-        Assert.Equal([new SourceLink("FI", Insert), new SourceLink("D-heroic", OwnerDecision)], FearItself.Sources);
+        Assert.Equal([new SourceLink("FI", Insert), new SourceLink("D-heroic", OwnerDecision), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")], FearItself.Sources);
         Assert.Equal("FI p.2; C1", FearItself.CatalogSource);
         Assert.Equal(
             ["HYDRA team FI p.1", "Thrown Artifact keyword FI p.1", "Uru-Enchanted Weapons keyword FI p.1", "Fight or Fail keyword FI p.1"],

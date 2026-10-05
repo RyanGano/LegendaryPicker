@@ -53,7 +53,7 @@ public class FantasticFourTests
     {
         Assert.Equal(["core", "dark-city", "fantastic-four"], Catalog.Boxes.Select(box => box.Id).Take(3));
         Assert.Equal(FantasticFourName, FantasticFour.Name);
-        Assert.Equal(6, FantasticFour.SchemaVersion);
+        Assert.Equal(7, FantasticFour.SchemaVersion);
         Assert.False(FantasticFour.IsBaseGame);
     }
 
@@ -124,7 +124,7 @@ public class FantasticFourTests
     public void The_rules_insert_is_the_one_source_key()
     {
         Assert.Equal(
-            [new SourceLink("FF", "https://upperdeck.com/wp-content/uploads/2024/05/Fantastic-4-Rules.pdf")],
+            [new SourceLink("FF", "https://upperdeck.com/wp-content/uploads/2024/05/Fantastic-4-Rules.pdf"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
             FantasticFour.Sources);
         Assert.Equal("FF p.2; C1; C2", FantasticFour.CatalogSource);
     }

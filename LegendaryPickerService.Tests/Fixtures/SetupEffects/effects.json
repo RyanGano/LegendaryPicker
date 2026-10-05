@@ -1,9 +1,10 @@
 {
-  "schemaVersion": 6,
+  "schemaVersion": 7,
   "id": "effects",
   "name": "Effects Fixture",
   "ruleset": "firstEdition",
   "catalogSource": "R p.1",
+  "about": { "released": { "value": "2020-01", "source": "R p.1" } },
   "sources": [
     { "key": "R", "url": "https://example.test/effects-rules.pdf" }
   ],

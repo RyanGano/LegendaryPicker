@@ -161,11 +161,38 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     {
         WriteCoreBox(core =>
         {
-            core["schemaVersion"] = 7;
-            core["fieldOnlyVersion7Has"] = true;
+            core["schemaVersion"] = 8;
+            core["fieldOnlyVersion8Has"] = true;
         });
 
-        AssertRejected("schemaVersion 7; this service reads version 6");
+        AssertRejected("schemaVersion 8; this service reads version 7");
+    }
+
+    [Theory]
+    [InlineData("2014")]
+    [InlineData("2014-13")]
+    [InlineData("October 2014")]
+    public void Rejects_a_release_that_is_not_a_year_and_month(string released)
+    {
+        WriteCoreBox(core => core["about"]!["released"]!["value"] = released);
+
+        AssertRejected($"box core has released {released}");
+    }
+
+    [Fact]
+    public void Rejects_a_box_with_no_release()
+    {
+        WriteCoreBox(core => core.Remove("about"));
+
+        AssertRejected("about");
+    }
+
+    [Fact]
+    public void Rejects_a_release_citing_a_source_the_box_does_not_list()
+    {
+        WriteCoreBox(core => core["about"]!["released"]!["source"] = "X9");
+
+        AssertRejected("about.released cites source X9, which is not in this box's sources");
     }
 
     [Theory]
