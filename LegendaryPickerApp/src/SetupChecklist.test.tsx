@@ -43,6 +43,11 @@ import mixedCrushHydra from './test/fixtures/mixedCrushHydra.json'
 // A live draw from the core box and Legendary: Villains with 2 players whose Scheme and Mastermind are Heroic,
 // so it follows the First Edition rules: Replace Earth's Leaders with Killbots and Loki, and only core cards.
 import heroicOnlyWithVillains from './test/fixtures/heroicOnlyWithVillains.json'
+// Live draws from the core box and Secret Wars Volume 1 with 2 players whose Scheme draws other Masterminds: Master
+// of Tyrants with Wasteland Hulk, shuffling 4 Tactics each of Nimrod, Magneto and Dr. Doom into the Villain Deck, and
+// Dark Alliance with Wasteland Hulk, setting Loki aside.
+import twoBoxesMasterOfTyrants from './test/fixtures/twoBoxesMasterOfTyrants.json'
+import twoBoxesDarkAlliance from './test/fixtures/twoBoxesDarkAlliance.json'
 
 // The drawn cards and the checklist, in the order the app shows them on a phone.
 function renderChecklist(setup: unknown) {
@@ -144,6 +149,22 @@ describe('SetupChecklist', () => {
       new RegExp(`^Savage Land Mutates${CORE}FightGoes to Hero Deck$`),
     )
     expect(tile('Henchman Groups', 'Hand Ninjas')).toHaveTextContent(new RegExp(`^Hand Ninjas${CORE}Fight$`))
+  })
+
+  it('shows the other Masterminds a Scheme draws as tiles, tagged with where they go', () => {
+    renderChecklist(twoBoxesMasterOfTyrants)
+
+    expect(tileNames('Other Masterminds')).toEqual(['Nimrod, Super Sentinel', 'Magneto', 'Dr. Doom'])
+    expect(tile('Other Masterminds', 'Magneto')).toHaveTextContent('Tactics go to Villain Deck')
+    // Their Tactics play with no abilities, so the tiles carry no term chips.
+    expect(tile('Other Masterminds', 'Magneto')).toHaveTextContent(new RegExp(`^Magneto${CORE}Tactics go to Villain Deck$`))
+  })
+
+  it('tags a Mastermind set aside by the Scheme', () => {
+    renderChecklist(twoBoxesDarkAlliance)
+
+    expect(tileNames('Other Mastermind')).toEqual(['Loki'])
+    expect(tile('Other Mastermind', 'Loki')).toHaveTextContent('Set aside')
   })
 
   it('tags no tile when the Scheme draws nothing outside the decks', () => {
@@ -534,6 +555,23 @@ describe('SetupChecklist', () => {
       'Set aside',
       'Hero Deck',
     ])
+  })
+
+  it('lays out the Tactics of other Masterminds in the Villain Deck, with a tick box, in its total', () => {
+    renderChecklist(twoBoxesMasterOfTyrants)
+
+    expect(rows('Villain Deck')).toContain(
+      `Nimrod, Super Sentinel Secret Wars Volume 1 Magneto ${CORE} Dr. Doom ${CORE} Tactics of 3 other Masterminds 12`,
+    )
+    expect(rows('Villain Deck').at(-1)).toBe('Total 53')
+    expect(within(section('Villain Deck')).getAllByRole('checkbox')).toHaveLength(6)
+  })
+
+  it('lays out a Mastermind the Scheme sets aside in the Set aside section', () => {
+    renderChecklist(twoBoxesDarkAlliance)
+
+    expect(rows('Set aside')).toEqual([`Loki ${CORE} 1 other Mastermind`])
+    expect(rows('Villain Deck').at(-1)).toBe('Total 41')
   })
 
   it('lays out the Bindings and the Twist a Plot sets aside, and leaves the Bindings stack the rest', () => {

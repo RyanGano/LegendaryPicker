@@ -11,7 +11,8 @@ import { TermKind } from './TermChips.tsx'
 // the tick boxes on the page, so it can never disagree with the lines shown.
 export function SetupChecklist({ setup }: { setup: Setup }) {
   // An API from before card moves, Heroes outside the Hero Deck, Henchman Groups outside the Villain Deck, cards
-  // of a group beside the Scheme or setup steps leaves them out; the site can deploy first, so read that as none.
+  // of a group beside the Scheme, setup steps or other Masterminds leaves them out; the site can deploy first, so
+  // read that as none.
   const {
     villainDeck,
     heroDeck,
@@ -21,6 +22,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     outsideHeroes = [],
     outsideHenchmen = [],
     cardsBeside = [],
+    outsideMasterminds = [],
     steps = [],
     standIns = [],
   } = setup
@@ -29,6 +31,8 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
   const henchmanTerms = cardTerms(setup, setup.henchmanGroups)
   const heroTerms = cardTerms(setup, setup.heroes)
   const decks = startingDeckTerms(setup)
+  const tyrants = outsideMasterminds.filter((other) => other.to === 'villainDeck').map((other) => other.mastermind)
+  const setAside = outsideMasterminds.filter((other) => other.to === 'setAside').map((other) => other.mastermind)
   const article = useRef<HTMLElement>(null)
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
@@ -64,6 +68,13 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <MovedOut moves={moves} from="villainDeck" terms={t} />
         <SetBeside cardsBeside={cardsBeside} terms={t} />
         <OutsideHeroCards count={villainDeck.outsideHeroCards} terms={t} />
+        {tyrants.length > 0 && (
+          <Item
+            label={names(tyrants)}
+            detail={`Tactics of ${plural(tyrants.length, `other ${t.mastermind}`)}`}
+            count={villainDeck.mastermindTactics}
+          />
+        )}
         <Total count={villainDeck.total} />
       </Section>
 
@@ -81,9 +92,10 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         </Section>
       )}
 
-      {moves.some((move) => move.to === 'setAside') && (
+      {(moves.some((move) => move.to === 'setAside') || setAside.length > 0) && (
         <Section title="Set aside" kind="scheme">
           <MovedIn moves={moves} to="setAside" terms={t} />
+          {setAside.length > 0 && <Item label={names(setAside)} detail={plural(setAside.length, `other ${t.mastermind}`)} />}
         </Section>
       )}
 

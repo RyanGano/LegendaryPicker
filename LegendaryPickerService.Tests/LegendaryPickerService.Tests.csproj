@@ -48,6 +48,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\OutsideHenchmen\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Schemes draw other Masterminds, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\OutsideMasterminds\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\OutsideMasterminds\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Schemes set cards of a group beside them, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\CardsBeside\*.json" CopyToOutputDirectory="PreserveNewest" />

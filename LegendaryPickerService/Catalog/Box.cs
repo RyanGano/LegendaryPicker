@@ -218,7 +218,8 @@ public sealed record SchemeSetup(
     IReadOnlyList<SetupStep>? Steps = null,
     IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null,
     Sourced<int>? BindingsPerPlayer = null,
-    IReadOnlyList<CardsBeside>? CardsBeside = null)
+    IReadOnlyList<CardsBeside>? CardsBeside = null,
+    IReadOnlyList<OutsideMasterminds>? OutsideMasterminds = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
@@ -253,6 +254,16 @@ public sealed record OutsideHeroes(
 public sealed record OutsideHenchmen(Pile To, IReadOnlyList<PlayerCountValue> Cards)
 {
     public static readonly Pile[] Destinations = [Pile.HeroDeck];
+}
+
+// Masterminds a Scheme draws besides its own, from the included Masterminds the setup doesn't otherwise use (#113).
+// Count says how many at each player count. Set aside, a Mastermind waits whole until the Scheme brings it into
+// play, as Dark Alliance adds a second Mastermind at its first Twist. Into the Villain Deck go only Tactics of each
+// drawn Mastermind, as Master of Tyrants shuffles 12 Tactics of 3 Masterminds in; those play as plain Villains with
+// no abilities, so they bring no parts. Tactics is required for, and only for, the Villain Deck.
+public sealed record OutsideMasterminds(Pile To, IReadOnlyList<PlayerCountValue> Count, Sourced<int>? Tactics = null)
+{
+    public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.SetAside];
 }
 
 // A kind of card a Scheme can move during setup. A Twist comes from the Twists the Villain Deck doesn't use, as

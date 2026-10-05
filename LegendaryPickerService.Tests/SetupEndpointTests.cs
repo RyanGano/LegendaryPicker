@@ -176,6 +176,26 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
+    public async Task Other_Masterminds_are_listed_with_their_pile_and_Tactics()
+    {
+        // Master of Tyrants with Madelyne: the 3 other Masterminds drawn are the first core ones, and their 12 Tactics
+        // go in the Villain Deck.
+        var client = Client(new ScriptedRandom(12, 4));
+
+        var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,secret-wars-volume-1");
+
+        Assert.Equal("Master of Tyrants", (string?)body!["scheme"]!["name"]);
+        Assert.Equal(
+            ["core_mastermind_dr-doom villainDeck 4", "core_mastermind_loki villainDeck 4", "core_mastermind_magneto villainDeck 4"],
+            body["outsideMasterminds"]!.AsArray().Select(other => $"{other!["mastermind"]!["id"]} {other["to"]} {other["tactics"]}"));
+        Assert.Equal("Marvel Legendary First Edition core box", (string?)body["outsideMasterminds"]![0]!["mastermind"]!["box"]);
+        // Those Tactics play with no abilities, so their Masterminds carry no terms.
+        Assert.All(body["outsideMasterminds"]!.AsArray(), other => Assert.Empty(other!["mastermind"]!["terms"]!.AsArray()));
+        Assert.Equal(12, (int?)body["villainDeck"]!["mastermindTactics"]);
+        Assert.Equal(53, (int?)body["villainDeck"]!["total"]);
+    }
+
+    [Fact]
     public async Task Setup_steps_are_listed_by_label()
     {
         // Test Vigil with Test Watcher: the Scheme's two steps, then the Mastermind's.
@@ -237,7 +257,7 @@ public sealed class SetupEndpointTests : IDisposable
         var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
 
         Assert.Equal(
-            ["core", "villains", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "fear-itself"],
+            ["core", "villains", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "fear-itself", "secret-wars-volume-1"],
             boxes!.Select(box => (string)box!["id"]!));
     }
 
@@ -252,6 +272,7 @@ public sealed class SetupEndpointTests : IDisposable
             [
                 "core firstEdition base", "villains villainous base mixes", "dark-city firstEdition", "fantastic-four firstEdition",
                 "paint-the-town-red firstEdition", "guardians-of-the-galaxy firstEdition", "fear-itself villainous plays",
+                "secret-wars-volume-1 firstEdition",
             ],
             boxes!.Select(box =>
                 $"{box!["id"]} {box["ruleset"]}{((bool)box["baseGame"]! ? " base" : "")}{((bool)box["mixesRulesets"]! ? " mixes" : "")}"

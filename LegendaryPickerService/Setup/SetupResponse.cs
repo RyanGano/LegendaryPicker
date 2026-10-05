@@ -38,10 +38,20 @@ public abstract record SetupResponse
                 glossary.Component(beside.Group.Id, beside.Group.Name, beside.Group.Terms), beside.Card, beside.Count, beside.FromVillainDeck))
             .ToList();
 
+        // Tactics shuffled into the Villain Deck play with no abilities, so only a Mastermind set aside brings its terms,
+        // on its tile and in the glossary.
+        var outsideMasterminds = (setup.OutsideMasterminds ?? [])
+            .Select(outside => new OutsideMastermindBody(
+                glossary.Component(outside.Mastermind.Id, outside.Mastermind.Name, outside.To == Pile.SetAside ? outside.Mastermind.Terms : []),
+                outside.To,
+                outside.Tactics))
+            .ToList();
+
         Component[] components =
         [
             scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(outside => outside.Group),
             .. heroes, .. outsideHeroes.Select(outside => outside.Hero), .. cardsBeside.Select(beside => beside.Group),
+            .. outsideMasterminds.Select(outside => outside.Mastermind),
         ];
 
         return new SetupBody(
@@ -66,7 +76,8 @@ public abstract record SetupResponse
             glossary.Entries(components.SelectMany(component => component.Terms)),
             setup.Mixed,
             setup.RulesReason,
-            setup.StandIns is { Count: > 0 } standIns ? standIns : null);
+            setup.StandIns is { Count: > 0 } standIns ? standIns : null,
+            outsideMasterminds.Count > 0 ? outsideMasterminds : null);
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
@@ -108,6 +119,7 @@ public abstract record SetupResponse
 // why the setup follows its ruleset, and is written only when the included boxes follow more than one. StandIns
 // lists each part the drawn cards use that no included box supplies and what replaces it ("with", null when
 // nothing does), written only when there is one, so the checklist can say a stack stands in for another.
+// OutsideMasterminds lists the Masterminds the Scheme draws besides its own, written only when it draws any.
 public sealed record SetupBody(
     int Players,
     Ruleset Ruleset,
@@ -130,7 +142,8 @@ public sealed record SetupBody(
     IReadOnlyList<GlossaryEntry> Glossary,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Mixed = false,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RuleNote? RulesReason = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<StandIn>? StandIns = null) : SetupResponse
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<StandIn>? StandIns = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<OutsideMastermindBody>? OutsideMasterminds = null) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";
@@ -160,6 +173,13 @@ public sealed record OutsideHeroBody(Component Hero, Pile To, int Cards);
 // A Henchman Group a Scheme draws outside the Villain Deck, the pile its cards go to ("heroDeck"), and
 // how many of its cards that is.
 public sealed record OutsideHenchmenBody(Component Group, Pile To, int Cards);
+
+// A Mastermind a Scheme draws besides its own: set aside whole ("setAside"), or tactics of its Tactics into the
+// Villain Deck ("villainDeck"); tactics is written only then.
+public sealed record OutsideMastermindBody(
+    Component Mastermind,
+    Pile To,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Tactics);
 
 // Cards of a group the Scheme sets beside it: count of them, or, when card is present, that one card of the group.
 // fromVillainDeck is how many fewer cards the group puts in the Villain Deck because of it, 0 when the group isn't

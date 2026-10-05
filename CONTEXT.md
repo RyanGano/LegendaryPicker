@@ -71,6 +71,11 @@ A Henchman Group a Scheme draws in addition to the Villain Deck's, from the incl
 
 _Avoid_: Extra Henchman Group, which is the setup effect that adds a Henchman Group to the Villain Deck.
 
+**Other Mastermind**:
+A Mastermind a Scheme draws besides the setup's own, from the other included Masterminds. It is set aside whole until the Scheme brings it into play, or only its Tactics go into the Villain Deck, where they play as Villains with no abilities. Its Always Leads group is not added.
+
+_Avoid_: Second Mastermind as a setup term; a rule note can use the Scheme's own words.
+
 **Always Leads group**:
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability.
 

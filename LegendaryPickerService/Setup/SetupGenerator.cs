@@ -5,7 +5,8 @@ namespace LegendaryPickerService.Setup;
 // Draws a random legal setup the way players would at the table: the Scheme from those allowed
 // at the player count, then a Mastermind that can complete it, then the groups they require, then
 // the remaining Villain and Henchman Groups, then any Henchman Groups the Scheme draws outside the
-// Villain Deck, then the Heroes, then any Heroes the Scheme draws outside the Hero Deck. Each draw goes
+// Villain Deck, then the Heroes, then any Heroes the Scheme draws outside the Hero Deck, then any other
+// Masterminds the Scheme draws. Each draw goes
 // through the IRandomSource and picks from the options left, in catalog order, so a fixed sequence of draws
 // always gives the same setup.
 //
@@ -138,6 +139,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.VillainGroups).Where(group => Supplied(boxes, standIns, group)).ToList();
         private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).Where(group => Supplied(boxes, standIns, group)).ToList();
         private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).Where(hero => Supplied(boxes, standIns, hero)).ToList();
+        private readonly List<Mastermind> _masterminds = boxes.SelectMany(box => box.Masterminds).Where(mastermind => Supplied(boxes, standIns, mastermind)).ToList();
         private readonly Dictionary<(string Scheme, int Heroes), bool> _heroesFit = [];
 
         // The words the ruleset's rulebook uses, for rule notes. A setup whose drawn cards follow both rulesets
@@ -160,8 +162,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             // A Mastermind whose Always Leads group is not included cannot be set up legally.
             var plan = Plan(scheme);
-            return boxes.SelectMany(box => box.Masterminds)
-                .Where(mastermind => Supplied(boxes, standIns, mastermind))
+            return _masterminds
                 .Where(mastermind => IgnoresAlwaysLeads || GroupIds().Contains(mastermind.AlwaysLeads.GroupId))
                 .Where(mastermind => RulesOf(scheme, mastermind) == rulesBox.Ruleset)
                 .Select(mastermind => WithMastermind(plan, mastermind))
@@ -188,6 +189,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .ToList();
             var (heroes, outside) = DrawHeroes(plan);
 
+            // The Masterminds the Scheme draws besides its own, from the included ones the setup doesn't otherwise use.
+            var otherMasterminds = new Queue<Mastermind>(DrawMany(_masterminds.Where(other => other != mastermind), plan.OutsideMasterminds.Sum(draw => draw.Count)));
+            var outsideMasterminds = plan.OutsideMasterminds
+                .SelectMany(draw => Enumerable.Range(0, draw.Count).Select(_ => new OutsideMastermind(otherMasterminds.Dequeue(), draw.Rule.To, draw.Rule.Tactics?.Value)))
+                .ToList();
+
             // The cards of each group the Scheme sets beside it, and how many fewer the group puts in the Villain
             // Deck when it is drawn there too.
             var inDeck = villainGroups.Select(g => g.Id).Concat(henchmanGroups.Select(g => g.Id)).ToHashSet();
@@ -206,6 +213,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             [
                 plan.Scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(group => group.Group),
                 .. heroes, .. outside.Select(hero => hero.Hero), .. beside.Select(cards => cards.Group),
+                .. outsideMasterminds.Select(other => other.Mastermind),
             ];
             var drawn = cards.Select(card => RulesetOf(card.Id)).ToHashSet();
             var mixed = drawn.Count > 1;
@@ -220,7 +228,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var mixingRules = rulesBox == mixingBox;
             var rulesUse = mixed && mixingRules ? boxes.Where(box => box.IsBaseGame).SelectMany(box => box.Setup!.Uses) : rules.Uses;
             // A part no included box supplies is replaced by its stand-in (D-heroic, FI p.2).
-            var cardParts = cards.SelectMany(card => card.Parts).ToHashSet();
+            // Tactics shuffled into the Villain Deck play with no abilities, so their Mastermind brings no parts (#113).
+            var cardParts = cards
+                .Except(outsideMasterminds.Where(other => other.To == Pile.VillainDeck).Select(other => other.Mastermind))
+                .SelectMany(card => card.Parts)
+                .ToHashSet();
             var used = rulesUse.Select(use => use.Part).Concat(cardParts.Select(StandInFor).OfType<Part>()).ToHashSet();
             var stoodIn = standIns.Values.Where(active => cardParts.Contains(active.Rule.Part)).ToList();
 
@@ -354,7 +366,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     plan.MovedIn(Pile.VillainDeck),
                     plan.MovedOut(Pile.VillainDeck),
                     outside.Where(hero => hero.To == Pile.VillainDeck).Sum(hero => hero.Cards),
-                    beside.Sum(cards => cards.FromVillainDeck)),
+                    beside.Sum(cards => cards.FromVillainDeck),
+                    outsideMasterminds.Sum(other => other.Tactics ?? 0)),
                 new HeroDeck(
                     heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value),
                     plan.MovedOut(Pile.HeroDeck),
@@ -380,7 +393,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 boxes,
                 mixed,
                 reason,
-                stoodIn.Select(active => active.Rule).ToList());
+                stoodIn.Select(active => active.Rule).ToList(),
+                outsideMasterminds);
         }
 
         // The counts one Scheme sets at this player count: the player-count table or Solo,
@@ -533,6 +547,21 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(Card($"{schemeWord} sets {what} beside it{(rule.PerPlayer ? $", {count.Value} per player" : "")}", count.Source));
             }
 
+            var otherMasterminds = new List<MastermindsDraw>();
+            foreach (var rule in effect.OutsideMasterminds ?? [])
+            {
+                if (ForPlayers(rule.Count) is not { } count)
+                {
+                    continue;
+                }
+
+                otherMasterminds.Add(new MastermindsDraw(rule, count.Value));
+                var which = $"{count.Value} other {_terms.Mastermind}{(count.Value == 1 ? "" : "s")}";
+                notes.Add(rule.Tactics is { } tactics
+                    ? Card($"{schemeWord} draws {which} and shuffles {tactics.Value * count.Value} of {(count.Value == 1 ? "its" : "their")} Tactics into the {_terms.VillainDeck}", tactics.Source)
+                    : Card($"{schemeWord} draws {which} and sets {(count.Value == 1 ? "it" : "them")} aside", count.Source));
+            }
+
             var twists = ForPlayers(effect.Twists)
                 ?? throw new InvalidDataException($"{scheme.Id} has no Twist count for {players} players.");
 
@@ -553,6 +582,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 outside,
                 outsideHenchmen,
                 cardsBeside,
+                otherMasterminds,
                 [],
                 notes);
 
@@ -630,6 +660,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 && Slots(plan.HenchmanGroups, GroupType.Henchman) + plan.OutsideHenchmen.Count
                     <= Drawable(_henchmanGroups.Select(g => g.Id), GroupType.Henchman)
                 && plan.OutsideHenchmen.All(draw => draw.Cards <= henchmanGroupCards)
+                && plan.OutsideMasterminds.Sum(draw => draw.Count) <= _masterminds.Count(other => other != plan.Mastermind)
                 && HeroesFit(plan)
                 && plan.MovedOut(Pile.HeroDeck) <= plan.Heroes * boxes.Min(box => box.Components.HeroCards.Value)
                 && plan.MovedOut(Pile.VillainDeck) <= plan.HenchmanGroups * (plan.HenchmanCards ?? (Solo
@@ -919,6 +950,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         IReadOnlyList<OutsideDraw> Outside,
         IReadOnlyList<HenchmenDraw> OutsideHenchmen,
         IReadOnlyList<BesideDraw> Beside,
+        IReadOnlyList<MastermindsDraw> OutsideMasterminds,
         IReadOnlyList<string> Steps,
         IReadOnlyList<RuleNote> Notes)
     {
@@ -935,4 +967,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
     // How many cards of a group the Scheme sets beside it at this player count.
     private sealed record BesideDraw(CardsBeside Rule, int Count);
+
+    // How many other Masterminds one of the Scheme's draws takes at this player count.
+    private sealed record MastermindsDraw(OutsideMasterminds Rule, int Count);
 }

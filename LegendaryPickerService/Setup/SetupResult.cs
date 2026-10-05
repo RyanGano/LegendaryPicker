@@ -13,6 +13,7 @@ public sealed record NoEligibleScheme(int Players) : GenerationResult;
 // When the included boxes follow more than one ruleset, the Scheme and Mastermind decide the Ruleset and
 // RulesReason says why; Mixed is true when the drawn cards themselves come from more than one ruleset.
 // StandIns are the parts no included box supplies that the drawn cards use, each replaced by its stand-in (D-heroic).
+// OutsideMasterminds are the Masterminds the Scheme draws besides its own (#113).
 public sealed record SetupResult(
     int Players,
     Ruleset Ruleset,
@@ -35,12 +36,14 @@ public sealed record SetupResult(
     IReadOnlyList<Box> Boxes,
     bool Mixed = false,
     RuleNote? RulesReason = null,
-    IReadOnlyList<StandIn>? StandIns = null) : GenerationResult;
+    IReadOnlyList<StandIn>? StandIns = null,
+    IReadOnlyList<OutsideMastermind>? OutsideMasterminds = null) : GenerationResult;
 
 // MovedIn and MovedOut count the cards the setup's moves put in the deck and take out of it, and SetBeside
 // the cards of its drawn groups the Scheme sets beside it. The response lists each move under the setup's
 // moves and each group's cards under its cards beside the Scheme instead, so they are left out of it.
-// OutsideHeroCards counts the cards of the Heroes drawn outside the Hero Deck that go into the Villain Deck.
+// OutsideHeroCards counts the cards of the Heroes drawn outside the Hero Deck that go into the Villain Deck, and
+// MastermindTactics the Tactics of other Masterminds the Scheme shuffles into it, written only when there are any.
 public sealed record VillainDeck(
     int Twists,
     int MasterStrikes,
@@ -50,9 +53,10 @@ public sealed record VillainDeck(
     [property: JsonIgnore] int MovedIn,
     [property: JsonIgnore] int MovedOut = 0,
     int OutsideHeroCards = 0,
-    [property: JsonIgnore] int SetBeside = 0)
+    [property: JsonIgnore] int SetBeside = 0,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int MastermindTactics = 0)
 {
-    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MovedIn - MovedOut - SetBeside;
+    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MastermindTactics + MovedIn - MovedOut - SetBeside;
 }
 
 // OutsideHenchmanCards counts the Henchmen of the Henchman Groups drawn outside the Villain Deck that go into
@@ -76,6 +80,10 @@ public sealed record OutsideHero(Hero Hero, Pile To, int Cards);
 // A Henchman Group a Scheme draws outside the Villain Deck, and the pile Cards of its cards go to. The rest
 // of the group stays out of the game.
 public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Cards);
+
+// A Mastermind a Scheme draws besides its own, and the pile it goes to: set aside whole until the Scheme brings it
+// into play, or Tactics of its Tactics into the Villain Deck. Tactics is null when it is set aside.
+public sealed record OutsideMastermind(Mastermind Mastermind, Pile To, int? Tactics);
 
 // Cards of a group the Scheme sets beside it: Count of them, or the one named Card. FromVillainDeck is how many
 // fewer cards the group puts in the Villain Deck because of it, or 0 when the group isn't drawn or its cards

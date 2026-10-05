@@ -1,6 +1,6 @@
 # Secret Wars Volume 1 (August 2015)
 
-**Research status: Partial.** The official insert gives extensive rules and aggregate counts, but its listed categories total 348 rather than its stated 350 cards. No card-front scans were available in this pass to verify individual Scheme setups, Always Leads, or the complete card manifest.
+**Research status: Partial.** The official insert gives extensive rules and aggregate counts, but its listed categories total 348 rather than its stated 350 cards. For integration (#113) the Scheme Setup lines, each Always Leads and the parts cards use were read from the card faces C1 links; the runtime data is `LegendaryPickerService/Data/Boxes/secret-wars-volume-1.json`. Build an Army of Annihilation is left out: its Setup line names 10 extra "Annihilation Wave" Henchmen, a group no box has.
 
 ## Sources
 

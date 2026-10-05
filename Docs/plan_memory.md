@@ -24,6 +24,7 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 - Owner decision D-heroic (2026-10-04, #110): Fear Itself works without Legendary: Villains. With a Heroic base game and Fear Itself but no Villainous base game, every pair follows the First Edition rules, and Fear Itself's `otherRuleset.standIns` (FI p.2) replace parts no included box supplies: Wounds for Bindings (the player may use Bindings), S.H.I.E.L.D. Officers for Madame HYDRA, and +1 Recruit for a New Recruit gain.
 - Owner decision D-shards (2026-10-04, #107): the Shard tokens are double-sided, so Guardians of the Galaxy's 18 tokens cover Unite the Shards' 30 Shards. A setup lays out all the Shard tokens from the included boxes, with no stand-ins, and never drops the Scheme for lack of Shards.
 - `/api/boxes` lists base games first, then by release month (`about.released`, #106); the draw still uses catalog (file) order.
+- Secret Wars Volume 1 (#113) is integrated with its Sidekick stack. Schemes can now draw other Masterminds (`setup.outsideMasterminds`): Dark Alliance sets one aside, Master of Tyrants shuffles 4 Tactics each of 3 into the Villain Deck. Build an Army of Annihilation is left out pending an owner decision: its "Annihilation Wave" Henchmen exist in no box.
 
 ## Research artifacts
 
