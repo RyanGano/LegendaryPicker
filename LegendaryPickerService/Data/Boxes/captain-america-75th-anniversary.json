@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 7,
+  "id": "captain-america-75th-anniversary",
+  "name": "Captain America 75th Anniversary",
+  "ruleset": "firstEdition",
+  "catalogSource": "CA75 p.2; C1",
+  "about": { "released": { "value": "2016-03", "source": "Q" } },
+  "sources": [
+    { "key": "CA75", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary-Captain-America-Rulesheet.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "CA75 p.2" },
+    "villainGroupCards": { "value": 8, "source": "CA75 p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "CA75 p.2" },
+    "schemeTwists": { "value": 0, "source": "CA75 p.2" }
+  },
+  "heroes": [
+    { "id": "captain-america-75th-anniversary_hero_agent-x-13", "name": "Agent X-13", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["captain-america-75th-anniversary_term_man-out-of-time", "captain-america-75th-anniversary_term_savior"], "uses": [{ "part": "officers", "source": "Card" }] },
+    { "id": "captain-america-75th-anniversary_hero_captain-america-falcon", "name": "Captain America (Falcon)", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["captain-america-75th-anniversary_term_savior"] },
+    { "id": "captain-america-75th-anniversary_hero_captain-america-1941", "name": "Captain America 1941", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["captain-america-75th-anniversary_term_man-out-of-time", "captain-america-75th-anniversary_term_savior"] },
+    { "id": "captain-america-75th-anniversary_hero_steve-rogers-director-of-s-h-i-e-l-d", "name": "Steve Rogers, Director of S.H.I.E.L.D.", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["captain-america-75th-anniversary_term_man-out-of-time", "captain-america-75th-anniversary_term_savior"] },
+    { "id": "captain-america-75th-anniversary_hero_winter-soldier", "name": "Winter Soldier", "team": null, "classes": ["core_term_covert", "core_term_strength", "core_term_tech"], "terms": ["captain-america-75th-anniversary_term_man-out-of-time"] }
+  ],
+  "villainGroups": [
+    { "id": "captain-america-75th-anniversary_villain_zola-s-creations", "name": "Zola's Creations", "terms": ["core_term_escape", "core_term_fight", "captain-america-75th-anniversary_term_abomination"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "captain-america-75th-anniversary_villain_masters-of-evil-wwii", "name": "Masters of Evil (WWII)", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "captain-america-75th-anniversary_term_savior"], "uses": [{ "part": "wounds", "source": "Card" }] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    { "id": "captain-america-75th-anniversary_mastermind_arnim-zola", "name": "Arnim Zola", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "captain-america-75th-anniversary_term_abomination"], "uses": [{ "part": "wounds", "source": "Card" }], "alwaysLeads": { "groupId": "captain-america-75th-anniversary_villain_zola-s-creations", "groupType": "villain", "source": "Card" } },
+    { "id": "captain-america-75th-anniversary_mastermind_baron-heinrich-zemo", "name": "Baron Heinrich Zemo", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "captain-america-75th-anniversary_term_savior"], "uses": [{ "part": "wounds", "source": "Card" }], "alwaysLeads": { "groupId": "captain-america-75th-anniversary_villain_masters-of-evil-wwii", "groupType": "villain", "source": "Card" } }
+  ],
+  "schemes": [
+    {
+      "id": "captain-america-75th-anniversary_scheme_brainwash-the-military",
+      "name": "Brainwash the Military",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 7, "source": "Card" }],
+        "moves": [{ "card": "officer", "to": "villainDeck", "count": [{ "players": null, "value": 12, "source": "Card" }] }]
+      }
+    },
+    {
+      "id": "captain-america-75th-anniversary_scheme_change-the-outcome-of-wwii",
+      "name": "Change the Outcome of WWII",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 7, "source": "Card" }],
+        "extraVillainGroups": [{ "players": null, "value": 1, "source": "Card" }]
+      }
+    },
+    {
+      "id": "captain-america-75th-anniversary_scheme_go-back-in-time-to-slay-heroes-ancestors",
+      "name": "Go Back in Time to Slay Heroes' Ancestors",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 9, "source": "Card" }],
+        "heroes": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    },
+    {
+      "id": "captain-america-75th-anniversary_scheme_the-unbreakable-enigma-code",
+      "name": "The Unbreakable Enigma Code",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 6, "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "captain-america-75th-anniversary_term_man-out-of-time", "name": "Man Out of Time", "kind": "keyword", "summary": "A card with this ability waits aside after it is used, comes back for one more play next turn, then is discarded. It counts as played on both turns.", "source": "CA75", "page": 1 },
+    { "id": "captain-america-75th-anniversary_term_savior", "name": "Savior", "kind": "keyword", "summary": "A Savior ability works for a player with at least three Bystanders in their Victory Pile, counting any rescued earlier that turn.", "source": "CA75", "page": 1 },
+    { "id": "captain-america-75th-anniversary_term_abomination", "name": "Abomination", "kind": "keyword", "summary": "A Villain with this gains Attack equal to the printed Attack of the Hero in the HQ space below it. Ultimate Abomination counts every Hero in the HQ instead.", "source": "CA75", "page": 1 }
+  ]
+}
