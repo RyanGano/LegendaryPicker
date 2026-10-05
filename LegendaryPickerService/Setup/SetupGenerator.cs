@@ -364,7 +364,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     Stack(Part.Bindings, (plan.Bindings ?? Supply(Part.Bindings)) - plan.MovedOut(Pile.Bindings)),
                     Stack(Part.MadameHydra, Supply(Part.MadameHydra)),
                     Stack(Part.NewRecruits, Supply(Part.NewRecruits)),
-                    Stack(Part.Shards, plan.Shards ?? Supply(Part.Shards))),
+                    Stack(Part.Shards, Supply(Part.Shards))),
                 new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value, choices),
                 plan.Moves,
                 outside,
@@ -438,14 +438,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 bindings = bindingsPerPlayer.Value * players;
                 notes.Add(Card($"{schemeWord} sets the Bindings stack to {bindingsPerPlayer.Value} per player", bindingsPerPlayer.Source));
-            }
-
-            // The Shard supply holds what the boxes supply unless the Scheme sets how many Shards it holds.
-            int? shards = null;
-            if (effect.ShardSupply is { } shardSupply)
-            {
-                shards = shardSupply.Value;
-                notes.Add(Card($"{schemeWord} puts {shards} Shards in the supply", shardSupply.Source));
             }
 
             var moves = new List<MovedCards>();
@@ -552,7 +544,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 bystanders,
                 wounds,
                 bindings,
-                shards,
                 moves,
                 outside,
                 outsideHenchmen,
@@ -919,7 +910,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int Bystanders,
         int? Wounds,
         int? Bindings,
-        int? Shards,
         IReadOnlyList<MovedCards> Moves,
         IReadOnlyList<OutsideDraw> Outside,
         IReadOnlyList<HenchmenDraw> OutsideHenchmen,

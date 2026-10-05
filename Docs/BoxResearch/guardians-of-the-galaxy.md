@@ -1,6 +1,6 @@
 # Guardians of the Galaxy (October 2014)
 
-**Research status: Partial.** The official insert verifies aggregate contents and several rules; local scans record 20 Hero faces, both Mastermind fronts, and all four Scheme fronts. Hero face counts and icon labels, the Tactics and Villain manifests, and the 18-versus-30 Shard supply discrepancy remain open.
+**Research status: Partial.** The official insert verifies aggregate contents and several rules; local scans record 20 Hero faces, both Mastermind fronts, and all four Scheme fronts. Hero face counts and icon labels, and the Tactics and Villain manifests remain open.
 
 ## Sources
 
@@ -122,7 +122,7 @@ GG p.1 says the 18 Shards form a shared supply. Players, Villains, and Mastermin
 | The Kree-Skrull War | 1 of 4 Schemes; the insert provides special group instructions for 1 and 2 players, not a general player-limit table. | 8 Twists; always include Kree Starforce and Skrull Villains. | Twists 1–7 make Kree and Skrulls escape, then place the Twist as a Kree or Skrull Conquest according to which group is more numerous in the Escape Pile. Twist 8 goes by the side with more Conquests. The card does not state where a Twist goes on a tie. Evil wins at four of either Conquest. | `scheme-kree-skrull-war.png` |
 | Unite the Shards | 1 of 4 Schemes; the card gives no player-count table. | 30 Shards in supply; players + 5 Twists (6–10 for 1–5 players). | Each Twist is stacked by the Scheme and gives the Mastermind a Shard. During a turn, you may repeat the printed exchange: pay two of the shown resource for one of the Mastermind's Shards. Evil wins at ten Mastermind Shards or when the supply is empty; the resource icon's name is unverified. | `scheme-unite-shards.png` |
 
-The four scanned Scheme fronts reconcile to the four Scheme cards in GG p.2. None prints a separate player-limit table. The Kree-Skrull War insert gives additional 1- and 2-player group instructions (GG p.2). The 30-Shard supply specified by Unite the Shards conflicts with the 18 physical Shard tokens listed by the insert; no substitution or extra supply is inferred.
+The four scanned Scheme fronts reconcile to the four Scheme cards in GG p.2. None prints a separate player-limit table. The Kree-Skrull War insert gives additional 1- and 2-player group instructions (GG p.2). Unite the Shards' 30 Shards are covered by the box's 18 tokens, which are double-sided (owner decision D-shards, 2026-10-04, #107).
 
 ### Mastermind Always Leads
 
@@ -165,7 +165,7 @@ The scans verify the four Scheme fronts, both Mastermind fronts and Always Leads
 ### Verified parts
 
 - The product adds 18 Shard tokens to the shared supply (GG p.1–2).
-- Unite the Shards' card Setup specifies 30 Shards, exceeding the 18 tokens listed in the insert; the mismatch needs an official clarification (Card: `scheme-unite-shards.png`; GG p.2).
+- Unite the Shards' card Setup specifies 30 Shards while the insert lists 18 tokens. The owner decided on 2026-10-04 (#107) that the tokens are double-sided, so they cover the 30 (Card: `scheme-unite-shards.png`; GG p.2).
 - Infinity Gems are Villain cards that can become Artifacts in a player's discard pile (GG p.2).
 - No additional shared-stack totals are listed in the official contents roster. Other Scheme-specific shared-stack uses beyond the verified Nega-Bomb Bystander Deck remain unverified.
 
@@ -184,19 +184,18 @@ Hero team/class icon labels and per-face copy counts, along with the missing Vil
 ## Implementation notes
 
 - The box is integrated as `LegendaryPickerService/Data/Boxes/guardians-of-the-galaxy.json` (#95). Guardians is an expansion with First Edition rules, not a separate base-game setup table (project queue).
-- The runtime file (#95) models Shards as a part with an 18-token supply (`components.shards`), Unite the Shards' 30 as `shardSupply`, and the Nega-Bomb Deck as a move of 6 Bystanders to a stack set aside (`to: setAside`) with a setup step.
+- The runtime file (#95) models Shards as a part with an 18-token supply (`components.shards`), Unite the Shards as a `uses` entry with a setup step to lay out all the Shard tokens (D-shards), and the Nega-Bomb Deck as a move of 6 Bystanders to a stack set aside (`to: setAside`) with a setup step.
 - An Infinity Gem changing from a Villain into an Artifact after defeat happens during play, so the runtime file does not model it.
 
 ## Open questions and evidence gaps
 
-1. Resolve the 30-Shard Scheme supply versus the insert's 18-token component list with an official clarification; do not assume substitute counters.
-2. Verify Hero teams/classes, identify the printed class/team symbols from an allowed source, and map the official 14-card-per-Hero distribution to individual face counts. The scans do not establish these mappings.
-3. Reconcile the C1/C2 Villain title leads to the official 16-card manifest; no Villain fronts were scanned, and the name leads do not reconcile to the insert's card count.
-4. Verify the eight Mastermind Tactic values and setup-relevant effects from allowed card-face sources; C1 metadata is indexed separately and is not rules evidence.
-5. Resolve where The Kree-Skrull War places a Twist when the Escape Pile counts tie, and where Twist 8 goes if both sides have the same number of Conquests.
-6. Check whether Schemes use shared parts beyond the verified six-Bystander Nega-Bomb Deck and Shards, and whether further glossary terms are needed.
+1. Verify Hero teams/classes, identify the printed class/team symbols from an allowed source, and map the official 14-card-per-Hero distribution to individual face counts. The scans do not establish these mappings.
+2. Reconcile the C1/C2 Villain title leads to the official 16-card manifest; no Villain fronts were scanned, and the name leads do not reconcile to the insert's card count.
+3. Verify the eight Mastermind Tactic values and setup-relevant effects from allowed card-face sources; C1 metadata is indexed separately and is not rules evidence.
+4. Resolve where The Kree-Skrull War places a Twist when the Escape Pile counts tie, and where Twist 8 goes if both sides have the same number of Conquests.
+5. Check whether Schemes use shared parts beyond the verified six-Bystander Nega-Bomb Deck and Shards, and whether further glossary terms are needed.
 
-Guardians remains **Partial**: the available Hero, Mastermind, and Scheme scans support the listed card-face facts, but Hero metadata and copies, Villain and Tactic fronts, tie handling in The Kree-Skrull War, and the Shard-supply conflict remain open. These gaps do not block serial research on other products.
+Guardians remains **Partial**: the available Hero, Mastermind, and Scheme scans support the listed card-face facts, but Hero metadata and copies, Villain and Tactic fronts, and tie handling in The Kree-Skrull War remain open. These gaps do not block serial research on other products.
 
 ## Structured card-face metadata (C1)
 
@@ -309,11 +308,11 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 - **Thanos** — Wounds: the **God of Death** Tactic ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/thanos-02.png)).
 - **Forge the Infinity Gauntlet** — Shards: its Twist (`scheme-forge-infinity-gauntlet.png`).
 - **Intergalactic Kree Nega-Bomb** — Wounds: its Twist (`scheme-kree-nega-bomb.png`).
-- **Unite the Shards** — Shards: its Setup line sizes the supply (`scheme-unite-shards.png`), so the runtime file records it as `shardSupply` rather than a `uses` entry.
+- **Unite the Shards** — Shards: its Setup line fills the supply (`scheme-unite-shards.png`).
 
 ### Runtime choices for the open gaps
 
-- **Unite the Shards' 30 Shards:** the runtime file follows the card (`shardSupply` 30) although the insert lists 18 tokens; listed as an open question in `Docs/Plan.md`.
+- **Unite the Shards' 30 Shards:** the runtime file lays out all the Shard tokens (owner decision D-shards, #107), not a count of 30.
 - **Hero teams and classes:** taken from C1 (team Guardians of the Galaxy; each Hero's classes are the union of its faces' class icons). The team term cites GG p.1, which introduces the Guardians as the box's Heroes.
 - **Villain manifest:** C1's per-face copy counts sum to 8 per group, matching GG p.2, which resolves the 13-versus-16 lead count above.
 - **The Kree-Skrull War in Solo:** both required groups fill the Villain Group slots, as GG p.2 says the deck will be larger than normal; no extra Villain Group effect is recorded.

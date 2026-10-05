@@ -75,13 +75,13 @@ _Avoid_: Extra Henchman Group, which is the setup effect that adds a Henchman Gr
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability.
 
 **Part in use**:
-A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack and Unite the Shards the Shard supply; the rules use the stacks players recruit from. A card that uses a part no included box supplies is dropped before the draw.
+A part of the game that a drawn card or the setup's rules use, so the setup lays it out; a part nothing uses is left out (owner decision, #87). So far the parts are the shared stacks other than Bystanders, and the Shard supply. A card uses a stack when its text takes cards or tokens from it, as Hulk gives Wounds and Gamora gains Shards, or when its Setup line sizes it, as Legacy Virus sets the Wound stack or Unite the Shards fills the Shard supply; the rules use the stacks players recruit from. A card that uses a part no included box supplies is dropped before the draw.
 
 **Stand-in**:
 A part a setup lays out in place of one no included box supplies, as an expansion's rules allow when it is played without its own ruleset's base game: with the core box and Fear Itself alone, Wounds stand in for Bindings and S.H.I.E.L.D. Officers for Madame HYDRA (Fear Itself insert, owner decision #110). The player can use the real cards if they have them.
 
 **Shard supply**:
-The shared pool of Shard tokens Guardians of the Galaxy adds (18, GG p.2), which players, Villains and Masterminds gain from. It is a part in use like a stack: laid out only when a drawn card gains or spends Shards, holding what the included boxes supply unless the Scheme sets its size.
+The shared pool of Shard tokens Guardians of the Galaxy adds (18 double-sided tokens, GG p.2), which players, Villains and Masterminds gain from. It is a part in use like a stack: laid out only when a drawn card gains or spends Shards, holding all the Shard tokens the included boxes supply (the tokens' two sides cover even Unite the Shards' 30 Shards, owner decision #107).
 
 **Required group**:
 A group a Scheme names as required (for example, Skrulls). Like an Always Leads group, it fills a group slot.

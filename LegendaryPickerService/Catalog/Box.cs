@@ -161,7 +161,6 @@ public sealed record Scheme(string Id, string Name, IReadOnlyList<string> Terms,
     public IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part)
         .Concat(Setup.WoundsPerPlayer is null ? [] : [Part.Wounds])
         .Concat(Setup.BindingsPerPlayer is null ? [] : [Part.Bindings])
-        .Concat(Setup.ShardSupply is null ? [] : [Part.Shards])
         .Concat((Setup.Moves ?? []).Select(move => CardMove.PartOf(move.Card)).OfType<Part>())
         .Distinct();
 }
@@ -197,7 +196,7 @@ public sealed record SetupStep(string Label, string Source);
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
 // Heroes, HenchmanCards and VillainDeckBystanders set a count, replacing the table or Solo value.
 // HenchmanCards is how many cards of each Henchman Group go in the Villain Deck. WoundsPerPlayer and
-// BindingsPerPlayer set the size of those stacks, and ShardSupply how many Shards the supply holds.
+// BindingsPerPlayer set the size of those stacks.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -219,8 +218,7 @@ public sealed record SchemeSetup(
     IReadOnlyList<SetupStep>? Steps = null,
     IReadOnlyList<OutsideHenchmen>? OutsideHenchmen = null,
     Sourced<int>? BindingsPerPlayer = null,
-    IReadOnlyList<CardsBeside>? CardsBeside = null,
-    Sourced<int>? ShardSupply = null)
+    IReadOnlyList<CardsBeside>? CardsBeside = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 public sealed record RequiredGroup(string GroupId, GroupType GroupType, string Source);
