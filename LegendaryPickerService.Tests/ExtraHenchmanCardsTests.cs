@@ -5,8 +5,8 @@ namespace LegendaryPickerService.Tests;
 
 // A Scheme's setup.extraHenchmanCards (#134), using Fixtures/ExtraHenchmen: a copy of the core box and a made-up
 // expansion. Catalog order puts its Schemes after the core box's 8 (6 in Solo): Test Smuggling (an extra Henchman
-// Group of 10), Test Skimming (an extra Henchman Group of 6) and Test Overload (an extra Henchman Group of 12, more
-// than any included group holds, so never drawn). Mastermind draw 0 is Dr. Doom, who always leads Doombot Legion.
+// Group of 10) and Test Skimming (an extra Henchman Group of 6). Mastermind draw 0 is Dr. Doom, who always leads
+// Doombot Legion.
 public sealed class ExtraHenchmanCardsTests
 {
     private static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "ExtraHenchmen");
@@ -46,14 +46,4 @@ public sealed class ExtraHenchmanCardsTests
         Assert.Contains(new RuleNote("Scheme puts 6 Henchmen of its extra Henchman Group in the Villain Deck", "Card", null, FixtureName), setup.Notes);
     }
 
-    // The core box's 8 Schemes and the fixture's 3, less Test Overload, whose 12 cards no included Henchman Group holds.
-    [Fact]
-    public void A_Scheme_whose_extra_group_count_is_larger_than_any_group_is_dropped()
-    {
-        var random = new ScriptedRandom();
-
-        Generator.Generate(2, Boxes, random);
-
-        Assert.Equal(10, random.Options[0]);
-    }
 }

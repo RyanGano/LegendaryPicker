@@ -11,7 +11,7 @@ public abstract record SetupResponse
 
     public static SetupResponse From(GenerationResult result, BoxCatalog catalog) => result switch
     {
-        SetupResult setup => FromSetup(setup, new Glossary(catalog, nameBoxes: setup.Boxes.Count > 1, nameRulesets: setup.Mixed)),
+        SetupResult setup => FromSetup(setup, new Glossary(catalog, setup.Boxes, nameRulesets: setup.Mixed)),
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
@@ -84,9 +84,12 @@ public abstract record SetupResponse
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
     // A term links to the URL its box lists for its source key; the loader guarantees one per key.
     // When the setup includes more than one box, each entry names the box that defines the term, and
-    // each component the box it comes from. In a mixed setup each component also names its ruleset.
-    private sealed class Glossary(BoxCatalog catalog, bool nameBoxes, bool nameRulesets)
+    // each component the box it comes from. In a mixed setup each component also names its ruleset. A component
+    // from a box the setup doesn't include, which a Scheme requires (D-scheme-first, #138), always names its box.
+    private sealed class Glossary(BoxCatalog catalog, IReadOnlyList<Box> included, bool nameRulesets)
     {
+        private bool NameBoxes => included.Count > 1;
+
         private readonly Dictionary<string, ((TermKind Kind, int Index) Order, GlossaryEntry Entry)> _terms = catalog.Boxes
             .SelectMany(box => box.Glossary.Select(term => (Term: term, Box: box, Link: box.Sources.First(source => source.Key == term.Source).Url)))
             .Select((x, index) => (x.Term, x.Box, x.Link, Index: index))
@@ -95,7 +98,7 @@ public abstract record SetupResponse
                 x => ((x.Term.Kind, x.Index),
                     new GlossaryEntry(
                         x.Term.Id, x.Term.Name, BoxCatalog.KindOf(x.Term.Kind), x.Term.Summary, $"{x.Term.Source} p.{x.Term.Page}", x.Link,
-                        nameBoxes ? x.Box.Name : null)),
+                        included.Count > 1 ? x.Box.Name : null)),
                 StringComparer.Ordinal);
 
         // A catalog id starts with its box's id, which the loader checks.
@@ -104,7 +107,8 @@ public abstract record SetupResponse
         public Component Component(string id, string name, IEnumerable<string> terms)
         {
             var box = _boxes[id.Split('_')[0]];
-            return new(id, name, Ordered(terms).ToList(), nameBoxes ? box.Name : null, nameRulesets ? box.Ruleset : null);
+            var notIncluded = !included.Contains(box);
+            return new(id, name, Ordered(terms).ToList(), NameBoxes || notIncluded ? box.Name : null, nameRulesets ? box.Ruleset : null, notIncluded);
         }
 
         public IReadOnlyList<GlossaryEntry> Entries(IEnumerable<string> terms) =>
@@ -160,12 +164,15 @@ public sealed record NoEligibleSchemeBody(int Players, string Message) : SetupRe
 // glossary terms it uses (for a Hero, its team and classes too). Box names the box it comes from once
 // a setup includes more than one box, as on RuleNote, so the player can tell which card to pull. Ruleset
 // names the ruleset of its box in a mixed setup, so the page can call a Plot a Plot and a Scheme a Scheme.
+// NotIncluded is true, and written only then, for a card the Scheme requires from a box the setup doesn't include,
+// which the player owns and pulls from that box (D-scheme-first, #138); Box then always names the box.
 public sealed record Component(
     string Id,
     string Name,
     IReadOnlyList<string> Terms,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Box = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] Ruleset? Ruleset = null);
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] Ruleset? Ruleset = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool NotIncluded = false);
 
 // A Hero drawn outside the Hero Deck, the pile its cards go to ("villainDeck", "besideScheme" or
 // "setAside"), and how many cards that is.

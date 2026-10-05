@@ -321,6 +321,7 @@ public class CoreBoxCatalogTests
                 new SourceLink("D1", "https://boardgamegeek.com/thread/993341/article/12653573"),
                 new SourceLink("D2", "https://boardgamegeek.com/thread/884926"),
                 new SourceLink("D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87"),
+                new SourceLink("D-scheme-first", "https://github.com/RyanGano/LegendaryPicker/issues/138"),
                 new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"),
             ],
             Core.Sources);

@@ -16,8 +16,18 @@
   },
   "heroes": [],
   "villainGroups": [],
-  "henchmanGroups": [],
-  "masterminds": [],
+  "henchmanGroups": [
+    { "id": "sideline_henchman_test-guards", "name": "Test Guards", "terms": [] },
+    { "id": "sideline_henchman_test-inmates", "name": "Test Inmates", "terms": [] }
+  ],
+  "masterminds": [
+    {
+      "id": "sideline_mastermind_test-jailer",
+      "name": "Test Jailer",
+      "terms": [],
+      "alwaysLeads": { "groupId": "sideline_henchman_test-guards", "groupType": "henchman", "source": "Card" }
+    }
+  ],
   "schemes": [
     {
       "id": "sideline_scheme_test-holding-cells",
@@ -26,18 +36,19 @@
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "cardsBeside": [
-          { "groupId": "core_henchman_doombot-legion", "groupType": "henchman", "count": [{ "players": null, "value": 10, "source": "Card" }] }
+          { "groupId": "sideline_henchman_test-guards", "groupType": "henchman", "count": [{ "players": null, "value": 10, "source": "Card" }] }
         ]
-      }
+      },
+      "excludesMasterminds": [{ "mastermindId": "sideline_mastermind_test-jailer", "source": "Card" }]
     },
     {
-      "id": "sideline_scheme_test-overfull-cells",
-      "name": "Test Overfull Cells",
+      "id": "sideline_scheme_test-crowded-cells",
+      "name": "Test Crowded Cells",
       "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "cardsBeside": [
-          { "groupId": "core_henchman_sentinel", "groupType": "henchman", "count": [{ "players": null, "value": 4, "source": "Card" }], "perPlayer": true }
+          { "groupId": "sideline_henchman_test-inmates", "groupType": "henchman", "count": [{ "players": null, "value": 2, "source": "Card" }], "perPlayer": true }
         ]
       }
     }

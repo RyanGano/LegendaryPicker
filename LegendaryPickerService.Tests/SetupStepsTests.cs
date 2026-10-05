@@ -7,7 +7,7 @@ namespace LegendaryPickerService.Tests;
 // expansion. Catalog order puts the fixture's Schemes after the core box's, so at 2–5 players they are
 // 8 Test Plain (no steps) and 9 Test Vigil (two steps, identical otherwise); Solo allows 6 core Schemes,
 // so there they are 6 and 7. The Masterminds are the core box's 4 (Red Skull is 3, who leads HYDRA), then
-// 4 Test Watcher, who also leads HYDRA and prints one step.
+// 4 Test Watcher, who leads the fixture's Test Lookouts and prints one step.
 public sealed class SetupStepsTests
 {
     public static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "SetupSteps");

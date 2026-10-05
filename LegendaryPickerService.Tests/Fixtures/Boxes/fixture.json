@@ -44,7 +44,7 @@
       "setup": {
         "twists": [{ "players": null, "value": 6, "source": "Card" }],
         "villainDeckBystanders": { "value": 35, "source": "Card" },
-        "requiredGroups": [{ "groupId": "core_villain_hydra", "groupType": "villain", "source": "R p.3" }]
+        "requiredGroups": [{ "groupId": "core_villain_hydra", "groupType": "villain", "source": "R p.3", "otherBox": { "source": "R p.4" } }]
       }
     }
   ],

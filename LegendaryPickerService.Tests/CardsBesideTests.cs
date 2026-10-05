@@ -5,9 +5,10 @@ namespace LegendaryPickerService.Tests;
 
 // Schemes that set cards of a group beside them, using Fixtures/CardsBeside: a copy of the core box and a made-up
 // expansion. Catalog order puts the fixture's Schemes after the core box's 8 (6 in Solo): Test Holding Cells (all 10
-// Doombot Legion cards beside it) and Test Overfull Cells (4 Sentinel cards per player, more than the group's 10
-// from 3 players). Masterminds in catalog order are 0 Dr. Doom (who leads Doombot Legion), 1 Loki, 2 Magneto and
-// 3 Red Skull; the Henchman Groups 0 Doombot Legion, 1 Hand Ninjas, 2 Savage Land Mutates and 3 Sentinel.
+// Test Guards cards beside it, so it excludes Test Jailer, who always leads them) and Test Crowded Cells (2 Test
+// Inmates cards per player). Masterminds in catalog order are 0 Dr. Doom, 1 Loki, 2 Magneto, 3 Red Skull and 4 Test
+// Jailer; the Henchman Groups 0 Doombot Legion, 1 Hand Ninjas, 2 Savage Land Mutates, 3 Sentinel, 4 Test Guards and
+// 5 Test Inmates.
 public sealed class CardsBesideTests
 {
     private static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "CardsBeside");
@@ -18,65 +19,64 @@ public sealed class CardsBesideTests
 
     private static readonly string[] Boxes = ["core", "sideline"];
 
-    private const int OverfullCells = 9;
+    private const int CrowdedCells = 9;
     private const int Magneto = 2;
 
     [Fact]
     public void A_drawn_group_puts_only_the_cards_left_after_those_beside_the_Scheme_in_the_Villain_Deck()
     {
-        // Magneto leads Brotherhood; the next Villain Group draw takes the first left, and the Henchman draw Sentinel.
-        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(OverfullCells, Magneto, 0, 3)));
+        // Magneto leads Brotherhood; the next Villain Group draw takes the first left, and the Henchman draw Test Inmates.
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(CrowdedCells, Magneto, 0, 5)));
 
-        Assert.Equal("Test Overfull Cells", setup.Scheme.Name);
-        Assert.Equal(["Sentinel"], setup.HenchmanGroups.Select(group => group.Name));
-        Assert.Equal([new GroupCardsBeside(HenchmanGroup("core_henchman_sentinel"), null, 8, 8)], setup.CardsBeside);
-        Assert.Equal(new VillainDeck(8, 5, 16, 10, 2, 0, 0, 0, 8), setup.VillainDeck);
-        Assert.Equal(33, setup.VillainDeck.Total);
-        Assert.Equal(new RuleNote("Scheme sets 8 Sentinel beside it, 4 per player", "Card", null, "Sideline Fixture"), setup.Notes[0]);
+        Assert.Equal("Test Crowded Cells", setup.Scheme.Name);
+        Assert.Equal(["Test Inmates"], setup.HenchmanGroups.Select(group => group.Name));
+        Assert.Equal([new GroupCardsBeside(HenchmanGroup("sideline_henchman_test-inmates"), null, 4, 4)], setup.CardsBeside);
+        Assert.Equal(new VillainDeck(8, 5, 16, 10, 2, 0, 0, 0, 4), setup.VillainDeck);
+        Assert.Equal(37, setup.VillainDeck.Total);
+        Assert.Equal(new RuleNote("Scheme sets 4 Test Inmates beside it, 2 per player", "Card", null, "Sideline Fixture"), setup.Notes[0]);
     }
 
     [Fact]
     public void A_group_that_is_not_drawn_still_has_its_cards_set_beside_the_Scheme()
     {
-        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(OverfullCells, Magneto, 0, 1)));
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(CrowdedCells, Magneto, 0, 1)));
 
         Assert.Equal(["Hand Ninjas"], setup.HenchmanGroups.Select(group => group.Name));
-        Assert.Equal([new GroupCardsBeside(HenchmanGroup("core_henchman_sentinel"), null, 8, 0)], setup.CardsBeside);
+        Assert.Equal([new GroupCardsBeside(HenchmanGroup("sideline_henchman_test-inmates"), null, 4, 0)], setup.CardsBeside);
         Assert.Equal(41, setup.VillainDeck.Total);
     }
 
-    // With every Doombot Legion card beside the Scheme, Doombot Legion can't be drawn, and Dr. Doom, who always
-    // leads it, can't complete the Scheme.
+    // With every Test Guards card beside the Scheme, Test Guards can't be drawn into the Villain Deck, and the Scheme's
+    // data excludes Test Jailer, who always leads them, so the Mastermind draw has only the core box's 4.
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(5)]
-    public void A_group_with_every_card_beside_the_Scheme_is_never_drawn_and_its_Mastermind_is_dropped(int players)
+    public void A_Scheme_never_draws_a_Mastermind_it_excludes_or_a_group_with_every_card_beside_it(int players)
     {
-        for (var seed = 0; seed < 20; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
-            var random = new ScriptedRandom([CoreSchemes(players), seed % 3, .. Enumerable.Repeat(seed % 2, 8)]);
+            var random = new ScriptedRandom([CoreSchemes(players), seed, .. Enumerable.Repeat(seed % 2, 8)]);
             var setup = Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, random));
 
             Assert.Equal("Test Holding Cells", setup.Scheme.Name);
-            Assert.DoesNotContain("Doombot Legion", setup.HenchmanGroups.Select(group => group.Name));
-            Assert.Equal(players == 1 ? 4 : 3, random.Options[1]);
-            Assert.Equal([new GroupCardsBeside(HenchmanGroup("core_henchman_doombot-legion"), null, 10, 0)], setup.CardsBeside);
+            Assert.Equal(4, random.Options[1]);
+            Assert.NotEqual("Test Jailer", setup.Mastermind.Name);
+            Assert.DoesNotContain("Test Guards", setup.HenchmanGroups.Select(group => group.Name));
+            Assert.Equal([new GroupCardsBeside(HenchmanGroup("sideline_henchman_test-guards"), null, 10, 0)], setup.CardsBeside);
         }
     }
 
-    // From 3 players Test Overfull Cells asks for more Sentinel cards than the group holds, so it is dropped.
-    [Theory]
-    [InlineData(1, true)]
-    [InlineData(2, true)]
-    [InlineData(3, false)]
-    [InlineData(5, false)]
-    public void A_Scheme_that_sets_more_cards_beside_it_than_a_group_holds_is_dropped(int players, bool eligible)
+    // Test Jailer is drawn with every other Scheme.
+    [Fact]
+    public void Another_Scheme_draws_the_Mastermind_one_Scheme_excludes()
     {
-        var both = new ScriptedRandom();
-        Generator.Generate(players, Boxes, both);
+        var random = new ScriptedRandom(CrowdedCells, 4);
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, random));
 
-        Assert.Equal(CoreSchemes(players) + (eligible ? 2 : 1), both.Options[0]);
+        Assert.Equal(5, random.Options[1]);
+        Assert.Equal("Test Jailer", setup.Mastermind.Name);
+        Assert.Contains("Test Guards", setup.HenchmanGroups.Select(group => group.Name));
     }
 
     // How many core Schemes can be drawn at a player count: 8, or 6 in Solo. The fixture's come after them.

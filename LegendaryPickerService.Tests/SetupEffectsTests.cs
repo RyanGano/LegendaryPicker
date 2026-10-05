@@ -1,4 +1,3 @@
-using System.Text.Json.Nodes;
 using LegendaryPickerService.Catalog;
 using LegendaryPickerService.Setup;
 
@@ -9,8 +8,8 @@ namespace LegendaryPickerService.Tests;
 // Schemes are the core box's 8, then 8 Test Uprising (+1 Villain Group), 9 Test Recruitment (+1 Hero)
 // and 10 Test Crowd (+1 Bystander in Solo, +2 at 3–5 players, nothing at 2). Solo allows 6 core
 // Schemes, so there they are 6, 7 and 8. The Masterminds are the core box's 4, then 4 Test Recruiter,
-// who always leads HYDRA and adds 1 Hero.
-public sealed class SetupEffectsTests : IDisposable
+// who always leads the fixture's Test Recruits and adds 1 Hero.
+public sealed class SetupEffectsTests
 {
     private static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "SetupEffects");
 
@@ -21,10 +20,6 @@ public sealed class SetupEffectsTests : IDisposable
     private static readonly SetupGenerator Generator = new(BoxCatalog.Load(FixtureDirectory));
 
     private static readonly string[] Boxes = ["core", "effects"];
-
-    private readonly string _directory = Directory.CreateTempSubdirectory("legendary-effects-").FullName;
-
-    public void Dispose() => Directory.Delete(_directory, recursive: true);
 
     [Theory]
     [InlineData(2, 3)]
@@ -108,7 +103,7 @@ public sealed class SetupEffectsTests : IDisposable
         Assert.Equal(
             [
                 new RuleNote("Test Recruiter adds 1 Hero", "Card", null, FixtureName),
-                new RuleNote("Test Recruiter always leads HYDRA", "R p.6", Rulebook, CoreName),
+                new RuleNote("Test Recruiter always leads Test Recruits", "R p.6", Rulebook, CoreName),
             ],
             setup.Notes);
     }
@@ -120,35 +115,7 @@ public sealed class SetupEffectsTests : IDisposable
 
         Assert.Equal(7, setup.Heroes.Count);
         Assert.Equal(
-            ["Scheme adds 1 Hero", "Test Recruiter adds 1 Hero", "Test Recruiter always leads HYDRA"],
+            ["Scheme adds 1 Hero", "Test Recruiter adds 1 Hero", "Test Recruiter always leads Test Recruits"],
             setup.Notes.Select(note => note.Text));
-    }
-
-    [Fact]
-    public void A_Mastermind_whose_effect_the_Scheme_leaves_no_cards_for_is_not_drawn_with_it()
-    {
-        // Recruiting 10 more Heroes fits the core box's 15 beside a normal 5, but not beside Test Recruitment's 6.
-        var generator = EditedGenerator(effects =>
-            effects["masterminds"]![0]!["setup"]!["extraHeroes"]![0]!["value"] = 10);
-        var withRecruitment = new ScriptedRandom(9);
-        var withCosmicCube = new ScriptedRandom(7, 4);
-
-        var recruitment = Assert.IsType<SetupResult>(generator.Generate(2, Boxes, withRecruitment));
-        var cosmicCube = Assert.IsType<SetupResult>(generator.Generate(2, Boxes, withCosmicCube));
-
-        Assert.Equal(4, withRecruitment.Options[1]);
-        Assert.Equal("Dr. Doom", recruitment.Mastermind.Name);
-        Assert.Equal(5, withCosmicCube.Options[1]);
-        Assert.Equal(15, cosmicCube.Heroes.Count);
-    }
-
-    private SetupGenerator EditedGenerator(Action<JsonObject> edit)
-    {
-        var effects = JsonNode.Parse(File.ReadAllText(Path.Combine(FixtureDirectory, "effects.json")))!.AsObject();
-        edit(effects);
-        File.WriteAllText(Path.Combine(_directory, "effects.json"), effects.ToJsonString());
-        File.Copy(Path.Combine(FixtureDirectory, "core.json"), Path.Combine(_directory, "core.json"));
-
-        return new SetupGenerator(BoxCatalog.Load(_directory));
     }
 }

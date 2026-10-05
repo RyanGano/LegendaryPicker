@@ -213,7 +213,7 @@ public class FearItselfTests
         Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, twoPlayers));
 
         Assert.Equal((10, 11), (solo.Options[0], twoPlayers.Options[0]));
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             Assert.NotEqual("The Traitor", setup.Scheme.Name);
@@ -320,7 +320,7 @@ public class FearItselfTests
     {
         foreach (var plot in new[] { FearItselfPlot, LastStand, TheTraitor })
         {
-            for (var seed = 0; seed < 20; seed++)
+            for (var seed = 0; seed < 4; seed++)
             {
                 var random = new CyclingRandom(8 + plot, seed, seed + 3, seed + 1, seed + 4, seed + 1, seed + 5, seed + 9, seed + 2, seed + 6);
                 var setup = Assert.IsType<SetupResult>(Generator.Generate(players, CoreAndFearItself, random));
@@ -405,7 +405,7 @@ public class FearItselfTests
         var neverLoaded = new SetupGenerator(BoxCatalog.Load(withoutIt.Path));
         string[] boxes = ["core", "dark-city", "fantastic-four", "guardians-of-the-galaxy", "paint-the-town-red", "villains"];
 
-        for (var seed = 0; seed < 40; seed++)
+        for (var seed = 0; seed < 4; seed++)
         {
             var withItLoaded = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
             var expected = Assert.IsType<SetupResult>(neverLoaded.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));

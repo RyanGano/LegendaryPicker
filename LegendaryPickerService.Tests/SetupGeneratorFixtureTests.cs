@@ -59,20 +59,6 @@ public sealed class SetupGeneratorFixtureTests : IDisposable
         Assert.Empty(random.Options);
     }
 
-    [Fact]
-    public void A_Scheme_needing_more_Heroes_than_the_catalog_holds_is_dropped_before_the_draw()
-    {
-        // Secret Invasion asks for 16 Heroes; the core box holds 15.
-        var generator = Generator(core =>
-            Scheme(core, "core_scheme_secret-invasion-of-the-skrull-shapeshifters")["setup"]!["heroes"]![0]!["value"] = 16);
-        var random = new ScriptedRandom();
-
-        var setup = Assert.IsType<SetupResult>(generator.Generate(2, random));
-
-        Assert.Equal(7, random.Options[0]);
-        Assert.Equal("Legacy Virus", setup.Scheme.Name);
-    }
-
     private SetupGenerator Generator(Action<JsonObject> edit)
     {
         var core = JsonNode.Parse(File.ReadAllText(Path.Combine(BoxCatalog.DefaultDirectory, "core.json")))!.AsObject();

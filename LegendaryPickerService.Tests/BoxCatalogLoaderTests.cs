@@ -863,12 +863,77 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     // Only one Storm is loaded and no Nova, but an expansion could add them; until one does, the Scheme
     // drops out of the draw rather than the box failing to load.
     [Fact]
-    public void Accepts_Hero_rules_only_Heroes_from_another_box_can_meet()
+    public void Rejects_Hero_rules_the_boxs_own_Heroes_cannot_meet()
     {
         WriteCoreBox(core => LegacyVirusSetup(core)["heroCounts"] = JsonNode.Parse(
-            """[{ "heroName": "Storm", "exactly": 2, "source": "Card" }, { "heroName": "Nova", "atLeast": 1, "source": "Card" }]"""));
+            """[{ "heroName": "Storm", "exactly": 2, "source": "Card" }]"""));
+
+        AssertRejected("core_scheme_legacy-virus counts 2 Heroes of Storm, which core doesn't hold; its own Heroes must meet it.");
+    }
+
+    // A Scheme's Hero rules are met by its own box's Heroes (D-scheme-first, #138); an outside draw by Hero Name can
+    // take another box's Hero only when otherBox allows it, and only a draw by Hero Name can.
+    [Theory]
+    [InlineData("""{ "to": "villainDeck", "heroName": "Nova", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
+        "setup.outsideHeroes[0] draws 1 Heroes core doesn't hold; its own Heroes must meet it, or otherBox allows another box's.")]
+    [InlineData("""{ "to": "villainDeck", "team": "core_term_x-men", "count": [{ "players": null, "value": 1, "source": "Card" }], "otherBox": { "source": "R p.20" } }""",
+        "setup.outsideHeroes[0] has otherBox; only a draw limited by heroName or heroNames has one, with no substitute.")]
+    [InlineData("""{ "to": "villainDeck", "heroName": "Nova", "count": [{ "players": null, "value": 1, "source": "Card" }], "otherBox": { "source": "R p.20", "substitute": "Card" } }""",
+        "setup.outsideHeroes[0] has otherBox; only a draw limited by heroName or heroNames has one, with no substitute.")]
+    public void Rejects_an_outside_Hero_draw_its_own_box_cannot_meet_unless_otherBox_allows_it(string outside, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["outsideHeroes"] = new JsonArray(JsonNode.Parse(outside)));
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
+    [Fact]
+    public void Accepts_an_outside_Hero_draw_by_a_Hero_Name_another_box_holds_when_otherBox_allows_it()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["outsideHeroes"] = JsonNode.Parse(
+            """[{ "to": "villainDeck", "heroName": "Nova", "count": [{ "players": null, "value": 1, "source": "Card" }], "otherBox": { "source": "R p.20" } }]"""));
 
         Assert.Single(BoxCatalog.Load(_directory).Boxes);
+    }
+
+    [Theory]
+    [InlineData("""[{ "groupId": "core_henchman_sentinel", "groupType": "henchman", "count": [{ "players": null, "value": 11, "source": "Card" }] }]""",
+        "sets 11 cards of core_henchman_sentinel beside it at 1 players; the group holds 10.")]
+    [InlineData("""[{ "groupId": "core_henchman_sentinel", "groupType": "henchman", "count": [{ "players": null, "value": 3, "source": "Card" }], "perPlayer": true }]""",
+        "sets 12 cards of core_henchman_sentinel beside it at 4 players; the group holds 10.")]
+    public void Rejects_more_cards_beside_the_Scheme_than_the_group_holds(string beside, string expected)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["cardsBeside"] = JsonNode.Parse(beside));
+
+        AssertRejected($"core_scheme_legacy-virus {expected}");
+    }
+
+    [Theory]
+    [InlineData("""[{ "mastermindId": "core_mastermind_nobody", "source": "Card" }]""")]
+    [InlineData("""[{ "mastermindId": "core_mastermind_loki", "source": "Card" }, { "mastermindId": "core_mastermind_loki", "source": "Card" }]""")]
+    public void Rejects_a_Scheme_exclusion_that_is_not_one_of_its_boxs_Masterminds_once(string exclusions)
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_legacy-virus")["excludesMasterminds"] = JsonNode.Parse(exclusions));
+
+        AssertRejected("core_scheme_legacy-virus excludesMasterminds lists core_mastermind_");
+    }
+
+    [Fact]
+    public void Rejects_a_Scheme_exclusion_with_a_source_the_box_does_not_list()
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_legacy-virus")["excludesMasterminds"] = JsonNode.Parse(
+            """[{ "mastermindId": "core_mastermind_loki", "source": "Nope p.1" }]"""));
+
+        AssertRejected("core_scheme_legacy-virus excludesMasterminds cites source Nope");
+    }
+
+    [Fact]
+    public void Rejects_otherBox_on_a_group_of_the_Schemes_own_box()
+    {
+        WriteCoreBox(core => Scheme(core, "core_scheme_secret-invasion-of-the-skrull-shapeshifters")["setup"]!["requiredGroups"]![0]!["otherBox"] =
+            JsonNode.Parse("""{ "source": "R p.20" }"""));
+
+        AssertRejected("core_scheme_secret-invasion-of-the-skrull-shapeshifters marks its own box's core_villain_skrulls with otherBox");
     }
 
     [Fact]
@@ -919,13 +984,46 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     {
         WriteCoreBox(_ => { });
         var extra = ExtraCopyOfCore();
-        Mastermind(extra, "extra_mastermind_red-skull")["alwaysLeads"]!["groupId"] = "core_villain_hydra";
+        var skrulls = Scheme(extra, "extra_scheme_secret-invasion-of-the-skrull-shapeshifters")["setup"]!["requiredGroups"]![0]!;
+        skrulls["groupId"] = "core_villain_skrulls";
+        skrulls["otherBox"] = JsonNode.Parse("""{ "source": "R p.20" }""");
         Entry(extra, "heroes", "extra_hero_thor")["team"] = "core_term_avengers";
         WriteBox("extra.json", extra);
 
         var catalog = BoxCatalog.Load(_directory);
 
         Assert.Equal(["core", "extra"], catalog.Boxes.Select(box => box.Id));
+    }
+
+    // Every requirement is met inside the box (D-scheme-first, #138), so a Mastermind leads only its own box's groups,
+    // and a Scheme requires another box's group only with otherBox.
+    [Fact]
+    public void Rejects_a_Mastermind_that_leads_a_group_in_another_box()
+    {
+        WriteCoreBox(_ => { });
+        var extra = ExtraCopyOfCore();
+        Mastermind(extra, "extra_mastermind_red-skull")["alwaysLeads"]!["groupId"] = "core_villain_hydra";
+        WriteBox("extra.json", extra);
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains("extra.json: extra_mastermind_red-skull leads core_villain_hydra from another box; it must be in extra.", error.Message);
+    }
+
+    [Theory]
+    [InlineData("requiredGroups", """[{ "groupId": "core_villain_skrulls", "groupType": "villain", "source": "Card" }]""", "requires core_villain_skrulls")]
+    [InlineData("cardsBeside", """[{ "groupId": "core_villain_skrulls", "groupType": "villain", "count": [{ "players": null, "value": 1, "source": "Card" }] }]""", "sets beside it cards of core_villain_skrulls")]
+    [InlineData("requiredHeroes", """[{ "heroId": "core_hero_storm", "source": "Card" }]""", "names Hero core_hero_storm")]
+    public void Rejects_a_Scheme_requirement_from_another_box_without_otherBox(string field, string value, string expected)
+    {
+        WriteCoreBox(_ => { });
+        var extra = ExtraCopyOfCore();
+        Scheme(extra, "extra_scheme_legacy-virus")["setup"]![field] = JsonNode.Parse(value);
+        WriteBox("extra.json", extra);
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains($"extra.json: extra_scheme_legacy-virus {expected} from another box; it must be in extra.", error.Message);
     }
 
     [Fact]

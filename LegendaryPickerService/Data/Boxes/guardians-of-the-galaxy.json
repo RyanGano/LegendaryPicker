@@ -8,6 +8,7 @@
   "sources": [
     { "key": "GG", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf" },
     { "key": "D-shards", "url": "https://github.com/RyanGano/LegendaryPicker/issues/107" },
+    { "key": "D-scheme-first", "url": "https://github.com/RyanGano/LegendaryPicker/issues/138" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
@@ -75,7 +76,7 @@
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "requiredGroups": [
           { "groupId": "guardians-of-the-galaxy_villain_kree-starforce", "groupType": "villain", "source": "Card" },
-          { "groupId": "core_villain_skrulls", "groupType": "villain", "source": "Card" }
+          { "groupId": "core_villain_skrulls", "groupType": "villain", "source": "Card", "otherBox": { "source": "D-scheme-first" } }
         ]
       }
     },

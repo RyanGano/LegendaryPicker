@@ -11,6 +11,7 @@
     { "key": "D1", "url": "https://boardgamegeek.com/thread/993341/article/12653573" },
     { "key": "D2", "url": "https://boardgamegeek.com/thread/884926" },
     { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" },
+    { "key": "D-scheme-first", "url": "https://github.com/RyanGano/LegendaryPicker/issues/138" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {

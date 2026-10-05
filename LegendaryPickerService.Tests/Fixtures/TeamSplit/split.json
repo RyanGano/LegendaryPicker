@@ -37,16 +37,6 @@
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "teamSplit": { "value": [2, 1], "source": "R p.2" }
       }
-    },
-    {
-      "id": "split_scheme_test-impossible-rivalry",
-      "name": "Test Impossible Rivalry",
-      "terms": ["core_term_scheme-twist"],
-      "setup": {
-        "twists": [{ "players": null, "value": 8, "source": "Card" }],
-        "heroes": [{ "players": null, "value": 14, "source": "Card" }],
-        "teamSplit": { "value": [7, 7], "source": "Card" }
-      }
     }
   ],
   "glossary": []

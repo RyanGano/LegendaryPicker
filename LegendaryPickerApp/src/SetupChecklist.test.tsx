@@ -555,6 +555,18 @@ describe('SetupChecklist', () => {
     expect(screen.getByRole('status')).toHaveTextContent('1 of 14 laid out')
   })
 
+  // The API marks a card the Scheme requires from a box the player didn't tick, as Test Heist's HYDRA would be
+  // without the core box; the line says where it comes from and why.
+  it('labels a required card from a box that is not included', () => {
+    const heist = structuredClone(twoBoxesTestHeist)
+    heist.villainGroups[0] = { ...heist.villainGroups[0], notIncluded: true } as (typeof heist.villainGroups)[0]
+    renderChecklist(heist)
+
+    expect(rows('Villain Deck')).toContain(
+      `HYDRA required by the Scheme, from ${CORE} Test Cult Fixture Expansion 2 Villain Groups 16`,
+    )
+  })
+
   it('lays out the Shard supply when a drawn card uses Shards', () => {
     renderChecklist(twoBoxesNegaBomb)
 

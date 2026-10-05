@@ -252,6 +252,12 @@ public sealed partial class BoxCatalog
                 }
             }
         }
+
+        // Once every reference resolves, each box must meet its own requirements.
+        foreach (var (path, box) in files)
+        {
+            ValidateOwnBox(path, box);
+        }
     }
 
     // A term needs a summary short enough to read at a glance, and a source this box links,
@@ -502,6 +508,106 @@ public sealed partial class BoxCatalog
         }
     }
 
+    // Every requirement a box's cards make is met inside the box (D-scheme-first, #138), so any setup that includes it
+    // can be laid out and no draw is ever checked against the others: a Mastermind's Always Leads and other groups, a
+    // Scheme's required groups and Heroes, the groups it sets cards beside it from, never more cards than a group holds,
+    // the Heroes it names, and the Hero Names and teams its Hero counts and outside draws ask for. A required group or a
+    // Hero Name draw can come from another box only when otherBox says so, and only a required group has a substitute.
+    // A Scheme's exclusions name Masterminds of its own box, each once. Team splits are left to the base game's Heroes.
+    private static void ValidateOwnBox(string path, Box box)
+    {
+        bool Own(string id) => id.Split('_')[0] == box.Id;
+        void Refuse(string owner, string what, string id) =>
+            throw new InvalidDataException($"{path}: {owner} {what} {id} from another box; it must be in {box.Id}.");
+
+        foreach (var mastermind in box.Masterminds)
+        {
+            foreach (var group in (mastermind.AlsoLeads?.GroupIds ?? []).Prepend(mastermind.AlwaysLeads.GroupId).Where(id => !Own(id)))
+            {
+                Refuse(mastermind.Id, "leads", group);
+            }
+        }
+
+        foreach (var scheme in box.Schemes)
+        {
+            var setup = scheme.Setup;
+            foreach (var group in setup.RequiredGroups ?? [])
+            {
+                if (Own(group.GroupId) && group.OtherBox is not null)
+                {
+                    throw new InvalidDataException($"{path}: {scheme.Id} marks its own box's {group.GroupId} with otherBox; otherBox is for a group from another box.");
+                }
+
+                if (!Own(group.GroupId) && group.OtherBox is null)
+                {
+                    Refuse(scheme.Id, "requires", group.GroupId);
+                }
+            }
+
+            foreach (var hero in (setup.RequiredHeroes ?? []).Select(rule => rule.HeroId)
+                .Concat((setup.OutsideHeroes ?? []).Select(rule => rule.Hero).OfType<string>()).Where(id => !Own(id)))
+            {
+                Refuse(scheme.Id, "names Hero", hero);
+            }
+
+            foreach (var beside in setup.CardsBeside ?? [])
+            {
+                if (!Own(beside.GroupId))
+                {
+                    Refuse(scheme.Id, "sets beside it cards of", beside.GroupId);
+                }
+
+                var size = beside.GroupType == GroupType.Villain ? box.Components.VillainGroupCards.Value : box.Components.HenchmanGroupCards.Value;
+                foreach (var players in setup.AllowedPlayerCounts?.Value ?? Enumerable.Range(MinPlayers, MaxPlayers - MinPlayers + 1))
+                {
+                    var count = beside.Count.SingleOrDefault(value => value.Players?.Contains(players) ?? true)?.Value ?? 0;
+                    if ((beside.PerPlayer ? count * players : count) > size)
+                    {
+                        throw new InvalidDataException(
+                            $"{path}: {scheme.Id} sets {(beside.PerPlayer ? count * players : count)} cards of {beside.GroupId} beside it at {players} players; the group holds {size}.");
+                    }
+                }
+            }
+
+            foreach (var count in setup.HeroCounts ?? [])
+            {
+                var needed = count.AtLeast ?? count.Exactly!.Value;
+                if (box.Heroes.Count(hero => count.Team is { } team ? hero.Team == team : hero.NameOfHero == count.HeroName) < needed)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} counts {needed} Heroes of {count.Team ?? count.HeroName}, which {box.Id} doesn't hold; its own Heroes must meet it.");
+                }
+            }
+
+            foreach (var (outside, index) in (setup.OutsideHeroes ?? []).Select((outside, index) => (outside, index)))
+            {
+                if (outside.OtherBox is { } other && (other.Substitute is not null || (outside.HeroName is null && outside.HeroNames is null)))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} setup.outsideHeroes[{index}] has otherBox; only a draw limited by heroName or heroNames has one, with no substitute.");
+                }
+
+                var most = outside.Count.Max(count => count.Value);
+                if (outside.OtherBox is null && (outside.HeroName is not null || outside.HeroNames is not null || outside.Team is not null)
+                    && box.Heroes.Count(hero => HeroRules.Selects(outside, hero)) < most)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} setup.outsideHeroes[{index}] draws {most} Heroes {box.Id} doesn't hold; its own Heroes must meet it, or otherBox allows another box's.");
+                }
+            }
+
+            var excluded = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var exclusion in scheme.ExcludesMasterminds ?? [])
+            {
+                if (!box.Masterminds.Any(mastermind => mastermind.Id == exclusion.MastermindId) || !excluded.Add(exclusion.MastermindId))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} excludesMasterminds lists {exclusion.MastermindId}; it lists Masterminds of {box.Id}, each once.");
+                }
+            }
+        }
+    }
+
     // A part listed twice would say nothing more. A base game's rules can use only parts it supplies, since a
     // setup can include it alone. Special Bystanders come into a setup with their box, so the parts they use must be
     // the box's own too, and only a box with Bystanders has them.
@@ -672,8 +778,8 @@ public sealed partial class BoxCatalog
     // A Scheme's own Hero choices must leave its Hero rules possible at every player count it allows. Which
     // boxes are included, and how many Hero Deck slots a setup has, are left open: the Heroes the Scheme
     // doesn't name are stand-ins of every team and Hero Name its rules or named Heroes mention, as many as a
-    // setup could use, and the Hero Deck has room for every required Hero and every count. So a Scheme only
-    // Heroes from another box could complete still loads, and drops out of the draw until they are included.
+    // setup could use, and the Hero Deck has room for every required Hero and every count. That the box's own
+    // Heroes are enough is ValidateOwnBox's check.
     private static void ValidateHeroRulesCanBeMet(string path, Box box, IReadOnlyDictionary<string, Hero> heroes)
     {
         foreach (var scheme in box.Schemes)
@@ -871,7 +977,14 @@ public sealed partial class BoxCatalog
             if (effect.Wounds is { } woundStack) yield return ($"{scheme.Id} setup.wounds", woundStack.Source);
             if (effect.ExtraHenchmanCards is { } extraCards) yield return ($"{scheme.Id} setup.extraHenchmanCards", extraCards.Source);
             if (effect.BindingsPerPlayer is { } bindings) yield return ($"{scheme.Id} setup.bindingsPerPlayer", bindings.Source);
-            foreach (var group in effect.RequiredGroups ?? []) yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
+            foreach (var group in effect.RequiredGroups ?? [])
+            {
+                yield return ($"{scheme.Id} setup.requiredGroups", group.Source);
+                if (group.OtherBox is { } otherBox) yield return ($"{scheme.Id} setup.requiredGroups.otherBox", otherBox.Source);
+                if (group.OtherBox?.Substitute is { } substitute) yield return ($"{scheme.Id} setup.requiredGroups.otherBox.substitute", substitute);
+            }
+
+            foreach (var exclusion in scheme.ExcludesMasterminds ?? []) yield return ($"{scheme.Id} excludesMasterminds", exclusion.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
             foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);
             foreach (var count in effect.HeroCounts ?? []) yield return ($"{scheme.Id} setup.heroCounts", count.Source);
@@ -887,6 +1000,7 @@ public sealed partial class BoxCatalog
             foreach (var outside in effect.OutsideHeroes ?? [])
             {
                 if (outside.HeroNames is { } heroNames) yield return ($"{scheme.Id} setup.outsideHeroes.heroNames", heroNames.Source);
+                if (outside.OtherBox is { } otherBox) yield return ($"{scheme.Id} setup.outsideHeroes.otherBox", otherBox.Source);
             }
         }
 

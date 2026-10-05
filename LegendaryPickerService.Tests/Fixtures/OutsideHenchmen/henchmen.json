@@ -36,15 +36,6 @@
           }
         ]
       }
-    },
-    {
-      "id": "henchmen_scheme_test-overfull-newsroom",
-      "name": "Test Overfull Newsroom",
-      "terms": ["core_term_scheme-twist"],
-      "setup": {
-        "twists": [{ "players": null, "value": 8, "source": "Card" }],
-        "outsideHenchmen": [{ "to": "heroDeck", "cards": [{ "players": null, "value": 11, "source": "Card" }] }]
-      }
     }
   ],
   "glossary": []

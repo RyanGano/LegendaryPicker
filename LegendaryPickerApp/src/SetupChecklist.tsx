@@ -55,12 +55,12 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <Item label={t.twists} count={villainDeck.twists} />
         <Item label={t.masterStrikes} count={villainDeck.masterStrikes} />
         <Item
-          label={names(setup.villainGroups)}
+          label={names(setup.villainGroups, t.scheme)}
           detail={plural(setup.villainGroups.length, villainTerms.villainGroup, villainTerms.villainGroups)}
           count={villainDeck.villainCards}
         />
         <Item
-          label={names(setup.henchmanGroups)}
+          label={names(setup.henchmanGroups, t.scheme)}
           detail={plural(setup.henchmanGroups.length, henchmanTerms.henchmanGroup, henchmanTerms.henchmanGroups)}
           count={villainDeck.henchmanCards}
         />
@@ -149,7 +149,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       {outsideHeroes.length > 0 && (
         <Section title={`${t.heroes} outside the ${t.heroDeck}`} kind="hero">
           {outsideHeroes.map((outside) => (
-            <Item key={outside.hero.id} label={names([outside.hero])} detail={into(t)[outside.to]} count={outside.cards} />
+            <Item key={outside.hero.id} label={names([outside.hero], t.scheme)} detail={into(t)[outside.to]} count={outside.cards} />
           ))}
         </Section>
       )}
@@ -413,8 +413,9 @@ function tickProgress(article: HTMLElement) {
 
 // The drawn cards by name; the checklist never lists the cards inside a group or Hero. When the setup
 // includes more than one box, each name stands on its own line with its box under it, so the player
-// knows which box to pull it from.
-function names(components: Component[]) {
+// knows which box to pull it from. A card the Scheme requires from a box the setup doesn't include says so,
+// since the player pulls it from a box they didn't tick.
+function names(components: Component[], scheme = 'Scheme') {
   if (!components.some((component) => component.box)) {
     return components.map((component) => component.name).join(', ')
   }
@@ -423,7 +424,10 @@ function names(components: Component[]) {
     <Fragment key={component.id}>
       {index > 0 && ' '}
       <span className="card-name">
-        {component.name} <span className="source-box">{component.box}</span>
+        {component.name}{' '}
+        <span className="source-box">
+          {component.notIncluded ? `required by the ${scheme}, from ${component.box}` : component.box}
+        </span>
       </span>
     </Fragment>
   ))
