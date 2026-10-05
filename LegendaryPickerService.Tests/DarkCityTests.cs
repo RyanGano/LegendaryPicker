@@ -162,7 +162,7 @@ public class DarkCityTests
     public void The_rules_insert_is_the_one_source_key()
     {
         Assert.Equal(
-            [new SourceLink("DC", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
+            [new SourceLink("DC", "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf"), new SourceLink("D-jean-grey", "https://github.com/RyanGano/LegendaryPicker/issues/122"), new SourceLink("Q", "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md")],
             DarkCity.Sources);
         Assert.Equal("DC p.2; C1; C2", DarkCity.CatalogSource);
     }
@@ -338,7 +338,7 @@ public class DarkCityTests
         Assert.Equal([new OutsideHero(jeanGrey, Pile.VillainDeck, 14)], setup.OutsideHeroes);
         Assert.DoesNotContain(jeanGrey, setup.Heroes);
         Assert.Contains(
-            new RuleNote("Scheme draws 1 extra Jean Grey Hero outside the Hero Deck and puts its cards into the Villain Deck", "Card", null, DarkCityName),
+            new RuleNote("Scheme draws 1 extra Jean Grey or Time-Traveling Jean Grey Hero outside the Hero Deck and puts its cards into the Villain Deck", "Card", null, DarkCityName),
             setup.Notes);
     }
 

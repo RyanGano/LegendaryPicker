@@ -68,7 +68,8 @@ public sealed record SourceLink(string Key, string Url);
 
 // The cards a box puts in the shared stacks, which a setup sums across its included boxes. A stack
 // the box adds nothing to is left out. A box's special cards of a stack, such as Special Bystanders
-// shuffled in with the Bystanders, count toward that stack. Bindings, Madame HYDRA and New Recruits are
+// shuffled in with the Bystanders, count toward that stack. Ambitions are the box's Ambition cards, a supply a
+// Scheme draws from rather than a stack players use (#119). Bindings, Madame HYDRA and New Recruits are
 // the Villainous stacks; the Villains rulebook says they are not the same cards as Wounds and Officers,
 // so each is a stack of its own. Shards are tokens rather than cards, but a setup lays out their supply the
 // same way.
@@ -84,7 +85,8 @@ public sealed record BoxComponents(
     Sourced<int>? Bindings = null,
     Sourced<int>? MadameHydra = null,
     Sourced<int>? NewRecruits = null,
-    Sourced<int>? Shards = null)
+    Sourced<int>? Shards = null,
+    Sourced<int>? Ambitions = null)
 {
     // What the box adds to a part's stack, or null when it adds none.
     public Sourced<int>? Supplies(Part part) => part switch
@@ -96,13 +98,14 @@ public sealed record BoxComponents(
         Part.MadameHydra => MadameHydra,
         Part.NewRecruits => NewRecruits,
         Part.Shards => Shards,
+        Part.Ambitions => Ambitions,
         _ => throw new ArgumentOutOfRangeException(nameof(part), part, null),
     };
 }
 
 // A part of the game a card or a base game's rules can use, which a setup lays out only when something in it
 // uses the part (owner decision D-uses, #87). So far the parts are the shared stacks other than Bystanders,
-// which every setup lays out, and the Shard supply (#95). Written camelCase in box files ("madameHydra").
+// which every setup lays out, the Shard supply (#95) and the Ambition cards (#119). Written camelCase in box files ("madameHydra").
 public enum Part
 {
     Wounds,
@@ -112,6 +115,7 @@ public enum Part
     MadameHydra,
     NewRecruits,
     Shards,
+    Ambitions,
 }
 
 // A part a card or a base game's rules use, with its source: Card for a card whose text gains, captures or
@@ -241,9 +245,12 @@ public sealed record HeroCount(string Source, string? Team = null, string? HeroN
 // Heroes a Scheme draws outside the Hero Deck, whose cards all go To one pile: the Villain Deck, beside
 // the Scheme, or a set-aside stack. Count says how many Heroes at each player count. Hero names the one
 // Hero to draw, HeroName limits the draw to Heroes with that Hero Name and Team to Heroes of that team;
-// with none of them any Hero not in the Hero Deck can be drawn.
+// with none of them any Hero not in the Hero Deck can be drawn. HeroNames limits the draw to Heroes with any of
+// those Hero Names, with the source that says they all count (an owner decision, as every Jean Grey does for Dark
+// City's Transform Citizens into Demons, #122).
 public sealed record OutsideHeroes(
-    Pile To, IReadOnlyList<PlayerCountValue> Count, string? Hero = null, string? HeroName = null, string? Team = null)
+    Pile To, IReadOnlyList<PlayerCountValue> Count, string? Hero = null, string? HeroName = null, string? Team = null,
+    Sourced<string[]>? HeroNames = null)
 {
     public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.BesideScheme, Pile.SetAside];
 }
@@ -253,15 +260,17 @@ public sealed record OutsideHeroes(
 // Cards says how many at each player count. Each entry draws a group of its own.
 public sealed record OutsideHenchmen(Pile To, IReadOnlyList<PlayerCountValue> Cards)
 {
-    public static readonly Pile[] Destinations = [Pile.HeroDeck];
+    public static readonly Pile[] Destinations = [Pile.HeroDeck, Pile.KoPile];
 }
 
 // Masterminds a Scheme draws besides its own, from the included Masterminds the setup doesn't otherwise use (#113).
 // Count says how many at each player count. Set aside, a Mastermind waits whole until the Scheme brings it into
 // play, as Dark Alliance adds a second Mastermind at its first Twist. Into the Villain Deck go only Tactics of each
 // drawn Mastermind, as Master of Tyrants shuffles 12 Tactics of 3 Masterminds in; those play as plain Villains with
-// no abilities, so they bring no parts. Tactics is required for, and only for, the Villain Deck.
-public sealed record OutsideMasterminds(Pile To, IReadOnlyList<PlayerCountValue> Count, Sourced<int>? Tactics = null)
+// no abilities, so they bring no parts. Tactics is required for, and only for, the Villain Deck. Joins says when a
+// set-aside Mastermind comes into play, in a few words ("Twist 1", "Twists 1-3"), and is allowed only for those.
+public sealed record OutsideMasterminds(
+    Pile To, IReadOnlyList<PlayerCountValue> Count, Sourced<int>? Tactics = null, Sourced<string>? Joins = null)
 {
     public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.SetAside];
 }
@@ -278,13 +287,15 @@ public enum CardKind
     Sidekick,
     Binding,
     Twist,
+    Ambition,
 }
 
 // A deck, pile or shared stack cards are laid out in. A move takes cards from the pile its card kind
 // comes from and puts them in one of the destinations: the Villain Deck, the Hero Deck, beside the
 // Scheme, each player's starting deck, or a stack of their own set aside, such as Guardians of the Galaxy's
 // Nega-Bomb Deck of Bystanders (#95). Twists is the Twists the boxes hold beyond those the Villain Deck and the
-// Scheme use.
+// Scheme use. Ambitions is the boxes' Ambition cards (#119), and KoPile the pile of KO'd cards, which a Scheme can
+// start with some Henchmen of a group in it (#116).
 public enum Pile
 {
     VillainDeck,
@@ -298,6 +309,8 @@ public enum Pile
     Sidekicks,
     Bindings,
     Twists,
+    Ambitions,
+    KoPile,
 }
 
 // A Scheme moving cards of one kind from their own pile to another during setup. Count says how many
@@ -320,6 +333,7 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
         CardKind.Sidekick => Pile.Sidekicks,
         CardKind.Binding => Pile.Bindings,
         CardKind.Twist => Pile.Twists,
+        CardKind.Ambition => Pile.Ambitions,
         _ => throw new ArgumentOutOfRangeException(nameof(Card), Card, null),
     };
 
@@ -330,6 +344,7 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
         CardKind.Officer => Part.Officers,
         CardKind.Sidekick => Part.Sidekicks,
         CardKind.Binding => Part.Bindings,
+        CardKind.Ambition => Part.Ambitions,
         _ => null,
     };
 
@@ -340,6 +355,7 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
         Part.Officers => CardKind.Officer,
         Part.Sidekicks => CardKind.Sidekick,
         Part.Bindings => CardKind.Binding,
+        Part.Ambitions => CardKind.Ambition,
         _ => null,
     };
 }

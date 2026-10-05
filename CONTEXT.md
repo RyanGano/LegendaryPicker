@@ -62,7 +62,7 @@ The name a setup shows for a Hero, Villain Group, Henchman Group, Mastermind or 
 A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team or with a Hero Name; or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, and a Scheme whose rules the included Heroes can't meet is dropped before the draw.
 
 **Hero outside the Hero Deck**:
-A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to the Villain Deck, beside the Scheme, or a stack set aside. The draw can name the Hero, or limit it to a Hero Name or a team.
+A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to the Villain Deck, beside the Scheme, or a stack set aside. The draw can name the Hero, or limit it to a Hero Name, a list of Hero Names (every Jean Grey for Transform Citizens into Demons) or a team.
 
 _Avoid_: Extra Hero, which is the setup effect that adds a Hero to the Hero Deck.
 

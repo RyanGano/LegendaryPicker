@@ -625,7 +625,7 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     [InlineData("""{ "to": "heroDeck", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
         "puts Heroes outside the Hero Deck in heroDeck; they go to villainDeck, besideScheme, setAside")]
     [InlineData("""{ "to": "villainDeck", "hero": "core_hero_storm", "team": "core_term_x-men", "count": [{ "players": null, "value": 1, "source": "Card" }] }""",
-        "chooses Heroes outside the Hero Deck by more than one of hero, heroName and team")]
+        "chooses Heroes outside the Hero Deck by more than one of hero, heroName, heroNames and team")]
     [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 0, "source": "Card" }] }""",
         "setup.outsideHeroes[0].count has value 0; values are at least 1")]
     public void Rejects_Heroes_outside_the_Hero_Deck_with_no_legal_draw(string outside, string expected)
@@ -637,7 +637,7 @@ public sealed class BoxCatalogLoaderTests : IDisposable
 
     [Theory]
     [InlineData("""{ "to": "villainDeck", "cards": [{ "players": null, "value": 6, "source": "Card" }] }""",
-        "puts Henchmen from outside the Villain Deck in villainDeck; they go to heroDeck")]
+        "puts Henchmen from outside the Villain Deck in villainDeck; they go to heroDeck, koPile")]
     [InlineData("""{ "to": "heroDeck", "cards": [{ "players": null, "value": 0, "source": "Card" }] }""",
         "setup.outsideHenchmen[0].cards has value 0; values are at least 1")]
     [InlineData("""{ "to": "heroDeck", "cards": [{ "players": null, "value": 6, "source": "Rumor" }] }""",
@@ -656,6 +656,8 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         "draws other Masterminds into villainDeck; tactics says how many of each one's Tactics go to the villainDeck, and only there")]
     [InlineData("""{ "to": "setAside", "count": [{ "players": null, "value": 1, "source": "Card" }], "tactics": { "value": 4, "source": "Card" } }""",
         "draws other Masterminds into setAside; tactics says how many of each one's Tactics go to the villainDeck, and only there")]
+    [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 3, "source": "Card" }], "tactics": { "value": 4, "source": "Card" }, "joins": { "value": "Twist 1", "source": "Card" } }""",
+        "draws other Masterminds into villainDeck; joins says when one comes into play, and only for those set aside")]
     [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 3, "source": "Card" }], "tactics": { "value": 0, "source": "Card" } }""",
         "puts 0 Tactics of each other Mastermind in the villainDeck; values are at least 1")]
     [InlineData("""{ "to": "setAside", "count": [{ "players": null, "value": 0, "source": "Card" }] }""",

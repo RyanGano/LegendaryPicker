@@ -49,7 +49,7 @@ export type HeroDeck = {
   total: number
 }
 
-export type CardKind = 'hero' | 'henchman' | 'bystander' | 'wound' | 'officer' | 'sidekick' | 'binding' | 'twist'
+export type CardKind = 'hero' | 'henchman' | 'bystander' | 'wound' | 'officer' | 'sidekick' | 'binding' | 'twist' | 'ambition'
 
 // The destinations a move can put cards in, among them a stack set aside, which Heroes outside the Hero
 // Deck can go to as well, then the shared stacks a move can take cards from and the Twists the Villain Deck doesn't
@@ -66,6 +66,8 @@ export type Pile =
   | 'sidekicks'
   | 'bindings'
   | 'twists'
+  | 'ambitions'
+  | 'koPile'
 
 // Cards a Scheme moves during setup. count is what the destination gets (into the starting decks,
 // what each player's deck gets); total is what leaves from.
@@ -87,6 +89,7 @@ export type OutsideHero = {
 
 // A Henchman Group a Scheme draws outside the Villain Deck: cards of its Henchmen go to one pile (the
 // Hero Deck), and the rest of the group stays out of the game.
+// to is the Hero Deck, or the KO pile.
 export type OutsideHenchmen = {
   group: Component
   to: Pile
@@ -99,6 +102,8 @@ export type OutsideMastermind = {
   mastermind: Component
   to: Pile
   tactics?: number
+  // When a set-aside Mastermind comes into play ("Twist 1", "Twists 1-3"), when the Scheme says.
+  joins?: string
 }
 
 // Cards of a group the Scheme sets beside it, whether or not the group is drawn: count of them, or, when card is

@@ -180,7 +180,7 @@ public sealed class SetupEndpointTests : IDisposable
     {
         // Master of Tyrants with Madelyne: the 3 other Masterminds drawn are the first core ones, and their 12 Tactics
         // go in the Villain Deck.
-        var client = Client(new ScriptedRandom(12, 4));
+        var client = Client(new ScriptedRandom(13, 4));
 
         var body = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,secret-wars-volume-1");
 
@@ -193,6 +193,23 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.All(body["outsideMasterminds"]!.AsArray(), other => Assert.Empty(other!["mastermind"]!["terms"]!.AsArray()));
         Assert.Equal(12, (int?)body["villainDeck"]!["mastermindTactics"]);
         Assert.Equal(53, (int?)body["villainDeck"]!["total"]);
+    }
+
+    [Fact]
+    public async Task A_set_aside_Mastermind_says_when_it_joins_and_a_KO_pile_Henchman_Group_is_listed()
+    {
+        // Dark Alliance with Madelyne: the second Mastermind is set aside until Twist 1.
+        var alliance = await Client(new ScriptedRandom(11, 4)).GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,secret-wars-volume-1");
+
+        Assert.Equal("Dark Alliance", (string?)alliance!["scheme"]!["name"]);
+        Assert.Equal("setAside Twist 1", $"{alliance["outsideMasterminds"]![0]!["to"]} {alliance["outsideMasterminds"]![0]!["joins"]}");
+
+        // Build an Army of Annihilation: 10 Henchmen of a group the Villain Deck doesn't use, into the KO pile.
+        var army = await Client(new ScriptedRandom(8, 4)).GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,secret-wars-volume-1");
+
+        Assert.Equal("Build an Army of Annihilation", (string?)army!["scheme"]!["name"]);
+        Assert.Equal("koPile 10", $"{army["outsideHenchmen"]![0]!["to"]} {army["outsideHenchmen"]![0]!["cards"]}");
+        Assert.Equal(70, (int?)army["heroDeck"]!["total"]);
     }
 
     [Fact]

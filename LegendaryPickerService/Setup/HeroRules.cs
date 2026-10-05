@@ -45,6 +45,7 @@ internal sealed class HeroRules
     public static bool Selects(OutsideHeroes rule, Hero hero) =>
         (rule.Hero is null || hero.Id == rule.Hero)
         && (rule.HeroName is null || hero.NameOfHero == rule.HeroName)
+        && (rule.HeroNames is null || rule.HeroNames.Value.Contains(hero.NameOfHero))
         && (rule.Team is null || hero.Team == rule.Team);
 
     // Whether the Heroes chosen so far can be completed: every Hero outside the Hero Deck, then the rest of
