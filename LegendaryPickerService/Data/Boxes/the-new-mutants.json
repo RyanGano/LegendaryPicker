@@ -1,0 +1,368 @@
+{
+  "schemaVersion": 7,
+  "id": "the-new-mutants",
+  "name": "The New Mutants",
+  "ruleset": "firstEdition",
+  "catalogSource": "NM p.2; C1",
+  "about": {
+    "released": {
+      "value": "2020-04",
+      "source": "Q"
+    }
+  },
+  "sources": [
+    {
+      "key": "NM",
+      "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/2020_Marvel_Legendary_NewMutants_Rules_compressed.pdf"
+    },
+    {
+      "key": "Q",
+      "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"
+    }
+  ],
+  "components": {
+    "heroCards": {
+      "value": 14,
+      "source": "NM p.2"
+    },
+    "villainGroupCards": {
+      "value": 8,
+      "source": "NM p.2"
+    },
+    "henchmanGroupCards": {
+      "value": 0,
+      "source": "NM p.2"
+    },
+    "schemeTwists": {
+      "value": 0,
+      "source": "NM p.2"
+    }
+  },
+  "heroes": [
+    {
+      "id": "the-new-mutants_hero_karma",
+      "name": "Karma",
+      "team": "core_term_x-men",
+      "classes": [
+        "core_term_covert",
+        "core_term_ranged"
+      ],
+      "terms": []
+    },
+    {
+      "id": "the-new-mutants_hero_mirage",
+      "name": "Mirage",
+      "team": "core_term_x-men",
+      "classes": [
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_ranged"
+      ],
+      "terms": [
+        "the-new-mutants_term_moonlight",
+        "the-new-mutants_term_sunlight",
+        "the-new-mutants_term_waking-nightmare"
+      ]
+    },
+    {
+      "id": "the-new-mutants_hero_sunspot",
+      "name": "Sunspot",
+      "team": "core_term_x-men",
+      "classes": [
+        "core_term_ranged",
+        "core_term_strength"
+      ],
+      "terms": [
+        "the-new-mutants_term_moonlight",
+        "the-new-mutants_term_sunlight"
+      ]
+    },
+    {
+      "id": "the-new-mutants_hero_warlock",
+      "name": "Warlock",
+      "team": "core_term_x-men",
+      "classes": [
+        "core_term_covert",
+        "core_term_tech"
+      ],
+      "terms": [
+        "the-new-mutants_term_moonlight",
+        "the-new-mutants_term_sunlight"
+      ]
+    },
+    {
+      "id": "the-new-mutants_hero_wolfsbane",
+      "name": "Wolfsbane",
+      "team": "core_term_x-men",
+      "classes": [
+        "core_term_covert",
+        "core_term_instinct",
+        "core_term_strength"
+      ],
+      "terms": [
+        "the-new-mutants_term_moonlight",
+        "the-new-mutants_term_sunlight"
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "id": "the-new-mutants_villain_demons-of-limbo",
+      "name": "Demons of Limbo",
+      "terms": [
+        "core_term_ambush",
+        "core_term_escape",
+        "core_term_fight",
+        "the-new-mutants_term_moonlight",
+        "the-new-mutants_term_sunlight",
+        "the-new-mutants_term_waking-nightmare"
+      ],
+      "uses": [
+        {
+          "part": "wounds",
+          "source": "Card"
+        }
+      ]
+    },
+    {
+      "id": "the-new-mutants_villain_hellions",
+      "name": "Hellions",
+      "terms": [
+        "core_term_ambush",
+        "core_term_escape",
+        "core_term_fight",
+        "core_term_master-strike",
+        "the-new-mutants_term_moonlight",
+        "the-new-mutants_term_sunlight",
+        "the-new-mutants_term_waking-nightmare"
+      ],
+      "uses": [
+        {
+          "part": "wounds",
+          "source": "Card"
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "the-new-mutants_mastermind_belasco-demon-lord-of-limbo",
+      "name": "Belasco, Demon Lord of Limbo",
+      "terms": [
+        "core_term_always-leads",
+        "core_term_fight",
+        "core_term_master-strike",
+        "core_term_mastermind-tactic",
+        "the-new-mutants_term_moonlight",
+        "the-new-mutants_term_sunlight",
+        "the-new-mutants_term_waking-nightmare"
+      ],
+      "alwaysLeads": {
+        "groupId": "the-new-mutants_villain_demons-of-limbo",
+        "groupType": "villain",
+        "source": "Card"
+      },
+      "epic": {
+        "name": "Epic Belasco",
+        "source": "Card"
+      },
+      "setup": {
+        "steps": [
+          {
+            "label": "Optional: play the Epic side instead; the Tactics stay the same",
+            "source": "NM p.2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-new-mutants_mastermind_emma-frost-the-white-queen",
+      "name": "Emma Frost, The White Queen",
+      "terms": [
+        "core_term_always-leads",
+        "core_term_fight",
+        "core_term_master-strike",
+        "core_term_mastermind-tactic",
+        "the-new-mutants_term_waking-nightmare"
+      ],
+      "uses": [
+        {
+          "part": "wounds",
+          "source": "Card"
+        }
+      ],
+      "alwaysLeads": {
+        "groupId": "the-new-mutants_villain_hellions",
+        "groupType": "villain",
+        "source": "Card"
+      },
+      "epic": {
+        "name": "Epic Emma Frost",
+        "source": "Card"
+      },
+      "setup": {
+        "steps": [
+          {
+            "label": "Optional: play the Epic side instead; the Tactics stay the same",
+            "source": "NM p.2"
+          }
+        ]
+      }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "the-new-mutants_scheme_the-demon-bear-saga",
+      "name": "The Demon Bear Saga",
+      "terms": [
+        "core_term_scheme-twist"
+      ],
+      "setup": {
+        "twists": [
+          {
+            "players": null,
+            "value": 8,
+            "source": "Card"
+          }
+        ],
+        "requiredGroups": [
+          {
+            "groupId": "the-new-mutants_villain_demons-of-limbo",
+            "groupType": "villain",
+            "source": "Card"
+          }
+        ],
+        "steps": [
+          {
+            "label": "Put the Demon Bear Villain beside the Scheme",
+            "source": "Card"
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-new-mutants_scheme_crash-the-moon-into-the-sun",
+      "name": "Crash the Moon into the Sun",
+      "terms": [
+        "core_term_scheme-twist",
+        "the-new-mutants_term_moonlight",
+        "the-new-mutants_term_sunlight"
+      ],
+      "setup": {
+        "twists": [
+          {
+            "players": null,
+            "value": 11,
+            "source": "Card"
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-new-mutants_scheme_trapped-in-the-insane-asylum",
+      "name": "Trapped in the Insane Asylum",
+      "terms": [
+        "core_term_scheme-twist"
+      ],
+      "setup": {
+        "twists": [
+          {
+            "players": [
+              1
+            ],
+            "value": 3,
+            "source": "Card"
+          },
+          {
+            "players": [
+              2
+            ],
+            "value": 5,
+            "source": "Card"
+          },
+          {
+            "players": [
+              3
+            ],
+            "value": 7,
+            "source": "Card"
+          },
+          {
+            "players": [
+              4
+            ],
+            "value": 9,
+            "source": "Card"
+          },
+          {
+            "players": [
+              5
+            ],
+            "value": 11,
+            "source": "Card"
+          }
+        ]
+      }
+    },
+    {
+      "id": "the-new-mutants_scheme_superhuman-baseball-game",
+      "name": "Superhuman Baseball Game",
+      "terms": [
+        "core_term_scheme-twist"
+      ],
+      "setup": {
+        "twists": [
+          {
+            "players": null,
+            "value": 9,
+            "source": "Card"
+          }
+        ],
+        "extraVillainGroups": [
+          {
+            "players": null,
+            "value": 1,
+            "source": "Card"
+          }
+        ],
+        "steps": [
+          {
+            "label": "Put the Villain Deck under the HQ as Home Plate",
+            "source": "Card"
+          },
+          {
+            "label": "Use the Sewers, Rooftops and Bridge as the bases; skip the Bank and Streets",
+            "source": "Card"
+          }
+        ]
+      }
+    }
+  ],
+  "glossary": [
+    {
+      "id": "the-new-mutants_term_moonlight",
+      "name": "Moonlight",
+      "kind": "keyword",
+      "summary": "An ability that works only while most Heroes in the HQ have odd printed costs. A tie means it does not apply.",
+      "source": "NM",
+      "page": 1
+    },
+    {
+      "id": "the-new-mutants_term_sunlight",
+      "name": "Sunlight",
+      "kind": "keyword",
+      "summary": "An ability that works only while most Heroes in the HQ have even printed costs. A tie means it does not apply.",
+      "source": "NM",
+      "page": 1
+    },
+    {
+      "id": "the-new-mutants_term_waking-nightmare",
+      "name": "Waking Nightmare",
+      "kind": "keyword",
+      "summary": "A player must give up a non-grey Hero from hand, and draws a replacement card only when they did.",
+      "source": "NM",
+      "page": 2
+    }
+  ]
+}
