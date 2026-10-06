@@ -98,17 +98,28 @@ public abstract record SetupResponse
                 x => ((x.Term.Kind, x.Index),
                     new GlossaryEntry(
                         x.Term.Id, x.Term.Name, BoxCatalog.KindOf(x.Term.Kind), x.Term.Summary, $"{x.Term.Source} p.{x.Term.Page}", x.Link,
-                        included.Count > 1 ? TermBox(x.Box, included) : null)),
+                        included.Count > 1 ? TermBox(x.Term.Id, x.Box, included) : null)),
                 StringComparer.Ordinal);
 
         // The box a chip names: the box that defines the term, or, when it isn't included, the included boxes that
-        // reprint its cards, which carry its terms (#153).
-        private static string TermBox(Box defining, IReadOnlyList<Box> included)
+        // reprint its cards (#153) and whose cards, its own or its printings, use the term, so Phase 1 never names
+        // the X-Men team chip but still names the Avengers one (#156).
+        private static string TermBox(string term, Box defining, IReadOnlyList<Box> included)
         {
             if (included.Contains(defining)) return defining.Name;
-            var reprinting = included.Where(box => box.Reprints?.Value.Any(id => id.StartsWith(defining.Id + "_", StringComparison.Ordinal)) ?? false).ToList();
+            var reprinting = included
+                .Where(box => box.Reprints?.Value.Any(id => id.StartsWith(defining.Id + "_", StringComparison.Ordinal)) ?? false)
+                .Where(box => UsesTerm(box, term))
+                .ToList();
             return reprinting.Count == 0 ? defining.Name : string.Join(" or ", reprinting.Select(box => box.Name));
         }
+
+        // Whether a card the box holds, its own or a printing of another box's, carries the term as a keyword, a team or
+        // a class.
+        private static bool UsesTerm(Box box, string term) =>
+            box.AllHeroes.Any(hero => hero.Terms.Contains(term) || hero.Classes.Contains(term) || hero.Teams.Contains(term))
+            || box.AllVillainGroups.Concat<ICard>(box.AllHenchmanGroups).Concat(box.AllMasterminds).Concat(box.AllSchemes)
+                .Any(card => card.Terms.Contains(term));
 
         // A catalog id starts with its box's id, which the loader checks.
         private readonly Dictionary<string, Box> _boxes = catalog.Boxes.ToDictionary(box => box.Id, StringComparer.Ordinal);

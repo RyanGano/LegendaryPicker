@@ -111,6 +111,29 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("core_hero_hulk uses cites source X9, which is not in this box's sources");
     }
 
+    // An Epic side is its own card face (#151): it needs a printed title unlike the normal side's, a source the box lists,
+    // and no part twice.
+    [Theory]
+    [InlineData("\"Dr. Doom\"", "core_mastermind_dr-doom epic needs a name that differs from the normal side's")]
+    [InlineData("\" \"", "core_mastermind_dr-doom epic needs a name that differs from the normal side's")]
+    [InlineData("\"Epic Dr. Doom\", \"uses\": [{\"part\": \"wounds\", \"source\": \"R p.6\"}, {\"part\": \"wounds\", \"source\": \"R p.6\"}]",
+        "core_mastermind_dr-doom epic.uses lists part wounds more than once")]
+    public void Rejects_a_malformed_epic_side(string nameAndUses, string expected)
+    {
+        WriteCoreBox(core => Mastermind(core, "core_mastermind_dr-doom")["epic"] =
+            JsonNode.Parse($$"""{ "name": {{nameAndUses}}, "source": "R p.6" }"""));
+
+        AssertRejected(expected);
+    }
+
+    [Fact]
+    public void Rejects_an_epic_side_citing_a_source_key_the_box_does_not_list()
+    {
+        WriteCoreBox(core => Mastermind(core, "core_mastermind_dr-doom")["epic"] = JsonNode.Parse("""{ "name": "Epic Dr. Doom", "source": "X9 p.3" }"""));
+
+        AssertRejected("core_mastermind_dr-doom epic cites source X9, which is not in this box's sources");
+    }
+
     [Fact]
     public void Rejects_a_part_that_is_not_a_stack()
     {

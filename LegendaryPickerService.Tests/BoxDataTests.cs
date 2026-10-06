@@ -48,4 +48,17 @@ public class BoxDataTests
     {
         Assert.Equal(Catalog.Boxes.Select(b => b.Id).Order(), Rows.Select(row => (string)row[0]).Order());
     }
+
+    // A Mastermind whose setup offers its Epic side has it recorded in `epic`, and the record is only on such a Mastermind (#151).
+    [Fact]
+    public void Every_Mastermind_offering_its_Epic_side_records_it()
+    {
+        var offers = Catalog.Boxes.SelectMany(box => box.Masterminds)
+            .Where(m => m.Setup?.Steps?.Any(step => step.Label.Contains("play the Epic side")) ?? false)
+            .Select(m => m.Id).Order().ToList();
+        var recorded = Catalog.Boxes.SelectMany(box => box.Masterminds).Where(m => m.Epic is not null).Select(m => m.Id).Order().ToList();
+
+        Assert.Equal(offers, recorded);
+        Assert.Equal(10, recorded.Count);
+    }
 }

@@ -205,9 +205,14 @@ public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string>
 
 // Setup is null for a Mastermind whose card does not change the setup. AlsoLeads is a second group its card always
 // leads, picked from several, as Deathbird leads a Shi'ar Henchman Group as well as the Shi'ar Imperial Guard (#132).
+// Epic is the Mastermind's Epic side, on the same card; draws don't use it yet (#151).
 public sealed record Mastermind(
     string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup AlwaysLeads, SetupEffects? Setup = null,
-    IReadOnlyList<PartUse>? Uses = null, AlsoLeadsGroup? AlsoLeads = null) : ICard;
+    IReadOnlyList<PartUse>? Uses = null, AlsoLeadsGroup? AlsoLeads = null, EpicSide? Epic = null) : ICard;
+
+// A Mastermind's Epic side, which shares the normal side's Tactics: its printed title, and in Uses the parts its text
+// uses beyond the normal side's Uses, which the setup would have to lay out (the Horrors an Epic X-Men Master Strike plays). Source is the card face.
+public sealed record EpicSide(string Name, string Source, IReadOnlyList<PartUse>? Uses = null);
 
 public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source);
 
