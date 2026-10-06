@@ -274,7 +274,7 @@ public sealed class SetupEndpointTests : IDisposable
         var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
 
         Assert.Equal(
-            ["core", "villains", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "fear-itself", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary", "civil-war", "deadpool", "noir", "x-men", "spider-man-homecoming", "champions", "world-war-hulk"],
+            ["core", "villains", "marvel-studios-phase-1", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "fear-itself", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary", "civil-war", "deadpool", "noir", "x-men", "spider-man-homecoming", "champions", "world-war-hulk"],
             boxes!.Select(box => (string)box!["id"]!));
     }
 
@@ -287,7 +287,7 @@ public sealed class SetupEndpointTests : IDisposable
 
         Assert.Equal(
             [
-                "core firstEdition base", "villains villainous base mixes", "dark-city firstEdition", "fantastic-four firstEdition",
+                "core firstEdition base", "villains villainous base mixes", "marvel-studios-phase-1 firstEdition base", "dark-city firstEdition", "fantastic-four firstEdition",
                 "paint-the-town-red firstEdition", "guardians-of-the-galaxy firstEdition", "fear-itself villainous plays",
                 "secret-wars-volume-1 firstEdition", "secret-wars-volume-2 firstEdition", "captain-america-75th-anniversary firstEdition",
                 "civil-war firstEdition",

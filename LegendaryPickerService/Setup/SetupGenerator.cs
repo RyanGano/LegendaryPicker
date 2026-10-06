@@ -116,7 +116,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     // follows that pair's rules.
     private static GenerationResult Run(IReadOnlyList<Box> boxes, IReadOnlyList<TableDraw> draws, int players, IRandomSource random)
     {
-        var schemes = boxes.SelectMany(box => box.Schemes)
+        var schemes = boxes.SelectMany(box => box.AllSchemes).DistinctBy(scheme => scheme.Id)
             .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(players) ?? true)
             .ToList();
         var masterminds = draws[0].Masterminds;
@@ -146,10 +146,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         IReadOnlyDictionary<Part, ActiveStandIn> standIns, SetupRules rules, int players, PlayerCountSetup? row,
         IRandomSource random)
     {
-        private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.VillainGroups).Where(group => Supplied(boxes, standIns, group)).ToList();
-        private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.HenchmanGroups).Where(group => Supplied(boxes, standIns, group)).ToList();
-        private readonly List<Hero> _heroes = boxes.SelectMany(box => box.Heroes).Where(hero => Supplied(boxes, standIns, hero)).ToList();
-        private readonly List<Mastermind> _masterminds = boxes.SelectMany(box => box.Masterminds).Where(mastermind => Supplied(boxes, standIns, mastermind)).ToList();
+        // A reprint is one card with the original (#34 D5), so each card is in its pool once however many included boxes hold it.
+        private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.AllVillainGroups).DistinctBy(group => group.Id).Where(group => Supplied(boxes, standIns, group)).ToList();
+        private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.AllHenchmanGroups).DistinctBy(group => group.Id).Where(group => Supplied(boxes, standIns, group)).ToList();
+        private readonly List<Hero> _heroes = boxes.SelectMany(box => box.AllHeroes).DistinctBy(hero => hero.Id).Where(hero => Supplied(boxes, standIns, hero)).ToList();
+        private readonly List<Mastermind> _masterminds = boxes.SelectMany(box => box.AllMasterminds).DistinctBy(mastermind => mastermind.Id).Where(mastermind => Supplied(boxes, standIns, mastermind)).ToList();
 
         // The words the ruleset's rulebook uses, for rule notes. A setup whose drawn cards follow both rulesets
         // switches to the mixed words once they are drawn.
@@ -702,7 +703,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 var group = (T)CatalogGroup(rule.GroupId);
                 var from = BoxOf(rule.GroupId);
-                var included = boxes.Contains(from);
+                var included = boxes.Any(box => box.Holds(rule.GroupId));
                 if (!included && rule.OtherBox?.Substitute is { } substitute)
                 {
                     var standIn = DrawOne(pool.Except(chosen).ToList());
@@ -807,7 +808,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 return (pool, heroes, new HeroRules(heroes, deckSlots, setup, outsideRules));
             }
 
-            var included = boxes.SelectMany(box => box.Heroes).ToList();
+            var included = boxes.SelectMany(box => box.AllHeroes).DistinctBy(hero => hero.Id).ToList();
             var deck = (setup.RequiredHeroes ?? []).Select(rule => included.Single(hero => hero.Id == rule.HeroId)).ToList();
             var (pool, heroes, rules) = From(_heroes);
             if (!rules.CanComplete(deck, []))
@@ -815,9 +816,22 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 (pool, heroes, rules) = From(included);
             }
 
+            // When the included Heroes can't meet the Scheme's Hero rules, as Avengers vs. X-Men's two teams of three
+            // can't be met by Marvel Studios Phase 1 and Civil War alone, the Heroes it still needs come from the other
+            // loaded boxes of its ruleset, since the player owns the card (D-scheme-first, #138), and each is named with
+            // its box. Each draw still takes an included Hero whenever one keeps the Hero rules completable.
+            var preferred = pool;
+            if (!rules.CanComplete(deck, []))
+            {
+                var ruleset = BoxOf(plan.Scheme.Id).Ruleset;
+                (pool, heroes, rules) = From(catalogBoxes.Where(box => box.Ruleset == ruleset).SelectMany(box => box.Heroes).ToList());
+            }
+
             while (deck.Count < rules.DeckSlots)
             {
-                deck.Add(DrawOne(pool.Where(hero => rules.CanComplete([.. deck, hero], [])).ToList()));
+                var options = pool.Where(hero => rules.CanComplete([.. deck, hero], [])).ToList();
+                var fromIncluded = options.Where(preferred.Contains).ToList();
+                deck.Add(DrawOne(fromIncluded.Count > 0 ? fromIncluded : options));
             }
 
             var outside = new List<Hero>();
@@ -990,7 +1004,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     // every setup that draws the card.
     private static bool Supplied(IReadOnlyList<Box> boxes, IReadOnlyDictionary<Part, ActiveStandIn> standIns, ICard card)
     {
-        var ruleset = boxes.Single(box => card.Id.StartsWith(box.Id + "_", StringComparison.Ordinal)).Ruleset;
+        var ruleset = boxes.First(box => box.Holds(card.Id)).Ruleset;
         return card.Parts.All(part => standIns.TryGetValue(part, out var active)
             ? active.Rule.With is not { } with || boxes.Any(box => box.Components.Supplies(with)?.Value > 0)
             : boxes.Any(box => box.Ruleset == ruleset && box.Components.Supplies(part)?.Value > 0));

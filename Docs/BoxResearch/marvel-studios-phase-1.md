@@ -1,6 +1,6 @@
-# Marvel Studios Phase 1 (2018)
+# Marvel Studios Phase 1 (August 2018)
 
-**Research status: Partial.** The official rulebook verifies the base-game setup and 393-card contents, but its contents and setup sections disagree on the Bystander count; full card-level setup and metadata remain unverified.
+**Research status: Partial; integrated (#147).** The official rulebook verifies the base-game setup and 393-card contents. Its contents and setup sections disagree on the Bystander and Master Strike counts; the box file uses the setup numbers (41 and 5). Every Scheme Setup line, Always Leads and part use was read from the C1-linked card faces (`Card`); per-face copy counts remain unverified.
 
 ## Sources
 
@@ -9,6 +9,7 @@
 | P1 | [Upper Deck Phase 1 rulebook](https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Marvel_Studios_the_First_Ten_Years.pdf) | Player count (PDF p.2), game setup and group counts (PDF pp.6–8), Solo (PDF p.17), contents (PDF p.18), printed Red Skull/Scheme example (PDF p.6). |
 | C1 | [master-strike structured marvel-studios-phase-1 card catalog](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/marvelstudios.ts) | Per-face titles, group/type, indexed printed numeric values/icons and direct image links; ability prose is omitted and is not rules evidence. |
 | C1 metadata | [teams](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/teams.ts), [Hero classes](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/heroClasses.ts), [keywords](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/keywords.ts), and [card types](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/cardTypes.ts) | Labels for C1 team/class/keyword/type icon identifiers. |
+| AIPT | [AIPT, 3 August 2018](https://aiptcomics.com/2018/08/03/legendary-marvel-studios-phase-1-is-here-for-better-or-worse/) | Release month: the box went on sale at Gen Con in August 2018. |
 | #34 / queue | [Release-order roadmap](https://github.com/RyanGano/LegendaryPicker/issues/34) and [`Docs/BoxResearch/README.md`](README.md) | 2018 release-order position, base-game status, First Edition classification. |
 
 ## Catalog inventory
@@ -74,6 +75,14 @@ The C1 face index below records available printed titles, group/type, numeric va
 - **Scheme Twist:** A card added to the Villain Deck in the count printed by the chosen Scheme; its effect follows that Scheme's text. (P1, PDF p.6)
 
 These are original paraphrases. The rulebook's generic terms do not verify all product-specific Hero teams, classes, card terms, or card-to-component dependencies.
+
+## Card-face setup facts (Card, read from the C1 image links)
+
+- **Schemes:** Asgard Under Siege 8 Twists, one extra Henchman Group; Destroy the Cities of Earth! 8 Twists, 12 Bystanders in the Villain Deck; Enslave Minds with the Chitauri Scepter 8 Twists, 6 Heroes, Chitauri required, 12 random Hero Deck cards shuffled into the Villain Deck; Invade Asgard 7 Twists; Radioactive Palladium Poisoning 8 Twists, Wound stack of 6 per player; Replace Earth's Leaders with HYDRA 5 Twists, 3 more beside the Scheme, 18 Bystanders in the Villain Deck; Super Hero Civil War 8 Twists at 2-3 players, 5 at 4-5, 4 Heroes at 2 players; Unleash the Power of the Cosmic Cube 8 Twists.
+- **Always Leads:** Iron Monger leads Iron Foes; Loki leads Enemies of Asgard; Red Skull leads HYDRA.
+- **Parts used:** Wounds are gained from Hulk (Crazed Rampage), Chitauri Leviathan, Laufey and Frost Giant, Thunderbolt Ross, HYDRA Tank, Whiplash, Iron Monger and Loki (Master Strikes), Radioactive Palladium Poisoning and the Cosmic Cube. S.H.I.E.L.D. Officers are gained from Nick Fury (Battlefield Promotion) and the HYDRA Motorcycle Squad. Happy Hogan only KOs a Wound a player already has.
+- **Reprints (#34 D5):** the 7 Heroes, Loki, Red Skull, Enemies of Asgard, HYDRA, Super Hero Civil War and Unleash the Power of the Cosmic Cube reprint core box cards. Their team, classes, keywords, Twists, Setup lines, Always Leads and parts used match the core box file, so the box file lists them under `reprints` as the core cards.
+- **Conqueror (P1 PDF p.13):** a Villain or Mastermind with it gets the named bonus while any Villain occupies the named city space.
 
 ## Setup and implementation gaps
 

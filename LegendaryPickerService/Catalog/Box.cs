@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace LegendaryPickerService.Catalog;
 
 // The catalog and setup rules of one box, as stored in Data/Boxes/<id>.json.
@@ -32,7 +34,9 @@ public enum Ruleset
 
 // BystanderUses lists the parts the box's special Bystanders use, such as Civil War's Aspiring Hero gaining a Sidekick
 // when rescued. Every setup shuffles all included Bystanders together, so a setup with the box's Bystanders lays these
-// parts out whatever it draws (#125).
+// parts out whatever it draws (#125). Reprints lists the ids of another box's Heroes, groups, Masterminds and Schemes
+// this box holds a printing of: each is one card with the original, in the pool once however many boxes holding it are
+// included (#34 D5, #147).
 public sealed record Box(
     int SchemaVersion,
     string Id,
@@ -50,10 +54,29 @@ public sealed record Box(
     IReadOnlyList<GlossaryTerm> Glossary,
     SetupRules? Setup = null,
     OtherRuleset? OtherRuleset = null,
-    IReadOnlyList<PartUse>? BystanderUses = null)
+    IReadOnlyList<PartUse>? BystanderUses = null,
+    Sourced<string[]>? Reprints = null)
 {
     // Only a base game supplies setup rules; an expansion's box file has no setup section.
     public bool IsBaseGame => Setup is not null;
+
+    // The cards Reprints names, which the catalog resolves when it loads.
+    [JsonIgnore]
+    public IReadOnlyList<ICard> ReprintedCards { get; init; } = [];
+
+    // Whether the box holds a card: one it declares or one it reprints.
+    public bool Holds(string id) => id.StartsWith(Id + "_", StringComparison.Ordinal) || (Reprints?.Value.Contains(id) ?? false);
+
+    // The cards a setup that includes the box can draw: its own, then its reprints.
+    public IEnumerable<Hero> AllHeroes => Heroes.Concat(ReprintedCards.OfType<Hero>());
+
+    public IEnumerable<VillainGroup> AllVillainGroups => VillainGroups.Concat(ReprintedCards.OfType<VillainGroup>());
+
+    public IEnumerable<HenchmanGroup> AllHenchmanGroups => HenchmanGroups.Concat(ReprintedCards.OfType<HenchmanGroup>());
+
+    public IEnumerable<Mastermind> AllMasterminds => Masterminds.Concat(ReprintedCards.OfType<Mastermind>());
+
+    public IEnumerable<Scheme> AllSchemes => Schemes.Concat(ReprintedCards.OfType<Scheme>());
 }
 
 // An expansion's rules for playing it without a base game of its own ruleset, under an included base game of

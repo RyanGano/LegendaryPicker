@@ -45,10 +45,10 @@ public sealed class SchemeFirstTests : IDisposable
         var included = Catalog.Boxes.Where(box => boxes.Contains(box.Id)).ToList();
         foreach (var players in Enumerable.Range(BoxCatalog.MinPlayers, BoxCatalog.MaxPlayers - BoxCatalog.MinPlayers + 1))
         {
-            var schemes = included.SelectMany(box => box.Schemes)
+            var schemes = included.SelectMany(box => box.AllSchemes).DistinctBy(scheme => scheme.Id)
                 .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(players) ?? true)
                 .ToList();
-            foreach (var scheme in Catalog.Boxes.Single(box => box.Id == boxId).Schemes.Where(schemes.Contains))
+            foreach (var scheme in Catalog.Boxes.Single(box => box.Id == boxId).AllSchemes.Where(schemes.Contains))
             {
                 var probe = new ScriptedRandom(schemes.IndexOf(scheme));
                 Assert.IsType<SetupResult>(Generator.Generate(players, boxes, probe));

@@ -1095,6 +1095,64 @@ public sealed class BoxCatalogLoaderTests : IDisposable
             "fixture_scheme_test-heist references villain group core_villain_hydra from box core, which is not loaded", error.Message);
     }
 
+    // A reprint is one card with the original (#34 D5): it must name a card another box declares, bring what that card
+    // requires, and hold as many cards.
+    [Theory]
+    [InlineData(new[] { "core_hero_nobody" }, "reprints core_hero_nobody; a reprint names a Hero, group, Mastermind or Scheme another loaded box declares")]
+    [InlineData(new[] { "core_hero_hulk", "core_hero_hulk" }, "lists reprint core_hero_hulk more than once")]
+    [InlineData(new[] { "core_mastermind_loki" }, "core_mastermind_loki leads core_villain_enemies-of-asgard from another box; it must be in reprinter")]
+    public void Rejects_a_reprint_that_isnt_the_card(string[] reprints, string expected)
+    {
+        WriteCoreBox(_ => { });
+        WriteBox("reprinter.json", Reprinter(reprints));
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains("reprinter.json", error.Message);
+        Assert.Contains(expected, error.Message);
+    }
+
+    [Fact]
+    public void Rejects_a_reprint_with_a_different_number_of_cards()
+    {
+        var reprinter = Reprinter(["core_hero_hulk"]);
+        reprinter["components"]!["heroCards"]!["value"] = 12;
+        WriteCoreBox(_ => { });
+        WriteBox("reprinter.json", reprinter);
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains("reprints core_hero_hulk with 12 cards to its 14; a reprint is the same card", error.Message);
+    }
+
+    [Fact]
+    public void Loads_a_reprint_as_the_original_card()
+    {
+        WriteCoreBox(_ => { });
+        WriteBox("reprinter.json", Reprinter(["core_mastermind_loki", "core_villain_enemies-of-asgard"]));
+
+        var boxes = BoxCatalog.Load(_directory).Boxes;
+
+        Assert.Same(boxes[0].Masterminds.Single(m => m.Id == "core_mastermind_loki"), boxes[1].AllMasterminds.Single());
+        Assert.True(boxes[1].Holds("core_villain_enemies-of-asgard"));
+    }
+
+    // An expansion "reprinter" with no cards of its own, reprinting the given core box cards.
+    private static JsonObject Reprinter(string[] reprints)
+    {
+        var box = ExtraCopyOfCore();
+        box["id"] = "reprinter";
+        box.Remove("setup");
+        foreach (var list in new[] { "heroes", "villainGroups", "henchmanGroups", "masterminds", "schemes", "glossary" })
+        {
+            box[list] = new JsonArray();
+        }
+
+        box["sources"]!.AsArray().Add(new JsonObject { ["key"] = "D5", ["url"] = "https://github.com/RyanGano/LegendaryPicker/issues/34" });
+        box["reprints"] = new JsonObject { ["value"] = new JsonArray([.. reprints.Select(id => JsonValue.Create(id))]), ["source"] = "D5" };
+        return box;
+    }
+
     private void AssertRejected(string expectedInMessage)
     {
         var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
