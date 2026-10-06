@@ -426,5 +426,19 @@ Box id `revelations`, file `LegendaryPickerService/Data/Boxes/revelations.json`,
 
 **Keywords (R pp.1-2):** Hyperspeed, Dark Memories, Last Stand, Location and Transforming Scheme are new here.
 
+## S.H.I.E.L.D. (December 2019)
+
+Box id `shield`, file `LegendaryPickerService/Data/Boxes/shield.json`, a First Edition expansion (#172). Counts (SH p.2): 4 Heroes x 14 cards, 2 Villain Groups x 8, 2 Adapting Masterminds (4 Tactics each, no Mastermind card), 4 Schemes and 16 special S.H.I.E.L.D. Officers. Names, teams and classes come from C1; Scheme Setup lines, Always Leads and part uses were read from OCR of the card faces C1 links (`Card`).
+
+**Officers (SH p.1):** the 16 special Officers are shuffled into the core box's 30 for every game, so the box's `components.officers` is 16 and a setup with it lays out a 46-card Officer stack. C1 links no image for the Officer faces; its data shows none taking cards from a stack.
+
+**Heroes:** Agent Phil Coulson, Deathlok, Mockingbird and Quake, all S.H.I.E.L.D.; all but Deathlok take cards from the Officer stack. **Villain Groups:** A.I.M., Hydra Offshoot and Hydra Elite, each using Officers and Wounds. **Masterminds:** Hydra High Council leads Hydra Elite and Hydra Super-Adaptoid leads A.I.M., Hydra Offshoot (printed on one Tactic of each); both use Wounds, and each adds the step "No Mastermind card: shuffle the 4 Tactics face up and play the top one" (SH p.2).
+
+**Schemes (Card):** Hail Hydra (11 Twists); Hydra Helicarriers Hunt Heroes (8, an extra Hero); Secret Empire of Betrayal (11, an extra Hero set aside, 5 of whose cards costing 5 or less form the Dark Loyalty deck, as a step; uses Wounds); S.H.I.E.L.D. vs. HYDRA War (7, uses Officers, and exactly one of A.I.M., Hydra Offshoot and Hydra Elite through `oneOfGroups`, below).
+
+**One of several groups (#172):** A Scheme's optional `setup.oneOfGroups` (`{ groupIds, groupType, source }`) requires exactly one of its groups and leaves the others out of the setup. The group is the drawn Mastermind's Always Leads group when that is one of them (so both rules are met; not in Solo, which ignores Always Leads), otherwise one drawn from the list; it fills a slot like a required group, after the Scheme's required groups, with the rule note "Scheme requires one of A.I.M., Hydra Offshoot and Hydra Elite, not both: Hydra Elite", and the others leave the pool for every later draw of that type. The loader refuses fewer than 2 groups, a group twice, one also in `requiredGroups`, a reference that doesn't resolve, and a group from another box. It is optional, so `schemaVersion` stays 7.
+
+**Keywords (SH pp.1-2):** Undercover, S.H.I.E.L.D. Level, Hydra Level and Adapting Mastermind are new here.
+
 ## Open questions
 

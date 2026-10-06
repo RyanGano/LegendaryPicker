@@ -704,7 +704,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             };
         }
 
-        // Fills one group type's slots: the Scheme's required groups first, then the Always Leads
+        // Fills one group type's slots: the Scheme's required groups first, then the one it requires of several, then the Always Leads
         // group if a slot is left, then draws for the rest. A required group keeps its slot over
         // the Always Leads group. A required group from a box the setup doesn't include is still drawn, as the
         // player owns it, unless its card gives a substitute: then a group drawn from the pool takes its place, and
@@ -739,6 +739,21 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(included
                     ? Note(text, rule.Source, BoxOf(scheme.Id), scheme.Id)
                     : Note($"{text}, from {from.Name}, which isn't included", rule.OtherBox!.Source, BoxOf(scheme.Id), scheme.Id));
+            }
+
+            // The one group the Scheme requires of several: the Mastermind's Always Leads group when it is one of them, so
+            // both rules are met, or else one drawn. The others are left out of every later draw (#172).
+            if (scheme.Setup.OneOfGroups is { } choice && choice.GroupType == type)
+            {
+                var options = choice.GroupIds.Select(id => (T)CatalogGroup(id)).ToList();
+                var leadsOne = !IgnoresAlwaysLeads && mastermind.AlwaysLeads.GroupType == type && choice.GroupIds.Contains(mastermind.AlwaysLeads.GroupId);
+                var group = leadsOne ? (T)CatalogGroup(mastermind.AlwaysLeads.GroupId) : DrawOne(options);
+                chosen.Add(group);
+                required[group.Id] = new RequiredGroup(group.Id, type, choice.Source);
+                pool = pool.Where(g => g.Id == group.Id || !choice.GroupIds.Contains(g.Id)).ToList();
+                notes.Add(Note(
+                    $"{SchemeWord(scheme)} requires one of {string.Join(" and ", options.Select(g => g.Name))}, not both: {group.Name}",
+                    choice.Source, BoxOf(scheme.Id), scheme.Id));
             }
 
             // The Always Leads group of each Mastermind the Scheme sets aside, as an extra group of its own.

@@ -277,6 +277,8 @@ public sealed record SetupStep(string Label, string Source);
 // whatever the player count, as Anti-Mutant Hatred's 30 Wounds (#132); a Scheme sets it this way or per player, not both.
 // ExtraHenchmanCards is how many cards each Henchman Group the Scheme's ExtraHenchmanGroups adds puts in the Villain Deck,
 // in place of the usual count, Solo's 3 or HenchmanCards, as Scavenge Alien Weaponry's 10 Smugglers even in Solo (#134).
+// OneOfGroups requires exactly one of several groups and leaves the others out, as S.H.I.E.L.D. vs. HYDRA War takes
+// A.I.M., Hydra Offshoot or Hydra Elite but not both (#172).
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -303,8 +305,13 @@ public sealed record SchemeSetup(
     Sourced<int[]>? TeamSplit = null,
     Sourced<int>? OwnTactics = null,
     Sourced<int>? Wounds = null,
-    Sourced<int>? ExtraHenchmanCards = null)
+    Sourced<int>? ExtraHenchmanCards = null,
+    GroupChoice? OneOfGroups = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
+
+// Groups of one type a Scheme requires exactly one of: the setup takes the drawn Mastermind's Always Leads group when
+// it is one of them, or else draws one, and leaves the others out of the setup.
+public sealed record GroupChoice(IReadOnlyList<string> GroupIds, GroupType GroupType, string Source);
 
 // Cards, for a Henchman Group, is how many of its cards go in the Villain Deck in place of the usual count, as
 // Alien Brood Encounters adds 10 Brood even in Solo (#132); it is left out to use the usual count. A required group

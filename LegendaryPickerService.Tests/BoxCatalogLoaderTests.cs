@@ -194,6 +194,17 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("core_scheme_legacy-virus has setup.teamSplit");
     }
 
+    [Theory]
+    [InlineData("[\"core_villain_hydra\"]")]
+    [InlineData("[\"core_villain_hydra\", \"core_villain_hydra\"]")]
+    public void Rejects_a_choice_of_one_group_that_is_not_two_or_more_different_groups(string groupIds)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["oneOfGroups"] =
+            JsonNode.Parse($$"""{ "groupIds": {{groupIds}}, "groupType": "villain", "source": "Card" }"""));
+
+        AssertRejected("core_scheme_legacy-virus setup.oneOfGroups lists");
+    }
+
     [Fact]
     public void Rejects_own_Tactics_below_1()
     {

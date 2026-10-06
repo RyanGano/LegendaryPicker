@@ -14,6 +14,7 @@ public class BoxDataTests
         { "venom", 5, 2, 0, 2, 4 },
         { "dimensions", 5, 0, 2, 1, 0 },
         { "revelations", 9, 4, 2, 3, 4 },
+        { "shield", 4, 2, 0, 2, 4 },
         { "captain-america-75th-anniversary", 5, 2, 0, 2, 4 },
         { "champions", 5, 2, 0, 2, 4 },
         { "civil-war", 16, 7, 2, 5, 8 },
