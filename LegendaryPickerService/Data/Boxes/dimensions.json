@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 7,
+  "id": "dimensions",
+  "name": "Dimensions",
+  "ruleset": "firstEdition",
+  "catalogSource": "D p.2; C1",
+  "about": {"released": {"value": "2019-05", "source": "Q"}},
+  "sources": [
+    {"key": "D", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Dimensions.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "D p.2"}, "villainGroupCards": {"value": 0, "source": "D p.2"}, "henchmanGroupCards": {"value": 10, "source": "D p.2"}, "schemeTwists": {"value": 0, "source": "D p.2"}, "bystanders": {"value": 5, "source": "D p.2"}},
+  "heroes": [
+    {"id": "dimensions_hero_howard-the-duck", "name": "Howard the Duck", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": []},
+    {"id": "dimensions_hero_jessica-jones", "name": "Jessica Jones", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_strength"], "terms": ["dimensions_term_switcheroo", "noir_term_investigate"]},
+    {"id": "dimensions_hero_man-thing", "name": "Man-Thing", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["dark-city_term_teleport"]},
+    {"id": "dimensions_hero_ms-america", "name": "Ms. America", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["dark-city_term_teleport", "noir_term_investigate"]},
+    {"id": "dimensions_hero_squirrel-girl", "name": "Squirrel Girl", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["dimensions_term_switcheroo", "noir_term_investigate"]}
+  ],
+  "villainGroups": [],
+  "henchmanGroups": [
+    {"id": "dimensions_henchman_circus-of-crime", "name": "Circus of Crime", "terms": ["core_term_fight"]},
+    {"id": "dimensions_henchman_spider-slayer", "name": "Spider-Slayer", "terms": ["core_term_fight"]}
+  ],
+  "masterminds": [
+    {"id": "dimensions_mastermind_j-jonah-jameson", "name": "J. Jonah Jameson", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "noir_term_investigate"], "uses": [{"part": "officers", "source": "Card"}, {"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "dimensions_henchman_spider-slayer", "groupType": "henchman", "source": "Card"}, "epic": {"name": "Epic J. Jonah Jameson", "source": "Card"}, "setup": {"steps": [{"label": "Put 2 Officers per player face down as the Angry Mobs stack", "source": "Card"}, {"label": "Optional: play the Epic side instead, with 3 Officers per player; Tactics stay the same", "source": "D p.2"}]}}
+  ],
+  "schemes": [],
+  "glossary": [
+    {"id": "dimensions_term_switcheroo", "name": "Switcheroo", "kind": "keyword", "summary": "Instead of playing the card, trade it from your hand to the bottom of the Hero Deck for an HQ Hero of the named printed cost. It is not a recruit.", "source": "D", "page": 1}
+  ]
+}
