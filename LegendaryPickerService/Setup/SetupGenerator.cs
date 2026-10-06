@@ -781,7 +781,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // included Heroes whose parts the included boxes supply, or from every included Hero when the Scheme's Hero
         // rules need one that uses a part none supplies, which the setup then lays out from the box that has it. A
         // draw outside the Hero Deck the box data lets take a Hero from another box draws from the loaded Heroes it
-        // allows when no included Hero has one of its Hero Names (D-scheme-first, #138).
+        // allows when no included Hero it can draw has one of its Hero Names (D-scheme-first, #138), and still takes an
+        // included one first, as one whose part no included box supplies (#150).
         private (List<Hero> Deck, List<OutsideHero> Outside) DrawHeroes(SetupPlan plan)
         {
             var setup = plan.Scheme.Setup;
@@ -826,10 +827,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 deck.Add(DrawOne(fromIncluded.Count > 0 ? fromIncluded : options));
             }
 
+            // A draw outside the Hero Deck takes a Hero of the included boxes whenever one keeps the Hero rules completable,
+            // so a Scheme's named Hero comes from another box only when no included one can be used (#150).
             var outside = new List<Hero>();
             while (outside.Count < rules.OutsideSlots.Count)
             {
-                outside.Add(DrawOne(heroes.Where(hero => rules.CanComplete(deck, [.. outside, hero])).ToList()));
+                var options = heroes.Where(hero => rules.CanComplete(deck, [.. outside, hero])).ToList();
+                var fromIncluded = options.Where(included.Contains).ToList();
+                outside.Add(DrawOne(fromIncluded.Count > 0 ? fromIncluded : options));
             }
 
             return (deck, outside
