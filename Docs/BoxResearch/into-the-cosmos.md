@@ -1,6 +1,6 @@
 # Into the Cosmos (August 2020)
 
-**Research status: Partial.** The official insert verifies the 200-card count, 18 Shard tokens, and several mechanics, but not individual Scheme setups, Always Leads, or complete card metadata.
+**Research status: Partial.** The official insert verifies the 200-card count, 18 Shard tokens, and several mechanics. For #179 the Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/into-the-cosmos.json`; per-face copy counts and the Contest of Champions and Cosmic Threat icons remain open.
 
 ## Sources
 
@@ -37,7 +37,7 @@ The card categories sum to 200; the 18 Shards are tokens, not cards.
 - **Schemes (four):** The Contest of Champions; Turn the Soul of Adam Warlock; Destroy the Nova Corps; Annihilation: Conquest.
 - **Special Bystanders (three):** Board Gamer; Legendary Game Designer; Pizza Delivery Guy.
 
-The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index and all setup/rules claims still need an allowed source; unresolved areas include Hero metadata, Always Leads, full Scheme/Mastermind setup lines, or the icon shapes lost in text extraction.
+The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index still need an allowed source; Scheme Setup lines, Always Leads and part uses were read from the linked faces (#179), and per-face copy counts and the icon shapes lost in text extraction remain open.
 
 ## Rules and mechanisms
 
@@ -57,11 +57,11 @@ The C1 face index below records available printed titles, group/type, numeric va
 - **Celestial Boon:** A persistent benefit from a Celestial held in the player's Victory Pile. (IC p.2)
 - **Cosmic Threat:** A once-per-turn vulnerability that reduces an enemy's value for each matching card revealed. (IC p.2)
 
-Summaries are original paraphrases under 40 words. Verify the Contest of Champions and Cosmic Threat icons, card-level Hero metadata, Always Leads, and component dependencies from legible cards.
+Summaries are original paraphrases under 40 words. The box file reuses Guardians of the Galaxy's Shard, Spider-Man Homecoming's Danger Sense and Fantastic Four's Cosmic Threat terms and adds Burn Shards, Contest of Champions and Celestial Boon. From the card faces (#179): every Hero, both Henchman Groups, the Celestials, the Elders of the Universe, the Grandmaster, Magus and Destroy the Nova Corps use Shards; the Black Order, the Elders, From Beyond, all three Masterminds, The Contest of Champions and Turn the Soul of Adam Warlock (3 Wounds stand in as Twists) use Wounds; Destroy the Nova Corps also puts 2 Wounds and an Officer in each starting deck. No card uses another shared stack. One special Bystander gives a Shard, but the special Bystanders join the Bystander stack and bring no part.
 
 ## Setup and implementation gaps
 
-Verify all four Schemes' player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps; all Mastermind Always Leads/setup effects; and Hero teams/classes/shared Hero Names. Integration must track Shards on players and enemies, transfer them on defeat/escape, and represent persistent Celestial Boons. The printed icon conditions lost in text extraction need card-level sources; this record changes no runtime data or code.
+Per-face copy counts for Heroes, Masterminds and Tactics are not indexed by C1 and remain unverified, as do the exact Contest of Champions and Cosmic Threat icons lost in text extraction; neither changes the setup. Shard movement, Celestial Boons and Contests happen during play.
 
 ## Structured card-face metadata (C1)
 

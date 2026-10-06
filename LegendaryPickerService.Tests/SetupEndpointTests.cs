@@ -274,7 +274,7 @@ public sealed class SetupEndpointTests : IDisposable
         var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
 
         Assert.Equal(
-            ["core", "villains", "marvel-studios-phase-1", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "fear-itself", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary", "civil-war", "deadpool", "noir", "x-men", "spider-man-homecoming", "champions", "world-war-hulk", "ant-man", "venom", "dimensions", "revelations", "shield", "heroes-of-asgard", "the-new-mutants"],
+            ["core", "villains", "marvel-studios-phase-1", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "fear-itself", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary", "civil-war", "deadpool", "noir", "x-men", "spider-man-homecoming", "champions", "world-war-hulk", "ant-man", "venom", "dimensions", "revelations", "shield", "heroes-of-asgard", "the-new-mutants", "into-the-cosmos"],
             boxes!.Select(box => (string)box!["id"]!));
     }
 
@@ -291,7 +291,7 @@ public sealed class SetupEndpointTests : IDisposable
                 "paint-the-town-red firstEdition", "guardians-of-the-galaxy firstEdition", "fear-itself villainous plays",
                 "secret-wars-volume-1 firstEdition", "secret-wars-volume-2 firstEdition", "captain-america-75th-anniversary firstEdition",
                 "civil-war firstEdition",
-                "deadpool firstEdition", "noir firstEdition", "x-men firstEdition", "spider-man-homecoming firstEdition", "champions firstEdition", "world-war-hulk firstEdition", "ant-man firstEdition", "venom firstEdition", "dimensions firstEdition", "revelations firstEdition", "shield firstEdition", "heroes-of-asgard firstEdition", "the-new-mutants firstEdition",
+                "deadpool firstEdition", "noir firstEdition", "x-men firstEdition", "spider-man-homecoming firstEdition", "champions firstEdition", "world-war-hulk firstEdition", "ant-man firstEdition", "venom firstEdition", "dimensions firstEdition", "revelations firstEdition", "shield firstEdition", "heroes-of-asgard firstEdition", "the-new-mutants firstEdition", "into-the-cosmos firstEdition",
             ],
             boxes!.Select(box =>
                 $"{box!["id"]} {box["ruleset"]}{((bool)box["baseGame"]! ? " base" : "")}{((bool)box["mixesRulesets"]! ? " mixes" : "")}"
