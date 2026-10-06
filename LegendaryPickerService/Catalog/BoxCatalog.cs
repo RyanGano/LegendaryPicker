@@ -532,7 +532,7 @@ public sealed partial class BoxCatalog
 
     // A Mastermind's other Always Leads groups name at least one group, each once and none its Always Leads group, so
     // the choice is real. A Scheme's choice of one group names at least two groups, each once and none it requires. A required group's own card count is for a Henchman Group and at least 1. A Scheme sets the
-    // Wound stack to a size or per player, not both, and to at least 1 Wound.
+    // Wound stack to a size or per player, not both, and to at least 1 Wound, and the Officer stack to at least 1 Officer.
     private static void ValidateLeadsAndCounts(string path, Box box)
     {
         foreach (var mastermind in box.Masterminds)
@@ -565,6 +565,11 @@ public sealed partial class BoxCatalog
             {
                 throw new InvalidDataException(
                     $"{path}: {scheme.Id} setup.oneOfGroups lists [{string.Join(", ", choice.GroupIds)}]; it lists at least 2 groups, each once, none of them in setup.requiredGroups.");
+            }
+
+            if (scheme.Setup.Officers is { } officers && officers.Value < 1)
+            {
+                throw new InvalidDataException($"{path}: {scheme.Id} has setup.officers {officers.Value}; it is at least 1.");
             }
 
             if (scheme.Setup.Wounds is { } wounds && (wounds.Value < 1 || scheme.Setup.WoundsPerPlayer is not null))
@@ -1113,6 +1118,7 @@ public sealed partial class BoxCatalog
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
             if (effect.Wounds is { } woundStack) yield return ($"{scheme.Id} setup.wounds", woundStack.Source);
+            if (effect.Officers is { } officerStack) yield return ($"{scheme.Id} setup.officers", officerStack.Source);
             if (effect.ExtraHenchmanCards is { } extraCards) yield return ($"{scheme.Id} setup.extraHenchmanCards", extraCards.Source);
             if (effect.BindingsPerPlayer is { } bindings) yield return ($"{scheme.Id} setup.bindingsPerPlayer", bindings.Source);
             foreach (var group in effect.RequiredGroups ?? [])

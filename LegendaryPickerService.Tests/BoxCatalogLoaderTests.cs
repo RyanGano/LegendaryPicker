@@ -206,6 +206,14 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Fact]
+    public void Rejects_an_Officer_stack_below_1()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["officers"] = JsonNode.Parse("""{ "value": 0, "source": "Card" }"""));
+
+        AssertRejected("core_scheme_legacy-virus has setup.officers 0");
+    }
+
+    [Fact]
     public void Rejects_own_Tactics_below_1()
     {
         WriteCoreBox(core => LegacyVirusSetup(core)["ownTactics"] = JsonNode.Parse("""{ "value": 0, "source": "Card" }"""));

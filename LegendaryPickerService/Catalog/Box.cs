@@ -230,6 +230,7 @@ public sealed record Scheme(
     // A Scheme also uses the stacks its Setup line sizes or moves cards from, so its uses needn't repeat them.
     public IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part)
         .Concat(Setup.WoundsPerPlayer is null && Setup.Wounds is null ? [] : [Part.Wounds])
+        .Concat(Setup.Officers is null ? [] : [Part.Officers])
         .Concat(Setup.BindingsPerPlayer is null ? [] : [Part.Bindings])
         .Concat((Setup.Moves ?? []).Select(move => CardMove.PartOf(move.Card)).OfType<Part>())
         .Distinct();
@@ -278,7 +279,8 @@ public sealed record SetupStep(string Label, string Source);
 // ExtraHenchmanCards is how many cards each Henchman Group the Scheme's ExtraHenchmanGroups adds puts in the Villain Deck,
 // in place of the usual count, Solo's 3 or HenchmanCards, as Scavenge Alien Weaponry's 10 Smugglers even in Solo (#134).
 // OneOfGroups requires exactly one of several groups and leaves the others out, as S.H.I.E.L.D. vs. HYDRA War takes
-// A.I.M., Hydra Offshoot or Hydra Elite but not both (#172).
+// A.I.M., Hydra Offshoot or Hydra Elite but not both (#172). Officers sets the S.H.I.E.L.D. Officer stack to a size, as
+// Secret HYDRA Corruption's 30 Officers even when S.H.I.E.L.D.'s special Officers are included (#172).
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -306,7 +308,8 @@ public sealed record SchemeSetup(
     Sourced<int>? OwnTactics = null,
     Sourced<int>? Wounds = null,
     Sourced<int>? ExtraHenchmanCards = null,
-    GroupChoice? OneOfGroups = null)
+    GroupChoice? OneOfGroups = null,
+    Sourced<int>? Officers = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
 
 // Groups of one type a Scheme requires exactly one of: the setup takes the drawn Mastermind's Always Leads group when

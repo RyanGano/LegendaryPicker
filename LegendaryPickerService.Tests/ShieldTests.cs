@@ -24,6 +24,16 @@ public class ShieldTests
         Assert.Equal(11, setup.VillainDeck.Twists);
     }
 
+    // Secret HYDRA Corruption (Revelations) uses exactly 30 Officers, so the special Officers don't add to its stack.
+    [Fact]
+    public void Secret_HYDRA_Corruption_keeps_its_30_Officer_stack_with_the_special_Officers()
+    {
+        string[] boxes = ["core", "revelations", "shield"];
+        var setup = Draw(2, "Secret HYDRA Corruption", boxes);
+
+        Assert.Equal(30, setup.Stacks.Officers);
+    }
+
     // Each Mastermind the Scheme can be drawn with: exactly one of the two groups is in the setup, and it is the
     // Mastermind's own Always Leads group when that is one of them.
     [Fact]
@@ -45,14 +55,15 @@ public class ShieldTests
         Assert.Equal(Aim, leads["Hydra Super-Adaptoid"]);
     }
 
-    private static int SchemeIndex(int players, string scheme)
+    private static int SchemeIndex(int players, string scheme, string[]? boxes = null)
     {
+        boxes ??= Boxes;
         var probe = new ScriptedRandom();
-        Generator.Generate(players, Boxes, probe);
+        Generator.Generate(players, boxes, probe);
         return Enumerable.Range(0, probe.Options[0])
-            .First(s => Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(s))).Scheme.Name == scheme);
+            .First(s => Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new ScriptedRandom(s))).Scheme.Name == scheme);
     }
 
-    private static SetupResult Draw(int players, string scheme) =>
-        Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(SchemeIndex(players, scheme))));
+    private static SetupResult Draw(int players, string scheme, string[]? boxes = null) =>
+        Assert.IsType<SetupResult>(Generator.Generate(players, boxes ?? Boxes, new ScriptedRandom(SchemeIndex(players, scheme, boxes))));
 }

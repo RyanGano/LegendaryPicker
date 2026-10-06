@@ -411,7 +411,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 plan.TwistsBeside,
                 new SetupStacks(
                     Stack(Part.Wounds, (plan.Wounds ?? Supply(Part.Wounds)) - plan.MovedOut(Pile.Wounds)),
-                    Stack(Part.Officers, Supply(Part.Officers) - plan.MovedOut(Pile.Officers)),
+                    Stack(Part.Officers, (plan.Officers ?? Supply(Part.Officers)) - plan.MovedOut(Pile.Officers)),
                     stackBoxes.Sum(box => box.Components.Bystanders?.Value ?? 0) - plan.Bystanders - plan.MovedOut(Pile.Bystanders),
                     Stack(Part.Sidekicks, Supply(Part.Sidekicks) - plan.MovedOut(Pile.Sidekicks)),
                     Stack(Part.Bindings, (plan.Bindings ?? Supply(Part.Bindings)) - plan.MovedOut(Pile.Bindings)),
@@ -489,7 +489,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     $"{bystanders} Bystanders in the {_terms.VillainDeck}", $"puts {bystanders} Bystanders in the {_terms.VillainDeck}", schemeBystanders.Source));
             }
 
-            // The Wound and Bindings stacks hold what the boxes supply unless the Scheme sets their size. A Scheme
+            // The Wound, Officer and Bindings stacks hold what the boxes supply unless the Scheme sets their size. A Scheme
             // that sets one stack's size sets that stack only.
             int? wounds = null;
             if (effect.WoundsPerPlayer is { } woundsPerPlayer)
@@ -502,6 +502,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 wounds = woundStack.Value;
                 notes.Add(Card($"{schemeWord} sets the Wound stack to {woundStack.Value}", woundStack.Source));
+            }
+
+            int? officers = null;
+            if (effect.Officers is { } officerStack)
+            {
+                officers = officerStack.Value;
+                notes.Add(Card($"{schemeWord} sets the {CardName(CardKind.Officer, 2)} stack to {officerStack.Value}", officerStack.Source));
             }
 
             int? bindings = null;
@@ -648,6 +655,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 Solo ? rules.Solo.MasterStrikes.Value : rules.MasterStrikes.Value,
                 bystanders,
                 wounds,
+                officers,
                 bindings,
                 moves,
                 outside,
@@ -1101,6 +1109,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int MasterStrikes,
         int Bystanders,
         int? Wounds,
+        int? Officers,
         int? Bindings,
         IReadOnlyList<MovedCards> Moves,
         IReadOnlyList<OutsideDraw> Outside,
