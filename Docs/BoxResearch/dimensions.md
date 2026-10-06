@@ -34,7 +34,7 @@ The listed categories sum to the official 100-card total. The insert identifies 
 - **Five Special Bystander names from C1-3D:** Bulldozer Driver; Double Agent of S.H.I.E.L.D.; Fortune Teller; Photographer; Stan Lee.
 - **Additional C1-Dim Bystander name lead:** Forklift Driver. It is not reconciled with the insert's five Special Bystanders or D5's 3D-promo identity and is not counted in the official 100-card breakdown.
 
-The official insert does not list individual card names for all categories. The C1 face index below adds the main catalog and 3D promo records, with available metadata and image links; J. Jonah Jameson's setup and the Forklift Driver count discrepancy remain unresolved.
+The official insert does not list individual card names for all categories. The C1 face index below adds the main catalog and 3D promo records, with available metadata and image links; J. Jonah Jameson's Always Leads (Spider-Slayers), Start of Game (2 Officers per player, 3 on the Epic side, as the Angry Mobs stack) and Wound use were read from his card faces for #168; the Forklift Driver count discrepancy remains unresolved.
 
 ## Rules and mechanisms
 

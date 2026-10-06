@@ -12,6 +12,7 @@ public class BoxDataTests
     {
         { "ant-man", 5, 2, 0, 2, 4 },
         { "venom", 5, 2, 0, 2, 4 },
+        { "dimensions", 5, 0, 2, 1, 0 },
         { "captain-america-75th-anniversary", 5, 2, 0, 2, 4 },
         { "champions", 5, 2, 0, 2, 4 },
         { "civil-war", 16, 7, 2, 5, 8 },
@@ -61,6 +62,6 @@ public class BoxDataTests
         var recorded = Catalog.Boxes.SelectMany(box => box.Masterminds).Where(m => m.Epic is not null).Select(m => m.Id).Order().ToList();
 
         Assert.Equal(offers, recorded);
-        Assert.Equal(14, recorded.Count);
+        Assert.Equal(15, recorded.Count);
     }
 }

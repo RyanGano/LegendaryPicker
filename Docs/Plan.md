@@ -406,5 +406,15 @@ Box id `venom`, file `LegendaryPickerService/Data/Boxes/venom.json`, a First Edi
 
 **Keywords (V pp.1-2):** Symbiote Bonds, Digest and Indigestion are new here; Excessive Violence reuses Deadpool's term.
 
+## Dimensions (May 2019)
+
+Box id `dimensions`, file `LegendaryPickerService/Data/Boxes/dimensions.json`, a First Edition expansion (#168). Counts (D p.2): 5 Heroes x 14 cards, 2 Henchman Groups x 10, 1 double-sided Mastermind and 5 Special Bystanders; no Schemes or Villain Groups of its own, so its cards draw under other boxes' Schemes. It includes the Marvel 3D promo content as one card with the Dimensions printing (#34 D5), so there is no separate 3D box.
+
+**Heroes:** Howard the Duck and Man-Thing (unaffiliated), Jessica Jones (Marvel Knights), Ms. America and Squirrel Girl (Avengers). **Henchman Groups:** Circus of Crime, Spider-Slayer. **Mastermind:** J. Jonah Jameson leads Spider-Slayer (Card) and can be played on his Epic side with the same Tactics. His Start of Game puts 2 Officers per player (3 on the Epic side) face down as the Angry Mobs stack, and a Tactic and the Epic Master Strike use Wounds, so he uses Officers and Wounds. No Hero, Henchman Group or Special Bystander takes cards from a stack (Card).
+
+**Special Bystanders (D p.2):** Bulldozer Driver, Double Agent of S.H.I.E.L.D., Fortune Teller, Photographer, Stan Lee; they join the Bystander stack under the shuffle-together rule. C1 also lists a Forklift Driver, left out until the owner reconciles it with the insert's five.
+
+**Keywords (D pp.1-2):** Switcheroo is new here; Teleport reuses Dark City's term and Investigate Noir's.
+
 ## Open questions
 
