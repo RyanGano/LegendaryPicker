@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 7,
+  "id": "ant-man",
+  "name": "Ant-Man",
+  "ruleset": "firstEdition",
+  "catalogSource": "AM p.2; C1",
+  "about": {"released": {"value": "2018-11", "source": "Q"}},
+  "sources": [
+    {"key": "AM", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Ant-Man.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "AM p.2"}, "villainGroupCards": {"value": 8, "source": "AM p.2"}, "henchmanGroupCards": {"value": 0, "source": "AM p.2"}, "schemeTwists": {"value": 0, "source": "AM p.2"}},
+  "heroes": [
+    {"id": "ant-man_hero_ant-man", "name": "Ant-Man", "team": "core_term_avengers", "classes": ["core_term_strength", "core_term_tech"], "terms": ["civil-war_term_size-changing", "ant-man_term_microscopic-size-changing"]},
+    {"id": "ant-man_hero_black-knight", "name": "Black Knight", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["ant-man_term_empowered"]},
+    {"id": "ant-man_hero_jocasta", "name": "Jocasta", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["civil-war_term_size-changing", "ant-man_term_empowered"]},
+    {"id": "ant-man_hero_wasp", "name": "Wasp", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["civil-war_term_size-changing", "ant-man_term_microscopic-size-changing"]},
+    {"id": "ant-man_hero_wonder-man", "name": "Wonder Man", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["civil-war_term_size-changing", "ant-man_term_empowered"]}
+  ],
+  "villainGroups": [
+    {"id": "ant-man_villain_queen-s-vengeance", "name": "Queen's Vengeance", "terms": ["ant-man_term_microscopic-size-changing", "ant-man_term_chivalrous-duel"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "ant-man_villain_ultron-s-legacy", "name": "Ultron's Legacy", "terms": ["civil-war_term_size-changing", "ant-man_term_microscopic-size-changing", "ant-man_term_empowered"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "ant-man_mastermind_morgan-le-fay", "name": "Morgan Le Fay", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "ant-man_term_chivalrous-duel"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "ant-man_villain_queen-s-vengeance", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Morgan Le Fay", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "AM p.2"}]}},
+    {"id": "ant-man_mastermind_ultron", "name": "Ultron", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "ant-man_term_empowered", "ant-man_term_threat-analysis"], "alwaysLeads": {"groupId": "ant-man_villain_ultron-s-legacy", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Ultron", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "AM p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "ant-man_scheme_age-of-ultron", "name": "Age of Ultron", "terms": ["core_term_scheme-twist", "ant-man_term_empowered"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "extraHeroes": [{"players": [4, 5], "value": 1, "source": "Card"}]}},
+    {"id": "ant-man_scheme_pull-earth-into-medieval-times", "name": "Pull Earth into Medieval Times", "terms": ["core_term_scheme-twist", "ant-man_term_chivalrous-duel"], "setup": {"twists": [{"players": null, "value": 9, "source": "Card"}]}},
+    {"id": "ant-man_scheme_transform-commuters-into-giant-ants", "name": "Transform Commuters into Giant Ants", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": [1], "value": 7, "source": "Card"}, {"players": [2], "value": 8, "source": "Card"}, {"players": [3], "value": 9, "source": "Card"}, {"players": [4], "value": 10, "source": "Card"}, {"players": [5], "value": 11, "source": "Card"}]}},
+    {"id": "ant-man_scheme_trap-heroes-in-the-microverse", "name": "Trap Heroes in the Microverse", "terms": ["core_term_scheme-twist", "civil-war_term_size-changing"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "outsideHeroes": [{"to": "villainDeck", "count": [{"players": null, "value": 1, "source": "Card"}]}]}}
+  ],
+  "glossary": [
+    {"id": "ant-man_term_microscopic-size-changing", "name": "Microscopic Size-Changing", "kind": "keyword", "summary": "Like Size-Changing, but the cost or fight value drops 2 for each card played, up to the number of icons shown. It can fall below zero, and a negative value gives that many points.", "source": "AM", "page": 1},
+    {"id": "ant-man_term_empowered", "name": "Empowered", "kind": "keyword", "summary": "The card gets +1 for each card of the shown color in the HQ, counted when you play the Hero or fight the enemy. Double and Triple Empowered give +2 and +3.", "source": "AM", "page": 1},
+    {"id": "ant-man_term_chivalrous-duel", "name": "Chivalrous Duel", "kind": "keyword", "summary": "To fight this enemy you can use points only from Heroes sharing one Hero Name. Points from anything that isn't a Hero card don't count.", "source": "AM", "page": 2},
+    {"id": "ant-man_term_threat-analysis", "name": "Threat Analysis", "kind": "keyword", "summary": "Ultron's pile of Heroes. He is Empowered by each color in it, and one card or three gives the same bonus.", "source": "AM", "page": 2}
+  ]
+}

@@ -1,6 +1,6 @@
 # Ant-Man (November 2018)
 
-**Research status: Partial.** The official insert verifies contents and four mechanics, but not individual card setup lines, Always Leads, or all component dependencies.
+**Research status: Partial; integrated (#163).** The official insert verifies contents and four mechanics. The Scheme Setup lines, Always Leads and part uses in `LegendaryPickerService/Data/Boxes/ant-man.json` were read from the C1-linked card faces (`Card`): Morgan Le Fay and both Villain Groups use Wounds, and no Ant-Man card uses another part. Per-face copy counts remain unverified.
 
 ## Sources
 
@@ -56,7 +56,7 @@ Summaries are original paraphrases under 40 words. Exact qualifying icons, Hero 
 
 ## Setup and implementation gaps
 
-Verify all four Schemes' player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps from the cards. Verify both Masterminds' Always Leads and setup effects and each Hero's teams, classes, shared Hero Name, and terms. The insert's icon extraction does not preserve Size-Changing/Empowered color and class symbols, so confirm those from clear card references. This record changes no runtime data or code.
+Every Scheme's Twists and Setup line, and both Masterminds' Always Leads and Epic side, were read from the card faces linked below and are in the box file (#163); no Scheme prints a player limit. Hero teams and classes are as C1 gives them.
 
 ## Structured card-face metadata (C1)
 
