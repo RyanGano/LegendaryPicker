@@ -386,5 +386,15 @@ Box id `marvel-studios-phase-1`, file `LegendaryPickerService/Data/Boxes/marvel-
 
 **Heroes from another box (#147):** when the included Heroes can't meet a Scheme's Hero rules, the Hero Deck takes the Heroes it still needs from the other loaded boxes of the Scheme's ruleset, which the player owns (D-scheme-first), each named with its box like any card from a box the setup doesn't include; every draw takes an included Hero whenever one keeps the rules completable. It first came up with Phase 1 and Civil War alone, whose Heroes give only one team of three for Avengers vs. X-Men. Research: [`Docs/BoxResearch/marvel-studios-phase-1.md`](BoxResearch/marvel-studios-phase-1.md).
 
+## Ant-Man (November 2018)
+
+Box id `ant-man`, file `LegendaryPickerService/Data/Boxes/ant-man.json`, a First Edition expansion (#163). Counts (AM p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 double-sided Masterminds and 4 Schemes; no Henchmen, Bystanders, Wounds or Scheme Twists of its own. Names, teams, classes and keywords come from C1; Scheme Setup lines and Always Leads were read from the card faces it links (`Card`).
+
+**Heroes:** all Avengers: Ant-Man, Black Knight, Jocasta, Wasp, Wonder Man. **Villain Groups:** Queen's Vengeance, Ultron's Legacy. **Masterminds:** Morgan Le Fay leads Queen's Vengeance, and Ultron leads Ultron's Legacy; each can be played on its Epic side with the same Tactics (AM p.2), recorded in `epic` with a step offering it. Morgan Le Fay and both Villain Groups give Wounds, so they use that part; no Ant-Man card uses another part. The Mastermind Ultron shares a name only with the Villains box's Hero Ultron, a different kind of card.
+
+**Schemes (Card; none prints a player limit):** Age of Ultron (11 Twists; one more Hero at 4 and 5 players); Pull Earth into Medieval Times (9); Transform Commuters into Giant Ants (players plus 6, listed per count, Solo included since a Scheme's printed count wins); Trap Heroes in the Microverse (11, and an extra Hero's 14 cards go into the Villain Deck).
+
+**Keywords (AM pp.1-2):** Microscopic Size-Changing, Empowered, Chivalrous Duel and Threat Analysis are new here; Size-Changing reuses Civil War's term.
+
 ## Open questions
 
