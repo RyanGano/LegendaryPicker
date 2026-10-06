@@ -669,11 +669,26 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return Add(plan, effect, schemeWord, schemeBox, scheme.Id);
         }
 
-        // The Scheme's plan with the Mastermind's setup effects added after the Scheme's.
+        // The Scheme's plan with the Mastermind's setup effects added after the Scheme's. A Mastermind's own count of
+        // Henchmen of each Henchman Group, such as Annihilus's 6 in Solo, replaces the table or Solo count, but not a
+        // count the Scheme sets.
         private SetupPlan WithMastermind(SetupPlan plan, Mastermind mastermind)
         {
             plan = plan with { Mastermind = mastermind };
-            return mastermind.Setup is { } effects ? Add(plan, effects, mastermind.Name, BoxOf(mastermind.Id), mastermind.Id) : plan;
+            if (mastermind.Setup is not { } effects)
+            {
+                return plan;
+            }
+
+            if (plan.HenchmanCards is null && ForPlayers(effects.HenchmanCards ?? []) is { } henchmen)
+            {
+                var note = Note(
+                    $"{mastermind.Name} puts {henchmen.Value} {_terms.Henchmen} of each {_terms.HenchmanGroup} in the {_terms.VillainDeck}",
+                    henchmen.Source, BoxOf(mastermind.Id), mastermind.Id);
+                plan = plan with { HenchmanCards = henchmen.Value, Notes = [.. plan.Notes, note] };
+            }
+
+            return Add(plan, effects, mastermind.Name, BoxOf(mastermind.Id), mastermind.Id);
         }
 
         // Adds each effect that applies at this player count to the plan's counts, and each setup step to
@@ -1093,7 +1108,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     };
 
     // The counts a setup uses, from the rules and the setup effects of its Scheme and, once one is
-    // paired with it, its Mastermind. HenchmanCards is the Scheme's count of cards of each Henchman
+    // paired with it, its Mastermind. HenchmanCards is the Scheme's (or else the Mastermind's) count of cards of each Henchman
     // Group, or null when the table or Solo sets it. Required holds the Scheme's required groups by the id of the
     // group the setup uses for each, which is a substitute's once one is drawn. OutsideHenchmen has one entry per Henchman Group
     // the Scheme draws outside the Villain Deck.

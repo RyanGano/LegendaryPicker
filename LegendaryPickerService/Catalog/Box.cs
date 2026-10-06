@@ -255,13 +255,16 @@ public sealed record GlossaryTerm(string Id, string Name, TermKind Kind, string 
 // Each adds its value to the count the setup would otherwise use (the player-count table or Solo,
 // after any Scheme value that sets it); a Scheme's are applied before its Mastermind's. Each is a
 // list so its value can depend on the player count: an entry for players [1] applies only in Solo,
-// and a player count no entry names adds nothing. Steps are setup steps that change no count.
+// and a player count no entry names adds nothing. Steps are setup steps that change no count. HenchmanCards sets
+// how many cards of each Henchman Group go in the Villain Deck, replacing the table or Solo count, as Annihilus's
+// 6 in Solo; a Mastermind's applies only when its Scheme sets none.
 public record SetupEffects(
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null,
-    IReadOnlyList<SetupStep>? Steps = null);
+    IReadOnlyList<SetupStep>? Steps = null,
+    IReadOnlyList<PlayerCountValue>? HenchmanCards = null);
 
 // A setup step that changes no count, such as placing a token on the Scheme, which the setup lists as a
 // line to tick. Label is a short instruction in our own words, never card text.
@@ -310,7 +313,7 @@ public sealed record SchemeSetup(
     Sourced<int>? ExtraHenchmanCards = null,
     GroupChoice? OneOfGroups = null,
     Sourced<int>? Officers = null)
-    : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps);
+    : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps, HenchmanCards);
 
 // Groups of one type a Scheme requires exactly one of: the setup takes the drawn Mastermind's Always Leads group when
 // it is one of them, or else draws one, and leaves the others out of the setup.

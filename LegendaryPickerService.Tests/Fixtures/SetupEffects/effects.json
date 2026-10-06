@@ -28,6 +28,15 @@
       "setup": {
         "extraHeroes": [{ "players": null, "value": 1, "source": "Card" }]
       }
+    },
+    {
+      "id": "effects_mastermind_test-swarm-lord",
+      "name": "Test Swarm Lord",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "alwaysLeads": { "groupId": "effects_villain_test-recruits", "groupType": "villain", "source": "Card" },
+      "setup": {
+        "henchmanCards": [{ "players": [1], "value": 6, "source": "Card" }]
+      }
     }
   ],
   "schemes": [
@@ -59,6 +68,15 @@
           { "players": [1], "value": 1, "source": "R p.2" },
           { "players": [3, 4, 5], "value": 2, "source": "Card" }
         ]
+      }
+    },
+    {
+      "id": "effects_scheme_test-muster",
+      "name": "Test Muster",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "henchmanCards": [{ "players": null, "value": 4, "source": "Card" }]
       }
     }
   ],
