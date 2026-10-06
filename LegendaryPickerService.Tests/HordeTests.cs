@@ -4,11 +4,12 @@ using LegendaryPickerService.Setup;
 namespace LegendaryPickerService.Tests;
 
 // The X-Men capabilities (#132), using Fixtures/Horde: a copy of the core box and a made-up expansion. Its Mastermind,
-// Test Commander, always leads Test Guard and also one of Test Drones and Test Gunships (alsoLeads). Catalog order puts
+// Test Commander, always leads Test Guard and also one of Test Drones and Test Gunships (alsoLeads); Test Overseer leads
+// Test Guard and also one of Test Drones and the core box's Sentinel. Catalog order puts
 // its Schemes after the core box's 8 (6 in Solo): Test Patrol (plain), Test Infestation (requires all 10 Test Swarm
 // as an extra Henchman Group), Test Nest (requires Test Swarm with no extra slot), Test Riot (a 20-Wound stack) and Test
 // Dread (uses Horrors). Mastermind draw
-// 0 is Dr. Doom and 4 is Test Commander.
+// 0 is Dr. Doom, 4 is Test Commander and 5 is Test Overseer.
 public sealed class HordeTests
 {
     private static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "Horde");
@@ -21,6 +22,7 @@ public sealed class HordeTests
 
     private const int DrDoom = 0;
     private const int TestCommander = 4;
+    private const int TestOverseer = 5;
 
     [Fact]
     public void A_Mastermind_that_also_leads_one_of_several_groups_draws_one_of_them_into_a_slot()
@@ -35,6 +37,20 @@ public sealed class HordeTests
         Assert.Equal(["Test Gunships"], setup.HenchmanGroups.Select(group => group.Name));
         Assert.Equal(2, random.Options[3]);
         Assert.Contains(new RuleNote("Test Commander also always leads Test Gunships, one of Test Drones and Test Gunships", "Card", null, FixtureName), setup.Notes);
+    }
+
+    // Bastion leads any Sentinel Henchman Group (#186): another box's group is one of the options when that box is included.
+    [Fact]
+    public void A_Mastermind_can_also_lead_a_group_of_another_included_box()
+    {
+        var random = new ScriptedRandom(8, TestOverseer, 0, 0);
+
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, random));
+
+        Assert.Equal(("Test Patrol", "Test Overseer"), (setup.Scheme.Name, setup.Mastermind.Name));
+        Assert.Equal(["Sentinel"], setup.HenchmanGroups.Select(group => group.Name));
+        Assert.Equal(2, random.Options[3]);
+        Assert.Contains(new RuleNote("Test Overseer also always leads Sentinel, one of Sentinel and Test Drones", "Card", null, FixtureName), setup.Notes);
     }
 
     [Fact]

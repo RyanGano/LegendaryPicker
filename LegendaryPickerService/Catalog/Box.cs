@@ -217,7 +217,8 @@ public sealed record EpicSide(string Name, string Source, IReadOnlyList<PartUse>
 public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source);
 
 // Groups of one type a Mastermind always leads one of, besides its Always Leads group: the setup takes one of them
-// that is drawn already, or draws one of those included into a slot, which it fills as the Always Leads group does.
+// that is drawn already, or draws one of those included into a slot, which it fills as the Always Leads group does. One
+// of the groups is in the Mastermind's box; the others can be another box's, as Bastion leads any Sentinel Henchman Group.
 public sealed record AlsoLeadsGroup(IReadOnlyList<string> GroupIds, GroupType GroupType, string Source);
 
 // ExcludesMasterminds lists the Masterminds the Scheme's card rules out, recorded when its box is entered: those whose

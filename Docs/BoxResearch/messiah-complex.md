@@ -1,6 +1,6 @@
 # Messiah Complex (January 2022)
 
-**Research status: Partial.** The official insert verifies contents and several new mechanics, but not the individual Scheme/Mastermind setup effects, Always Leads, or complete Hero metadata.
+**Research status: Integrated ([#186](https://github.com/RyanGano/LegendaryPicker/issues/186)); partial.** Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked card face (`Card`); Hero teams and classes come from C1 and the cards. Runtime data: `LegendaryPickerService/Data/Boxes/messiah-complex.json`.
 
 ## Sources
 
@@ -40,7 +40,7 @@ The listed categories sum to the official 200-card total.
 - **Special Bystanders (three):** Cloning Technician; Opera Singer; Private Investigator.
 - **Sidekick types (seven):** Layla Miller; Skids; Rockslide; Darwin; Boom-Boom; Prodigy; Rusty “Firefist” Collins.
 
-The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index and all setup/rules claims still need an allowed source; unresolved areas include Hero metadata, Always Leads, Scheme setup lines, the Unveiled Scheme selection pool, or the Prey icon.
+The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Setup values in the runtime data come from the card faces (`Card`) and the insert (MC).
 
 ## Rules and mechanisms
 
@@ -63,11 +63,11 @@ The C1 face index below records available printed titles, group/type, numeric va
 - **Prey:** Assign a Villain to a player with the fewest qualifying icons, then resolve its consequence if it survives that player's turn. (MC p.2)
 - **Veiled Scheme:** A Scheme that begins on its hidden side and later transforms into an Unveiled side. (MC p.2)
 
-Summaries are original paraphrases under 40 words. The Prey icon, full Hero metadata, Always Leads, and card-linked component dependencies need card-level verification.
+Summaries are original paraphrases under 40 words.
 
 ## Setup and implementation gaps
 
-Verify the four Veiled Scheme setup lines/player limits, the Unveiled Scheme replacement pool, all Mastermind Always Leads/setup effects, and Hero teams/classes/shared Hero Names. Integration must include Special Sidekicks in the shared stack, support Clone effects by card type, and represent Scheme-side replacement; this record changes no runtime data or code.
+Still open: per-face copy counts of the four non-Clone Heroes; the seven Sidekick faces have no C1 image, so their own text was not read (they join the Sidekick stack and change no setup); the Epic sides' own setup effects are not drawn yet (#151). A Veiled Scheme is set up from its Veiled side; the Unveiled side is picked at random from every Unveiled Scheme the players own when it transforms, so setup adds only a step, and the Unveiled sides' "when revealed" draws (an extra Villain Group, an extra Hero) happen in play. Bastion, Fused Sentinel's "any Sentinel Henchmen Group" is read as Sentinel Squad O\*N\*E\* or the core Sentinel when the core box is included. The Opera Singer Bystander's OCR was unreadable; a visual read of the face (review of #187) found it shatters a Villain in the Bank or the HQ Hero below it, so it uses no stack.
 
 ## Structured card-face metadata (C1)
 

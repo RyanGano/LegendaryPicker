@@ -587,7 +587,7 @@ public sealed partial class BoxCatalog
     }
 
     // Every requirement a box's cards make is met inside the box (D-scheme-first, #138), so any setup that includes it
-    // can be laid out and no draw is ever checked against the others: a Mastermind's Always Leads and other groups, a
+    // can be laid out and no draw is ever checked against the others: a Mastermind's Always Leads group and one of its other groups, a
     // Scheme's required groups, the groups it requires one of, its required Heroes, the groups it sets cards beside it from, never more cards than a group holds,
     // the Heroes it names, and the Hero Names and teams its Hero counts and outside draws ask for. A required group or a
     // Hero Name draw can come from another box only when otherBox says so, and only a required group has a substitute.
@@ -600,9 +600,17 @@ public sealed partial class BoxCatalog
 
         foreach (var mastermind in box.AllMasterminds)
         {
-            foreach (var group in (mastermind.AlsoLeads?.GroupIds ?? []).Prepend(mastermind.AlwaysLeads.GroupId).Where(id => !Own(id)))
+            if (!Own(mastermind.AlwaysLeads.GroupId))
             {
-                Refuse(mastermind.Id, "leads", group);
+                Refuse(mastermind.Id, "leads", mastermind.AlwaysLeads.GroupId);
+            }
+
+            // Its other groups can include another box's, as Bastion leads any Sentinel Henchman Group (#186), so long as
+            // one is its own: the setup takes another box's group only when that box is included.
+            if (mastermind.AlsoLeads is { } also && !also.GroupIds.Any(Own))
+            {
+                throw new InvalidDataException(
+                    $"{path}: {mastermind.Id} alsoLeads names only groups from other boxes; at least one must be in {box.Id}.");
             }
         }
 
