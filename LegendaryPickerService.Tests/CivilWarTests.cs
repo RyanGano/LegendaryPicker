@@ -38,11 +38,12 @@ public class CivilWarTests
         Assert.Contains(new RuleNote("Scheme adds 1 Villain Group", "Card", null, "Civil War"), setup.Notes);
     }
 
-    // The team split's search stays fast with every box included, where many teams could take each side (#93). One scripted
-    // draw at 5 players. It takes about 0.3 s alone and took about 3 s before #93, so the 1.5 s budget leaves room for a slow
-    // runner yet still fails on a return to multi-second draws.
+    // The team split's search stays small with every box included, where many teams could take each side (#93). One scripted
+    // draw at 5 players. It counts the search's checks of the Hero Deck's counts rather than timing it, so the result is the
+    // same on any runner. With the boxes of #161 it made 74,361 checks with the team-count bound of #144 and 307,896 without it;
+    // the limit sits between. A new box can raise the count: re-measure both before moving the limit.
     [Fact]
-    public void Avengers_vs_X_Men_draws_quickly_with_every_box()
+    public void Avengers_vs_X_Men_searches_few_Hero_counts_with_every_box()
     {
         var everyBox = Catalog.Boxes.Select(box => box.Id).ToList();
         var schemes = Catalog.Boxes.SelectMany(box => box.Schemes)
@@ -50,13 +51,12 @@ public class CivilWarTests
             .ToList();
         var random = new ScriptedRandom(schemes.FindIndex(scheme => scheme.Name == "Avengers vs. X-Men"));
 
-        var timer = System.Diagnostics.Stopwatch.StartNew();
+        HeroRules.CountChecks = 0;
         var setup = Assert.IsType<SetupResult>(Generator.Generate(5, everyBox, random));
-        timer.Stop();
 
         Assert.Equal("Avengers vs. X-Men", setup.Scheme.Name);
         Assert.Equal([3, 3], setup.Heroes.GroupBy(hero => hero.Team).Select(team => team.Count()));
-        Assert.InRange(timer.ElapsedMilliseconds, 0, 1500);
+        Assert.InRange(HeroRules.CountChecks, 0, 150_000);
     }
 
     // The Aspiring Hero Bystanders gain a Sidekick when rescued, and every setup shuffles them in with the other Bystanders,

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="LegendaryPickerService.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Data\Boxes\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
