@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 7,
+  "id": "revelations",
+  "name": "Revelations",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.2; C1",
+  "about": {"released": {"value": "2019-08", "source": "Q"}},
+  "sources": [
+    {"key": "R", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/2019_Marvel_Legendary_Revelations_Rules_compressed.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "R p.2"}, "villainGroupCards": {"value": 8, "source": "R p.2"}, "henchmanGroupCards": {"value": 10, "source": "R p.2"}, "schemeTwists": {"value": 0, "source": "R p.2"}, "bystanders": {"value": 3, "source": "R p.2"}},
+  "heroes": [
+    {"id": "revelations_hero_captain-marvel-agent-of-shield", "name": "Captain Marvel, Agent of S.H.I.E.L.D.", "heroName": "Captain Marvel", "team": "core_term_shield", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["revelations_term_last-stand"]},
+    {"id": "revelations_hero_darkhawk", "name": "Darkhawk", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_tech"], "terms": ["revelations_term_hyperspeed"]},
+    {"id": "revelations_hero_hellcat", "name": "Hellcat", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct"], "terms": []},
+    {"id": "revelations_hero_photon", "name": "Photon", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["revelations_term_hyperspeed", "revelations_term_last-stand"]},
+    {"id": "revelations_hero_quicksilver", "name": "Quicksilver", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["revelations_term_hyperspeed"]},
+    {"id": "revelations_hero_ronin", "name": "Ronin", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["revelations_term_dark-memories", "revelations_term_hyperspeed"]},
+    {"id": "revelations_hero_scarlet-witch", "name": "Scarlet Witch", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["revelations_term_dark-memories"]},
+    {"id": "revelations_hero_speed", "name": "Speed", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["revelations_term_hyperspeed"]},
+    {"id": "revelations_hero_war-machine", "name": "War Machine", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["revelations_term_hyperspeed"]}
+  ],
+  "villainGroups": [
+    {"id": "revelations_villain_army-of-evil", "name": "Army of Evil", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "revelations_term_location"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "revelations_villain_dark-avengers", "name": "Dark Avengers", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "revelations_term_last-stand", "revelations_term_location"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "revelations_villain_hoods-gang", "name": "Hood's Gang", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "revelations_term_dark-memories", "revelations_term_location"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "revelations_villain_lethal-legion", "name": "Lethal Legion", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "revelations_term_location"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "henchmanGroups": [
+    {"id": "revelations_henchman_hydra-base", "name": "HYDRA Base", "terms": ["core_term_fight", "revelations_term_location"]},
+    {"id": "revelations_henchman_mandarins-rings", "name": "Mandarin's Rings", "terms": ["core_term_fight"]}
+  ],
+  "masterminds": [
+    {"id": "revelations_mastermind_grim-reaper", "name": "Grim Reaper", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "revelations_term_location"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "revelations_villain_lethal-legion", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Grim Reaper", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "R p.2"}]}},
+    {"id": "revelations_mastermind_mandarin", "name": "Mandarin", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "revelations_term_location"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "revelations_henchman_mandarins-rings", "groupType": "henchman", "source": "Card"}, "epic": {"name": "Epic Mandarin", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "R p.2"}]}},
+    {"id": "revelations_mastermind_the-hood", "name": "The Hood", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "revelations_term_dark-memories", "revelations_term_location"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "revelations_villain_hoods-gang", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Hood", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "R p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "revelations_scheme_earthquake-drains-the-ocean", "name": "Earthquake Drains the Ocean", "terms": ["core_term_scheme-twist", "revelations_term_transforming-scheme"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "extraVillainGroups": [{"players": null, "value": 1, "source": "Card"}], "steps": [{"label": "Add two Low Tide city spaces left of the city, for 7 spaces", "source": "Card"}]}},
+    {"id": "revelations_scheme_house-of-m", "name": "House of M", "terms": ["core_term_scheme-twist", "revelations_term_transforming-scheme"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "heroes": [{"players": null, "value": 6, "source": "Card"}], "teamSplit": {"value": [4], "source": "Card"}, "outsideHeroes": [{"to": "villainDeck", "heroName": "Scarlet Witch", "count": [{"players": null, "value": 1, "source": "Card"}]}], "steps": [{"label": "Read the X-Men icons on both sides as the 4 Heroes' team", "source": "Card"}]}},
+    {"id": "revelations_scheme_secret-hydra-corruption", "name": "Secret HYDRA Corruption", "terms": ["core_term_scheme-twist", "revelations_term_transforming-scheme"], "uses": [{"part": "officers", "source": "Card"}], "setup": {"twists": [{"players": [1], "value": 7, "source": "Card"}, {"players": [2, 3], "value": 9, "source": "Card"}, {"players": [4, 5], "value": 11, "source": "Card"}], "steps": [{"label": "Use exactly 30 Officers in the S.H.I.E.L.D. Officer stack", "source": "Card"}]}},
+    {"id": "revelations_scheme_the-korvac-saga", "name": "The Korvac Saga", "terms": ["core_term_scheme-twist", "revelations_term_transforming-scheme"], "uses": [{"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "revelations_term_hyperspeed", "name": "Hyperspeed", "kind": "keyword", "summary": "Reveal the given number of cards from your deck and get +1 Attack for each with an Attack icon, or the icon the card names, then discard them.", "source": "R", "page": 1},
+    {"id": "revelations_term_dark-memories", "name": "Dark Memories", "kind": "keyword", "summary": "A bonus of one per Hero Class found in your discard pile, counting each class once. Grey cards add nothing.", "source": "R", "page": 1},
+    {"id": "revelations_term_last-stand", "name": "Last Stand", "kind": "keyword", "summary": "A bonus of one per city space with no Villain in it. A space that no longer exists doesn't count.", "source": "R", "page": 1},
+    {"id": "revelations_term_location", "name": "Location", "kind": "keyword", "summary": "A card that settles above a city space and stays put while Villains pass beneath it. It isn't a Villain, but you can fight it for its Victory Points.", "source": "R", "page": 1},
+    {"id": "revelations_term_transforming-scheme", "name": "Transforming Scheme", "kind": "keyword", "summary": "A two-sided Scheme. Begin on the side with the Setup line and turn it over whenever it says to; only the side facing up applies.", "source": "R", "page": 2}
+  ]
+}

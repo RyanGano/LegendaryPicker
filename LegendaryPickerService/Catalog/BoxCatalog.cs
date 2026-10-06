@@ -825,10 +825,10 @@ public sealed partial class BoxCatalog
                     $"{path}: {scheme.Id} shuffles {ownTactics.Value} Tactics of its Mastermind into the villainDeck; setup.ownTactics is at least 1.");
             }
 
-            if (scheme.Setup.TeamSplit is { } split && (split.Value.Length < 2 || split.Value.Any(count => count < 1)))
+            if (scheme.Setup.TeamSplit is { } split && (split.Value.Length < 1 || split.Value.Any(count => count < 1)))
             {
                 throw new InvalidDataException(
-                    $"{path}: {scheme.Id} has setup.teamSplit [{string.Join(", ", split.Value)}]; it lists at least 2 teams, each with at least 1 Hero.");
+                    $"{path}: {scheme.Id} has setup.teamSplit [{string.Join(", ", split.Value)}]; it lists at least 1 team, each with at least 1 Hero.");
             }
 
             var required = new HashSet<string>();
