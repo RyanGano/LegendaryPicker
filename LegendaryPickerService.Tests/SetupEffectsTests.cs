@@ -6,9 +6,10 @@ namespace LegendaryPickerService.Tests;
 // Setup effects that add to a count, using Fixtures/SetupEffects: a copy of the core box and a
 // made-up expansion. Catalog order puts the fixture's cards after the core box's, so at 2–5 players the
 // Schemes are the core box's 8, then 8 Test Uprising (+1 Villain Group), 9 Test Recruitment (+1 Hero)
-// and 10 Test Crowd (+1 Bystander in Solo, +2 at 3–5 players, nothing at 2). Solo allows 6 core
-// Schemes, so there they are 6, 7 and 8. The Masterminds are the core box's 4, then 4 Test Recruiter,
-// who always leads the fixture's Test Recruits and adds 1 Hero.
+// and 10 Test Crowd (+1 Bystander in Solo, +2 at 3–5 players, nothing at 2), then 11 Test Muster (4 Henchmen of each
+// Henchman Group). Solo allows 6 core Schemes, so there they are 6, 7, 8 and 9. The Masterminds are the core box's 4,
+// then 4 Test Recruiter, who always leads the fixture's Test Recruits and adds 1 Hero, and 5 Test Swarm Lord, who
+// puts 6 Henchmen of each Henchman Group in the Villain Deck in Solo.
 public sealed class SetupEffectsTests
 {
     private static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "SetupEffects");
@@ -117,5 +118,27 @@ public sealed class SetupEffectsTests
         Assert.Equal(
             ["Scheme adds 1 Hero", "Test Recruiter adds 1 Hero", "Test Recruiter always leads Test Recruits"],
             setup.Notes.Select(note => note.Text));
+    }
+
+    [Fact]
+    public void A_Mastermind_can_set_the_Solo_Henchman_count()
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(0, 5)));
+
+        Assert.Equal("Test Swarm Lord", setup.Mastermind.Name);
+        Assert.Equal(6, setup.VillainDeck.HenchmanCards);
+        Assert.Contains(
+            new RuleNote("Test Swarm Lord puts 6 Henchmen of each Henchman Group in the Villain Deck", "Card", null, FixtureName),
+            setup.Notes);
+    }
+
+    [Fact]
+    public void A_Schemes_Henchman_count_wins_over_the_Masterminds()
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(9, 5)));
+
+        Assert.Equal("Test Muster", setup.Scheme.Name);
+        Assert.Equal(4, setup.VillainDeck.HenchmanCards);
+        Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Test Swarm Lord puts"));
     }
 }

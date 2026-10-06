@@ -1,6 +1,6 @@
 # Annihilation (September 2021)
 
-**Research status: Partial.** The official insert verifies the 100-card breakdown and several mechanics, but not card-level Scheme setups, Always Leads, or full Hero metadata.
+**Research status: Integrated ([#183](https://github.com/RyanGano/LegendaryPicker/issues/183)); partial.** Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked card face (`Card`); Hero teams and classes come from C1 and the cards. Runtime data: `LegendaryPickerService/Data/Boxes/annihilation.json`.
 
 ## Sources
 
@@ -58,7 +58,7 @@ Summaries are original paraphrases under 40 words. Hero teams/classes, Always Le
 
 ## Setup and implementation gaps
 
-Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps; both Masterminds' Always Leads/setup effects; and Hero metadata. Integration must model set-aside cards returning next turn, Villains entering spaces, and city-space destruction; this record changes no runtime data or code.
+Still open: per-face copy counts; the Epic sides' own setup effects (Epic Annihilus adds an extra Villain Group, even for 1 player) are not drawn yet (#151); Annihilus's printed "1 player: Use 6 Henchmen" is modeled as his `setup.henchmanCards` (6 of each Henchman Group in a Solo Villain Deck, in place of Solo's 3; Solo ignores his Always Leads as usual); Heroes of Fantastic Four United and Heralds of Galactus record each card's character as a Hero Name (the Galactus card as "Galactus"). Integration must still model set-aside cards returning next turn, Villains entering spaces, and city-space destruction at play time, which the setup does not need.
 
 ## Structured card-face metadata (C1)
 
