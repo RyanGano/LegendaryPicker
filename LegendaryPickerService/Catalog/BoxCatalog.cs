@@ -207,6 +207,7 @@ public sealed partial class BoxCatalog
             ValidateUses(path, box);
             ValidateOtherRuleset(path, box);
             ValidateOptionalTokens(path, box);
+            ValidateEpicSides(path, box);
         }
 
         // A setup names its cards by display name, so two Heroes, groups, Masterminds or Schemes sharing
@@ -698,6 +699,19 @@ public sealed partial class BoxCatalog
         }
     }
 
+    // An Epic side is a card face of its own, so it has a printed title, and one that tells it from the normal side.
+    private static void ValidateEpicSides(string path, Box box)
+    {
+        foreach (var mastermind in box.Masterminds.Where(m => m.Epic is not null))
+        {
+            var name = mastermind.Epic!.Name;
+            if (string.IsNullOrWhiteSpace(name) || name.Trim().Equals(mastermind.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidDataException($"{path}: {mastermind.Id} epic needs a name that differs from the normal side's.");
+            }
+        }
+    }
+
     // The Token cards are used with cards of the box itself, each named once.
     private static void ValidateOptionalTokens(string path, Box box)
     {
@@ -742,6 +756,7 @@ public sealed partial class BoxCatalog
     // The parts each card, and a base game's rules, list as used.
     private static IEnumerable<(string Owner, IReadOnlyList<PartUse> Uses)> UseLists(Box box) =>
         Cards(box).Where(card => card.Uses is not null).Select(card => ($"{card.Id} uses", card.Uses!))
+            .Concat(box.Masterminds.Where(m => m.Epic?.Uses is not null).Select(m => ($"{m.Id} epic.uses", m.Epic!.Uses!)))
             .Concat(box.Setup is { } setup ? [("setup.uses", setup.Uses)] : [])
             .Concat(box.BystanderUses is { } bystanderUses ? [("bystanderUses", bystanderUses)] : []);
 
@@ -1063,6 +1078,7 @@ public sealed partial class BoxCatalog
         {
             yield return ($"{mastermind.Id} alwaysLeads", mastermind.AlwaysLeads.Source);
             if (mastermind.AlsoLeads is { } also) yield return ($"{mastermind.Id} alsoLeads", also.Source);
+            if (mastermind.Epic is { } epic) yield return ($"{mastermind.Id} epic", epic.Source);
         }
 
         foreach (var scheme in box.Schemes)
