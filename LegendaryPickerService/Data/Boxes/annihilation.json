@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 7,
+  "id": "annihilation",
+  "name": "Annihilation",
+  "ruleset": "firstEdition",
+  "catalogSource": "AN p.2; C1",
+  "about": { "released": { "value": "2021-09", "source": "Q" } },
+  "sources": [
+    { "key": "AN", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Annihilation_Rules.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "AN p.2" },
+    "villainGroupCards": { "value": 8, "source": "AN p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "AN p.2" },
+    "schemeTwists": { "value": 0, "source": "AN p.2" }
+  },
+  "heroes": [
+    {"id": "annihilation_hero_brainstorm", "name": "Brainstorm", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["captain-america-75th-anniversary_term_man-out-of-time"]},
+    {"id": "annihilation_hero_fantastic-four-united", "name": "Fantastic Four United", "heroNames": ["Human Torch", "Thing", "Invisible Woman", "Mr. Fantastic"], "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["fantastic-four_term_focus"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "annihilation_hero_heralds-of-galactus", "name": "Heralds of Galactus", "heroNames": ["Firelord", "Silver Surfer", "Stardust", "Galactus"], "team": null, "classes": ["core_term_covert", "core_term_ranged"], "terms": ["fantastic-four_term_focus", "heroes-of-asgard_term_conqueror"]},
+    {"id": "annihilation_hero_psi-lord", "name": "Psi-Lord", "team": "fantastic-four_term_fantastic-four", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["fantastic-four_term_focus", "captain-america-75th-anniversary_term_man-out-of-time"]},
+    {"id": "annihilation_hero_super-skrull", "name": "Super-Skrull", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["fantastic-four_term_focus", "heroes-of-asgard_term_conqueror"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "villainGroups": [
+    {"id": "annihilation_villain_annihilation-wave", "name": "Annihilation Wave", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "annihilation_term_momentum"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "annihilation_villain_timelines-of-kang", "name": "Timelines of Kang", "terms": ["core_term_escape", "core_term_fight", "heroes-of-asgard_term_conqueror", "captain-america-75th-anniversary_term_man-out-of-time"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "annihilation_mastermind_annihilus", "name": "Annihilus", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "annihilation_term_momentum", "annihilation_term_mass-momentum"], "alwaysLeads": {"groupId": "annihilation_villain_annihilation-wave", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Annihilus", "source": "Card"}, "setup": {"henchmanCards": [{"players": [1], "value": 6, "source": "Card"}], "steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "AN p.2"}]}},
+    {"id": "annihilation_mastermind_kang-the-conqueror", "name": "Kang the Conqueror", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "heroes-of-asgard_term_conqueror", "captain-america-75th-anniversary_term_man-out-of-time"], "alwaysLeads": {"groupId": "annihilation_villain_timelines-of-kang", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Kang the Conqueror", "source": "Card", "uses": [{"part": "wounds", "source": "Card"}]}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "AN p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "annihilation_scheme_pulse-waves-from-the-negative-zone", "name": "Pulse Waves From the Negative Zone", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 9, "source": "Card"}]}},
+    {"id": "annihilation_scheme_sneak-attack-the-heroes-homes", "name": "Sneak Attack the Heroes' Homes", "terms": ["core_term_scheme-twist"], "uses": [{"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}], "moves": [{"card": "hero", "to": "startingDecks", "count": [{"players": null, "value": 3, "source": "Card"}]}, {"card": "wound", "to": "startingDecks", "count": [{"players": null, "value": 3, "source": "Card"}]}], "steps": [{"label": "Each player picks a Hero for the Hero Deck; draw the rest at random", "source": "Card"}, {"label": "Each starting deck gets 3 non-rare cards of different names from that player's Hero", "source": "Card"}]}},
+    {"id": "annihilation_scheme_put-humanity-on-trial", "name": "Put Humanity on Trial", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "moves": [{"card": "bystander", "to": "besideScheme", "count": [{"players": null, "value": 11, "source": "Card"}]}], "steps": [{"label": "Stack the Bystanders face down beside the Scheme as the Galactic Jurors", "source": "Card"}]}},
+    {"id": "annihilation_scheme_breach-parallel-dimensions", "name": "Breach Parallel Dimensions", "terms": ["core_term_scheme-twist", "fantastic-four_term_focus"], "uses": [{"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}], "extraVillainDeckBystanders": [{"players": null, "value": 4, "source": "Card"}], "steps": [{"label": "Deal the Villain Deck into Dimension decks of 1, 2, 3 cards and up", "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "annihilation_term_momentum", "name": "Momentum", "kind": "keyword", "summary": "A Villain with this gets the stated bonus on any turn it has moved into a different city space, however it got there. Moving several spaces still counts once.", "source": "AN", "page": 1},
+    {"id": "annihilation_term_mass-momentum", "name": "Mass Momentum", "kind": "keyword", "summary": "Annihilus's version: the bonus applies once for every Villain in the city that moved into a new space this turn. Escaped Villains don't count.", "source": "AN", "page": 1}
+  ]
+}
