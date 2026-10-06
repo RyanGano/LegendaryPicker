@@ -531,8 +531,8 @@ public sealed partial class BoxCatalog
     }
 
     // A Mastermind's other Always Leads groups name at least one group, each once and none its Always Leads group, so
-    // the choice is real. A required group's own card count is for a Henchman Group and at least 1. A Scheme sets the
-    // Wound stack to a size or per player, not both, and to at least 1 Wound.
+    // the choice is real. A Scheme's choice of one group names at least two groups, each once and none it requires. A required group's own card count is for a Henchman Group and at least 1. A Scheme sets the
+    // Wound stack to a size or per player, not both, and to at least 1 Wound, and the Officer stack to at least 1 Officer.
     private static void ValidateLeadsAndCounts(string path, Box box)
     {
         foreach (var mastermind in box.Masterminds)
@@ -560,6 +560,18 @@ public sealed partial class BoxCatalog
                 }
             }
 
+            if (scheme.Setup.OneOfGroups is { } choice && (choice.GroupIds.Count < 2 || choice.GroupIds.Distinct().Count() != choice.GroupIds.Count
+                || choice.GroupIds.Any(id => (scheme.Setup.RequiredGroups ?? []).Any(group => group.GroupId == id))))
+            {
+                throw new InvalidDataException(
+                    $"{path}: {scheme.Id} setup.oneOfGroups lists [{string.Join(", ", choice.GroupIds)}]; it lists at least 2 groups, each once, none of them in setup.requiredGroups.");
+            }
+
+            if (scheme.Setup.Officers is { } officers && officers.Value < 1)
+            {
+                throw new InvalidDataException($"{path}: {scheme.Id} has setup.officers {officers.Value}; it is at least 1.");
+            }
+
             if (scheme.Setup.Wounds is { } wounds && (wounds.Value < 1 || scheme.Setup.WoundsPerPlayer is not null))
             {
                 throw new InvalidDataException(
@@ -576,7 +588,7 @@ public sealed partial class BoxCatalog
 
     // Every requirement a box's cards make is met inside the box (D-scheme-first, #138), so any setup that includes it
     // can be laid out and no draw is ever checked against the others: a Mastermind's Always Leads and other groups, a
-    // Scheme's required groups and Heroes, the groups it sets cards beside it from, never more cards than a group holds,
+    // Scheme's required groups, the groups it requires one of, its required Heroes, the groups it sets cards beside it from, never more cards than a group holds,
     // the Heroes it names, and the Hero Names and teams its Hero counts and outside draws ask for. A required group or a
     // Hero Name draw can come from another box only when otherBox says so, and only a required group has a substitute.
     // A Scheme's exclusions name Masterminds of its own box, each once. Team splits are left to the base game's Heroes.
@@ -608,6 +620,11 @@ public sealed partial class BoxCatalog
                 {
                     Refuse(scheme.Id, "requires", group.GroupId);
                 }
+            }
+
+            foreach (var group in (setup.OneOfGroups?.GroupIds ?? []).Where(id => !Own(id)))
+            {
+                Refuse(scheme.Id, "requires one of", group);
             }
 
             foreach (var hero in (setup.RequiredHeroes ?? []).Select(rule => rule.HeroId)
@@ -1013,7 +1030,8 @@ public sealed partial class BoxCatalog
             .Concat(box.Masterminds.SelectMany(m => (m.AlsoLeads?.GroupIds ?? []).Select(id => (m.Id, id, m.AlsoLeads!.GroupType))))
             .Concat(box.Schemes.SelectMany(s =>
                 (s.Setup.RequiredGroups ?? []).Select(g => (s.Id, g.GroupId, g.GroupType))
-                    .Concat((s.Setup.CardsBeside ?? []).Select(b => (s.Id, b.GroupId, b.GroupType)))));
+                    .Concat((s.Setup.CardsBeside ?? []).Select(b => (s.Id, b.GroupId, b.GroupType)))
+                    .Concat((s.Setup.OneOfGroups?.GroupIds ?? []).Select(id => (s.Id, id, s.Setup.OneOfGroups!.GroupType)))));
 
     // The Heroes a Scheme requires or draws outside the Hero Deck by id.
     private static IEnumerable<(string Owner, string HeroId)> HeroReferences(Box box) =>
@@ -1100,6 +1118,7 @@ public sealed partial class BoxCatalog
             if (effect.VillainDeckBystanders is { } bystanders) yield return ($"{scheme.Id} setup.villainDeckBystanders", bystanders.Source);
             if (effect.WoundsPerPlayer is { } wounds) yield return ($"{scheme.Id} setup.woundsPerPlayer", wounds.Source);
             if (effect.Wounds is { } woundStack) yield return ($"{scheme.Id} setup.wounds", woundStack.Source);
+            if (effect.Officers is { } officerStack) yield return ($"{scheme.Id} setup.officers", officerStack.Source);
             if (effect.ExtraHenchmanCards is { } extraCards) yield return ($"{scheme.Id} setup.extraHenchmanCards", extraCards.Source);
             if (effect.BindingsPerPlayer is { } bindings) yield return ($"{scheme.Id} setup.bindingsPerPlayer", bindings.Source);
             foreach (var group in effect.RequiredGroups ?? [])
@@ -1109,6 +1128,7 @@ public sealed partial class BoxCatalog
                 if (group.OtherBox?.Substitute is { } substitute) yield return ($"{scheme.Id} setup.requiredGroups.otherBox.substitute", substitute);
             }
 
+            if (effect.OneOfGroups is { } choice) yield return ($"{scheme.Id} setup.oneOfGroups", choice.Source);
             foreach (var exclusion in scheme.ExcludesMasterminds ?? []) yield return ($"{scheme.Id} excludesMasterminds", exclusion.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
             foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);

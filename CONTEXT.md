@@ -95,7 +95,7 @@ A part a setup lays out in place of one no included box supplies, as an expansio
 The shared pool of Shard tokens Guardians of the Galaxy adds (18 double-sided tokens, GG p.2), which players, Villains and Masterminds gain from. It is a part in use like a stack: laid out only when a drawn card gains or spends Shards, holding all the Shard tokens the included boxes supply (the tokens' two sides cover even Unite the Shards' 30 Shards, owner decision #107).
 
 **Required group**:
-A group a Scheme names as required (for example, Skrulls). Like an Always Leads group, it fills a group slot. A Scheme can say how many of a required Henchman Group's cards go in, as Alien Brood Encounters adds all 10 Brood even in Solo.
+A group a Scheme names as required (for example, Skrulls). Like an Always Leads group, it fills a group slot. A Scheme can say how many of a required Henchman Group's cards go in, as Alien Brood Encounters adds all 10 Brood even in Solo. A Scheme can instead require exactly one of several groups and leave the others out, as S.H.I.E.L.D. vs. HYDRA War takes A.I.M., Hydra Offshoot or Hydra Elite but not both: the drawn Mastermind's Always Leads group when it is one of them, otherwise one drawn (#172).
 
 **Horrors**:
 X-Men's 20 Horror cards, which make a game harder (XM p.2). A part in use: the setup lays them out only when a drawn card plays them, as Horror of Horrors does. A Mastermind's Epic side also brings them in, but the setup draws the normal side and only offers the Epic side as a step.

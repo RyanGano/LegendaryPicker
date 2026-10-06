@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 7,
+  "id": "shield",
+  "name": "S.H.I.E.L.D.",
+  "ruleset": "firstEdition",
+  "catalogSource": "SH p.2; C1",
+  "about": {"released": {"value": "2019-12", "source": "Q"}},
+  "sources": [
+    {"key": "SH", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/2019_Marvel_Legendary_SHIELD_Rules_compressed.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "SH p.2"}, "villainGroupCards": {"value": 8, "source": "SH p.2"}, "henchmanGroupCards": {"value": 0, "source": "SH p.2"}, "schemeTwists": {"value": 0, "source": "SH p.2"}, "officers": {"value": 16, "source": "SH p.1"}},
+  "heroes": [
+    {"id": "shield_hero_agent-phil-coulson", "name": "Agent Phil Coulson", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_tech"], "terms": ["shield_term_shield-level", "shield_term_undercover"], "uses": [{"part": "officers", "source": "Card"}]},
+    {"id": "shield_hero_deathlok", "name": "Deathlok", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_strength", "core_term_tech"], "terms": ["shield_term_shield-level", "shield_term_undercover"]},
+    {"id": "shield_hero_mockingbird", "name": "Mockingbird", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": ["shield_term_shield-level", "shield_term_undercover"], "uses": [{"part": "officers", "source": "Card"}]},
+    {"id": "shield_hero_quake", "name": "Quake", "team": "core_term_shield", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["shield_term_shield-level", "shield_term_undercover"], "uses": [{"part": "officers", "source": "Card"}]}
+  ],
+  "villainGroups": [
+    {"id": "shield_villain_aim-hydra-offshoot", "name": "A.I.M., Hydra Offshoot", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "shield_term_hydra-level", "shield_term_undercover"], "uses": [{"part": "wounds", "source": "Card"}, {"part": "officers", "source": "Card"}]},
+    {"id": "shield_villain_hydra-elite", "name": "Hydra Elite", "terms": ["core_term_ambush", "shield_term_hydra-level"], "uses": [{"part": "wounds", "source": "Card"}, {"part": "officers", "source": "Card"}]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "shield_mastermind_hydra-high-council", "name": "Hydra High Council", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "shield_term_adapting-mastermind", "shield_term_hydra-level"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "shield_villain_hydra-elite", "groupType": "villain", "source": "Card"}, "setup": {"steps": [{"label": "No Mastermind card: shuffle the 4 Tactics face up and play the top one", "source": "SH p.2"}]}},
+    {"id": "shield_mastermind_hydra-super-adaptoid", "name": "Hydra Super-Adaptoid", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "shield_term_adapting-mastermind"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "shield_villain_aim-hydra-offshoot", "groupType": "villain", "source": "Card"}, "setup": {"steps": [{"label": "No Mastermind card: shuffle the 4 Tactics face up and play the top one", "source": "SH p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "shield_scheme_hail-hydra", "name": "Hail Hydra", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}]}},
+    {"id": "shield_scheme_hydra-helicarriers-hunt-heroes", "name": "Hydra Helicarriers Hunt Heroes", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "extraHeroes": [{"players": null, "value": 1, "source": "Card"}]}},
+    {"id": "shield_scheme_secret-empire-of-betrayal", "name": "Secret Empire of Betrayal", "terms": ["core_term_scheme-twist"], "uses": [{"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "outsideHeroes": [{"to": "setAside", "count": [{"players": null, "value": 1, "source": "Card"}]}], "steps": [{"label": "Make the Dark Loyalty deck: 5 random cards costing 5 or less from that Hero", "source": "Card"}]}},
+    {"id": "shield_scheme_shield-vs-hydra-war", "name": "S.H.I.E.L.D. vs. HYDRA War", "terms": ["core_term_scheme-twist", "shield_term_hydra-level", "shield_term_undercover"], "uses": [{"part": "officers", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 7, "source": "Card"}], "oneOfGroups": {"groupIds": ["shield_villain_aim-hydra-offshoot", "shield_villain_hydra-elite"], "groupType": "villain", "source": "Card"}}}
+  ],
+  "glossary": [
+    {"id": "shield_term_undercover", "name": "Undercover", "kind": "keyword", "summary": "Putting a Hero card into your Victory Pile, where it scores 1 VP. A card that sends itself there still gives the Recruit and Attack it played for.", "source": "SH", "page": 1},
+    {"id": "shield_term_shield-level", "name": "S.H.I.E.L.D. Level", "kind": "keyword", "summary": "How many S.H.I.E.L.D. or HYDRA cards, by team icon or name, are in your Victory Pile. An ability marked with a Level works only at that count or more, and spends nothing.", "source": "SH", "page": 1},
+    {"id": "shield_term_hydra-level", "name": "Hydra Level", "kind": "keyword", "summary": "How many S.H.I.E.L.D. or HYDRA cards, by team icon or name, are in the Escape Pile. Some Villains and Masterminds grow stronger as it rises.", "source": "SH", "page": 2},
+    {"id": "shield_term_adapting-mastermind", "name": "Adapting Mastermind", "kind": "keyword", "summary": "A Mastermind of four Tactics and no Mastermind card: the face-up Tactic on top is the one in play. To Adapt, shuffle the Tactics left and turn a random one up on top.", "source": "SH", "page": 2}
+  ]
+}

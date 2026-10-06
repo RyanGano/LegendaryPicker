@@ -411,7 +411,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 plan.TwistsBeside,
                 new SetupStacks(
                     Stack(Part.Wounds, (plan.Wounds ?? Supply(Part.Wounds)) - plan.MovedOut(Pile.Wounds)),
-                    Stack(Part.Officers, Supply(Part.Officers) - plan.MovedOut(Pile.Officers)),
+                    Stack(Part.Officers, (plan.Officers ?? Supply(Part.Officers)) - plan.MovedOut(Pile.Officers)),
                     stackBoxes.Sum(box => box.Components.Bystanders?.Value ?? 0) - plan.Bystanders - plan.MovedOut(Pile.Bystanders),
                     Stack(Part.Sidekicks, Supply(Part.Sidekicks) - plan.MovedOut(Pile.Sidekicks)),
                     Stack(Part.Bindings, (plan.Bindings ?? Supply(Part.Bindings)) - plan.MovedOut(Pile.Bindings)),
@@ -489,7 +489,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     $"{bystanders} Bystanders in the {_terms.VillainDeck}", $"puts {bystanders} Bystanders in the {_terms.VillainDeck}", schemeBystanders.Source));
             }
 
-            // The Wound and Bindings stacks hold what the boxes supply unless the Scheme sets their size. A Scheme
+            // The Wound, Officer and Bindings stacks hold what the boxes supply unless the Scheme sets their size. A Scheme
             // that sets one stack's size sets that stack only.
             int? wounds = null;
             if (effect.WoundsPerPlayer is { } woundsPerPlayer)
@@ -502,6 +502,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 wounds = woundStack.Value;
                 notes.Add(Card($"{schemeWord} sets the Wound stack to {woundStack.Value}", woundStack.Source));
+            }
+
+            int? officers = null;
+            if (effect.Officers is { } officerStack)
+            {
+                officers = officerStack.Value;
+                notes.Add(Card($"{schemeWord} sets the {CardName(CardKind.Officer, 2)} stack to {officerStack.Value}", officerStack.Source));
             }
 
             int? bindings = null;
@@ -648,6 +655,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 Solo ? rules.Solo.MasterStrikes.Value : rules.MasterStrikes.Value,
                 bystanders,
                 wounds,
+                officers,
                 bindings,
                 moves,
                 outside,
@@ -704,7 +712,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             };
         }
 
-        // Fills one group type's slots: the Scheme's required groups first, then the Always Leads
+        // Fills one group type's slots: the Scheme's required groups first, then the one it requires of several, then the Always Leads
         // group if a slot is left, then draws for the rest. A required group keeps its slot over
         // the Always Leads group. A required group from a box the setup doesn't include is still drawn, as the
         // player owns it, unless its card gives a substitute: then a group drawn from the pool takes its place, and
@@ -739,6 +747,21 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(included
                     ? Note(text, rule.Source, BoxOf(scheme.Id), scheme.Id)
                     : Note($"{text}, from {from.Name}, which isn't included", rule.OtherBox!.Source, BoxOf(scheme.Id), scheme.Id));
+            }
+
+            // The one group the Scheme requires of several: the Mastermind's Always Leads group when it is one of them, so
+            // both rules are met, or else one drawn. The others are left out of every later draw (#172).
+            if (scheme.Setup.OneOfGroups is { } choice && choice.GroupType == type)
+            {
+                var options = choice.GroupIds.Select(id => (T)CatalogGroup(id)).ToList();
+                var leadsOne = !IgnoresAlwaysLeads && mastermind.AlwaysLeads.GroupType == type && choice.GroupIds.Contains(mastermind.AlwaysLeads.GroupId);
+                var group = leadsOne ? (T)CatalogGroup(mastermind.AlwaysLeads.GroupId) : DrawOne(options);
+                chosen.Add(group);
+                required[group.Id] = new RequiredGroup(group.Id, type, choice.Source);
+                pool = pool.Where(g => g.Id == group.Id || !choice.GroupIds.Contains(g.Id)).ToList();
+                notes.Add(Note(
+                    $"{SchemeWord(scheme)} requires one of {string.Join(" and ", options.Select(g => g.Name))}, not both: {group.Name}",
+                    choice.Source, BoxOf(scheme.Id), scheme.Id));
             }
 
             // The Always Leads group of each Mastermind the Scheme sets aside, as an extra group of its own.
@@ -1086,6 +1109,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int MasterStrikes,
         int Bystanders,
         int? Wounds,
+        int? Officers,
         int? Bindings,
         IReadOnlyList<MovedCards> Moves,
         IReadOnlyList<OutsideDraw> Outside,

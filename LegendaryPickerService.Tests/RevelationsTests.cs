@@ -33,7 +33,7 @@ public class RevelationsTests
         var setup = Draw(players, "Secret HYDRA Corruption");
 
         Assert.Equal(twists, setup.VillainDeck.Twists);
-        Assert.Contains("Use exactly 30 Officers in the S.H.I.E.L.D. Officer stack", setup.Steps);
+        Assert.Equal(30, setup.Stacks.Officers);
     }
 
     private static SetupResult Draw(int players, string scheme)
