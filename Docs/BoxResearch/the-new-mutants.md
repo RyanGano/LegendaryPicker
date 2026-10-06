@@ -1,6 +1,6 @@
 # The New Mutants (April 2020)
 
-**Research status: Partial.** The official insert verifies the 100-card breakdown and three mechanics, but not individual Scheme setups, Always Leads, or full Hero metadata.
+**Research status: Partial.** The official insert verifies the 100-card breakdown and three mechanics. For #177 the Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/the-new-mutants.json`; per-face copy counts remain open.
 
 ## Sources
 
@@ -32,7 +32,7 @@ The listed categories sum to the official 100-card total.
 - **Masterminds (two):** Belasco, Demon Lord of Limbo; Emma Frost, The White Queen.
 - **Schemes (four):** The Demon Bear Saga; Crash the Moon into the Sun; Trapped in the Insane Asylum; Superhuman Baseball Game.
 
-The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index and all setup/rules claims still need an allowed source; unresolved areas include Hero metadata, Always Leads, full individual Scheme/Mastermind setup lines, or card-linked component dependencies.
+The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index still need an allowed source; Scheme Setup lines, Always Leads and part uses were read from the linked faces (#177), and per-face copy counts remain open.
 
 ## Rules and mechanisms
 
@@ -49,11 +49,11 @@ The official contents list identifies no new shared stack, token, or card type b
 - **Sunlight:** A condition based on most HQ Heroes having even printed costs. (NM p.1)
 - **Waking Nightmare:** Discard a non-grey Hero from hand and draw a card if one was discarded. (NM p.2)
 
-Summaries are original paraphrases under 40 words. Product-specific Hero teams/classes, Always Leads, and component dependencies require card-level sources.
+Summaries are original paraphrases under 40 words. From the card faces (#177): both Villain Groups and an Emma Frost Tactic give Wounds; no card uses another shared stack.
 
 ## Setup and implementation gaps
 
-Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps, plus each Mastermind's Always Leads/setup effect and Hero metadata. The runtime must evaluate Moonlight/Sunlight from the current HQ's printed costs when abilities resolve; this record changes no runtime data or code.
+Per-face copy counts for Heroes, Masterminds and Tactics are not indexed by C1 and remain unverified. Moonlight and Sunlight are evaluated during play and have no setup effect.
 
 ## Structured card-face metadata (C1)
 
