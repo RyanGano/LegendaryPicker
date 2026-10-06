@@ -11,7 +11,8 @@ namespace LegendaryPickerService.Tests;
 // 10 Test Summons (requires Test Nova Rider), 11 Test Web (at least 1 Spider Friends Hero), 12 Test
 // Corps (exactly 2 Test Nova Heroes), 13 Test Unique (requires Test Jean Grey, no two Heroes with the same
 // Hero Name), 14 Test Vault (2 extra X-Men Heroes set aside, 1 in Solo), 15 Test Lair (Test Phoenix
-// beside the Scheme) and 16 Test Guest Star (1 Test Visitor, from the Visitors fixture, into the Villain Deck).
+// beside the Scheme) and 16 Test Guest Star (1 Test Visitor Hero, which only the Visitors and Voyagers fixtures hold,
+// into the Villain Deck).
 // Solo allows 6 core Schemes, so there Test Vault is 12. Mastermind draw 0 is Dr. Doom,
 // who leads a Henchman Group, so a 2-player setup draws 2 Villain Groups and then its Heroes.
 public sealed class HeroRulesTests
@@ -125,6 +126,22 @@ public sealed class HeroRulesTests
         Assert.DoesNotContain(Hero("visitors_hero_test-visitor"), setup.Heroes);
         var guest = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).OutsideHeroes.Single().Hero;
         Assert.Equal(("Visitors Fixture", !visitors), (guest.Box, guest.NotIncluded));
+    }
+
+    // The Voyagers fixture's Test Visitor Prime also has the Hero Name Test Visitor, but uses Sidekicks, which only the
+    // Visitors fixture supplies, so it isn't in the draw's usual pool. With Voyagers included and Visitors not, Test
+    // Guest Star still takes the included Test Visitor Prime rather than the first Test Visitor of the loaded boxes,
+    // Visitors' own, and lays out Visitors' Sidekicks for it (#150).
+    [Fact]
+    public void A_Hero_a_Scheme_may_take_from_another_box_comes_from_the_included_boxes_when_one_has_its_Hero_Name()
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, ["core", "heroes", "voyagers"], new ScriptedRandom(16, 0)));
+
+        Assert.Equal("Test Guest Star", setup.Scheme.Name);
+        Assert.Equal([new OutsideHero(Hero("voyagers_hero_test-visitor-prime"), Pile.VillainDeck, 14)], setup.OutsideHeroes);
+        Assert.Equal(15, setup.Stacks.Sidekicks);
+        var guest = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).OutsideHeroes.Single().Hero;
+        Assert.Equal(("Voyagers Fixture", false), (guest.Box, guest.NotIncluded));
     }
 
     [Fact]

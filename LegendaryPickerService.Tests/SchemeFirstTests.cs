@@ -149,8 +149,25 @@ public sealed class SchemeFirstTests : IDisposable
         Assert.Contains(new RuleNote("Scheme requires HYDRA", "R p.3", "https://example.test/fixture-rules.pdf", "Fixture Expansion"), setup.Notes);
     }
 
-    // The real core box, the fixture expansion, its required group given a substitute when asked, and Frontier.
-    private BoxCatalog FrontierCatalog(bool substitute)
+    // A box the setup includes that reprints the required group holds it, so the group is an ordinary included one and the
+    // checklist sends the player to that box rather than to the core box (#150).
+    [Fact]
+    public void A_required_group_an_included_box_reprints_is_drawn_from_that_box()
+    {
+        var catalog = FrontierCatalog(substitute: false, reprintsHydra: true);
+
+        var setup = Assert.IsType<SetupResult>(new SetupGenerator(catalog).Generate(2, ["frontier", "fixture"], new ScriptedRandom(0, 1)));
+
+        Assert.Equal("Test Heist", setup.Scheme.Name);
+        Assert.Equal("HYDRA", setup.VillainGroups[0].Name);
+        Assert.Contains(new RuleNote("Scheme requires HYDRA", "R p.3", "https://example.test/fixture-rules.pdf", "Fixture Expansion"), setup.Notes);
+        var hydra = Assert.IsType<SetupBody>(SetupResponse.From(setup, catalog)).VillainGroups[0];
+        Assert.Equal(("Frontier", false), (hydra.Box, hydra.NotIncluded));
+    }
+
+    // The real core box, the fixture expansion, its required group given a substitute when asked, and Frontier, which
+    // reprints the core box's HYDRA when asked.
+    private BoxCatalog FrontierCatalog(bool substitute, bool reprintsHydra = false)
     {
         var core = File.ReadAllText(Path.Combine(BoxCatalog.DefaultDirectory, "core.json"));
         File.WriteAllText(Path.Combine(_directory, "core.json"), core);
@@ -166,6 +183,10 @@ public sealed class SchemeFirstTests : IDisposable
         var frontier = JsonNode.Parse(core.Replace("\"core_", "\"frontier_"))!.AsObject();
         frontier["id"] = "frontier";
         frontier["name"] = "Frontier";
+        if (reprintsHydra)
+        {
+            frontier["reprints"] = new JsonObject { ["value"] = new JsonArray("core_villain_hydra"), ["source"] = "R p.1" };
+        }
         foreach (var list in new[] { "heroes", "villainGroups", "henchmanGroups", "masterminds", "schemes" })
         {
             foreach (var entry in frontier[list]!.AsArray())
