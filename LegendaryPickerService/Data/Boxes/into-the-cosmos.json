@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 7,
+  "id": "into-the-cosmos",
+  "name": "Into the Cosmos",
+  "ruleset": "firstEdition",
+  "catalogSource": "IC p.2; C1",
+  "about": { "released": { "value": "2020-08", "source": "Q" } },
+  "sources": [
+    { "key": "IC", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/IntoTheCosmos_Rules.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "IC p.2" },
+    "villainGroupCards": { "value": 8, "source": "IC p.2" },
+    "henchmanGroupCards": { "value": 10, "source": "IC p.2" },
+    "schemeTwists": { "value": 0, "source": "IC p.2" },
+    "bystanders": { "value": 3, "source": "IC p.2" },
+    "shards": { "value": 18, "source": "IC p.2" }
+  },
+  "heroes": [
+    {"id": "into-the-cosmos_hero_adam-warlock", "name": "Adam Warlock", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["guardians-of-the-galaxy_term_shard", "into-the-cosmos_term_burn-shards"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_hero_captain-mar-vell", "name": "Captain Mar-Vell", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["guardians-of-the-galaxy_term_shard", "spider-man-homecoming_term_danger-sense"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_hero_moondragon", "name": "Moondragon", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["guardians-of-the-galaxy_term_shard", "spider-man-homecoming_term_danger-sense"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_hero_nebula", "name": "Nebula", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["guardians-of-the-galaxy_term_shard"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_hero_nova", "name": "Nova (Into the Cosmos)", "heroName": "Nova", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["guardians-of-the-galaxy_term_shard", "fantastic-four_term_cosmic-threat"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_hero_phyla-vell", "name": "Phyla-Vell", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["guardians-of-the-galaxy_term_shard"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_hero_quasar", "name": "Quasar", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["guardians-of-the-galaxy_term_shard", "into-the-cosmos_term_burn-shards"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_hero_ronan-the-accuser", "name": "Ronan the Accuser", "team": null, "classes": ["core_term_strength", "core_term_tech"], "terms": ["guardians-of-the-galaxy_term_shard", "into-the-cosmos_term_burn-shards", "into-the-cosmos_term_contest-of-champions"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_hero_yondu", "name": "Yondu", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["guardians-of-the-galaxy_term_shard", "into-the-cosmos_term_burn-shards", "spider-man-homecoming_term_danger-sense"], "uses": [{"part": "shards", "source": "Card"}]}
+  ],
+  "villainGroups": [
+    {"id": "into-the-cosmos_villain_black-order-of-thanos", "name": "Black Order of Thanos", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "spider-man-homecoming_term_danger-sense"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "into-the-cosmos_villain_celestials", "name": "Celestials", "terms": ["core_term_escape", "core_term_fight", "fantastic-four_term_cosmic-threat", "into-the-cosmos_term_celestial-boon", "guardians-of-the-galaxy_term_shard"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_villain_elders-of-the-universe", "name": "Elders of the Universe", "terms": ["core_term_ambush", "core_term_fight", "into-the-cosmos_term_contest-of-champions", "guardians-of-the-galaxy_term_shard"], "uses": [{"part": "wounds", "source": "Card"}, {"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_villain_from-beyond", "name": "From Beyond", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "fantastic-four_term_cosmic-threat"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "henchmanGroups": [
+    {"id": "into-the-cosmos_henchman_sidera-maris-bridge-builders", "name": "Sidera Maris, Bridge Builders", "terms": ["core_term_ambush", "core_term_fight", "guardians-of-the-galaxy_term_shard"], "uses": [{"part": "shards", "source": "Card"}]},
+    {"id": "into-the-cosmos_henchman_universal-church-of-truth", "name": "Universal Church of Truth", "terms": ["core_term_ambush", "core_term_fight", "guardians-of-the-galaxy_term_shard", "into-the-cosmos_term_burn-shards"], "uses": [{"part": "shards", "source": "Card"}]}
+  ],
+  "masterminds": [
+    {"id": "into-the-cosmos_mastermind_the-beyonder", "name": "The Beyonder", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "fantastic-four_term_cosmic-threat", "into-the-cosmos_term_contest-of-champions"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "into-the-cosmos_villain_from-beyond", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Beyonder", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "IC p.2"}]}},
+    {"id": "into-the-cosmos_mastermind_the-grandmaster", "name": "The Grandmaster", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "into-the-cosmos_term_contest-of-champions", "guardians-of-the-galaxy_term_shard"], "uses": [{"part": "wounds", "source": "Card"}, {"part": "shards", "source": "Card"}], "alwaysLeads": {"groupId": "into-the-cosmos_villain_elders-of-the-universe", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Grandmaster", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "IC p.2"}]}},
+    {"id": "into-the-cosmos_mastermind_magus", "name": "Magus", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "guardians-of-the-galaxy_term_shard"], "uses": [{"part": "wounds", "source": "Card"}, {"part": "shards", "source": "Card"}], "alwaysLeads": {"groupId": "into-the-cosmos_henchman_universal-church-of-truth", "groupType": "henchman", "source": "Card"}, "epic": {"name": "Epic Magus", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "IC p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "into-the-cosmos_scheme_the-contest-of-champions", "name": "The Contest of Champions", "terms": ["core_term_scheme-twist", "into-the-cosmos_term_contest-of-champions"], "uses": [{"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "extraHeroes": [{"players": null, "value": 1, "source": "Card"}], "steps": [{"label": "Lay 11 random Hero Deck cards face up as the Contest Row", "source": "Card"}]}},
+    {"id": "into-the-cosmos_scheme_turn-the-soul-of-adam-warlock", "name": "Turn the Soul of Adam Warlock", "terms": ["core_term_scheme-twist"], "uses": [{"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 14, "source": "Card"}], "outsideHeroes": [{"to": "setAside", "hero": "into-the-cosmos_hero_adam-warlock", "count": [{"players": null, "value": 1, "source": "Card"}]}], "steps": [{"label": "Use 3 Wounds as the 12th to 14th Twists", "source": "Card"}, {"label": "Stack Adam Warlock's 14 cards face up, cheapest on top", "source": "Card"}]}},
+    {"id": "into-the-cosmos_scheme_destroy-the-nova-corps", "name": "Destroy the Nova Corps", "terms": ["core_term_scheme-twist", "guardians-of-the-galaxy_term_shard"], "uses": [{"part": "shards", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 9, "source": "Card"}], "heroes": [{"players": [1], "value": 5, "source": "Card"}], "heroCounts": [{"heroName": "Nova", "exactly": 1, "source": "Card"}], "moves": [{"card": "wound", "to": "startingDecks", "count": [{"players": null, "value": 2, "source": "Card"}]}, {"card": "officer", "to": "startingDecks", "count": [{"players": null, "value": 1, "source": "Card"}]}, {"card": "hero", "to": "startingDecks", "count": [{"players": null, "value": 1, "source": "Card"}]}], "steps": [{"label": "The Hero card in each starting deck is a Nova card that costs 2", "source": "Card"}]}},
+    {"id": "into-the-cosmos_scheme_annihilation-conquest", "name": "Annihilation: Conquest", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "extraHeroes": [{"players": null, "value": 1, "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "into-the-cosmos_term_burn-shards", "name": "Burn Shards", "kind": "keyword", "summary": "Pay the listed number of your Shards, once a turn, to get the card's effect. Shards paid this way give none of their usual bonus.", "source": "IC", "page": 1},
+    {"id": "into-the-cosmos_term_contest-of-champions", "name": "Contest of Champions", "kind": "keyword", "summary": "Each player scores one card from hand, from play this turn or atop their deck: its cost, doubled for the named icon. Evil scores its best top Hero Deck card; top scores, ties too, win.", "source": "IC", "page": 2},
+    {"id": "into-the-cosmos_term_celestial-boon", "name": "Celestial Boon", "kind": "keyword", "summary": "Fighting a Celestial earns its lasting bonus, kept while that Celestial sits in your Victory Pile. Several Boons, even repeats, all apply.", "source": "IC", "page": 2}
+  ]
+}

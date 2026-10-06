@@ -17,6 +17,7 @@ public class BoxDataTests
         { "shield", 4, 2, 0, 2, 4 },
         { "heroes-of-asgard", 5, 2, 0, 2, 4 },
         { "the-new-mutants", 5, 2, 0, 2, 4 },
+        { "into-the-cosmos", 9, 4, 2, 3, 4 },
         { "captain-america-75th-anniversary", 5, 2, 0, 2, 4 },
         { "champions", 5, 2, 0, 2, 4 },
         { "civil-war", 16, 7, 2, 5, 8 },
@@ -66,6 +67,6 @@ public class BoxDataTests
         var recorded = Catalog.Boxes.SelectMany(box => box.Masterminds).Where(m => m.Epic is not null).Select(m => m.Id).Order().ToList();
 
         Assert.Equal(offers, recorded);
-        Assert.Equal(22, recorded.Count);
+        Assert.Equal(25, recorded.Count);
     }
 }
