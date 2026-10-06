@@ -14,7 +14,7 @@
     {"id": "champions_hero_gwenpool", "name": "Gwenpool", "team": "champions_term_champions", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["champions_term_versatile", "civil-war_term_size-changing", "champions_term_cheering-crowds", "champions_term_demolish"]},
     {"id": "champions_hero_ms-marvel", "name": "Ms. Marvel", "team": "champions_term_champions", "classes": ["core_term_covert", "core_term_strength"], "terms": ["civil-war_term_size-changing", "champions_term_versatile", "champions_term_cheering-crowds"]},
     {"id": "champions_hero_nova", "name": "Nova", "team": "champions_term_champions", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["champions_term_versatile", "champions_term_cheering-crowds", "civil-war_term_size-changing"]},
-    {"id": "champions_hero_totally-awesome-hulk", "name": "Totally Awesome Hulk", "team": "champions_term_champions", "classes": ["core_term_strength", "core_term_tech"], "terms": ["civil-war_term_size-changing", "champions_term_cheering-crowds"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "champions_hero_totally-awesome-hulk", "name": "Totally Awesome Hulk", "heroName": "Hulk", "team": "champions_term_champions", "classes": ["core_term_strength", "core_term_tech"], "terms": ["civil-war_term_size-changing", "champions_term_cheering-crowds"], "uses": [{"part": "wounds", "source": "Card"}]},
     {"id": "champions_hero_viv-vision", "name": "Viv Vision", "team": "champions_term_champions", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["civil-war_term_size-changing", "champions_term_versatile", "champions_term_cheering-crowds"]}
   ],
   "villainGroups": [

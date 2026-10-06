@@ -48,6 +48,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\HeroNameWords\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion with a two-team, two-name Divided Card Hero and a version of a core Hero, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\HeroIdentity\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\HeroIdentity\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Schemes ask for Heroes of different teams the draw picks, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\TeamSplit\*.json" CopyToOutputDirectory="PreserveNewest" />

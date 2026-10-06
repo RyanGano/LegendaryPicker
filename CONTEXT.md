@@ -53,10 +53,10 @@ _Avoid_: Card move, which moves cards of a kind from the drawn groups or a stack
 A setup effect that changes no count but still has to be done while laying out, for example placing a token on the Scheme or splitting the Villain Deck into piles. The Setup checklist lists it as a line to tick, and a rule note cites the card or rule that prints it. Its label is a short instruction of at most 15 words in our own words, never card text.
 
 **Hero Name**:
-The character a Hero card set is for (for example Jean Grey). Different Heroes can share a Hero Name, such as two versions of one character; a Hero with no other version has its own name as its Hero Name. A Hero of Divided Cards takes the Hero Name on their left half, which setup and sorting use (CW p.1): Storm for Storm & Black Panther.
+The character a Hero card set is for (for example Jean Grey). Different Heroes can share a Hero Name, such as two versions of one character; a Hero with no other version has its own name as its Hero Name. A version of a character shares its Hero Name: Spider-Man Noir is Spider-Man. A Hero of Divided Cards whose halves show two names counts under either one, as Colossus & Wolverine counts as Wolverine (#149).
 
 **Divided Card**:
-A Civil War Hero card printed as two half-cards. It is one card for every count, so a Hero of Divided Cards is still 14 cards, and it sorts by its left half's Hero Name.
+A Civil War Hero card printed as two half-cards. It is one card for every count, so a Hero of Divided Cards is still 14 cards, and it sorts by its left half's Hero Name. In hand it counts as both halves' Hero Names and teams, so a Hero whose halves show two teams fills either team's count, one at a time (Storm & Black Panther: X-Men or Avengers, #149).
 
 **Display name**:
 The name a setup shows for a Hero, Villain Group, Henchman Group, Mastermind or Scheme. No two of one kind share a display name across the boxes, so the player can always tell which card to use. A new version of a character takes a distinguishing name: its printed card title when that differs (Symbiote Spider-Man), otherwise the title with its version in brackets (Wolverine (X-Force)). It keeps the shared Hero Name.
@@ -68,7 +68,7 @@ A box's printing of another box's Hero, group, Mastermind or Scheme, as Marvel S
 A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team, with a Hero Name, or with a word in their Hero Names (Fall of the Hulks: exactly 2 with "Hulk"); a team split, exactly some number of Heroes of each of several different teams the draw picks (Avengers vs. X-Men: 3 of one team and 3 of another); or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, which the Scheme's own box's Heroes can always meet (#138).
 
 **Hero outside the Hero Deck**:
-A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to the Villain Deck, beside the Scheme, or a stack set aside. The draw can name the Hero, or limit it to a Hero Name, a list of Hero Names (every Jean Grey for Transform Citizens into Demons), a word in the Hero Name ("Hulk" for Shoot Hulk into Space) or a team.
+A Hero a Scheme draws in addition to the Hero Deck, which sends all its cards to the Villain Deck, beside the Scheme, or a stack set aside. The draw can name the Hero, or limit it to a Hero Name, a list of Hero Names, a word in the Hero Name ("Hulk" for Shoot Hulk into Space) or a team.
 
 _Avoid_: Extra Hero, which is the setup effect that adds a Hero to the Hero Deck.
 

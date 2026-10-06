@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 7,
+  "id": "identity",
+  "name": "Hero Identity Fixture",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.1",
+  "about": { "released": { "value": "2020-01", "source": "R p.1" } },
+  "sources": [
+    { "key": "R", "url": "https://example.test/identity-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [
+    { "id": "identity_hero_test-storm-and-panther", "name": "Test Storm & Panther", "heroNames": ["Test Storm", "Test Panther"], "team": "core_term_x-men", "alsoTeam": "core_term_avengers", "classes": ["core_term_ranged"], "terms": [] },
+    { "id": "identity_hero_test-colossus-and-wolverine", "name": "Test Colossus & Wolverine", "heroNames": ["Test Colossus", "Wolverine"], "team": "core_term_x-men", "classes": ["core_term_strength"], "terms": [] },
+    { "id": "identity_hero_test-wolverine-noir", "name": "Test Wolverine Noir", "heroName": "Wolverine", "team": "core_term_x-men", "classes": ["core_term_instinct"], "terms": [] }
+  ],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [],
+  "schemes": [
+    {
+      "id": "identity_scheme_test-claws",
+      "name": "Test Claws",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "outsideHeroes": [{ "to": "villainDeck", "heroName": "Wolverine", "count": [{ "players": null, "value": 1, "source": "Card" }] }]
+      }
+    },
+    {
+      "id": "identity_scheme_test-pair",
+      "name": "Test Pair",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "heroes": [{ "players": null, "value": 2, "source": "Card" }],
+        "heroCounts": [
+          { "team": "core_term_avengers", "exactly": 1, "source": "Card" },
+          { "team": "core_term_x-men", "exactly": 1, "source": "Card" }
+        ]
+      }
+    },
+    {
+      "id": "identity_scheme_test-rivalry",
+      "name": "Test Rivalry",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "heroes": [{ "players": null, "value": 6, "source": "Card" }],
+        "teamSplit": { "value": [3, 3], "source": "Card" }
+      }
+    }
+  ],
+  "glossary": []
+}

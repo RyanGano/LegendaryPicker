@@ -19,7 +19,7 @@ public class XMenTests
 
         Assert.Contains("Hellfire Club", setup.VillainGroups.Select(group => group.Name));
         var outside = Assert.Single(setup.OutsideHeroes);
-        Assert.Equal(("Jean Grey", Pile.VillainDeck, 14), (outside.Hero.NameOfHero, outside.To, outside.Cards));
+        Assert.Equal(("Jean Grey", Pile.VillainDeck, 14), (outside.Hero.NamesOfHero.Single(), outside.To, outside.Cards));
         Assert.Equal(14, setup.VillainDeck.OutsideHeroCards);
     }
 

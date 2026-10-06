@@ -36,7 +36,7 @@ public class WorldWarHulkTests
         var setup = Draw(2, scheme, "The Sentry");
 
         var outside = Assert.Single(setup.OutsideHeroes);
-        Assert.Contains("Hulk", outside.Hero.NameOfHero);
+        Assert.Contains("Hulk", outside.Hero.Name);
         Assert.Equal((Pile.SetAside, 14), (outside.To, outside.Cards));
         Assert.DoesNotContain(outside.Hero, setup.Heroes);
         Assert.Contains(step, setup.Steps);

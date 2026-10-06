@@ -6,13 +6,23 @@ namespace LegendaryPickerService.Setup;
 // Heroes and Hero counts, whether two Heroes may share a Hero Name, and each Hero it draws outside the Hero
 // Deck. It answers whether a partial choice of Heroes can still be completed, so the generator can drop a
 // Scheme whose rules the included Heroes can't meet and keep every draw away from a dead end. A Hero count
-// counts only the Heroes in the Hero Deck, never those drawn outside it (D-readings).
+// counts only the Heroes in the Hero Deck, never those drawn outside it (D-readings). A Divided Card Hero with two
+// teams fills either team's count but not both (#149): when the Scheme counts Heroes by team, the search sees each
+// such Hero once per team, as a side, and uses at most one side of it.
 internal sealed class HeroRules
 {
     private readonly IReadOnlyList<Hero> _heroes;
     private readonly IReadOnlyList<HeroCount> _counts;
     private readonly bool _distinctNames;
     private readonly Dictionary<Hero, string> _kinds;
+
+    // The Scheme's different draws outside the Hero Deck, and, when no two Heroes may share a Hero Name, the Hero
+    // Names more than one included Hero has.
+    private readonly List<OutsideHeroes> _outsideRules;
+    private readonly HashSet<string> _sharedNames;
+
+    // Whether a Hero counts as the one team it is used as, because the Scheme counts Heroes by team.
+    private readonly bool _bySide;
 
     // With a team split, the rules for each way of giving its counts to different teams of the included Heroes, as
     // exact team counts; the Heroes can be completed when any one of them can.
@@ -22,11 +32,17 @@ internal sealed class HeroRules
     // the Hero Deck, in the order the Scheme lists its draws.
     public HeroRules(IReadOnlyList<Hero> heroes, int deckSlots, SchemeSetup scheme, IReadOnlyList<OutsideHeroes> outsideSlots)
     {
-        _heroes = heroes;
         _counts = scheme.HeroCounts ?? [];
+        _bySide = _counts.Any(count => count.Team is not null);
         _distinctNames = scheme.DistinctHeroNames?.Value ?? false;
         DeckSlots = deckSlots;
         OutsideSlots = outsideSlots;
+        _outsideRules = outsideSlots.Distinct().ToList();
+        _sharedNames = _distinctNames
+            ? heroes.SelectMany(hero => hero.NamesOfHero).GroupBy(name => name).Where(name => name.Count() > 1).Select(name => name.Key).ToHashSet()
+            : [];
+        _heroes = heroes.SelectMany(SidesOf).ToList();
+        _kinds = _heroes.ToDictionary(hero => hero, KindOf);
 
         if (scheme.TeamSplit is { } split)
         {
@@ -38,19 +54,6 @@ internal sealed class HeroRules
                 }, outsideSlots))
                 .ToList();
         }
-
-        // A Hero's kind: which counts it matches, which draws outside the Hero Deck it fits, and, when no
-        // two Heroes may share a Hero Name, its Hero Name if another included Hero has it too. Heroes of one
-        // kind are interchangeable to every rule here.
-        var sharedNames = _distinctNames
-            ? heroes.GroupBy(hero => hero.NameOfHero).Where(name => name.Count() > 1).Select(name => name.Key).ToHashSet()
-            : [];
-        var rules = outsideSlots.Distinct().ToList();
-        _kinds = heroes.ToDictionary(hero => hero, hero => string.Join(
-            '|',
-            string.Concat(_counts.Select(count => count.Matches(hero) ? '1' : '0')),
-            string.Concat(rules.Select(rule => Selects(rule, hero) ? '1' : '0')),
-            sharedNames.Contains(hero.NameOfHero) ? hero.NameOfHero : ""));
     }
 
     public int DeckSlots { get; }
@@ -59,10 +62,10 @@ internal sealed class HeroRules
 
     public static bool Selects(OutsideHeroes rule, Hero hero) =>
         (rule.Hero is null || hero.Id == rule.Hero)
-        && (rule.HeroName is null || hero.NameOfHero == rule.HeroName)
-        && (rule.HeroNames is null || rule.HeroNames.Value.Contains(hero.NameOfHero))
+        && (rule.HeroName is null || hero.HasHeroName(rule.HeroName))
+        && (rule.HeroNames is null || rule.HeroNames.Value.Any(hero.HasHeroName))
         && (rule.HeroNameContains is null || hero.HasInHeroName(rule.HeroNameContains))
-        && (rule.Team is null || hero.Team == rule.Team);
+        && (rule.Team is null || hero.HasTeam(rule.Team));
 
     // Whether the Heroes chosen so far can be completed: every Hero outside the Hero Deck, then the rest of
     // the Hero Deck within the Scheme's Hero counts, each from the Heroes not yet used. chosenOutside fills
@@ -79,6 +82,16 @@ internal sealed class HeroRules
             return _splits.Any(rules => rules.CanComplete(chosenDeck, chosenOutside));
         }
 
+        // A chosen Hero with two teams can be either side, so each way of using the chosen Heroes' sides is tried.
+        IEnumerable<IReadOnlyList<Hero>> SidesChosen(int index) => index == chosenDeck.Count
+            ? [[]]
+            : SidesOf(chosenDeck[index]).SelectMany(side => SidesChosen(index + 1).Select(rest => (IReadOnlyList<Hero>)[side, .. rest]));
+
+        return SidesChosen(0).Any(sides => CanCompleteWith(sides, chosenOutside));
+    }
+
+    private bool CanCompleteWith(IReadOnlyList<Hero> chosenDeck, IReadOnlyList<Hero> chosenOutside)
+    {
         var deck = new List<Hero>();
         var outside = new List<Hero>();
 
@@ -103,12 +116,13 @@ internal sealed class HeroRules
             outside.Add(hero);
         }
 
-        // Whether at least needed usable Heroes that fit are left from position from, counting one per Hero
-        // Name when no two Heroes may share one.
+        // Whether at least needed usable Heroes that fit are left from position from, counting each Hero once, and
+        // one per first Hero Name when no two Heroes may share one. Heroes sharing a first Hero Name can't both be
+        // used, so this never counts too few.
         bool Enough(int from, int needed, Func<Hero, bool> fits) =>
             _heroes.Skip(from)
                 .Where(hero => fits(hero) && Usable(hero, deck, outside))
-                .DistinctBy(hero => _distinctNames ? hero.NameOfHero : hero.Id)
+                .DistinctBy(hero => _distinctNames ? hero.NamesOfHero[0] : hero.Id)
                 .Take(needed)
                 .Count() == needed;
 
@@ -138,7 +152,7 @@ internal sealed class HeroRules
 
         // Whether the Hero Deck's counts can still be met from position from: none is past its exact bound,
         // the slots left can hold what they still need, and each has enough usable Heroes left for it. A Hero
-        // has one team, so counts of different teams need different Heroes, and the slots left must hold the
+        // is used as one team, so counts of different teams need different Heroes, and the slots left must hold the
         // most each team still needs, added up. Those cheap checks come before any search for usable Heroes,
         // so each way of a team split that the Heroes chosen so far rule out fails at once (#93).
         bool CountsReachable(int from)
@@ -192,7 +206,7 @@ internal sealed class HeroRules
     // that many included Heroes. Counts that are equal are given teams in catalog order, so no way is listed twice.
     private static IEnumerable<string[]> TeamsFor(IReadOnlyList<Hero> heroes, int[] counts)
     {
-        var teams = heroes.Select(hero => hero.Team).OfType<string>().Distinct().ToList();
+        var teams = heroes.SelectMany(hero => hero.Teams).Distinct().ToList();
         IEnumerable<string[]> From(int index, string[] chosen)
         {
             if (index == counts.Length)
@@ -202,15 +216,31 @@ internal sealed class HeroRules
 
             var after = index > 0 && counts[index - 1] == counts[index] ? teams.IndexOf(chosen[index - 1]) + 1 : 0;
             return teams.Skip(after)
-                .Where(team => !chosen.Contains(team) && heroes.Count(hero => hero.Team == team) >= counts[index])
+                .Where(team => !chosen.Contains(team) && heroes.Count(hero => hero.HasTeam(team)) >= counts[index])
                 .SelectMany(team => From(index + 1, [.. chosen, team]));
         }
 
         return From(0, []);
     }
 
-    // A Hero is used once per setup and, when no two Heroes may share a Hero Name, only while no chosen Hero
-    // has its Hero Name.
+    // A Hero is used once per setup, as one side when it has two teams, and, when no two Heroes may share a Hero Name,
+    // only while no chosen Hero has one of its Hero Names.
     private bool Usable(Hero hero, IEnumerable<Hero> deck, IEnumerable<Hero> outside) =>
-        !deck.Concat(outside).Any(other => other == hero || (_distinctNames && other.NameOfHero == hero.NameOfHero));
+        !deck.Concat(outside).Any(other => other.Id == hero.Id || (_distinctNames && other.SharesHeroName(hero)));
+
+    // A Hero's kind: which counts it matches, which draws outside the Hero Deck it fits, and, when no two Heroes may
+    // share a Hero Name, which of its Hero Names another included Hero has too. Heroes of one kind are interchangeable
+    // to every rule here.
+    private string KindOf(Hero hero) => string.Join(
+        '|',
+        string.Concat(_counts.Select(count => count.Matches(hero) ? '1' : '0')),
+        string.Concat(_outsideRules.Select(rule => Selects(rule, hero) ? '1' : '0')),
+        string.Join(',', hero.NamesOfHero.Where(_sharedNames.Contains)));
+
+    // The Hero as the search sees it: when the Scheme counts Heroes by team, a Hero with two teams is two sides, each
+    // of one team, unless both sides are of one kind; otherwise the Hero itself.
+    private IEnumerable<Hero> SidesOf(Hero hero) =>
+        _bySide && hero.AlsoTeam is not null
+            ? hero.Teams.Select(team => hero with { Team = team, AlsoTeam = null }).DistinctBy(KindOf)
+            : [hero];
 }

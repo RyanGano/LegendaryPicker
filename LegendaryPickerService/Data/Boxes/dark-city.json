@@ -7,7 +7,6 @@
   "about": { "released": { "value": "2013-06", "source": "Q" } },
   "sources": [
     { "key": "DC", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Dark_City.pdf" },
-    { "key": "D-jean-grey", "url": "https://github.com/RyanGano/LegendaryPicker/issues/122" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
@@ -153,7 +152,7 @@
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
         "villainDeckBystanders": { "value": 0, "source": "Card" },
-        "outsideHeroes": [{ "to": "villainDeck", "heroNames": { "value": ["Jean Grey", "Time-Traveling Jean Grey"], "source": "D-jean-grey" }, "count": [{ "players": null, "value": 1, "source": "Card" }] }]
+        "outsideHeroes": [{ "to": "villainDeck", "heroName": "Jean Grey", "count": [{ "players": null, "value": 1, "source": "Card" }] }]
       }
     },
     {
