@@ -396,5 +396,15 @@ Box id `ant-man`, file `LegendaryPickerService/Data/Boxes/ant-man.json`, a First
 
 **Keywords (AM pp.1-2):** Microscopic Size-Changing, Empowered, Chivalrous Duel and Threat Analysis are new here; Size-Changing reuses Civil War's term.
 
+## Venom (March 2019)
+
+Box id `venom`, file `LegendaryPickerService/Data/Boxes/venom.json`, a First Edition expansion (#165). Counts (V p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 double-sided Masterminds and 4 Schemes; no Henchmen, Bystanders or Scheme Twists of its own. Names, teams, classes and keywords come from C1; Scheme Setup lines, Always Leads and part uses were read from the card faces it links (`Card`).
+
+**Heroes:** all Venomverse: Carnage, Venom, Venom Rocket, Venomized Dr. Strange, Venompool. The Hero Venom takes the display name "Venom (Venomverse)" because the Villains box has a Hero Venom (#76), and keeps the Hero Name Venom; Venomized Dr. Strange keeps Dr. Strange in its title and so shares that Hero Name; Venom Rocket and Venompool name no other character's Hero Name, so keep their own. **Villain Groups:** Life Foundation, Poisons. **Masterminds:** Hybrid leads Life Foundation and Poison Thanos leads Poisons; each can be played on its Epic side with the same Tactics (V p.2). Hybrid, Poison Thanos and Life Foundation give Wounds, so they use that part; no Hero uses a part.
+
+**Schemes (Card; none prints a player limit):** Invasion of the Venom Symbiotes (8 Twists, an extra Henchman Group); Maximum Carnage (10, 6 Wounds per player); Paralyzing Venom (6); Symbiotic Absorption (11; one other Mastermind set aside with its Tactics, which never comes into play itself (its Tactics and Master Strike are used on later Twists, so it records no `joins`), and a step to add its Always Leads Villains as an extra Villain Group).
+
+**Keywords (V pp.1-2):** Symbiote Bonds, Digest and Indigestion are new here; Excessive Violence reuses Deadpool's term.
+
 ## Open questions
 

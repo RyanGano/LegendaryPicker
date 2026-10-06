@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 7,
+  "id": "venom",
+  "name": "Venom",
+  "ruleset": "firstEdition",
+  "catalogSource": "V p.2; C1",
+  "about": {"released": {"value": "2019-03", "source": "Q"}},
+  "sources": [
+    {"key": "V", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Venom.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "V p.2"}, "villainGroupCards": {"value": 8, "source": "V p.2"}, "henchmanGroupCards": {"value": 0, "source": "V p.2"}, "schemeTwists": {"value": 0, "source": "V p.2"}},
+  "heroes": [
+    {"id": "venom_hero_carnage", "name": "Carnage", "team": "venom_term_venomverse", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest", "venom_term_indigestion"]},
+    {"id": "venom_hero_venom", "name": "Venom (Venomverse)", "heroName": "Venom", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest", "venom_term_indigestion"]},
+    {"id": "venom_hero_venom-rocket", "name": "Venom Rocket", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest"]},
+    {"id": "venom_hero_venomized-dr-strange", "name": "Venomized Dr. Strange", "heroName": "Dr. Strange", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_ranged"], "terms": ["venom_term_digest"]},
+    {"id": "venom_hero_venompool", "name": "Venompool", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest", "venom_term_indigestion"]}
+  ],
+  "villainGroups": [
+    {"id": "venom_villain_life-foundation", "name": "Life Foundation", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "venom_term_symbiote-bonds"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "venom_villain_poisons", "name": "Poisons", "terms": ["core_term_ambush", "core_term_fight", "venom_term_symbiote-bonds"]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "venom_mastermind_hybrid", "name": "Hybrid", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "venom_term_symbiote-bonds"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "venom_villain_life-foundation", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Hybrid", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "V p.2"}]}},
+    {"id": "venom_mastermind_poison-thanos", "name": "Poison Thanos", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "venom_villain_poisons", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Poison Thanos", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "V p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "venom_scheme_invasion-of-the-venom-symbiotes", "name": "Invasion of the Venom Symbiotes", "terms": ["core_term_scheme-twist", "core_term_ambush", "venom_term_symbiote-bonds"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "extraHenchmanGroups": [{"players": null, "value": 1, "source": "Card"}]}},
+    {"id": "venom_scheme_maximum-carnage", "name": "Maximum Carnage", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 10, "source": "Card"}], "woundsPerPlayer": {"value": 6, "source": "Card"}}},
+    {"id": "venom_scheme_paralyzing-venom", "name": "Paralyzing Venom", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}]}},
+    {"id": "venom_scheme_symbiotic-absorption", "name": "Symbiotic Absorption", "terms": ["core_term_scheme-twist", "core_term_master-strike"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "outsideMasterminds": [{"to": "setAside", "count": [{"players": null, "value": 1, "source": "Card"}]}], "steps": [{"label": "Add the set-aside Mastermind's Always Leads Villains as an extra Villain Group", "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "venom_term_venomverse", "name": "Venomverse", "kind": "team", "summary": "A Hero team. In this box its members are Carnage, Venom, Venom Rocket, Venomized Dr. Strange and Venompool.", "source": "Q", "page": 1},
+    {"id": "venom_term_symbiote-bonds", "name": "Symbiote Bonds", "kind": "keyword", "summary": "Joins one Villain to another in the same city space as a single enemy with both cards' strength and abilities. Fighting it defeats one card at a time.", "source": "V", "page": 1},
+    {"id": "venom_term_digest", "name": "Digest", "kind": "keyword", "summary": "An effect you can use only when your Victory Pile holds at least the shown number of cards of any type. Nothing is spent, and each Digest is used once.", "source": "V", "page": 2},
+    {"id": "venom_term_indigestion", "name": "Indigestion", "kind": "keyword", "summary": "The backup effect that applies when the card's Digest number is not met. When it is met, you use the Digest effect instead.", "source": "V", "page": 2}
+  ]
+}
