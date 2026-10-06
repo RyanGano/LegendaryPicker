@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 7,
+  "id": "heroes-of-asgard",
+  "name": "Heroes of Asgard",
+  "ruleset": "firstEdition",
+  "catalogSource": "HA p.2; C1",
+  "about": {"released": {"value": "2020-03", "source": "Q"}},
+  "sources": [
+    {"key": "HA", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/2020_Marvel_Legendary_HeroesAsgard_Rules_compressed.pdf"},
+    {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
+  ],
+  "components": {"heroCards": {"value": 14, "source": "HA p.2"}, "villainGroupCards": {"value": 8, "source": "HA p.2"}, "henchmanGroupCards": {"value": 0, "source": "HA p.2"}, "schemeTwists": {"value": 0, "source": "HA p.2"}},
+  "heroes": [
+    {"id": "heroes-of-asgard_hero_beta-ray-bill", "name": "Beta Ray Bill", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["heroes-of-asgard_term_thrown-artifact", "heroes-of-asgard_term_worthy"]},
+    {"id": "heroes-of-asgard_hero_lady-sif", "name": "Lady Sif", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["heroes-of-asgard_term_thrown-artifact"]},
+    {"id": "heroes-of-asgard_hero_thor", "name": "Thor (Heroes of Asgard)", "heroName": "Thor", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["heroes-of-asgard_term_thrown-artifact", "heroes-of-asgard_term_worthy"]},
+    {"id": "heroes-of-asgard_hero_valkyrie", "name": "Valkyrie", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["heroes-of-asgard_term_conqueror", "heroes-of-asgard_term_thrown-artifact"]},
+    {"id": "heroes-of-asgard_hero_the-warriors-three", "name": "The Warriors Three", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["heroes-of-asgard_term_conqueror"]}
+  ],
+  "villainGroups": [
+    {"id": "heroes-of-asgard_villain_dark-council", "name": "Dark Council", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "heroes-of-asgard_term_artifact", "heroes-of-asgard_term_thrown-artifact", "heroes-of-asgard_term_villainous-weapon", "heroes-of-asgard_term_worthy"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "heroes-of-asgard_villain_omens-of-ragnarok", "name": "Omens of Ragnarok", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "heroes-of-asgard_term_artifact", "heroes-of-asgard_term_conqueror", "heroes-of-asgard_term_villainous-weapon"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "heroes-of-asgard_mastermind_hela-goddess-of-death", "name": "Hela, Goddess of Death", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "heroes-of-asgard_term_artifact", "heroes-of-asgard_term_conqueror", "heroes-of-asgard_term_thrown-artifact", "heroes-of-asgard_term_villainous-weapon"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "heroes-of-asgard_villain_omens-of-ragnarok", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Hela, Goddess of Death", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "HA p.2"}]}},
+    {"id": "heroes-of-asgard_mastermind_malekith-the-accursed", "name": "Malekith the Accursed", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "heroes-of-asgard_term_artifact", "heroes-of-asgard_term_thrown-artifact", "heroes-of-asgard_term_villainous-weapon"], "alwaysLeads": {"groupId": "heroes-of-asgard_villain_dark-council", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Malekith the Accursed", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "HA p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "heroes-of-asgard_scheme_asgardian-test-of-worth", "name": "Asgardian Test of Worth", "terms": ["core_term_scheme-twist", "heroes-of-asgard_term_worthy"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}]}},
+    {"id": "heroes-of-asgard_scheme_the-dark-world-of-svartalfheim", "name": "The Dark World of Svartalfheim", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 10, "source": "Card"}]}},
+    {"id": "heroes-of-asgard_scheme_ragnarok-twilight-of-the-gods", "name": "Ragnarok, Twilight of the Gods", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}]}},
+    {"id": "heroes-of-asgard_scheme_war-of-the-frost-giants", "name": "War of the Frost Giants", "terms": ["core_term_scheme-twist", "heroes-of-asgard_term_worthy"], "setup": {"twists": [{"players": null, "value": 9, "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "heroes-of-asgard_term_asgard", "name": "Asgard", "kind": "team", "summary": "A Hero team. In this box its members are Beta Ray Bill, Lady Sif, Thor, Valkyrie and The Warriors Three.", "source": "Q", "page": 1},
+    {"id": "heroes-of-asgard_term_artifact", "name": "Artifact", "kind": "keyword", "summary": "A card you play in front of you that stays there from turn to turn. Its once-per-turn abilities work only on your own turn.", "source": "HA", "page": 1},
+    {"id": "heroes-of-asgard_term_thrown-artifact", "name": "Thrown Artifact", "kind": "keyword", "summary": "An Artifact you may throw on your turn: put it on the bottom of your deck and use its listed effect.", "source": "HA", "page": 1},
+    {"id": "heroes-of-asgard_term_worthy", "name": "Worthy", "kind": "keyword", "summary": "You are Worthy while you have a Hero costing 5 or more in hand, played this turn, or controlled as an Artifact.", "source": "HA", "page": 1},
+    {"id": "heroes-of-asgard_term_villainous-weapon", "name": "Villainous Weapon", "kind": "keyword", "summary": "A card in a Villain Group that a Villain or Mastermind captures to grow stronger. Defeat its holder to take it as an Artifact.", "source": "HA", "page": 1},
+    {"id": "heroes-of-asgard_term_conqueror", "name": "Conqueror", "kind": "keyword", "summary": "A bonus that applies while any Villain stands in the named city space, including the card's own bearer.", "source": "HA", "page": 2}
+  ]
+}
