@@ -31,6 +31,13 @@
       "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
       "alwaysLeads": { "groupId": "horde_villain_test-guard", "groupType": "villain", "source": "Card" },
       "alsoLeads": { "groupIds": ["horde_henchman_test-drones", "horde_henchman_test-gunships"], "groupType": "henchman", "source": "Card" }
+    },
+    {
+      "id": "horde_mastermind_test-overseer",
+      "name": "Test Overseer",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "alwaysLeads": { "groupId": "horde_villain_test-guard", "groupType": "villain", "source": "Card" },
+      "alsoLeads": { "groupIds": ["horde_henchman_test-drones", "core_henchman_sentinel"], "groupType": "henchman", "source": "Card" }
     }
   ],
   "schemes": [

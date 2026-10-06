@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 7,
+  "id": "messiah-complex",
+  "name": "Messiah Complex",
+  "ruleset": "firstEdition",
+  "catalogSource": "MC p.2; C1",
+  "about": { "released": { "value": "2022-01", "source": "Q" } },
+  "sources": [
+    { "key": "MC", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Lgd_MessiahComplex_Rulesheet_Compressed.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "MC p.2" },
+    "villainGroupCards": { "value": 8, "source": "MC p.2" },
+    "henchmanGroupCards": { "value": 10, "source": "MC p.2" },
+    "schemeTwists": { "value": 0, "source": "MC p.2" },
+    "bystanders": { "value": 3, "source": "MC p.2" },
+    "sidekicks": { "value": 14, "source": "MC p.2" }
+  },
+  "heroes": [
+    {"id": "messiah-complex_hero_multiple-man", "name": "Multiple Man (Messiah Complex)", "heroName": "Multiple Man", "team": "messiah-complex_term_x-factor-investigations", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["noir_term_investigate", "messiah-complex_term_clone", "messiah-complex_term_tactical-formation"]},
+    {"id": "messiah-complex_hero_shatterstar", "name": "Shatterstar", "team": "dark-city_term_x-force", "classes": ["core_term_instinct", "core_term_ranged"], "terms": ["realm-of-kings_term_when-recruited", "messiah-complex_term_clone", "messiah-complex_term_tactical-formation", "messiah-complex_term_shatter"]},
+    {"id": "messiah-complex_hero_stepford-cuckoos", "name": "Stepford Cuckoos", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged", "core_term_tech"], "terms": ["realm-of-kings_term_when-recruited", "messiah-complex_term_clone", "messiah-complex_term_tactical-formation", "noir_term_investigate", "secret-wars-volume-1_term_sidekick"], "uses": [{"part": "sidekicks", "source": "Card"}]},
+    {"id": "messiah-complex_hero_m", "name": "M", "team": "messiah-complex_term_x-factor-investigations", "classes": ["core_term_covert", "core_term_strength"], "terms": ["realm-of-kings_term_when-recruited", "messiah-complex_term_clone", "messiah-complex_term_tactical-formation", "noir_term_investigate"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "messiah-complex_hero_strong-guy", "name": "Strong Guy", "team": "messiah-complex_term_x-factor-investigations", "classes": ["core_term_strength"], "terms": ["noir_term_investigate", "messiah-complex_term_tactical-formation"]},
+    {"id": "messiah-complex_hero_warpath", "name": "Warpath", "team": "dark-city_term_x-force", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["noir_term_investigate", "messiah-complex_term_tactical-formation"]},
+    {"id": "messiah-complex_hero_siryn", "name": "Siryn", "team": "messiah-complex_term_x-factor-investigations", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["noir_term_investigate", "messiah-complex_term_shatter", "messiah-complex_term_tactical-formation"]},
+    {"id": "messiah-complex_hero_rictor", "name": "Rictor", "team": "messiah-complex_term_x-factor-investigations", "classes": ["core_term_instinct", "core_term_ranged"], "terms": ["messiah-complex_term_shatter", "noir_term_investigate"]}
+  ],
+  "villainGroups": [
+    {"id": "messiah-complex_villain_reavers", "name": "Reavers", "terms": ["core_term_ambush", "core_term_fight", "messiah-complex_term_prey"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "messiah-complex_villain_purifiers", "name": "Purifiers", "terms": ["core_term_ambush", "core_term_fight", "messiah-complex_term_prey", "messiah-complex_term_clone", "secret-wars-volume-1_term_sidekick"], "uses": [{"part": "sidekicks", "source": "Card"}, {"part": "wounds", "source": "Card"}]},
+    {"id": "messiah-complex_villain_acolytes", "name": "Acolytes", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "messiah-complex_term_shatter"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "messiah-complex_villain_clan-yashida", "name": "Clan Yashida", "terms": ["core_term_ambush", "core_term_fight", "ant-man_term_chivalrous-duel"]}
+  ],
+  "henchmanGroups": [
+    {"id": "messiah-complex_henchman_mr-sinister-clones", "name": "Mr. Sinister Clones", "terms": ["core_term_ambush", "core_term_fight", "messiah-complex_term_clone"]},
+    {"id": "messiah-complex_henchman_sentinel-squad-one", "name": "Sentinel Squad O*N*E*", "terms": ["core_term_ambush", "core_term_fight", "messiah-complex_term_clone"]}
+  ],
+  "masterminds": [
+    {"id": "messiah-complex_mastermind_lady-deathstrike", "name": "Lady Deathstrike", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "messiah-complex_term_prey"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "messiah-complex_villain_reavers", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Lady Deathstrike", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "MC p.2"}]}},
+    {"id": "messiah-complex_mastermind_bastion-fused-sentinel", "name": "Bastion, Fused Sentinel", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "messiah-complex_villain_purifiers", "groupType": "villain", "source": "Card"}, "alsoLeads": {"groupIds": ["messiah-complex_henchman_sentinel-squad-one", "core_henchman_sentinel"], "groupType": "henchman", "source": "Card"}, "epic": {"name": "Epic Bastion, Fused Sentinel", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "MC p.2"}]}},
+    {"id": "messiah-complex_mastermind_exodus", "name": "Exodus", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "messiah-complex_term_shatter"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "messiah-complex_villain_acolytes", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Exodus", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "MC p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "messiah-complex_scheme_drain-mutants-powers-to", "name": "Drain Mutants' Powers To...", "terms": ["core_term_scheme-twist", "messiah-complex_term_veiled-scheme", "secret-wars-volume-1_term_sidekick"], "uses": [{"part": "sidekicks", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "steps": [{"label": "Start Veiled side up; keep your Unveiled Schemes ready for when it transforms", "source": "MC p.2"}]}},
+    {"id": "messiah-complex_scheme_hack-cerebro-servers-to", "name": "Hack Cerebro Servers To...", "terms": ["core_term_scheme-twist", "messiah-complex_term_veiled-scheme"], "setup": {"twists": [{"players": null, "value": 10, "source": "Card"}], "steps": [{"label": "Start Veiled side up; keep your Unveiled Schemes ready for when it transforms", "source": "MC p.2"}]}},
+    {"id": "messiah-complex_scheme_hire-singularity-investigations-to", "name": "Hire Singularity Investigations To...", "terms": ["core_term_scheme-twist", "messiah-complex_term_veiled-scheme", "noir_term_investigate"], "setup": {"twists": [{"players": null, "value": 9, "source": "Card"}], "steps": [{"label": "Start Veiled side up; keep your Unveiled Schemes ready for when it transforms", "source": "MC p.2"}]}},
+    {"id": "messiah-complex_scheme_raid-gene-banks-to", "name": "Raid Gene Banks To...", "terms": ["core_term_scheme-twist", "messiah-complex_term_veiled-scheme"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "steps": [{"label": "Start Veiled side up; keep your Unveiled Schemes ready for when it transforms", "source": "MC p.2"}]}}
+  ],
+  "glossary": [
+    {"id": "messiah-complex_term_x-factor-investigations", "name": "X-Factor Investigations", "kind": "team", "summary": "A Hero team. In this box its members are Multiple Man, M, Strong Guy, Siryn and Rictor.", "source": "MC", "page": 1},
+    {"id": "messiah-complex_term_clone", "name": "Clone", "kind": "keyword", "summary": "Take one more copy of the same card into your discard pile, from the HQ or else from its deck or stack, then shuffle that deck. A Villain's Clone brings a copy from the Villain Deck into the city.", "source": "MC", "page": 1},
+    {"id": "messiah-complex_term_shatter", "name": "Shatter", "kind": "keyword", "summary": "Cuts a Villain's current fight value in half, rounding up, until the turn ends, and can be repeated. Some cards shatter the Mastermind for one fight, or halve an HQ Hero's cost.", "source": "MC", "page": 1},
+    {"id": "messiah-complex_term_tactical-formation", "name": "Tactical Formation", "kind": "keyword", "summary": "A bonus that works only if the Heroes in your hand and played this turn, this card included, match the listed costs.", "source": "MC", "page": 1},
+    {"id": "messiah-complex_term_prey", "name": "Prey", "kind": "keyword", "summary": "The Villain singles out the player with the fewest or most of an icon. If nobody beats it by the end of that player's turn, its Finish the Prey effect hits them.", "source": "MC", "page": 2},
+    {"id": "messiah-complex_term_veiled-scheme", "name": "Veiled Scheme", "kind": "keyword", "summary": "A two-sided Scheme played hidden side up. When it transforms, it is swapped for an Unveiled side picked at random from all you own, which may come from a different card.", "source": "MC", "page": 2}
+  ]
+}

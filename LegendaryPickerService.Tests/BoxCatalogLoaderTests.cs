@@ -1081,6 +1081,21 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         Assert.Contains("extra.json: extra_mastermind_red-skull leads core_villain_hydra from another box; it must be in extra.", error.Message);
     }
 
+    // A Mastermind's other groups can include another box's, but one of them must be its own (#186).
+    [Fact]
+    public void Rejects_a_Mastermind_whose_other_groups_are_all_from_another_box()
+    {
+        WriteCoreBox(_ => { });
+        var extra = ExtraCopyOfCore();
+        Mastermind(extra, "extra_mastermind_red-skull")["alsoLeads"] =
+            JsonNode.Parse("""{ "groupIds": ["core_henchman_sentinel"], "groupType": "henchman", "source": "Card" }""");
+        WriteBox("extra.json", extra);
+
+        var error = Assert.Throws<InvalidDataException>(() => BoxCatalog.Load(_directory));
+
+        Assert.Contains("extra.json: extra_mastermind_red-skull alsoLeads names only groups from other boxes; at least one must be in extra.", error.Message);
+    }
+
     [Theory]
     [InlineData("requiredGroups", """[{ "groupId": "core_villain_skrulls", "groupType": "villain", "source": "Card" }]""", "requires core_villain_skrulls")]
     [InlineData("cardsBeside", """[{ "groupId": "core_villain_skrulls", "groupType": "villain", "count": [{ "players": null, "value": 1, "source": "Card" }] }]""", "sets beside it cards of core_villain_skrulls")]
