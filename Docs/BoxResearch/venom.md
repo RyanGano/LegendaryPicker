@@ -1,6 +1,6 @@
 # Venom (March 2019)
 
-**Research status: Partial.** The official insert verifies contents and several new mechanics, but not card-level Scheme setups, Always Leads, or Hero metadata.
+**Research status: Partial; integrated (#165).** The official insert verifies contents and the new mechanics. The Scheme Setup lines, Always Leads and part uses in `LegendaryPickerService/Data/Boxes/venom.json` were read from the C1-linked card faces (`Card`): Hybrid, Poison Thanos and Life Foundation give Wounds, and no Hero or other card uses another part. Per-face copy counts remain unverified.
 
 ## Sources
 
@@ -58,7 +58,7 @@ Summaries are original paraphrases under 40 words. Hero teams/classes/shared Her
 
 ## Setup and implementation gaps
 
-Verify all four Schemes' player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps from the cards. Verify both Masterminds' Always Leads/setup effects, Hero metadata, and any additional card-driven component dependencies. Modeling Symbiote Bonds requires preserving two Villain cards in one city space and handling its combined fight/escape rules; this record changes no runtime data or code.
+Every Scheme's Twists and Setup line, and both Masterminds' Always Leads and Epic side, were read from the card faces linked below and are in the box file (#165); no Scheme prints a player limit. Symbiotic Absorption sets a Drained Mastermind aside and adds its Always Leads group as an extra Villain Group, recorded as `bringsAlwaysLeads` on its set-aside Mastermind. Hero teams and classes are as C1 gives them. Symbiote Bonds itself is not modelled; the checklist only names the keyword.
 
 ## Structured card-face metadata (C1)
 

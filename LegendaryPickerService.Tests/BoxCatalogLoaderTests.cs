@@ -798,6 +798,10 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         "draws other Masterminds into setAside; tactics says how many of each one's Tactics go to the villainDeck, and only there")]
     [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 3, "source": "Card" }], "tactics": { "value": 4, "source": "Card" }, "joins": { "value": "Twist 1", "source": "Card" } }""",
         "draws other Masterminds into villainDeck; joins says when one comes into play, and only for those set aside")]
+    [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 3, "source": "Card" }], "tactics": { "value": 4, "source": "Card" }, "bringsAlwaysLeads": { "value": true, "source": "Card" } }""",
+        "draws other Masterminds into villainDeck; bringsAlwaysLeads adds a Mastermind's Always Leads group, and only for those set aside")]
+    [InlineData("""{ "to": "setAside", "count": [{ "players": null, "value": 1, "source": "Card" }], "bringsAlwaysLeads": { "value": false, "source": "Card" } }""",
+        "sets bringsAlwaysLeads to false; leave it out instead")]
     [InlineData("""{ "to": "villainDeck", "count": [{ "players": null, "value": 3, "source": "Card" }], "tactics": { "value": 0, "source": "Card" } }""",
         "puts 0 Tactics of each other Mastermind in the villainDeck; values are at least 1")]
     [InlineData("""{ "to": "setAside", "count": [{ "players": null, "value": 0, "source": "Card" }] }""",

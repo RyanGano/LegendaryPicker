@@ -496,6 +496,18 @@ public sealed partial class BoxCatalog
                         $"{path}: {scheme.Id} draws other Masterminds into {WireName(outside.To)}; tactics says how many of each one's Tactics go to the villainDeck, and only there.");
                 }
 
+                if (outside.To != Pile.SetAside && outside.BringsAlwaysLeads is not null)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} draws other Masterminds into {WireName(outside.To)}; bringsAlwaysLeads adds a Mastermind's Always Leads group, and only for those set aside.");
+                }
+
+                if (outside.BringsAlwaysLeads is { Value: false })
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} sets bringsAlwaysLeads to false; leave it out instead.");
+                }
+
                 if (outside.To != Pile.SetAside && outside.Joins is not null)
                 {
                     throw new InvalidDataException(
@@ -1108,6 +1120,7 @@ public sealed partial class BoxCatalog
             {
                 if (outside.Tactics is { } tactics) yield return ($"{scheme.Id} setup.outsideMasterminds.tactics", tactics.Source);
                 if (outside.Joins is { } joins) yield return ($"{scheme.Id} setup.outsideMasterminds.joins", joins.Source);
+                if (outside.BringsAlwaysLeads is { } leads) yield return ($"{scheme.Id} setup.outsideMasterminds.bringsAlwaysLeads", leads.Source);
             }
 
             foreach (var outside in effect.OutsideHeroes ?? [])

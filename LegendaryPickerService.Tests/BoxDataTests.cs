@@ -11,6 +11,7 @@ public class BoxDataTests
     public static TheoryData<string, int, int, int, int, int> Rows => new()
     {
         { "ant-man", 5, 2, 0, 2, 4 },
+        { "venom", 5, 2, 0, 2, 4 },
         { "captain-america-75th-anniversary", 5, 2, 0, 2, 4 },
         { "champions", 5, 2, 0, 2, 4 },
         { "civil-war", 16, 7, 2, 5, 8 },
@@ -60,6 +61,6 @@ public class BoxDataTests
         var recorded = Catalog.Boxes.SelectMany(box => box.Masterminds).Where(m => m.Epic is not null).Select(m => m.Id).Order().ToList();
 
         Assert.Equal(offers, recorded);
-        Assert.Equal(12, recorded.Count);
+        Assert.Equal(14, recorded.Count);
     }
 }

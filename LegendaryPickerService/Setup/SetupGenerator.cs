@@ -172,15 +172,33 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var plan = WithMastermind(Plan(scheme), mastermind);
             var slotNotes = new List<RuleNote>();
 
+            // A Mastermind the Scheme sets aside and whose Always Leads group it adds (Symbiotic Absorption) is drawn
+            // before the groups, since its group is one more of them.
+            var drainedDraws = plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value == true).ToList();
+            // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out.
+            var ruledOut = (scheme.ExcludesMasterminds ?? []).Select(exclusion => exclusion.MastermindId).ToHashSet();
+            var drained = new Queue<Mastermind>(DrawMany(
+                _masterminds.Where(other => other != mastermind && other.AlwaysLeads.GroupId != mastermind.AlwaysLeads.GroupId && !ruledOut.Contains(other.Id)),
+                drainedDraws.Sum(draw => draw.Count)));
+            var drainedLeads = drainedDraws
+                .SelectMany(draw => Enumerable.Repeat(draw.Rule.BringsAlwaysLeads!.Source, draw.Count))
+                .Select(source => (other: drained.Dequeue(), source))
+                .ToList();
+            plan = plan with
+            {
+                VillainGroups = plan.VillainGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads.GroupType == GroupType.Villain),
+                HenchmanGroups = plan.HenchmanGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads.GroupType == GroupType.Henchman),
+            };
+
             // A group the Scheme sets every card of beside it has none left for the Villain Deck, so it isn't drawn there.
             // A required group whose card gives a substitute is replaced by the group drawn for it.
             var required = new Dictionary<string, RequiredGroup>(plan.Required);
             var villainGroups = FillSlots(
                 _villainGroups.Where(g => DeckCards(plan, g.Id, GroupType.Villain) > 0).ToList(), GroupType.Villain,
-                plan.VillainGroups, plan.Scheme, mastermind, required, slotNotes);
+                plan.VillainGroups, plan.Scheme, mastermind, required, slotNotes, drainedLeads);
             var henchmanGroups = FillSlots(
                 _henchmanGroups.Where(g => DeckCards(plan, g.Id, GroupType.Henchman) > 0).ToList(), GroupType.Henchman,
-                plan.HenchmanGroups, plan.Scheme, mastermind, required, slotNotes);
+                plan.HenchmanGroups, plan.Scheme, mastermind, required, slotNotes, drainedLeads);
             plan = plan with { Required = required };
             var extraHenchmen = ExtraHenchmanGroups(plan, henchmanGroups.Select(g => g.Id).ToList());
             // Each Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
@@ -190,9 +208,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var (heroes, outside) = DrawHeroes(plan);
 
             // The Masterminds the Scheme draws besides its own, from the included ones the setup doesn't otherwise use.
-            var otherMasterminds = new Queue<Mastermind>(DrawMany(_masterminds.Where(other => other != mastermind), plan.OutsideMasterminds.Sum(draw => draw.Count)));
+            var drawnDrained = drainedLeads.Select(entry => entry.other).ToList();
+            var otherMasterminds = new Queue<Mastermind>(DrawMany(
+                _masterminds.Where(other => other != mastermind && !drawnDrained.Contains(other)),
+                plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value != true).Sum(draw => draw.Count)));
+            var drainedQueue = new Queue<Mastermind>(drawnDrained);
             var outsideMasterminds = plan.OutsideMasterminds
-                .SelectMany(draw => Enumerable.Range(0, draw.Count).Select(_ => new OutsideMastermind(otherMasterminds.Dequeue(), draw.Rule.To, draw.Rule.Tactics?.Value, draw.Rule.Joins?.Value)))
+                .SelectMany(draw => Enumerable.Range(0, draw.Count).Select(_ => new OutsideMastermind(
+                    (draw.Rule.BringsAlwaysLeads?.Value == true ? drainedQueue : otherMasterminds).Dequeue(), draw.Rule.To, draw.Rule.Tactics?.Value, draw.Rule.Joins?.Value)))
                 .ToList();
 
             // The cards of each group the Scheme sets beside it, and how many fewer the group puts in the Villain
@@ -688,7 +711,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // required records the substitute in its place.
         private List<T> FillSlots<T>(
             List<T> pool, GroupType type, int slots, Scheme scheme, Mastermind mastermind,
-            Dictionary<string, RequiredGroup> required, List<RuleNote> notes) where T : ICard
+            Dictionary<string, RequiredGroup> required, List<RuleNote> notes,
+            List<(Mastermind Drained, string Source)> drained) where T : ICard
         {
             var chosen = new List<T>();
             foreach (var rule in (scheme.Setup.RequiredGroups ?? []).Where(group => group.GroupType == type))
@@ -715,6 +739,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(included
                     ? Note(text, rule.Source, BoxOf(scheme.Id), scheme.Id)
                     : Note($"{text}, from {from.Name}, which isn't included", rule.OtherBox!.Source, BoxOf(scheme.Id), scheme.Id));
+            }
+
+            // The Always Leads group of each Mastermind the Scheme sets aside, as an extra group of its own.
+            foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads.GroupType == type))
+            {
+                var group = (T)CatalogGroup(other.AlwaysLeads.GroupId);
+                if (!chosen.Contains(group))
+                {
+                    chosen.Add(group);
+                }
+
+                notes.Add(Note($"{SchemeWord(scheme)} adds {other.Name}'s Always Leads group {group.Name}", source, BoxOf(scheme.Id), scheme.Id));
             }
 
             var leads = mastermind.AlwaysLeads;

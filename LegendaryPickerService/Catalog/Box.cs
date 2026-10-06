@@ -367,8 +367,11 @@ public sealed record OutsideHenchmen(Pile To, IReadOnlyList<PlayerCountValue> Ca
 // drawn Mastermind, as Master of Tyrants shuffles 12 Tactics of 3 Masterminds in; those play as plain Villains with
 // no abilities, so they bring no parts. Tactics is required for, and only for, the Villain Deck. Joins says when a
 // set-aside Mastermind comes into play, in a few words ("Twist 1", "Twists 1-3"), and is allowed only for those.
+// BringsAlwaysLeads, only for those set aside, adds each drawn Mastermind's Always Leads group as an extra group, which
+// Symbiotic Absorption's Drained Mastermind does; the Mastermind is drawn before the groups.
 public sealed record OutsideMasterminds(
-    Pile To, IReadOnlyList<PlayerCountValue> Count, Sourced<int>? Tactics = null, Sourced<string>? Joins = null)
+    Pile To, IReadOnlyList<PlayerCountValue> Count, Sourced<int>? Tactics = null, Sourced<string>? Joins = null,
+    Sourced<bool>? BringsAlwaysLeads = null)
 {
     public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.SetAside];
 }
