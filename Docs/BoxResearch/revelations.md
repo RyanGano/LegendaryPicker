@@ -1,6 +1,6 @@
 # Revelations (August 2019)
 
-**Research status: Partial.** The official insert verifies the 200-card breakdown and new rules, but not card-level Scheme setup, Always Leads, or full Hero metadata.
+**Research status: Partial.** The official insert verifies the 200-card breakdown and new rules. For #170 the Scheme Setup lines (both sides), Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/revelations.json`; per-face copy counts and printed Hyperspeed icons remain open.
 
 ## Sources
 

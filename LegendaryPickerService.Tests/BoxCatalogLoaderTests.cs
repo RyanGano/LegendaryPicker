@@ -185,9 +185,9 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Theory]
-    [InlineData("[3]")]
+    [InlineData("[]")]
     [InlineData("[3, 0]")]
-    public void Rejects_a_team_split_that_is_not_two_or_more_teams_of_at_least_one_Hero(string split)
+    public void Rejects_a_team_split_that_is_not_one_or_more_teams_of_at_least_one_Hero(string split)
     {
         WriteCoreBox(core => LegacyVirusSetup(core)["teamSplit"] = JsonNode.Parse($$"""{ "value": {{split}}, "source": "Card" }"""));
 

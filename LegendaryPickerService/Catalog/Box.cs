@@ -271,7 +271,8 @@ public sealed record SetupStep(string Label, string Source);
 // HenchmanCards is how many cards of each Henchman Group go in the Villain Deck. WoundsPerPlayer and
 // BindingsPerPlayer set the size of those stacks. TeamSplit asks for Heroes of as many different teams as it has
 // values, that many of each team, with the teams left to the draw, as Avengers vs. X-Men's 3 Heroes of one team and
-// 3 of another (#125). OwnTactics is how many of the drawn Mastermind's own Tactics the Scheme shuffles into the
+// 3 of another (#125), or House of M's 4 Heroes of one team, the X-Men it prints or any team it lets the player name
+// instead (#170), the rest of the Hero Deck then of other teams. OwnTactics is how many of the drawn Mastermind's own Tactics the Scheme shuffles into the
 // Villain Deck as Villains, as Noir's Hidden Heart of Darkness does (#130). Wounds sets the Wound stack to a size
 // whatever the player count, as Anti-Mutant Hatred's 30 Wounds (#132); a Scheme sets it this way or per player, not both.
 // ExtraHenchmanCards is how many cards each Henchman Group the Scheme's ExtraHenchmanGroups adds puts in the Villain Deck,
