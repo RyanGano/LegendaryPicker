@@ -1,6 +1,6 @@
 # Heroes of Asgard (March 2020)
 
-**Research status: Partial.** The official insert verifies contents and several new card types/mechanics, but not card-level Scheme setups, Always Leads, or full Hero metadata.
+**Research status: Partial.** The official insert verifies contents and several new card types/mechanics. For #174 the Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/heroes-of-asgard.json`; per-face copy counts remain open.
 
 ## Sources
 
