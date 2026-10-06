@@ -319,6 +319,21 @@ public class MarvelStudiosPhase1Tests
         Assert.Equal(("Marvel Studios Phase 1", false), (hydra.Box, hydra.NotIncluded));
     }
 
+    // With the core box unticked, a reprint's rule notes and glossary chips name the ticked box that holds it, never the
+    // core box (#153), while their citations keep the original's source.
+    [Fact]
+    public void A_reprints_notes_and_glossary_name_the_ticked_box_not_the_core_box()
+    {
+        var setup = Response(3, ["marvel-studios-phase-1", "dark-city"], "Super Hero Civil War", "Red Skull");
+
+        var notes = setup.Notes.Where(note => note.Text.StartsWith("Scheme ", StringComparison.Ordinal) || note.Text.StartsWith("Red Skull ", StringComparison.Ordinal)).ToList();
+        Assert.NotEmpty(notes);
+        Assert.All(notes, note => Assert.Equal("Marvel Studios Phase 1", note.Box));
+        Assert.DoesNotContain(setup.Notes, note => note.Box == "Marvel Legendary First Edition core box");
+        Assert.DoesNotContain(setup.Glossary, entry => entry.Box == "Marvel Legendary First Edition core box");
+        Assert.Contains(setup.Glossary, entry => entry.Box == "Marvel Studios Phase 1");
+    }
+
     // Phase 1 is the base game an expansion is played with when the core box isn't ticked.
     [Fact]
     public void Phase_1_is_the_base_game_for_an_expansion_without_the_core_box()

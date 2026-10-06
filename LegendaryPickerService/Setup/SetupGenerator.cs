@@ -427,7 +427,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             // A note the Scheme card itself causes, cited from the box that holds the card.
             var schemeBox = BoxOf(scheme.Id);
-            RuleNote Card(string text, string source) => Note(text, source, schemeBox);
+            RuleNote Card(string text, string source) => Note(text, source, schemeBox, scheme.Id);
 
             // A Scheme value that replaces a Solo value cites the ruling that the Scheme wins;
             // otherwise the card itself is the source. A Scheme rule overrides a normal rule unless the rules
@@ -643,20 +643,20 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 [],
                 notes);
 
-            return Add(plan, effect, schemeWord, schemeBox);
+            return Add(plan, effect, schemeWord, schemeBox, scheme.Id);
         }
 
         // The Scheme's plan with the Mastermind's setup effects added after the Scheme's.
         private SetupPlan WithMastermind(SetupPlan plan, Mastermind mastermind)
         {
             plan = plan with { Mastermind = mastermind };
-            return mastermind.Setup is { } effects ? Add(plan, effects, mastermind.Name, BoxOf(mastermind.Id)) : plan;
+            return mastermind.Setup is { } effects ? Add(plan, effects, mastermind.Name, BoxOf(mastermind.Id), mastermind.Id) : plan;
         }
 
         // Adds each effect that applies at this player count to the plan's counts, and each setup step to
         // its steps, with a note citing the card that prints it. An effect only adds to the count, so it
         // replaces no Solo value: a Scheme's "+N Heroes" applies on top of the Solo count (D-readings).
-        private SetupPlan Add(SetupPlan plan, SetupEffects effects, string by, Box from)
+        private SetupPlan Add(SetupPlan plan, SetupEffects effects, string by, Box from, string cardId)
         {
             var notes = new List<RuleNote>(plan.Notes);
 
@@ -667,13 +667,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     return 0;
                 }
 
-                notes.Add(Note($"{by} adds {extra.Value} {(extra.Value == 1 ? one : many)}{where}", extra.Source, from));
+                notes.Add(Note($"{by} adds {extra.Value} {(extra.Value == 1 ? one : many)}{where}", extra.Source, from, cardId));
                 return extra.Value;
             }
 
             string Step(SetupStep step)
             {
-                notes.Add(Note($"{by} adds a setup step: {step.Label}", step.Source, from));
+                notes.Add(Note($"{by} adds a setup step: {step.Label}", step.Source, from, cardId));
                 return step.Label;
             }
 
@@ -712,7 +712,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     chosen.Add(standIn);
                     notes.Add(Note(
                         $"{SchemeWord(scheme)} uses {standIn.Name} in place of {group.Name}: {from.Name} isn't included",
-                        substitute, BoxOf(scheme.Id)));
+                        substitute, BoxOf(scheme.Id), scheme.Id));
                     continue;
                 }
 
@@ -721,8 +721,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     ? $"{SchemeWord(scheme)} requires {group.Name}, {cards} of its {CardName(CardKind.Henchman, cards)} in the {_terms.VillainDeck}"
                     : $"{SchemeWord(scheme)} requires {group.Name}";
                 notes.Add(included
-                    ? Note(text, rule.Source, BoxOf(scheme.Id))
-                    : Note($"{text}, from {from.Name}, which isn't included", rule.OtherBox!.Source, BoxOf(scheme.Id)));
+                    ? Note(text, rule.Source, BoxOf(scheme.Id), scheme.Id)
+                    : Note($"{text}, from {from.Name}, which isn't included", rule.OtherBox!.Source, BoxOf(scheme.Id), scheme.Id));
             }
 
             var leads = mastermind.AlwaysLeads;
@@ -775,7 +775,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
                     notes.Add(Note(
                         $"{mastermind.Name} also always leads {group.Name}, one of {string.Join(" and ", options.Select(g => g.Name))}",
-                        also.Source, BoxOf(mastermind.Id)));
+                        also.Source, BoxOf(mastermind.Id), mastermind.Id));
                 }
             }
 
@@ -992,8 +992,16 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // A note cites a source key of the box whose rule it is, since each box lists its own sources.
         // Once more than one box is included, the note also names that box.
-        private RuleNote Note(string text, string citation, Box from) =>
-            new(text, citation, LinkOf(citation, from), boxes.Count > 1 ? from.Name : null);
+        // A note a card causes cites the box that declares it but names the included boxes that hold it, as the card's
+        // own label does: a reprint's note names the reprinting box when the original isn't included (#153).
+        private RuleNote Note(string text, string citation, Box from, string? cardId = null) =>
+            new(text, citation, LinkOf(citation, from), boxes.Count > 1 ? BoxLabel(from, cardId) : null);
+
+        private string BoxLabel(Box from, string? cardId)
+        {
+            var holders = cardId is null ? [] : boxes.Where(box => box.Holds(cardId)).ToList();
+            return holders.Count == 0 ? from.Name : string.Join(" or ", holders.Select(box => box.Name));
+        }
 
         private static string? LinkOf(string citation, Box from) =>
             from.Sources.FirstOrDefault(source => source.Key == citation.Split(' ')[0])?.Url;
