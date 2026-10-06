@@ -58,7 +58,7 @@ Summaries are original paraphrases under 40 words. Hero teams/classes/shared Her
 
 ## Setup and implementation gaps
 
-Every Scheme's Twists and Setup line, and both Masterminds' Always Leads and Epic side, were read from the card faces linked below and are in the box file (#165); no Scheme prints a player limit. Symbiotic Absorption sets a second Mastermind aside and adds its Always Leads Villains as an extra group, recorded as a set-aside Mastermind and a setup step. Hero teams and classes are as C1 gives them. Symbiote Bonds itself is not modelled; the checklist only names the keyword.
+Every Scheme's Twists and Setup line, and both Masterminds' Always Leads and Epic side, were read from the card faces linked below and are in the box file (#165); no Scheme prints a player limit. Symbiotic Absorption sets a Drained Mastermind aside and adds its Always Leads group as an extra Villain Group, recorded as `bringsAlwaysLeads` on its set-aside Mastermind. Hero teams and classes are as C1 gives them. Symbiote Bonds itself is not modelled; the checklist only names the keyword.
 
 ## Structured card-face metadata (C1)
 

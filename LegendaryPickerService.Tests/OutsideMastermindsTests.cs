@@ -91,6 +91,22 @@ public sealed class OutsideMastermindsTests
         Assert.Contains(new RuleNote("Scheme shuffles the 4 Tactics of its Mastermind into the Villain Deck", "Card", null, FixtureName), setup.Notes);
     }
 
+    [Fact]
+    public void A_Mastermind_set_aside_that_brings_its_Always_Leads_adds_that_group_as_an_extra_Villain_Group()
+    {
+        // Solo draws the Scheme, then Dr. Doom, then the set-aside Mastermind from the 3 others, each leading a group
+        // other than Dr. Doom's. Loki, drawn first, brings Enemies of Asgard on top of Solo's one Villain Group.
+        var random = new ScriptedRandom(9, 0, 0);
+
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, random));
+
+        Assert.Equal(("Test Drain", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));
+        Assert.Equal(3, random.Options[2]);
+        Assert.Equal("Loki", Assert.Single(setup.OutsideMasterminds!).Mastermind.Name);
+        Assert.Contains("Enemies of Asgard", setup.VillainGroups.Select(group => group.Name));
+        Assert.Equal(2, setup.VillainGroups.Count);
+    }
+
     private static Mastermind Mastermind(string id) =>
         Catalog.Boxes.SelectMany(box => box.Masterminds).Single(mastermind => mastermind.Id == id);
 }

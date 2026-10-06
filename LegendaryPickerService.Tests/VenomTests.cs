@@ -21,14 +21,14 @@ public class VenomTests
     }
 
     [Fact]
-    public void Symbiotic_Absorption_sets_one_other_Mastermind_aside()
+    public void Symbiotic_Absorption_sets_one_other_Mastermind_aside_and_adds_its_Always_Leads_group()
     {
         var setup = Draw(2, "Symbiotic Absorption");
 
         var drained = Assert.Single(setup.OutsideMasterminds!);
-        // The Drained Mastermind never comes into play itself, so the checklist names no Twist it joins on.
         Assert.Equal((Pile.SetAside, null), (drained.To, drained.Joins));
-        Assert.NotEqual(setup.Mastermind, drained.Mastermind);
+        Assert.NotEqual(setup.Mastermind.AlwaysLeads.GroupId, drained.Mastermind.AlwaysLeads.GroupId);
+        Assert.Contains(drained.Mastermind.AlwaysLeads.GroupId, setup.VillainGroups.Select(group => group.Id));
         Assert.Equal(11, setup.VillainDeck.Twists);
     }
 
