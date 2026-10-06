@@ -11,6 +11,11 @@ namespace LegendaryPickerService.Setup;
 // such Hero once per team, as a side, and uses at most one side of it.
 internal sealed class HeroRules
 {
+    // How many times the search has checked the Hero Deck's counts on this thread, so a test can bound the search's
+    // work without timing it (#161).
+    [ThreadStatic]
+    internal static int CountChecks;
+
     private readonly IReadOnlyList<Hero> _heroes;
     private readonly IReadOnlyList<HeroCount> _counts;
     private readonly bool _distinctNames;
@@ -157,6 +162,7 @@ internal sealed class HeroRules
         // so each way of a team split that the Heroes chosen so far rule out fails at once (#93).
         bool CountsReachable(int from)
         {
+            CountChecks++;
             var left = DeckSlots - deck.Count;
             var needs = _counts
                 .Select(count => (Count: count, Have: deck.Count(hero => count.Matches(hero))))
