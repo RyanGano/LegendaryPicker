@@ -249,7 +249,7 @@ public class WorldWarHulkTests
         Assert.All(lurking, other => Assert.Equal((Pile.SetAside, (int?)null), (other.To, other.Tactics)));
         Assert.Equal(4, lurking.Select(other => other.Mastermind.Name).Append(setup.Mastermind.Name).Distinct().Count());
         Assert.Contains("Keep the 3 extra Masterminds out of play as Lurking Masterminds", setup.Steps);
-        Assert.Contains("Give each of the 4 Masterminds 2 random Tactics; leave the others out", setup.Steps);
+        Assert.Contains("Give each of the 4 Masterminds 2 random Tactics", setup.Steps);
     }
 
     [Theory]

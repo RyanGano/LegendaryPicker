@@ -147,8 +147,7 @@
     "rulings": {
       "alwaysLeadsFillsSlot": "P1 p.7",
       "requiredGroupDisplacesAlwaysLeads": "D1",
-      "schemeOverridesSolo": "D2",
-      "unusedPartsLeftOut": "D-uses"
+      "schemeOverridesSolo": "D2"
     }
   }
 }

@@ -36,7 +36,8 @@ public enum Ruleset
 // when rescued. Every setup shuffles all included Bystanders together, so a setup with the box's Bystanders lays these
 // parts out whatever it draws (#125). Reprints lists the ids of another box's Heroes, groups, Masterminds and Schemes
 // this box holds a printing of: each is one card with the original, in the pool once however many boxes holding it are
-// included (#34 D5, #147).
+// included (#34 D5, #147). OptionalTokens lists the ids of the box's own cards that its optional Token cards can be
+// used with; a setup that draws one tells the player the Tokens could be used (#148). The Tokens are never counted.
 public sealed record Box(
     int SchemaVersion,
     string Id,
@@ -55,7 +56,8 @@ public sealed record Box(
     SetupRules? Setup = null,
     OtherRuleset? OtherRuleset = null,
     IReadOnlyList<PartUse>? BystanderUses = null,
-    Sourced<string[]>? Reprints = null)
+    Sourced<string[]>? Reprints = null,
+    Sourced<string[]>? OptionalTokens = null)
 {
     // Only a base game supplies setup rules; an expansion's box file has no setup section.
     public bool IsBaseGame => Setup is not null;
@@ -480,9 +482,7 @@ public sealed record Rulings(
     // When a Scheme's required groups leave no slot for the Always Leads group, the Always Leads group is dropped.
     string RequiredGroupDisplacesAlwaysLeads,
     // A Scheme's Setup line overrides the Solo setup.
-    string SchemeOverridesSolo,
-    // A part no drawn card or rule uses is left out of the setup, even where the rulebook lays it out.
-    string UnusedPartsLeftOut);
+    string SchemeOverridesSolo);
 
 // The sources of a base game's rules for mixing its ruleset with another in one setup. A draw whose Scheme or
 // Mastermind is of this base game's ruleset follows this base game's rules; any other draw follows its own

@@ -98,8 +98,17 @@ public abstract record SetupResponse
                 x => ((x.Term.Kind, x.Index),
                     new GlossaryEntry(
                         x.Term.Id, x.Term.Name, BoxCatalog.KindOf(x.Term.Kind), x.Term.Summary, $"{x.Term.Source} p.{x.Term.Page}", x.Link,
-                        included.Count > 1 ? x.Box.Name : null)),
+                        included.Count > 1 ? TermBox(x.Box, included) : null)),
                 StringComparer.Ordinal);
+
+        // The box a chip names: the box that defines the term, or, when it isn't included, the included boxes that
+        // reprint its cards, which carry its terms (#153).
+        private static string TermBox(Box defining, IReadOnlyList<Box> included)
+        {
+            if (included.Contains(defining)) return defining.Name;
+            var reprinting = included.Where(box => box.Reprints?.Value.Any(id => id.StartsWith(defining.Id + "_", StringComparison.Ordinal)) ?? false).ToList();
+            return reprinting.Count == 0 ? defining.Name : string.Join(" or ", reprinting.Select(box => box.Name));
+        }
 
         // A catalog id starts with its box's id, which the loader checks.
         private readonly Dictionary<string, Box> _boxes = catalog.Boxes.ToDictionary(box => box.Id, StringComparer.Ordinal);

@@ -13,7 +13,6 @@ public class GuardiansOfTheGalaxyTests
     private const string GuardiansName = "Guardians of the Galaxy";
     private const string CoreName = "Marvel Legendary First Edition core box";
     private const string Rulebook = "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf";
-    private const string UsesDecision = "https://github.com/RyanGano/LegendaryPicker/issues/87";
     private const string SchemeFirst = "https://github.com/RyanGano/LegendaryPicker/issues/138";
 
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
@@ -334,15 +333,15 @@ public class GuardiansOfTheGalaxyTests
     }
 
     // Shards are laid out only when a drawn card uses them (D-uses): Legacy Virus with Dr. Doom and the first core
-    // Heroes in Solo uses none, so the Shard supply is left out with a note.
+    // Heroes in Solo uses none, so the Shard supply is not laid out, and the checklist says nothing of it (#148).
     [Fact]
-    public void A_setup_whose_cards_use_no_Shards_leaves_the_Shard_supply_out()
+    public void A_setup_whose_cards_use_no_Shards_lays_out_no_Shard_supply()
     {
         var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(0, 0)));
 
         Assert.Equal(("Legacy Virus", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));
         Assert.Null(setup.Stacks.Shards);
-        Assert.Contains(new RuleNote("Leave out the Shard supply: no drawn card uses it", "D-uses", UsesDecision, CoreName), setup.Notes);
+        Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }
 
     // Guardians cards that give Wounds need a box that supplies them; with Legendary: Villains as the only base

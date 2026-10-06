@@ -94,12 +94,12 @@ public sealed class HordeTests
     }
 
     [Fact]
-    public void A_setup_with_no_card_that_uses_Horrors_leaves_the_Horror_stack_out()
+    public void A_setup_with_no_card_that_uses_Horrors_lays_out_no_Horror_stack()
     {
         var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(8, DrDoom)));
 
         Assert.Equal("Test Patrol", setup.Scheme.Name);
         Assert.Null(setup.Stacks.Horrors);
-        Assert.Contains(setup.Notes, note => note.Text.StartsWith("Leave out the") && note.Text.Contains("Horror"));
+        Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }
 }

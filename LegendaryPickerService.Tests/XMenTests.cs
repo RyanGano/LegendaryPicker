@@ -164,6 +164,24 @@ public class XMenTests
         Assert.Equal([new SetupStep(EpicStep, "XM p.2")], entry.Setup!.Steps);
     }
 
+    // The nine Token cards are optional and never counted; a setup that draws a card they go with says they could be used
+    // (XM p.2, #148), and any other setup says nothing of them.
+    [Fact]
+    public void The_optional_Tokens_are_noted_only_when_a_card_they_go_with_is_drawn()
+    {
+        var withTokens = Draw(2, "Nuclear Armageddon", "Deathbird");
+        var note = Assert.Single(withTokens.Notes, note => note.Text.Contains("Token", StringComparison.Ordinal));
+        Assert.Equal("XM p.2", note.Citation);
+        Assert.StartsWith("Optional: the Token cards could be used with ", note.Text);
+        Assert.Contains("Deathbird", note.Text);
+
+        var plain = Draw(2, "Nuclear Armageddon", "Onslaught");
+        var tokenGroups = new[] { "Hellfire Club", "Murderworld" };
+        Assert.Equal(
+            plain.VillainGroups.Any(group => tokenGroups.Contains(group.Name)),
+            plain.Notes.Any(n => n.Text.Contains("Token", StringComparison.Ordinal)));
+    }
+
     [Fact]
     public void Deathbird_also_leads_a_Shi_ar_Henchman_Group()
     {
