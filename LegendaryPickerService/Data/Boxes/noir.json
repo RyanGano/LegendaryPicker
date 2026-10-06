@@ -11,11 +11,11 @@
   ],
   "components": {"heroCards": {"value": 14, "source": "N p.2"}, "villainGroupCards": {"value": 8, "source": "N p.2"}, "henchmanGroupCards": {"value": 0, "source": "N p.2"}, "schemeTwists": {"value": 0, "source": "N p.2"}},
   "heroes": [
-    {"id": "noir_hero_angel-noir", "name": "Angel Noir", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["noir_term_investigate"]},
-    {"id": "noir_hero_daredevil-noir", "name": "Daredevil Noir", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["noir_term_investigate"]},
-    {"id": "noir_hero_iron-man-noir", "name": "Iron Man Noir", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["noir_term_investigate"]},
-    {"id": "noir_hero_luke-cage-noir", "name": "Luke Cage Noir", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_strength"], "terms": ["noir_term_investigate"]},
-    {"id": "noir_hero_spider-man-noir", "name": "Spider-Man Noir", "team": "core_term_spider-friends", "classes": ["core_term_instinct", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["noir_term_investigate", "core_term_rescue-a-bystander"]}
+    {"id": "noir_hero_angel-noir", "name": "Angel Noir", "heroName": "Angel", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["noir_term_investigate"]},
+    {"id": "noir_hero_daredevil-noir", "name": "Daredevil Noir", "heroName": "Daredevil", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["noir_term_investigate"]},
+    {"id": "noir_hero_iron-man-noir", "name": "Iron Man Noir", "heroName": "Iron Man", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["noir_term_investigate"]},
+    {"id": "noir_hero_luke-cage-noir", "name": "Luke Cage Noir", "heroName": "Luke Cage", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_strength"], "terms": ["noir_term_investigate"]},
+    {"id": "noir_hero_spider-man-noir", "name": "Spider-Man Noir", "heroName": "Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_instinct", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["noir_term_investigate", "core_term_rescue-a-bystander"]}
   ],
   "villainGroups": [
     {"id": "noir_villain_goblin-s-freak-show", "name": "Goblin's Freak Show", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "noir_term_hidden-witnesses"], "uses": [{"part": "wounds", "source": "Card"}]},

@@ -403,6 +403,16 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected($"core_hero_storm {expected}");
     }
 
+    [Theory]
+    [InlineData("heroNames", "[\"Storm\"]", "core_hero_storm has heroNames [Storm]")]
+    [InlineData("alsoTeam", "\"core_term_x-men\"", "core_hero_storm has alsoTeam core_term_x-men")]
+    public void Rejects_a_second_Hero_Name_or_team_that_adds_nothing(string field, string value, string expected)
+    {
+        WriteCoreBox(core => Entry(core, "heroes", "core_hero_storm")[field] = JsonNode.Parse(value));
+
+        AssertRejected(expected);
+    }
+
     [Fact]
     public void Rejects_a_Scheme_that_lists_a_team_as_a_keyword()
     {

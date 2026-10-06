@@ -58,7 +58,7 @@ public class DarkCityTests
         Assert.Equal([new OutsideHero(jeanGrey, Pile.VillainDeck, 14)], setup.OutsideHeroes);
         Assert.DoesNotContain(jeanGrey, setup.Heroes);
         Assert.Contains(
-            new RuleNote("Scheme draws 1 extra Jean Grey or Time-Traveling Jean Grey Hero outside the Hero Deck and puts its cards into the Villain Deck", "Card", null, DarkCityName),
+            new RuleNote("Scheme draws 1 extra Jean Grey Hero outside the Hero Deck and puts its cards into the Villain Deck", "Card", null, DarkCityName),
             setup.Notes);
     }
 

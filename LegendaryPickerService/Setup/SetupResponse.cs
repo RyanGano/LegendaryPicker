@@ -25,7 +25,7 @@ public abstract record SetupResponse
         var villainGroups = setup.VillainGroups.Select(group => glossary.Component(group.Id, group.Name, group.Terms)).ToList();
         var henchmanGroups = setup.HenchmanGroups.Select(group => glossary.Component(group.Id, group.Name, group.Terms)).ToList();
         Component Hero(Hero hero) => glossary.Component(
-            hero.Id, hero.Name, [.. hero.Team is null ? [] : new[] { hero.Team }, .. hero.Classes, .. hero.Terms]);
+            hero.Id, hero.Name, [.. hero.Teams, .. hero.Classes, .. hero.Terms]);
         var heroes = setup.Heroes.Select(Hero).ToList();
         var outsideHeroes = setup.OutsideHeroes.Select(outside => new OutsideHeroBody(Hero(outside.Hero), outside.To, outside.Cards)).ToList();
 

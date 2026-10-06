@@ -41,7 +41,7 @@ public class DeadpoolTests
             var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new SeededRandom(SchemeDraw(2, scheme), seed)));
 
             Assert.Equal(scheme, setup.Scheme.Name);
-            Assert.Contains(setup.Heroes, hero => hero.NameOfHero == "Deadpool");
+            Assert.Contains(setup.Heroes, hero => hero.HasHeroName("Deadpool"));
         }
     }
 

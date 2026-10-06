@@ -171,18 +171,32 @@ public interface ICard
     IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part);
 }
 
-// Team, Classes and Terms name glossary term ids. Team is null for an unaffiliated Hero. HeroName is the
-// Hero Name several Heroes can share, such as two versions of one character; it is left out when the
-// Hero's own name is its Hero Name.
+// Team, Classes and Terms name glossary term ids. Team is null for an unaffiliated Hero. AlsoTeam is the second team of a
+// Divided Card Hero whose right halves show another team, as Storm & Black Panther's Avengers beside its X-Men; the Hero
+// counts as either team, one at a time (owner rule, #149). HeroName is the Hero Name several Heroes can share, such as a
+// version of a character (Spider-Man Noir is Spider-Man); it is left out when the Hero's own name is its Hero Name.
+// HeroNames replaces it for a Hero whose halves show two names, as Colossus & Wolverine counts as Colossus and as
+// Wolverine (#149).
 public sealed record Hero(
     string Id, string Name, string? Team, IReadOnlyList<string> Classes, IReadOnlyList<string> Terms, string? HeroName = null,
-    IReadOnlyList<PartUse>? Uses = null) : ICard
+    IReadOnlyList<PartUse>? Uses = null, IReadOnlyList<string>? HeroNames = null, string? AlsoTeam = null) : ICard
 {
-    public string NameOfHero => HeroName ?? Name;
+    // Every Hero Name the Hero counts under for Hero Name rules.
+    public IReadOnlyList<string> NamesOfHero => HeroNames ?? [HeroName ?? Name];
 
-    // Whether a word is in the Hero Name as the card prints it: "Hulk" is in She-Hulk and Hulkbuster Iron Man, not in
-    // Bruce Banner.
-    public bool HasInHeroName(string word) => NameOfHero.Contains(word, StringComparison.Ordinal);
+    // Every team the Hero counts as: none, its team, or a Divided Card's two.
+    public IReadOnlyList<string> Teams => Team is null ? [] : AlsoTeam is null ? [Team] : [Team, AlsoTeam];
+
+    public bool HasTeam(string team) => Team == team || AlsoTeam == team;
+
+    public bool HasHeroName(string name) => HeroNames?.Contains(name) ?? (HeroName ?? Name) == name;
+
+    // Whether the two Heroes have a Hero Name in common, so a Scheme allowing no two Heroes with one Hero Name can't take both.
+    public bool SharesHeroName(Hero other) => HeroNames?.Any(other.HasHeroName) ?? other.HasHeroName(HeroName ?? Name);
+
+    // Whether a word is in the Hero Name as the card prints it, the display name less any bracketed version: "Hulk" is in
+    // She-Hulk and Hulkbuster Iron Man, not in Bruce Banner.
+    public bool HasInHeroName(string word) => Name.Split(" (")[0].Contains(word, StringComparison.Ordinal);
 }
 
 public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null) : ICard;
@@ -314,9 +328,9 @@ public sealed record HeroCount(
     string Source, string? Team = null, string? HeroName = null, int? AtLeast = null, int? Exactly = null, string? HeroNameContains = null)
 {
     public bool Matches(Hero hero) =>
-        Team is { } team ? hero.Team == team
+        Team is { } team ? hero.HasTeam(team)
         : HeroNameContains is { } word ? hero.HasInHeroName(word)
-        : hero.NameOfHero == HeroName;
+        : hero.HasHeroName(HeroName!);
 }
 
 // Heroes a Scheme draws outside the Hero Deck, whose cards all go To one pile: the Villain Deck, beside

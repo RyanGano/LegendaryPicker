@@ -751,9 +751,24 @@ public sealed partial class BoxCatalog
     // A Hero constraint counts Heroes by one thing, a team, a Hero Name or a word in it, against one bound. Heroes
     // drawn outside the Hero Deck go to a pile of their own rather than a stack or the Hero Deck, and are
     // chosen by at most one of a Hero, a Hero Name, a word in it or a team. There is one of each Hero, so a rule that
-    // needs one Hero twice, or both in the Hero Deck and outside it, has no draw.
+    // needs one Hero twice, or both in the Hero Deck and outside it, has no draw. A Hero with two Hero Names or two
+    // teams lists them once each, and has the second team only beside a first.
     private static void ValidateHeroRules(string path, Box box)
     {
+        foreach (var hero in box.Heroes)
+        {
+            if (hero.HeroNames is { } names && (hero.HeroName is not null || names.Count < 2 || names.Distinct().Count() != names.Count))
+            {
+                throw new InvalidDataException(
+                    $"{path}: {hero.Id} has heroNames [{string.Join(", ", names)}]; it lists at least 2 different Hero Names, without heroName.");
+            }
+
+            if (hero.AlsoTeam is { } also && (hero.Team is null || hero.Team == also))
+            {
+                throw new InvalidDataException($"{path}: {hero.Id} has alsoTeam {also}; it is a second team, different from team.");
+            }
+        }
+
         foreach (var scheme in box.Schemes)
         {
             foreach (var count in scheme.Setup.HeroCounts ?? [])
@@ -886,11 +901,11 @@ public sealed partial class BoxCatalog
 
         // Stand-ins of each team and Hero Name, including none and a Hero Name of their own, enough of each
         // to fill every slot, with a team of their own for each team a team split asks for.
-        var teams = counts.Select(count => count.Team).Concat(outside.Select(rule => rule.Team)).Concat(named.Select(hero => hero.Team))
+        var teams = counts.Select(count => count.Team).Concat(outside.Select(rule => rule.Team)).Concat(named.SelectMany(hero => hero.Teams))
             .Concat(split.Select((_, index) => $"stand-in-team_{index}")).Append(null).Distinct();
         // A word a rule looks for in Hero Names is a stand-in's whole Hero Name.
         var names = counts.Select(count => count.HeroName ?? count.HeroNameContains).Concat(outside.Select(rule => rule.HeroName ?? rule.HeroNameContains))
-            .Concat(outside.SelectMany(rule => rule.HeroNames?.Value ?? [])).Concat(named.Select(hero => hero.NameOfHero)).Append(null).Distinct().ToList();
+            .Concat(outside.SelectMany(rule => rule.HeroNames?.Value ?? [])).Concat(named.SelectMany(hero => hero.NamesOfHero)).Append(null).Distinct().ToList();
         var standIns = teams
             .SelectMany(team => names.SelectMany(name => Enumerable.Range(0, deckSlots + outside.Count).Select(_ => (Team: team, Name: name))))
             .Select((standIn, index) => new Hero($"stand-in_{index}", standIn.Name ?? $"stand-in {index}", standIn.Team, [], []))
@@ -980,7 +995,7 @@ public sealed partial class BoxCatalog
 
     // A Hero's team and classes, then every component's keywords, then the teams a Scheme's Hero rules name.
     private static IEnumerable<(string Owner, string TermId, TermKind Kind)> TermReferences(Box box) =>
-        box.Heroes.SelectMany(h => (h.Team is null ? [] : new[] { (h.Id, h.Team, TermKind.Team) })
+        box.Heroes.SelectMany(h => h.Teams.Select(team => (h.Id, team, TermKind.Team))
                 .Concat(h.Classes.Select(c => (h.Id, c, TermKind.Class)))
                 .Concat(h.Terms.Select(t => (h.Id, t, TermKind.Keyword))))
             .Concat(box.VillainGroups.SelectMany(g => g.Terms.Select(t => (g.Id, t, TermKind.Keyword))))
