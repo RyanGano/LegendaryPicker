@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 7,
+  "id": "marvel-studios-phase-1",
+  "name": "Marvel Studios Phase 1",
+  "ruleset": "firstEdition",
+  "catalogSource": "P1 p.18; C1",
+  "about": { "released": { "value": "2018-08", "source": "Q" } },
+  "sources": [
+    { "key": "P1", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Marvel_Studios_the_First_Ten_Years.pdf" },
+    { "key": "D1", "url": "https://boardgamegeek.com/thread/993341/article/12653573" },
+    { "key": "D2", "url": "https://boardgamegeek.com/thread/884926" },
+    { "key": "D-uses", "url": "https://github.com/RyanGano/LegendaryPicker/issues/87" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" },
+    { "key": "D5", "url": "https://github.com/RyanGano/LegendaryPicker/issues/34" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "P1 p.18" },
+    "villainGroupCards": { "value": 8, "source": "P1 p.18" },
+    "henchmanGroupCards": { "value": 10, "source": "P1 p.18" },
+    "schemeTwists": { "value": 12, "source": "P1 p.18" },
+    "bystanders": { "value": 41, "source": "P1 p.6" },
+    "wounds": { "value": 30, "source": "P1 p.18" },
+    "officers": { "value": 30, "source": "P1 p.18" }
+  },
+  "reprints": {
+    "value": [
+      "core_hero_black-widow", "core_hero_captain-america", "core_hero_hawkeye", "core_hero_hulk", "core_hero_iron-man", "core_hero_nick-fury", "core_hero_thor",
+      "core_villain_enemies-of-asgard", "core_villain_hydra",
+      "core_mastermind_loki", "core_mastermind_red-skull",
+      "core_scheme_super-hero-civil-war", "core_scheme_unleash-the-power-of-the-cosmic-cube"
+    ],
+    "source": "D5"
+  },
+  "heroes": [],
+  "villainGroups": [
+    { "id": "marvel-studios-phase-1_villain_chitauri", "name": "Chitauri", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "marvel-studios-phase-1_term_conqueror"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "marvel-studios-phase-1_villain_gamma-hunters", "name": "Gamma Hunters", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "marvel-studios-phase-1_term_conqueror"], "uses": [{ "part": "wounds", "source": "Card" }] },
+    { "id": "marvel-studios-phase-1_villain_iron-foes", "name": "Iron Foes", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "marvel-studios-phase-1_term_conqueror"], "uses": [{ "part": "wounds", "source": "Card" }] }
+  ],
+  "henchmanGroups": [
+    { "id": "marvel-studios-phase-1_henchman_hammer-drone-army", "name": "Hammer Drone Army", "terms": ["core_term_fight"] },
+    { "id": "marvel-studios-phase-1_henchman_hydra-pilots", "name": "HYDRA Pilots", "terms": ["core_term_fight"] },
+    { "id": "marvel-studios-phase-1_henchman_hydra-spies", "name": "HYDRA Spies", "terms": ["core_term_fight"] },
+    { "id": "marvel-studios-phase-1_henchman_ten-rings-fanatics", "name": "Ten Rings Fanatics", "terms": ["core_term_fight"] }
+  ],
+  "masterminds": [
+    {
+      "id": "marvel-studios-phase-1_mastermind_iron-monger",
+      "name": "Iron Monger",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "marvel-studios-phase-1_term_conqueror"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
+      "alwaysLeads": { "groupId": "marvel-studios-phase-1_villain_iron-foes", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "marvel-studios-phase-1_scheme_asgard-under-siege",
+      "name": "Asgard Under Siege",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "allowedPlayerCounts": { "value": [2, 3, 4, 5], "source": "P1 p.17" },
+        "extraHenchmanGroups": [{ "players": null, "value": 1, "source": "Card" }]
+      }
+    },
+    {
+      "id": "marvel-studios-phase-1_scheme_destroy-the-cities-of-earth",
+      "name": "Destroy the Cities of Earth!",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "villainDeckBystanders": { "value": 12, "source": "Card" }
+      }
+    },
+    {
+      "id": "marvel-studios-phase-1_scheme_enslave-minds-with-the-chitauri-scepter",
+      "name": "Enslave Minds with the Chitauri Scepter",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "heroes": [{ "players": null, "value": 6, "source": "Card" }],
+        "requiredGroups": [{ "groupId": "marvel-studios-phase-1_villain_chitauri", "groupType": "villain", "source": "Card" }],
+        "moves": [
+          { "card": "hero", "to": "villainDeck", "count": [{ "players": null, "value": 12, "source": "Card" }] }
+        ]
+      }
+    },
+    {
+      "id": "marvel-studios-phase-1_scheme_invade-asgard",
+      "name": "Invade Asgard",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 7, "source": "Card" }]
+      }
+    },
+    {
+      "id": "marvel-studios-phase-1_scheme_radioactive-palladium-poisoning",
+      "name": "Radioactive Palladium Poisoning",
+      "terms": ["core_term_scheme-twist"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "woundsPerPlayer": { "value": 6, "source": "Card" }
+      }
+    },
+    {
+      "id": "marvel-studios-phase-1_scheme_replace-earths-leaders-with-hydra",
+      "name": "Replace Earth's Leaders with HYDRA",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 5, "source": "Card" }],
+        "twistsBesideScheme": { "value": 3, "source": "Card" },
+        "villainDeckBystanders": { "value": 18, "source": "Card" }
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "marvel-studios-phase-1_term_conqueror", "name": "Conqueror", "kind": "keyword", "summary": "A card with this ability names a city space and a bonus. It gets that much extra Attack whenever any Villain, not only itself, occupies that space.", "source": "P1", "page": 13 }
+  ],
+  "setup": {
+    "playerCounts": [
+      { "players": 2, "villainGroups": 2, "henchmanGroups": 1, "bystanders": 2, "source": "P1 p.7" },
+      { "players": 3, "villainGroups": 3, "henchmanGroups": 1, "bystanders": 8, "source": "P1 p.7" },
+      { "players": 4, "villainGroups": 3, "henchmanGroups": 2, "bystanders": 8, "source": "P1 p.7" },
+      { "players": 5, "villainGroups": 4, "henchmanGroups": 2, "bystanders": 12, "source": "P1 p.7" }
+    ],
+    "heroes": { "value": 5, "source": "P1 p.8" },
+    "extraHeroes": [{ "players": [5], "value": 1, "source": "P1 p.8" }],
+    "masterStrikes": { "value": 5, "source": "P1 p.7" },
+    "startingDeck": {
+      "agents": { "value": 8, "source": "P1 p.6" },
+      "troopers": { "value": 4, "source": "P1 p.6" }
+    },
+    "solo": {
+      "heroes": { "value": 3, "source": "P1 p.17" },
+      "villainGroups": { "value": 1, "source": "P1 p.17" },
+      "henchmanGroups": { "value": 1, "source": "P1 p.17" },
+      "henchmanCards": { "value": 3, "source": "P1 p.17" },
+      "bystanders": { "value": 1, "source": "P1 p.17" },
+      "masterStrikes": { "value": 1, "source": "P1 p.17" },
+      "ignoresAlwaysLeads": { "value": true, "source": "P1 p.17" },
+      "playRules": [
+        { "label": "After each Twist, KO a Hero costing 6 or less from the HQ", "source": "P1 p.17" }
+      ]
+    },
+    "uses": [{ "part": "officers", "source": "P1 p.11" }],
+    "rulings": {
+      "alwaysLeadsFillsSlot": "P1 p.7",
+      "requiredGroupDisplacesAlwaysLeads": "D1",
+      "schemeOverridesSolo": "D2",
+      "unusedPartsLeftOut": "D-uses"
+    }
+  }
+}

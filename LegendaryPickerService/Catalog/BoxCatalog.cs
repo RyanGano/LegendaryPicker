@@ -53,6 +53,7 @@ public sealed partial class BoxCatalog
             .Select(path => (Path: path, Box: LoadBox(path)))
             .ToList();
 
+        files = ResolveReprints(files);
         Validate(files);
 
         return new BoxCatalog(files.Select(file => file.Box).ToList());
@@ -86,6 +87,57 @@ public sealed partial class BoxCatalog
             // Name the file: with one file per box, the JSON path alone does not say which box is broken.
             throw new InvalidDataException($"{path} is not a valid box file: {ex.Message}", ex);
         }
+    }
+
+    // Gives each box the cards its reprints name. A reprint names a Hero, group, Mastermind or Scheme another box of the
+    // same ruleset declares, once, and its cards are as many as the original's, since it is one card with it (#34 D5).
+    private static List<(string Path, Box Box)> ResolveReprints(IReadOnlyList<(string Path, Box Box)> files)
+    {
+        // An id declared twice is Validate's to report, so the first declaration serves here.
+        var declared = files.SelectMany(file => Cards(file.Box).Select(card => (Card: card, file.Box)))
+            .DistinctBy(entry => entry.Card.Id)
+            .ToDictionary(entry => entry.Card.Id, StringComparer.Ordinal);
+
+        return files.Select(file =>
+        {
+            var (path, box) = file;
+            var ids = box.Reprints?.Value ?? [];
+            if (ids.GroupBy(id => id).FirstOrDefault(id => id.Count() > 1) is { } twice)
+            {
+                throw new InvalidDataException($"{path}: box {box.Id} lists reprint {twice.Key} more than once.");
+            }
+
+            var cards = ids.Select(id =>
+            {
+                if (!declared.TryGetValue(id, out var original) || original.Box.Id == box.Id)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: box {box.Id} reprints {id}; a reprint names a Hero, group, Mastermind or Scheme another loaded box declares.");
+                }
+
+                if (original.Box.Ruleset != box.Ruleset)
+                {
+                    throw new InvalidDataException($"{path}: box {box.Id} reprints {id} from {original.Box.Id}, which follows another ruleset.");
+                }
+
+                var (own, theirs) = original.Card switch
+                {
+                    Hero => (box.Components.HeroCards.Value, original.Box.Components.HeroCards.Value),
+                    VillainGroup => (box.Components.VillainGroupCards.Value, original.Box.Components.VillainGroupCards.Value),
+                    HenchmanGroup => (box.Components.HenchmanGroupCards.Value, original.Box.Components.HenchmanGroupCards.Value),
+                    _ => (0, 0),
+                };
+                if (own != theirs)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: box {box.Id} reprints {id} with {own} cards to its {theirs}; a reprint is the same card.");
+                }
+
+                return original.Card;
+            }).ToList();
+
+            return (path, box with { ReprintedCards = cards });
+        }).ToList();
     }
 
     // Checks across every loaded box, so a reference into another box resolves.
@@ -516,11 +568,11 @@ public sealed partial class BoxCatalog
     // A Scheme's exclusions name Masterminds of its own box, each once. Team splits are left to the base game's Heroes.
     private static void ValidateOwnBox(string path, Box box)
     {
-        bool Own(string id) => id.Split('_')[0] == box.Id;
+        bool Own(string id) => box.Holds(id);
         void Refuse(string owner, string what, string id) =>
             throw new InvalidDataException($"{path}: {owner} {what} {id} from another box; it must be in {box.Id}.");
 
-        foreach (var mastermind in box.Masterminds)
+        foreach (var mastermind in box.AllMasterminds)
         {
             foreach (var group in (mastermind.AlsoLeads?.GroupIds ?? []).Prepend(mastermind.AlwaysLeads.GroupId).Where(id => !Own(id)))
             {
@@ -528,7 +580,7 @@ public sealed partial class BoxCatalog
             }
         }
 
-        foreach (var scheme in box.Schemes)
+        foreach (var scheme in box.AllSchemes)
         {
             var setup = scheme.Setup;
             foreach (var group in setup.RequiredGroups ?? [])
@@ -572,7 +624,7 @@ public sealed partial class BoxCatalog
             foreach (var count in setup.HeroCounts ?? [])
             {
                 var needed = count.AtLeast ?? count.Exactly!.Value;
-                if (box.Heroes.Count(count.Matches) < needed)
+                if (box.AllHeroes.Count(count.Matches) < needed)
                 {
                     throw new InvalidDataException(
                         $"{path}: {scheme.Id} counts {needed} Heroes {(count.HeroNameContains is { } word ? $"with \"{word}\" in their Hero Names" : $"of {count.Team ?? count.HeroName}")}, which {box.Id} doesn't hold; its own Heroes must meet it.");
@@ -589,7 +641,7 @@ public sealed partial class BoxCatalog
 
                 var most = outside.Count.Max(count => count.Value);
                 if (outside.OtherBox is null && (outside.HeroName is not null || outside.HeroNames is not null || outside.Team is not null || outside.HeroNameContains is not null)
-                    && box.Heroes.Count(hero => HeroRules.Selects(outside, hero)) < most)
+                    && box.AllHeroes.Count(hero => HeroRules.Selects(outside, hero)) < most)
                 {
                     throw new InvalidDataException(
                         $"{path}: {scheme.Id} setup.outsideHeroes[{index}] draws {most} Heroes {box.Id} doesn't hold; its own Heroes must meet it, or otherBox allows another box's.");
@@ -599,7 +651,7 @@ public sealed partial class BoxCatalog
             var excluded = new HashSet<string>(StringComparer.Ordinal);
             foreach (var exclusion in scheme.ExcludesMasterminds ?? [])
             {
-                if (!box.Masterminds.Any(mastermind => mastermind.Id == exclusion.MastermindId) || !excluded.Add(exclusion.MastermindId))
+                if (!box.AllMasterminds.Any(mastermind => mastermind.Id == exclusion.MastermindId) || !excluded.Add(exclusion.MastermindId))
                 {
                     throw new InvalidDataException(
                         $"{path}: {scheme.Id} excludesMasterminds lists {exclusion.MastermindId}; it lists Masterminds of {box.Id}, each once.");
@@ -928,6 +980,11 @@ public sealed partial class BoxCatalog
     private static IEnumerable<(string Rule, string Source)> RuleSources(Box box)
     {
         yield return ("about.released", box.About.Released.Source);
+        if (box.Reprints is { } reprints)
+        {
+            yield return ("reprints", reprints.Source);
+        }
+
         var components = box.Components;
         yield return ("components.heroCards", components.HeroCards.Source);
         yield return ("components.villainGroupCards", components.VillainGroupCards.Source);

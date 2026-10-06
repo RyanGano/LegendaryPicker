@@ -104,11 +104,15 @@ public abstract record SetupResponse
         // A catalog id starts with its box's id, which the loader checks.
         private readonly Dictionary<string, Box> _boxes = catalog.Boxes.ToDictionary(box => box.Id, StringComparer.Ordinal);
 
+        // A reprint is one card with the original (#34 D5), so a card held by several included boxes names them all:
+        // a card from either one will do.
         public Component Component(string id, string name, IEnumerable<string> terms)
         {
             var box = _boxes[id.Split('_')[0]];
-            var notIncluded = !included.Contains(box);
-            return new(id, name, Ordered(terms).ToList(), NameBoxes || notIncluded ? box.Name : null, nameRulesets ? box.Ruleset : null, notIncluded);
+            var holders = included.Where(other => other.Holds(id)).ToList();
+            var notIncluded = holders.Count == 0;
+            var label = notIncluded ? box.Name : string.Join(" or ", holders.Select(holder => holder.Name));
+            return new(id, name, Ordered(terms).ToList(), NameBoxes || notIncluded ? label : null, nameRulesets ? box.Ruleset : null, notIncluded);
         }
 
         public IReadOnlyList<GlossaryEntry> Entries(IEnumerable<string> terms) =>

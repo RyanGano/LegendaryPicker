@@ -17,7 +17,7 @@ The original Marvel Legendary base product, with its own card pool and setup rul
 An additional product that adds content to the Marvel Legendary game system. An expansion's rules apply only to a setup that includes that expansion.
 
 **Base game**:
-A box that can be played on its own and carries setup rules, such as the First Edition core box or Legendary: Villains. A base game is an optional pick like any other box, but every setup includes at least one.
+A box that can be played on its own and carries setup rules, such as the First Edition core box, Marvel Studios Phase 1 or Legendary: Villains. A base game is an optional pick like any other box, but every setup includes at least one.
 
 **Ruleset**:
 The rules a box's cards are played under, separate from the box itself: First Edition for the core box and its Heroic expansions, and Villainous for Legendary: Villains and its Villainous expansions, such as Fear Itself. A setup follows one ruleset. Boxes of both can be included together; the Scheme and Mastermind then decide it: a Villainous Plot or Commander means Villainous, otherwise First Edition (owner decisions, #85, #88). Every other card is drawn from every included box whatever the ruleset. An expansion whose box says it can be played without a base game of its own ruleset, as Fear Itself can, follows the included base game's rules when none of its own is included (owner decision, #110).
@@ -60,6 +60,9 @@ A Civil War Hero card printed as two half-cards. It is one card for every count,
 
 **Display name**:
 The name a setup shows for a Hero, Villain Group, Henchman Group, Mastermind or Scheme. No two of one kind share a display name across the boxes, so the player can always tell which card to use. A new version of a character takes a distinguishing name: its printed card title when that differs (Symbiote Spider-Man), otherwise the title with its version in brackets (Wolverine (X-Force)). It keeps the shared Hero Name.
+
+**Reprint**:
+A box's printing of another box's Hero, group, Mastermind or Scheme, as Marvel Studios Phase 1's Hulk and Loki reprint the core box's. A reprint is the same card (roadmap decision D5, #34): a setup with either box can draw it, it is drawn at most once when both are included, and it names both boxes, since either box's card will do. A new version with different setup data is not a reprint; it takes a distinguishing display name.
 
 **Hero constraint**:
 A Scheme's rule on which Heroes the Hero Deck holds: a required Hero, which fills a Hero slot like a required group; at least or exactly some number of Heroes of a team, with a Hero Name, or with a word in their Hero Names (Fall of the Hulks: exactly 2 with "Hulk"); a team split, exactly some number of Heroes of each of several different teams the draw picks (Avengers vs. X-Men: 3 of one team and 3 of another); or no two Heroes with the same Hero Name. The Heroes are drawn within these rules, which the Scheme's own box's Heroes can always meet (#138).
@@ -141,7 +144,7 @@ How a random setup is selected, mirroring a normal game at the table: draw the S
 The table draw's first step: the Scheme comes first, from every included Scheme its card allows at the player count, and everything else follows from it. A Scheme rules a Mastermind out only when its card says so, recorded in its box file as an excluded Mastermind (owner decision, #138).
 
 **Required card from another box**:
-A card a Scheme requires that is in a box the setup doesn't include, as The Kree-Skrull War's core box Skrulls. The setup still uses it, since the player owns it, and the checklist says the Scheme requires it from that box; when the card names a substitute, an included card takes its place instead (owner decision, #138).
+A card a Scheme requires that is in a box the setup doesn't include, as The Kree-Skrull War's core box Skrulls. The setup still uses it, since the player owns it, and the checklist says the Scheme requires it from that box; when the card names a substitute, an included card takes its place instead (owner decision, #138). Heroes a Scheme's Hero rules need that no included box has, as a second team of three for Avengers vs. X-Men with Marvel Studios Phase 1 and Civil War alone, are such cards too (#147).
 
 **Setup checklist**:
 What a generated setup gives the player to lay out the game: the chosen components; the Villain Deck and Hero Deck with per-component counts and totals (the Hero Deck's including any Henchmen from a Henchman Group outside the Villain Deck); the Twists and any cards of a group beside the Scheme; any cards a Scheme sets aside; any Heroes outside the Hero Deck and where their cards go; the Bystanders and each other shared stack that is a part in use (Wounds, S.H.I.E.L.D. Officers, Bindings, Madame HYDRA, New Recruits, Sidekicks or the Shard supply), each holding what the included boxes supply unless the Scheme sets its size; each player's starting deck; any setup steps; the rule notes; and the glossary terms its components use. When the setup includes more than one box, each drawn card names the box it comes from.
