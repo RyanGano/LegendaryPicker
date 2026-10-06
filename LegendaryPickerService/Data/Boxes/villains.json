@@ -221,8 +221,7 @@
     "rulings": {
       "alwaysLeadsFillsSlot": "VIL p.6",
       "requiredGroupDisplacesAlwaysLeads": "VIL p.18",
-      "schemeOverridesSolo": "VIL p.18",
-      "unusedPartsLeftOut": "D-uses"
+      "schemeOverridesSolo": "VIL p.18"
     },
     "mixing": {
       "rules": "D-mixed",

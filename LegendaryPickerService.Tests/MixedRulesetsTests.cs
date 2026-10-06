@@ -13,7 +13,6 @@ public class MixedRulesetsTests
     private const string Rulebook = "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf";
     private const string CoreRulebook = "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf";
     private const string Decision = "https://github.com/RyanGano/LegendaryPicker/issues/88";
-    private const string UsesDecision = "https://github.com/RyanGano/LegendaryPicker/issues/87";
     private const string VillainsBox = "Legendary: Villains";
     private const string CoreBox = "Marvel Legendary First Edition core box";
 
@@ -97,7 +96,7 @@ public class MixedRulesetsTests
                 "VIL pp.20-21", Rulebook, VillainsBox),
             setup.Notes);
         Assert.Contains(new RuleNote("Mixed sets: shuffle all Bystanders together", "VIL p.21", Rulebook, VillainsBox), setup.Notes);
-        Assert.Contains(new RuleNote("Leave out the Madame HYDRA stack: no drawn card uses it", "D-uses", UsesDecision, CoreBox), setup.Notes);
+        Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
         Assert.DoesNotContain(setup.Notes, note => note.Text.Contains("recruit stacks", StringComparison.Ordinal) || note.Text.Contains("starting decks", StringComparison.Ordinal));
         if (solo)
         {
@@ -137,7 +136,7 @@ public class MixedRulesetsTests
                 "Mixed sets: lay out the recruit stacks of every included base game, and shuffle all Bystanders together",
                 "VIL p.21", Rulebook, VillainsBox),
             setup.Notes);
-        Assert.Contains(new RuleNote("Leave out the Bindings stack: no drawn card uses it", "D-uses", UsesDecision, VillainsBox), setup.Notes);
+        Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
         Assert.Contains(new RuleNote("Mixed sets: the players choose S.H.I.E.L.D. or HYDRA starting decks", "VIL p.21", Rulebook, VillainsBox), setup.Notes);
         if (solo)
         {
@@ -224,11 +223,11 @@ public class MixedRulesetsTests
         Assert.Equal(["Doombot Legion"], midtown.HenchmanGroups.Select(group => group.Name));
         Assert.Equal(["Black Widow", "Captain America", "Cyclops"], midtown.Heroes.Select(hero => hero.Name));
         Assert.Equal(new SetupStacks(null, 30, 30 + 41 - 12, MadameHydra: 12, NewRecruits: 15), midtown.Stacks);
-        Assert.Contains(new RuleNote("Leave out the Wound and Bindings stacks: no drawn card uses them", "D-uses", UsesDecision, VillainsBox), midtown.Notes);
+        Assert.DoesNotContain(midtown.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
 
         var legacyVirus = Draw(1, CoreAndVillains, "Legacy Virus", "Nick Fury", 13, 0, 0, 0, 0);
         Assert.Equal(new SetupStacks(6, 30, 30 + 41 - 1, MadameHydra: 12, NewRecruits: 15), legacyVirus.Stacks);
-        Assert.Contains(new RuleNote("Leave out the Bindings stack: no drawn card uses it", "D-uses", UsesDecision, VillainsBox), legacyVirus.Notes);
+        Assert.DoesNotContain(legacyVirus.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }
 
     // Villains with Dark City has no box that supplies Wounds, so Mephisto, Stryfe and the Dark City cards that

@@ -257,16 +257,14 @@ public class SecretWarsVolume2Tests
         Assert.Contains(new RuleNote("Scheme moves 10 Ambition cards into the Villain Deck", "Card", null, "Secret Wars Volume 2"), setup.Notes);
     }
 
-    // The other Schemes leave the Ambition cards in the box, and the setup says so.
+    // The other Schemes bring no Ambition cards, and the setup says nothing of them (#148).
     [Fact]
     public void A_draw_without_Sinister_Ambitions_has_no_Ambition_cards()
     {
         var setup = Draw(2, "Master the Mysteries of Kung-Fu", Zheng);
 
         Assert.Empty(setup.Moves);
-        Assert.Contains(
-            setup.Notes,
-            note => note.Text.StartsWith("Leave out the") && note.Text.Contains("Ambition cards"));
+        Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }
 
     // With both Secret Wars boxes included, their Ambition cards form one supply, and Sinister Ambitions still moves 10.

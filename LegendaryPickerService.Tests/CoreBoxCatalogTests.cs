@@ -286,7 +286,7 @@ public class CoreBoxCatalogTests
     [Fact]
     public void Rulings_cite_the_rulebook_and_the_designer()
     {
-        Assert.Equal(new Rulings("R p.6", "D1", "D2", "D-uses"), Core.Setup!.Rulings);
+        Assert.Equal(new Rulings("R p.6", "D1", "D2"), Core.Setup!.Rulings);
     }
 
     // The rules let players recruit S.H.I.E.L.D. Officers in every game (R p.12); Wounds are laid out only
@@ -295,7 +295,6 @@ public class CoreBoxCatalogTests
     public void The_rules_use_the_Officers_and_the_cards_that_take_from_a_stack_list_it()
     {
         Assert.Equal([new PartUse(Part.Officers, "R p.12")], Core.Setup!.Uses);
-        Assert.Equal("D-uses", Core.Setup.Rulings.UnusedPartsLeftOut);
 
         ICard[] cards = [.. Core.Heroes, .. Core.VillainGroups, .. Core.HenchmanGroups, .. Core.Masterminds, .. Core.Schemes];
         Assert.Equal(
@@ -333,8 +332,8 @@ public class CoreBoxCatalogTests
         var sources = RuleSources().ToList();
 
         // 1 catalog + 7 components + 4 player-count rows + 2 + 2 starting deck + 8 solo
-        // + 4 rulings + 1 part the rules use + 4 Always Leads + 20 Scheme setup values + 14 parts cards use.
-        Assert.Equal(67, sources.Count);
+        // + 3 rulings + 1 part the rules use + 4 Always Leads + 20 Scheme setup values + 14 parts cards use.
+        Assert.Equal(66, sources.Count);
         Assert.All(sources, source => Assert.False(string.IsNullOrWhiteSpace(source)));
     }
 
@@ -465,7 +464,6 @@ public class CoreBoxCatalogTests
         yield return setup.Rulings.AlwaysLeadsFillsSlot;
         yield return setup.Rulings.RequiredGroupDisplacesAlwaysLeads;
         yield return setup.Rulings.SchemeOverridesSolo;
-        yield return setup.Rulings.UnusedPartsLeftOut;
         foreach (var use in setup.Uses) yield return use.Source;
 
         foreach (var mastermind in Core.Masterminds) yield return mastermind.AlwaysLeads.Source;

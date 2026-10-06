@@ -299,23 +299,15 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 }
             }
 
-            // A stack the boxes of the drawn cards' rulesets supply but nothing in the setup uses is left out,
-            // Wounds included (D-readings).
-            var leftOut = Enum.GetValues<Part>()
-                .Where(part => !used.Contains(part) && stackBoxes.Any(box => box.Components.Supplies(part) is not null))
-                .ToList();
-            if (leftOut.Count > 0)
+            // A box's optional Token cards could be used with a drawn card they go with; the Tokens stay out of the counts.
+            foreach (var box in boxes.Where(box => box.OptionalTokens is not null))
             {
-                // The Shards are a supply rather than a stack of cards, and the glossary calls them that; the Ambition
-                // cards stay in their box until a Scheme draws some.
-                var stacks = leftOut.Where(part => part is not (Part.Shards or Part.Ambitions)).Select(StackName).ToList();
-                var named = new List<string>();
-                if (stacks.Count > 0) named.Add($"{string.Join(" and ", stacks)} {(stacks.Count == 1 ? "stack" : "stacks")}");
-                if (leftOut.Contains(Part.Shards)) named.Add("Shard supply");
-                if (leftOut.Contains(Part.Ambitions)) named.Add("Ambition cards");
-                notes.Add(Note(
-                    $"Leave out the {string.Join(" and the ", named)}: no drawn card uses {(leftOut.Count == 1 && leftOut[0] != Part.Ambitions ? "it" : "them")}",
-                    rules.Rulings.UnusedPartsLeftOut, rulesBox));
+                var tokens = box.OptionalTokens!;
+                var withTokens = cards.Where(card => tokens.Value.Contains(card.Id)).Select(card => card.Name).Distinct().ToList();
+                if (withTokens.Count > 0)
+                {
+                    notes.Add(Note($"Optional: the Token cards could be used with {string.Join(" and ", withTokens)}", tokens.Source, box));
+                }
             }
 
             if (Solo)

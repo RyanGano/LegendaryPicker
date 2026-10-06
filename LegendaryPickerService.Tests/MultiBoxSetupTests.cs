@@ -103,7 +103,7 @@ public class MultiBoxSetupTests
     }
 
     // Test Tyrant always leads Test Cult, which uses Sidekicks. Midtown Bank Robbery and Dr. Doom's first
-    // groups and Heroes use none, so the fixture's Sidekicks are left out, with a note.
+    // groups and Heroes use none, so the fixture's Sidekicks are not laid out, and no note says so (#148).
     [Fact]
     public void Sidekicks_are_laid_out_only_when_a_drawn_card_uses_them()
     {
@@ -112,11 +112,8 @@ public class MultiBoxSetupTests
 
         Assert.Contains(cult.VillainGroups, group => group.Name == "Test Cult");
         Assert.Equal(16, cult.Stacks.Sidekicks);
-        Assert.DoesNotContain(cult.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
         Assert.Null(midtown.Stacks.Sidekicks);
-        Assert.Contains(
-            new RuleNote("Leave out the Sidekick stack: no drawn card uses it", "D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87", CoreName),
-            midtown.Notes);
+        Assert.DoesNotContain(midtown.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }
 
     // No First Edition box supplies Bindings, so Test Warden, which uses them, is not among the 17 Heroes

@@ -140,7 +140,7 @@ public class VillainsTests
         Assert.Equal((1, "VIL p.7"), (sixthAlly.Value, sixthAlly.Source));
         Assert.Equal(new Sourced<int>(5, "VIL p.6"), setup.MasterStrikes);
         Assert.Equal(new StartingDeck(new Sourced<int>(8, "VIL p.5"), new Sourced<int>(4, "VIL p.5")), setup.StartingDeck);
-        Assert.Equal(new Rulings("VIL p.6", "VIL p.18", "VIL p.18", "D-uses"), setup.Rulings);
+        Assert.Equal(new Rulings("VIL p.6", "VIL p.18", "VIL p.18"), setup.Rulings);
     }
 
     [Fact]

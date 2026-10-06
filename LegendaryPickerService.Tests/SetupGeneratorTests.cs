@@ -375,13 +375,11 @@ public class SetupGeneratorTests
             Assert.Equal(30, setup.Stacks.Officers);
             Assert.Equal(30 - setup.VillainDeck.Bystanders, setup.Stacks.Bystanders);
 
-            // The Wound stack is laid out only when a drawn card uses it, and a note says when it is left out.
+            // The Wound stack is laid out only when a drawn card uses it, and no note says when it is left out.
             ICard[] cards = [setup.Scheme, setup.Mastermind, .. setup.VillainGroups, .. setup.HenchmanGroups, .. setup.Heroes];
             var woundsUsed = cards.Any(card => card.Parts.Contains(Part.Wounds));
             Assert.Equal(woundsUsed ? setup.Scheme.Name == LegacyVirus ? 6 * players : 30 : null, setup.Stacks.Wounds);
-            Assert.Equal(
-                !woundsUsed,
-                setup.Notes.Contains(new RuleNote("Leave out the Wound stack: no drawn card uses it", "D-uses", "https://github.com/RyanGano/LegendaryPicker/issues/87")));
+            Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
         });
     }
 

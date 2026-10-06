@@ -206,6 +206,7 @@ public sealed partial class BoxCatalog
 
             ValidateUses(path, box);
             ValidateOtherRuleset(path, box);
+            ValidateOptionalTokens(path, box);
         }
 
         // A setup names its cards by display name, so two Heroes, groups, Masterminds or Schemes sharing
@@ -697,6 +698,22 @@ public sealed partial class BoxCatalog
         }
     }
 
+    // The Token cards are used with cards of the box itself, each named once.
+    private static void ValidateOptionalTokens(string path, Box box)
+    {
+        var ids = box.OptionalTokens?.Value ?? [];
+        var own = Cards(box).Select(card => card.Id).ToHashSet(StringComparer.Ordinal);
+        if (ids.FirstOrDefault(id => !own.Contains(id)) is { } unknown)
+        {
+            throw new InvalidDataException($"{path}: box {box.Id} lists optionalTokens {unknown}, which it doesn't declare.");
+        }
+
+        if (ids.GroupBy(id => id).FirstOrDefault(id => id.Count() > 1) is { } twice)
+        {
+            throw new InvalidDataException($"{path}: box {box.Id} lists optionalTokens {twice.Key} more than once.");
+        }
+    }
+
     // Only an expansion plays under another ruleset's base game: a base game brings its own rules. A part stands in
     // for itself or twice would say nothing.
     private static void ValidateOtherRuleset(string path, Box box)
@@ -985,6 +1002,11 @@ public sealed partial class BoxCatalog
             yield return ("reprints", reprints.Source);
         }
 
+        if (box.OptionalTokens is { } tokens)
+        {
+            yield return ("optionalTokens", tokens.Source);
+        }
+
         var components = box.Components;
         yield return ("components.heroCards", components.HeroCards.Source);
         yield return ("components.villainGroupCards", components.VillainGroupCards.Source);
@@ -1013,7 +1035,6 @@ public sealed partial class BoxCatalog
             yield return ("setup.rulings.alwaysLeadsFillsSlot", setup.Rulings.AlwaysLeadsFillsSlot);
             yield return ("setup.rulings.requiredGroupDisplacesAlwaysLeads", setup.Rulings.RequiredGroupDisplacesAlwaysLeads);
             yield return ("setup.rulings.schemeOverridesSolo", setup.Rulings.SchemeOverridesSolo);
-            yield return ("setup.rulings.unusedPartsLeftOut", setup.Rulings.UnusedPartsLeftOut);
             if (setup.Mixing is { } mixing)
             {
                 yield return ("setup.mixing.rules", mixing.Rules);

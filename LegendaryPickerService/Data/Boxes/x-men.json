@@ -12,6 +12,7 @@
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
   ],
   "components": {"heroCards": {"value": 14, "source": "XM p.2"}, "villainGroupCards": {"value": 8, "source": "XM p.2"}, "henchmanGroupCards": {"value": 10, "source": "XM p.2"}, "schemeTwists": {"value": 1, "source": "XM p.2"}, "bystanders": {"value": 9, "source": "XM p.2"}, "horrors": {"value": 20, "source": "XM p.2"}},
+  "optionalTokens": {"value": ["x-men_mastermind_deathbird", "x-men_villain_hellfire-club", "x-men_villain_murderworld"], "source": "XM p.2"},
   "heroes": [
     {"id": "x-men_hero_aurora-and-northstar", "name": "Aurora & Northstar", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["civil-war_term_divided-card", "x-men_term_berserk", "x-men_term_soaring-flight", "x-men_term_lightshow"]},
     {"id": "x-men_hero_banshee", "name": "Banshee", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["x-men_term_x-gene", "x-men_term_piercing-energy", "x-men_term_soaring-flight"]},
