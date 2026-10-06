@@ -61,6 +61,7 @@ The official insert does not name the nine token cards or the 20 Horrors. The C1
 ## Required parts and glossary
 
 - The product adds nine token cards, one Master Strike, one Scheme Twist, nine Special Bystanders, and 20 Horrors (XM p.2). Exact token names remain unavailable in the insert.
+- **Token-marked cards (C1 card faces, `Card`):** C1 marks the Token symbol on Deathbird's Master Strike (both faces; the Shi'ar Battlecruiser and Battleship), the Hellfire Club's Corrupt the Phoenix Force and Murderworld's Animatronic Killer Clowns, so `optionalTokens` lists Deathbird, Hellfire Club and Murderworld. That accounts for four of the nine Token cards at most; the other Token-using cards are unresolved (no card-face check has found them), so the list may be incomplete (#156).
 - **X-Gene:** Use a conditional bonus once only if its specified card is already in the discard pile. (XM p.1)
 - **Piercing Energy:** A resource that fights enemies using their printed Victory Points instead of their Attack value. (XM p.1)
 - **Berserk:** Discard the deck's top card and gain Attack based on that card's printed value. (XM p.1)

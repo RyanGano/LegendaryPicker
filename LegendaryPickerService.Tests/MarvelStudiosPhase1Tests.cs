@@ -63,6 +63,34 @@ public class MarvelStudiosPhase1Tests
         Assert.Equal(("Marvel Studios Phase 1", false), (hydra.Box, hydra.NotIncluded));
     }
 
+    // Phase 1 reprints core cards but none of its cards is X-Men, so beside the X-Men box the X-Men team chip names
+    // the core box that defines the term, not Phase 1 (#156); its reprinted Black Widow is an Avenger, so the Avengers
+    // chip still names Phase 1 (#153).
+    [Fact]
+    public void A_core_team_chip_names_Phase_1_only_for_its_own_printings()
+    {
+        string[] boxes = ["marvel-studios-phase-1", "x-men"];
+        var included = Catalog.Boxes.Where(box => boxes.Contains(box.Id)).ToList();
+        var scheme = included.SelectMany(box => box.AllSchemes).DistinctBy(s => s.Id)
+            .Where(s => s.Setup.AllowedPlayerCounts?.Value.Contains(2) ?? true).Select(s => s.Name).ToList().IndexOf("Anti-Mutant Hatred");
+        var mastermind = included.SelectMany(box => box.AllMasterminds).DistinctBy(m => m.Id).Select(m => m.Name).ToList().IndexOf("Arcade");
+        var probe = new ScriptedRandom(scheme, mastermind);
+        Generator.Generate(2, boxes, probe);
+
+        // The Hero draws are the ones with the whole pool to choose from: the first Hero in it is Phase 1's Black Widow,
+        // and the last are the X-Men box's.
+        var pool = included.SelectMany(box => box.AllHeroes).DistinctBy(hero => hero.Id).Count();
+        var first = probe.Options.IndexOf(pool);
+        var draws = new[] { scheme, mastermind }.Concat(new int[first - 2]).Append(0).Concat(Enumerable.Range(2, 4).Select(i => pool - i)).ToArray();
+        var setup = Assert.IsType<SetupBody>(SetupResponse.From(Generator.Generate(2, boxes, new ScriptedRandom(draws)), Catalog));
+
+        Assert.Contains(setup.Heroes, hero => hero.Name == "Black Widow");
+        Assert.Equal(
+            ("Marvel Legendary First Edition core box", "Marvel Studios Phase 1"),
+            (Assert.Single(setup.Glossary, entry => entry.Id == "core_term_x-men").Box,
+                Assert.Single(setup.Glossary, entry => entry.Id == "core_term_avengers").Box));
+    }
+
     // With Phase 1 alone the Schemes and Masterminds are drawn in box-file order, so a pair is two indexes.
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
