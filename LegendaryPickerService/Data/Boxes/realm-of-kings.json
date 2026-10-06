@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 7,
+  "id": "realm-of-kings",
+  "name": "Realm of Kings",
+  "ruleset": "firstEdition",
+  "catalogSource": "RK p.2; C1",
+  "about": { "released": { "value": "2020-10", "source": "Q" } },
+  "sources": [
+    { "key": "RK", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/RealmOfKings_Rules_Compressed.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "RK p.2" },
+    "villainGroupCards": { "value": 8, "source": "RK p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "RK p.2" },
+    "schemeTwists": { "value": 0, "source": "RK p.2" }
+  },
+  "heroes": [
+    {"id": "realm-of-kings_hero_black-bolt", "name": "Black Bolt (Realm of Kings)", "heroName": "Black Bolt", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["realm-of-kings_term_when-recruited", "realm-of-kings_term_thrones-favor"]},
+    {"id": "realm-of-kings_hero_medusa", "name": "Medusa", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["realm-of-kings_term_when-recruited", "realm-of-kings_term_thrones-favor"]},
+    {"id": "realm-of-kings_hero_crystal", "name": "Crystal", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["realm-of-kings_term_when-recruited", "realm-of-kings_term_thrones-favor"]},
+    {"id": "realm-of-kings_hero_karnak", "name": "Karnak", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["realm-of-kings_term_when-recruited"]},
+    {"id": "realm-of-kings_hero_gorgon", "name": "Gorgon", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_covert", "core_term_strength"], "terms": ["realm-of-kings_term_when-recruited", "captain-america-75th-anniversary_term_abomination", "dark-city_term_teleport"]}
+  ],
+  "villainGroups": [
+    {"id": "realm-of-kings_villain_inhuman-rebellion", "name": "Inhuman Rebellion", "terms": ["core_term_ambush", "core_term_fight", "captain-america-75th-anniversary_term_abomination"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "realm-of-kings_villain_shiar-imperial-elite", "name": "Shi'ar Imperial Elite", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "realm-of-kings_term_thrones-favor"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "realm-of-kings_mastermind_maximus-the-mad", "name": "Maximus the Mad", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "captain-america-75th-anniversary_term_abomination", "realm-of-kings_term_thrones-favor"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "realm-of-kings_villain_inhuman-rebellion", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Maximus the Mad", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "RK p.2"}]}},
+    {"id": "realm-of-kings_mastermind_emperor-vulcan-of-the-shiar", "name": "Emperor Vulcan of the Shi'ar", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "realm-of-kings_term_thrones-favor"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "realm-of-kings_villain_shiar-imperial-elite", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Emperor Vulcan", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "RK p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "realm-of-kings_scheme_ruin-the-perfect-wedding", "name": "Ruin the Perfect Wedding", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "outsideHeroes": [{"to": "setAside", "count": [{"players": null, "value": 2, "source": "Card"}]}], "steps": [{"label": "Stack each set-aside Wedding Hero's 14 cards by cost, cheapest on top", "source": "Card"}]}},
+    {"id": "realm-of-kings_scheme_war-of-kings", "name": "War of Kings", "terms": ["core_term_scheme-twist", "realm-of-kings_term_thrones-favor"], "uses": [{"part": "officers", "source": "Card"}, {"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}]}},
+    {"id": "realm-of-kings_scheme_tornado-of-terrigen-mists", "name": "Tornado of Terrigen Mists", "terms": ["core_term_scheme-twist"], "uses": [{"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 10, "source": "Card"}], "steps": [{"label": "Each player puts a marker above the Sewers", "source": "Card"}]}},
+    {"id": "realm-of-kings_scheme_devolve-with-xerogen-crystals", "name": "Devolve with Xerogen Crystals", "terms": ["core_term_scheme-twist", "captain-america-75th-anniversary_term_abomination"], "setup": {"twists": [{"players": [1], "value": 9, "source": "Card"}, {"players": [2], "value": 10, "source": "Card"}, {"players": [3], "value": 11, "source": "Card"}, {"players": [4], "value": 12, "source": "Card"}, {"players": [5], "value": 13, "source": "Card"}], "extraHenchmanGroups": [{"players": null, "value": 1, "source": "Card"}], "extraHenchmanCards": {"value": 10, "source": "Card"}, "steps": [{"label": "Call the extra Henchman Group the Xerogen Experiments", "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "realm-of-kings_term_inhumans", "name": "Inhumans", "kind": "team", "summary": "A Hero team. In this box its members are Black Bolt, Medusa, Crystal, Karnak and Gorgon.", "source": "RK", "page": 2},
+    {"id": "realm-of-kings_term_when-recruited", "name": "When Recruited", "kind": "keyword", "summary": "Works once, right after you buy the Hero and the HQ is refilled. It does not work when the card is played later, nor when the Hero is gained without recruiting.", "source": "RK", "page": 1},
+    {"id": "realm-of-kings_term_thrones-favor", "name": "Throne's Favor", "kind": "keyword", "summary": "A single shared marker held by one player or Mastermind, or nobody. Gaining it takes it from the holder; spending it sets it aside until someone gains it.", "source": "RK", "page": 1}
+  ]
+}
