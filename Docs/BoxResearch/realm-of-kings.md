@@ -1,6 +1,6 @@
 # Realm of Kings (October 2020)
 
-**Research status: Partial.** The official insert verifies the 100-card count and several mechanics, but not card-level Scheme setups, Always Leads, or complete card metadata.
+**Research status: Partial.** The official insert verifies the 100-card count and the mechanics. For #181 the Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/realm-of-kings.json`; per-face copy counts and the exact Abomination value icon remain open.
 
 ## Sources
 
@@ -32,7 +32,7 @@ The listed categories sum to the official 100-card total.
 - **Masterminds (two):** Maximus the Mad; Emperor Vulcan of the Shi'ar.
 - **Schemes (four):** Ruin the Perfect Wedding; War of Kings; Tornado of Terrigen Mists; Devolve with Xerogen Crystals.
 
-The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index and all setup/rules claims still need an allowed source; unresolved areas include Hero metadata, Always Leads, individual Scheme/Mastermind setup lines, or the precise Abomination comparison icon.
+The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index still need an allowed source; Scheme Setup lines, Always Leads and part uses were read from the linked faces (#181), and per-face copy counts and the Abomination value icon remain open.
 
 ## Rules and mechanisms
 
@@ -52,11 +52,11 @@ The C1 face index below records available printed titles, group/type, numeric va
 - **Abomination:** A Villain value that changes with a printed value in the matching HQ space. (RK p.2)
 - **Teleport:** Set a card aside to add it to the new hand at turn end. (RK p.2)
 
-Summaries are original paraphrases under 40 words. Hero teams/classes, Always Leads, the exact Abomination value icon, and individual card-linked components need further evidence.
+Summaries are original paraphrases under 40 words. The box file reuses Captain America 75th Anniversary's Abomination and Dark City's Teleport terms and adds the Inhumans team, When Recruited and Throne's Favor. From the card faces (#181): both Villain Groups, both Masterminds, War of Kings (which also takes S.H.I.E.L.D. Officers) and Tornado of Terrigen Mists use Wounds. No Hero uses a shared stack, and the Throne's Favor marker is not a setup part. Ruin the Perfect Wedding sets two extra Heroes aside as 14-card stacks, and Devolve with Xerogen Crystals adds an extra 10-card Henchman Group.
 
 ## Setup and implementation gaps
 
-Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps; both Masterminds' Always Leads/setup effects; and full Hero metadata. Integration must track the unique Throne's Favor marker and account for When Recruited abilities without treating them as play effects. Confirm the Abomination comparison field from legible cards; this record changes no runtime data or code.
+Per-face copy counts for Heroes, Masterminds and Tactics are not indexed by C1 and remain unverified, as does the exact Abomination value icon lost in text extraction; neither changes the setup. Throne's Favor, When Recruited and Abomination matter during play only.
 
 ## Structured card-face metadata (C1)
 
