@@ -263,6 +263,14 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("core_scheme_portals-to-the-dark-dimension has setup.wounds 0");
     }
 
+    [Fact]
+    public void Rejects_a_Villain_card_count_below_1()
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["villainCards"] = JsonNode.Parse("""{ "value": 0, "source": "Card" }"""));
+
+        AssertRejected("core_scheme_legacy-virus has setup.villainCards 0; it is at least 1.");
+    }
+
     [Theory]
     [InlineData("core_scheme_negative-zone-prison-breakout", 0)]
     [InlineData("core_scheme_legacy-virus", 10)]

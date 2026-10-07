@@ -442,5 +442,13 @@ Box id `shield`, file `LegendaryPickerService/Data/Boxes/shield.json`, a First E
 
 **Keywords (SH pp.1-2):** Undercover, S.H.I.E.L.D. Level, Hydra Level and Adapting Mastermind are new here.
 
+## Marvel Studios' Guardians of the Galaxy (June 2022)
+
+Box id `marvel-studios-guardians-of-the-galaxy`, file `LegendaryPickerService/Data/Boxes/marvel-studios-guardians-of-the-galaxy.json`, a First Edition expansion (#190). Counts (MG p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8 (5 Villains and 3 Villainous Weapons), 2 double-sided Epic Masterminds and 4 Schemes; no Henchman Group or shared stack. Setup values and part uses come from OCR of the card faces (`Card`).
+
+**Heroes:** Star-Lord (Marvel Studios), Gamora (Marvel Studios), Rocket & Groot, Drax (Marvel Studios) and Mantis, all Guardians of the Galaxy and all with Divided Cards; each counts under the Hero Names of both halves (Star-Lord and Yondu; Gamora and Nebula; Rocket Raccoon and Groot; Drax the Destroyer and Rhomann Dey; Mantis and Ego), spelled as the other boxes spell them. **Villain Groups:** Followers of Ronan (uses Wounds) and Ravagers. **Masterminds:** Ronan the Accuser leads the Followers of Ronan; Ego, the Living Planet's Always Leads allows any group, so it has no `alwaysLeads` and its Setup adds a Villain Group, even in Solo (the Epic side adds a second, offered as a step). Both have an Epic side with the same Tactics.
+
+**Schemes:** Inescapable "Kyln" Space Prison (8 Twists, an extra Villain Group, uses Wounds); Provoke the Sovereign War Fleet (11, an extra Villain Group); Star-Lord's Awesome Mix Tape (7 Twists, 7 Heroes including a Guardians Hero, double the Villain and Henchman Groups with half the cards of each: `villainCards` 4, Henchman cards 5, 2 in Solo); Unleash the Abilisk Space Monster (9). Group slots the included boxes can't fill, as Mix Tape's doubled groups can't with a small set of boxes, are drawn from groups of the same ruleset in unticked boxes and noted in the checklist. Whether Ego conflicts with a Scheme in another box that changes the number of city spaces is an open question for the owner.
+
 ## Open questions
 

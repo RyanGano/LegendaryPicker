@@ -53,3 +53,4 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 ## Research artifacts
 
 Rulebook downloads and extracts stay outside the repository and are never committed or redistributed. Keep only short factual notes and source links.
+- Marvel Studios' Guardians of the Galaxy (#190) is integrated: 5 Heroes (Divided Cards, each with the Hero Names of both halves), 2 Villain Groups, 2 Epic Masterminds and 4 Schemes. Ego's Always Leads allows any group, so `alwaysLeads` is left out (null) and its Setup adds a Villain Group even in Solo; Star-Lord's Awesome Mix Tape uses the new `villainCards` (half of each Villain Group) beside doubled groups and halved Henchman cards, and a Scheme whose group count exceeds the included boxes' groups takes the rest from unticked boxes of the same ruleset, noted in the checklist.

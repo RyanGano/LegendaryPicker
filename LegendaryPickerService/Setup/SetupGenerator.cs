@@ -178,7 +178,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out.
             var ruledOut = (scheme.ExcludesMasterminds ?? []).Select(exclusion => exclusion.MastermindId).ToHashSet();
             var drained = new Queue<Mastermind>(DrawMany(
-                _masterminds.Where(other => other != mastermind && other.AlwaysLeads.GroupId != mastermind.AlwaysLeads.GroupId && !ruledOut.Contains(other.Id)),
+                _masterminds.Where(other => other != mastermind && other.AlwaysLeads is not null && other.AlwaysLeads.GroupId != mastermind.AlwaysLeads?.GroupId && !ruledOut.Contains(other.Id)),
                 drainedDraws.Sum(draw => draw.Count)));
             var drainedLeads = drainedDraws
                 .SelectMany(draw => Enumerable.Repeat(draw.Rule.BringsAlwaysLeads!.Source, draw.Count))
@@ -186,8 +186,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .ToList();
             plan = plan with
             {
-                VillainGroups = plan.VillainGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads.GroupType == GroupType.Villain),
-                HenchmanGroups = plan.HenchmanGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads.GroupType == GroupType.Henchman),
+                VillainGroups = plan.VillainGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads!.GroupType == GroupType.Villain),
+                HenchmanGroups = plan.HenchmanGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads!.GroupType == GroupType.Henchman),
             };
 
             // A group the Scheme sets every card of beside it has none left for the Villain Deck, so it isn't drawn there.
@@ -461,6 +461,16 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 notes.Add(Replaces($"{heroes} {_terms.Heroes}", $"uses {heroes} {_terms.Heroes}", schemeHeroes.Source));
             }
 
+            int? villainCards = null;
+            if (effect.VillainCards is { } schemeVillains)
+            {
+                villainCards = schemeVillains.Value;
+                notes.Add(Replaces(
+                    $"{villainCards} cards of each {_terms.VillainGroup}",
+                    $"puts {villainCards} cards of each {_terms.VillainGroup} in the {_terms.VillainDeck}",
+                    schemeVillains.Source));
+            }
+
             int? henchmanCards = null;
             if (ForPlayers(effect.HenchmanCards ?? []) is { } schemeHenchmen)
             {
@@ -650,6 +660,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 Solo ? rules.Solo.VillainGroups.Value : row!.VillainGroups,
                 Solo ? rules.Solo.HenchmanGroups.Value : row!.HenchmanGroups,
                 henchmanCards,
+                villainCards,
                 twists.Value,
                 effect.TwistsBesideScheme?.Value ?? 0,
                 Solo ? rules.Solo.MasterStrikes.Value : rules.MasterStrikes.Value,
@@ -769,8 +780,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             if (scheme.Setup.OneOfGroups is { } choice && choice.GroupType == type)
             {
                 var options = choice.GroupIds.Select(id => (T)CatalogGroup(id)).ToList();
-                var leadsOne = !IgnoresAlwaysLeads && mastermind.AlwaysLeads.GroupType == type && choice.GroupIds.Contains(mastermind.AlwaysLeads.GroupId);
-                var group = leadsOne ? (T)CatalogGroup(mastermind.AlwaysLeads.GroupId) : DrawOne(options);
+                var leadsOne = !IgnoresAlwaysLeads && mastermind.AlwaysLeads is { } alwaysLeads && alwaysLeads.GroupType == type && choice.GroupIds.Contains(alwaysLeads.GroupId);
+                var group = leadsOne ? (T)CatalogGroup(mastermind.AlwaysLeads!.GroupId) : DrawOne(options);
                 chosen.Add(group);
                 required[group.Id] = new RequiredGroup(group.Id, type, choice.Source);
                 pool = pool.Where(g => g.Id == group.Id || !choice.GroupIds.Contains(g.Id)).ToList();
@@ -780,9 +791,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             }
 
             // The Always Leads group of each Mastermind the Scheme sets aside, as an extra group of its own.
-            foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads.GroupType == type))
+            foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads!.GroupType == type))
             {
-                var group = (T)CatalogGroup(other.AlwaysLeads.GroupId);
+                var group = (T)CatalogGroup(other.AlwaysLeads!.GroupId);
                 if (!chosen.Contains(group))
                 {
                     chosen.Add(group);
@@ -792,7 +803,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             }
 
             var leads = mastermind.AlwaysLeads;
-            if (leads.GroupType == type)
+            if (leads is not null && leads.GroupType == type)
             {
                 if (IgnoresAlwaysLeads)
                 {
@@ -845,7 +856,27 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 }
             }
 
-            chosen.AddRange(DrawMany(pool.Except(chosen).ToList(), slots - chosen.Count));
+            var open = pool.Except(chosen).ToList();
+            chosen.AddRange(DrawMany(open, Math.Min(open.Count, slots - chosen.Count)));
+
+            // Slots the included boxes' groups can't fill, as Star-Lord's Awesome Mix Tape's doubled groups can't with few
+            // boxes, are filled from groups of the same ruleset in boxes that aren't included, which the player adds (#138).
+            // A group already chosen, as one a Scheme requires from a box that isn't included, isn't drawn twice.
+            if (chosen.Count < slots)
+            {
+                var others = catalogBoxes
+                    .Where(box => box.Ruleset == rulesBox.Ruleset && !boxes.Contains(box))
+                    .SelectMany(box => type == GroupType.Villain ? box.VillainGroups.Cast<ICard>() : box.HenchmanGroups)
+                    .Cast<T>().Except(chosen).ToList();
+                foreach (var group in DrawMany(others, Math.Min(others.Count, slots - chosen.Count)))
+                {
+                    chosen.Add(group);
+                    notes.Add(Note(
+                        $"The included boxes have too few groups for {SchemeWord(scheme)}, so {group.Name} comes from {BoxOf(group.Id).Name}, which isn't included",
+                        SchemeFirst, rulesBox));
+                }
+            }
+
             return chosen;
         }
 
@@ -967,8 +998,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var placed = plan.Required.Keys.ToHashSet();
             if (!IgnoresAlwaysLeads)
             {
-                placed.Add(plan.Mastermind!.AlwaysLeads.GroupId);
-                placed.UnionWith(plan.Mastermind.AlsoLeads?.GroupIds ?? []);
+                if (plan.Mastermind!.AlwaysLeads is { } leads) placed.Add(leads.GroupId);
+                placed.UnionWith(plan.Mastermind!.AlsoLeads?.GroupIds ?? []);
             }
 
             return drawn.Where(id => !placed.Contains(id)).TakeLast(extra.Value).ToHashSet();
@@ -978,7 +1009,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // Villain Group, and of a Henchman Group the Scheme's count, Solo's, or all of it.
         // A Henchman Group the Scheme requires with a count of its own puts that many in.
         private int ShareOfDeck(SetupPlan plan, string groupId, GroupType type) => type == GroupType.Villain
-            ? GroupCards(groupId, type)
+            ? plan.VillainCards ?? GroupCards(groupId, type)
             : plan.Required.GetValueOrDefault(groupId)?.Cards
                 ?? plan.HenchmanCards ?? (Solo ? rules.Solo.HenchmanCards.Value : GroupCards(groupId, type));
 
@@ -1119,6 +1150,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         int VillainGroups,
         int HenchmanGroups,
         int? HenchmanCards,
+        int? VillainCards,
         int Twists,
         int TwistsBeside,
         int MasterStrikes,

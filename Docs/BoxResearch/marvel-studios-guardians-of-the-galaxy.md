@@ -1,6 +1,6 @@
 # Marvel Studios' Guardians of the Galaxy (June 2022)
 
-**Research status: Partial.** The official insert verifies contents and several mechanics, but not individual Scheme setups, Always Leads, or full Hero metadata.
+**Research status: Integrated ([#190](https://github.com/RyanGano/LegendaryPicker/issues/190)); partial.** Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked card face (`Card`); Hero teams and classes come from C1, and the Hero Names on Divided Card halves from a look at the faces. Runtime data: `LegendaryPickerService/Data/Boxes/marvel-studios-guardians-of-the-galaxy.json`.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -57,7 +57,7 @@ Summaries are original paraphrases under 40 words. Verify Hero teams/classes/sha
 
 ## Setup and implementation gaps
 
-Verify all four Schemes' player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps, plus both Masterminds' Always Leads/setup effects and Hero metadata. The listed Scheme *Star-Lord's Awesome Mix Tape* is a tracked hard case in #34; its setup must be checked against the card rather than inferred from the insert. Integration must represent Triggered Artifacts, Weapon capture/transfer, and city-size changes. This record changes no runtime data or code.
+Still open: per-face copy counts (C1 gives none for some faces); the two Epic Ego and Ronan sides add no draw, so the Epic side stays an optional step; whether Ego conflicts with a Scheme in another box that changes the number of city spaces (the insert says not to combine them) is not recorded, since no card data was checked for it. Star-Lord's Awesome Mix Tape is modelled with doubled groups and half the cards of each (4 of a Villain Group's 8, 5 of a Henchman Group's 10, 2 in Solo); when the included boxes lack enough groups the setup takes the rest from boxes that are not ticked. Triggered Artifacts, Weapon capture and city-size changes are play mechanics and need no setup data.
 
 ## Structured card-face metadata (C1)
 
