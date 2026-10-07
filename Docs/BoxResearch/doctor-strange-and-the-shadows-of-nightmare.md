@@ -1,6 +1,6 @@
 # Doctor Strange and the Shadows of Nightmare (March 2022)
 
-**Research status: Partial.** The official insert verifies contents and the Astral Plane, Demonic Bargain, and Artifact rules, but not card-level Scheme setups, Always Leads, or full Hero metadata.
+**Research status: Integrated ([#188](https://github.com/RyanGano/LegendaryPicker/issues/188)); partial.** Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked card face (`Card`); Hero teams and classes come from C1. Runtime data: `LegendaryPickerService/Data/Boxes/doctor-strange-and-the-shadows-of-nightmare.json`.
 
 ## Sources
 
@@ -32,7 +32,7 @@ The listed categories sum to the official 100-card total.
 - **Masterminds (two):** Nightmare; Dormammu.
 - **Schemes (four):** War for the Dream Dimension; Claim Souls for Demons; Cursed Pages of the Darkhold Tome; Duels of Science and Magic.
 
-The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index and all setup/rules claims still need an allowed source; unresolved areas include Hero metadata, Always Leads, individual Scheme/Mastermind setup lines, or card-linked component dependencies.
+The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Setup values in the runtime data come from the card faces (`Card`) and the insert (DS).
 
 ## Rules and mechanisms
 
@@ -50,11 +50,11 @@ The C1 face index below records available printed titles, group/type, numeric va
 - **Artifact:** A persistent card controlled in front of its owner and usable on later turns. (DS p.2)
 - **Ritual Artifact:** An Artifact that may be discarded for an effect in a turn when its listed condition is fulfilled. (DS p.2)
 
-Summaries are original paraphrases under 40 words. Hero teams/classes/shared Hero Names, Always Leads, and card-linked component dependencies need card-level verification.
+Summaries are original paraphrases under 40 words.
 
 ## Setup and implementation gaps
 
-Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps, plus both Masterminds' Always Leads/setup effects and all Hero metadata. Integration must represent the Astral Plane separately from the city and track its entry/escape rules, as well as persistent Ritual Artifacts. This record changes no runtime data or code.
+Still open: per-face copy counts of the Heroes and Masterminds' Tactics; the Epic sides' own setup effects are not drawn yet (#151). The Astral Plane and Artifacts matter only in play, so setup adds nothing for them. Wounds are laid out for every card with a Demonic Bargain or a Wound gain (Clea, The Vishanti, Lords of the Netherworld, Nightmare's Night Terrors, Dormammu, Claim Souls for Demons); Claim Souls for Demons also takes S.H.I.E.L.D. Officers. The Doctor Strange Hero is "Doctor Strange (Shadows of Nightmare)", with Hero Name Dr. Strange, the one Dr. Strange (Illuminati) and Venomized Dr. Strange share.
 
 ## Structured card-face metadata (C1)
 

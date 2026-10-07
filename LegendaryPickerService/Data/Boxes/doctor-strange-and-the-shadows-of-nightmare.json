@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 7,
+  "id": "doctor-strange-and-the-shadows-of-nightmare",
+  "name": "Doctor Strange and the Shadows of Nightmare",
+  "ruleset": "firstEdition",
+  "catalogSource": "DS p.2; C1",
+  "about": { "released": { "value": "2022-03", "source": "Q" } },
+  "sources": [
+    { "key": "DS", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_DoctorStrange_Rulesheet.pdf" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "DS p.2" },
+    "villainGroupCards": { "value": 8, "source": "DS p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "DS p.2" },
+    "schemeTwists": { "value": 0, "source": "DS p.2" }
+  },
+  "heroes": [
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_hero_doctor-strange", "name": "Doctor Strange (Shadows of Nightmare)", "heroName": "Dr. Strange", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_ranged"], "terms": ["heroes-of-asgard_term_artifact", "doctor-strange-and-the-shadows-of-nightmare_term_ritual-artifact"]},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_hero_doctor-voodoo", "name": "Doctor Voodoo", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["heroes-of-asgard_term_artifact", "doctor-strange-and-the-shadows-of-nightmare_term_ritual-artifact"]},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_hero_clea", "name": "Clea", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["doctor-strange-and-the-shadows-of-nightmare_term_demonic-bargain", "doctor-strange-and-the-shadows-of-nightmare_term_ritual-artifact"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_hero_the-ancient-one", "name": "The Ancient One", "team": null, "classes": ["core_term_covert", "core_term_instinct"], "terms": ["doctor-strange-and-the-shadows-of-nightmare_term_astral-plane", "doctor-strange-and-the-shadows-of-nightmare_term_ritual-artifact"]},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_hero_the-vishanti", "name": "The Vishanti", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["doctor-strange-and-the-shadows-of-nightmare_term_demonic-bargain", "doctor-strange-and-the-shadows-of-nightmare_term_ritual-artifact"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "villainGroups": [
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_villain_fear-lords", "name": "Fear Lords", "terms": ["core_term_ambush", "core_term_fight", "core_term_escape", "doctor-strange-and-the-shadows-of-nightmare_term_astral-plane"]},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_villain_lords-of-the-netherworld", "name": "Lords of the Netherworld", "terms": ["core_term_ambush", "core_term_fight", "core_term_escape", "doctor-strange-and-the-shadows-of-nightmare_term_demonic-bargain"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_mastermind_nightmare", "name": "Nightmare", "terms": ["core_term_always-leads", "core_term_fight", "core_term_escape", "core_term_master-strike", "core_term_mastermind-tactic", "doctor-strange-and-the-shadows-of-nightmare_term_astral-plane"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "doctor-strange-and-the-shadows-of-nightmare_villain_fear-lords", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Nightmare", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "DS p.2"}]}},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_mastermind_dormammu", "name": "Dormammu", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "doctor-strange-and-the-shadows-of-nightmare_term_demonic-bargain"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "doctor-strange-and-the-shadows-of-nightmare_villain_lords-of-the-netherworld", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Dormammu", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "DS p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_scheme_claim-souls-for-demons", "name": "Claim Souls for Demons", "terms": ["core_term_scheme-twist", "core_term_rescue-a-bystander", "doctor-strange-and-the-shadows-of-nightmare_term_demonic-bargain"], "uses": [{"part": "officers", "source": "Card"}, {"part": "wounds", "source": "Card"}], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}]}},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_scheme_cursed-pages-of-the-darkhold-tome", "name": "Cursed Pages of the Darkhold Tome", "terms": ["core_term_scheme-twist", "doctor-strange-and-the-shadows-of-nightmare_term_ritual-artifact"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}], "extraVillainGroups": [{"players": null, "value": 1, "source": "Card"}]}},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_scheme_duels-of-science-and-magic", "name": "Duels of Science and Magic", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": [2], "value": 9, "source": "Card"}, {"players": [1, 4], "value": 10, "source": "Card"}, {"players": [3, 5], "value": 11, "source": "Card"}]}},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_scheme_war-for-the-dream-dimension", "name": "War for the Dream Dimension", "terms": ["core_term_scheme-twist", "doctor-strange-and-the-shadows-of-nightmare_term_astral-plane"], "setup": {"twists": [{"players": null, "value": 7, "source": "Card"}], "extraVillainGroups": [{"players": null, "value": 1, "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_term_astral-plane", "name": "Astral Plane", "kind": "keyword", "summary": "A single extra space just right of the Villain Deck, outside the city. Enemies there are fought with Attack only, and a newcomer pushes the occupant out as an escape.", "source": "DS", "page": 1},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_term_demonic-bargain", "name": "Demonic Bargain", "kind": "keyword", "summary": "A chosen player discards their deck's top card. If it costs 1 or more they gain a Wound; at 0 they don't. Either way they get the listed reward and can't refuse.", "source": "DS", "page": 1},
+    {"id": "doctor-strange-and-the-shadows-of-nightmare_term_ritual-artifact", "name": "Ritual Artifact", "kind": "keyword", "summary": "An Artifact with a condition to meet during your turn. If you met it, you may discard the card for its bonus, or leave it in play to use later.", "source": "DS", "page": 2}
+  ]
+}
