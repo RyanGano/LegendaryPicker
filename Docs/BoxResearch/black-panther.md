@@ -1,6 +1,6 @@
 # Black Panther (2022/23)
 
-**Research status: Partial.** The official insert verifies contents and several mechanics, but not card-level Scheme setups, Always Leads, or complete Hero metadata.
+**Research status: Integrated ([#194](https://github.com/RyanGano/LegendaryPicker/issues/194)); partial.** Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked card face (`Card`); Hero teams and classes come from C1. The release month (August 2022) is from the [icv2 announcement](https://icv2.com/articles/news/view/51644/upper-deck-will-release-marvel-legendary-black-panther).
 
 ## Sources
 
@@ -32,7 +32,7 @@ The listed categories sum to the official 100-card total.
 - **Masterminds (two):** Killmonger; Klaw.
 - **Schemes (four):** Seize the Wakandan Throne; Poison Lakes with Nanite Microbots; Plunder Wakanda's Vibranium; Provoke a Clash of Nations.
 
-The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index and all setup/rules claims still need an allowed source; unresolved areas include Hero metadata, Always Leads, individual Scheme/Mastermind setup lines, or the Multiclass/Empowered icon combinations.
+The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence.
 
 ## Rules and mechanisms
 
@@ -57,7 +57,7 @@ Summaries are original paraphrases under 40 words. Verify the printed Empowered/
 
 ## Setup and implementation gaps
 
-Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps, plus both Masterminds' Always Leads/setup effects and all Hero metadata. Integration must handle Hero Ambush on HQ entry, enemy Wounds including their return, and Throne's Favor as a single shared marker across Realm of Kings and this box. This record changes no runtime data or code.
+Still open: per-face copy counts for Heroes and Mastermind Tactics (C1 gives none), and the exact Empowered and Multiclass icon combinations printed on each face, which the box file records only as the Hero's class list.
 
 ## Structured card-face metadata (C1)
 
