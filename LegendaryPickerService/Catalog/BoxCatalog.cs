@@ -542,7 +542,7 @@ public sealed partial class BoxCatalog
                 continue;
             }
 
-            if (also.GroupIds.Count == 0 || also.GroupIds.Distinct().Count() != also.GroupIds.Count || also.GroupIds.Contains(mastermind.AlwaysLeads.GroupId))
+            if (also.GroupIds.Count == 0 || also.GroupIds.Distinct().Count() != also.GroupIds.Count || also.GroupIds.Contains(mastermind.AlwaysLeads?.GroupId))
             {
                 throw new InvalidDataException(
                     $"{path}: {mastermind.Id} alsoLeads lists [{string.Join(", ", also.GroupIds)}]; it lists at least one group, each once, and not its alwaysLeads group.");
@@ -578,6 +578,11 @@ public sealed partial class BoxCatalog
                     $"{path}: {scheme.Id} has setup.wounds {wounds.Value}; it is at least 1, and a Scheme sets either setup.wounds or setup.woundsPerPlayer.");
             }
 
+            if (scheme.Setup.VillainCards is { Value: < 1 } fewVillains)
+            {
+                throw new InvalidDataException($"{path}: {scheme.Id} has setup.villainCards {fewVillains.Value}; it is at least 1.");
+            }
+
             if (scheme.Setup.ExtraHenchmanCards is { } extraCards && (extraCards.Value < 1 || scheme.Setup.ExtraHenchmanGroups is null))
             {
                 throw new InvalidDataException(
@@ -600,9 +605,9 @@ public sealed partial class BoxCatalog
 
         foreach (var mastermind in box.AllMasterminds)
         {
-            if (!Own(mastermind.AlwaysLeads.GroupId))
+            if (mastermind.AlwaysLeads is { } leads && !Own(leads.GroupId))
             {
-                Refuse(mastermind.Id, "leads", mastermind.AlwaysLeads.GroupId);
+                Refuse(mastermind.Id, "leads", leads.GroupId);
             }
 
             // Its other groups can include another box's, as Bastion leads any Sentinel Henchman Group (#186), so long as
@@ -1034,7 +1039,7 @@ public sealed partial class BoxCatalog
             .Concat(box.Schemes.Select(x => ("scheme", x.Id, x.Name)));
 
     private static IEnumerable<(string Owner, string GroupId, GroupType GroupType)> GroupReferences(Box box) =>
-        box.Masterminds.Select(m => (m.Id, m.AlwaysLeads.GroupId, m.AlwaysLeads.GroupType))
+        box.Masterminds.Where(m => m.AlwaysLeads is not null).Select(m => (m.Id, m.AlwaysLeads!.GroupId, m.AlwaysLeads.GroupType))
             .Concat(box.Masterminds.SelectMany(m => (m.AlsoLeads?.GroupIds ?? []).Select(id => (m.Id, id, m.AlsoLeads!.GroupType))))
             .Concat(box.Schemes.SelectMany(s =>
                 (s.Setup.RequiredGroups ?? []).Select(g => (s.Id, g.GroupId, g.GroupType))
@@ -1114,7 +1119,7 @@ public sealed partial class BoxCatalog
 
         foreach (var mastermind in box.Masterminds)
         {
-            yield return ($"{mastermind.Id} alwaysLeads", mastermind.AlwaysLeads.Source);
+            if (mastermind.AlwaysLeads is { } leads) yield return ($"{mastermind.Id} alwaysLeads", leads.Source);
             if (mastermind.AlsoLeads is { } also) yield return ($"{mastermind.Id} alsoLeads", also.Source);
             if (mastermind.Epic is { } epic) yield return ($"{mastermind.Id} epic", epic.Source);
         }
@@ -1128,6 +1133,7 @@ public sealed partial class BoxCatalog
             if (effect.Wounds is { } woundStack) yield return ($"{scheme.Id} setup.wounds", woundStack.Source);
             if (effect.Officers is { } officerStack) yield return ($"{scheme.Id} setup.officers", officerStack.Source);
             if (effect.ExtraHenchmanCards is { } extraCards) yield return ($"{scheme.Id} setup.extraHenchmanCards", extraCards.Source);
+            if (effect.VillainCards is { } villainCards) yield return ($"{scheme.Id} setup.villainCards", villainCards.Source);
             if (effect.BindingsPerPlayer is { } bindings) yield return ($"{scheme.Id} setup.bindingsPerPlayer", bindings.Source);
             foreach (var group in effect.RequiredGroups ?? [])
             {

@@ -203,11 +203,12 @@ public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> 
 
 public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null) : ICard;
 
-// Setup is null for a Mastermind whose card does not change the setup. AlsoLeads is a second group its card always
+// Setup is null for a Mastermind whose card does not change the setup. AlwaysLeads is null for a Mastermind whose Always
+// Leads ability allows any group, as Ego's does (it only adds a Villain Group in its Setup), so it constrains no draw. AlsoLeads is a second group its card always
 // leads, picked from several, as Deathbird leads a Shi'ar Henchman Group as well as the Shi'ar Imperial Guard (#132).
 // Epic is the Mastermind's Epic side, on the same card; draws don't use it yet (#151).
 public sealed record Mastermind(
-    string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup AlwaysLeads, SetupEffects? Setup = null,
+    string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup? AlwaysLeads = null, SetupEffects? Setup = null,
     IReadOnlyList<PartUse>? Uses = null, AlsoLeadsGroup? AlsoLeads = null, EpicSide? Epic = null) : ICard;
 
 // A Mastermind's Epic side, which shares the normal side's Tactics: its printed title, and in Uses the parts its text
@@ -285,6 +286,8 @@ public sealed record SetupStep(string Label, string Source);
 // OneOfGroups requires exactly one of several groups and leaves the others out, as S.H.I.E.L.D. vs. HYDRA War takes
 // A.I.M., Hydra Offshoot or Hydra Elite but not both (#172). Officers sets the S.H.I.E.L.D. Officer stack to a size, as
 // Secret HYDRA Corruption's 30 Officers even when S.H.I.E.L.D.'s special Officers are included (#172).
+// VillainCards sets how many cards of each Villain Group go in the Villain Deck, replacing all of it, as Star-Lord's Awesome
+// Mix Tape's half of each group.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -313,7 +316,8 @@ public sealed record SchemeSetup(
     Sourced<int>? Wounds = null,
     Sourced<int>? ExtraHenchmanCards = null,
     GroupChoice? OneOfGroups = null,
-    Sourced<int>? Officers = null)
+    Sourced<int>? Officers = null,
+    Sourced<int>? VillainCards = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps, HenchmanCards);
 
 // Groups of one type a Scheme requires exactly one of: the setup takes the drawn Mastermind's Always Leads group when

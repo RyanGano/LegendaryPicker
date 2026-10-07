@@ -103,6 +103,13 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\BaseGames\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Scheme needs more Villain Groups than it and the core box have, and one left out to
+       supply the rest. -->
+  <ItemGroup>
+    <None Include="Fixtures\ShortGroups\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\ShortGroups\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LegendaryPickerService\LegendaryPickerService.csproj" />
   </ItemGroup>

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 7,
+  "id": "reserve",
+  "name": "Reserve Fixture",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.1",
+  "about": { "released": { "value": "2020-02", "source": "R p.1" } },
+  "sources": [
+    { "key": "R", "url": "https://example.test/reserve-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [],
+  "villainGroups": [
+    { "id": "reserve_villain_test-reservists", "name": "Test Reservists", "terms": [] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [],
+  "schemes": [],
+  "glossary": []
+}
