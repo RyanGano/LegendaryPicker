@@ -450,5 +450,13 @@ Box id `marvel-studios-guardians-of-the-galaxy`, file `LegendaryPickerService/Da
 
 **Schemes:** Inescapable "Kyln" Space Prison (8 Twists, an extra Villain Group, uses Wounds); Provoke the Sovereign War Fleet (11, an extra Villain Group); Star-Lord's Awesome Mix Tape (7 Twists, 7 Heroes including a Guardians Hero, double the Villain and Henchman Groups with half the cards of each: `villainCards` 4, Henchman cards 5, 2 in Solo); Unleash the Abilisk Space Monster (9). Group slots the included boxes can't fill, as Mix Tape's doubled groups can't with a small set of boxes, are drawn from groups of the same ruleset in unticked boxes and noted in the checklist. Whether Ego conflicts with a Scheme in another box that changes the number of city spaces is an open question for the owner.
 
+## Black Panther (August 2022)
+
+Box id `black-panther`, file `LegendaryPickerService/Data/Boxes/black-panther.json`, a First Edition expansion (#194). Counts (BP p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 double-sided Epic Masterminds and 4 Schemes; no Henchman Group or shared stack. Release month from the icv2 announcement (`REL`). Setup values and part uses come from OCR of the C1-linked card faces (`Card`).
+
+**Heroes:** King Black Panther (Hero Name Black Panther), Queen Storm of Wakanda (Hero Name Storm), Princess Shuri, General Okoye and White Wolf, all Heroes of Wakanda. Wounds: Storm, Okoye and White Wolf (they Wound enemies or gain Wounds); Okoye also uses Officers. **Villain Groups:** Killmonger's League (uses Wounds) and Enemies of Wakanda. **Masterminds:** Killmonger (uses Wounds) leads Killmonger's League, Klaw (uses Wounds) leads Enemies of Wakanda; both have an Epic side with the same Tactics, offered as a step.
+
+**Schemes:** Seize the Wakandan Throne (6 Twists); Poison Lakes with Nanite Microbots (Twists equal to 5 plus the players, 30 Wounds in the Wound Stack); Plunder Wakanda's Vibranium (10); Provoke a Clash of Nations (11). The Throne's Favor reuses Realm of Kings' keyword; Empowered and Multiclass reuse Ant-Man's and Secret Wars Volume 1's.
+
 ## Open questions
 

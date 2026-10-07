@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 7,
+  "id": "black-panther",
+  "name": "Black Panther",
+  "ruleset": "firstEdition",
+  "catalogSource": "BP p.2; C1",
+  "about": { "released": { "value": "2022-08", "source": "REL" } },
+  "sources": [
+    { "key": "BP", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/2022-BlackPanther_Rulesheet.pdf" },
+    { "key": "REL", "url": "https://icv2.com/articles/news/view/51644/upper-deck-will-release-marvel-legendary-black-panther" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "BP p.2" },
+    "villainGroupCards": { "value": 8, "source": "BP p.2" },
+    "henchmanGroupCards": { "value": 0, "source": "BP p.2" },
+    "schemeTwists": { "value": 0, "source": "BP p.2" }
+  },
+  "heroes": [
+    {"id": "black-panther_hero_king-black-panther", "name": "King Black Panther", "heroName": "Black Panther", "team": "black-panther_term_heroes-of-wakanda", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["black-panther_term_hero-ambush", "realm-of-kings_term_thrones-favor", "secret-wars-volume-1_term_multiclass"]},
+    {"id": "black-panther_hero_queen-storm-of-wakanda", "name": "Queen Storm of Wakanda", "heroName": "Storm", "team": "black-panther_term_heroes-of-wakanda", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["black-panther_term_hero-ambush", "realm-of-kings_term_thrones-favor", "ant-man_term_empowered", "secret-wars-volume-1_term_multiclass", "black-panther_term_wounding"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "black-panther_hero_princess-shuri", "name": "Princess Shuri", "team": "black-panther_term_heroes-of-wakanda", "classes": ["core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["black-panther_term_hero-ambush", "ant-man_term_empowered", "secret-wars-volume-1_term_multiclass"]},
+    {"id": "black-panther_hero_general-okoye", "name": "General Okoye", "team": "black-panther_term_heroes-of-wakanda", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["black-panther_term_hero-ambush", "secret-wars-volume-1_term_multiclass", "black-panther_term_wounding"], "uses": [{"part": "wounds", "source": "Card"}, {"part": "officers", "source": "Card"}]},
+    {"id": "black-panther_hero_white-wolf", "name": "White Wolf", "team": "black-panther_term_heroes-of-wakanda", "classes": ["core_term_covert", "core_term_tech"], "terms": ["black-panther_term_hero-ambush", "secret-wars-volume-1_term_multiclass", "black-panther_term_wounding"], "uses": [{"part": "wounds", "source": "Card"}]}
+  ],
+  "villainGroups": [
+    {"id": "black-panther_villain_killmongers-league", "name": "Killmonger's League", "terms": ["core_term_ambush", "core_term_escape", "black-panther_term_wounding"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "black-panther_villain_enemies-of-wakanda", "name": "Enemies of Wakanda", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "ant-man_term_empowered"]}
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {"id": "black-panther_mastermind_killmonger", "name": "Killmonger", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "black-panther_term_wounding"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "black-panther_villain_killmongers-league", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Killmonger", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "BP p.2"}]}},
+    {"id": "black-panther_mastermind_klaw", "name": "Klaw", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "ant-man_term_empowered"], "uses": [{"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "black-panther_villain_enemies-of-wakanda", "groupType": "villain", "source": "Card"}, "epic": {"name": "Epic Klaw", "source": "Card"}, "setup": {"steps": [{"label": "Optional: play the Epic side instead; the Tactics stay the same", "source": "BP p.2"}]}}
+  ],
+  "schemes": [
+    {"id": "black-panther_scheme_seize-the-wakandan-throne", "name": "Seize the Wakandan Throne", "terms": ["core_term_scheme-twist", "realm-of-kings_term_thrones-favor"], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}]}},
+    {"id": "black-panther_scheme_poison-lakes-with-nanite-microbots", "name": "Poison Lakes with Nanite Microbots", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": [1], "value": 6, "source": "Card"}, {"players": [2], "value": 7, "source": "Card"}, {"players": [3], "value": 8, "source": "Card"}, {"players": [4], "value": 9, "source": "Card"}, {"players": [5], "value": 10, "source": "Card"}], "wounds": {"value": 30, "source": "Card"}}},
+    {"id": "black-panther_scheme_plunder-wakandas-vibranium", "name": "Plunder Wakanda's Vibranium", "terms": ["core_term_scheme-twist", "ant-man_term_empowered"], "setup": {"twists": [{"players": null, "value": 10, "source": "Card"}]}},
+    {"id": "black-panther_scheme_provoke-a-clash-of-nations", "name": "Provoke a Clash of Nations", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}]}}
+  ],
+  "glossary": [
+    {"id": "black-panther_term_heroes-of-wakanda", "name": "Heroes of Wakanda", "kind": "team", "summary": "A Hero team. In this box its members are King Black Panther, Queen Storm of Wakanda, Princess Shuri, General Okoye and White Wolf.", "source": "BP", "page": 2},
+    {"id": "black-panther_term_hero-ambush", "name": "Hero Ambush", "kind": "keyword", "summary": "A Hero's Ambush ability fires when that Hero enters the HQ on your turn, provided you have a Hero in hand or played this turn.", "source": "BP", "page": 1},
+    {"id": "black-panther_term_wounding", "name": "Wounding", "kind": "keyword", "summary": "Lay a Wound from the Wound Stack or KO pile on an enemy to lower its value by 1. The Wounds go back to the Wound Stack when it is defeated or leaves.", "source": "BP", "page": 1}
+  ]
+}
