@@ -25,6 +25,18 @@ Use one concise entry per distinct printed card face, for example:
 **Research is complete** only when the component list is reconciled against an official contents list, every distinct card face has its identity and available printed metadata/source link recorded, all applicable Scheme and Mastermind setup effects and required components are accounted for, and each gameplay claim has an allowed source and citation. Mark unresolved facts `Partial` or `Blocked`; do not guess. An unresolved product may remain `Partial` or `Blocked` while the single `Next` marker advances to the next release-order product; missing evidence must not stall later research.
 When the final listed product has been processed, leave `Next` unset until another product is added to the roadmap.
 
+## Using existing research
+
+The per-product research record is the implementation handoff. Read it and the matching runtime box file before opening card images or running OCR. Reuse facts the record already marks verified, including card-face findings described as read from `Card`; do not repeat that OCR just because the implementation task is new. A `Partial` status does not mean all of that product's information is missing: check its `Setup and implementation gaps` section and investigate only those unresolved fields, source conflicts, or fields the record does not cover.
+
+When new card-face research is needed, record the concise verified result and its source in the product record before implementing it. Keep OCR output, full card wording, and rulebook text out of the repository; preserve only card identity and metadata allowed above, setup-relevant effects in original concise wording, and the citation needed to verify them. Findings left only in chat or temporary files are not an implementation handoff.
+
+## Local OCR data
+
+The local OCR data is generated from the card-image URLs in these product records using Windows' on-device OCR. The shared cross-worktree cache on this machine is `C:\Code\Local\Legendary\Docs\BoxResearch\_ocr\`: `faces.jsonl` is the resumable per-image cache, `<slug>.json` files hold per-product results, and `index.json` summarizes coverage. It retains OCR status and confidence plus extracted title-match, labeled numeric values, and game/setup markers, but not full OCR text or card abilities. These results are evidence, not verified facts; assess confidence and cite sources before adding findings to the research record. The cache is outside the repository and Git; another worktree on this machine can use the same files. If the shared directory is unavailable, use the source links in the product record and do not assume OCR coverage.
+
+The current pass covers 2,581 unique image URLs across 40 product records: 2,566 produced text and 15 returned no text. The records for 2099, Weapon X, and Second Edition contain no direct card-image URLs, so they have no OCR coverage. The per-product `status` describes OCR coverage of linked images only; it does not mean research is complete.
+
 ## Product inventory
 
 `Integrated` means a runtime box file exists, not that every product feature is complete. `Research complete` means the per-product research record meets the criteria above; implementation may still be pending. Paths for queued products are reserved destinations and are created when their research starts.

@@ -12,6 +12,9 @@ LegendaryPickerService/*.user
 LegendaryPickerService.Tests/bin/
 LegendaryPickerService.Tests/obj/
 
+# Local card research
+/Docs/BoxResearch/_ocr/
+
 # Editor and operating system files
 .vs/
 .vscode/
