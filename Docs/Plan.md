@@ -517,5 +517,13 @@ Box id `2099`, file `LegendaryPickerService/Data/Boxes/2099.json`, a Revised exp
 
 **Schemes (Card):** Pull Reality Into Cyberspace (7 Twists); Become President of the United States (11); Subjugate Earth with Mega-Corporations (11, extra Hero, Wounds); Befoul Earth Into a Polluted Wasteland (8, extra Hero, Wounds). Every effect uses existing capabilities.
 
+## Weapon X (Oct 2024)
+
+Box id `weapon-x`, file `LegendaryPickerService/Data/Boxes/weapon-x.json`, a Revised expansion played with What If...? (#214). Counts (WX p.2): 4 Heroes x 14 cards, 2 Villain Groups x 8, 3 Epic Masterminds and 3 Schemes; no Henchman Group, and the 10 Enraging Wounds join the Wound stack (`components.wounds`). No card images exist for this box (owner ruling, 2026-10-12), so Scheme Setup lines, Always Leads and part uses come from C1's transcribed card text (`Card`).
+
+**Heroes:** Fantomex, Marrow (X-Force), Weapon H (Avengers) and Weapon X (Wolverine) (Marvel Knights, Hero Name Wolverine). Wounds are used by Weapon H, Weapon X (Wolverine), both Villain Groups (Berserkers, Weapon Plus) and all three Masterminds. **Masterminds:** Romulus leads Weapon Plus, Sabretooth leads Berserkers, Omega Red any Villain Group (no constraint); each offers its Epic side as a step.
+
+**Schemes (Card):** Condition Logan into Weapon X (8 Twists, Wounds, exactly 1 Hero with "Wolverine" in its name); Go After Heroes' Loved Ones (8/10/11 Twists, an extra Hero, distinct Hero Names, one set-aside card and 2 Bystanders per Hero); Wipe Heroes' Memories (players + 4 Twists). One generator change: a bracketed version also counts for a word in its shared Hero Name, so Weapon X (Wolverine) counts as a Wolverine (`HeroVersionNamesTests`).
+
 ## Open questions
 

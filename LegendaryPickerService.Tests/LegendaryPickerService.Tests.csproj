@@ -135,6 +135,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\CitySpaces\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Hero is a bracketed version of a character, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\HeroVersionNames\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\HeroVersionNames\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Mastermind has an Epic side with a Setup of its own, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\Epic\*.json" CopyToOutputDirectory="PreserveNewest" />

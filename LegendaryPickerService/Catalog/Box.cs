@@ -196,9 +196,11 @@ public sealed record Hero(
     // Whether the two Heroes have a Hero Name in common, so a Scheme allowing no two Heroes with one Hero Name can't take both.
     public bool SharesHeroName(Hero other) => HeroNames?.Any(other.HasHeroName) ?? other.HasHeroName(HeroName ?? Name);
 
-    // Whether a word is in the Hero Name as the card prints it, the display name less any bracketed version: "Hulk" is in
-    // She-Hulk and Hulkbuster Iron Man, not in Bruce Banner.
-    public bool HasInHeroName(string word) => Name.Split(" (")[0].Contains(word, StringComparison.Ordinal);
+    // Whether a word is in the Hero Name as the card prints it, the display name less any bracketed version, or in the
+    // shared Hero Name a bracketed version keeps: "Hulk" is in She-Hulk and Hulkbuster Iron Man, not in Bruce Banner, and
+    // "Wolverine" is in Weapon X (Wolverine).
+    public bool HasInHeroName(string word) =>
+        Name.Split(" (")[0].Contains(word, StringComparison.Ordinal) || (HeroName?.Contains(word, StringComparison.Ordinal) ?? false);
 }
 
 // AmbushSchemes is how many of the group's cards are Ambush Schemes rather than Villains (0 when it has none), which a
