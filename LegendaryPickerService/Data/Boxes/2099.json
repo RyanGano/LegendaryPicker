@@ -1,0 +1,408 @@
+{
+ "schemaVersion": 7,
+ "id": "2099",
+ "name": "2099",
+ "ruleset": "revised",
+ "catalogSource": "UD; OT; C1",
+ "about": {
+  "released": {
+   "value": "2024-04",
+   "source": "Q"
+  }
+ },
+ "sources": [
+  {
+   "key": "UD",
+   "url": "https://upperdeckstore.com/legendary-marvel-2099.html"
+  },
+  {
+   "key": "C1",
+   "url": "https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/2099.ts"
+  },
+  {
+   "key": "OT",
+   "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/2099.md"
+  },
+  {
+   "key": "Q",
+   "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"
+  }
+ ],
+ "components": {
+  "heroCards": {
+   "value": 14,
+   "source": "OT"
+  },
+  "villainGroupCards": {
+   "value": 8,
+   "source": "OT"
+  },
+  "henchmanGroupCards": {
+   "value": 0,
+   "source": "C1"
+  },
+  "schemeTwists": {
+   "value": 0,
+   "source": "UD"
+  }
+ },
+ "heroes": [
+  {
+   "id": "2099_hero_doctor-doom-2099",
+   "name": "Doctor Doom 2099",
+   "heroName": "Doctor Doom",
+   "team": null,
+   "classes": [
+    "marvel-studios-what-if_term_ranged",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "2099_term_cyber-mod",
+    "2099_term_fated-future",
+    "2099_term_undercover"
+   ]
+  },
+  {
+   "id": "2099_hero_ghost-rider-2099",
+   "name": "Ghost Rider 2099",
+   "heroName": "Ghost Rider",
+   "team": "2099_term_marvel-knights",
+   "classes": [
+    "marvel-studios-what-if_term_covert",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "2099_term_cyber-mod",
+    "2099_term_fated-future",
+    "2099_term_undercover"
+   ]
+  },
+  {
+   "id": "2099_hero_hulk-2099",
+   "name": "Hulk 2099",
+   "heroName": "Hulk",
+   "team": "2099_term_marvel-knights",
+   "classes": [
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_strength",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "2099_term_cyber-mod",
+    "2099_term_fated-future",
+    "2099_term_undercover"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "2099_hero_ravage-2099",
+   "name": "Ravage 2099",
+   "heroName": "Ravage",
+   "team": "2099_term_marvel-knights",
+   "classes": [
+    "marvel-studios-what-if_term_covert",
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_strength"
+   ],
+   "terms": [
+    "2099_term_fated-future"
+   ]
+  },
+  {
+   "id": "2099_hero_spider-man-2099",
+   "name": "Spider-Man 2099",
+   "heroName": "Spider-Man",
+   "team": "2099_term_spider-friends",
+   "classes": [
+    "marvel-studios-what-if_term_covert",
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_strength"
+   ],
+   "terms": [
+    "2099_term_cyber-mod",
+    "2099_term_fated-future",
+    "2099_term_undercover"
+   ]
+  }
+ ],
+ "villainGroups": [
+  {
+   "id": "2099_villain_alchemax-enforcers",
+   "name": "Alchemax Enforcers",
+   "terms": [
+    "2099_term_cyber-mod",
+    "marvel-studios-what-if_term_ambush",
+    "marvel-studios-what-if_term_escape",
+    "marvel-studios-what-if_term_fight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "2099_villain_false-aesir-of-alchemax",
+   "name": "False Aesir of Alchemax",
+   "terms": [
+    "2099_term_fight-or-fail",
+    "2099_term_uru-enchanted-weapons",
+    "marvel-studios-what-if_term_ambush",
+    "marvel-studios-what-if_term_escape"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  }
+ ],
+ "henchmanGroups": [],
+ "masterminds": [
+  {
+   "id": "2099_mastermind_alchemax-executives",
+   "name": "Alchemax Executives",
+   "terms": [
+    "2099_term_adapting-mastermind",
+    "2099_term_cyber-mod",
+    "2099_term_undercover",
+    "marvel-studios-what-if_term_always-leads",
+    "marvel-studios-what-if_term_fight",
+    "marvel-studios-what-if_term_master-strike",
+    "marvel-studios-what-if_term_mastermind-tactic"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "2099_villain_alchemax-enforcers",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Alchemax Executives",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Adapt: shuffle the 4 Tactics. If Avatarr is on top, add an extra Hero",
+      "source": "Card"
+     },
+     {
+      "label": "Optional: play the Epic side instead; every Tactic turns to its Epic face",
+      "source": "Card",
+      "offersEpic": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "2099_mastermind_sinister-six-2099",
+   "name": "Sinister Six 2099",
+   "terms": [
+    "2099_term_adapting-mastermind",
+    "marvel-studios-what-if_term_always-leads",
+    "marvel-studios-what-if_term_fight",
+    "marvel-studios-what-if_term_master-strike",
+    "marvel-studios-what-if_term_mastermind-tactic"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "2099_villain_alchemax-enforcers",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Sinister Six 2099",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Adapt: shuffle the 6 Tactics and turn one face up on top",
+      "source": "Card"
+     },
+     {
+      "label": "Optional: play the Epic side instead; every Tactic turns to its Epic face",
+      "source": "Card",
+      "offersEpic": true
+     }
+    ]
+   }
+  }
+ ],
+ "schemes": [
+  {
+   "id": "2099_scheme_become-president-of-the-united-states",
+   "name": "Become President of the United States",
+   "terms": [
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 11,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "2099_scheme_befoul-earth-into-a-polluted-wasteland",
+   "name": "Befoul Earth Into a Polluted Wasteland",
+   "terms": [
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 8,
+      "source": "Card"
+     }
+    ],
+    "extraHeroes": [
+     {
+      "players": null,
+      "value": 1,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "2099_scheme_pull-reality-into-cyberspace",
+   "name": "Pull Reality Into Cyberspace",
+   "terms": [
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 7,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "2099_scheme_subjugate-earth-with-mega-corporations",
+   "name": "Subjugate Earth with Mega-Corporations",
+   "terms": [
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 11,
+      "source": "Card"
+     }
+    ],
+    "extraHeroes": [
+     {
+      "players": null,
+      "value": 1,
+      "source": "Card"
+     }
+    ]
+   }
+  }
+ ],
+ "glossary": [
+  {
+   "id": "2099_term_spider-friends",
+   "name": "Spider Friends",
+   "kind": "team",
+   "summary": "A team of Heroes. Its icon on a card powers team Superpower abilities.",
+   "source": "OT",
+   "page": 1
+  },
+  {
+   "id": "2099_term_marvel-knights",
+   "name": "Marvel Knights",
+   "kind": "team",
+   "summary": "A team of Heroes. Its icon on a card powers team Superpower abilities.",
+   "source": "OT",
+   "page": 1
+  },
+  {
+   "id": "2099_term_cyber-mod",
+   "name": "Cyber-Mod",
+   "kind": "keyword",
+   "summary": "An ability that works only while the listed Class icons are in your Victory Pile. For Villains and Masterminds, the Escape Pile is checked instead.",
+   "source": "OT",
+   "page": 1
+  },
+  {
+   "id": "2099_term_fated-future",
+   "name": "Fated Future",
+   "kind": "keyword",
+   "summary": "When you play the card, you may put it on the bottom of your deck instead of your discard pile, so it comes back sooner.",
+   "source": "OT",
+   "page": 1
+  },
+  {
+   "id": "2099_term_undercover",
+   "name": "Undercover",
+   "kind": "keyword",
+   "summary": "Sending a card Undercover puts it into your Victory Pile, which is what switches on your Cyber-Mods.",
+   "source": "OT",
+   "page": 1
+  },
+  {
+   "id": "2099_term_uru-enchanted-weapons",
+   "name": "Uru-Enchanted Weapons",
+   "kind": "keyword",
+   "summary": "Before you fight, reveal that many Villain Deck cards. Their Victory Points are added to the enemy's Attack, then the cards go back under the deck.",
+   "source": "OT",
+   "page": 1
+  },
+  {
+   "id": "2099_term_fight-or-fail",
+   "name": "Fight or Fail",
+   "kind": "keyword",
+   "summary": "The effect happens whether the fight is won or lost, which matters because Uru-Enchanted Weapons can make a fight fail.",
+   "source": "OT",
+   "page": 1
+  },
+  {
+   "id": "2099_term_adapting-mastermind",
+   "name": "Adapting Mastermind",
+   "kind": "keyword",
+   "summary": "A Mastermind made only of Tactics, where the face-up top Tactic is the one in play. To Adapt, shuffle the Tactics and turn a random one up on top.",
+   "source": "OT",
+   "page": 1
+  }
+ ]
+}
