@@ -1,0 +1,387 @@
+{
+ "schemaVersion": 7,
+ "id": "marvel-studios-the-infinity-saga",
+ "name": "Marvel Studios' The Infinity Saga",
+ "ruleset": "firstEdition",
+ "catalogSource": "IS p.2; C1",
+ "about": {
+  "released": {
+   "value": "2023-03",
+   "source": "Q"
+  }
+ },
+ "sources": [
+  {
+   "key": "IS",
+   "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/MCU_InfinitySaga_Rulesheet.pdf"
+  },
+  {
+   "key": "Q",
+   "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"
+  }
+ ],
+ "components": {
+  "heroCards": {
+   "value": 14,
+   "source": "IS p.2"
+  },
+  "villainGroupCards": {
+   "value": 8,
+   "source": "IS p.2"
+  },
+  "henchmanGroupCards": {
+   "value": 0,
+   "source": "IS p.2"
+  },
+  "schemeTwists": {
+   "value": 0,
+   "source": "IS p.2"
+  }
+ },
+ "heroes": [
+  {
+   "id": "marvel-studios-the-infinity-saga_hero_doctor-strange",
+   "name": "Doctor Strange (Infinity Saga)",
+   "heroName": "Dr. Strange",
+   "team": "core_term_avengers",
+   "classes": [
+    "core_term_instinct",
+    "core_term_ranged"
+   ],
+   "terms": [
+    "civil-war_term_phasing",
+    "marvel-studios-the-infinity-saga_term_sacrifice",
+    "secret-wars-volume-1_term_multiclass"
+   ]
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_hero_black-panther",
+   "name": "Black Panther (Infinity Saga)",
+   "heroName": "Black Panther",
+   "team": "core_term_avengers",
+   "classes": [
+    "core_term_covert",
+    "core_term_instinct",
+    "core_term_ranged",
+    "core_term_strength",
+    "core_term_tech"
+   ],
+   "terms": [
+    "marvel-studios-the-infinity-saga_term_sacrifice",
+    "secret-wars-volume-1_term_multiclass"
+   ]
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_hero_bruce-banner",
+   "name": "Bruce Banner (Infinity Saga)",
+   "heroName": "Bruce Banner",
+   "team": "core_term_avengers",
+   "classes": [
+    "core_term_strength",
+    "core_term_tech"
+   ],
+   "terms": [
+    "marvel-studios-the-infinity-saga_term_sacrifice",
+    "secret-wars-volume-1_term_multiclass"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_hero_captain-marvel",
+   "name": "Captain Marvel (Infinity Saga)",
+   "heroName": "Captain Marvel",
+   "team": "core_term_avengers",
+   "classes": [
+    "core_term_ranged",
+    "core_term_strength"
+   ],
+   "terms": [
+    "marvel-studios-the-infinity-saga_term_endgame",
+    "secret-wars-volume-1_term_multiclass"
+   ]
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_hero_wanda-and-vision",
+   "name": "Wanda & Vision",
+   "heroNames": [
+    "Wanda",
+    "Vision"
+   ],
+   "team": "core_term_avengers",
+   "classes": [
+    "core_term_covert",
+    "core_term_ranged",
+    "core_term_tech"
+   ],
+   "terms": [
+    "civil-war_term_divided-card",
+    "civil-war_term_phasing",
+    "marvel-studios-the-infinity-saga_term_sacrifice",
+    "secret-wars-volume-1_term_multiclass"
+   ]
+  }
+ ],
+ "villainGroups": [
+  {
+   "id": "marvel-studios-the-infinity-saga_villain_children-of-thanos",
+   "name": "Children of Thanos",
+   "terms": [
+    "core_term_ambush",
+    "core_term_fight",
+    "core_term_escape",
+    "marvel-studios-the-infinity-saga_term_endgame"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_villain_infinity-stones",
+   "name": "Infinity Stones",
+   "terms": [
+    "core_term_ambush",
+    "core_term_fight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    },
+    {
+     "part": "officers",
+     "source": "Card"
+    }
+   ]
+  }
+ ],
+ "henchmanGroups": [],
+ "masterminds": [
+  {
+   "id": "marvel-studios-the-infinity-saga_mastermind_ebony-maw",
+   "name": "Ebony Maw",
+   "terms": [
+    "core_term_always-leads",
+    "core_term_fight",
+    "core_term_master-strike",
+    "core_term_mastermind-tactic",
+    "marvel-studios-the-infinity-saga_term_endgame"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "marvel-studios-the-infinity-saga_villain_children-of-thanos",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Ebony Maw",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "IS p.2"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_mastermind_thanos",
+   "name": "Thanos (Infinity Saga)",
+   "terms": [
+    "core_term_always-leads",
+    "core_term_fight",
+    "core_term_master-strike",
+    "core_term_mastermind-tactic"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "marvel-studios-the-infinity-saga_villain_infinity-stones",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Thanos",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "IS p.2"
+     }
+    ]
+   }
+  }
+ ],
+ "schemes": [
+  {
+   "id": "marvel-studios-the-infinity-saga_scheme_halve-all-life-in-the-universe",
+   "name": "Halve All Life in the Universe",
+   "terms": [
+    "core_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 5,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_scheme_sacrifice-for-the-soul-stone",
+   "name": "Sacrifice for the Soul Stone",
+   "terms": [
+    "core_term_scheme-twist",
+    "marvel-studios-the-infinity-saga_term_sacrifice"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": [
+       1
+      ],
+      "value": 5,
+      "source": "Card"
+     },
+     {
+      "players": [
+       2
+      ],
+      "value": 6,
+      "source": "Card"
+     },
+     {
+      "players": [
+       3
+      ],
+      "value": 7,
+      "source": "Card"
+     },
+     {
+      "players": [
+       4
+      ],
+      "value": 8,
+      "source": "Card"
+     },
+     {
+      "players": [
+       5
+      ],
+      "value": 9,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_scheme_the-time-heist",
+   "name": "The Time Heist",
+   "terms": [
+    "core_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 11,
+      "source": "Card"
+     }
+    ],
+    "heroes": [
+     {
+      "players": null,
+      "value": 8,
+      "source": "Card"
+     }
+    ],
+    "steps": [
+     {
+      "label": "Split the 8 Heroes: 4 in the Hero Deck, 4 in a Past Hero Deck",
+      "source": "Card"
+     },
+     {
+      "label": "Make a second city, the Past, above the board with its own HQ",
+      "source": "Card"
+     },
+     {
+      "label": "Start playing as if the Past city, HQ and Hero Deck don't exist",
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_scheme_warp-reality-into-a-tv-show",
+   "name": "Warp Reality into a TV Show",
+   "terms": [
+    "core_term_scheme-twist"
+   ],
+   "uses": [
+    {
+     "part": "officers",
+     "source": "Card"
+    }
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 11,
+      "source": "Card"
+     }
+    ],
+    "steps": [
+     {
+      "label": "Shrink the city to the 50s, 60s and 70s, with an HQ space under each",
+      "source": "Card"
+     },
+     {
+      "label": "Move the Mastermind and Officer Deck to mark the city's left edge",
+      "source": "Card"
+     }
+    ]
+   }
+  }
+ ],
+ "glossary": [
+  {
+   "id": "marvel-studios-the-infinity-saga_term_endgame",
+   "name": "Endgame",
+   "kind": "keyword",
+   "summary": "It is the Endgame once the Villain Deck holds eight cards per player or fewer. Cards that mention Endgame then add their bonus or switch to their alternate effect.",
+   "source": "IS",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-the-infinity-saga_term_sacrifice",
+   "name": "Sacrifice",
+   "kind": "keyword",
+   "summary": "As you play the card, you may KO it to use its Sacrifice effect, but only if you played another Hero of the matching Class earlier that turn. Its other effects happen either way.",
+   "source": "IS",
+   "page": 1
+  }
+ ]
+}

@@ -466,5 +466,13 @@ Box id `black-widow`, file `LegendaryPickerService/Data/Boxes/black-widow.json`,
 
 **Schemes:** Corrupt the Spy Agencies (7 Twists); Train Black Widows in the Red Room (8 Twists minus 1 per player, 8 Officers moved into the Villain Deck); Sniper Rifle Assassins (11 Twists minus 1 per player); Frame Heroes for Murder (7 Twists, 6 Heroes). Dodge, Dark Memories, Undercover and When Recruited reuse earlier terms; Unleash is new.
 
+## Marvel Studios' The Infinity Saga (March 2023)
+
+Box id `marvel-studios-the-infinity-saga`, file `LegendaryPickerService/Data/Boxes/marvel-studios-the-infinity-saga.json`, a First Edition expansion (#199). Counts (IS p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 double-sided Epic Masterminds and 4 Schemes; no Henchman Group. Setup values and part uses come from OCR of every C1-linked card face (`Card`).
+
+**Heroes:** Doctor Strange (Infinity Saga) (Hero Name Dr. Strange), Black Panther (Infinity Saga), Bruce Banner (Infinity Saga) (Wounds), Captain Marvel (Infinity Saga) and the Divided Wanda & Vision, which counts under the Hero Names Wanda and Vision. **Villain Groups:** Children of Thanos (Wounds) and Infinity Stones (Wounds, and Officers for Nebula). **Masterminds:** Ebony Maw leads Children of Thanos and Thanos (Infinity Saga) leads Infinity Stones (both use Wounds); each has an Epic side with the same Tactics, offered as a step. Solo already ignores Always Leads, as the insert allows for Thanos.
+
+**Schemes:** Halve All Life in the Universe (5 Twists); Sacrifice for the Soul Stone (Twists equal to the players plus 4); The Time Heist (11 Twists, 8 Heroes split 4 and 4 between the Hero Deck and the Past Hero Deck, as steps); Warp Reality into a TV Show (11 Twists, a three-space city, uses the Officer Deck as an edge marker). Endgame and Sacrifice are new glossary terms; Phasing, Multiclass and Divided Card reuse earlier boxes' terms.
+
 ## Open questions
 
