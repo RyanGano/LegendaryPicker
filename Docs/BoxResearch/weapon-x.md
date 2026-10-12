@@ -1,6 +1,6 @@
 # Weapon X (Oct 2024)
 
-**Research status: Partial.** The official insert verifies contents, Berserk, Weapon X Sequence, and the Enraging Wound supply; Upper Deck's article clarifies two Schemes. The third Scheme, full Mastermind setup text, and card-level Hero metadata remain open.
+**Research status: Integrated (#214), research partial.** No card images exist for this box (owner ruling, 2026-10-12), so Scheme Setup lines, Always Leads and part uses come from C1's transcribed card text (read as text, never quoted here), cited in box data as `Card`; the official insert and article supply counts, Berserk, Weapon X Sequence and the Enraging Wounds. Wounds are used by Weapon H, Weapon X (Wolverine), both Villain Groups, all three Masterminds and Condition Logan into Weapon X.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -8,7 +8,7 @@
 | WX | [Upper Deck Weapon X rules insert](https://upperdeck.com/wp-content/uploads/2024/12/Marvel_WeaponX_Rulesheet.pdf) | Component counts, Berserk, Weapon X Sequence, Enraging Wounds, and setup of the shared Wound Deck (PDF pp.1–2). |
 | WXA | [Upper Deck Weapon X article](https://upperdeck.com/legendary-weapon-x/) | Additional Berserk/Sequence clarifications and effects of two Schemes. |
 | UD | [Upper Deck Weapon X product listing](https://upperdeckstore.com/legendary-weapon-x.html) | 100-card expansion total and 1–5 player range. |
-| C1 | [master-strike structured weapon-x card catalog](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/weaponx.ts) | Per-face structured fields are indexed below; C1 provides no direct image URLs for these records, and its ability prose is not rules evidence. |
+| C1 | [master-strike structured weapon-x card catalog](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/weaponx.ts) | Per-face structured fields are indexed below; C1 provides no direct image URLs. With no scans available, its transcribed ability prose is the card-face evidence (`Card`) for Scheme Setup lines, Always Leads and part uses. |
 | C1 metadata | [teams](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/teams.ts), [Hero classes](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/heroClasses.ts), [keywords](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/keywords.ts), and [card types](https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/metadata/cardTypes.ts) | Labels for C1 team/class/keyword/type icon identifiers. |
 | #34 / queue | [Release-order roadmap](https://github.com/RyanGano/LegendaryPicker/issues/34) and [`Docs/BoxResearch/README.md`](README.md) | Release-order position, expansion status, Revised ruleset classification. |
 
@@ -35,7 +35,7 @@ Each Hero has 1 rare, 3 uncommons, and 5 copies each of two commons (WX p.2). Th
 - **Schemes (three):** Condition Logan into Weapon X; Go After Heroes' Loved Ones; Wipe Heroes' Memories.
 - **Enraging Wounds (ten):** Blazing Vengeance; Broken Bones; Concussion; Erratic Powers; Insults and Injuries; Last Breath; Massive Blood Loss; Shell Shock; Sudden Terror; Wild Rage.
 
-The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. The insert and article provide rules and two Scheme clarifications; the third setup, Always Leads, and Loved Ones components remain open.
+The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. The insert and article provide rules and two Scheme clarifications; with no scans available, C1's ability prose supplies the Scheme Setup lines, Always Leads and Loved Ones components (owner ruling, 2026-10-12; see Setup facts from the card text below).
 
 ## Rules and setup facts
 
@@ -45,7 +45,7 @@ The C1 face index below records available printed titles, group/type, numeric va
 - **Weapon X Sequence for Heroes (WX p.1; WXA):** Gain Attack for the longest run of distinct consecutive printed costs among cards in hand and already played. The run can begin at any value, including 0; duplicates do not extend it. Later card draws cannot retroactively improve a Sequence already used.
 - **Weapon X Sequence for Enemies (WX p.2; WXA):** An Enemy gains Attack for the longest run of distinct consecutive printed costs represented in the HQ. Recruiting a Hero can break or change the run. “Doubled Weapon X Sequence” doubles the bonus (WX p.1).
 - **Enraging Wounds (WX p.2; WXA):** Shuffle all ten into the Wound Deck with normal Wounds, for at least 40 total Wounds; include other special Wounds in the supply too. Enraging Wounds can be played from hand for their printed effects and have individual Healing conditions. Their KO effects do not prevent recruiting or fighting that turn. They still count as Wounds for other card effects.
-- **Go After Heroes' Loved Ones (WXA):** Each Scheme Twist removes a Loved One from the Hero in the rightmost HQ space. A Hero that loses all Loved Ones is removed from the HQ and Hero Deck. The article does not specify the Scheme's Twist count or all setup text.
+- **Go After Heroes' Loved Ones (WXA):** Each Scheme Twist removes a Loved One from the Hero in the rightmost HQ space. A Hero that loses all Loved Ones is removed from the HQ and Hero Deck. The article does not specify the Scheme's Twist count or all setup text; the card text does (below).
 - **Wipe Heroes' Memories (WXA):** On a Scheme Twist, a Villain or Mastermind Tactic from the player's Victory Pile is turned face down and moved to its bottom, then the Twist is shuffled back into the Villain Deck. If there is no such “memory,” set the Twist beside the Scheme as a Total Memory Wipe.
 
 ## Required parts and glossary
@@ -58,11 +58,20 @@ The C1 face index below records available printed titles, group/type, numeric va
 - **Enraging Wound:** A Wound with its own Healing condition and playable effects; it remains a Wound for other effects. (WX p.2)
 - **Loved One / Lost in Grief:** A Scheme state tracked on the rightmost HQ Hero; losing all Loved Ones removes that Hero from the HQ and Hero Deck. (WXA)
 
-The insert specifies no new token or separate shared stack. The Loved Ones tracking method and its physical components need card-level verification.
+The insert specifies no new token or separate shared stack. The card text sets the Loved Ones up as one set-aside Hero card per Hero Name with 2 Bystanders under it (below).
 
-## Setup and implementation gaps
+## Setup facts from the card text (Card)
 
-Verify the full card text and setup for Condition Logan into Weapon X; all three Masterminds' Always Leads/setup effects; complete Hero metadata; the Loved Ones components and exact Scheme setup; and any additional card-driven shared parts. The rules insert and article support the facts above but do not provide full card-level setup data. This record changes no runtime data or code.
+- **Twists:** Condition Logan into Weapon X 8; Go After Heroes' Loved Ones 8 at 1 player, 10 at 2-4, 11 at 5; Wipe Heroes' Memories players + 4.
+- **Condition Logan into Weapon X:** exactly 1 Hero with Wolverine or Logan in its name. Weapon X (Wolverine) keeps the Hero Name Wolverine; the data counts the word "Wolverine" (no Revised box has a Logan Hero).
+- **Go After Heroes' Loved Ones:** one extra Hero, no two Heroes with the same Hero Name, and a lowest-cost card of each Hero set aside face up with 2 Bystanders under it. Modelled as moves of one Hero card and 2 Bystanders per Hero into a set-aside stack (the What If...? Hero count plus one: 4 Solo, 6 at 2-4, 7 at 5).
+- **Always Leads:** Romulus leads Weapon Plus; Sabretooth leads Berserkers; Omega Red leads any Villain Group, so it constrains no draw.
+- **Epic sides:** each Mastermind has one, with the same Always Leads and parts.
+- **Parts:** Wounds only, as listed above. Bystanders are captured or rescued by some cards but are not a part.
+
+## Open
+
+Per-face copy counts of the Hero, Mastermind and Scheme cards; the Logan half of Condition Logan's "Wolverine or Logan" (a Revised Logan Hero would need a second word); an Always Leads choice capability for Omega Red's any-group line (tracked in #217).
 
 ## Structured card-face metadata (C1)
 

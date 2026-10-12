@@ -1,0 +1,512 @@
+{
+ "schemaVersion": 7,
+ "id": "weapon-x",
+ "name": "Weapon X",
+ "ruleset": "revised",
+ "catalogSource": "UD; WX; C1",
+ "about": {
+  "released": {
+   "value": "2024-10",
+   "source": "Q"
+  }
+ },
+ "sources": [
+  {
+   "key": "UD",
+   "url": "https://upperdeckstore.com/legendary-weapon-x.html"
+  },
+  {
+   "key": "WX",
+   "url": "https://upperdeck.com/wp-content/uploads/2024/12/Marvel_WeaponX_Rulesheet.pdf"
+  },
+  {
+   "key": "WXA",
+   "url": "https://upperdeck.com/legendary-weapon-x/"
+  },
+  {
+   "key": "C1",
+   "url": "https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/weaponx.ts"
+  },
+  {
+   "key": "Q",
+   "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"
+  }
+ ],
+ "components": {
+  "heroCards": {
+   "value": 14,
+   "source": "WX p.2"
+  },
+  "villainGroupCards": {
+   "value": 8,
+   "source": "WX p.2"
+  },
+  "henchmanGroupCards": {
+   "value": 0,
+   "source": "WX p.2"
+  },
+  "schemeTwists": {
+   "value": 0,
+   "source": "WX p.2"
+  },
+  "wounds": {
+   "value": 10,
+   "source": "WX p.2"
+  }
+ },
+ "heroes": [
+  {
+   "id": "weapon-x_hero_fantomex",
+   "name": "Fantomex",
+   "team": "weapon-x_term_x-force",
+   "classes": [
+    "marvel-studios-what-if_term_covert",
+    "marvel-studios-what-if_term_ranged",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "weapon-x_term_weapon-x-sequence"
+   ]
+  },
+  {
+   "id": "weapon-x_hero_marrow",
+   "name": "Marrow",
+   "team": "weapon-x_term_x-force",
+   "classes": [
+    "marvel-studios-what-if_term_covert",
+    "marvel-studios-what-if_term_ranged",
+    "marvel-studios-what-if_term_strength"
+   ],
+   "terms": [
+    "weapon-x_term_berserk",
+    "weapon-x_term_weapon-x-sequence"
+   ]
+  },
+  {
+   "id": "weapon-x_hero_weapon-h",
+   "name": "Weapon H",
+   "team": "weapon-x_term_avengers",
+   "classes": [
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_strength"
+   ],
+   "terms": [
+    "weapon-x_term_berserk",
+    "weapon-x_term_weapon-x-sequence"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "weapon-x_hero_weapon-x-wolverine",
+   "name": "Weapon X (Wolverine)",
+   "heroName": "Wolverine",
+   "team": "weapon-x_term_marvel-knights",
+   "classes": [
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "weapon-x_term_berserk",
+    "weapon-x_term_weapon-x-sequence"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  }
+ ],
+ "villainGroups": [
+  {
+   "id": "weapon-x_villain_berserkers",
+   "name": "Berserkers",
+   "terms": [
+    "weapon-x_term_berserk",
+    "weapon-x_term_fail",
+    "marvel-studios-what-if_term_ambush",
+    "marvel-studios-what-if_term_escape",
+    "marvel-studios-what-if_term_fight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "weapon-x_villain_weapon-plus",
+   "name": "Weapon Plus",
+   "terms": [
+    "weapon-x_term_berserk",
+    "weapon-x_term_fail",
+    "weapon-x_term_weapon-x-sequence",
+    "marvel-studios-what-if_term_ambush",
+    "marvel-studios-what-if_term_escape",
+    "marvel-studios-what-if_term_fight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  }
+ ],
+ "henchmanGroups": [],
+ "masterminds": [
+  {
+   "id": "weapon-x_mastermind_omega-red",
+   "name": "Omega Red",
+   "terms": [
+    "marvel-studios-what-if_term_always-leads",
+    "marvel-studios-what-if_term_fight",
+    "marvel-studios-what-if_term_master-strike",
+    "marvel-studios-what-if_term_mastermind-tactic"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "epic": {
+    "name": "Epic Omega Red",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "Card",
+      "offersEpic": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "weapon-x_mastermind_romulus",
+   "name": "Romulus",
+   "terms": [
+    "marvel-studios-what-if_term_always-leads",
+    "marvel-studios-what-if_term_fight",
+    "marvel-studios-what-if_term_master-strike",
+    "marvel-studios-what-if_term_mastermind-tactic",
+    "weapon-x_term_weapon-x-sequence"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "weapon-x_villain_weapon-plus",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Romulus",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "Card",
+      "offersEpic": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "weapon-x_mastermind_sabretooth",
+   "name": "Sabretooth",
+   "terms": [
+    "marvel-studios-what-if_term_always-leads",
+    "marvel-studios-what-if_term_fight",
+    "marvel-studios-what-if_term_master-strike",
+    "marvel-studios-what-if_term_mastermind-tactic",
+    "weapon-x_term_berserk",
+    "weapon-x_term_fail"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "weapon-x_villain_berserkers",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Sabretooth",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "Card",
+      "offersEpic": true
+     }
+    ]
+   }
+  }
+ ],
+ "schemes": [
+  {
+   "id": "weapon-x_scheme_condition-logan-into-weapon-x",
+   "name": "Condition Logan into Weapon X",
+   "terms": [
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 8,
+      "source": "Card"
+     }
+    ],
+    "heroCounts": [
+     {
+      "heroNameContains": "Wolverine",
+      "exactly": 1,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "weapon-x_scheme_go-after-heroes-loved-ones",
+   "name": "Go After Heroes' Loved Ones",
+   "terms": [
+    "weapon-x_term_berserk",
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": [
+       1
+      ],
+      "value": 8,
+      "source": "Card"
+     },
+     {
+      "players": [
+       2,
+       3,
+       4
+      ],
+      "value": 10,
+      "source": "Card"
+     },
+     {
+      "players": [
+       5
+      ],
+      "value": 11,
+      "source": "Card"
+     }
+    ],
+    "extraHeroes": [
+     {
+      "players": null,
+      "value": 1,
+      "source": "Card"
+     }
+    ],
+    "distinctHeroNames": {
+     "value": true,
+     "source": "Card"
+    },
+    "moves": [
+     {
+      "card": "hero",
+      "to": "setAside",
+      "count": [
+       {
+        "players": [
+         1
+        ],
+        "value": 4,
+        "source": "Card"
+       },
+       {
+        "players": [
+         2,
+         3,
+         4
+        ],
+        "value": 6,
+        "source": "Card"
+       },
+       {
+        "players": [
+         5
+        ],
+        "value": 7,
+        "source": "Card"
+       }
+      ]
+     },
+     {
+      "card": "bystander",
+      "to": "setAside",
+      "count": [
+       {
+        "players": [
+         1
+        ],
+        "value": 8,
+        "source": "Card"
+       },
+       {
+        "players": [
+         2,
+         3,
+         4
+        ],
+        "value": 12,
+        "source": "Card"
+       },
+       {
+        "players": [
+         5
+        ],
+        "value": 14,
+        "source": "Card"
+       }
+      ]
+     }
+    ],
+    "steps": [
+     {
+      "label": "Set aside each Hero's lowest-cost card face up, with 2 Bystanders under it",
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "weapon-x_scheme_wipe-heroes-memories",
+   "name": "Wipe Heroes' Memories",
+   "terms": [
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": [
+       1
+      ],
+      "value": 5,
+      "source": "Card"
+     },
+     {
+      "players": [
+       2
+      ],
+      "value": 6,
+      "source": "Card"
+     },
+     {
+      "players": [
+       3
+      ],
+      "value": 7,
+      "source": "Card"
+     },
+     {
+      "players": [
+       4
+      ],
+      "value": 8,
+      "source": "Card"
+     },
+     {
+      "players": [
+       5
+      ],
+      "value": 9,
+      "source": "Card"
+     }
+    ]
+   }
+  }
+ ],
+ "glossary": [
+  {
+   "id": "weapon-x_term_x-force",
+   "name": "X-Force",
+   "kind": "team",
+   "summary": "A team of Heroes. Its icon on a card powers team Superpower abilities.",
+   "source": "WX",
+   "page": 1
+  },
+  {
+   "id": "weapon-x_term_avengers",
+   "name": "Avengers",
+   "kind": "team",
+   "summary": "A team of Heroes. Its icon on a card powers team Superpower abilities.",
+   "source": "WX",
+   "page": 1
+  },
+  {
+   "id": "weapon-x_term_marvel-knights",
+   "name": "Marvel Knights",
+   "kind": "team",
+   "summary": "A team of Heroes. Its icon on a card powers team Superpower abilities.",
+   "source": "WX",
+   "page": 1
+  },
+  {
+   "id": "weapon-x_term_berserk",
+   "name": "Berserk",
+   "kind": "keyword",
+   "summary": "Flip the top card of your deck into the discard pile and count its printed Attack as a bonus. On an Enemy, the bonus raises what you must beat to fight it.",
+   "source": "WX",
+   "page": 1
+  },
+  {
+   "id": "weapon-x_term_fail",
+   "name": "Fail",
+   "kind": "keyword",
+   "summary": "An Enemy's backup effect that happens only when a Berserk bonus makes you miss the fight you tried.",
+   "source": "WX",
+   "page": 1
+  },
+  {
+   "id": "weapon-x_term_weapon-x-sequence",
+   "name": "Weapon X Sequence",
+   "kind": "keyword",
+   "summary": "Count the longest unbroken run of different costs among your cards, or the Heroes in the HQ for an Enemy, and gain that much Attack.",
+   "source": "WX",
+   "page": 1
+  },
+  {
+   "id": "weapon-x_term_enraging-wound",
+   "name": "Enraging Wound",
+   "kind": "keyword",
+   "summary": "A special Wound shuffled into the Wound Deck. It can be played for an effect and has its own way of being healed, yet still counts as a Wound.",
+   "source": "WX",
+   "page": 2
+  }
+ ]
+}
