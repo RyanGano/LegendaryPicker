@@ -1,6 +1,6 @@
 # Midnight Sons (May 2023)
 
-**Research status: Partial.** The official product page verifies a 100-card product and 1–5 player range; the insert documents several mechanics. Category counts, full setups, and card-level metadata remain unverified.
+**Research status: Integrated ([#201](https://github.com/RyanGano/LegendaryPicker/issues/201)); partial.** The insert (MS p.2) gives the contents: 5 Heroes of 14 cards, 2 Villain Groups of 8, 2 double-sided Epic Masterminds with 4 Tactics each and 4 Schemes (100 cards). Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked card face (`Card`); Hero teams and classes come from C1. The release month (May 2023) is from the research queue.
 
 ## Sources
 
@@ -14,14 +14,14 @@
 
 ## Catalog inventory
 
-The official product listing gives **100 cards** and **1–5 players**; the insert does not break down the 100 by card type or group. C1 face metadata is indexed below with linked images where supplied; the 100-card composition remains unresolved:
+The official product listing gives **100 cards** and **1–5 players**; the insert's contents list (MS p.2) breaks the 100 down as 5 Heroes x 14, 2 Villain Groups x 8, 2 Masterminds with 4 Tactics each and 4 Schemes. C1 face metadata is indexed below with linked images where supplied:
 
 - **Heroes (five):** Blade, Daywalker; Elsa Bloodstone; Morbius; Werewolf by Night; Wong, Master of the Mystic Arts.
 - **Villain Groups (two):** Lilin; Fallen.
 - **Masterminds (two):** Lilith, Mother of Demons; Zarathos.
 - **Schemes (four):** Sire Vampires at the Blood Bank; Ritual Sacrifice to Summon Chthon; Midnight Massacre; Wager at Blackjack for Heroes' Souls.
 
-C1 does not support the 100-card total, per-group card counts, mechanics, or setup values. The insert's pictured Morbius and Elsa Bloodstone examples are limited evidence, not full card-face sources; no allowed source recorded here verifies complete card identities, Hero Names, teams/classes, group inventories, or setup lines.
+The 14-card Heroes are 1 rare, 3 uncommons, 5 of one common and 5 of another (MS p.2).
 
 ## Rules and mechanisms
 
@@ -46,7 +46,7 @@ Summaries are original paraphrases under 40 words. The insert names no new token
 
 ## Setup and implementation gaps
 
-Verify the 100-card category and group totals against an official contents list or product cards; the official listing and insert reviewed here do not provide that breakdown. Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps; both Masterminds' Always Leads and setup effects; and complete Hero metadata and card-driven component requirements. The rules insert is sufficient for the mechanics above, but does not establish those card-specific facts. This record changes no runtime data or code.
+Still open: per-face copy counts for the Heroes, the Masterminds and their Tactics, and the Schemes (C1 gives none). Integration notes: Elsa Bloodstone is named "(Marvel Knights)" because Secret Wars Volume 2 holds an Elsa Bloodstone, and both Blade, Daywalker and Wong carry the Hero Names Blade and Wong. Ritual Sacrifice to Summon Chthon prints 1 Twist total with Lilith, recorded by the Scheme's `setup.mastermindTwists`. Wounds are used by Morbius, both Villain Groups and both Masterminds; Werewolf by Night takes from the Sidekick Deck.
 
 ## Structured card-face metadata (C1)
 

@@ -692,6 +692,16 @@ public sealed partial class BoxCatalog
                 }
             }
 
+            var withTwists = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var twists in scheme.Setup.MastermindTwists ?? [])
+            {
+                if (!box.AllMasterminds.Any(mastermind => mastermind.Id == twists.MastermindId) || !withTwists.Add(twists.MastermindId) || twists.Value < 1)
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} setup.mastermindTwists lists {twists.MastermindId} with {twists.Value}; it lists Masterminds of {box.Id}, each once, with at least 1 Twist.");
+                }
+            }
+
             var excluded = new HashSet<string>(StringComparer.Ordinal);
             foreach (var exclusion in scheme.ExcludesMasterminds ?? [])
             {
@@ -1144,6 +1154,7 @@ public sealed partial class BoxCatalog
 
             if (effect.OneOfGroups is { } choice) yield return ($"{scheme.Id} setup.oneOfGroups", choice.Source);
             foreach (var exclusion in scheme.ExcludesMasterminds ?? []) yield return ($"{scheme.Id} excludesMasterminds", exclusion.Source);
+            foreach (var twists in effect.MastermindTwists ?? []) yield return ($"{scheme.Id} setup.mastermindTwists", twists.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
             foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);
             foreach (var count in effect.HeroCounts ?? []) yield return ($"{scheme.Id} setup.heroCounts", count.Source);

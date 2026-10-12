@@ -317,8 +317,13 @@ public sealed record SchemeSetup(
     Sourced<int>? ExtraHenchmanCards = null,
     GroupChoice? OneOfGroups = null,
     Sourced<int>? Officers = null,
-    Sourced<int>? VillainCards = null)
+    Sourced<int>? VillainCards = null,
+    IReadOnlyList<MastermindTwists>? MastermindTwists = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps, HenchmanCards);
+
+// A Twist count a Scheme prints for one Mastermind of its box, which replaces the Scheme's own Twists when that
+// Mastermind is drawn, as Ritual Sacrifice to Summon Chthon's single Twist with Lilith.
+public sealed record MastermindTwists(string MastermindId, int Value, string Source);
 
 // Groups of one type a Scheme requires exactly one of: the setup takes the drawn Mastermind's Always Leads group when
 // it is one of them, or else draws one, and leaves the others out of the setup.

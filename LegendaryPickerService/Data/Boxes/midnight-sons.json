@@ -1,0 +1,427 @@
+{
+ "schemaVersion": 7,
+ "id": "midnight-sons",
+ "name": "Midnight Sons",
+ "ruleset": "firstEdition",
+ "catalogSource": "MS p.2; C1",
+ "about": {
+  "released": {
+   "value": "2023-05",
+   "source": "Q"
+  }
+ },
+ "sources": [
+  {
+   "key": "MS",
+   "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/MidnightSons_Rulesheet.pdf"
+  },
+  {
+   "key": "Q",
+   "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"
+  }
+ ],
+ "components": {
+  "heroCards": {
+   "value": 14,
+   "source": "MS p.2"
+  },
+  "villainGroupCards": {
+   "value": 8,
+   "source": "MS p.2"
+  },
+  "henchmanGroupCards": {
+   "value": 0,
+   "source": "MS p.2"
+  },
+  "schemeTwists": {
+   "value": 0,
+   "source": "MS p.2"
+  }
+ },
+ "heroes": [
+  {
+   "id": "midnight-sons_hero_blade-daywalker",
+   "name": "Blade, Daywalker",
+   "heroName": "Blade",
+   "team": "dark-city_term_marvel-knights",
+   "classes": [
+    "core_term_instinct",
+    "core_term_strength",
+    "core_term_tech"
+   ],
+   "terms": [
+    "midnight-sons_term_blood-frenzy",
+    "midnight-sons_term_moonlight-and-sunlight",
+    "secret-wars-volume-2_term_patrol"
+   ]
+  },
+  {
+   "id": "midnight-sons_hero_elsa-bloodstone",
+   "name": "Elsa Bloodstone (Marvel Knights)",
+   "heroName": "Elsa Bloodstone",
+   "team": "dark-city_term_marvel-knights",
+   "classes": [
+    "core_term_instinct",
+    "core_term_tech"
+   ],
+   "terms": [
+    "midnight-sons_term_blood-frenzy",
+    "midnight-sons_term_hunt-for-victims",
+    "secret-wars-volume-2_term_patrol"
+   ]
+  },
+  {
+   "id": "midnight-sons_hero_morbius",
+   "name": "Morbius",
+   "team": "dark-city_term_marvel-knights",
+   "classes": [
+    "core_term_covert",
+    "core_term_strength"
+   ],
+   "terms": [
+    "midnight-sons_term_blood-frenzy",
+    "midnight-sons_term_moonlight-and-sunlight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "midnight-sons_hero_werewolf-by-night",
+   "name": "Werewolf by Night",
+   "team": "dark-city_term_marvel-knights",
+   "classes": [
+    "core_term_instinct",
+    "core_term_strength"
+   ],
+   "terms": [
+    "midnight-sons_term_blood-frenzy",
+    "midnight-sons_term_moonlight-and-sunlight",
+    "secret-wars-volume-1_term_sidekick"
+   ],
+   "uses": [
+    {
+     "part": "sidekicks",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "midnight-sons_hero_wong",
+   "name": "Wong, Master of the Mystic Arts",
+   "heroName": "Wong",
+   "team": "dark-city_term_marvel-knights",
+   "classes": [
+    "core_term_covert",
+    "core_term_ranged"
+   ],
+   "terms": [
+    "midnight-sons_term_moonlight-and-sunlight",
+    "secret-wars-volume-2_term_patrol"
+   ]
+  }
+ ],
+ "villainGroups": [
+  {
+   "id": "midnight-sons_villain_lilin",
+   "name": "Lilin",
+   "terms": [
+    "core_term_ambush",
+    "core_term_fight",
+    "core_term_escape",
+    "midnight-sons_term_hunt-for-victims",
+    "midnight-sons_term_moonlight-and-sunlight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "midnight-sons_villain_fallen",
+   "name": "Fallen",
+   "terms": [
+    "core_term_ambush",
+    "core_term_fight",
+    "core_term_escape",
+    "midnight-sons_term_blood-frenzy",
+    "midnight-sons_term_haunt"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  }
+ ],
+ "henchmanGroups": [],
+ "masterminds": [
+  {
+   "id": "midnight-sons_mastermind_lilith",
+   "name": "Lilith, Mother of Demons",
+   "terms": [
+    "core_term_always-leads",
+    "core_term_fight",
+    "core_term_master-strike",
+    "core_term_mastermind-tactic",
+    "midnight-sons_term_hunt-for-victims"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "midnight-sons_villain_lilin",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Lilith",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "midnight-sons_mastermind_zarathos",
+   "name": "Zarathos",
+   "terms": [
+    "core_term_always-leads",
+    "core_term_fight",
+    "core_term_master-strike",
+    "core_term_mastermind-tactic",
+    "midnight-sons_term_haunt"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "midnight-sons_villain_fallen",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Zarathos",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "Card"
+     }
+    ]
+   }
+  }
+ ],
+ "schemes": [
+  {
+   "id": "midnight-sons_scheme_sire-vampires-at-the-blood-bank",
+   "name": "Sire Vampires at the Blood Bank",
+   "terms": [
+    "core_term_scheme-twist",
+    "midnight-sons_term_blood-frenzy"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 10,
+      "source": "Card"
+     }
+    ],
+    "extraHenchmanGroups": [
+     {
+      "players": null,
+      "value": 1,
+      "source": "Card"
+     }
+    ],
+    "extraHenchmanCards": {
+     "value": 10,
+     "source": "Card"
+    },
+    "steps": [
+     {
+      "label": "Put the Scheme above the Bank space to mark the Blood Bank",
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "midnight-sons_scheme_ritual-sacrifice-to-summon-chthon",
+   "name": "Ritual Sacrifice to Summon Chthon",
+   "terms": [
+    "core_term_scheme-twist",
+    "midnight-sons_term_hunt-for-victims",
+    "revelations_term_transforming-scheme"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": [
+       1
+      ],
+      "value": 7,
+      "source": "Card"
+     },
+     {
+      "players": [
+       2
+      ],
+      "value": 8,
+      "source": "Card"
+     },
+     {
+      "players": [
+       3
+      ],
+      "value": 9,
+      "source": "Card"
+     },
+     {
+      "players": [
+       4
+      ],
+      "value": 10,
+      "source": "Card"
+     },
+     {
+      "players": [
+       5
+      ],
+      "value": 11,
+      "source": "Card"
+     }
+    ],
+    "requiredGroups": [
+     {
+      "groupId": "midnight-sons_villain_lilin",
+      "groupType": "villain",
+      "source": "Card"
+     }
+    ],
+    "extraVillainGroups": [
+     {
+      "players": null,
+      "value": 1,
+      "source": "Card"
+     }
+    ],
+    "mastermindTwists": [
+     {
+      "mastermindId": "midnight-sons_mastermind_lilith",
+      "value": 1,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "midnight-sons_scheme_midnight-massacre",
+   "name": "Midnight Massacre",
+   "terms": [
+    "core_term_scheme-twist",
+    "midnight-sons_term_moonlight-and-sunlight",
+    "midnight-sons_term_blood-frenzy"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 11,
+      "source": "Card"
+     }
+    ],
+    "outsideHeroes": [
+     {
+      "to": "villainDeck",
+      "heroName": "Blade",
+      "count": [
+       {
+        "players": null,
+        "value": 1,
+        "source": "Card"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "midnight-sons_scheme_wager-at-blackjack-for-heroes-souls",
+   "name": "Wager at Blackjack for Heroes' Souls",
+   "terms": [
+    "core_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 11,
+      "source": "Card"
+     }
+    ],
+    "extraHeroes": [
+     {
+      "players": null,
+      "value": 2,
+      "source": "Card"
+     }
+    ]
+   }
+  }
+ ],
+ "glossary": [
+  {
+   "id": "midnight-sons_term_blood-frenzy",
+   "name": "Blood Frenzy",
+   "kind": "keyword",
+   "summary": "The bonus equals how many different Victory Point values your Victory Pile holds. On a Villain it raises its Attack, but only during your turn.",
+   "source": "MS",
+   "page": 1
+  },
+  {
+   "id": "midnight-sons_term_hunt-for-victims",
+   "name": "Hunt for Victims",
+   "kind": "keyword",
+   "summary": "The card preys on Bystanders: it KOs one that is held captive or sits in the Escape Pile, or captures a new one if none is available.",
+   "source": "MS",
+   "page": 1
+  },
+  {
+   "id": "midnight-sons_term_haunt",
+   "name": "Haunt",
+   "kind": "keyword",
+   "summary": "A Villain slips under an HQ Hero and blocks it from being recruited. A player can spend Recruit equal to that Hero's cost to exorcise it, driving the Villain out into the city.",
+   "source": "MS",
+   "page": 1
+  },
+  {
+   "id": "midnight-sons_term_moonlight-and-sunlight",
+   "name": "Moonlight and Sunlight",
+   "kind": "keyword",
+   "summary": "Moonlight abilities work when most HQ Heroes have odd printed costs, Sunlight abilities when most have even ones. A tie turns both off.",
+   "source": "MS",
+   "page": 2
+  }
+ ]
+}

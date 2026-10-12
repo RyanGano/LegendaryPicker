@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 7,
+  "id": "rituals",
+  "name": "Rituals Fixture",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.1",
+  "about": { "released": { "value": "2020-01", "source": "R p.1" } },
+  "sources": [
+    { "key": "R", "url": "https://example.test/rituals-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [
+    { "id": "rituals_mastermind_test-lord", "name": "Test Lord", "terms": ["core_term_mastermind-tactic"] }
+  ],
+  "schemes": [
+    {
+      "id": "rituals_scheme_test-ritual",
+      "name": "Test Ritual",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 7, "source": "Card" }],
+        "mastermindTwists": [{ "mastermindId": "rituals_mastermind_test-lord", "value": 1, "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": []
+}
