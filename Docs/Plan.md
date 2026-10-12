@@ -474,5 +474,15 @@ Box id `marvel-studios-the-infinity-saga`, file `LegendaryPickerService/Data/Box
 
 **Schemes:** Halve All Life in the Universe (5 Twists); Sacrifice for the Soul Stone (Twists equal to the players plus 4); The Time Heist (11 Twists, 8 Heroes split 4 and 4 between the Hero Deck and the Past Hero Deck, as steps); Warp Reality into a TV Show (11 Twists, a three-space city, uses the Officer Deck as an edge marker). Endgame and Sacrifice are new glossary terms; Phasing, Multiclass and Divided Card reuse earlier boxes' terms.
 
+## Midnight Sons (May 2023)
+
+Box id `midnight-sons`, file `LegendaryPickerService/Data/Boxes/midnight-sons.json`, a First Edition expansion (#201). Counts (MS p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 double-sided Epic Masterminds and 4 Schemes; no Henchman Group. Setup values and part uses come from OCR of every C1-linked card face (`Card`).
+
+**Heroes:** Blade, Daywalker (Hero Name Blade), Elsa Bloodstone (Marvel Knights), Morbius (Wounds), Werewolf by Night (Sidekicks) and Wong, Master of the Mystic Arts (Hero Name Wong). **Villain Groups:** Lilin and Fallen (both use Wounds). **Masterminds:** Lilith leads Lilin and Zarathos leads Fallen (both use Wounds); each has an Epic side with the same Tactics, offered as a step.
+
+**Schemes:** Sire Vampires at the Blood Bank (10 Twists, an extra Henchman Group of 10 cards even in Solo, a step to mark the Blood Bank); Ritual Sacrifice to Summon Chthon (6 Twists plus 1 per player, 1 Twist total with Lilith through the new `setup.mastermindTwists`, Lilin required and an extra Villain Group); Midnight Massacre (11 Twists, a Blade Hero's 14 cards in the Villain Deck through `outsideHeroes`); Wager at Blackjack for Heroes' Souls (11 Twists, 2 extra Heroes). Blood Frenzy, Hunt for Victims, Haunt and Moonlight and Sunlight are new glossary terms; Patrol reuses Secret Wars Volume 2's.
+
+**Mastermind-specific Twists (#201):** A Scheme's optional `setup.mastermindTwists` (`[{ mastermindId, value, source }]`, Masterminds of its own box, each once, at least 1 Twist) replaces the Scheme's Twists when that Mastermind is drawn, with the rule note "Scheme uses 1 Twist total with Lilith" citing the card. `MastermindTwistsTests` covers it against the made-up fixture `Fixtures/MastermindTwists`. It is an optional field, so `schemaVersion` stays 7.
+
 ## Open questions
 

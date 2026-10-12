@@ -85,6 +85,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\ExtraHenchmen\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Scheme prints a Twist count for one of its Masterminds, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\MastermindTwists\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\MastermindTwists\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Schemes set cards of a group beside them, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\CardsBeside\*.json" CopyToOutputDirectory="PreserveNewest" />

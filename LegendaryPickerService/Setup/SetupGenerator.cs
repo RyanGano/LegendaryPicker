@@ -686,6 +686,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         private SetupPlan WithMastermind(SetupPlan plan, Mastermind mastermind)
         {
             plan = plan with { Mastermind = mastermind };
+            if (plan.Scheme.Setup.MastermindTwists?.FirstOrDefault(twists => twists.MastermindId == mastermind.Id) is { } printed)
+            {
+                var note = Note(
+                    $"{SchemeWord(plan.Scheme)} uses {printed.Value} {(printed.Value == 1 ? _terms.Twist : _terms.Twists)} total with {mastermind.Name}",
+                    printed.Source, BoxOf(plan.Scheme.Id), plan.Scheme.Id);
+                plan = plan with { Twists = printed.Value, Notes = [.. plan.Notes, note] };
+            }
+
             if (mastermind.Setup is not { } effects)
             {
                 return plan;
