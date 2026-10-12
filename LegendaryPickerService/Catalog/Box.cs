@@ -212,9 +212,18 @@ public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string>
 // Leads ability allows any group, as Ego's does (it only adds a Villain Group in its Setup), so it constrains no draw. AlsoLeads is a second group its card always
 // leads, picked from several, as Deathbird leads a Shi'ar Henchman Group as well as the Shi'ar Imperial Guard (#132).
 // Epic is the Mastermind's Epic side, on the same card; draws don't use it yet (#151).
+// NoCitySpaceSchemes is the source of a rule that the Mastermind isn't played with a Scheme that changes the number of
+// city spaces, as Ego's insert says; the draw skips it after a Scheme with ChangesCitySpaces (#192).
 public sealed record Mastermind(
     string Id, string Name, IReadOnlyList<string> Terms, AlwaysLeadsGroup? AlwaysLeads = null, SetupEffects? Setup = null,
-    IReadOnlyList<PartUse>? Uses = null, AlsoLeadsGroup? AlsoLeads = null, EpicSide? Epic = null) : ICard;
+    IReadOnlyList<PartUse>? Uses = null, AlsoLeadsGroup? AlsoLeads = null, EpicSide? Epic = null, string? NoCitySpaceSchemes = null) : ICard
+{
+    // Whether the Scheme's card rules this Mastermind out: it lists the Mastermind in ExcludesMasterminds, or changes
+    // the city spaces and the Mastermind can't be played with that.
+    public bool RuledOutBy(Scheme scheme) =>
+        (scheme.ExcludesMasterminds ?? []).Any(exclusion => exclusion.MastermindId == Id)
+        || (scheme.ChangesCitySpaces is not null && NoCitySpaceSchemes is not null);
+}
 
 // A Mastermind's Epic side, which shares the normal side's Tactics: its printed title, and in Uses the parts its text
 // uses beyond the normal side's Uses, which the setup would have to lay out (the Horrors an Epic X-Men Master Strike plays). Source is the card face.
@@ -232,9 +241,11 @@ public sealed record AlsoLeadsGroup(IReadOnlyList<string> GroupIds, GroupType Gr
 // ExcludesMasterminds lists the Masterminds the Scheme's card rules out, recorded when its box is entered: those whose
 // Always Leads group it sets every card of beside it, as Clash of the Monsters Unleashed does Fin Fang Foom's
 // (D-scheme-first, #138). The draw reads the list and computes nothing; a test derives it from the card data.
+// ChangesCitySpaces is the source for a Scheme whose card changes the number of city spaces, which a Mastermind with
+// NoCitySpaceSchemes (Ego) rules out, from any box (#192).
 public sealed record Scheme(
     string Id, string Name, IReadOnlyList<string> Terms, SchemeSetup Setup, IReadOnlyList<PartUse>? Uses = null,
-    IReadOnlyList<ExcludedMastermind>? ExcludesMasterminds = null) : ICard
+    IReadOnlyList<ExcludedMastermind>? ExcludesMasterminds = null, string? ChangesCitySpaces = null) : ICard
 {
     // A Scheme also uses the stacks its Setup line sizes or moves cards from, so its uses needn't repeat them.
     public IEnumerable<Part> Parts => (Uses ?? []).Select(use => use.Part)

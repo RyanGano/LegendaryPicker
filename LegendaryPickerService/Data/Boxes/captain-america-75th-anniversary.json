@@ -44,6 +44,7 @@
     {
       "id": "captain-america-75th-anniversary_scheme_change-the-outcome-of-wwii",
       "name": "Change the Outcome of WWII",
+      "changesCitySpaces": "Card",
       "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 7, "source": "Card" }],

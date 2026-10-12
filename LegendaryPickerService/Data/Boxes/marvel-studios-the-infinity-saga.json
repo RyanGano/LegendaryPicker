@@ -336,6 +336,7 @@
   {
    "id": "marvel-studios-the-infinity-saga_scheme_warp-reality-into-a-tv-show",
    "name": "Warp Reality into a TV Show",
+   "changesCitySpaces": "Card",
    "terms": [
     "core_term_scheme-twist"
    ],

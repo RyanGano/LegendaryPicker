@@ -308,6 +308,7 @@
     {
       "id": "the-new-mutants_scheme_superhuman-baseball-game",
       "name": "Superhuman Baseball Game",
+      "changesCitySpaces": "Card",
       "terms": [
         "core_term_scheme-twist"
       ],
