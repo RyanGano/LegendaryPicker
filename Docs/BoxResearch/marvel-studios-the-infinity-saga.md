@@ -1,6 +1,6 @@
 # Marvel Studios' The Infinity Saga (Mar 2023)
 
-**Research status: Partial.** The official insert verifies component totals and several mechanics, but card-level setup text and complete card metadata remain unverified.
+**Research status: Integrated ([#199](https://github.com/RyanGano/LegendaryPicker/issues/199)); partial.** Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked card face (`Card`); Hero teams and classes come from C1. The release month (March 2023) is from the research queue.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -32,7 +32,7 @@ Each Hero has 1 rare, 2 copies of each of two uncommons, and 3 copies of each of
 - **Masterminds (two sets):** Ebony Maw; Thanos (C2 also labels the alternate side “Epic Thanos”).
 - **Schemes (four):** Halve All Life In The Universe; Sacrifice For The Soul Stone; The Time Heist; Warp Reality Into a TV Show.
 
-C1 structured face metadata is indexed below; C2 remains a names/mappings source and neither catalog's ability prose is rules evidence. The insert confirms that Wanda & Vision are one 14-card Hero stack and that both Masterminds are double-sided Epic Masterminds (IS p.2). Remaining setup gaps include the full card-level Hero Name/team/class values, Scheme setup details, printed Always Leads/setup text, or additional card-driven components.
+C1 structured face metadata is indexed below; C2 remains a names/mappings source and neither catalog's ability prose is rules evidence. The insert confirms that Wanda & Vision are one 14-card Hero stack and that both Masterminds are double-sided Epic Masterminds (IS p.2).
 
 ## Rules and mechanisms
 
@@ -53,11 +53,11 @@ The insert introduces no separately listed shared token or stack. Sacrifice uses
 - **Multiclass:** A card that counts as each of its printed Hero Classes. (IS p.2)
 - **Divided Card:** One physical card with two selectable sides and shared identifiers while not in play. (IS p.2)
 
-Summaries are original paraphrases under 40 words. Verify any additional shared parts from the cards, including any card-driven Wounds or other stacks, against allowed card-level evidence.
+Summaries are original paraphrases under 40 words. Card-driven stacks (Wounds, Officers) were read from the card faces and are recorded as `uses` in the box file.
 
 ## Setup and implementation gaps
 
-Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks/parts, and setup steps; both Masterminds' printed Always Leads and setup effects; all Hero metadata and card-level dependencies. The insert establishes Thanos's connection to Infinity Stones but not all printed setup text. Runtime support for Endgame, Sacrifice, Phasing, Multiclass, and Divided Cards is an implementation concern; research does not change runtime data or code.
+Still open: per-face copy counts for Mastermind Tactics and the Mastermind and Scheme cards (C1 gives none); C1 has no image for three Wanda & Vision halves (Let Go, Science, Grief), so their printed values are indexed only from the shared Divided-card faces. The Warp Reality into a TV Show city size (three spaces: the 50s, 60s and 70s) was confirmed by a reader's look at the face, since OCR reads its digit as 8. Integration notes: Doctor Strange, Black Panther, Captain Marvel and Bruce Banner are named "(Infinity Saga)" because earlier boxes hold those names; the Mastermind is "Thanos (Infinity Saga)". Wanda & Vision count under the Hero Names Wanda and Vision.
 
 ## Structured card-face metadata (C1)
 
