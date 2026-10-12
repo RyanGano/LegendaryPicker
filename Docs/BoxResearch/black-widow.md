@@ -1,6 +1,6 @@
 # Black Widow (2022/23)
 
-**Research status: Partial.** The official insert verifies contents and several mechanics, but not card-level Scheme setups, Always Leads, or complete Hero metadata.
+**Research status: Integrated ([#196](https://github.com/RyanGano/LegendaryPicker/issues/196)); partial.** Scheme Setup lines, Always Leads and part uses were read from OCR of the C1-linked card faces (`Card`); Hero teams and classes come from C1. The release month (October 2022) is from [ComicBook.com's availability report](https://comicbook.com/gaming/news/marvel-legendary-black-widow-expansion-now-available/).
 
 ## Sources
 
@@ -32,7 +32,7 @@ The listed categories sum to the official 100-card total.
 - **Masterminds (two):** Taskmaster; Indestructible Man.
 - **Schemes (four):** Corrupt the Spy Agencies; Train Black Widows in the Red Room; Sniper Rifle Assassins; Frame Heroes for Murder.
 
-The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index and all setup/rules claims still need an allowed source; unresolved areas include Hero metadata, Always Leads, individual Scheme/Mastermind setup lines, or printed Divided-card values.
+The C1 face index below records available printed titles, group/type, numeric values, and team/class/keyword metadata, with direct card-image URLs where supplied. C1 ability prose is not rules evidence. Fields absent from the index and all setup/rules claims still need an allowed source.
 
 ## Rules and mechanisms
 
@@ -57,7 +57,7 @@ Summaries are original paraphrases under 40 words. Hero teams/classes/shared Her
 
 ## Setup and implementation gaps
 
-Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps, plus both Masterminds' Always Leads/setup effects and Hero metadata. Integration must handle Heroes moving between the Victory Pile and hand and the destination choice for conflicting When Recruited effects. This record changes no runtime data or code.
+Still open: per-face copy counts for Heroes and Mastermind Tactics (C1 gives none); the printed Divided-card values. Each Divided Falcon & Winter Soldier image holds both halves (Attune/Atone on `_2Common`, Relocate/Reload on `_3Common`, New Wings/New Plan on `_4Uncommon`), so Atone, Reload and New Plan have no image of their own; OCR of those images at twice the size, and of Weave a Web of Spies, shows none of them uses Wounds, Officers or Sidekicks. Integration notes: the box file records Black Widow (Black Widow) with Hero Name Black Widow and Falcon & Winter Soldier under both Hero Names; Taskmaster has no Henchman Group because no Setup line asks for one.
 
 ## Structured card-face metadata (C1)
 
