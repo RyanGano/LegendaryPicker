@@ -1,0 +1,590 @@
+{
+ "schemaVersion": 7,
+ "id": "marvel-studios-ant-man-and-the-wasp",
+ "name": "Marvel Studios' Ant-Man and the Wasp",
+ "ruleset": "revised",
+ "catalogSource": "AW; C1; C2",
+ "about": {
+  "released": {
+   "value": "2023-12",
+   "source": "Q"
+  }
+ },
+ "sources": [
+  {
+   "key": "AW",
+   "url": "https://upperdeck.com/legendary-marvel-studios-ant-man-and-the-wasp/"
+  },
+  {
+   "key": "C1",
+   "url": "https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/msaw.ts"
+  },
+  {
+   "key": "Q",
+   "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"
+  }
+ ],
+ "components": {
+  "heroCards": {
+   "value": 14,
+   "source": "C1"
+  },
+  "villainGroupCards": {
+   "value": 8,
+   "source": "C1"
+  },
+  "henchmanGroupCards": {
+   "value": 10,
+   "source": "C1"
+  },
+  "schemeTwists": {
+   "value": 0,
+   "source": "AW"
+  },
+  "bystanders": {
+   "value": 7,
+   "source": "C1"
+  }
+ },
+ "heroes": [
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_hero_ant-army",
+   "name": "Ant Army",
+   "team": null,
+   "classes": [
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_antics",
+    "marvel-studios-ant-man-and-the-wasp_term_heist",
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_hero_ant-man",
+   "name": "Ant-Man (Ant-Man and the Wasp)",
+   "heroName": "Ant-Man",
+   "team": "marvel-studios-ant-man-and-the-wasp_term_avengers",
+   "classes": [
+    "marvel-studios-what-if_term_covert",
+    "marvel-studios-what-if_term_strength"
+   ],
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_antics",
+    "marvel-studios-ant-man-and-the-wasp_term_heist",
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_hero_cassie-lang",
+   "name": "Cassie Lang",
+   "team": "marvel-studios-ant-man-and-the-wasp_term_avengers",
+   "classes": [
+    "marvel-studios-what-if_term_strength",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_hero_freedom-fighters",
+   "name": "Freedom Fighters",
+   "team": null,
+   "classes": [
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_ranged"
+   ],
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_conqueror",
+    "marvel-studios-ant-man-and-the-wasp_term_explore"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_hero_janet-van-dyne",
+   "name": "Janet van Dyne",
+   "team": null,
+   "classes": [
+    "marvel-studios-what-if_term_covert",
+    "marvel-studios-what-if_term_ranged"
+   ],
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_explore",
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_hero_jentorra",
+   "name": "Jentorra",
+   "team": null,
+   "classes": [
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_strength"
+   ],
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_conqueror",
+    "marvel-studios-ant-man-and-the-wasp_term_explore"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_hero_scott-lang-cat-burglar",
+   "name": "Scott Lang, Cat Burglar",
+   "team": "marvel-studios-ant-man-and-the-wasp_term_crime-syndicate",
+   "classes": [
+    "marvel-studios-what-if_term_covert",
+    "marvel-studios-what-if_term_instinct",
+    "marvel-studios-what-if_term_ranged",
+    "marvel-studios-what-if_term_strength",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_heist"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_hero_wasp",
+   "name": "Wasp (Ant-Man and the Wasp)",
+   "heroName": "Wasp",
+   "team": "marvel-studios-ant-man-and-the-wasp_term_avengers",
+   "classes": [
+    "marvel-studios-what-if_term_ranged",
+    "marvel-studios-what-if_term_tech"
+   ],
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_heist",
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing"
+   ]
+  }
+ ],
+ "villainGroups": [
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_villain_armada-of-kang",
+   "name": "Armada of Kang",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_ambush-scheme",
+    "marvel-studios-ant-man-and-the-wasp_term_conqueror",
+    "marvel-studios-ant-man-and-the-wasp_term_double-cross",
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-what-if_term_ambush",
+    "marvel-studios-what-if_term_escape",
+    "marvel-studios-what-if_term_fight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_villain_cross-technologies",
+   "name": "Cross Technologies",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_ambush-scheme",
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+    "marvel-studios-what-if_term_ambush",
+    "marvel-studios-what-if_term_escape",
+    "marvel-studios-what-if_term_fight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_villain_ghost-chasers",
+   "name": "Ghost Chasers",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_ambush-scheme",
+    "marvel-studios-ant-man-and-the-wasp_term_double-cross",
+    "marvel-studios-ant-man-and-the-wasp_term_heist",
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+    "marvel-studios-what-if_term_ambush",
+    "marvel-studios-what-if_term_escape",
+    "marvel-studios-what-if_term_fight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_villain_quantum-realm",
+   "name": "Quantum Realm",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_ambush-scheme",
+    "marvel-studios-ant-man-and-the-wasp_term_explore",
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-what-if_term_ambush",
+    "marvel-studios-what-if_term_escape",
+    "marvel-studios-what-if_term_fight"
+   ]
+  }
+ ],
+ "henchmanGroups": [
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_henchman_quantum-hound",
+   "name": "Quantum Hound",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_explore",
+    "marvel-studios-what-if_term_fight"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_henchman_quantumnauts",
+   "name": "Quantumnauts",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_conqueror",
+    "marvel-studios-what-if_term_fight"
+   ]
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_henchman_tardigrade",
+   "name": "Tardigrade",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-what-if_term_fight"
+   ]
+  }
+ ],
+ "masterminds": [
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_mastermind_darren-cross",
+   "name": "Darren Cross",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_conqueror",
+    "marvel-studios-ant-man-and-the-wasp_term_double-cross",
+    "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+    "marvel-studios-ant-man-and-the-wasp_term_transform",
+    "marvel-studios-what-if_term_always-leads",
+    "marvel-studios-what-if_term_fight",
+    "marvel-studios-what-if_term_master-strike",
+    "marvel-studios-what-if_term_mastermind-tactic"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "marvel-studios-ant-man-and-the-wasp_villain_cross-technologies",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Start with the side showing Always Leads face up",
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_mastermind_ghost-master-thief",
+   "name": "Ghost, Master Thief",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_transform",
+    "marvel-studios-what-if_term_always-leads",
+    "marvel-studios-what-if_term_fight",
+    "marvel-studios-what-if_term_master-strike",
+    "marvel-studios-what-if_term_mastermind-tactic"
+   ],
+   "alwaysLeads": {
+    "groupId": "marvel-studios-ant-man-and-the-wasp_villain_ghost-chasers",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Start with the side showing Always Leads face up",
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_mastermind_kang-quantum-conqueror",
+   "name": "Kang, Quantum Conqueror",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_conqueror",
+    "marvel-studios-ant-man-and-the-wasp_term_double-cross",
+    "marvel-studios-ant-man-and-the-wasp_term_transform",
+    "marvel-studios-what-if_term_always-leads",
+    "marvel-studios-what-if_term_fight",
+    "marvel-studios-what-if_term_master-strike",
+    "marvel-studios-what-if_term_mastermind-tactic"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "marvel-studios-ant-man-and-the-wasp_villain_armada-of-kang",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "setup": {
+    "extraVillainGroups": [
+     {
+      "players": null,
+      "value": 1,
+      "source": "Card"
+     }
+    ],
+    "steps": [
+     {
+      "label": "Start with the side showing Always Leads face up",
+      "source": "Card"
+     },
+     {
+      "label": "Set aside the extra Group's Villains as Timeline Variants; keep its Ambush Scheme in",
+      "source": "Card"
+     }
+    ]
+   }
+  }
+ ],
+ "schemes": [
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_scheme_auction-shrink-tech-to-highest-bidder",
+   "name": "Auction Shrink Tech to Highest Bidder",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 11,
+      "source": "Card"
+     }
+    ],
+    "outsideHeroes": [
+     {
+      "to": "setAside",
+      "count": [
+       {
+        "players": null,
+        "value": 1,
+        "source": "Card"
+       }
+      ],
+      "heroNames": {
+       "value": [
+        "Ant Army",
+        "Ant-Man",
+        "Cassie Lang",
+        "Janet van Dyne",
+        "Wasp"
+       ],
+       "source": "Card"
+      }
+     }
+    ],
+    "steps": [
+     {
+      "label": "Call the extra Hero's 14 set-aside cards the Shrink Tech",
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_scheme_escape-an-imprisoning-dimension",
+   "name": "Escape an Imprisoning Dimension",
+   "terms": [
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 5,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_scheme_safeguard-dark-secrets",
+   "name": "Safeguard Dark Secrets",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_heist",
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 5,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_scheme_siphon-energy-from-the-quantum-realm",
+   "name": "Siphon Energy from the Quantum Realm",
+   "terms": [
+    "marvel-studios-ant-man-and-the-wasp_term_ambush-scheme",
+    "marvel-studios-what-if_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 9,
+      "source": "Card"
+     }
+    ],
+    "requiredGroups": [
+     {
+      "groupId": "marvel-studios-ant-man-and-the-wasp_villain_quantum-realm",
+      "groupType": "villain",
+      "source": "Card"
+     }
+    ],
+    "extraVillainGroups": [
+     {
+      "players": null,
+      "value": 1,
+      "source": "Card"
+     }
+    ],
+    "cardsBeside": [
+     {
+      "groupId": "marvel-studios-ant-man-and-the-wasp_villain_quantum-realm",
+      "groupType": "villain",
+      "count": [
+       {
+        "players": null,
+        "value": 7,
+        "source": "Card"
+       }
+      ]
+     }
+    ],
+    "steps": [
+     {
+      "label": "Keep Quantum Realm's Villains aside for the Siphons; its Ambush Scheme joins the deck",
+      "source": "Card"
+     }
+    ]
+   }
+  }
+ ],
+ "glossary": [
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_avengers",
+   "name": "Avengers",
+   "kind": "team",
+   "summary": "The team of Earth's Mightiest Heroes. Its icon on a card powers team Superpower abilities.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_crime-syndicate",
+   "name": "Crime Syndicate",
+   "kind": "team",
+   "summary": "A team of Heroes who work outside the law. Its icon on a card powers team Superpower abilities.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_heist",
+   "name": "Heist",
+   "kind": "keyword",
+   "summary": "A gamble resolved as a Villain is revealed: your Heroes' costs are weighed against that Villain's Victory Points, and a good enough match earns the card's bonus.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_double-cross",
+   "name": "Double-Cross",
+   "kind": "keyword",
+   "summary": "Every player shows their hand and discards one of its most expensive cards, but only if another card in that hand costs the same.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_explore",
+   "name": "Explore",
+   "kind": "keyword",
+   "summary": "Swap an HQ Hero to the bottom of the Hero Deck, reveal two new Heroes, and pick one to fill the space. The pick is the Found Hero, which can switch on extra effects.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+   "name": "Size-Changing",
+   "kind": "keyword",
+   "summary": "Playing Heroes of the Classes listed on the card this turn makes it cheaper to recruit, or, on a Villain, easier to fight.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_microscopic-size-changing",
+   "name": "Microscopic Size-Changing",
+   "kind": "keyword",
+   "summary": "A stronger Size-Changing: each listed Class icon matched this turn cuts the cost by 2, and a Villain's Attack falls the same way. Recruiting below zero gives Recruit points.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_antics",
+   "name": "Antics",
+   "kind": "keyword",
+   "summary": "A bonus available only as you play the card, if you have at least three cards costing 1 or 2, or with Size-Changing, in play or hand, counting the card itself.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_ambush-scheme",
+   "name": "Ambush Scheme",
+   "kind": "keyword",
+   "summary": "A Scheme card shuffled into the Villain Deck with its Villain Group. Once revealed it sits beside the main Scheme, and each Scheme Twist then triggers both Schemes.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_conqueror",
+   "name": "Conqueror",
+   "kind": "keyword",
+   "summary": "The card names a city space and a bonus, and gets that much extra Attack whenever any Villain stands in that space.",
+   "source": "AW",
+   "page": 1
+  },
+  {
+   "id": "marvel-studios-ant-man-and-the-wasp_term_transform",
+   "name": "Transform",
+   "kind": "keyword",
+   "summary": "The card flips to its other side. A Transforming Mastermind turns over when its Master Strike or Tactic says so.",
+   "source": "AW",
+   "page": 1
+  }
+ ]
+}

@@ -25,6 +25,7 @@ public class BoxDataTests
         { "marvel-studios-the-infinity-saga", 5, 2, 0, 2, 4 },
         { "midnight-sons", 5, 2, 0, 2, 4 },
         { "marvel-studios-what-if", 8, 5, 3, 4, 4 },
+        { "marvel-studios-ant-man-and-the-wasp", 8, 4, 3, 3, 4 },
         { "messiah-complex", 8, 4, 2, 3, 4 },
         { "doctor-strange-and-the-shadows-of-nightmare", 5, 2, 0, 2, 4 },
         { "captain-america-75th-anniversary", 5, 2, 0, 2, 4 },
