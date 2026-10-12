@@ -171,7 +171,8 @@
         "steps": [
           {
             "label": "Optional: play the Epic side instead; the Tactics stay the same",
-            "source": "NM p.2"
+            "source": "NM p.2",
+      "offersEpic": true
           }
         ]
       }
@@ -205,7 +206,8 @@
         "steps": [
           {
             "label": "Optional: play the Epic side instead; the Tactics stay the same",
-            "source": "NM p.2"
+            "source": "NM p.2",
+      "offersEpic": true
           }
         ]
       }

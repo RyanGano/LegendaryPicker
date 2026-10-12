@@ -81,9 +81,10 @@ app.MapGet("/api/boxes", (BoxCatalog catalog) =>
     })));
 
 // players is read as text so a non-number gets the same ProblemDetails as an out-of-range count.
-// boxes is a comma-separated list of box ids; without it a setup uses the core box alone.
+// boxes is a comma-separated list of box ids; without it a setup uses the core box alone. epic=true plays a drawn
+// Mastermind that has an Epic side on that side (#185).
 // NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
-app.MapGet("/api/setup", (string? players, string? boxes, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
+app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
 {
     // "Generate another" must always draw a fresh setup.
     response.Headers.CacheControl = "no-store";
@@ -104,7 +105,7 @@ app.MapGet("/api/setup", (string? players, string? boxes, HttpResponse response,
         return Results.ValidationProblem(new Dictionary<string, string[]> { ["boxes"] = [problem] });
     }
 
-    return Results.Ok(SetupResponse.From(generator.Generate(count, included, random), catalog));
+    return Results.Ok(SetupResponse.From(generator.Generate(count, included, random, epic ?? false), catalog));
 }).RequireRateLimiting(SetupRateLimit);
 
 app.Run();

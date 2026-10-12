@@ -101,7 +101,10 @@ The shared pool of Shard tokens Guardians of the Galaxy adds (18 double-sided to
 A group a Scheme names as required (for example, Skrulls). Like an Always Leads group, it fills a group slot. A Scheme can say how many of a required Henchman Group's cards go in, as Alien Brood Encounters adds all 10 Brood even in Solo. A Scheme can instead require exactly one of several groups and leave the others out, as S.H.I.E.L.D. vs. HYDRA War takes A.I.M., Hydra Offshoot or Hydra Elite but not both: the drawn Mastermind's Always Leads group when it is one of them, otherwise one drawn (#172).
 
 **Horrors**:
-X-Men's 20 Horror cards, which make a game harder (XM p.2). A part in use: the setup lays them out only when a drawn card plays them, as Horror of Horrors does. A Mastermind's Epic side also brings them in, but the setup draws the normal side and only offers the Epic side as a step.
+X-Men's 20 Horror cards, which make a game harder (XM p.2). A part in use: the setup lays them out only when a drawn card plays them, as Horror of Horrors does. A Mastermind's Epic side also brings them in, which the setup lays out when it plays the Epic side.
+
+**Epic Mastermind**:
+A Mastermind's other card face, with the same Tactics (XM p.2). It is an option (`epic=true`, "Epic Masterminds" in the web app): with it on, a drawn Mastermind that has an Epic side is played on that side, under its printed Epic title, with the Epic side's own Setup line in place of the normal side's and the parts its text uses beside the normal side's; without it, or when the Epic side uses a part no included box supplies, the normal side is drawn and its card offers the Epic side as a step. The Epic side keeps the same Always Leads unless its card says otherwise (#185).
 
 **Villain Group**:
 A named set of 8 Villain cards selected as one setup component.

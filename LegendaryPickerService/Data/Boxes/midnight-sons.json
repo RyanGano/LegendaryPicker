@@ -191,7 +191,8 @@
     "steps": [
      {
       "label": "Optional: play the Epic side instead; the Tactics stay the same",
-      "source": "Card"
+      "source": "Card",
+      "offersEpic": true
      }
     ]
    }
@@ -225,7 +226,8 @@
     "steps": [
      {
       "label": "Optional: play the Epic side instead; the Tactics stay the same",
-      "source": "Card"
+      "source": "Card",
+      "offersEpic": true
      }
     ]
    }
