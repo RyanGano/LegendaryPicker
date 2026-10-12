@@ -535,8 +535,29 @@ public sealed partial class BoxCatalog
     // Wound stack to a size or per player, not both, and to at least 1 Wound, and the Officer stack to at least 1 Officer.
     private static void ValidateLeadsAndCounts(string path, Box box)
     {
+        if (box.Setup?.WarmupRound is { } warmup)
+        {
+            if (warmup.Value.Length == 0)
+            {
+                throw new InvalidDataException($"{path}: setup.warmupRound names no player count.");
+            }
+
+            CheckPlayerCounts(path, "setup.warmupRound", [warmup.Value]);
+        }
+
+        if (box.Setup?.Solo.HenchmenInCity is { Value: < 1 } inCity)
+        {
+            throw new InvalidDataException($"{path}: setup.solo.henchmenInCity is {inCity.Value}; it is at least 1.");
+        }
+
         foreach (var mastermind in box.Masterminds)
         {
+            var required = mastermind.Setup?.RequiredHeroes ?? [];
+            if (required.GroupBy(hero => hero.HeroId).FirstOrDefault(hero => hero.Count() > 1) is { } twice)
+            {
+                throw new InvalidDataException($"{path}: {mastermind.Id} setup.requiredHeroes lists {twice.Key} more than once.");
+            }
+
             if (mastermind.AlsoLeads is not { } also)
             {
                 continue;
@@ -608,6 +629,14 @@ public sealed partial class BoxCatalog
             if (mastermind.AlwaysLeads is { } leads && !Own(leads.GroupId))
             {
                 Refuse(mastermind.Id, "leads", leads.GroupId);
+            }
+
+            foreach (var hero in mastermind.Setup?.RequiredHeroes ?? [])
+            {
+                if (!Own(hero.HeroId))
+                {
+                    Refuse(mastermind.Id, "requires Hero", hero.HeroId);
+                }
             }
 
             // Its other groups can include another box's, as Bastion leads any Sentinel Henchman Group (#186), so long as
@@ -919,6 +948,12 @@ public sealed partial class BoxCatalog
                         $"{path}: {scheme.Id} chooses Heroes outside the Hero Deck by more than one of hero, heroName, heroNames, heroNameContains and team.");
                 }
 
+                if (outside.Cards is { } cards && (cards < 1 || cards > box.Components.HeroCards.Value))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} setup.outsideHeroes[{index}] has cards {cards}; it is at least 1 and at most the {box.Components.HeroCards.Value} cards of a Hero.");
+                }
+
                 if (outside.HeroNames is { Value.Length: < 2 })
                 {
                     throw new InvalidDataException(
@@ -1056,10 +1091,11 @@ public sealed partial class BoxCatalog
                     .Concat((s.Setup.CardsBeside ?? []).Select(b => (s.Id, b.GroupId, b.GroupType)))
                     .Concat((s.Setup.OneOfGroups?.GroupIds ?? []).Select(id => (s.Id, id, s.Setup.OneOfGroups!.GroupType)))));
 
-    // The Heroes a Scheme requires or draws outside the Hero Deck by id.
+    // The Heroes a Scheme or a Mastermind requires, or a Scheme draws outside the Hero Deck, by id.
     private static IEnumerable<(string Owner, string HeroId)> HeroReferences(Box box) =>
         box.Schemes.SelectMany(s => (s.Setup.RequiredHeroes ?? []).Select(h => (s.Id, h.HeroId))
-            .Concat((s.Setup.OutsideHeroes ?? []).Where(o => o.Hero is not null).Select(o => (s.Id, o.Hero!))));
+            .Concat((s.Setup.OutsideHeroes ?? []).Where(o => o.Hero is not null).Select(o => (s.Id, o.Hero!))))
+            .Concat(box.Masterminds.SelectMany(m => (m.Setup?.RequiredHeroes ?? []).Select(h => (m.Id, h.HeroId))));
 
     // A Hero's team and classes, then every component's keywords, then the teams a Scheme's Hero rules name.
     private static IEnumerable<(string Owner, string TermId, TermKind Kind)> TermReferences(Box box) =>
@@ -1115,6 +1151,8 @@ public sealed partial class BoxCatalog
             yield return ("setup.solo.masterStrikes", setup.Solo.MasterStrikes.Source);
             yield return ("setup.solo.ignoresAlwaysLeads", setup.Solo.IgnoresAlwaysLeads.Source);
             foreach (var rule in setup.Solo.PlayRules) yield return ("setup.solo.playRules", rule.Source);
+            if (setup.Solo.HenchmenInCity is { } inCity) yield return ("setup.solo.henchmenInCity", inCity.Source);
+            if (setup.WarmupRound is { } warmup) yield return ("setup.warmupRound", warmup.Source);
             yield return ("setup.rulings.alwaysLeadsFillsSlot", setup.Rulings.AlwaysLeadsFillsSlot);
             yield return ("setup.rulings.requiredGroupDisplacesAlwaysLeads", setup.Rulings.RequiredGroupDisplacesAlwaysLeads);
             yield return ("setup.rulings.schemeOverridesSolo", setup.Rulings.SchemeOverridesSolo);
@@ -1132,6 +1170,7 @@ public sealed partial class BoxCatalog
             if (mastermind.AlwaysLeads is { } leads) yield return ($"{mastermind.Id} alwaysLeads", leads.Source);
             if (mastermind.AlsoLeads is { } also) yield return ($"{mastermind.Id} alsoLeads", also.Source);
             if (mastermind.Epic is { } epic) yield return ($"{mastermind.Id} epic", epic.Source);
+            foreach (var hero in mastermind.Setup?.RequiredHeroes ?? []) yield return ($"{mastermind.Id} setup.requiredHeroes", hero.Source);
         }
 
         foreach (var scheme in box.Schemes)
@@ -1213,11 +1252,12 @@ public sealed partial class BoxCatalog
         ("horrors", components.Horrors),
     ];
 
-    // The stacks a base game of each ruleset lays out (R p.22; VIL p.5).
+    // The stacks a base game of each ruleset lays out (R p.22; VIL p.5; WI p.27).
     private static string[] BaseGameStacks(Ruleset ruleset) => ruleset switch
     {
         Ruleset.FirstEdition => ["bystanders", "wounds", "officers"],
         Ruleset.Villainous => ["bystanders", "bindings", "madameHydra", "newRecruits"],
+        Ruleset.Revised => ["bystanders", "wounds", "officers"],
         _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
     };
 

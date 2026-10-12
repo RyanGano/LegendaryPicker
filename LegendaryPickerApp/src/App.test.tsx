@@ -522,6 +522,25 @@ describe('App', () => {
     expect(screen.queryByText(/mix only with/)).not.toBeInTheDocument()
   })
 
+  it('disables Generate while a Revised box is ticked with a box of another ruleset', async () => {
+    const whatIf: Box = { id: 'marvel-studios-what-if', name: "Marvel Studios' What If...?", baseGame: true, ruleset: 'revised' }
+    boxesAnswer = () => json([core, whatIf])
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '3' }))
+    const hint = "Revised boxes can't be drawn with First Edition or Villainous boxes. Untick one kind to draw a setup."
+
+    await user.click(await screen.findByRole('checkbox', { name: "Marvel Studios' What If...? Base game Revised rules" }))
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
+    expect(screen.getByText(hint)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' }))
+
+    expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
+    expect(screen.queryByText(hint)).not.toBeInTheDocument()
+  })
+
   it('draws from the core box and every ticked expansion', async () => {
     boxesAnswer = () => json([core, fixture])
     setupAnswers.push(() => json(setup))

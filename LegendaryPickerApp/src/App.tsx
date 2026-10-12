@@ -86,6 +86,10 @@ function boxHint(available: Box[], included: string[]): string | null {
   if (available.length > 0 && !ticked.some((box) => box.baseGame)) {
     return 'Pick a base game to draw a setup.'
   }
+  // A Revised box follows rules of its own that no base game mixes with the others, so it is drawn with Revised boxes only.
+  if (ticked.some((box) => box.ruleset === 'revised') && ticked.some((box) => box.ruleset !== 'revised')) {
+    return "Revised boxes can't be drawn with First Edition or Villainous boxes. Untick one kind to draw a setup."
+  }
   const mixers = available.filter((box) => box.mixesRulesets)
   const rulesets = new Set(ticked.map((box) => box.ruleset))
   const baseRulesets = new Set(ticked.filter((box) => box.baseGame).map((box) => box.ruleset))
@@ -242,7 +246,7 @@ function App() {
           <h1 className="wordmark">
             Legendary <span>Picker</span>
           </h1>
-          <p className="tagline">A random legal setup for Marvel Legendary First Edition, Villains and their expansions.</p>
+          <p className="tagline">A random legal setup for Marvel Legendary First Edition, Villains, What If...? and their expansions.</p>
         </div>
       </header>
 
@@ -279,6 +283,7 @@ function App() {
                       />
                       <span className="box-name">{box.name}</span>
                       {box.baseGame && <> <span className="detail">Base game</span></>}
+                      {box.ruleset === 'revised' && <> <span className="detail">Revised rules</span></>}
                     </label>
                   ))}
                 </div>

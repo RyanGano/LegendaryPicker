@@ -26,10 +26,12 @@ public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
 // A setup can include boxes of both when a base game gives rules for mixing them (SetupRules.Mixing); the
 // Scheme and Mastermind it draws then decide which ruleset it follows (#73, #85, #88). An expansion with an
 // OtherRuleset section can also be included with base games of the other ruleset alone, whose rules it follows (#110).
+// A Revised setup is never mixed with the other rulesets until the owner rules on it (#141).
 public enum Ruleset
 {
     FirstEdition,
     Villainous,
+    Revised,
 }
 
 // BystanderUses lists the parts the box's special Bystanders use, such as Civil War's Aspiring Hero gaining a Sidekick
@@ -215,7 +217,9 @@ public sealed record Mastermind(
 // uses beyond the normal side's Uses, which the setup would have to lay out (the Horrors an Epic X-Men Master Strike plays). Source is the card face.
 public sealed record EpicSide(string Name, string Source, IReadOnlyList<PartUse>? Uses = null);
 
-public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source);
+// EvenInSolo is true for a Mastermind whose card says it always leads the group in Solo too, as Ultron Infinity's
+// Ultron Sentries (#203): Solo's rule to ignore Always Leads then doesn't apply to it.
+public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source, bool EvenInSolo = false);
 
 // Groups of one type a Mastermind always leads one of, besides its Always Leads group: the setup takes one of them
 // that is drawn already, or draws one of those included into a slot, which it fills as the Always Leads group does. One
@@ -259,14 +263,16 @@ public sealed record GlossaryTerm(string Id, string Name, TermKind Kind, string 
 // list so its value can depend on the player count: an entry for players [1] applies only in Solo,
 // and a player count no entry names adds nothing. Steps are setup steps that change no count. HenchmanCards sets
 // how many cards of each Henchman Group go in the Villain Deck, replacing the table or Solo count, as Annihilus's
-// 6 in Solo; a Mastermind's applies only when its Scheme sets none.
+// 6 in Solo; a Mastermind's applies only when its Scheme sets none. RequiredHeroes are Heroes the card always
+// includes in the Hero Deck, as Killmonger, The Betrayer's Killmonger (#203).
 public record SetupEffects(
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraHenchmanGroups = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null,
     IReadOnlyList<SetupStep>? Steps = null,
-    IReadOnlyList<PlayerCountValue>? HenchmanCards = null);
+    IReadOnlyList<PlayerCountValue>? HenchmanCards = null,
+    IReadOnlyList<RequiredHero>? RequiredHeroes = null);
 
 // A setup step that changes no count, such as placing a token on the Scheme, which the setup lists as a
 // line to tick. Label is a short instruction in our own words, never card text.
@@ -319,7 +325,7 @@ public sealed record SchemeSetup(
     Sourced<int>? Officers = null,
     Sourced<int>? VillainCards = null,
     IReadOnlyList<MastermindTwists>? MastermindTwists = null)
-    : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps, HenchmanCards);
+    : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps, HenchmanCards, RequiredHeroes);
 
 // A Twist count a Scheme prints for one Mastermind of its box, which replaces the Scheme's own Twists when that
 // Mastermind is drawn, as Ritual Sacrifice to Summon Chthon's single Twist with Lilith.
@@ -369,10 +375,11 @@ public sealed record HeroCount(
 // Hero not in the Hero Deck can be drawn. HeroNames limits the draw to Heroes with any of
 // those Hero Names, with the source that says they all count (an owner decision, as every Jean Grey does for Dark
 // City's Transform Citizens into Demons, #122). OtherBox lets a draw limited by Hero Name take a Hero from a box the
-// setup doesn't include when no included Hero has the name, as The Dark Phoenix Saga's Jean Grey (#138).
+// setup doesn't include when no included Hero has the name, as The Dark Phoenix Saga's Jean Grey (#138). Cards is how
+// many of each Hero's cards go To the pile, in place of all of them, as Marvel Zombies' 8 cards of an extra Hero (#203).
 public sealed record OutsideHeroes(
     Pile To, IReadOnlyList<PlayerCountValue> Count, string? Hero = null, string? HeroName = null, string? Team = null,
-    Sourced<string[]>? HeroNames = null, OtherBox? OtherBox = null, string? HeroNameContains = null)
+    Sourced<string[]>? HeroNames = null, OtherBox? OtherBox = null, string? HeroNameContains = null, int? Cards = null)
 {
     public static readonly Pile[] Destinations = [Pile.VillainDeck, Pile.BesideScheme, Pile.SetAside];
 }
@@ -489,7 +496,8 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
 // which then follows the first one's rules. Uses lists the parts the rules themselves use in every setup
 // that follows them, such as the stacks players recruit from. ExtraHeroes adds to Heroes at some player
 // counts, as Villains adds a 6th Ally with 5 players; it is part of the table, not a rule note. Mixing is
-// present on a base game whose rules cover a setup that also includes boxes of another ruleset.
+// present on a base game whose rules cover a setup that also includes boxes of another ruleset. WarmupRound lists the
+// player counts at which each player's first turn plays no Villain Deck card, as What If...?'s 4 and 5 players (#203).
 public sealed record SetupRules(
     IReadOnlyList<PlayerCountSetup> PlayerCounts,
     Sourced<int> Heroes,
@@ -499,7 +507,8 @@ public sealed record SetupRules(
     Rulings Rulings,
     IReadOnlyList<PartUse> Uses,
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
-    Mixing? Mixing = null);
+    Mixing? Mixing = null,
+    Sourced<int[]>? WarmupRound = null);
 
 public sealed record PlayerCountSetup(int Players, int VillainGroups, int HenchmanGroups, int Bystanders, string Source);
 
@@ -507,6 +516,7 @@ public sealed record PlayerCountSetup(int Players, int VillainGroups, int Henchm
 // Operatives and Soldiers under Villainous. The ruleset names them.
 public sealed record StartingDeck(Sourced<int> Agents, Sourced<int> Troopers);
 
+// HenchmenInCity is how many more cards of the Solo Henchman Group enter the city before the first turn, as What If...?'s 2 (#203).
 public sealed record SoloSetup(
     Sourced<int> Heroes,
     Sourced<int> VillainGroups,
@@ -515,7 +525,8 @@ public sealed record SoloSetup(
     Sourced<int> Bystanders,
     Sourced<int> MasterStrikes,
     Sourced<bool> IgnoresAlwaysLeads,
-    IReadOnlyList<PlayRule> PlayRules);
+    IReadOnlyList<PlayRule> PlayRules,
+    Sourced<int>? HenchmenInCity = null);
 
 // A rule Solo play adds that changes no setup count, such as KOing a Hero after each Twist. The setup
 // reminds the player of it in a rule note. Label is a short instruction in our own words, never rulebook text.

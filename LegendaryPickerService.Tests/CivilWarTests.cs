@@ -45,8 +45,10 @@ public class CivilWarTests
     [Fact]
     public void Avengers_vs_X_Men_searches_few_Hero_counts_with_every_box()
     {
-        var everyBox = Catalog.Boxes.Select(box => box.Id).ToList();
-        var schemes = Catalog.Boxes.SelectMany(box => box.Schemes)
+        // Every box but the Revised ones, which are never combined with the others (#203).
+        var boxes = Catalog.Boxes.Where(box => box.Ruleset != Ruleset.Revised).ToList();
+        var everyBox = boxes.Select(box => box.Id).ToList();
+        var schemes = boxes.SelectMany(box => box.Schemes)
             .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(5) ?? true)
             .ToList();
         var random = new ScriptedRandom(schemes.FindIndex(scheme => scheme.Name == "Avengers vs. X-Men"));
