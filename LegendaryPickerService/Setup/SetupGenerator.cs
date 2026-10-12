@@ -213,6 +213,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 plan.HenchmanGroups, plan.Scheme, mastermind, required, slotNotes, drainedLeads);
             plan = plan with { Required = required };
             var extraHenchmen = ExtraHenchmanGroups(plan, henchmanGroups.Select(g => g.Id).ToList());
+            var villainsSetAside = VillainsSetAside(plan, mastermind, villainGroups, drainedLeads, slotNotes);
             // Each Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
             var outsideHenchmen = plan.OutsideHenchmen
                 .Zip(DrawMany(_henchmanGroups.Except(henchmanGroups), plan.OutsideHenchmen.Count), (draw, group) => new OutsideHenchmanGroup(group, draw.To, draw.Cards))
@@ -426,7 +427,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     outside.Where(hero => hero.To == Pile.VillainDeck).Sum(hero => hero.Cards),
                     beside.Sum(cards => cards.FromVillainDeck),
                     outsideMasterminds.Sum(other => other.Tactics ?? 0),
-                    plan.Scheme.Setup.OwnTactics?.Value ?? 0),
+                    plan.Scheme.Setup.OwnTactics?.Value ?? 0,
+                    villainsSetAside.Sum(aside => aside.Count)),
                 new HeroDeck(
                     heroes.Sum(hero => BoxOf(hero.Id).Components.HeroCards.Value),
                     plan.MovedOut(Pile.HeroDeck),
@@ -454,7 +456,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 mixed,
                 reason,
                 stoodIn.Select(active => active.Rule).ToList(),
-                outsideMasterminds);
+                outsideMasterminds,
+                villainsSetAside);
         }
 
         // The counts one Scheme sets at this player count: the player-count table or Solo,
@@ -1053,6 +1056,34 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             }
 
             return drawn.Where(id => !placed.Contains(id)).TakeLast(extra.Value).ToHashSet();
+        }
+
+        // The Villains of the extra Villain Groups the Mastermind sets aside, when its card does (#208). The extra groups are
+        // drawn from those no rule placed, so they are the last drawn that are neither required nor the Mastermind's, or a
+        // drained Mastermind's, Always Leads group. A group's Ambush Schemes stay in the Villain Deck.
+        private List<VillainsSetAside> VillainsSetAside(
+            SetupPlan plan, Mastermind mastermind, IReadOnlyList<VillainGroup> drawn,
+            IReadOnlyList<(Mastermind Drained, string Source)> drained, List<RuleNote> notes)
+        {
+            if (mastermind.Setup is not { SetAsideExtraVillains: { } setAside } effects || ForPlayers(effects.ExtraVillainGroups ?? []) is not { } extra)
+            {
+                return [];
+            }
+
+            var placed = plan.Required.Keys.Concat(drained.Select(entry => entry.Drained.AlwaysLeads!.GroupId)).ToHashSet();
+            if (!Ignores(mastermind))
+            {
+                if (mastermind.AlwaysLeads is { } leads) placed.Add(leads.GroupId);
+                placed.UnionWith(mastermind.AlsoLeads?.GroupIds ?? []);
+            }
+
+            var aside = drawn.Where(group => !placed.Contains(group.Id)).TakeLast(extra.Value)
+                .Select(group => new VillainsSetAside(group, Math.Max(0, DeckCards(plan, group.Id, GroupType.Villain) - group.AmbushSchemes)))
+                .ToList();
+            notes.AddRange(aside.Select(entry => Note(
+                $"{mastermind.Name} sets aside the Villains of {entry.Group.Name}, its extra {_terms.VillainGroup}; their Ambush Schemes stay in the {_terms.VillainDeck}",
+                setAside.Source, BoxOf(mastermind.Id), mastermind.Id)));
+            return aside;
         }
 
         // How many cards a group puts in the Villain Deck when the Scheme sets none of them beside it: all of a

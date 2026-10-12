@@ -82,6 +82,9 @@ A Mastermind a Scheme draws besides the setup's own, from the other included Mas
 
 _Avoid_: Second Mastermind as a setup term; a rule note can use the Scheme's own words.
 
+**Set-aside Villains**:
+The Villains of an extra Villain Group that a Mastermind sets aside instead of shuffling into the Villain Deck, as Kang, Quantum Conqueror's Timeline Variants. They leave the Villain Deck total and show under Set aside; the group's Ambush Schemes (cards that aren't Villains) stay in the Villain Deck.
+
 **Always Leads group**:
 The Villain Group or Henchman Group required by a selected Mastermind's "Always Leads" ability. A Mastermind whose ability allows any group, as Ego's does, has no Always Leads group. It fills one of the player-count group slots rather than being added on top. First Edition Solo ignores this ability. A few Masterminds also always lead one of several groups, as Deathbird leads the Shi'ar Imperial Guard and a Shi'ar Henchman Group; that second group fills a slot the same way. Its choices can include another box's groups when that box is included, as Bastion, Fused Sentinel leads any Sentinel Henchman Group.
 

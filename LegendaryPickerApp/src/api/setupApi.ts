@@ -110,6 +110,12 @@ export type OutsideMastermind = {
   joins?: string
 }
 
+// The Villains of an extra Villain Group a Mastermind sets aside, which the Villain Deck total leaves out.
+export type VillainsSetAside = {
+  group: Component
+  count: number
+}
+
 // Cards of a group the Scheme sets beside it, whether or not the group is drawn: count of them, or, when card is
 // present, that one card of the group. fromVillainDeck is how many fewer cards the group puts in the Villain Deck
 // because of it (0 when it isn't drawn there); the Villain Deck's total already leaves them out.
@@ -196,6 +202,8 @@ export type Setup = {
   cardsBeside?: CardsBeside[]
   // Present only when the Scheme draws Masterminds besides its own.
   outsideMasterminds?: OutsideMastermind[]
+  // Present only when the Mastermind sets aside the Villains of an extra Villain Group.
+  villainsSetAside?: VillainsSetAside[]
   // The setup steps the Scheme and Mastermind print that change no count, Scheme first, each a short
   // instruction. Left out by an API from before setup steps.
   steps?: string[]

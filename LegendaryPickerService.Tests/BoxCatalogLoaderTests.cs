@@ -132,6 +132,24 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Theory]
+    [InlineData(-1)]
+    [InlineData(9)]
+    public void Rejects_a_Villain_Group_with_more_Ambush_Schemes_than_cards(int ambush)
+    {
+        WriteCoreBox(core => core["villainGroups"]![0]!["ambushSchemes"] = ambush);
+
+        AssertRejected($"core_villain_brotherhood ambushSchemes is {ambush}; it is 0 to the group's 8 cards");
+    }
+
+    [Fact]
+    public void Rejects_setting_aside_extra_Villains_without_an_extra_Villain_Group()
+    {
+        WriteCoreBox(core => core["masterminds"]![0]!["setup"] = JsonNode.Parse("""{ "setAsideExtraVillains": { "value": true, "source": "Card" } }"""));
+
+        AssertRejected("setup.setAsideExtraVillains needs setup.extraVillainGroups");
+    }
+
+    [Theory]
     [InlineData("0")]
     [InlineData("15")]
     public void Rejects_Heroes_outside_the_Hero_Deck_with_a_card_count_a_Hero_cannot_have(string cards)

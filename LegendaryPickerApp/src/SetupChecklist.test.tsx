@@ -191,6 +191,17 @@ describe('SetupChecklist', () => {
     expect(tile('Henchman Groups', 'Savage Land Mutates')).toHaveTextContent('Goes to KO pile')
   })
 
+  it('takes the Villains a Mastermind sets aside out of the Villain Deck and lists them under Set aside', () => {
+    const setup = structuredClone(killbots) as Setup
+    setup.villainsSetAside = [{ group: setup.villainGroups[2], count: 7 }]
+    setup.villainDeck.total -= 7
+    renderChecklist(setup)
+
+    expect(rows('Villain Deck')).toContain('Radiation set aside −7')
+    expect(rows('Villain Deck').at(-1)).toBe('Total 65')
+    expect(rows('Set aside')).toEqual(['Radiation Villains of the extra Villain Group 7'])
+  })
+
   it('tags no tile when the Scheme draws nothing outside the decks', () => {
     renderChecklist(killbots)
 

@@ -23,6 +23,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     outsideHenchmen = [],
     cardsBeside = [],
     outsideMasterminds = [],
+    villainsSetAside = [],
     steps = [],
     standIns = [],
   } = setup
@@ -68,6 +69,11 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         <MovedIn moves={moves} to="villainDeck" terms={t} />
         <MovedOut moves={moves} from="villainDeck" terms={t} />
         <SetBeside cardsBeside={cardsBeside} terms={t} />
+        {villainsSetAside.map((aside) => (
+          <li key={aside.group.id} className="row">
+            <span className="label">{names([aside.group])} set aside</span> <span className="count">−{aside.count}</span>
+          </li>
+        ))}
         <OutsideHeroCards count={villainDeck.outsideHeroCards} terms={t} />
         {tyrants.length > 0 && (
           <Item
@@ -96,9 +102,17 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         </Section>
       )}
 
-      {(moves.some((move) => move.to === 'setAside') || setAside.length > 0) && (
+      {(moves.some((move) => move.to === 'setAside') || setAside.length > 0 || villainsSetAside.length > 0) && (
         <Section title="Set aside" kind="scheme">
           <MovedIn moves={moves} to="setAside" terms={t} />
+          {villainsSetAside.map((aside) => (
+            <Item
+              key={aside.group.id}
+              label={names([aside.group])}
+              detail={`Villains of the extra ${t.villainGroup}`}
+              count={aside.count}
+            />
+          ))}
           {setAside.length > 0 && (
             <Item
               label={names(setAside.map((other) => other.mastermind))}

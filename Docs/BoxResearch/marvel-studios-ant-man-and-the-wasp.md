@@ -50,7 +50,7 @@ Summaries are original paraphrases under 40 words.
 
 ## Setup and implementation gaps
 
-Still open: an official itemized contents list (the 200-card total and the per-group counts rest on C1 face copies; Henchman and Mastermind copies are unverified); whether Kang's extra group's Ambush Scheme stays in the Villain Deck while its Villains are set aside as Timeline Variants (read literally as yes); and the per-card Wound reads of Tactics other than those the OCR marked. The Villain Deck total for Kang counts the extra group's 7 set-aside Villains, since only a Scheme can set cards beside it.
+Still open: an official itemized contents list (the 200-card total and the per-group counts rest on C1 face copies; Henchman and Mastermind copies are unverified); whether Kang's extra group's Ambush Scheme stays in the Villain Deck while its Villains are set aside as Timeline Variants (read literally as yes); and the per-card Wound reads of Tactics other than those the OCR marked. The generator sets the extra group's Villains aside for Kang (#208): the group's Ambush Scheme stays in the Villain Deck, so the total is 7 lower with a group of this box and 8 lower with a What If...? group.
 
 ## Structured card-face metadata (C1)
 
