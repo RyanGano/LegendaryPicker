@@ -550,8 +550,22 @@ public sealed partial class BoxCatalog
             throw new InvalidDataException($"{path}: setup.solo.henchmenInCity is {inCity.Value}; it is at least 1.");
         }
 
+        foreach (var group in box.VillainGroups)
+        {
+            if (group.AmbushSchemes < 0 || group.AmbushSchemes > box.Components.VillainGroupCards.Value)
+            {
+                throw new InvalidDataException(
+                    $"{path}: {group.Id} ambushSchemes is {group.AmbushSchemes}; it is 0 to the group's {box.Components.VillainGroupCards.Value} cards.");
+            }
+        }
+
         foreach (var mastermind in box.Masterminds)
         {
+            if (mastermind.Setup is { SetAsideExtraVillains: not null, ExtraVillainGroups: null })
+            {
+                throw new InvalidDataException($"{path}: {mastermind.Id} setup.setAsideExtraVillains needs setup.extraVillainGroups.");
+            }
+
             var required = mastermind.Setup?.RequiredHeroes ?? [];
             if (required.GroupBy(hero => hero.HeroId).FirstOrDefault(hero => hero.Count() > 1) is { } twice)
             {
@@ -1171,6 +1185,7 @@ public sealed partial class BoxCatalog
             if (mastermind.AlsoLeads is { } also) yield return ($"{mastermind.Id} alsoLeads", also.Source);
             if (mastermind.Epic is { } epic) yield return ($"{mastermind.Id} epic", epic.Source);
             foreach (var hero in mastermind.Setup?.RequiredHeroes ?? []) yield return ($"{mastermind.Id} setup.requiredHeroes", hero.Source);
+            if (mastermind.Setup?.SetAsideExtraVillains is { } setAside) yield return ($"{mastermind.Id} setup.setAsideExtraVillains", setAside.Source);
         }
 
         foreach (var scheme in box.Schemes)

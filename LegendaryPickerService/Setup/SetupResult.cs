@@ -37,14 +37,16 @@ public sealed record SetupResult(
     bool Mixed = false,
     RuleNote? RulesReason = null,
     IReadOnlyList<StandIn>? StandIns = null,
-    IReadOnlyList<OutsideMastermind>? OutsideMasterminds = null) : GenerationResult;
+    IReadOnlyList<OutsideMastermind>? OutsideMasterminds = null,
+    IReadOnlyList<VillainsSetAside>? VillainsSetAside = null) : GenerationResult;
 
 // MovedIn and MovedOut count the cards the setup's moves put in the deck and take out of it, and SetBeside
 // the cards of its drawn groups the Scheme sets beside it. The response lists each move under the setup's
 // moves and each group's cards under its cards beside the Scheme instead, so they are left out of it.
 // OutsideHeroCards counts the cards of the Heroes drawn outside the Hero Deck that go into the Villain Deck, and
 // MastermindTactics the Tactics of other Masterminds the Scheme shuffles into it, and OwnTactics the drawn Mastermind's
-// own Tactics it shuffles in, each written only when there are any.
+// own Tactics it shuffles in, each written only when there are any. SetAside counts the Villains of extra groups the
+// Mastermind sets aside; the response lists them under the Villains set aside instead.
 public sealed record VillainDeck(
     int Twists,
     int MasterStrikes,
@@ -56,9 +58,10 @@ public sealed record VillainDeck(
     int OutsideHeroCards = 0,
     [property: JsonIgnore] int SetBeside = 0,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int MastermindTactics = 0,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int OwnTactics = 0)
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int OwnTactics = 0,
+    [property: JsonIgnore] int SetAside = 0)
 {
-    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MastermindTactics + OwnTactics + MovedIn - MovedOut - SetBeside;
+    public int Total => Twists + MasterStrikes + VillainCards + HenchmanCards + Bystanders + OutsideHeroCards + MastermindTactics + OwnTactics + MovedIn - MovedOut - SetBeside - SetAside;
 }
 
 // OutsideHenchmanCards counts the Henchmen of the Henchman Groups drawn outside the Villain Deck that go into
@@ -86,6 +89,10 @@ public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Card
 // A Mastermind a Scheme draws besides its own, and the pile it goes to: set aside whole until the Scheme brings it
 // into play, or Tactics of its Tactics into the Villain Deck. Tactics is null when it is set aside. Joins says when a set-aside Mastermind comes into play, when the Scheme says.
 public sealed record OutsideMastermind(Mastermind Mastermind, Pile To, int? Tactics, string? Joins = null);
+
+// The Villains of an extra Villain Group a Mastermind sets aside, Count of them, which its group puts in the Villain Deck
+// no more (#208).
+public sealed record VillainsSetAside(ICard Group, int Count);
 
 // Cards of a group the Scheme sets beside it: Count of them, or the one named Card. FromVillainDeck is how many
 // fewer cards the group puts in the Villain Deck because of it, or 0 when the group isn't drawn or its cards

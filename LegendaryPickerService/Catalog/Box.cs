@@ -201,7 +201,10 @@ public sealed record Hero(
     public bool HasInHeroName(string word) => Name.Split(" (")[0].Contains(word, StringComparison.Ordinal);
 }
 
-public sealed record VillainGroup(string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null) : ICard;
+// AmbushSchemes is how many of the group's cards are Ambush Schemes rather than Villains (0 when it has none), which a
+// card that sets aside a group's Villains leaves in the Villain Deck.
+public sealed record VillainGroup(
+    string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null, int AmbushSchemes = 0) : ICard;
 
 public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string> Terms, IReadOnlyList<PartUse>? Uses = null) : ICard;
 
@@ -264,7 +267,9 @@ public sealed record GlossaryTerm(string Id, string Name, TermKind Kind, string 
 // and a player count no entry names adds nothing. Steps are setup steps that change no count. HenchmanCards sets
 // how many cards of each Henchman Group go in the Villain Deck, replacing the table or Solo count, as Annihilus's
 // 6 in Solo; a Mastermind's applies only when its Scheme sets none. RequiredHeroes are Heroes the card always
-// includes in the Hero Deck, as Killmonger, The Betrayer's Killmonger (#203).
+// includes in the Hero Deck, as Killmonger, The Betrayer's Killmonger (#203). SetAsideExtraVillains sets aside the Villains
+// of the Villain Groups the card's ExtraVillainGroups adds, as Kang, Quantum Conqueror's Timeline Variants (#208): they
+// are not in the Villain Deck, and a group's Ambush Schemes stay in it.
 public record SetupEffects(
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     IReadOnlyList<PlayerCountValue>? ExtraVillainGroups = null,
@@ -272,7 +277,8 @@ public record SetupEffects(
     IReadOnlyList<PlayerCountValue>? ExtraVillainDeckBystanders = null,
     IReadOnlyList<SetupStep>? Steps = null,
     IReadOnlyList<PlayerCountValue>? HenchmanCards = null,
-    IReadOnlyList<RequiredHero>? RequiredHeroes = null);
+    IReadOnlyList<RequiredHero>? RequiredHeroes = null,
+    Sourced<bool>? SetAsideExtraVillains = null);
 
 // A setup step that changes no count, such as placing a token on the Scheme, which the setup lists as a
 // line to tick. Label is a short instruction in our own words, never card text.

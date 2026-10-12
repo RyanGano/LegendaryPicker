@@ -48,6 +48,10 @@ public abstract record SetupResponse
                 outside.Joins))
             .ToList();
 
+        var villainsSetAside = (setup.VillainsSetAside ?? [])
+            .Select(aside => new VillainsSetAsideBody(glossary.Component(aside.Group.Id, aside.Group.Name, aside.Group.Terms), aside.Count))
+            .ToList();
+
         Component[] components =
         [
             scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(outside => outside.Group),
@@ -78,7 +82,8 @@ public abstract record SetupResponse
             setup.Mixed,
             setup.RulesReason,
             setup.StandIns is { Count: > 0 } standIns ? standIns : null,
-            outsideMasterminds.Count > 0 ? outsideMasterminds : null);
+            outsideMasterminds.Count > 0 ? outsideMasterminds : null,
+            villainsSetAside.Count > 0 ? villainsSetAside : null);
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
@@ -148,7 +153,8 @@ public abstract record SetupResponse
 // why the setup follows its ruleset, and is written only when the included boxes follow more than one. StandIns
 // lists each part the drawn cards use that no included box supplies and what replaces it ("with", null when
 // nothing does), written only when there is one, so the checklist can say a stack stands in for another.
-// OutsideMasterminds lists the Masterminds the Scheme draws besides its own, written only when it draws any.
+// OutsideMasterminds lists the Masterminds the Scheme draws besides its own, written only when it draws any. VillainsSetAside
+// lists the extra Villain Groups whose Villains the Mastermind sets aside, written only when it does.
 public sealed record SetupBody(
     int Players,
     Ruleset Ruleset,
@@ -172,7 +178,8 @@ public sealed record SetupBody(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Mixed = false,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RuleNote? RulesReason = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<StandIn>? StandIns = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<OutsideMastermindBody>? OutsideMasterminds = null) : SetupResponse
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<OutsideMastermindBody>? OutsideMasterminds = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<VillainsSetAsideBody>? VillainsSetAside = null) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";
@@ -214,6 +221,9 @@ public sealed record OutsideMastermindBody(
     Pile To,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Tactics,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Joins = null);
+
+// The Villains of an extra Villain Group the Mastermind sets aside, count of them, written only when it sets any aside.
+public sealed record VillainsSetAsideBody(Component Group, int Count);
 
 // Cards of a group the Scheme sets beside it: count of them, or, when card is present, that one card of the group.
 // fromVillainDeck is how many fewer cards the group puts in the Villain Deck because of it, 0 when the group isn't

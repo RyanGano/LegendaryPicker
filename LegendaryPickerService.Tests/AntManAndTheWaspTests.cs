@@ -49,6 +49,10 @@ public class AntManAndTheWaspTests
 
         Assert.Equal(3, setup.VillainGroups.Count);
         Assert.Contains("Armada of Kang", setup.VillainGroups.Select(group => group.Name));
+        var aside = Assert.Single(setup.VillainsSetAside!);
+        Assert.NotEqual("Armada of Kang", aside.Group.Name);
+        // The extra group's Ambush Scheme stays in the Villain Deck, so a group of this box sets aside 7, any other 8.
+        Assert.Equal(aside.Group.Id.StartsWith(BoxId) ? 7 : 8, aside.Count);
     }
 
     // Draws the Scheme and Mastermind by name, in the order the generator lists them across the two boxes.
