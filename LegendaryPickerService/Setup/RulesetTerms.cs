@@ -26,6 +26,9 @@ public sealed record RulesetTerms(
         "Scheme", "Mastermind", "Hero", "Heroes", "Villain Group", "Villain Groups", "Henchman Group", "Henchman Groups",
         "Henchman", "Henchmen", "Villain Deck", "Hero Deck", "Twists", "Twist");
 
+    // Revised calls the parts by the First Edition names (WI p.27).
+    public static readonly RulesetTerms Revised = FirstEdition;
+
     public static readonly RulesetTerms Villainous = new(
         "Plot", "Commander", "Ally", "Allies", "Adversary Group", "Adversary Groups", "Backup Adversary group", "Backup Adversary groups",
         "Backup Adversary", "Backup Adversaries", "Adversary Deck", "Ally Deck", "Plot Twists", "Plot Twist");
@@ -42,6 +45,7 @@ public sealed record RulesetTerms(
     {
         Ruleset.FirstEdition => FirstEdition,
         Ruleset.Villainous => Villainous,
+        Ruleset.Revised => Revised,
         _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
     };
 
@@ -50,6 +54,7 @@ public sealed record RulesetTerms(
     {
         Ruleset.FirstEdition => "First Edition",
         Ruleset.Villainous => "Villains",
+        Ruleset.Revised => "Revised",
         _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
     };
 
@@ -58,6 +63,7 @@ public sealed record RulesetTerms(
     {
         Ruleset.FirstEdition => "Heroic",
         Ruleset.Villainous => "Villainous",
+        Ruleset.Revised => "Revised",
         _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
     };
 
@@ -66,6 +72,7 @@ public sealed record RulesetTerms(
     {
         Ruleset.FirstEdition => "S.H.I.E.L.D.",
         Ruleset.Villainous => "HYDRA",
+        Ruleset.Revised => "S.H.I.E.L.D.",
         _ => throw new ArgumentOutOfRangeException(nameof(ruleset), ruleset, null),
     };
 }

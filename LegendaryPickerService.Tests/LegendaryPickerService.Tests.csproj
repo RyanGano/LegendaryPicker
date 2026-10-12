@@ -116,6 +116,13 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\ShortGroups\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up Revised base game whose Mastermind requires a Hero and leads a group even in Solo, whose Scheme puts some cards of an
+       extra Hero in the Villain Deck, with warmup rounds and Solo Henchmen entering the city, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\Revised\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\Revised\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LegendaryPickerService\LegendaryPickerService.csproj" />
   </ItemGroup>

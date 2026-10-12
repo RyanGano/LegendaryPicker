@@ -155,7 +155,7 @@ export type PlayerDeck = {
 
 // The rules a box's cards are played under. A setup follows one ruleset, which its Scheme and Mastermind
 // decide when the included boxes follow more than one.
-export type Ruleset = 'firstEdition' | 'villainous'
+export type Ruleset = 'firstEdition' | 'villainous' | 'revised'
 
 // box names the box the rule comes from, and is present only when the setup includes more than one box.
 export type RuleNote = {

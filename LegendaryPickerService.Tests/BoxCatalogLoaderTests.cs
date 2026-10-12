@@ -94,6 +94,67 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         Assert.Equal(Ruleset.Villainous, Assert.Single(BoxCatalog.Load(_directory).Boxes).Ruleset);
     }
 
+    // A Revised base game lays out the same stacks as a First Edition one (WI p.27).
+    [Theory]
+    [InlineData("bystanders")]
+    [InlineData("wounds")]
+    [InlineData("officers")]
+    public void Rejects_a_Revised_base_game_that_does_not_list_a_shared_stack(string stack)
+    {
+        WriteCoreBox(core =>
+        {
+            core["ruleset"] = "revised";
+            core["components"]!.AsObject().Remove(stack);
+        });
+
+        AssertRejected($"base game core has a setup section but no components.{stack}");
+    }
+
+    [Theory]
+    [InlineData("""{ "value": [], "source": "R p.6" }""", "setup.warmupRound names no player count")]
+    [InlineData("""{ "value": [4, 6], "source": "R p.6" }""", "setup.warmupRound names player count 6")]
+    [InlineData("""{ "value": [4], "source": "Rumor" }""", "setup.warmupRound cites source Rumor, which is not in this box's sources")]
+    public void Rejects_a_warmup_round_with_no_legal_player_count(string warmup, string expected)
+    {
+        WriteCoreBox(core => core["setup"]!["warmupRound"] = JsonNode.Parse(warmup));
+
+        AssertRejected(expected);
+    }
+
+    [Theory]
+    [InlineData("""{ "value": 0, "source": "R p.20" }""", "setup.solo.henchmenInCity is 0; it is at least 1")]
+    [InlineData("""{ "value": 2, "source": "Rumor" }""", "setup.solo.henchmenInCity cites source Rumor, which is not in this box's sources")]
+    public void Rejects_Solo_Henchmen_in_the_city_with_no_legal_count(string inCity, string expected)
+    {
+        WriteCoreBox(core => core["setup"]!["solo"]!["henchmenInCity"] = JsonNode.Parse(inCity));
+
+        AssertRejected(expected);
+    }
+
+    [Theory]
+    [InlineData("0")]
+    [InlineData("15")]
+    public void Rejects_Heroes_outside_the_Hero_Deck_with_a_card_count_a_Hero_cannot_have(string cards)
+    {
+        WriteCoreBox(core => LegacyVirusSetup(core)["outsideHeroes"] = JsonNode.Parse(
+            $$"""[{ "to": "villainDeck", "cards": {{cards}}, "count": [{ "players": null, "value": 1, "source": "Card" }] }]"""));
+
+        AssertRejected($"core_scheme_legacy-virus setup.outsideHeroes[0] has cards {cards}; it is at least 1 and at most the 14 cards of a Hero");
+    }
+
+    [Theory]
+    [InlineData("""[{ "heroId": "core_hero_storm", "source": "Card" }, { "heroId": "core_hero_storm", "source": "Card" }]""",
+        "core_mastermind_dr-doom setup.requiredHeroes lists core_hero_storm more than once")]
+    [InlineData("""[{ "heroId": "core_hero_nobody", "source": "Card" }]""", "core_mastermind_dr-doom references Hero core_hero_nobody")]
+    [InlineData("""[{ "heroId": "core_hero_storm", "source": "Rumor" }]""",
+        "core_mastermind_dr-doom setup.requiredHeroes cites source Rumor, which is not in this box's sources")]
+    public void Rejects_a_Mastermind_that_requires_Heroes_no_draw_can_include(string required, string expected)
+    {
+        WriteCoreBox(core => Mastermind(core, "core_mastermind_dr-doom")["setup"] = new JsonObject { ["requiredHeroes"] = JsonNode.Parse(required) });
+
+        AssertRejected(expected);
+    }
+
     [Fact]
     public void Rejects_a_card_that_lists_a_part_twice()
     {

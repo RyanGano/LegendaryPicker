@@ -1,6 +1,6 @@
 # Marvel Studios' What If...? (late 2023)
 
-**Research status: Partial.** The official product listing and rulebook verify the 350-card inventory, base-game setup, solo mode, and many rules. Three Scheme setups, two Masterminds' full card text, and complete per-Hero metadata remain unverified.
+**Research status: Integrated ([#203](https://github.com/RyanGano/LegendaryPicker/issues/203)); partial.** The rulebook verifies the 350-card inventory, the setup table, the warmup round and Solo mode; Scheme Setup lines, Always Leads and part uses were read from OCR of the card faces (`Card`), and Hero teams and classes come from C1. The release month (Nov 2023) is not yet confirmed.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -306,6 +306,10 @@ This index uses C1 structured fields for printed identity, group, available valu
 
 - **S.H.I.E.L.D. Officer**; type/group: Officer / S.H.I.E.L.D. Officer; copies: 8; printed values: Cost 3; Recruit 2; card image: unavailable in C1.
 
+### Still open
+
+Per-face copy counts for Masterminds, Tactics, Schemes and Henchmen (C1 gives none); the exact release month; whether the Scheme-over-Always-Leads (D1) and Scheme-over-Solo (D2) designer rulings carry over to the Revised ruleset (the base game cites them); mixing Revised boxes with the other rulesets (#141).
+
 ### Setup interpretation boundary
 
-Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified.

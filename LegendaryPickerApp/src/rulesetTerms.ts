@@ -23,25 +23,29 @@ export type RulesetTerms = {
   troopers: string
 }
 
+const FIRST_EDITION: RulesetTerms = {
+  scheme: 'Scheme',
+  mastermind: 'Mastermind',
+  hero: 'Hero',
+  heroes: 'Heroes',
+  villainGroup: 'Villain Group',
+  villainGroups: 'Villain Groups',
+  henchmanGroup: 'Henchman Group',
+  henchmanGroups: 'Henchman Groups',
+  henchmen: 'Henchmen',
+  villainDeck: 'Villain Deck',
+  heroDeck: 'Hero Deck',
+  twists: 'Scheme Twists',
+  masterStrikes: 'Master Strikes',
+  team: 'S.H.I.E.L.D.',
+  agents: 'S.H.I.E.L.D. Agents',
+  troopers: 'S.H.I.E.L.D. Troopers',
+}
+
 const TERMS: Record<Ruleset, RulesetTerms> = {
-  firstEdition: {
-    scheme: 'Scheme',
-    mastermind: 'Mastermind',
-    hero: 'Hero',
-    heroes: 'Heroes',
-    villainGroup: 'Villain Group',
-    villainGroups: 'Villain Groups',
-    henchmanGroup: 'Henchman Group',
-    henchmanGroups: 'Henchman Groups',
-    henchmen: 'Henchmen',
-    villainDeck: 'Villain Deck',
-    heroDeck: 'Hero Deck',
-    twists: 'Scheme Twists',
-    masterStrikes: 'Master Strikes',
-    team: 'S.H.I.E.L.D.',
-    agents: 'S.H.I.E.L.D. Agents',
-    troopers: 'S.H.I.E.L.D. Troopers',
-  },
+  firstEdition: FIRST_EDITION,
+  // Revised calls the parts by the First Edition names (WI p.27).
+  revised: FIRST_EDITION,
   villainous: {
     scheme: 'Plot',
     mastermind: 'Commander',
