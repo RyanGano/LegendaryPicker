@@ -497,5 +497,15 @@ Box id `marvel-studios-what-if`, file `LegendaryPickerService/Data/Boxes/marvel-
 
 **Schemes:** Breach the Nexus of All Realities (2 Twists per Villain Group: 6, 6, 6, 8, 10 at 1-5 players, with 3 Villain Groups at 1-2 players, and two steps for the Realities); Collect an Interstellar Zoo (11 Twists); Marvel Zombies (4 Twists, Zombie Avengers as the one Rise of the Living Dead group, 8 cards of an extra Hero in the Villain Deck, 8 extra Bystanders at 1-2 players); Trash Earth with Hugest Party Ever (6 Twists, Party Thor and Intergalactic Party Animals). The rulebook has no ruling on a required group against Always Leads or a Scheme against Solo, so the base game cites D1 and D2 as the other base games do.
 
+## Marvel Studios' Ant-Man and the Wasp (Dec 2023/Jan 2024)
+
+Box id `marvel-studios-ant-man-and-the-wasp`, file `LegendaryPickerService/Data/Boxes/marvel-studios-ant-man-and-the-wasp.json`, a Revised expansion played with What If...? (#206). Counts (AW; C1): 8 Heroes x 14 cards, 4 Villain Groups x 8, 3 Henchman Groups x 10, 3 Transforming Masterminds, 4 Schemes and 7 special Bystanders; no Scheme Twists or Wounds supplied. Names, teams, classes and keywords come from C1/C2; Scheme Setup lines, Always Leads and part uses were read from OCR of the card faces (`Card`). The release month 2023-12 is the research queue's "Dec 2023/Jan 2024". The insert at `Legendary_Rules-Ant-Man` is the 2018 Ant-Man box's, so the glossary cites the Upper Deck article (`AW`).
+
+**Heroes:** Avengers: Ant-Man (Ant-Man and the Wasp), Cassie Lang, Wasp (Ant-Man and the Wasp); the first and last keep Hero Names Ant-Man and Wasp, shared with the 2018 box's Heroes. Crime Syndicate: Scott Lang, Cat Burglar. Unaffiliated: Ant Army, Freedom Fighters, Janet van Dyne, Jentorra. Revised boxes define their own team terms, since they share nothing with First Edition boxes. **Villain Groups:** Armada of Kang, Cross Technologies, Ghost Chasers (these three use Wounds) and Quantum Realm. Each group's 8 cards include its Ambush Scheme, so the Villain Deck counts are unchanged; the Ambush Scheme glossary entry tells the player how it plays. **Henchman Groups:** Quantum Hound, Quantumnauts, Tardigrade.
+
+**Masterminds:** Darren Cross (leads Cross Technologies; Wounds), Ghost, Master Thief (Ghost Chasers) and Kang, Quantum Conqueror (Armada of Kang; Wounds; an extra Villain Group). Each starts on the side showing Always Leads.
+
+**Schemes (Card):** Auction Shrink Tech to Highest Bidder (11 Twists; an extra Hero with Size-Changing cards, drawn by `outsideHeroes.heroNames` from the five Hero Names that have them, its 14 cards set aside); Escape an Imprisoning Dimension (5, uses Wounds); Safeguard Dark Secrets (5); Siphon Energy from the Quantum Realm (9; Quantum Realm required as an extra group with 7 of its cards set beside the Scheme through `cardsBeside`, so only its Ambush Scheme joins the Villain Deck). Kang's extra group sets its Villains aside as Timeline Variants, but only a Scheme can set cards beside it, so the Villain Deck total counts those 7 cards (owner question on #206). Every other effect uses existing capabilities.
+
 ## Open questions
 

@@ -1,6 +1,6 @@
 # Marvel Studios' Ant-Man and the Wasp (Dec 2023/Jan 2024)
 
-**Research status: Partial.** Upper Deck verifies this is a 200-card expansion and explains five keywords plus Ambush Schemes. Official category counts and card-level setup details remain unavailable.
+**Research status: Integrated (#206), research partial.** Upper Deck verifies this is a 200-card expansion and explains five keywords plus Ambush Schemes. Scheme Setup lines, Always Leads and part uses were read from OCR of the C1-linked card faces (`Card`); an official itemized contents list is still unavailable. Wounds are used by Armada of Kang, Cross Technologies, Ghost Chasers, Darren Cross, Kang and Escape an Imprisoning Dimension.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -13,14 +13,14 @@
 
 ## Catalog inventory
 
-Upper Deck describes a **200-card deluxe box expansion** (AW). An official itemized contents list, rules insert, or complete allowed card-face source was not located, so counts by card type/group and printed card identities are unresolved. C1 face metadata is indexed below with direct image URLs where supplied; C2 remains a names/mappings source:
+Upper Deck describes a **200-card deluxe box expansion** (AW). An official itemized contents list, rules insert, or complete allowed card-face source was not located, so the per-group counts in the runtime data rest on the C1 face index (8 cards per Villain Group, 10 per Henchman Group assumed) and copy counts of Henchmen and Masterminds are unverified. C1 face metadata is indexed below with direct image URLs where supplied; C2 remains a names/mappings source:
 
 - **Heroes (eight):** Ant Army; Ant-Man; Cassie Lang; Freedom Fighters; Janet Van Dyne; Jentorra; Scott Lang, Cat Burglar; Wasp.
 - **Villain Groups (four):** Armada of Kang; Cross Technologies; Ghost Chasers; Quantum Realm.
 - **Henchman Groups (three):** Quantum Hound; Quantumnauts; Tardigrade.
 - **Mastermind card faces (six C2 names):** Darren Cross; Yellowjacket; Ghost, Master Thief; Ghost, Intangible; Kang, Quantum Conqueror; Kang, Multiverse Conqueror. Upper Deck describes Transforming Masterminds, but the physical pairings and number of sets need card-level verification.
 - **Schemes (four C2 names):** Auction Shrink Tech to Highest Bidder; Escape an Imprisoning Dimension; Safeguard Dark Secrets; Siphon Energy from the Quantum Realm.
-- **Ambush Scheme examples (AW):** High-Speed Car Chase (Ghost Chasers); Quantumania (Quantum Realm). The examples do not establish the full Ambush Scheme inventory.
+- **Ambush Scheme examples (AW):** High-Speed Car Chase (Ghost Chasers); Quantumania (Quantum Realm). C1 lists one Ambush Scheme face in each of the four Villain Groups: Take Over Pym Technologies (Cross Technologies), High-Speed Car Chase (Ghost Chasers), Build a Conquering Army (Armada of Kang) and Quantumania (Quantum Realm).
 - **Named Bystanders (four C2 names):** Agent Jimmy Woo; Maggie Lang; Officer Jim Paxton; Young Cassie Lang.
 
 The C1 face index below records available Hero Names, teams/classes, printed values, and image links. Fields absent from it and the official component totals remain unresolved; C1 ability prose is not rules evidence.
@@ -37,7 +37,7 @@ The C1 face index below records available Hero Names, teams/classes, printed val
 
 ## Required parts and glossary
 
-The described mechanics use the Villain Deck, Hero Deck, and HQ; the article identifies no new shared token or separate stack. An official itemized contents list and card-level checks are still needed to verify any additional shared-component dependencies, including possible Wound use.
+The described mechanics use the Villain Deck, Hero Deck, and HQ; the article identifies no new shared token or separate stack. OCR of the card faces (`Card`) shows Wound use by Armada of Kang, Cross Technologies, Ghost Chasers (its Ambush Scheme), Darren Cross, Kang and Escape an Imprisoning Dimension; Quantum Realm's Axian Bartender only KOs Wounds players already hold, so it takes nothing from the Wound stack.
 
 - **Heist:** Compare the costs among your Heroes with a revealed Villain's Victory Point value. (AW)
 - **Double-Cross:** Reveal hands and discard a highest-cost card sharing its cost with another card in that hand. (AW)
@@ -50,7 +50,7 @@ Summaries are original paraphrases under 40 words.
 
 ## Setup and implementation gaps
 
-Verify the 200-card category/group totals, physical Transforming Mastermind pairings, all Ambush Scheme names and group links, complete Scheme player limits/setup values/effects, Mastermind Always Leads/setup effects, and Hero metadata against official contents and product cards. The product article does not provide a base-game setup table; this expansion uses the Revised ruleset indicated by the roadmap. Research does not change runtime data or code.
+Still open: an official itemized contents list (the 200-card total and the per-group counts rest on C1 face copies; Henchman and Mastermind copies are unverified); whether Kang's extra group's Ambush Scheme stays in the Villain Deck while its Villains are set aside as Timeline Variants (read literally as yes); and the per-card Wound reads of Tactics other than those the OCR marked. The Villain Deck total for Kang counts the extra group's 7 set-aside Villains, since only a Scheme can set cards beside it.
 
 ## Structured card-face metadata (C1)
 
