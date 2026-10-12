@@ -509,5 +509,13 @@ Box id `marvel-studios-ant-man-and-the-wasp`, file `LegendaryPickerService/Data/
 
 **Schemes (Card):** Auction Shrink Tech to Highest Bidder (11 Twists; an extra Hero with Size-Changing cards, drawn by `outsideHeroes.heroNames` from the five Hero Names that have them, its 14 cards set aside); Escape an Imprisoning Dimension (5, uses Wounds); Safeguard Dark Secrets (5); Siphon Energy from the Quantum Realm (9; Quantum Realm required as an extra group with 7 of its cards set beside the Scheme through `cardsBeside`, so only its Ambush Scheme joins the Villain Deck). Kang's extra group sets its Villains aside as Timeline Variants, which the Villain Deck total leaves out (`setAsideExtraVillains`, #208). Every other effect uses existing capabilities.
 
+## 2099 (Apr 2024)
+
+Box id `2099`, file `LegendaryPickerService/Data/Boxes/2099.json`, a Revised expansion played with What If...? (#213). Counts (UD; owner transcription): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 Adapting Masterminds with Epic sides (6 and 4 double-sided Tactics) and 4 Schemes; no Henchman Group, Twists or shared stack supplied. No card images exist for this box (owner ruling, 2026-10-12), so Scheme Setup lines, Always Leads and part uses come from the owner's transcription of the cards cross-checked with C1's card text (`Card`).
+
+**Heroes:** Spider-Man 2099 (Spider Friends), Ghost Rider 2099, Hulk 2099, Ravage 2099 (Marvel Knights) and Doctor Doom 2099 (unaffiliated), each keeping the base character's Hero Name (Spider-Man, Ghost Rider, Hulk, Ravage, Doctor Doom) like Captain America 1941. Only Hulk 2099 uses Wounds. **Villain Groups:** Alchemax Enforcers and False Aesir of Alchemax, both using Wounds. **Masterminds:** Alchemax Executives lead Alchemax Enforcers; Sinister Six 2099 allows any "Alchemax" or "Sinister" group and is recorded as leading Alchemax Enforcers, which always meets it. Both use Wounds, set up by shuffling the Tactics (Adapt), and offer the Epic side as a step; Avatarr's extra Hero is a step because it applies only if that Tactic is on top.
+
+**Schemes (Card):** Pull Reality Into Cyberspace (7 Twists); Become President of the United States (11); Subjugate Earth with Mega-Corporations (11, extra Hero, Wounds); Befoul Earth Into a Polluted Wasteland (8, extra Hero, Wounds). Every effect uses existing capabilities.
+
 ## Open questions
 
