@@ -47,6 +47,7 @@ The C1 face index below records available printed titles, group/type, numeric va
 ## Required parts and glossary
 
 - Villainous Weapons are cards inside Villain Groups and may be attached to Villains, transferred to the Mastermind, or become player Artifacts. They do not form a separate stack (MG pp.1–2).
+- Ego never draws with a Scheme that changes the number of city spaces (#192): Ego carries `noCitySpaceSchemes` (MG p.2) and each such Scheme `changesCitySpaces` (Card), found by reading every Scheme face in the box files: Earthquake Drains the Ocean (and its Tsunami side), Change the Outcome of WWII, Warp Reality into a TV Show, Smash Two Dimensions Together, Fragmented Realities, Superhuman Baseball Game and Nuclear Armageddon. Schemes that only swap, seal or add cards beside spaces (Time Heist's alternate city of the same size, Tornado of Terrigen Mists) are not flagged.
 - Ego can alter the city-space count; the insert suggests marking removed or added spaces with the Mastermind or Master Strikes (MG p.2).
 - **Divided Card:** One physical card with two selectable sides; it counts as one card before play and only the chosen side while played. (MG p.1)
 - **Triggered Artifact:** A persistent Artifact that activates whenever its listed trigger occurs while controlled. (MG p.1)
@@ -57,7 +58,7 @@ Summaries are original paraphrases under 40 words. Verify Hero teams/classes/sha
 
 ## Setup and implementation gaps
 
-Still open: per-face copy counts (C1 gives none for some faces); the two Epic Ego and Ronan sides add no draw, so the Epic side stays an optional step; whether Ego conflicts with a Scheme in another box that changes the number of city spaces (the insert says not to combine them) is not recorded, since no card data was checked for it. Star-Lord's Awesome Mix Tape is modelled with doubled groups and half the cards of each (4 of a Villain Group's 8, 5 of a Henchman Group's 10, 2 in Solo); when the included boxes lack enough groups the setup takes the rest from boxes that are not ticked. Triggered Artifacts, Weapon capture and city-size changes are play mechanics and need no setup data.
+Still open: per-face copy counts (C1 gives none for some faces); the two Epic Ego and Ronan sides add no draw, so the Epic side stays an optional step; Star-Lord's Awesome Mix Tape is modelled with doubled groups and half the cards of each (4 of a Villain Group's 8, 5 of a Henchman Group's 10, 2 in Solo); when the included boxes lack enough groups the setup takes the rest from boxes that are not ticked. Triggered Artifacts, Weapon capture and city-size changes are play mechanics and need no setup data.
 
 ## Structured card-face metadata (C1)
 

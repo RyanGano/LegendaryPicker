@@ -34,6 +34,25 @@ public class MarvelStudiosGuardiansTests
         Assert.Equal(2 * 5, setup.VillainDeck.HenchmanCards);
     }
 
+    // Ego isn't played with a Scheme that changes the number of city spaces, even one from another box (MG p.2, #192):
+    // with Revelations ticked, Earthquake Drains the Ocean draws its Mastermind from every included one but Ego.
+    [Fact]
+    public void Earthquake_Drains_the_Ocean_never_draws_Ego()
+    {
+        string[] boxes = ["core", "revelations", "marvel-studios-guardians-of-the-galaxy"];
+        var included = Catalog.Boxes.Where(box => boxes.Contains(box.Id)).ToList();
+        var s = included.SelectMany(box => box.AllSchemes)
+            .Where(candidate => candidate.Setup.AllowedPlayerCounts?.Value.Contains(2) ?? true)
+            .ToList().FindIndex(candidate => candidate.Name == "Earthquake Drains the Ocean");
+        var masterminds = included.SelectMany(box => box.AllMasterminds).Count();
+        var random = new ScriptedRandom(s, masterminds - 2);
+
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, boxes, random));
+
+        Assert.Equal(("Earthquake Drains the Ocean", masterminds - 1), (setup.Scheme.Name, random.Options[1]));
+        Assert.NotEqual("Ego, the Living Planet", setup.Mastermind.Name);
+    }
+
     // Draws the box's Scheme and Mastermind by name: the box's Schemes and Masterminds follow the core box's in catalog order.
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {

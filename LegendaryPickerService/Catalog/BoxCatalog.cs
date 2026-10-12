@@ -1184,6 +1184,7 @@ public sealed partial class BoxCatalog
             if (mastermind.AlwaysLeads is { } leads) yield return ($"{mastermind.Id} alwaysLeads", leads.Source);
             if (mastermind.AlsoLeads is { } also) yield return ($"{mastermind.Id} alsoLeads", also.Source);
             if (mastermind.Epic is { } epic) yield return ($"{mastermind.Id} epic", epic.Source);
+            if (mastermind.NoCitySpaceSchemes is { } noCity) yield return ($"{mastermind.Id} noCitySpaceSchemes", noCity);
             foreach (var hero in mastermind.Setup?.RequiredHeroes ?? []) yield return ($"{mastermind.Id} setup.requiredHeroes", hero.Source);
             if (mastermind.Setup?.SetAsideExtraVillains is { } setAside) yield return ($"{mastermind.Id} setup.setAsideExtraVillains", setAside.Source);
         }
@@ -1208,6 +1209,7 @@ public sealed partial class BoxCatalog
 
             if (effect.OneOfGroups is { } choice) yield return ($"{scheme.Id} setup.oneOfGroups", choice.Source);
             foreach (var exclusion in scheme.ExcludesMasterminds ?? []) yield return ($"{scheme.Id} excludesMasterminds", exclusion.Source);
+            if (scheme.ChangesCitySpaces is { } changesCity) yield return ($"{scheme.Id} changesCitySpaces", changesCity);
             foreach (var twists in effect.MastermindTwists ?? []) yield return ($"{scheme.Id} setup.mastermindTwists", twists.Source);
             if (effect.TwistsBesideScheme is { } beside) yield return ($"{scheme.Id} setup.twistsBesideScheme", beside.Source);
             foreach (var hero in effect.RequiredHeroes ?? []) yield return ($"{scheme.Id} setup.requiredHeroes", hero.Source);

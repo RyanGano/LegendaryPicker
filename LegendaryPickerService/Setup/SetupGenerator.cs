@@ -134,9 +134,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         }
 
         var scheme = schemes[random.Next(schemes.Count)];
-        var excluded = (scheme.ExcludesMasterminds ?? []).Select(exclusion => exclusion.MastermindId).ToHashSet();
         var pairs = masterminds
-            .Where(mastermind => !excluded.Contains(mastermind.Id))
+            .Where(mastermind => !mastermind.RuledOutBy(scheme))
             .Select(mastermind => (Mastermind: mastermind, Draw: draws.FirstOrDefault(draw => draw.Follows(scheme, mastermind))))
             .Where(pair => pair.Draw is not null)
             .ToList();
@@ -188,9 +187,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // before the groups, since its group is one more of them.
             var drainedDraws = plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value == true).ToList();
             // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out.
-            var ruledOut = (scheme.ExcludesMasterminds ?? []).Select(exclusion => exclusion.MastermindId).ToHashSet();
             var drained = new Queue<Mastermind>(DrawMany(
-                _masterminds.Where(other => other != mastermind && other.AlwaysLeads is not null && other.AlwaysLeads.GroupId != mastermind.AlwaysLeads?.GroupId && !ruledOut.Contains(other.Id)),
+                _masterminds.Where(other => other != mastermind && other.AlwaysLeads is not null && other.AlwaysLeads.GroupId != mastermind.AlwaysLeads?.GroupId && !other.RuledOutBy(scheme)),
                 drainedDraws.Sum(draw => draw.Count)));
             var drainedLeads = drainedDraws
                 .SelectMany(draw => Enumerable.Repeat(draw.Rule.BringsAlwaysLeads!.Source, draw.Count))
