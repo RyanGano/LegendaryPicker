@@ -1,0 +1,396 @@
+{
+ "schemaVersion": 7,
+ "id": "black-widow",
+ "name": "Black Widow",
+ "ruleset": "firstEdition",
+ "catalogSource": "BW p.2; C1",
+ "about": {
+  "released": {
+   "value": "2022-10",
+   "source": "REL"
+  }
+ },
+ "sources": [
+  {
+   "key": "BW",
+   "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/2022_BlackWidow_Rulesheet.pdf"
+  },
+  {
+   "key": "REL",
+   "url": "https://comicbook.com/gaming/news/marvel-legendary-black-widow-expansion-now-available/"
+  }
+ ],
+ "components": {
+  "heroCards": {
+   "value": 14,
+   "source": "BW p.2"
+  },
+  "villainGroupCards": {
+   "value": 8,
+   "source": "BW p.2"
+  },
+  "henchmanGroupCards": {
+   "value": 0,
+   "source": "BW p.2"
+  },
+  "schemeTwists": {
+   "value": 0,
+   "source": "BW p.2"
+  }
+ },
+ "heroes": [
+  {
+   "id": "black-widow_hero_black-widow",
+   "name": "Black Widow (Black Widow)",
+   "heroName": "Black Widow",
+   "team": "core_term_shield",
+   "classes": [
+    "core_term_covert",
+    "core_term_instinct",
+    "core_term_ranged",
+    "core_term_tech"
+   ],
+   "terms": [
+    "villains_term_dodge",
+    "revelations_term_dark-memories",
+    "shield_term_undercover"
+   ]
+  },
+  {
+   "id": "black-widow_hero_yelena-belova",
+   "name": "Yelena Belova",
+   "heroName": "Yelena Belova",
+   "team": "core_term_shield",
+   "classes": [
+    "core_term_covert",
+    "core_term_instinct",
+    "core_term_tech"
+   ],
+   "terms": [
+    "villains_term_dodge",
+    "black-widow_term_unleash",
+    "shield_term_undercover"
+   ]
+  },
+  {
+   "id": "black-widow_hero_red-guardian",
+   "name": "Red Guardian",
+   "heroName": "Red Guardian",
+   "team": null,
+   "classes": [
+    "core_term_covert",
+    "core_term_strength"
+   ],
+   "terms": [
+    "realm-of-kings_term_when-recruited",
+    "black-widow_term_unleash",
+    "shield_term_undercover"
+   ]
+  },
+  {
+   "id": "black-widow_hero_white-tiger",
+   "name": "White Tiger",
+   "heroName": "White Tiger",
+   "team": "dark-city_term_marvel-knights",
+   "classes": [
+    "core_term_covert",
+    "core_term_instinct",
+    "core_term_ranged",
+    "core_term_strength"
+   ],
+   "terms": [
+    "villains_term_dodge",
+    "revelations_term_dark-memories"
+   ]
+  },
+  {
+   "id": "black-widow_hero_falcon-and-winter-soldier",
+   "name": "Falcon & Winter Soldier",
+   "heroNames": [
+    "Falcon",
+    "Winter Soldier"
+   ],
+   "team": "core_term_avengers",
+   "classes": [
+    "core_term_covert",
+    "core_term_instinct",
+    "core_term_ranged",
+    "core_term_strength",
+    "core_term_tech"
+   ],
+   "terms": [
+    "civil-war_term_divided-card",
+    "villains_term_dodge",
+    "revelations_term_dark-memories"
+   ]
+  }
+ ],
+ "villainGroups": [
+  {
+   "id": "black-widow_villain_taskmasters-thunderbolts",
+   "name": "Taskmaster's Thunderbolts",
+   "terms": [
+    "core_term_ambush",
+    "core_term_escape",
+    "core_term_fight"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  },
+  {
+   "id": "black-widow_villain_elite-assassins",
+   "name": "Elite Assassins",
+   "terms": [
+    "core_term_ambush",
+    "core_term_fight",
+    "revelations_term_dark-memories",
+    "shield_term_undercover",
+    "black-widow_term_unleash"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ]
+  }
+ ],
+ "henchmanGroups": [],
+ "masterminds": [
+  {
+   "id": "black-widow_mastermind_taskmaster",
+   "name": "Taskmaster",
+   "terms": [
+    "core_term_always-leads",
+    "core_term_fight",
+    "core_term_master-strike",
+    "core_term_mastermind-tactic"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    },
+    {
+     "part": "officers",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "black-widow_villain_taskmasters-thunderbolts",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Taskmaster",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "BW p.2"
+     }
+    ]
+   }
+  },
+  {
+   "id": "black-widow_mastermind_indestructible-man",
+   "name": "Indestructible Man",
+   "terms": [
+    "core_term_always-leads",
+    "core_term_fight",
+    "core_term_master-strike",
+    "core_term_mastermind-tactic"
+   ],
+   "uses": [
+    {
+     "part": "wounds",
+     "source": "Card"
+    }
+   ],
+   "alwaysLeads": {
+    "groupId": "black-widow_villain_elite-assassins",
+    "groupType": "villain",
+    "source": "Card"
+   },
+   "epic": {
+    "name": "Epic Indestructible Man",
+    "source": "Card"
+   },
+   "setup": {
+    "steps": [
+     {
+      "label": "Optional: play the Epic side instead; the Tactics stay the same",
+      "source": "BW p.2"
+     }
+    ]
+   }
+  }
+ ],
+ "schemes": [
+  {
+   "id": "black-widow_scheme_corrupt-the-spy-agencies",
+   "name": "Corrupt the Spy Agencies",
+   "terms": [
+    "core_term_scheme-twist",
+    "shield_term_undercover",
+    "black-widow_term_unleash"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 7,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "black-widow_scheme_train-black-widows-in-the-red-room",
+   "name": "Train Black Widows in the Red Room",
+   "terms": [
+    "core_term_scheme-twist",
+    "revelations_term_dark-memories",
+    "shield_term_undercover"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": [
+       1
+      ],
+      "value": 7,
+      "source": "Card"
+     },
+     {
+      "players": [
+       2
+      ],
+      "value": 6,
+      "source": "Card"
+     },
+     {
+      "players": [
+       3
+      ],
+      "value": 5,
+      "source": "Card"
+     },
+     {
+      "players": [
+       4
+      ],
+      "value": 4,
+      "source": "Card"
+     },
+     {
+      "players": [
+       5
+      ],
+      "value": 3,
+      "source": "Card"
+     }
+    ],
+    "moves": [
+     {
+      "card": "officer",
+      "to": "villainDeck",
+      "count": [
+       {
+        "players": null,
+        "value": 8,
+        "source": "Card"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "black-widow_scheme_sniper-rifle-assassins",
+   "name": "Sniper Rifle Assassins",
+   "terms": [
+    "core_term_scheme-twist",
+    "villains_term_dodge"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": [
+       1
+      ],
+      "value": 10,
+      "source": "Card"
+     },
+     {
+      "players": [
+       2
+      ],
+      "value": 9,
+      "source": "Card"
+     },
+     {
+      "players": [
+       3
+      ],
+      "value": 8,
+      "source": "Card"
+     },
+     {
+      "players": [
+       4
+      ],
+      "value": 7,
+      "source": "Card"
+     },
+     {
+      "players": [
+       5
+      ],
+      "value": 6,
+      "source": "Card"
+     }
+    ]
+   }
+  },
+  {
+   "id": "black-widow_scheme_frame-heroes-for-murder",
+   "name": "Frame Heroes for Murder",
+   "terms": [
+    "core_term_scheme-twist"
+   ],
+   "setup": {
+    "twists": [
+     {
+      "players": null,
+      "value": 7,
+      "source": "Card"
+     }
+    ],
+    "heroes": [
+     {
+      "players": null,
+      "value": 6,
+      "source": "Card"
+     }
+    ]
+   }
+  }
+ ],
+ "glossary": [
+  {
+   "id": "black-widow_term_unleash",
+   "name": "Unleash",
+   "kind": "keyword",
+   "summary": "Bring a Hero back from your Victory Pile to your hand, where you can play it the same turn.",
+   "source": "BW",
+   "page": 1
+  }
+ ]
+}

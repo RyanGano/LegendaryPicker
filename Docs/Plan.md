@@ -458,5 +458,13 @@ Box id `black-panther`, file `LegendaryPickerService/Data/Boxes/black-panther.js
 
 **Schemes:** Seize the Wakandan Throne (6 Twists); Poison Lakes with Nanite Microbots (Twists equal to 5 plus the players, 30 Wounds in the Wound Stack); Plunder Wakanda's Vibranium (10); Provoke a Clash of Nations (11). The Throne's Favor reuses Realm of Kings' keyword; Empowered and Multiclass reuse Ant-Man's and Secret Wars Volume 1's.
 
+## Black Widow (October 2022)
+
+Box id `black-widow`, file `LegendaryPickerService/Data/Boxes/black-widow.json`, a First Edition expansion (#196). Counts (BW p.2): 5 Heroes x 14 cards, 2 Villain Groups x 8, 2 double-sided Epic Masterminds and 4 Schemes; no Henchman Group or shared stack. Release month from ComicBook.com's availability report (`REL`). Setup values and part uses come from OCR of the C1-linked card faces (`Card`).
+
+**Heroes:** Black Widow (Black Widow) (Hero Name Black Widow, named with its box because the core box has a Black Widow), Yelena Belova, Red Guardian, White Tiger and the Divided Falcon & Winter Soldier, which counts under both Hero Names as the Marvel Studios Guardians Heroes do. **Villain Groups:** Taskmaster's Thunderbolts (Jack O'Lantern gains Wounds) and Elite Assassins (Blue Talon). **Masterminds:** Taskmaster (Wounds and Officers) leads Taskmaster's Thunderbolts and Indestructible Man (Wounds) leads Elite Assassins; both have an Epic side with the same Tactics, offered as a step. Taskmaster gets no Henchman Group because no Setup line asks for one.
+
+**Schemes:** Corrupt the Spy Agencies (7 Twists); Train Black Widows in the Red Room (8 Twists minus 1 per player, 8 Officers moved into the Villain Deck); Sniper Rifle Assassins (11 Twists minus 1 per player); Frame Heroes for Murder (7 Twists, 6 Heroes). Dodge, Dark Memories, Undercover and When Recruited reuse earlier terms; Unleash is new.
+
 ## Open questions
 
