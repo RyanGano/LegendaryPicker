@@ -79,7 +79,7 @@ The following are short setup-only summaries of the printed card faces; they omi
 ### Masterminds
 
 - **Adrian Toomes (normal or Epic face):** Always Leads Salvagers; both faces use the same four Tactics (SM p.2). [Normal face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/adrian-toomes-01.png) · [Epic face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/adrian-toomes-02.png).
-- **Vulture (normal or Epic face):** Always Leads Vulture Tech; both faces use the same four Tactics (SM p.2). [Normal face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/vulture-01.png) · [Epic face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/vulture-02.png).
+- **Vulture (normal or Epic face):** Always Leads Vulture Tech; both faces use the same four Tactics (SM p.2). Both faces use the Wound stack (shared OCR markers, #185). [Normal face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/vulture-01.png) · [Epic face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/vulture-02.png).
 
 ## Structured card-face metadata (C1)
 

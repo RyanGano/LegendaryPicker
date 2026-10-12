@@ -1,4 +1,4 @@
-import { act, render, screen, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { StrictMode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -134,6 +134,23 @@ describe('App', () => {
     expect(screen.getByLabelText('Brotherhood 1 Villain Group 8')).toBeInTheDocument()
     expect(screen.getByLabelText('Savage Land Mutates 1 Henchman Group 10')).toBeInTheDocument()
     expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3&boxes=core$/)])
+  })
+
+  it('asks for Epic Masterminds only once the option is ticked, and remembers it', async () => {
+    setupAnswers.push(() => json(setup), () => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+    await user.click(screen.getByRole('checkbox', { name: /Epic Masterminds/ }))
+    await user.click(screen.getByRole('button', { name: /Generate another/ }))
+
+    await waitFor(() => expect(setupRequests()).toHaveLength(2))
+    expect(setupRequests()[0]).toMatch(/players=3&boxes=core$/)
+    expect(setupRequests()[1]).toMatch(/players=3&boxes=core&epic=true$/)
+    expect(localStorage.getItem('legendaryPicker.epic')).toBe('true')
   })
 
   it('moves focus to the result heading after Generate', async () => {

@@ -795,8 +795,19 @@ public sealed partial class BoxCatalog
     }
 
     // An Epic side is a card face of its own, so it has a printed title, and one that tells it from the normal side.
+    // Only a Mastermind with an Epic side has the step that offers it, and the Epic side's own Setup doesn't.
     private static void ValidateEpicSides(string path, Box box)
     {
+        foreach (var mastermind in box.Masterminds.Where(m => m.Epic is null && (m.Setup?.Steps ?? []).Any(step => step.OffersEpic)))
+        {
+            throw new InvalidDataException($"{path}: {mastermind.Id} offers an Epic side it doesn't have.");
+        }
+
+        foreach (var mastermind in box.Masterminds.Where(m => (m.Epic?.Setup?.Steps ?? []).Any(step => step.OffersEpic)))
+        {
+            throw new InvalidDataException($"{path}: {mastermind.Id} epic.setup offers an Epic side.");
+        }
+
         foreach (var mastermind in box.Masterminds.Where(m => m.Epic is not null))
         {
             var name = mastermind.Epic!.Name;
@@ -1256,6 +1267,7 @@ public sealed partial class BoxCatalog
     // The setup steps of every Mastermind and Scheme that has any, by the id of the card that prints them.
     private static IEnumerable<(string Owner, IReadOnlyList<SetupStep> Steps)> StepLists(Box box) =>
         box.Masterminds.Select(m => (m.Id, m.Setup?.Steps))
+            .Concat(box.Masterminds.Select(m => (Id: $"{m.Id} epic", Steps: m.Epic?.Setup?.Steps)))
             .Concat(box.Schemes.Select(s => (s.Id, s.Setup.Steps)))
             .Where(list => list.Steps is not null)
             .Select(list => (list.Id, list.Steps!));
@@ -1293,6 +1305,11 @@ public sealed partial class BoxCatalog
             if (mastermind.Setup is { } effects)
             {
                 foreach (var list in EffectLists(mastermind.Id, effects)) yield return list;
+            }
+
+            if (mastermind.Epic?.Setup is { } epicEffects)
+            {
+                foreach (var list in EffectLists($"{mastermind.Id} epic", epicEffects)) yield return list;
             }
         }
 

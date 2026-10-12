@@ -211,7 +211,7 @@ public sealed record HenchmanGroup(string Id, string Name, IReadOnlyList<string>
 // Setup is null for a Mastermind whose card does not change the setup. AlwaysLeads is null for a Mastermind whose Always
 // Leads ability allows any group, as Ego's does (it only adds a Villain Group in its Setup), so it constrains no draw. AlsoLeads is a second group its card always
 // leads, picked from several, as Deathbird leads a Shi'ar Henchman Group as well as the Shi'ar Imperial Guard (#132).
-// Epic is the Mastermind's Epic side, on the same card; draws don't use it yet (#151).
+// Epic is the Mastermind's Epic side, on the same card, which a draw plays when the player asks for Epic Masterminds (#185).
 // NoCitySpaceSchemes is the source of a rule that the Mastermind isn't played with a Scheme that changes the number of
 // city spaces, as Ego's insert says; the draw skips it after a Scheme with ChangesCitySpaces (#192).
 public sealed record Mastermind(
@@ -223,11 +223,24 @@ public sealed record Mastermind(
     public bool RuledOutBy(Scheme scheme) =>
         (scheme.ExcludesMasterminds ?? []).Any(exclusion => exclusion.MastermindId == Id)
         || (scheme.ChangesCitySpaces is not null && NoCitySpaceSchemes is not null);
+
+    // This Mastermind on its Epic side, or itself when it has none: the Epic title, the Epic side's own Setup in place
+    // of the normal side's when it has one, without the step that offers the Epic side, and the parts the Epic side's
+    // text uses besides the normal side's.
+    public Mastermind PlayedEpic() => Epic is not { } epic ? this : this with
+    {
+        Name = epic.Name,
+        Setup = (epic.Setup ?? Setup) is { } setup ? setup with { Steps = setup.Steps?.Where(step => !step.OffersEpic).ToList() } : null,
+        Uses = [.. Uses ?? [], .. epic.Uses ?? []],
+        Epic = null,
+    };
 }
 
 // A Mastermind's Epic side, which shares the normal side's Tactics: its printed title, and in Uses the parts its text
-// uses beyond the normal side's Uses, which the setup would have to lay out (the Horrors an Epic X-Men Master Strike plays). Source is the card face.
-public sealed record EpicSide(string Name, string Source, IReadOnlyList<PartUse>? Uses = null);
+// uses beyond the normal side's Uses, which the setup would have to lay out (the Horrors an Epic X-Men Master Strike plays).
+// Setup is the Epic side's own Setup line when it differs from the normal side's, as Epic Annihilus's extra Villain Group
+// in place of his Solo Henchmen; it replaces the normal side's. Source is the card face.
+public sealed record EpicSide(string Name, string Source, IReadOnlyList<PartUse>? Uses = null, SetupEffects? Setup = null);
 
 // EvenInSolo is true for a Mastermind whose card says it always leads the group in Solo too, as Ultron Infinity's
 // Ultron Sentries (#203): Solo's rule to ignore Always Leads then doesn't apply to it.
@@ -293,7 +306,8 @@ public record SetupEffects(
 
 // A setup step that changes no count, such as placing a token on the Scheme, which the setup lists as a
 // line to tick. Label is a short instruction in our own words, never card text.
-public sealed record SetupStep(string Label, string Source);
+// OffersEpic marks the step that offers a Mastermind's Epic side, which a setup playing that side leaves out (#185).
+public sealed record SetupStep(string Label, string Source, bool OffersEpic = false);
 
 // A Scheme's Setup line as data. Absent values leave the box's setup rules unchanged.
 // Heroes, HenchmanCards and VillainDeckBystanders set a count, replacing the table or Solo value.

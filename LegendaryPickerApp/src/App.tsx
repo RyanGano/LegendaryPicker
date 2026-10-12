@@ -16,6 +16,8 @@ const WAKE_UP_NOTICE_MS = 3_000
 const PLAYER_COUNT_KEY = 'legendaryPicker.playerCount'
 // Every box the player included, base games and expansions alike.
 const BOXES_KEY = 'legendaryPicker.boxes'
+// Whether the player plays the Masterminds' Epic sides (#185).
+const EPIC_KEY = 'legendaryPicker.epic'
 // The expansions a returning player included before base games became picks (#71). The core box was
 // always in the setup then, so it joins them when they move to BOXES_KEY.
 const OLD_EXPANSIONS_KEY = 'legendaryPicker.expansions'
@@ -108,6 +110,22 @@ function boxHint(available: Box[], included: string[]): string | null {
   return null
 }
 
+function loadEpic(): boolean {
+  try {
+    return localStorage.getItem(EPIC_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
+
+function saveEpic(epic: boolean) {
+  try {
+    localStorage.setItem(EPIC_KEY, String(epic))
+  } catch {
+    // Remembering the option is optional.
+  }
+}
+
 function saveBoxes(ids: string[]) {
   try {
     localStorage.setItem(BOXES_KEY, JSON.stringify(ids))
@@ -153,6 +171,7 @@ function App() {
   const [players, setPlayers] = useState<number | null>(loadPlayerCount)
   const [boxes, setBoxes] = useState<Box[]>([])
   const [included, setIncluded] = useState<string[]>(loadBoxes)
+  const [epic, setEpic] = useState(loadEpic)
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   // The intro explains the app until there is a setup on screen to explain it instead, so a first draw
   // that fails or finds no legal Scheme keeps it.
@@ -208,6 +227,11 @@ function App() {
     saveBoxes(next)
   }
 
+  function toggleEpic() {
+    setEpic(!epic)
+    saveEpic(!epic)
+  }
+
   // Stored ids the API no longer lists are ignored.
   const isIncluded = (box: Box) => included.includes(box.id)
   const hint = boxHint(boxes, included)
@@ -226,7 +250,11 @@ function App() {
         setStatus({ kind: 'idle' })
         return
       }
-      const response = await getSetup(players, drawn.map((box) => box.id))
+      const response = await getSetup(
+        players,
+        drawn.map((box) => box.id),
+        epic,
+      )
       if (response.kind === 'setup') {
         setStatus({ kind: 'result', setup: response })
         setShownSetup(true)
@@ -290,6 +318,14 @@ function App() {
                 {hint && <p className="box-hint">{hint}</p>}
               </>
             )}
+            <h2 id="options-label">Options</h2>
+            <div className="box-options" role="group" aria-labelledby="options-label">
+              <label className="box-option">
+                <input type="checkbox" checked={epic} disabled={loading} onChange={toggleEpic} />
+                <span className="box-name">Epic Masterminds</span>
+                <span className="detail">Play the Epic side</span>
+              </label>
+            </div>
             <button
               type="button"
               className="primary"

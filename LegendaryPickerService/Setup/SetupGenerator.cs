@@ -45,8 +45,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     public GenerationResult Generate(int players, IRandomSource random) => Generate(players, [CoreBoxId], random);
 
     // Every included box contributes its cards and stacks, drawn in catalog order whatever order the boxes
-    // are named in. The rules of each ruleset come from its first included base game in catalog order.
-    public GenerationResult Generate(int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random)
+    // are named in. The rules of each ruleset come from its first included base game in catalog order. With epic, a drawn
+    // Mastermind that has an Epic side is played on that side, with its setup effects (#185).
+    public GenerationResult Generate(int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random, bool epic = false)
     {
         if (CheckBoxes(includedBoxes) is { } problem)
         {
@@ -84,7 +85,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             })
             .ToList();
 
-        return Run(boxes, draws, players, random);
+        return Run(boxes, draws, players, random, epic);
     }
 
     // Why a set of box ids can't be drawn from, or null when it can. A setup needs at least one base game for
@@ -122,7 +123,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     // Draws the Scheme from every included Scheme its card allows at the player count, then the Mastermind from the
     // included ones the Scheme doesn't exclude and some set of rules covers, in catalog order; the rest of the draw
     // follows that pair's rules.
-    private static GenerationResult Run(IReadOnlyList<Box> boxes, IReadOnlyList<TableDraw> draws, int players, IRandomSource random)
+    private static GenerationResult Run(IReadOnlyList<Box> boxes, IReadOnlyList<TableDraw> draws, int players, IRandomSource random, bool epic)
     {
         var schemes = boxes.SelectMany(box => box.AllSchemes).DistinctBy(scheme => scheme.Id)
             .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(players) ?? true)
@@ -140,7 +141,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             .Where(pair => pair.Draw is not null)
             .ToList();
         var (drawn, draw) = pairs[random.Next(pairs.Count)];
-        return draw!.Finish(scheme, drawn);
+        return draw!.Finish(scheme, epic ? draw.PlayedEpic(drawn) : drawn);
     }
 
     // One set of rules a table draw can follow: every loaded box, which holds the cards a Scheme requires from a box
@@ -174,6 +175,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // The included Masterminds a setup can draw: those whose parts the included boxes supply.
         public IReadOnlyList<Mastermind> Masterminds => _masterminds;
 
+        // The side the setup plays a drawn Mastermind on when the player asks for Epic Masterminds: its Epic side, unless
+        // that side uses a part no included box supplies, when it stays on its normal side as a Mastermind would be
+        // dropped for it (#185).
+        public Mastermind PlayedEpic(Mastermind mastermind) =>
+            mastermind.PlayedEpic() is var epic && Supplied(boxes, standIns, epic) ? epic : mastermind;
+
         // Whether a Scheme and Mastermind pair follows these rules.
         public bool Follows(Scheme scheme, Mastermind mastermind) => RulesOf(scheme, mastermind) == rulesBox.Ruleset;
 
@@ -188,7 +195,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var drainedDraws = plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value == true).ToList();
             // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out.
             var drained = new Queue<Mastermind>(DrawMany(
-                _masterminds.Where(other => other != mastermind && other.AlwaysLeads is not null && other.AlwaysLeads.GroupId != mastermind.AlwaysLeads?.GroupId && !other.RuledOutBy(scheme)),
+                _masterminds.Where(other => other.Id != mastermind.Id && other.AlwaysLeads is not null && other.AlwaysLeads.GroupId != mastermind.AlwaysLeads?.GroupId && !other.RuledOutBy(scheme)),
                 drainedDraws.Sum(draw => draw.Count)));
             var drainedLeads = drainedDraws
                 .SelectMany(draw => Enumerable.Repeat(draw.Rule.BringsAlwaysLeads!.Source, draw.Count))
@@ -221,7 +228,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // The Masterminds the Scheme draws besides its own, from the included ones the setup doesn't otherwise use.
             var drawnDrained = drainedLeads.Select(entry => entry.other).ToList();
             var otherMasterminds = new Queue<Mastermind>(DrawMany(
-                _masterminds.Where(other => other != mastermind && !drawnDrained.Contains(other)),
+                _masterminds.Where(other => other.Id != mastermind.Id && !drawnDrained.Contains(other)),
                 plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value != true).Sum(draw => draw.Count)));
             var drainedQueue = new Queue<Mastermind>(drawnDrained);
             var outsideMasterminds = plan.OutsideMasterminds

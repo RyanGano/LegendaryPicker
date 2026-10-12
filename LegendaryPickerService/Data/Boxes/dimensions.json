@@ -23,7 +23,7 @@
     {"id": "dimensions_henchman_spider-slayer", "name": "Spider-Slayer", "terms": ["core_term_fight"]}
   ],
   "masterminds": [
-    {"id": "dimensions_mastermind_j-jonah-jameson", "name": "J. Jonah Jameson", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "noir_term_investigate"], "uses": [{"part": "officers", "source": "Card"}, {"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "dimensions_henchman_spider-slayer", "groupType": "henchman", "source": "Card"}, "epic": {"name": "Epic J. Jonah Jameson", "source": "Card"}, "setup": {"steps": [{"label": "Put 2 Officers per player face down as the Angry Mobs stack", "source": "Card"}, {"label": "Optional: play the Epic side instead, with 3 Officers per player; Tactics stay the same", "source": "D p.2"}]}}
+    {"id": "dimensions_mastermind_j-jonah-jameson", "name": "J. Jonah Jameson", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic", "noir_term_investigate"], "uses": [{"part": "officers", "source": "Card"}, {"part": "wounds", "source": "Card"}], "alwaysLeads": {"groupId": "dimensions_henchman_spider-slayer", "groupType": "henchman", "source": "Card"}, "epic": {"name": "Epic J. Jonah Jameson", "source": "Card", "setup": {"steps": [{"label": "Put 3 Officers per player face down as the Angry Mobs stack", "source": "Card"}]}}, "setup": {"steps": [{"label": "Put 2 Officers per player face down as the Angry Mobs stack", "source": "Card"}, {"label": "Optional: play the Epic side instead, with 3 Officers per player; Tactics stay the same", "source": "D p.2", "offersEpic": true}]}}
   ],
   "schemes": [],
   "glossary": [

@@ -265,13 +265,14 @@ export async function getBoxes(): Promise<Box[]> {
   }
 }
 
-// Draws from the named boxes, or from the core box alone when boxes is empty.
+// Draws from the named boxes, or from the core box alone when boxes is empty. With epic, a drawn Mastermind that has
+// an Epic side is played on that side.
 // Throws on a network failure, a non-2xx status (bad count or boxes, rate limit, server error),
 // an unrecognised body, or no answer within REQUEST_TIMEOUT_MS.
-export async function getSetup(players: number, boxes: string[] = []): Promise<SetupResponse> {
+export async function getSetup(players: number, boxes: string[] = [], epic = false): Promise<SetupResponse> {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
-  const query = boxes.length > 0 ? `&boxes=${boxes.map(encodeURIComponent).join(',')}` : ''
+  const query = (boxes.length > 0 ? `&boxes=${boxes.map(encodeURIComponent).join(',')}` : '') + (epic ? '&epic=true' : '')
   try {
     const response = await fetch(`${apiBaseUrl}/api/setup?players=${players}${query}`, {
       signal: controller.signal,
