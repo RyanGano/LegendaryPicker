@@ -82,7 +82,7 @@ public sealed class SchemeFirstTests : IDisposable
                     }));
 
                 var derived = masterminds
-                    .Where(mastermind => (mastermind.AlwaysLeads is { } leads && AllBeside(leads.GroupId, leads.GroupType))
+                    .Where(mastermind => (mastermind.AlwaysLeads is { } leads && leads.GroupIds.All(id => AllBeside(id, leads.GroupType)))
                         || (mastermind.AlsoLeads is { } also && also.GroupIds.All(id => AllBeside(id, also.GroupType))))
                     .Select(mastermind => mastermind.Id)
                     .Order();

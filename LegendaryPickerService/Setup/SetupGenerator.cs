@@ -196,7 +196,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out. One with no Always
             // Leads group (Ego) is drawable too: it adds a Villain Group drawn by the normal rules instead (#211).
             var drained = new Queue<Mastermind>(DrawMany(
-                _masterminds.Where(other => other.Id != mastermind.Id && (other.AlwaysLeads is null || other.AlwaysLeads.GroupId != mastermind.AlwaysLeads?.GroupId) && !other.RuledOutBy(scheme)),
+                _masterminds.Where(other => other.Id != mastermind.Id && (other.AlwaysLeads is null || !other.AlwaysLeads.GroupIds.Intersect(mastermind.AlwaysLeads?.GroupIds ?? []).Any()) && !other.RuledOutBy(scheme)),
                 drainedDraws.Sum(draw => draw.Count)));
             var drainedLeads = drainedDraws
                 .SelectMany(draw => Enumerable.Repeat(draw.Rule.BringsAlwaysLeads!.Source, draw.Count))
@@ -788,6 +788,20 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             };
         }
 
+        // The group a Mastermind leads: its one group, or of several the one already chosen, else one drawn from those the
+        // pool still holds (all of them when it holds none), as the owner's ruling on an open choice says (#217).
+        private T LeadGroup<T>(AlwaysLeadsGroup leads, List<T> chosen, List<T> pool) where T : ICard
+        {
+            if (leads.OrGroupIds is null)
+            {
+                return (T)CatalogGroup(leads.GroupId);
+            }
+
+            var options = leads.GroupIds.Select(id => (T)CatalogGroup(id)).ToList();
+            var drawable = options.Intersect(pool).ToList();
+            return chosen.FirstOrDefault(options.Contains) ?? DrawOne(drawable.Count > 0 ? drawable : options);
+        }
+
         // Fills one group type's slots: the Scheme's required groups first, then the one it requires of several, then the Always Leads
         // group if a slot is left, then draws for the rest. A required group keeps its slot over
         // the Always Leads group. A required group from a box the setup doesn't include is still drawn, as the
@@ -830,8 +844,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             if (scheme.Setup.OneOfGroups is { } choice && choice.GroupType == type)
             {
                 var options = choice.GroupIds.Select(id => (T)CatalogGroup(id)).ToList();
-                var leadsOne = !Ignores(mastermind) && mastermind.AlwaysLeads is { } alwaysLeads && alwaysLeads.GroupType == type && choice.GroupIds.Contains(alwaysLeads.GroupId);
-                var group = leadsOne ? (T)CatalogGroup(mastermind.AlwaysLeads!.GroupId) : DrawOne(options);
+                var leadable = Ignores(mastermind) || mastermind.AlwaysLeads is not { } alwaysLeads || alwaysLeads.GroupType != type
+                    ? []
+                    : alwaysLeads.GroupIds.Where(choice.GroupIds.Contains).Select(id => (T)CatalogGroup(id)).ToList();
+                var group = leadable.Count switch { 0 => DrawOne(options), 1 => leadable[0], _ => DrawOne(leadable) };
                 chosen.Add(group);
                 required[group.Id] = new RequiredGroup(group.Id, type, choice.Source);
                 pool = pool.Where(g => g.Id == group.Id || !choice.GroupIds.Contains(g.Id)).ToList();
@@ -843,7 +859,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // The Always Leads group of each Mastermind the Scheme sets aside, as an extra group of its own.
             foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads?.GroupType == type))
             {
-                var group = (T)CatalogGroup(other.AlwaysLeads!.GroupId);
+                var group = LeadGroup(other.AlwaysLeads!, chosen, pool);
                 if (!chosen.Contains(group))
                 {
                     chosen.Add(group);
@@ -870,21 +886,27 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 }
                 else
                 {
-                    var group = (T)CatalogGroup(leads.GroupId);
-                    if (!chosen.Contains(group) && chosen.Count >= slots)
+                    // With every slot taken by groups that aren't one of its options, nothing is drawn: the note names
+                    // every option, since none of them is played.
+                    if (!chosen.Any(g => leads.GroupIds.Contains(g.Id)) && chosen.Count >= slots)
                     {
                         notes.Add(Note(
-                            $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(g => g.Name))}, so {mastermind.Name}'s Always Leads group {group.Name} is dropped",
+                            $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(g => g.Name))}, so {mastermind.Name}'s Always Leads group {string.Join(" or ", leads.GroupIds.Select(id => CatalogGroup(id).Name))} is dropped",
                             rules.Rulings.RequiredGroupDisplacesAlwaysLeads, rulesBox));
                     }
                     else
                     {
+                        var group = LeadGroup(leads, chosen, pool);
                         if (!chosen.Contains(group))
                         {
                             chosen.Add(group);
                         }
 
-                        notes.Add(Note($"{mastermind.Name} always leads {group.Name}", rules.Rulings.AlwaysLeadsFillsSlot, rulesBox));
+                        notes.Add(leads.OrGroupIds is null
+                            ? Note($"{mastermind.Name} always leads {group.Name}", rules.Rulings.AlwaysLeadsFillsSlot, rulesBox)
+                            : Note(
+                                $"{mastermind.Name} always leads {group.Name}, one of {string.Join(" and ", leads.GroupIds.Select(id => CatalogGroup(id).Name))}",
+                                leads.Source, BoxOf(mastermind.Id), mastermind.Id));
                         if (IgnoresAlwaysLeads)
                         {
                             notes.Add(Note($"{mastermind.Name} leads {group.Name} even in Solo", leads.Source, BoxOf(mastermind.Id), mastermind.Id));
@@ -1066,7 +1088,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var placed = plan.Required.Keys.ToHashSet();
             if (!Ignores(plan.Mastermind!))
             {
-                if (plan.Mastermind!.AlwaysLeads is { } leads) placed.Add(leads.GroupId);
+                placed.UnionWith(plan.Mastermind!.AlwaysLeads?.GroupIds ?? []);
                 placed.UnionWith(plan.Mastermind!.AlsoLeads?.GroupIds ?? []);
             }
 
@@ -1085,10 +1107,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 return [];
             }
 
-            var placed = plan.Required.Keys.Concat(drained.Where(entry => entry.Drained.AlwaysLeads is not null).Select(entry => entry.Drained.AlwaysLeads!.GroupId)).ToHashSet();
+            var placed = plan.Required.Keys.Concat(drained.Where(entry => entry.Drained.AlwaysLeads is not null).SelectMany(entry => entry.Drained.AlwaysLeads!.GroupIds)).ToHashSet();
             if (!Ignores(mastermind))
             {
-                if (mastermind.AlwaysLeads is { } leads) placed.Add(leads.GroupId);
+                placed.UnionWith(mastermind.AlwaysLeads?.GroupIds ?? []);
                 placed.UnionWith(mastermind.AlsoLeads?.GroupIds ?? []);
             }
 

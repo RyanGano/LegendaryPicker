@@ -314,6 +314,31 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     }
 
     [Theory]
+    [InlineData("[]")]
+    [InlineData("""["core_henchman_doombot-legion"]""")]
+    [InlineData("""["core_henchman_sentinel", "core_henchman_sentinel"]""")]
+    public void Rejects_Always_Leads_alternatives_that_give_no_real_choice(string orGroupIds)
+    {
+        WriteCoreBox(core => Mastermind(core, "core_mastermind_dr-doom")["alwaysLeads"] =
+            JsonNode.Parse($$"""{ "groupId": "core_henchman_doombot-legion", "orGroupIds": {{orGroupIds}}, "groupType": "henchman", "source": "Card" }"""));
+
+        AssertRejected($"core_mastermind_dr-doom alwaysLeads orGroupIds lists {orGroupIds.Replace("\"", "")}");
+    }
+
+    [Fact]
+    public void Rejects_an_other_Always_Leads_group_that_is_one_of_its_Always_Leads_options()
+    {
+        WriteCoreBox(core =>
+        {
+            var doom = Mastermind(core, "core_mastermind_dr-doom");
+            doom["alwaysLeads"] = JsonNode.Parse("""{ "groupId": "core_henchman_doombot-legion", "orGroupIds": ["core_henchman_sentinel"], "groupType": "henchman", "source": "Card" }""");
+            doom["alsoLeads"] = JsonNode.Parse("""{ "groupIds": ["core_henchman_sentinel", "core_henchman_hand-ninjas"], "groupType": "henchman", "source": "Card" }""");
+        });
+
+        AssertRejected("core_mastermind_dr-doom alsoLeads lists [core_henchman_sentinel, core_henchman_hand-ninjas]");
+    }
+
+    [Theory]
     [InlineData("core_villain_skrulls", "villain", 8, "requires core_villain_skrulls with 8 cards; a card count is for a henchman group and at least 1.")]
     [InlineData("core_henchman_sentinel", "henchman", 0, "requires core_henchman_sentinel with 0 cards; a card count is for a henchman group and at least 1.")]
     [InlineData("core_henchman_sentinel", "henchman", 11, "requires 11 cards of core_henchman_sentinel, which has 10.")]

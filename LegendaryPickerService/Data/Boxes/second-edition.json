@@ -479,9 +479,9 @@
      "source": "Card"
     }
    ],
-   "alsoLeads": {
-    "groupIds": [
-     "second-edition_villain_sinister-spider-foes",
+   "alwaysLeads": {
+    "groupId": "second-edition_villain_sinister-spider-foes",
+    "orGroupIds": [
      "second-edition_villain_sinister-syndicate"
     ],
     "groupType": "villain",

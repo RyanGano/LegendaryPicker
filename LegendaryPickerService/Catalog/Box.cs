@@ -246,7 +246,14 @@ public sealed record EpicSide(string Name, string Source, IReadOnlyList<PartUse>
 
 // EvenInSolo is true for a Mastermind whose card says it always leads the group in Solo too, as Ultron Infinity's
 // Ultron Sentries (#203): Solo's rule to ignore Always Leads then doesn't apply to it.
-public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source, bool EvenInSolo = false);
+// OrGroupIds are the other groups of the same type the card lets it lead instead, as Sinister Six 2099 leads Alchemax
+// Enforcers or False Aesir of Alchemax (#217): the setup takes one of them that is drawn already, or draws one into a slot.
+// GroupId then is the first of the options; with no OrGroupIds the card leads that one group.
+public sealed record AlwaysLeadsGroup(string GroupId, GroupType GroupType, string Source, bool EvenInSolo = false, IReadOnlyList<string>? OrGroupIds = null)
+{
+    // Every group the Mastermind may lead: GroupId, then OrGroupIds.
+    public IReadOnlyList<string> GroupIds => [GroupId, .. OrGroupIds ?? []];
+}
 
 // Groups of one type a Mastermind always leads one of, besides its Always Leads group: the setup takes one of them
 // that is drawn already, or draws one of those included into a slot, which it fills as the Always Leads group does. One

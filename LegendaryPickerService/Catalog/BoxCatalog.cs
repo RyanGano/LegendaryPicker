@@ -572,15 +572,21 @@ public sealed partial class BoxCatalog
                 throw new InvalidDataException($"{path}: {mastermind.Id} setup.requiredHeroes lists {twice.Key} more than once.");
             }
 
+            if (mastermind.AlwaysLeads is { OrGroupIds: { } or } && (or.Count == 0 || or.Contains(mastermind.AlwaysLeads.GroupId) || or.Distinct().Count() != or.Count))
+            {
+                throw new InvalidDataException(
+                    $"{path}: {mastermind.Id} alwaysLeads orGroupIds lists [{string.Join(", ", or)}]; it lists at least one other group, each once, and not its groupId.");
+            }
+
             if (mastermind.AlsoLeads is not { } also)
             {
                 continue;
             }
 
-            if (also.GroupIds.Count == 0 || also.GroupIds.Distinct().Count() != also.GroupIds.Count || also.GroupIds.Contains(mastermind.AlwaysLeads?.GroupId))
+            if (also.GroupIds.Count == 0 || also.GroupIds.Distinct().Count() != also.GroupIds.Count || also.GroupIds.Intersect(mastermind.AlwaysLeads?.GroupIds ?? []).Any())
             {
                 throw new InvalidDataException(
-                    $"{path}: {mastermind.Id} alsoLeads lists [{string.Join(", ", also.GroupIds)}]; it lists at least one group, each once, and not its alwaysLeads group.");
+                    $"{path}: {mastermind.Id} alsoLeads lists [{string.Join(", ", also.GroupIds)}]; it lists at least one group, each once, and none of its alwaysLeads groups.");
             }
         }
 
@@ -640,9 +646,12 @@ public sealed partial class BoxCatalog
 
         foreach (var mastermind in box.AllMasterminds)
         {
-            if (mastermind.AlwaysLeads is { } leads && !Own(leads.GroupId))
+            foreach (var groupId in mastermind.AlwaysLeads?.GroupIds ?? [])
             {
-                Refuse(mastermind.Id, "leads", leads.GroupId);
+                if (!Own(groupId))
+                {
+                    Refuse(mastermind.Id, "leads", groupId);
+                }
             }
 
             foreach (var hero in mastermind.Setup?.RequiredHeroes ?? [])
@@ -1109,7 +1118,7 @@ public sealed partial class BoxCatalog
             .Concat(box.Schemes.Select(x => ("scheme", x.Id, x.Name)));
 
     private static IEnumerable<(string Owner, string GroupId, GroupType GroupType)> GroupReferences(Box box) =>
-        box.Masterminds.Where(m => m.AlwaysLeads is not null).Select(m => (m.Id, m.AlwaysLeads!.GroupId, m.AlwaysLeads.GroupType))
+        box.Masterminds.Where(m => m.AlwaysLeads is not null).SelectMany(m => m.AlwaysLeads!.GroupIds.Select(id => (m.Id, id, m.AlwaysLeads.GroupType)))
             .Concat(box.Masterminds.SelectMany(m => (m.AlsoLeads?.GroupIds ?? []).Select(id => (m.Id, id, m.AlsoLeads!.GroupType))))
             .Concat(box.Schemes.SelectMany(s =>
                 (s.Setup.RequiredGroups ?? []).Select(g => (s.Id, g.GroupId, g.GroupType))

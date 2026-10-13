@@ -35,6 +35,21 @@ public class TwentyNinetyNineTests
         Assert.DoesNotContain(setup.Steps, step => step.Contains("play the Epic side"));
     }
 
+    // The card lets Sinister Six 2099 lead any "Alchemax" or "Sinister" group: Alchemax Enforcers or False Aesir of
+    // Alchemax, drawn at random (#217).
+    [Fact]
+    public void Sinister_Six_2099_can_lead_False_Aesir_of_Alchemax()
+    {
+        var included = Catalog.Boxes.Where(box => Boxes.Contains(box.Id)).ToList();
+        var s = included.SelectMany(box => box.AllSchemes).ToList().FindIndex(candidate => candidate.Name == "Pull Reality Into Cyberspace");
+        var m = included.SelectMany(box => box.AllMasterminds).ToList().FindIndex(candidate => candidate.Name == "Sinister Six 2099");
+
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(s, m, 1)));
+
+        Assert.Contains("False Aesir of Alchemax", setup.VillainGroups.Select(group => group.Name));
+        Assert.Contains(setup.Notes, note => note.Text == "Sinister Six 2099 always leads False Aesir of Alchemax, one of Alchemax Enforcers and False Aesir of Alchemax");
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind, bool epic)
     {
         var included = Catalog.Boxes.Where(box => Boxes.Contains(box.Id)).ToList();
