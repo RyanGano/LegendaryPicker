@@ -46,7 +46,10 @@ public sealed partial class BoxCatalog
 
     private BoxCatalog(IReadOnlyList<Box> boxes) => Boxes = boxes;
 
-    public static BoxCatalog Load(string directory)
+    public static BoxCatalog Load(string directory) => Load(directory, HeroRules.LoadBudget);
+
+    // heroSearchBudget is how many steps the load-time Hero rules check may take for one Scheme at one player count.
+    internal static BoxCatalog Load(string directory, int heroSearchBudget)
     {
         var files = Directory.GetFiles(directory, "*.json")
             .Order(StringComparer.Ordinal)
@@ -54,7 +57,7 @@ public sealed partial class BoxCatalog
             .ToList();
 
         files = ResolveReprints(files);
-        Validate(files);
+        Validate(files, heroSearchBudget);
 
         return new BoxCatalog(files.Select(file => file.Box).ToList());
     }
@@ -141,7 +144,7 @@ public sealed partial class BoxCatalog
     }
 
     // Checks across every loaded box, so a reference into another box resolves.
-    private static void Validate(IReadOnlyList<(string Path, Box Box)> files)
+    private static void Validate(IReadOnlyList<(string Path, Box Box)> files, int heroSearchBudget)
     {
         var declaredIn = new Dictionary<string, string>(StringComparer.Ordinal);
 
@@ -282,10 +285,10 @@ public sealed partial class BoxCatalog
                 throw new InvalidDataException($"{path}: {owner} references Hero {heroId}{Unresolved(heroId)}.");
             }
 
-            ValidateHeroRulesCanBeMet(path, box, heroes);
+            ValidateHeroRulesCanBeMet(path, box, heroes, heroSearchBudget);
         }
 
-        ValidateSchemeExclusions(files, heroes);
+        ValidateSchemeExclusions(files, heroes, heroSearchBudget);
 
         var terms = files
             .SelectMany(file => file.Box.Glossary)
@@ -1004,19 +1007,19 @@ public sealed partial class BoxCatalog
     // doesn't name are stand-ins of every team and Hero Name its rules or named Heroes mention, as many as a
     // setup could use, and the Hero Deck has room for every required Hero and every count. That the box's own
     // Heroes are enough is ValidateOwnBox's check.
-    private static void ValidateHeroRulesCanBeMet(string path, Box box, IReadOnlyDictionary<string, Hero> heroes)
+    private static void ValidateHeroRulesCanBeMet(string path, Box box, IReadOnlyDictionary<string, Hero> heroes, int budget)
     {
         foreach (var scheme in box.Schemes)
         {
             foreach (var players in scheme.Setup.AllowedPlayerCounts?.Value ?? Enumerable.Range(MinPlayers, MaxPlayers - MinPlayers + 1))
             {
-                if (CanMeetHeroRules(scheme.Setup, players, heroes))
+                if (CanMeetHeroRules(scheme.Setup, players, heroes, path, scheme.Id, budget))
                 {
                     continue;
                 }
 
                 var culprits = HeroRulesLeftOut(scheme.Setup)
-                    .Where(rule => CanMeetHeroRules(rule.Without, players, heroes))
+                    .Where(rule => CanMeetHeroRules(rule.Without, players, heroes, path, scheme.Id, budget))
                     .Select(rule => rule.Name)
                     .ToList();
                 throw new InvalidDataException(
@@ -1029,7 +1032,7 @@ public sealed partial class BoxCatalog
     // A Scheme excludes Masterminds of its own ruleset, from any box (a Scheme of one box can rule out another box's
     // Mastermind). A Scheme that limits Heroes must also list every Mastermind whose required Heroes its Hero rules
     // can't take with its own, since the draw puts them in the Hero Deck beside the Scheme's (#205).
-    private static void ValidateSchemeExclusions(IReadOnlyList<(string Path, Box Box)> files, IReadOnlyDictionary<string, Hero> heroes)
+    private static void ValidateSchemeExclusions(IReadOnlyList<(string Path, Box Box)> files, IReadOnlyDictionary<string, Hero> heroes, int budget)
     {
         foreach (var (path, box) in files)
         {
@@ -1057,7 +1060,7 @@ public sealed partial class BoxCatalog
                         RequiredHeroes = (setup.RequiredHeroes ?? []).Concat(mastermind.Setup!.RequiredHeroes!).DistinctBy(rule => rule.HeroId).ToList(),
                     };
                     var clash = (setup.AllowedPlayerCounts?.Value ?? Enumerable.Range(MinPlayers, MaxPlayers - MinPlayers + 1))
-                        .Where(players => !CanMeetHeroRules(together, players, heroes))
+                        .Where(players => !CanMeetHeroRules(together, players, heroes, path, scheme.Id, budget))
                         .Cast<int?>().FirstOrDefault();
                     if (clash is { } players)
                     {
@@ -1070,7 +1073,22 @@ public sealed partial class BoxCatalog
         }
     }
 
-    private static bool CanMeetHeroRules(SchemeSetup setup, int players, IReadOnlyDictionary<string, Hero> heroes)
+    // Whether the Scheme's Hero rules can be met, searching within a budget of nodes; a Scheme that needs more
+    // fails the load by name rather than hanging it (#145).
+    private static bool CanMeetHeroRules(SchemeSetup setup, int players, IReadOnlyDictionary<string, Hero> heroes, string path, string schemeId, int budget)
+    {
+        try
+        {
+            return CanMeetHeroRules(setup, players, heroes, new HeroRules.SearchBudget(budget));
+        }
+        catch (HeroRules.SearchBudgetExceeded)
+        {
+            throw new InvalidDataException(
+                $"{path}: {schemeId} has Hero rules too tangled to check within {budget} search steps at {players} {(players == 1 ? "player" : "players")}; simplify its Hero counts.");
+        }
+    }
+
+    private static bool CanMeetHeroRules(SchemeSetup setup, int players, IReadOnlyDictionary<string, Hero> heroes, HeroRules.SearchBudget budget)
     {
         var required = (setup.RequiredHeroes ?? []).Select(rule => heroes[rule.HeroId]).ToList();
         var counts = setup.HeroCounts ?? [];
@@ -1093,7 +1111,7 @@ public sealed partial class BoxCatalog
             .Select((standIn, index) => new Hero($"stand-in_{index}", standIn.Name ?? $"stand-in {index}", standIn.Team, [], []))
             .ToList();
 
-        return new HeroRules([.. named, .. standIns], deckSlots, setup, outside).CanComplete(required, []);
+        return new HeroRules([.. named, .. standIns], deckSlots, setup, outside, budget).CanComplete(required, []);
     }
 
     // The Scheme's Hero rules, each with the setup that leaves it out.

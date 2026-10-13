@@ -11,6 +11,11 @@ namespace LegendaryPickerService.Setup;
 // such Hero once per team, as a side, and uses at most one side of it.
 internal sealed class HeroRules
 {
+    // The most nodes the load-time check may visit for one Scheme at one player count (#145). The real Schemes need
+    // at most 8; a Scheme beyond this has Hero counts so tangled that the check would run for minutes, and
+    // the loader refuses it by name instead of hanging startup. Draws pass no budget.
+    internal const int LoadBudget = 100_000;
+
     // How many times the search has checked the Hero Deck's counts on this thread, so a test can bound the search's
     // work without timing it (#161).
     [ThreadStatic]
@@ -20,6 +25,7 @@ internal sealed class HeroRules
     private readonly IReadOnlyList<HeroCount> _counts;
     private readonly bool _distinctNames;
     private readonly Dictionary<Hero, string> _kinds;
+    private readonly SearchBudget? _budget;
 
     // The Scheme's different draws outside the Hero Deck, and, when no two Heroes may share a Hero Name, the Hero
     // Names more than one included Hero has.
@@ -33,10 +39,28 @@ internal sealed class HeroRules
     // exact team counts; the Heroes can be completed when any one of them can.
     private readonly List<HeroRules>? _splits;
 
+    // How many nodes the search may still visit, shared by the rules of a team split. A node is one check of the Hero
+    // Deck's counts. Spending past the limit throws SearchBudgetExceeded.
+    internal sealed class SearchBudget(int limit)
+    {
+        public int Used { get; private set; }
+
+        public void Spend()
+        {
+            if (++Used > limit)
+            {
+                throw new SearchBudgetExceeded();
+            }
+        }
+    }
+
+    internal sealed class SearchBudgetExceeded : Exception;
+
     // heroes are the included Heroes in catalog order; outsideSlots has one entry per Hero drawn outside
     // the Hero Deck, in the order the Scheme lists its draws.
-    public HeroRules(IReadOnlyList<Hero> heroes, int deckSlots, SchemeSetup scheme, IReadOnlyList<OutsideHeroes> outsideSlots)
+    public HeroRules(IReadOnlyList<Hero> heroes, int deckSlots, SchemeSetup scheme, IReadOnlyList<OutsideHeroes> outsideSlots, SearchBudget? budget = null)
     {
+        _budget = budget;
         _counts = scheme.HeroCounts ?? [];
         _bySide = _counts.Any(count => count.Team is not null);
         _distinctNames = scheme.DistinctHeroNames?.Value ?? false;
@@ -56,7 +80,7 @@ internal sealed class HeroRules
                 {
                     TeamSplit = null,
                     HeroCounts = [.. _counts, .. teams.Zip(split.Value, (team, count) => new HeroCount(split.Source, Team: team, Exactly: count))],
-                }, outsideSlots))
+                }, outsideSlots, budget))
                 .ToList();
         }
     }
@@ -163,6 +187,7 @@ internal sealed class HeroRules
         bool CountsReachable(int from)
         {
             CountChecks++;
+            _budget?.Spend();
             var left = DeckSlots - deck.Count;
             var needs = _counts
                 .Select(count => (Count: count, Have: deck.Count(hero => count.Matches(hero))))

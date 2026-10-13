@@ -165,6 +165,11 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\DrainedNoLeads\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- One made-up box, with its own teams, whose one Scheme has several overlapping Hero counts. -->
+  <ItemGroup>
+    <None Include="Fixtures\HeroRulesBudget\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LegendaryPickerService\LegendaryPickerService.csproj" />
   </ItemGroup>
