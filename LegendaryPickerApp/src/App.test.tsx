@@ -507,7 +507,7 @@ describe('App', () => {
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
 
-    await user.click(await screen.findByRole('checkbox', { name: "Marvel Studios' What If...? Base game Revised rules" }))
+    await user.click(await screen.findByRole('checkbox', { name: "Marvel Studios' What If...? Base game Second Edition rules" }))
     await user.click(screen.getByRole('checkbox', { name: 'Legendary: Villains Base game' }))
 
     expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
@@ -521,13 +521,14 @@ describe('App', () => {
     const user = userEvent.setup()
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
-    await screen.findByRole('checkbox', { name: 'Marvel Legendary Second Edition Base game Revised rules' })
+    await screen.findByRole('checkbox', { name: 'Marvel Legendary Second Edition Base game Second Edition rules' })
 
     expect(screen.queryByRole('radiogroup', { name: 'Rules' })).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary Second Edition Base game Revised rules' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary Second Edition Base game Second Edition rules' }))
     const rules = screen.getByRole('radiogroup', { name: 'Rules' })
     expect(within(rules).getByRole('radio', { name: 'Default Set by the boxes' })).toBeChecked()
+    expect(within(rules).getByRole('radio', { name: 'Second Edition Also What If...?' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Generate' }))
     await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
 
@@ -589,7 +590,7 @@ describe('App', () => {
 
     await user.click(await screen.findByRole('button', { name: 'About What If' }))
 
-    expect(screen.getByRole('dialog', { name: 'What If' })).toHaveTextContent('Revised rules')
+    expect(screen.getByRole('dialog', { name: 'What If' })).toHaveTextContent('Second Edition rules')
   })
 
   it('remembers the ticked boxes on the next visit and forgets boxes the API no longer lists', async () => {

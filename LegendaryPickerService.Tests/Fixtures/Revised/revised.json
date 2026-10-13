@@ -14,6 +14,10 @@
     {
       "key": "R",
       "url": "https://example.test/revised-rules.pdf"
+    },
+    {
+      "key": "D-editions",
+      "url": "https://example.test/editions"
     }
   ],
   "components": {

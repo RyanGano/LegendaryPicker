@@ -22,10 +22,10 @@ const EPIC_KEY = 'legendaryPicker.epic'
 // The rule edition the player chose for boxes of more than one ruleset, or none for the boxes' default (#240).
 const RULES_KEY = 'legendaryPicker.rules'
 // The rule editions a player can choose, after the default.
-const RULE_EDITIONS: { id: RuleEdition; name: string }[] = [
+const RULE_EDITIONS: { id: RuleEdition; name: string; detail?: string }[] = [
   { id: 'first-edition', name: 'First Edition' },
   { id: 'villains', name: 'Villains' },
-  { id: 'revised', name: 'Revised' },
+  { id: 'revised', name: 'Second Edition', detail: 'Also What If...?' },
 ]
 // The expansions a returning player included before base games became picks (#71). The core box was
 // always in the setup then, so it joins them when they move to BOXES_KEY.
@@ -338,7 +338,7 @@ function App() {
                         />
                         <span className="box-name">{box.name}</span>
                         {box.baseGame && <> <span className="detail">Base game</span></>}
-                        {box.ruleset === 'revised' && <> <span className="detail ruleset-tag">Revised rules</span></>}
+                        {box.ruleset === 'revised' && <> <span className="detail ruleset-tag">Second Edition rules</span></>}
                       </label>
                       <BoxInfo box={box} />
                     </div>
@@ -371,6 +371,7 @@ function App() {
                         onChange={() => chooseRules(edition.id)}
                       />
                       <span className="box-name">{edition.name}</span>
+                      {edition.detail && <> <span className="detail">{edition.detail}</span></>}
                     </label>
                   ))}
                 </div>
