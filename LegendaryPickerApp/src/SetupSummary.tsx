@@ -11,11 +11,20 @@ import { TermChips } from './TermChips.tsx'
 // its name. Card types use the words of the setup's ruleset, or in a mixed setup each card's own ruleset's.
 // When the included boxes follow more than one ruleset, a line under the heading says which rules the
 // setup follows and why. On a wide screen this sits beside the checklist.
-export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?: Ref<HTMLHeadingElement> }) {
+// A Mastermind that joins mid-game is a hidden card until the player reveals it in the checklist.
+export function SetupSummary({
+  setup,
+  headingRef,
+  mastermindShown = false,
+}: {
+  setup: Setup
+  headingRef?: Ref<HTMLHeadingElement>
+  mastermindShown?: boolean
+}) {
   // An API from before them leaves these out; read that as none.
   const { outsideHeroes = [], outsideHenchmen = [], outsideMasterminds = [] } = setup
   const glossary = new Map(setup.glossary.map((entry) => [entry.id, entry]))
-  const t = setupTerms(setup)
+  const t = setupTerms(setup, setup.mastermindReveal !== undefined && !mastermindShown)
   const chipsOf = (component: Component) => (
     <TermChips terms={component.terms.flatMap((id) => glossary.get(id) ?? [])} hero={cardTerms(setup, [component]).hero} />
   )
@@ -47,13 +56,21 @@ export function SetupSummary({ setup, headingRef }: { setup: Setup; headingRef?:
       <section className="summary" aria-label="Drawn cards">
         <div className="headline-cards">
           <HeadlineCard type={t.scheme} kind="scheme" component={setup.scheme} chips={chipsOf(setup.scheme)} />
-          <HeadlineCard
-            type={t.mastermind}
-            kind="mastermind"
-            component={setup.mastermind}
-            chips={chipsOf(setup.mastermind)}
-            tags={alwaysLeadsNotes(setup.notes)}
-          />
+          {setup.mastermindReveal && !mastermindShown ? (
+            <div className="headline-card mastermind">
+              <p className="card-type">{t.mastermind}</p>
+              <h3>Hidden</h3>
+              <p className="hidden-mastermind">Reveal it in the checklist.</p>
+            </div>
+          ) : (
+            <HeadlineCard
+              type={t.mastermind}
+              kind="mastermind"
+              component={setup.mastermind}
+              chips={chipsOf(setup.mastermind)}
+              tags={alwaysLeadsNotes(setup.notes)}
+            />
+          )}
         </div>
         {outsideMasterminds.length > 0 && (
           <TileGroup

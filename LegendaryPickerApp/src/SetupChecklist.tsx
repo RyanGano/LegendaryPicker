@@ -1,5 +1,5 @@
 import { Fragment, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import type { CardKind, CardsBeside, Component, Move, Pile, Setup, SetupStacks } from './api/setupApi.ts'
+import type { CardKind, CardsBeside, Component, Move, Pile, RuleNote, Setup, SetupStacks } from './api/setupApi.ts'
 import { cardTerms, setupTerms, startingDeckTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { SpecialCardsInfo } from './SpecialCardsInfo.tsx'
 import { TermKind } from './TermChips.tsx'
@@ -10,7 +10,19 @@ import { TermKind } from './TermChips.tsx'
 // names each card by its own ruleset's word and a part holding both kinds by both words. The ticks are
 // local state, so a new setup, which remounts this component, starts unticked. The progress line counts
 // the tick boxes on the page, so it can never disagree with the lines shown.
-export function SetupChecklist({ setup }: { setup: Setup }) {
+// A Mastermind that joins mid-game is a button until the player reveals it, which shows it with its Always Leads
+// groups and Start of Game effects. The app owns that state so the summary stays in step; alone, the checklist keeps it.
+export function SetupChecklist({
+  setup,
+  mastermindShown,
+  onShowMastermind,
+}: {
+  setup: Setup
+  mastermindShown?: boolean
+  onShowMastermind?: () => void
+}) {
+  const [shownHere, setShownHere] = useState(false)
+  const shown = mastermindShown ?? shownHere
   // An API from before card moves, Heroes outside the Hero Deck, Henchman Groups outside the Villain Deck, cards
   // of a group beside the Scheme, setup steps or other Masterminds leaves them out; the site can deploy first, so
   // read that as none.
@@ -29,7 +41,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     standIns = [],
     specialCards = [],
   } = setup
-  const t = setupTerms(setup)
+  const t = setupTerms(setup, setup.mastermindReveal !== undefined && !shown)
   const villainTerms = cardTerms(setup, setup.villainGroups)
   const henchmanTerms = cardTerms(setup, setup.henchmanGroups)
   const heroTerms = cardTerms(setup, setup.heroes)
@@ -41,7 +53,10 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
   const [progress, setProgress] = useState({ ticked: 0, total: 0 })
   const countTicks = () => setProgress(tickProgress(article.current!))
 
-  useLayoutEffect(() => setProgress(tickProgress(article.current!)), [setup])
+  // Revealing a hidden Mastermind adds its lines, so the count follows it too.
+  useLayoutEffect(() => setProgress(tickProgress(article.current!)), [setup, shown])
+  const hiddenTerms = new Set(setup.mastermindReveal && !shown ? setup.mastermindReveal.terms : [])
+  const glossary = setup.glossary.filter((term) => !hiddenTerms.has(term.id))
 
   return (
     <article className="setup" ref={article} onChange={countTicks}>
@@ -51,7 +66,36 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
 
       <Section title={`${t.scheme} and ${t.mastermind}`} kind="mastermind">
         <Item label={names([setup.scheme])} detail={t.scheme} />
-        <Item label={names([setup.mastermind])} detail={t.mastermind} />
+        {setup.mastermindReveal && !shown ? (
+          <li className="row reveal-row">
+            <button
+              type="button"
+              className="reveal-button"
+              aria-expanded="false"
+              onClick={() => (onShowMastermind ?? (() => setShownHere(true)))()}
+            >
+              Reveal {t.mastermind}
+            </button>
+            <span className="detail">joins when the Bodyguards are gone</span>
+          </li>
+        ) : (
+          <Item label={names([setup.mastermind])} detail={t.mastermind} />
+        )}
+        {setup.mastermindReveal && shown && (
+          <>
+            {setup.mastermindReveal.alwaysLeads.map((group) => (
+              <Item
+                key={group.id}
+                label={names([group])}
+                detail={`Always Leads, not in this ${t.villainDeck}: the ${t.mastermind} arrives after setup`}
+              />
+            ))}
+            {setup.mastermindReveal.notes.length > 0 && <li className="reveal-heading">Start of Game</li>}
+            {setup.mastermindReveal.notes.map((note) => (
+              <NoteLine key={`${note.text}|${note.citation}`} note={note} className="reveal-note" />
+            ))}
+          </>
+        )}
       </Section>
 
       <Section title={t.villainDeck} kind="villain">
@@ -214,26 +258,14 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
       {setup.notes.length > 0 && (
         <Section title="Why this setup" className="notes">
           {setup.notes.map((note) => (
-            <li key={`${note.text}|${note.citation}`}>
-              {note.text}{' '}
-              <cite>
-                {note.link ? (
-                  <a href={note.link} target="_blank" rel="noreferrer">
-                    {note.citation}
-                  </a>
-                ) : (
-                  note.citation
-                )}
-              </cite>
-              {note.box && <span className="source-box">{note.box}</span>}
-            </li>
+            <NoteLine key={`${note.text}|${note.citation}`} note={note} />
           ))}
         </Section>
       )}
 
-      {setup.glossary.length > 0 && (
+      {glossary.length > 0 && (
         <Section title="Terms in this setup" className="glossary">
-          {setup.glossary.map((term) => (
+          {glossary.map((term) => (
             <li key={term.id} className={term.kind}>
               <span className="term-name">{term.name}</span>{' '}
               <span className="detail">
@@ -251,6 +283,25 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
         </Section>
       )}
     </article>
+  )
+}
+
+// One rule note with its citation, linked when the source is published, and the box it comes from.
+function NoteLine({ note, className }: { note: RuleNote; className?: string }) {
+  return (
+    <li className={className}>
+      {note.text}{' '}
+      <cite>
+        {note.link ? (
+          <a href={note.link} target="_blank" rel="noreferrer">
+            {note.citation}
+          </a>
+        ) : (
+          note.citation
+        )}
+      </cite>
+      {note.box && <span className="source-box">{note.box}</span>}
+    </li>
   )
 }
 

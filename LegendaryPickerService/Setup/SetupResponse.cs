@@ -52,15 +52,28 @@ public abstract record SetupResponse
             .Select(aside => new VillainsSetAsideBody(glossary.Component(aside.Group.Id, aside.Group.Name, aside.Group.Terms), aside.Count))
             .ToList();
 
-        Component[] components =
+        Component[] shown =
         [
-            scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(outside => outside.Group),
+            scheme, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(outside => outside.Group),
             .. heroes, .. outsideHeroes.Select(outside => outside.Hero), .. cardsBeside.Select(beside => beside.Group),
             .. outsideMasterminds.Select(outside => outside.Mastermind),
         ];
 
         // A stack the setup lays out brings the terms its included boxes attach to it (#127).
-        var stackTerms = setup.Boxes.SelectMany(box => box.StackTerms ?? []).Where(stack => setup.Stacks.Lays(stack.Part)).Select(stack => stack.Term);
+        var stackTerms = setup.Boxes.SelectMany(box => box.StackTerms ?? []).Where(stack => setup.Stacks.Lays(stack.Part)).Select(stack => stack.Term).ToList();
+
+        // A Mastermind that joins mid-game hides with it the terms only it and its Always Leads groups bring, so the
+        // glossary doesn't give it away before the reveal.
+        MastermindRevealBody? reveal = null;
+        if (setup.MastermindReveal is { } later)
+        {
+            var alwaysLeads = later.AlwaysLeads.Select(group => glossary.Component(group.Id, group.Name, group.Terms)).ToList();
+            var visible = shown.SelectMany(component => component.Terms).Concat(stackTerms).ToHashSet(StringComparer.Ordinal);
+            var hidden = glossary.Entries(mastermind.Terms.Concat(alwaysLeads.SelectMany(group => group.Terms)).Where(term => !visible.Contains(term)));
+            reveal = new MastermindRevealBody(alwaysLeads, later.Notes, hidden.Select(entry => entry.Id).ToList());
+        }
+
+        Component[] components = [.. shown, mastermind, .. reveal?.AlwaysLeads ?? []];
 
         var specialCards = setup.Boxes
             .SelectMany(box => (box.SpecialCards ?? []).Where(special => setup.Stacks.Lays(special.Stack)).Select(special => new SpecialCardsBody(special.Stack, box.Name, special.Cards)))
@@ -91,7 +104,8 @@ public abstract record SetupResponse
             setup.StandIns is { Count: > 0 } standIns ? standIns : null,
             outsideMasterminds.Count > 0 ? outsideMasterminds : null,
             villainsSetAside.Count > 0 ? villainsSetAside : null,
-            specialCards.Count > 0 ? specialCards : null);
+            specialCards.Count > 0 ? specialCards : null,
+            reveal);
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
@@ -164,6 +178,8 @@ public abstract record SetupResponse
 // OutsideMasterminds lists the Masterminds the Scheme draws besides its own, written only when it draws any. VillainsSetAside
 // lists the extra Villain Groups whose Villains the Mastermind sets aside, written only when it does. SpecialCards lists
 // the special cards each included box shuffles into a stack the setup lays out, written only when there are any (#244).
+// MastermindReveal is written only when the Scheme adds its Mastermind mid-game (#245): the checklist then hides mastermind
+// behind a button, and the reveal holds what it shows with it.
 public sealed record SetupBody(
     int Players,
     Ruleset Ruleset,
@@ -189,7 +205,8 @@ public sealed record SetupBody(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<StandIn>? StandIns = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<OutsideMastermindBody>? OutsideMasterminds = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<VillainsSetAsideBody>? VillainsSetAside = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<SpecialCardsBody>? SpecialCards = null) : SetupResponse
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<SpecialCardsBody>? SpecialCards = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] MastermindRevealBody? MastermindReveal = null) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";
@@ -231,6 +248,11 @@ public sealed record OutsideMastermindBody(
     Pile To,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Tactics,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Joins = null);
+
+// What revealing a Mastermind that joins mid-game shows besides it: the groups it always leads, which are not in the
+// Villain Deck, the notes for its Start of Game effects, and the ids of the glossary terms only it and those groups bring,
+// which the checklist leaves out of the glossary until the reveal.
+public sealed record MastermindRevealBody(IReadOnlyList<Component> AlwaysLeads, IReadOnlyList<RuleNote> Notes, IReadOnlyList<string> Terms);
 
 // The Villains of an extra Villain Group the Mastermind sets aside, count of them, written only when it sets any aside.
 public sealed record VillainsSetAsideBody(Component Group, int Count);

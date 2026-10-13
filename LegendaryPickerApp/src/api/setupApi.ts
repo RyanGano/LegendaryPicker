@@ -100,6 +100,15 @@ export type OutsideHenchmen = {
   cards: number
 }
 
+// What revealing a Mastermind that joins mid-game shows with it: the groups it always leads, which are not in the
+// Villain Deck, notes for the Start of Game effects its card prints, and the ids of the glossary terms only it and
+// those groups bring, which stay out of the glossary until the reveal.
+export type MastermindReveal = {
+  alwaysLeads: Component[]
+  notes: RuleNote[]
+  terms: string[]
+}
+
 // A Mastermind a Scheme draws besides its own: set aside whole until the Scheme brings it into play, or tactics of
 // its Tactics into the Villain Deck, where they play as Villains.
 export type OutsideMastermind = {
@@ -213,6 +222,8 @@ export type Setup = {
   outsideHenchmen?: OutsideHenchmen[]
   // Left out by an API from before cards of a group beside the Scheme.
   cardsBeside?: CardsBeside[]
+  // Present only when the Scheme adds its Mastermind mid-game: the app hides mastermind until the player reveals it.
+  mastermindReveal?: MastermindReveal
   // Present only when the Scheme draws Masterminds besides its own.
   outsideMasterminds?: OutsideMastermind[]
   // Present only when the Mastermind sets aside the Villains of an extra Villain Group.

@@ -97,6 +97,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\MastermindTwists\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Scheme adds its Mastermind mid-game, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\MastermindLater\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\MastermindLater\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Schemes set cards of a group beside them, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\CardsBeside\*.json" CopyToOutputDirectory="PreserveNewest" />

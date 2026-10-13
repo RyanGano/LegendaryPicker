@@ -353,7 +353,9 @@ public sealed record SetupStep(string Label, string Source, bool OffersEpic = fa
 // A.I.M., Hydra Offshoot or Hydra Elite but not both (#172). Officers sets the S.H.I.E.L.D. Officer stack to a size, as
 // Secret HYDRA Corruption's 30 Officers even when S.H.I.E.L.D.'s special Officers are included (#172).
 // VillainCards sets how many cards of each Villain Group go in the Villain Deck, replacing all of it, as Star-Lord's Awesome
-// Mix Tape's half of each group.
+// Mix Tape's half of each group. MastermindJoinsLater is true for a Scheme whose card has no Mastermind at setup and adds a
+// random one mid-game, as Enshrouded Identity does when its Bodyguards are gone (#245): the Mastermind is still drawn, but
+// its Always Leads groups and setup effects are not part of the setup.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -384,7 +386,8 @@ public sealed record SchemeSetup(
     GroupChoice? OneOfGroups = null,
     Sourced<int>? Officers = null,
     Sourced<int>? VillainCards = null,
-    IReadOnlyList<MastermindTwists>? MastermindTwists = null)
+    IReadOnlyList<MastermindTwists>? MastermindTwists = null,
+    Sourced<bool>? MastermindJoinsLater = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps, HenchmanCards, RequiredHeroes);
 
 // A Twist count a Scheme prints for one Mastermind of its box, which replaces the Scheme's own Twists when that

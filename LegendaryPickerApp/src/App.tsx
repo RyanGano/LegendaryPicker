@@ -170,7 +170,10 @@ function announcement(status: Status, showWakeUpNotice: boolean) {
       }`
     case 'result': {
       const terms = setupTerms(status.setup)
-      return `Setup ready. ${terms.scheme}: ${status.setup.scheme.name}. ${terms.mastermind}: ${status.setup.mastermind.name}.`
+      // A Mastermind that joins mid-game stays hidden, so the line doesn't name it.
+      return status.setup.mastermindReveal
+        ? `Setup ready. ${terms.scheme}: ${status.setup.scheme.name}.`
+        : `Setup ready. ${terms.scheme}: ${status.setup.scheme.name}. ${terms.mastermind}: ${status.setup.mastermind.name}.`
     }
     case 'noEligibleScheme':
       return `${status.message} Pick another player count.`
@@ -186,6 +189,7 @@ function App() {
   const [epic, setEpic] = useState(loadEpic)
   const [rules, setRules] = useState<RuleEdition | null>(loadRules)
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
+  const [mastermindShown, setMastermindShown] = useState(false)
   // The intro explains the app until there is a setup on screen to explain it instead, so a first draw
   // that fails or finds no legal Scheme keeps it.
   const [shownSetup, setShownSetup] = useState(false)
@@ -262,6 +266,7 @@ function App() {
   async function generate() {
     if (players === null) return
     setStatus({ kind: 'loading', players })
+    setMastermindShown(false)
     try {
       const available = await boxesRequest.current
       const drawn = available.filter(isIncluded)
@@ -393,7 +398,7 @@ function App() {
               </p>
             )}
           </section>
-          {status.kind === 'result' && <SetupSummary setup={status.setup} headingRef={resultHeading} />}
+          {status.kind === 'result' && <SetupSummary setup={status.setup} headingRef={resultHeading} mastermindShown={mastermindShown} />}
         </div>
 
         {/* Announces each state change. The status below is not live, so a new checklist isn't read
@@ -412,7 +417,7 @@ function App() {
               <SetupSkeleton />
             </>
           )}
-          {status.kind === 'result' && <SetupChecklist setup={status.setup} />}
+          {status.kind === 'result' && <SetupChecklist setup={status.setup} mastermindShown={mastermindShown} onShowMastermind={() => setMastermindShown(true)} />}
           {status.kind === 'noEligibleScheme' && (
             <div className="state-card scheme">
               <p>{status.message}</p>

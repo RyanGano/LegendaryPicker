@@ -13,7 +13,9 @@ public sealed record NoEligibleScheme(int Players) : GenerationResult;
 // When the included boxes follow more than one ruleset, the Scheme and Mastermind decide the Ruleset and
 // RulesReason says why; Mixed is true when the drawn cards themselves come from more than one ruleset.
 // StandIns are the parts no included box supplies that the drawn cards use, each replaced by its stand-in (D-heroic).
-// OutsideMasterminds are the Masterminds the Scheme draws besides its own (#113).
+// OutsideMasterminds are the Masterminds the Scheme draws besides its own (#113). MastermindReveal is present when the
+// Scheme adds its Mastermind mid-game (#245): the Mastermind is drawn, but the setup has none of its Always Leads groups or
+// setup effects; they are listed there for the player to apply when it arrives.
 public sealed record SetupResult(
     int Players,
     Ruleset Ruleset,
@@ -38,7 +40,8 @@ public sealed record SetupResult(
     RuleNote? RulesReason = null,
     IReadOnlyList<StandIn>? StandIns = null,
     IReadOnlyList<OutsideMastermind>? OutsideMasterminds = null,
-    IReadOnlyList<VillainsSetAside>? VillainsSetAside = null) : GenerationResult;
+    IReadOnlyList<VillainsSetAside>? VillainsSetAside = null,
+    MastermindReveal? MastermindReveal = null) : GenerationResult;
 
 // MovedIn and MovedOut count the cards the setup's moves put in the deck and take out of it, and SetBeside
 // the cards of its drawn groups the Scheme sets beside it. The response lists each move under the setup's
@@ -89,6 +92,10 @@ public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Card
 // A Mastermind a Scheme draws besides its own, and the pile it goes to: set aside whole until the Scheme brings it
 // into play, or Tactics of its Tactics into the Villain Deck. Tactics is null when it is set aside. Joins says when a set-aside Mastermind comes into play, when the Scheme says.
 public sealed record OutsideMastermind(Mastermind Mastermind, Pile To, int? Tactics, string? Joins = null);
+
+// What the player applies when a Mastermind that joins mid-game arrives: the groups it always leads, which are not in the
+// Villain Deck, and the notes for the Start of Game effects its card prints.
+public sealed record MastermindReveal(IReadOnlyList<ICard> AlwaysLeads, IReadOnlyList<RuleNote> Notes);
 
 // The Villains of an extra Villain Group a Mastermind sets aside, Count of them, which its group puts in the Villain Deck
 // no more (#208).

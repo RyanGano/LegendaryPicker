@@ -237,8 +237,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         public bool Follows(Scheme scheme, Mastermind mastermind) => edition is not null || RulesOf(scheme, mastermind) == rulesBox.Ruleset;
 
         // Draws the rest of the setup for a Scheme and Mastermind pair that follows these rules.
-        public SetupResult Finish(Scheme scheme, Mastermind mastermind)
+        public SetupResult Finish(Scheme scheme, Mastermind drawnMastermind)
         {
+            // A Scheme that adds its Mastermind mid-game (Enshrouded Identity, #245) still has one drawn, but its Always Leads
+            // groups and setup effects are no part of the setup: the rest of the draw sees it without them, and they are
+            // returned as the lines shown when the player reveals it.
+            var joinsLater = scheme.Setup.MastermindJoinsLater?.Value == true;
+            var mastermind = joinsLater ? drawnMastermind with { AlwaysLeads = null, AlsoLeads = null, Setup = null } : drawnMastermind;
             var plan = WithMastermind(Plan(scheme), mastermind);
             var slotNotes = new List<RuleNote>();
 
@@ -306,7 +311,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // The groups whose cards sit beside the Scheme count among them.
             ICard[] cards =
             [
-                plan.Scheme, mastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(group => group.Group),
+                plan.Scheme, drawnMastermind, .. villainGroups, .. henchmanGroups, .. outsideHenchmen.Select(group => group.Group),
                 .. heroes, .. outside.Select(hero => hero.Hero), .. beside.Select(cards => cards.Group),
                 .. outsideMasterminds.Select(other => other.Mastermind),
             ];
@@ -456,7 +461,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
                 if (RulesetOf(mastermind.Id) == mixingBox.Ruleset)
                 {
-                    deciders.Add($"the {words.Mastermind} is {Called(mastermind)}");
+                    deciders.Add(joinsLater ? $"the {words.Mastermind} is one of its" : $"the {words.Mastermind} is {Called(mastermind)}");
                 }
 
                 reason = new RuleNote(
@@ -490,7 +495,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 players,
                 rulesBox.Ruleset,
                 plan.Scheme,
-                mastermind,
+                drawnMastermind,
                 villainGroups,
                 henchmanGroups,
                 heroes,
@@ -537,7 +542,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 reason,
                 stoodIn.Select(active => active.Rule).ToList(),
                 outsideMasterminds,
-                villainsSetAside);
+                villainsSetAside,
+                joinsLater ? Reveal(plan.Scheme, drawnMastermind) : null);
+        }
+
+        // What the player sees when the Mastermind of a Scheme that adds it mid-game is revealed: the Always Leads groups
+        // it brings, which are not part of the Villain Deck, and the Start of Game effects its card prints, as notes.
+        private MastermindReveal Reveal(Scheme scheme, Mastermind mastermind)
+        {
+            var groups = Ignores(mastermind)
+                ? []
+                : (mastermind.AlwaysLeads?.GroupIds ?? []).Concat(mastermind.AlsoLeads?.GroupIds ?? []).Select(CatalogGroup).ToList();
+            return new MastermindReveal(groups, WithMastermind(Plan(scheme) with { Notes = [] }, mastermind).Notes);
         }
 
         // The counts one Scheme sets at this player count: the player-count table or Solo,
