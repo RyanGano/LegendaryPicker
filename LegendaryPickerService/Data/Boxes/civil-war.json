@@ -19,6 +19,10 @@
     "sidekicks": { "value": 15, "source": "CW p.2" }
   },
   "bystanderUses": [{ "part": "sidekicks", "source": "Card" }],
+  "stackTerms": [
+    { "part": "wounds", "term": "civil-war_term_grievous-wound" },
+    { "part": "sidekicks", "term": "secret-wars-volume-1_term_sidekick" }
+  ],
   "heroes": [
     { "id": "civil-war_hero_captain-america-secret-avenger", "name": "Captain America, Secret Avenger", "heroName": "Captain America", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["civil-war_term_divided-card", "secret-wars-volume-1_term_sidekick"], "uses": [{ "part": "sidekicks", "source": "Card" }] },
     { "id": "civil-war_hero_cloak-and-dagger", "name": "Cloak & Dagger", "heroNames": ["Cloak", "Dagger"], "team": "core_term_avengers", "alsoTeam": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["civil-war_term_divided-card", "civil-war_term_phasing"] },
@@ -164,6 +168,7 @@
     { "id": "civil-war_term_size-changing", "name": "Size-Changing", "kind": "keyword", "summary": "The card is 2 cheaper to recruit, or the Villain 2 cheaper to fight, once you have played a card of the shown class this turn.", "source": "CW", "page": 1 },
     { "id": "civil-war_term_phasing", "name": "Phasing", "kind": "keyword", "summary": "On your turn you may trade this card in your hand for the top card of your deck. That trade is neither playing nor drawing a card.", "source": "CW", "page": 1 },
     { "id": "civil-war_term_fortify", "name": "Fortify", "kind": "keyword", "summary": "A Villain parks itself on a named place, such as the Mastermind or a stack, and blocks or changes it until a player defeats that Villain. A place already fortified stays as it is.", "source": "CW", "page": 2 },
-    { "id": "civil-war_term_shield-clearance", "name": "S.H.I.E.L.D. Clearance", "kind": "keyword", "summary": "To fight this enemy you also discard a S.H.I.E.L.D. Hero, or two for Double Clearance.", "source": "CW", "page": 2 }
+    { "id": "civil-war_term_shield-clearance", "name": "S.H.I.E.L.D. Clearance", "kind": "keyword", "summary": "To fight this enemy you also discard a S.H.I.E.L.D. Hero, or two for Double Clearance.", "source": "CW", "page": 2 },
+    { "id": "civil-war_term_grievous-wound", "name": "Grievous Wound", "kind": "keyword", "summary": "A special Wound shuffled into the Wound Stack, with its own Healing effect. A normal Wound in hand is needed to use a normal Wound's KO-all-Wounds ability on it.", "source": "CW", "page": 2 }
   ]
 }

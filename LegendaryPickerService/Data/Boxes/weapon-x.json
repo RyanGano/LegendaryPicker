@@ -54,6 +54,12 @@
    "source": "WX p.2"
   }
  },
+ "stackTerms": [
+  {
+   "part": "wounds",
+   "term": "weapon-x_term_enraging-wound"
+  }
+ ],
  "heroes": [
   {
    "id": "weapon-x_hero_fantomex",

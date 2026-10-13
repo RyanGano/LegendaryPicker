@@ -79,6 +79,19 @@ public class CivilWarTests
         Assert.Equal(bystanders, setup.Stacks.Bystanders);
     }
 
+    // The Wound Stack and the Sidekick Stack each carry their special cards' glossary entry (#127).
+    [Fact]
+    public void The_glossary_explains_the_Grievous_Wounds_and_Sidekicks_the_box_adds_to_its_stacks()
+    {
+        const int Zemo = 1;
+        var setup = Assert.IsType<SetupBody>(SetupResponse.From(Draw(2, "Predict Future Crime", Zemo), Catalog));
+
+        Assert.NotNull(setup.Stacks.Wounds);
+        Assert.NotNull(setup.Stacks.Sidekicks);
+        Assert.Contains("Grievous Wound", setup.Glossary.Select(entry => entry.Name));
+        Assert.Contains("Sidekick", setup.Glossary.Select(entry => entry.Name));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind) =>
         Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(Array.IndexOf(SchemeNames, scheme), mastermind)));
 }

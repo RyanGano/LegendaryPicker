@@ -113,7 +113,22 @@ public sealed record SetupStacks(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? MadameHydra = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? NewRecruits = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Shards = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Horrors = null);
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Horrors = null)
+{
+    // Whether the setup lays the part's stack out. The Ambition cards are a supply, not a stack, so never.
+    public bool Lays(Part part) => part switch
+    {
+        Part.Wounds => Wounds is not null,
+        Part.Officers => Officers is not null,
+        Part.Sidekicks => Sidekicks is not null,
+        Part.Bindings => Bindings is not null,
+        Part.MadameHydra => MadameHydra is not null,
+        Part.NewRecruits => NewRecruits is not null,
+        Part.Shards => Shards is not null,
+        Part.Horrors => Horrors is not null,
+        _ => false,
+    };
+}
 
 // Each player's starting deck: S.H.I.E.L.D. Agents and Troopers, or under Villainous HYDRA Operatives and Soldiers.
 // Choices lists the rulesets whose starting decks the players choose between in a mixed setup that includes

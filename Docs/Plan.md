@@ -288,6 +288,8 @@ Box id `secret-wars-volume-1`, file `LegendaryPickerService/Data/Boxes/secret-wa
 
 **Build an Army of Annihilation (#116).** Its Setup line (9 Twists) puts 10 extra "Annihilation Wave" Henchmen in the KO pile. No box has a Henchman Group of that name, so under D-ko-henchmen any one Henchman Group not already in the Villain Deck stands in, with its 10 cards going to the KO pile; the Scheme's setup step says so, cited D-ko-henchmen, and its `cards` value is cited `Card`.
 
+**Stack terms (#127):** a box's `stackTerms` attach glossary terms to the stacks it adds cards to (`part` and `term`); the loader checks only that the term resolves (owner ruling 2026-10-12: no load-time checks of printed counts or supply). A setup that lays the stack out adds the term to its glossary, so the Wound Stack shows Civil War's Grievous Wound and the Sidekick Stack the Sidekick term; a stack left out brings none. Weapon X attaches its Enraging Wound. Candidates not done: Second Edition's Daring Sidekicks and Dimensions' special Bystanders have no term yet.
+
 **Parts cards use (Card, #87):** Sidekicks: Magik, Maximus, Namor, the Sub-Mariner, Ultimate Spider-Man and Corrupt the Next Generation of Heroes (its Setup line). Wounds: every Cross-Dimensional Rampage (Old Man Logan; Domain of Apocalypse, Manhattan (Earth-1610), Sentinel Territories and Wasteland; Wasteland Hulk), Madelyne's Master Strike, Zombie Green Goblin's The Hungry Dead, The Deadlands' Zombie Loki and Zombie Venom, and Pan-Dimensional Plague. The box supplies no Wounds, so those need the core box's.
 
 ## Secret Wars Volume 2 (December 2015)
