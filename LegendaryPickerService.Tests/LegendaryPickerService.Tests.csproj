@@ -147,6 +147,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\Epic\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Mastermind leads one of two groups, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\AlwaysLeadsChoice\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\AlwaysLeadsChoice\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Mastermind leads no group, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\DrainedNoLeads\*.json" CopyToOutputDirectory="PreserveNewest" />

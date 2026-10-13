@@ -225,6 +225,9 @@
    ],
    "alwaysLeads": {
     "groupId": "2099_villain_alchemax-enforcers",
+    "orGroupIds": [
+     "2099_villain_false-aesir-of-alchemax"
+    ],
     "groupType": "villain",
     "source": "Card"
    },
