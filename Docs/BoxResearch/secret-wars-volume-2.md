@@ -1,6 +1,6 @@
 # Secret Wars Volume 2 (December 2015)
 
-**Research status: Partial; integrated (#117).** Official counts reconcile to 350 cards and the insert defines several mechanics. The Scheme Setup lines, Always Leads and Mastermind part uses in `LegendaryPickerService/Data/Boxes/secret-wars-volume-2.json` were read from the C1-linked card faces (`Card`); per-face copy counts and the part uses of some Hero and Villain faces remain open.
+**Research status: Partial; integrated (#117).** Official counts reconcile to 350 cards and the insert defines several mechanics. The Scheme Setup lines, Always Leads and Mastermind part uses in `LegendaryPickerService/Data/Boxes/secret-wars-volume-2.json` were read from the C1-linked card faces (`Card`); per-face copy counts remain open. Every Hero, Villain, Henchman and Tactic face was checked for terms and part uses (#120).
 
 ## Sources
 
@@ -67,7 +67,16 @@ Summaries are original paraphrases under 40 words. Card-level class/term usage a
 
 ## Setup and implementation gaps
 
-Still open: per-face copy counts, and the part uses of Hero and Villain faces not read. The Scheme Setup lines, Always Leads, Mastermind part uses and the Wound-giving Villain Groups were read from the C1-linked card faces (`Card`) and are in the box file. Sinister Ambitions (6 Twists; adds 10 random Ambition cards to the Villain Deck, per the card face) is in the runtime data as of #119, and Secret Wars joins its set-aside Masterminds on Twists 1-3 (#122); optional Ambition mode remains excluded.
+Still open: per-face copy counts. The Scheme Setup lines, Always Leads, Mastermind part uses and the Wound-giving Villain Groups were read from the C1-linked card faces (`Card`) and are in the box file. Sinister Ambitions (6 Twists; adds 10 random Ambition cards to the Villain Deck, per the card face) is in the runtime data as of #119, and Secret Wars joins its set-aside Masterminds on Twists 1-3 (#122); optional Ambition mode remains excluded.
+
+## Verified `uses` and terms (#120)
+
+All 64 Hero faces, 25 Villain faces, 3 Henchman faces and the 20 Mastermind and Tactic faces were checked from the C1-linked card faces (`Card`), read by local OCR and kept out of the repository. Stack words and the Ambush, Escape, Fight and Master Strike labels were matched per face; the OCR is noisy, so a stack that a face's text plainly names is recorded and doubtful reads follow the owner ruling to add the part.
+
+- **Wounds:** Soulsword Colossus; Deadpool's Secret Secret Wars (Deadpool's ascended Master Strike); Guardians of Knowhere (Gamora Ambush and Escape); K'un-Lun (Rand K'ai); Monster Metropolis; Utopolis (Whizzer); X-Men '92; Immortal Emperor Zheng-Zhu (two Tactics); King Hyperion (Escape); Spider-Queen (Master Strike).
+- **Officers:** Phoenix Force Cyclops (Reincarnate gains a Hero from the Officer stack or the HQ). The Undercover Agent Bystander gives an Officer; it is modelled as `bystanderUses`, so a setup with this box's cards lays out the Officer stack, the core box's when no included box has one.
+- **Bystanders:** Spider-Gwen, Corvus Glaive, Soulsword Colossus, Black Swan, Spider-Infected, Monster Metropolis and Spider-Queen use Bystanders; every setup lays those out, so no entry.
+- **Terms added:** Ambush, Escape and Fight on each Villain Group whose faces print them (Deadpool's Secret Secret Wars, Guardians of Knowhere, Monster Metropolis, Utopolis, X-Men '92; K'un-Lun has Escape and Fight only), Escape on King Hyperion's Mastermind face, and Master Strike on the groups with an ascending Villain (Deadpool, Angela, Warrior Woman, '92 Professor X). Hero faces printed no further keywords than the C1 index lists. Sidekicks, Bindings, Shards and tokens appear on no face.
 
 ## Structured card-face metadata (C1)
 
