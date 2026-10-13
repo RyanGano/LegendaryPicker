@@ -28,7 +28,7 @@
     {"id": "world-war-hulk_hero_skaar-son-of-hulk", "name": "Skaar, Son of Hulk", "team": "core_term_avengers", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["world-war-hulk_term_smash", "world-war-hulk_term_wounded-fury", "world-war-hulk_term_transform"], "uses": [{"part": "wounds", "source": "Card"}]}
   ],
   "villainGroups": [
-    {"id": "world-war-hulk_villain_aspects-of-the-void", "name": "Aspects of the Void", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "x-men_term_trap", "paint-the-town-red_term_feast", "world-war-hulk_term_wounded-fury"]},
+    {"id": "world-war-hulk_villain_aspects-of-the-void", "name": "Aspects of the Void", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "x-men_term_trap", "paint-the-town-red_term_feast", "world-war-hulk_term_wounded-fury"], "uses": [{"part": "wounds", "source": "Card"}]},
     {"id": "world-war-hulk_villain_code-red", "name": "Code Red", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "x-men_term_trap", "world-war-hulk_term_wounded-fury"], "uses": [{"part": "wounds", "source": "Card"}]},
     {"id": "world-war-hulk_villain_illuminati", "name": "Illuminati", "terms": ["core_term_ambush", "core_term_escape", "x-men_term_trap", "world-war-hulk_term_outwit", "secret-wars-volume-1_term_cross-dimensional-rampage"], "uses": [{"part": "wounds", "source": "Card"}]},
     {"id": "world-war-hulk_villain_intelligencia", "name": "Intelligencia", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "x-men_term_trap", "world-war-hulk_term_outwit", "world-war-hulk_term_wounded-fury"], "uses": [{"part": "wounds", "source": "Card"}]},

@@ -147,6 +147,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\Epic\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion whose Mastermind leads no group, beside a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\DrainedNoLeads\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\DrainedNoLeads\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LegendaryPickerService\LegendaryPickerService.csproj" />
   </ItemGroup>
