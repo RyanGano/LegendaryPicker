@@ -74,11 +74,11 @@ Method: the shared OCR cache (`_ocr/core.json`, 114 C1-linked faces: Hero, Villa
 | Checked | Result |
 |---|---|
 | 15 Hero, 7 Villain Group and 4 Henchman Group names | Match. The cache's title match covers 17 of the 26 groups; the re-read covers the rest (Villain and Henchman faces print the group, e.g. "Villain - Skrulls"). |
-| Scheme names | Match. The printed title of Legacy Virus is "The Legacy Virus"; the box file keeps the article-less display name, the same card. |
+| Scheme names | Match, except that Legacy Virus is printed "The Legacy Virus": the box file's display name now carries the article, as the other boxes' "The ..." titles do (id unchanged). |
 | Scheme Twists and Setup lines | All eight match the Schemes table in `Docs/Plan.md`: Legacy Virus 8 Twists, 6 Wounds per player; Midtown Bank Robbery 8, 12 Bystanders; Negative Zone Prison Breakout 8, an extra Henchman Group; Portals to the Dark Dimension 7; Killbots 5, 3 more Twists beside the Scheme, 18 Bystanders; Secret Invasion 8, 6 Heroes, Skrulls required, 12 random Hero cards into the Villain Deck; Super Hero Civil War 8 at 2-3 players and 5 at 4-5, 4 Heroes at 2 players; Cosmic Cube 8. |
 | Mastermind Always Leads | Match: Dr. Doom - Doombot Legion, Loki - Enemies of Asgard, Magneto - Brotherhood, Red Skull - HYDRA. |
 
-No value differed, so no data changed. Per-card ability text, numeric values, Hero metadata, copy ratios and per-face copy counts remain unchecked.
+No Twist count, Setup line or Always Leads differed; the only data change is that display name. Per-card ability text, numeric values, Hero metadata, copy ratios and per-face copy counts remain unchecked.
 
 ## Structured card-face metadata (C1)
 

@@ -86,7 +86,7 @@
   "schemes": [
     {
       "id": "core_scheme_legacy-virus",
-      "name": "Legacy Virus",
+      "name": "The Legacy Virus",
       "terms": ["core_term_scheme-twist"],
       "uses": [{ "part": "wounds", "source": "Card" }],
       "setup": {

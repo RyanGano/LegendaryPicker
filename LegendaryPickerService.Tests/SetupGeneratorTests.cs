@@ -15,7 +15,7 @@ namespace LegendaryPickerService.Tests;
 // Every test asserts the drawn Scheme and Mastermind by name, so a script that misses its target fails.
 public class SetupGeneratorTests
 {
-    private const string LegacyVirus = "Legacy Virus";
+    private const string LegacyVirus = "The Legacy Virus";
     private const string BankRobbery = "Midtown Bank Robbery";
     private const string NegativeZone = "Negative Zone Prison Breakout";
     private const string Portals = "Portals to the Dark Dimension";

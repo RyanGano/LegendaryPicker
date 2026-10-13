@@ -97,7 +97,7 @@ public class MultiBoxSetupTests
         var legacyVirus = Assert.IsType<SetupResult>(Generator.Generate(3, ["core", "fixture"], new ScriptedRandom(0)));
         var midtown = Assert.IsType<SetupResult>(Generator.Generate(3, ["core", "fixture"], new ScriptedRandom(1)));
 
-        Assert.Equal("Legacy Virus", legacyVirus.Scheme.Name);
+        Assert.Equal("The Legacy Virus", legacyVirus.Scheme.Name);
         Assert.Equal(18, legacyVirus.Stacks.Wounds);
         Assert.Equal(35, midtown.Stacks.Wounds);
     }
