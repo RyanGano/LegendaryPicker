@@ -53,7 +53,7 @@ Cards of one named group a Scheme sets beside it, whether or not that group is d
 _Avoid_: Card move, which moves cards of a kind from the drawn groups or a stack rather than from one named group.
 
 **Setup step**:
-A setup effect that changes no count but still has to be done while laying out, for example placing a token on the Scheme or splitting the Villain Deck into piles. The Setup checklist lists it as a line to tick, and a rule note cites the card or rule that prints it. Its label is a short instruction of at most 15 words in our own words, never card text.
+A setup effect that changes no count but still has to be done while laying out, for example placing a token on the Scheme or splitting the Villain Deck into piles. The Setup checklist lists it as a line to tick, and a rule note cites the card or rule that prints it. Its label is a short instruction of at most 15 words in our own words, never card text. A step that would leave a Hero to the players names `{hero}` (an extra Hero) or `{playerHeroes}` (a Hero of the Hero Deck for each player) in its label, and the generator draws it (#242).
 
 **Hero Name**:
 The character a Hero card set is for (for example Jean Grey). Different Heroes can share a Hero Name, such as two versions of one character; a Hero with no other version has its own name as its Hero Name. A version of a character shares its Hero Name: Spider-Man Noir is Spider-Man. A Hero of Divided Cards whose halves show two names counts under either one, as Colossus & Wolverine counts as Wolverine (#149).

@@ -277,6 +277,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .Zip(DrawMany(_henchmanGroups.Except(henchmanGroups), plan.OutsideHenchmen.Count), (draw, group) => new OutsideHenchmanGroup(group, draw.To, draw.Cards))
                 .ToList();
             var (heroes, outside) = DrawHeroes(plan);
+            plan = plan with { Steps = FillHeroSteps(plan, heroes, outside) };
 
             // The Masterminds the Scheme draws besides its own, from the included ones the setup doesn't otherwise use.
             var drawnDrained = drainedLeads.Select(entry => entry.other).ToList();
@@ -845,7 +846,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             string Step(SetupStep step)
             {
-                notes.Add(Note($"{by} adds a setup step: {step.Label}", step.Source, from, cardId));
+                notes.Add(Note($"{by} adds a setup step: {Unfilled(step.Label)}", step.Source, from, cardId));
                 return step.Label;
             }
 
@@ -1108,6 +1109,59 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return (deck, outside
                 .Zip(rules.OutsideSlots, (hero, rule) => new OutsideHero(hero, rule.To, rule.Cards ?? BoxOf(hero.Id).Components.HeroCards.Value))
                 .ToList());
+        }
+
+        // A setup step that would leave a Hero to the players names a placeholder the app fills by drawing (#242): {hero}
+        // is an extra Hero for the Hero Deck, as Avatarr's, drawn from the included Heroes the setup doesn't use that keep
+        // the Scheme's Hero rules met with it in the Hero Deck, else from any it doesn't use; {playerHeroes} gives each
+        // player a different Hero of the Hero Deck, as Sneak Attack the Heroes' Homes's. With none to draw, the step
+        // keeps the words its rule note uses.
+        private const string HeroPlaceholder = "{hero}";
+        private const string PlayerHeroesPlaceholder = "{playerHeroes}";
+
+        private static string Unfilled(string label) =>
+            label.Replace(HeroPlaceholder, "an extra Hero").Replace(PlayerHeroesPlaceholder, "a Hero for each player");
+
+        private IReadOnlyList<string> FillHeroSteps(SetupPlan plan, IReadOnlyList<Hero> deck, IReadOnlyList<OutsideHero> outside)
+        {
+            var outsideHeroes = outside.Select(drawn => drawn.Hero).ToList();
+            var outsideRules = plan.Outside.SelectMany(draw => Enumerable.Repeat(draw.Rule, draw.Count)).ToList();
+            var extras = new List<Hero>();
+
+            string Fill(string label)
+            {
+                if (label.Contains(PlayerHeroesPlaceholder) && deck.Count >= players)
+                {
+                    var left = deck.ToList();
+                    var seats = new List<string>();
+                    for (var seat = 1; seat <= players; seat++)
+                    {
+                        var hero = DrawOne(left);
+                        left.Remove(hero);
+                        seats.Add($"Player {seat}: {hero.Name}");
+                    }
+
+                    label = label.Replace(PlayerHeroesPlaceholder, string.Join("; ", seats));
+                }
+
+                if (label.Contains(HeroPlaceholder))
+                {
+                    var unused = _heroes.Where(hero => !deck.Concat(outsideHeroes).Concat(extras).Any(other => other.Id == hero.Id)).ToList();
+                    var rules = new HeroRules(_heroes, deck.Count + extras.Count + 1, plan.Scheme.Setup, outsideRules);
+                    var fitting = unused.Where(hero => rules.CanComplete([.. deck, .. extras, hero], outsideHeroes)).ToList();
+                    if ((fitting.Count > 0 ? fitting : unused) is { Count: > 0 } options)
+                    {
+                        var drawn = DrawOne(options);
+                        extras.Add(drawn);
+                        var named = boxes.Count > 1 ? $"{drawn.Name} (from {BoxLabel(BoxOf(drawn.Id), drawn.Id)})" : drawn.Name;
+                        label = label.Replace(HeroPlaceholder, named);
+                    }
+                }
+
+                return Unfilled(label);
+            }
+
+            return plan.Steps.Select(Fill).ToList();
         }
 
         // "X-Men Heroes", "Jean Grey Hero" or "Heroes": what count Heroes of a team or a Hero Name are called.

@@ -196,7 +196,11 @@
    "setup": {
     "steps": [
      {
-      "label": "Adapt: shuffle the 4 Tactics. If Avatarr is on top, add an extra Hero",
+      "label": "Shuffle the 4 Tactics and turn one face up on top as the Mastermind",
+      "source": "OT"
+     },
+     {
+      "label": "If Avatarr is on top, add {hero} to the Hero Deck, then Adapt",
       "source": "Card"
      },
      {

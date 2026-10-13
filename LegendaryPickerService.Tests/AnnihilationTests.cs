@@ -20,6 +20,11 @@ public class AnnihilationTests
         Assert.Contains(setup.Moves, move => move is { Card: CardKind.Hero, To: Pile.StartingDecks, Count: 3 });
         Assert.Contains(setup.Moves, move => move is { Card: CardKind.Wound, To: Pile.StartingDecks, Count: 3 });
         Assert.NotNull(setup.Stacks.Wounds);
+        // The app draws each player's Hero from the Hero Deck rather than leaving the pick to the players (#242).
+        var seats = Assert.Single(setup.Steps, step => step.StartsWith("Each player's own Hero, from the Hero Deck: "));
+        var named = seats.Split(": ", 2)[1].Split("; ").Select(seat => seat.Split(": ")[1]).ToList();
+        Assert.Equal(2, named.Distinct().Count());
+        Assert.Subset(setup.Heroes.Select(hero => hero.Name).ToHashSet(), named.ToHashSet());
     }
 
     // Put Humanity on Trial sets 11 Bystanders beside the Scheme as the Galactic Jurors.
