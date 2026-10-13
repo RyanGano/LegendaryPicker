@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 8,
+  "id": "later",
+  "name": "Later Fixture",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.1",
+  "about": { "released": { "value": "2020-01", "source": "R p.1" }, "description": { "value": "A made-up expansion for tests.", "source": "R p.1" } },
+  "sources": [
+    { "key": "R", "url": "https://example.test/later-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [],
+  "villainGroups": [
+    { "id": "later_villain_late-gang", "name": "Late Gang", "terms": ["core_term_fight"] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "later_mastermind_late-lord",
+      "name": "Late Lord",
+      "terms": ["core_term_mastermind-tactic", "later_term_lurk"],
+      "alwaysLeads": { "groupId": "later_villain_late-gang", "groupType": "villain", "source": "Card" },
+      "setup": {
+        "extraHeroes": [{ "players": null, "value": 1, "source": "Card" }],
+        "steps": [{ "label": "Test Start of Game step", "source": "Card" }]
+      }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "later_scheme_late-arrival",
+      "name": "Late Arrival",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "mastermindJoinsLater": { "value": true, "source": "Card" }
+      }
+    },
+    {
+      "id": "later_scheme_early-arrival",
+      "name": "Early Arrival",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "later_term_lurk", "name": "Lurk", "kind": "keyword", "summary": "A made-up keyword only Late Lord carries.", "source": "R", "page": 1 }
+  ]
+}

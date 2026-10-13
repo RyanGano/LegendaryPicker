@@ -115,12 +115,13 @@ export function cardTerms(setup: Setup, components: Component[]): RulesetTerms {
   return rulesets.size === 1 && only ? TERMS[only] : rulesetTerms(setup)
 }
 
-// The setup's words, with its one Scheme and one Mastermind each named by their own ruleset's word.
-export function setupTerms(setup: Setup): RulesetTerms {
+// The setup's words, with its one Scheme and one Mastermind each named by their own ruleset's word. A Mastermind
+// still hidden until it joins mid-game takes the Scheme's word, so "Commander" doesn't give away a Villains card.
+export function setupTerms(setup: Setup, mastermindHidden = false): RulesetTerms {
   return {
     ...rulesetTerms(setup),
     scheme: cardTerms(setup, [setup.scheme]).scheme,
-    mastermind: cardTerms(setup, [setup.mastermind]).mastermind,
+    mastermind: cardTerms(setup, [mastermindHidden ? setup.scheme : setup.mastermind]).mastermind,
   }
 }
 

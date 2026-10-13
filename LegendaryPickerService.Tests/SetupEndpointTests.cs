@@ -589,6 +589,18 @@ public sealed class SetupEndpointTests : IDisposable
         return factory.Server;
     }
 
+    [Fact]
+    public async Task A_Scheme_that_adds_its_Mastermind_later_returns_the_Mastermind_reveal()
+    {
+        // Enshrouded Identity, then Red Skull, Hydra Overlord (#245).
+        var response = await Client(new ScriptedRandom(1, 4)).GetAsync("/api/setup?players=2&boxes=second-edition");
+
+        var body = JsonNode.Parse(await response.Content.ReadAsStringAsync())!;
+        Assert.Equal(("Enshrouded Identity", "Red Skull, Hydra Overlord"), ((string)body["scheme"]!["name"]!, (string)body["mastermind"]!["name"]!));
+        Assert.Equal(["Hydra"], body["mastermindReveal"]!["alwaysLeads"]!.AsArray().Select(group => (string)group!["name"]!));
+        Assert.DoesNotContain("Hydra", body["villainGroups"]!.AsArray().Select(group => (string)group!["name"]!));
+    }
+
     private HttpClient Client(IRandomSource? random = null, BoxCatalog? catalog = null)
     {
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(host => host.ConfigureTestServices(services =>

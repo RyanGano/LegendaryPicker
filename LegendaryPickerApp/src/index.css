@@ -804,6 +804,46 @@ div.box-option {
   padding-left: var(--space-6);
 }
 
+/* The button that reveals a Mastermind joining mid-game, in the Scheme and Mastermind section. */
+.reveal-row {
+  align-items: center;
+}
+
+.reveal-button {
+  flex: none;
+  padding: 0 var(--space-4);
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.reveal-heading {
+  padding-top: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.reveal-note {
+  padding: var(--space-2) 0;
+  font-size: var(--text-sm);
+  border-bottom: 1px solid var(--border);
+}
+
+.reveal-note cite {
+  font-style: normal;
+  white-space: nowrap;
+}
+
+.hidden-mastermind {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
 /* Each note is a short callout, its citation on the line below. */
 .setup .notes {
   display: flex;

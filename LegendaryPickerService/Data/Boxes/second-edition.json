@@ -683,6 +683,10 @@
       ]
      }
     ],
+    "mastermindJoinsLater": {
+     "value": true,
+     "source": "Card"
+    },
     "steps": [
      {
       "label": "Put the 3 set-aside Officers next to the Mastermind space as Bodyguards",

@@ -9,6 +9,9 @@ import killbots from './test/fixtures/killbots.json'
 import legacyVirusThreePlayers from './test/fixtures/legacyVirusThreePlayers.json'
 import soloSecretInvasion from './test/fixtures/soloSecretInvasion.json'
 import twoPlayerCosmicCube from './test/fixtures/twoPlayerCosmicCube.json'
+// A live draw from the Second Edition box with 2 players: Enshrouded Identity with Red Skull, Hydra Overlord, whose
+// Mastermind joins mid-game.
+import enshroudedIdentity from './test/fixtures/enshroudedIdentity.json'
 // Drawn from the core box and the service's test-only fixture expansion.
 import twoBoxesTestHeist from './test/fixtures/twoBoxesTestHeist.json'
 // Drawn from the core box and the service's test-only card-moves fixture expansion.
@@ -1050,5 +1053,27 @@ describe('SetupChecklist', () => {
     ])
     expect(terms[8]).toHaveTextContent('Fight Keyword Triggers when a player spends enough Attack to defeat this card. R p.13')
     expect(within(terms[8]).getByRole('link', { name: 'R p.13' })).toHaveAttribute('href', 'https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf')
+  })
+
+  it('hides a Mastermind that joins mid-game behind a button until it is revealed with its Always Leads group', async () => {
+    renderChecklist(enshroudedIdentity)
+
+    const lines = () => within(section('Scheme and Mastermind')).getAllByRole('listitem').map((line) => line.textContent)
+    expect(lines()).toEqual(['Enshrouded Identity Scheme', 'Reveal Mastermindjoins when the Bodyguards are gone'])
+    expect(document.body).not.toHaveTextContent('Red Skull')
+    expect(document.body).not.toHaveTextContent('Hydra Overlord')
+    // The terms only the Mastermind carries wait for the reveal too.
+    const terms = () => within(section('Terms in this setup')).queryByText('Always Leads')
+    expect(terms()).toBeNull()
+    expect(screen.getByRole('status')).toHaveTextContent('0 of 15 laid out')
+
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Reveal Mastermind' }))
+
+    expect(screen.queryByRole('button', { name: 'Reveal Mastermind' })).toBeNull()
+    expect(lines()[1]).toBe('Red Skull, Hydra Overlord Mastermind')
+    expect(lines()[2]).toBe('Hydra Always Leads, not in this Villain Deck: the Mastermind arrives after setup')
+    expect(lines()[3]).toBe('Start of Game')
+    expect(terms()).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('0 of 17 laid out')
   })
 })

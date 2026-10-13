@@ -1333,6 +1333,7 @@ public sealed partial class BoxCatalog
             foreach (var count in effect.HeroCounts ?? []) yield return ($"{scheme.Id} setup.heroCounts", count.Source);
             if (effect.DistinctHeroNames is { } distinct) yield return ($"{scheme.Id} setup.distinctHeroNames", distinct.Source);
             if (effect.TeamSplit is { } split) yield return ($"{scheme.Id} setup.teamSplit", split.Source);
+            if (effect.MastermindJoinsLater is { } joinsLater) yield return ($"{scheme.Id} setup.mastermindJoinsLater", joinsLater.Source);
             if (effect.OwnTactics is { } ownTactics) yield return ($"{scheme.Id} setup.ownTactics", ownTactics.Source);
             foreach (var outside in effect.OutsideMasterminds ?? [])
             {
