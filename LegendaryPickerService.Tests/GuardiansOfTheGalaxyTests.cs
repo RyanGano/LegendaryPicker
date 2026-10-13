@@ -70,7 +70,7 @@ public class GuardiansOfTheGalaxyTests
     {
         var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(0, 0)));
 
-        Assert.Equal(("Legacy Virus", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));
+        Assert.Equal(("The Legacy Virus", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));
         Assert.Null(setup.Stacks.Shards);
         Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }

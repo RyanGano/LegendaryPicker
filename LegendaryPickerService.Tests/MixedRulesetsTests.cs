@@ -34,7 +34,7 @@ public class MixedRulesetsTests
     [InlineData(5)]
     public void A_draw_with_no_Villainous_card_follows_the_First_Edition_rules_in_full(int players)
     {
-        var setup = Draw(players, CoreAndVillains, "Legacy Virus", "Dr. Doom");
+        var setup = Draw(players, CoreAndVillains, "The Legacy Virus", "Dr. Doom");
 
         Assert.Equal(Ruleset.FirstEdition, setup.Ruleset);
         Assert.False(setup.Mixed);
@@ -66,7 +66,7 @@ public class MixedRulesetsTests
     [InlineData(5, new[] { 7, 0, 0, 0, 0, 23, 0, 0, 0, 0 })]
     public void A_Heroic_Scheme_and_Mastermind_draw_Allies_and_Adversaries_under_the_First_Edition_rules(int players, int[] rest)
     {
-        var scheme = IndexOf(players, CoreAndVillains, "Legacy Virus");
+        var scheme = IndexOf(players, CoreAndVillains, "The Legacy Virus");
         var mastermind = IndexOf(players, CoreAndVillains, "Dr. Doom", scheme);
         var random = new ScriptedRandom([scheme, mastermind, .. rest]);
         var setup = Assert.IsType<SetupResult>(Generator.Generate(players, CoreAndVillains, random));
@@ -196,7 +196,7 @@ public class MixedRulesetsTests
     [Fact]
     public void A_mixed_setup_names_each_card_by_its_own_side()
     {
-        var setup = Draw(3, CoreAndVillains, "Legacy Virus", "Dr. Strange");
+        var setup = Draw(3, CoreAndVillains, "The Legacy Virus", "Dr. Strange");
 
         Assert.Equal(Ruleset.Villainous, setup.Ruleset);
         Assert.Equal(new RuleNote("Villains rules: the Commander is Dr. Strange", "D-mixed", Decision), setup.RulesReason);
@@ -212,7 +212,7 @@ public class MixedRulesetsTests
     [Fact]
     public void A_mixed_setup_lays_out_Wounds_and_Bindings_only_when_a_drawn_card_uses_them()
     {
-        var strange = Draw(3, CoreAndVillains, "Legacy Virus", "Dr. Strange");
+        var strange = Draw(3, CoreAndVillains, "The Legacy Virus", "Dr. Strange");
         Assert.True(strange.Mixed);
         Assert.Equal(18, strange.Stacks.Wounds);
         Assert.Equal(30, strange.Stacks.Bindings);
@@ -225,7 +225,7 @@ public class MixedRulesetsTests
         Assert.Equal(new SetupStacks(null, 30, 30 + 41 - 12, MadameHydra: 12, NewRecruits: 15), midtown.Stacks);
         Assert.DoesNotContain(midtown.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
 
-        var legacyVirus = Draw(1, CoreAndVillains, "Legacy Virus", "Nick Fury", 13, 0, 0, 0, 0);
+        var legacyVirus = Draw(1, CoreAndVillains, "The Legacy Virus", "Nick Fury", 13, 0, 0, 0, 0);
         Assert.Equal(new SetupStacks(6, 30, 30 + 41 - 1, MadameHydra: 12, NewRecruits: 15), legacyVirus.Stacks);
         Assert.DoesNotContain(legacyVirus.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }

@@ -51,7 +51,7 @@ public class PaintTheTownRedTests
         var setup = Assert.IsType<SetupResult>(Generator.Generate(3, Boxes, random));
 
         Assert.Equal([12, 6], random.Options.Take(2));
-        Assert.Equal("Legacy Virus", setup.Scheme.Name);
+        Assert.Equal("The Legacy Virus", setup.Scheme.Name);
         Assert.Equal("Mysterio", setup.Mastermind.Name);
         Assert.Equal(["Sinister Six", "Brotherhood", "Enemies of Asgard"], setup.VillainGroups.Select(group => group.Name));
         Assert.Equal([20, 19, 18, 17, 16], random.Options[^5..]);
