@@ -285,6 +285,8 @@ public sealed partial class BoxCatalog
             ValidateHeroRulesCanBeMet(path, box, heroes);
         }
 
+        ValidateSchemeExclusions(files, heroes);
+
         var terms = files
             .SelectMany(file => file.Box.Glossary)
             .ToDictionary(term => term.Id, term => term.Kind, StringComparer.Ordinal);
@@ -757,10 +759,10 @@ public sealed partial class BoxCatalog
             var excluded = new HashSet<string>(StringComparer.Ordinal);
             foreach (var exclusion in scheme.ExcludesMasterminds ?? [])
             {
-                if (!box.AllMasterminds.Any(mastermind => mastermind.Id == exclusion.MastermindId) || !excluded.Add(exclusion.MastermindId))
+                if (!excluded.Add(exclusion.MastermindId))
                 {
                     throw new InvalidDataException(
-                        $"{path}: {scheme.Id} excludesMasterminds lists {exclusion.MastermindId}; it lists Masterminds of {box.Id}, each once.");
+                        $"{path}: {scheme.Id} excludesMasterminds lists {exclusion.MastermindId}; it lists Masterminds of its ruleset, each once.");
                 }
             }
         }
@@ -1020,6 +1022,50 @@ public sealed partial class BoxCatalog
                 throw new InvalidDataException(
                     $"{path}: {scheme.Id} has Hero rules no draw can meet at {players} {(players == 1 ? "player" : "players")}, whichever Heroes are included; "
                     + (culprits.Count > 0 ? $"it can be met without {string.Join(" or ", culprits)}." : "no one of them can be left out to meet the rest."));
+            }
+        }
+    }
+
+    // A Scheme excludes Masterminds of its own ruleset, from any box (a Scheme of one box can rule out another box's
+    // Mastermind). A Scheme that limits Heroes must also list every Mastermind whose required Heroes its Hero rules
+    // can't take with its own, since the draw puts them in the Hero Deck beside the Scheme's (#205).
+    private static void ValidateSchemeExclusions(IReadOnlyList<(string Path, Box Box)> files, IReadOnlyDictionary<string, Hero> heroes)
+    {
+        foreach (var (path, box) in files)
+        {
+            // Reprints too, as the draw picks from every box's Masterminds and the ones it reprints.
+            var rivals = files.Where(file => file.Box.Ruleset == box.Ruleset).SelectMany(file => file.Box.AllMasterminds).DistinctBy(mastermind => mastermind.Id).ToList();
+            foreach (var scheme in box.Schemes)
+            {
+                var excluded = (scheme.ExcludesMasterminds ?? []).Select(exclusion => exclusion.MastermindId).ToHashSet(StringComparer.Ordinal);
+                foreach (var id in excluded.Where(id => rivals.All(mastermind => mastermind.Id != id)))
+                {
+                    throw new InvalidDataException(
+                        $"{path}: {scheme.Id} excludesMasterminds lists {id}; it lists Masterminds of its ruleset, each once.");
+                }
+
+                var setup = scheme.Setup;
+                if (setup.HeroCounts is not { Count: > 0 } && setup.DistinctHeroNames?.Value != true && setup.TeamSplit is null && setup.OutsideHeroes is not { Count: > 0 })
+                {
+                    continue;
+                }
+
+                foreach (var mastermind in rivals.Where(mastermind => mastermind.Setup?.RequiredHeroes is { Count: > 0 } && !excluded.Contains(mastermind.Id)))
+                {
+                    var together = setup with
+                    {
+                        RequiredHeroes = (setup.RequiredHeroes ?? []).Concat(mastermind.Setup!.RequiredHeroes!).DistinctBy(rule => rule.HeroId).ToList(),
+                    };
+                    var clash = (setup.AllowedPlayerCounts?.Value ?? Enumerable.Range(MinPlayers, MaxPlayers - MinPlayers + 1))
+                        .Where(players => !CanMeetHeroRules(together, players, heroes))
+                        .Cast<int?>().FirstOrDefault();
+                    if (clash is { } players)
+                    {
+                        throw new InvalidDataException(
+                            $"{path}: {scheme.Id} has Hero rules {mastermind.Id}'s required Heroes can't meet at {players} {(players == 1 ? "player" : "players")}; "
+                            + "it must list that Mastermind in excludesMasterminds.");
+                    }
+                }
             }
         }
     }

@@ -67,6 +67,7 @@ public sealed class SchemeFirstTests : IDisposable
     public void Each_Schemes_excluded_Masterminds_are_those_its_card_data_rules_out()
     {
         var masterminds = Catalog.Boxes.SelectMany(box => box.Masterminds).ToList();
+        var requiresHeroes = masterminds.Where(mastermind => mastermind.Setup?.RequiredHeroes is { Count: > 0 }).Select(mastermind => mastermind.Id).ToHashSet(StringComparer.Ordinal);
         foreach (var box in Catalog.Boxes)
         {
             foreach (var scheme in box.Schemes)
@@ -85,6 +86,9 @@ public sealed class SchemeFirstTests : IDisposable
                     .Where(mastermind => (mastermind.AlwaysLeads is { } leads && leads.GroupIds.All(id => AllBeside(id, leads.GroupType)))
                         || (mastermind.AlsoLeads is { } also && also.GroupIds.All(id => AllBeside(id, also.GroupType))))
                     .Select(mastermind => mastermind.Id)
+                    // The loader requires the exclusions a Mastermind's required Heroes bring (#205); those are checked there.
+                    .Concat((scheme.ExcludesMasterminds ?? []).Select(exclusion => exclusion.MastermindId).Where(requiresHeroes.Contains))
+                    .Distinct()
                     .Order();
 
                 Assert.Equal(derived, (scheme.ExcludesMasterminds ?? []).Select(exclusion => exclusion.MastermindId).Order());

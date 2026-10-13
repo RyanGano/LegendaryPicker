@@ -123,6 +123,12 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\Revised\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up Revised base game whose Scheme allows no Test Zulu, beside its Mastermind that requires Test Zulu, with a copy of the core box. -->
+  <ItemGroup>
+    <None Include="Fixtures\RequiredHeroes\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\RequiredHeroes\core.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Mastermind adds a Villain Group and sets its Villains aside, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\SetAside\*.json" CopyToOutputDirectory="PreserveNewest" />
