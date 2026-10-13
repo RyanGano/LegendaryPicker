@@ -885,6 +885,21 @@ describe('SetupChecklist', () => {
     expect(rows('Shared stacks')).toContain('Bystanders 12')
   })
 
+  it("lists a box's special Bystanders from an info button beside the Bystanders line without ticking it", async () => {
+    const user = userEvent.setup()
+    renderChecklist({
+      ...killbots,
+      specialCards: [{ stack: 'bystanders', box: 'Dimensions', cards: ['Photographer', 'Stan Lee'] }],
+    })
+
+    await user.click(within(section('Shared stacks')).getByRole('button', { name: 'Special Bystanders in this setup' }))
+
+    const panel = screen.getByRole('dialog', { name: 'Special Bystanders' })
+    expect(panel).toHaveTextContent('DimensionsPhotographerStan Lee')
+    expect(within(section('Shared stacks')).getByRole('checkbox', { name: /^Bystanders/ })).not.toBeChecked()
+    expect(within(section('Shared stacks')).getAllByRole('button', { name: /^Special / })).toHaveLength(1)
+  })
+
   it('leaves out Twists beside the Scheme when there are none', () => {
     renderChecklist(twoPlayerCosmicCube)
 

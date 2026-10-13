@@ -105,7 +105,7 @@ describe('App', () => {
     )
     expect(within(footer).getByRole('link', { name: 'What If...? rulebook' })).toHaveAttribute(
       'href',
-      'https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/WhatIf_Rulebook.pdf',
+      'https://upperdeck.com/wp-content/uploads/2024/05/WhatIf_Rulebook.pdf',
     )
     expect(within(footer).getByRole('link', { name: 'Second Edition rulebook' })).toHaveAttribute(
       'href',
@@ -579,6 +579,17 @@ describe('App', () => {
     expect(screen.queryByRole('dialog')).toBeNull()
     expect(info).toHaveFocus()
     expect(tick).not.toBeChecked()
+  })
+
+  it("says a Revised-rules box's ruleset in its info panel, which the phone layout shows in place of the row's tag", async () => {
+    boxesAnswer = () =>
+      json([core, { id: 'marvel-studios-what-if', name: 'What If', baseGame: true, ruleset: 'revised', description: 'A made-up box.' }])
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(await screen.findByRole('button', { name: 'About What If' }))
+
+    expect(screen.getByRole('dialog', { name: 'What If' })).toHaveTextContent('Revised rules')
   })
 
   it('remembers the ticked boxes on the next visit and forgets boxes the API no longer lists', async () => {

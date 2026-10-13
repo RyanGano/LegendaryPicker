@@ -1,6 +1,7 @@
 import { Fragment, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import type { CardKind, CardsBeside, Component, Move, Pile, Setup, SetupStacks } from './api/setupApi.ts'
 import { cardTerms, setupTerms, startingDeckTerms, type RulesetTerms } from './rulesetTerms.ts'
+import { SpecialCardsInfo } from './SpecialCardsInfo.tsx'
 import { TermKind } from './TermChips.tsx'
 
 // The setup as a checklist in the order a player lays it out. Every count and note comes from
@@ -26,6 +27,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
     villainsSetAside = [],
     steps = [],
     standIns = [],
+    specialCards = [],
   } = setup
   const t = setupTerms(setup)
   const villainTerms = cardTerms(setup, setup.villainGroups)
@@ -174,6 +176,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
           // A stack standing in for one no included box has, as Wounds for Bindings, says so; the rule notes say the
           // real cards work too.
           const standingIn = standIns.filter((standIn) => standIn.with === stack).map((standIn) => STACK_NAMES[standIn.part])
+          const special = specialCards.filter((cards) => cards.stack === stack)
           return (
             count !== undefined && (
               <Item
@@ -181,6 +184,7 @@ export function SetupChecklist({ setup }: { setup: Setup }) {
                 label={label}
                 detail={standingIn.length > 0 ? `Standing in for ${standingIn.join(' and ')}` : undefined}
                 count={count}
+                info={special.length > 0 && <SpecialCardsInfo stack={label} special={special} />}
               />
             )
           )
@@ -273,8 +277,9 @@ function Section({
 
 // One line to lay out, with a box to tick once it is on the table. Where the line is drawn cards,
 // their names are the label and the detail says what they are. The whole line names the tick box,
-// so the spaces sit between the spans: a name computation may trim the text inside each one.
-function Item({ label, detail, count }: { label: ReactNode; detail?: string; count?: number }) {
+// so the spaces sit between the spans: a name computation may trim the text inside each one. An info button
+// sits beside the label, never inside it, so tapping it doesn't tick the line.
+function Item({ label, detail, count, info }: { label: ReactNode; detail?: string; count?: number; info?: ReactNode }) {
   return (
     <li className="row">
       <label>
@@ -285,6 +290,7 @@ function Item({ label, detail, count }: { label: ReactNode; detail?: string; cou
         </span>
         {count !== undefined && <> <span className="count">{count}</span></>}
       </label>
+      {info}
     </li>
   )
 }
