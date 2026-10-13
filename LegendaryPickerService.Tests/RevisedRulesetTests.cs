@@ -80,15 +80,4 @@ public sealed class RevisedRulesetTests
             new RuleNote($"Scheme draws 1 extra Hero outside the Hero Deck and puts 8 of its cards into the Villain Deck", "Card", null),
             setup.Notes);
     }
-
-    [Fact]
-    public void A_Revised_box_is_not_combined_with_a_box_of_another_ruleset()
-    {
-        const string Refusal = "Marvel Legendary First Edition core box and Revised Fixture follow different rulesets, and Revised boxes can't be combined with First Edition or Villainous boxes.";
-
-        Assert.Equal(Refusal, Generator.CheckBoxes(["core", "revised"]));
-        var error = Assert.Throws<ArgumentException>(() => Generator.Generate(2, ["revised", "core"], new ScriptedRandom()));
-        Assert.StartsWith(Refusal, error.Message);
-        Assert.Null(Generator.CheckBoxes(["revised"]));
-    }
 }

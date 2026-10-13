@@ -27,7 +27,7 @@ public sealed class SchemeFirstTests : IDisposable
         {
             foreach (var baseGame in Catalog.Boxes.Where(other => other.IsBaseGame))
             {
-                if (box == baseGame || (!box.IsBaseGame && Generator.CheckBoxes([baseGame.Id, box.Id]) is null))
+                if (box == baseGame || (!box.IsBaseGame && SameSide(box, baseGame)))
                 {
                     data.Add(box.Id, baseGame.Id);
                 }
@@ -36,6 +36,13 @@ public sealed class SchemeFirstTests : IDisposable
 
         return data;
     }
+
+    // Whether an expansion is drawn with a base game here: one of its ruleset, or a First Edition or Villainous expansion
+    // that Legendary: Villains mixes with or that plays under the other ruleset's base game (D-mixed, D-heroic). Any box can
+    // be drawn with any base game (#240), but the theory keeps to these pairs so its size doesn't grow with every box.
+    private static bool SameSide(Box box, Box baseGame) =>
+        box.Ruleset == baseGame.Ruleset
+        || (box.Ruleset != Ruleset.Revised && baseGame.Ruleset != Ruleset.Revised && (baseGame.Setup!.Mixing is not null || box.OtherRuleset is not null));
 
     [Theory]
     [MemberData(nameof(BoxesWithBaseGames))]

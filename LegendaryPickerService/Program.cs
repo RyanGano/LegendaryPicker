@@ -70,21 +70,27 @@ app.MapMethods("/api/health", ["GET", "HEAD"], (HttpRequest request) =>
     HttpMethods.IsHead(request.Method) ? Results.Ok() : Results.Ok(new { status = "ok" }));
 
 // The boxes a player can include in a setup, base games first, then by release month (#106). A base game supplies setup rules; an expansion adds cards.
-// Each names its ruleset, and MixesRulesets says whether it is a base game with rules for mixing rulesets, which a
-// setup that includes boxes of more than one ruleset needs, unless each box of a ruleset with no included base game
-// is an expansion that PlaysWithOtherRulesets: one that can be played under another ruleset's base game (D-heroic).
+// Each names its ruleset, so the app can offer a choice of rule edition when the ticked boxes follow more than one (#240).
 app.MapGet("/api/boxes", (BoxCatalog catalog) =>
     Results.Ok(catalog.Boxes.OrderByDescending(box => box.IsBaseGame).ThenBy(box => box.About.Released.Value, StringComparer.Ordinal).Select(box => new
     {
-        box.Id, box.Name, BaseGame = box.IsBaseGame, box.Ruleset, box.About.FirstPublished, Description = box.About.Description.Value, MixesRulesets = box.Setup?.Mixing is not null,
-        PlaysWithOtherRulesets = box.OtherRuleset is not null,
+        box.Id, box.Name, BaseGame = box.IsBaseGame, box.Ruleset, box.About.FirstPublished, Description = box.About.Description.Value,
     })));
+
+// The rule editions a player can choose with rules=, by their names in the query string (#240).
+var editions = new Dictionary<string, Ruleset>(StringComparer.Ordinal)
+{
+    ["first-edition"] = Ruleset.FirstEdition,
+    ["villains"] = Ruleset.Villainous,
+    ["revised"] = Ruleset.Revised,
+};
 
 // players is read as text so a non-number gets the same ProblemDetails as an out-of-range count.
 // boxes is a comma-separated list of box ids; without it a setup uses the core box alone. epic=true plays a drawn
-// Mastermind that has an Epic side on that side (#185).
+// Mastermind that has an Epic side on that side (#185). rules names the rule edition the whole setup follows; without
+// it the boxes decide (D-editions, #240).
 // NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
-app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
+app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? rules, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
 {
     // "Generate another" must always draw a fresh setup.
     response.Headers.CacheControl = "no-store";
@@ -97,15 +103,29 @@ app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, HttpRespon
         });
     }
 
+    Ruleset? edition = null;
+    if (!string.IsNullOrEmpty(rules))
+    {
+        if (!editions.TryGetValue(rules, out var named))
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]>
+            {
+                ["rules"] = [$"rules must be one of {string.Join(", ", editions.Keys)}."],
+            });
+        }
+
+        edition = named;
+    }
+
     var included = (boxes ?? SetupGenerator.CoreBoxId)
         .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
         .ToHashSet(StringComparer.Ordinal);
-    if (generator.CheckBoxes(included) is { } problem)
+    if (generator.CheckBoxes(included, edition) is { } problem)
     {
         return Results.ValidationProblem(new Dictionary<string, string[]> { ["boxes"] = [problem] });
     }
 
-    return Results.Ok(SetupResponse.From(generator.Generate(count, included, random, epic ?? false), catalog));
+    return Results.Ok(SetupResponse.From(generator.Generate(count, included, random, epic ?? false, edition), catalog));
 }).RequireRateLimiting(SetupRateLimit);
 
 app.Run();

@@ -500,73 +500,50 @@ describe('App', () => {
     expect(screen.queryByText('Pick a base game to draw a setup.')).not.toBeInTheDocument()
   })
 
-  it('disables Generate while Heroic and Villainous boxes are ticked without a base game that mixes them', async () => {
-    const mixingVillains: Box = { ...villains, mixesRulesets: true }
-    const coreBox: Box = { ...core, mixesRulesets: false }
-    const villainousFixture: Box = {
-      id: 'villainous-fixture',
-      name: 'Villainous Fixture',
-      baseGame: false,
-      ruleset: 'villainous',
-      mixesRulesets: false,
-      playsWithOtherRulesets: false,
-    }
-    boxesAnswer = () => json([coreBox, mixingVillains, villainousFixture])
+  it('enables Generate for boxes of any rulesets once a base game is ticked', async () => {
+    const whatIf: Box = { id: 'marvel-studios-what-if', name: "Marvel Studios' What If...?", baseGame: true, ruleset: 'revised' }
+    boxesAnswer = () => json([core, villains, whatIf])
     const user = userEvent.setup()
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
-    const hint = 'Heroic and Villainous boxes mix only with Legendary: Villains. Tick it too to draw a setup.'
 
-    await user.click(await screen.findByRole('checkbox', { name: 'Villainous Fixture' }))
-
-    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
-    expect(screen.getByText(hint)).toBeInTheDocument()
-
+    await user.click(await screen.findByRole('checkbox', { name: "Marvel Studios' What If...? Base game Revised rules" }))
     await user.click(screen.getByRole('checkbox', { name: 'Legendary: Villains Base game' }))
 
     expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
-    expect(screen.queryByText(hint)).not.toBeInTheDocument()
+    expect(document.querySelector('.box-hint')).toBeNull()
   })
 
-  it('enables Generate for the core box and an expansion that plays with other rulesets, such as Fear Itself', async () => {
-    const mixingVillains: Box = { ...villains, mixesRulesets: true }
-    const coreBox: Box = { ...core, mixesRulesets: false }
-    const fearItself: Box = {
-      id: 'fear-itself',
-      name: 'Fear Itself',
-      baseGame: false,
-      ruleset: 'villainous',
-      mixesRulesets: false,
-      playsWithOtherRulesets: true,
-    }
-    boxesAnswer = () => json([coreBox, mixingVillains, fearItself])
+  it('offers the rule editions only while the ticked boxes follow more than one ruleset, and remembers the choice', async () => {
+    const secondEdition: Box = { id: 'second-edition', name: 'Marvel Legendary Second Edition', baseGame: true, ruleset: 'revised' }
+    boxesAnswer = () => json([core, secondEdition])
+    setupAnswers.push(() => json(setup), () => json(setup))
     const user = userEvent.setup()
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
+    await screen.findByRole('checkbox', { name: 'Marvel Legendary Second Edition Base game Revised rules' })
 
-    await user.click(await screen.findByRole('checkbox', { name: 'Fear Itself' }))
+    expect(screen.queryByRole('radiogroup', { name: 'Rules' })).not.toBeInTheDocument()
 
-    expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
-    expect(screen.queryByText(/mix only with/)).not.toBeInTheDocument()
-  })
+    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary Second Edition Base game Revised rules' }))
+    const rules = screen.getByRole('radiogroup', { name: 'Rules' })
+    expect(within(rules).getByRole('radio', { name: 'Default Set by the boxes' })).toBeChecked()
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
 
-  it('disables Generate while a Revised box is ticked with a box of another ruleset', async () => {
-    const whatIf: Box = { id: 'marvel-studios-what-if', name: "Marvel Studios' What If...?", baseGame: true, ruleset: 'revised' }
-    boxesAnswer = () => json([core, whatIf])
-    const user = userEvent.setup()
-    renderApp()
-    await user.click(screen.getByRole('button', { name: '3' }))
-    const hint = "Revised boxes can't be drawn with First Edition or Villainous boxes. Untick one kind to draw a setup."
+    await user.click(within(rules).getByRole('radio', { name: 'First Edition' }))
+    await user.click(screen.getByRole('button', { name: 'Generate another' }))
 
-    await user.click(await screen.findByRole('checkbox', { name: "Marvel Studios' What If...? Base game Revised rules" }))
-
-    expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
-    expect(screen.getByText(hint)).toBeInTheDocument()
+    await waitFor(() => expect(setupRequests()).toHaveLength(2))
+    expect(setupRequests()).toEqual([
+      expect.stringMatching(/players=3&boxes=core,second-edition$/),
+      expect.stringMatching(/players=3&boxes=core,second-edition&rules=first-edition$/),
+    ])
+    expect(localStorage.getItem('legendaryPicker.rules')).toBe('first-edition')
 
     await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' }))
 
-    expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
-    expect(screen.queryByText(hint)).not.toBeInTheDocument()
+    expect(screen.queryByRole('radiogroup', { name: 'Rules' })).not.toBeInTheDocument()
   })
 
   it('draws from the core box and every ticked expansion', async () => {

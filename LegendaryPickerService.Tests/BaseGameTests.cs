@@ -30,15 +30,14 @@ public class BaseGameTests
         }
     }
 
-    // Villains Fixture has no rules for mixing, unlike Legendary: Villains, so nothing covers the mix.
+    // Villains Fixture has no rules for mixing, unlike Legendary: Villains, but any boxes with a base game can be drawn
+    // together (D-editions, #240): the core box's Scheme and Mastermind follow its own rules.
     [Fact]
-    public void Boxes_of_different_rulesets_with_no_rules_for_mixing_them_are_refused()
+    public void Boxes_of_different_rulesets_with_no_rules_for_mixing_them_are_drawn_together()
     {
-        const string Refusal = "Marvel Legendary First Edition core box and Villains Fixture follow different rulesets, and no included base game has rules for mixing them.";
-
-        Assert.Equal(Refusal, Generator.CheckBoxes(["core", "villains-fixture"]));
-        var error = Assert.Throws<ArgumentException>(() => Generator.Generate(2, ["villains-fixture", "core"], new ScriptedRandom()));
-        Assert.StartsWith(Refusal, error.Message);
+        Assert.Null(Generator.CheckBoxes(["core", "villains-fixture"]));
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, ["villains-fixture", "core"], new ScriptedRandom()));
+        Assert.Equal(Ruleset.FirstEdition, setup.Ruleset);
     }
 
     [Fact]

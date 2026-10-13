@@ -474,6 +474,25 @@ describe('SetupChecklist', () => {
     expect(tileNames('Heroes')).toEqual(['Thor', 'Cyclops', 'Nick Fury', 'Black Widow', 'Hulk'])
   })
 
+  it('keeps the First Edition words for a mixed setup of First Edition and Revised cards', () => {
+    const [first, ...others] = legacyVirusThreePlayers.heroes
+    renderChecklist({
+      ...legacyVirusThreePlayers,
+      ruleset: 'revised',
+      mixed: true,
+      heroes: [{ ...first, ruleset: 'revised' }, ...others.map((hero) => ({ ...hero, ruleset: 'firstEdition' }))],
+    })
+
+    expect(screen.getByRole('heading', { name: 'Villain Deck', level: 3 })).toBeInTheDocument()
+    expect(screen.queryByText(/ or Adversary /)).not.toBeInTheDocument()
+  })
+
+  it("names the included base game's starting cards when the setup's rules come from one that isn't", () => {
+    renderChecklist({ ...twoPlayerVillainsGraduation, playerDeck: { ...twoPlayerVillainsGraduation.playerDeck, team: 'firstEdition' } })
+
+    expect(rows('Starting deck per player · 2 players')).toEqual(['S.H.I.E.L.D. Agents 8', 'S.H.I.E.L.D. Troopers 4'])
+  })
+
   it('says nothing about rules when the included boxes follow one ruleset', () => {
     renderChecklist(twoPlayerVillainsGraduation)
 

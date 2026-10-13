@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 8,
+  "id": "revised-extra",
+  "name": "Revised Extra Fixture",
+  "ruleset": "revised",
+  "catalogSource": "R p.1",
+  "about": { "released": { "value": "2015-01", "source": "R p.1" }, "description": { "value": "A made-up Revised expansion for tests.", "source": "R p.1" } },
+  "sources": [
+    { "key": "R", "url": "https://example.test/revised-extra-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 8, "source": "R p.1" }
+  },
+  "heroes": [
+    { "id": "revised-extra_hero_test-scout", "name": "Test Scout", "team": null, "classes": ["core_term_tech"], "terms": [] }
+  ],
+  "villainGroups": [
+    { "id": "revised-extra_villain_test-raiders", "name": "Test Raiders", "terms": ["core_term_ambush"] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "revised-extra_mastermind_test-admiral",
+      "name": "Test Admiral",
+      "terms": ["core_term_always-leads"],
+      "alwaysLeads": { "groupId": "revised-extra_villain_test-raiders", "groupType": "villain", "source": "Card" },
+      "uses": [{ "part": "wounds", "source": "Card" }]
+    }
+  ],
+  "schemes": [
+    {
+      "id": "revised-extra_scheme_test-blockade",
+      "name": "Test Blockade",
+      "terms": ["core_term_scheme-twist"],
+      "setup": { "twists": [{ "players": null, "value": 8, "source": "Card" }] }
+    }
+  ],
+  "glossary": []
+}

@@ -34,6 +34,11 @@ namespace LegendaryPickerService.Setup;
 // #110): its Schemes and Masterminds then follow the included base game's rules, and each part it uses that no
 // included box supplies is replaced by its stand-in, as Fear Itself's Bindings become Wounds (FI p.2).
 //
+// Any boxes with a base game can be drawn together, whatever their rulesets, under one rule edition (D-editions, #240):
+// the one the player chooses, or else Revised when a Revised base game is included, and otherwise the Scheme and
+// Mastermind decide as above, with a Revised card following First Edition rules. An edition whose base game isn't
+// included takes its rules from a loaded one, and the included base game closest to it supplies the parts they use.
+//
 // Every count and rule comes from the box data; nothing here compares a card name.
 public sealed class SetupGenerator(BoxCatalog catalog)
 {
@@ -42,14 +47,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     // The source key of the owner decision that every requirement is met, from another box when need be (#138).
     private const string SchemeFirst = "D-scheme-first";
 
+    // The source key of the owner decision that any boxes can be drawn together under one rule edition (#240).
+    private const string Editions = "D-editions";
+
     public GenerationResult Generate(int players, IRandomSource random) => Generate(players, [CoreBoxId], random);
 
     // Every included box contributes its cards and stacks, drawn in catalog order whatever order the boxes
     // are named in. The rules of each ruleset come from its first included base game in catalog order. With epic, a drawn
-    // Mastermind that has an Epic side is played on that side, with its setup effects (#185).
-    public GenerationResult Generate(int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random, bool epic = false)
+    // Mastermind that has an Epic side is played on that side, with its setup effects (#185). With rules, the whole
+    // setup follows that rule edition, from the first loaded base game of it when none is included (#240).
+    public GenerationResult Generate(int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random, bool epic = false, Ruleset? rules = null)
     {
-        if (CheckBoxes(includedBoxes) is { } problem)
+        if (CheckBoxes(includedBoxes, rules) is { } problem)
         {
             throw new ArgumentException(problem, nameof(includedBoxes));
         }
@@ -67,56 +76,91 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             .ToDictionary(active => active.Rule.Part);
         var baseRulesets = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).ToHashSet();
 
-        // One set of rules per ruleset that has an included base game, each drawing from every included box.
-        var draws = boxes.Where(box => box.IsBaseGame)
-            .GroupBy(box => box.Ruleset)
-            .Select(rulesets =>
+        TableDraw Table(Box rulesBox, RuleNote? edition)
+        {
+            var rules = rulesBox.Setup!;
+            var row = rules.PlayerCounts.SingleOrDefault(r => r.Players == players);
+            if (players != 1 && row is null)
             {
-                var rulesBox = rulesets.Key == mixingBox?.Ruleset ? mixingBox : rulesets.First();
-                var rules = rulesBox.Setup!;
-                var row = rules.PlayerCounts.SingleOrDefault(r => r.Players == players);
-                if (players != 1 && row is null)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(players), players,
-                        $"Supported player counts are 1 (Solo) and {string.Join(", ", rules.PlayerCounts.Select(r => r.Players))}.");
-                }
+                throw new ArgumentOutOfRangeException(nameof(players), players,
+                    $"Supported player counts are 1 (Solo) and {string.Join(", ", rules.PlayerCounts.Select(r => r.Players))}.");
+            }
 
-                return new TableDraw(catalog.Boxes, boxes, rulesBox, mixingBox, baseRulesets, standIns, rules, players, row, random);
-            })
-            .ToList();
+            return new TableDraw(catalog.Boxes, boxes, rulesBox, mixingBox, baseRulesets, standIns, rules, players, row, random, edition);
+        }
+
+        // One rule edition for the whole setup, when the player chose one or the boxes call for one; otherwise one set of
+        // rules per ruleset that has an included base game, each drawing from every included box.
+        var draws = (rules ?? DefaultEdition(boxes, mixingBox)) is { } edition
+            ? [Table(EditionBox(boxes, edition), EditionReason(boxes, edition, chosen: rules is not null))]
+            : boxes.Where(box => box.IsBaseGame)
+                .GroupBy(box => box.Ruleset)
+                .Select(group => Table(group.Key == mixingBox?.Ruleset ? mixingBox : group.First(), null))
+                .ToList();
 
         return Run(boxes, draws, players, random, epic);
     }
 
-    // Why a set of box ids can't be drawn from, or null when it can. A setup needs at least one base game for
-    // its rules, and boxes of different rulesets need a base game that gives rules for mixing them, unless the base
-    // games are of one ruleset and every box of the other can be played under it (D-heroic). A Revised box is never
-    // combined with a box of another ruleset (#141).
-    public string? CheckBoxes(IReadOnlyCollection<string> includedBoxes)
+    // The rule edition a setup follows when the player chooses none (D-editions, #240), or null when its boxes follow one
+    // ruleset or its Scheme and Mastermind decide. A Revised base game brings the newest rules. Without one, First Edition
+    // and Villainous boxes keep D-mixed, or D-heroic for an expansion played under the other ruleset's base game, and a
+    // Revised card among them follows First Edition rules; any other mix follows its base games' one ruleset.
+    private static Ruleset? DefaultEdition(IReadOnlyList<Box> boxes, Box? mixingBox)
+    {
+        var bases = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).ToHashSet();
+        if (boxes.Select(box => box.Ruleset).Distinct().Count() == 1)
+        {
+            return null;
+        }
+
+        if (bases.Contains(Ruleset.Revised))
+        {
+            return Ruleset.Revised;
+        }
+
+        return mixingBox is not null || bases.Count > 1 || boxes.All(box => bases.Contains(box.Ruleset) || box.OtherRuleset is not null)
+            ? null
+            : bases.Single();
+    }
+
+    // The base game whose rules an edition follows: the first included one of it, or else the first loaded one, whose
+    // rules then apply with none of its cards (#240).
+    private Box EditionBox(IReadOnlyList<Box> boxes, Ruleset edition) =>
+        boxes.FirstOrDefault(box => box.IsBaseGame && box.Ruleset == edition)
+        ?? catalog.Boxes.First(box => box.IsBaseGame && box.Ruleset == edition);
+
+    // Why a setup follows a rule edition, or null when the player chose the one ruleset its boxes follow anyway.
+    private static RuleNote? EditionReason(IReadOnlyList<Box> boxes, Ruleset edition, bool chosen)
+    {
+        var name = RulesetTerms.RulesName(edition);
+        if (chosen)
+        {
+            return boxes.All(box => box.Ruleset == edition) ? null : new RuleNote($"{name} rules: chosen by the player", Editions, null);
+        }
+
+        return new RuleNote(
+            edition == Ruleset.Revised ? $"{name} rules: a Revised base game is included" : $"{name} rules: the included base games follow them",
+            Editions,
+            null);
+    }
+
+    // Why a set of box ids can't be drawn from, or null when it can. A setup needs at least one base game for its
+    // rules; any boxes with one can be drawn together, whatever their rulesets (D-editions, #240). A chosen rule edition
+    // needs a loaded base game of it for its rules.
+    public string? CheckBoxes(IReadOnlyCollection<string> includedBoxes, Ruleset? rules = null)
     {
         if (includedBoxes.FirstOrDefault(id => catalog.Boxes.All(box => box.Id != id)) is { } unknown)
         {
             return $"No box has id {unknown}.";
         }
 
-        var included = catalog.Boxes.Where(box => includedBoxes.Contains(box.Id)).ToList();
-        if (!included.Any(box => box.IsBaseGame))
+        if (!catalog.Boxes.Any(box => includedBoxes.Contains(box.Id) && box.IsBaseGame))
         {
             return "Include at least one base game.";
         }
 
-        // A Revised box follows rules of its own that no mixing rules cover, so it is played with Revised boxes only
-        // until the owner rules on mixing it with the others (#141).
-        if (included.Any(box => box.Ruleset == Ruleset.Revised) && included.Any(box => box.Ruleset != Ruleset.Revised))
-        {
-            return $"{string.Join(" and ", included.Select(box => box.Name))} follow different rulesets, and Revised boxes can't be combined with First Edition or Villainous boxes.";
-        }
-
-        var baseRulesets = included.Where(box => box.IsBaseGame).Select(box => box.Ruleset).ToHashSet();
-        return included.Select(box => box.Ruleset).Distinct().Count() > 1
-            && !included.Any(box => box.Setup?.Mixing is not null)
-            && (baseRulesets.Count > 1 || included.Any(box => !baseRulesets.Contains(box.Ruleset) && box.OtherRuleset is null))
-            ? $"{string.Join(" and ", included.Select(box => box.Name))} follow different rulesets, and no included base game has rules for mixing them."
+        return rules is { } edition && !catalog.Boxes.Any(box => box.IsBaseGame && box.Ruleset == edition)
+            ? $"No base game has {RulesetTerms.RulesName(edition)} rules."
             : null;
     }
 
@@ -148,12 +192,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     // the setup doesn't include, the included boxes, which it draws every other card from, the base game whose rules
     // they are, the mixing base game when the included boxes follow more than one ruleset and
     // one of them has mixing rules, the rulesets of the included base games, the stand-ins of the parts no
-    // included box supplies, and the random source. row is the player-count table row, or null in Solo.
+    // included box supplies, and the random source. row is the player-count table row, or null in Solo. edition is
+    // present when the setup follows one rule edition whatever its Scheme and Mastermind (D-editions, #240), and is why.
     private sealed class TableDraw(
         IReadOnlyList<Box> catalogBoxes, IReadOnlyList<Box> boxes, Box rulesBox, Box? mixingBox, IReadOnlySet<Ruleset> baseRulesets,
         IReadOnlyDictionary<Part, ActiveStandIn> standIns, SetupRules rules, int players, PlayerCountSetup? row,
-        IRandomSource random)
+        IRandomSource random, RuleNote? edition)
     {
+        // The included base game whose parts stand for those of the rules' base game when that isn't included: the first
+        // that uses the same words, or else the first (D-editions, #240).
+        private readonly Box _componentsBox = boxes.Contains(rulesBox)
+            ? rulesBox
+            : boxes.Where(box => box.IsBaseGame).OrderByDescending(box => RulesetTerms.For(box.Ruleset) == RulesetTerms.For(rulesBox.Ruleset)).First();
+
         // A reprint is one card with the original (#34 D5), so each card is in its pool once however many included boxes hold it.
         private readonly List<VillainGroup> _villainGroups = boxes.SelectMany(box => box.AllVillainGroups).DistinctBy(group => group.Id).Where(group => Supplied(boxes, standIns, group)).ToList();
         private readonly List<HenchmanGroup> _henchmanGroups = boxes.SelectMany(box => box.AllHenchmanGroups).DistinctBy(group => group.Id).Where(group => Supplied(boxes, standIns, group)).ToList();
@@ -181,8 +232,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         public Mastermind PlayedEpic(Mastermind mastermind) =>
             mastermind.PlayedEpic() is var epic && Supplied(boxes, standIns, epic) ? epic : mastermind;
 
-        // Whether a Scheme and Mastermind pair follows these rules.
-        public bool Follows(Scheme scheme, Mastermind mastermind) => RulesOf(scheme, mastermind) == rulesBox.Ruleset;
+        // Whether a Scheme and Mastermind pair follows these rules: every pair does under one rule edition.
+        public bool Follows(Scheme scheme, Mastermind mastermind) => edition is not null || RulesOf(scheme, mastermind) == rulesBox.Ruleset;
 
         // Draws the rest of the setup for a Scheme and Mastermind pair that follows these rules.
         public SetupResult Finish(Scheme scheme, Mastermind mastermind)
@@ -261,14 +312,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var mixed = drawn.Count > 1;
 
             // The rules' own ruleset lays out its stacks too, which a pair played under another ruleset's base game
-            // (D-heroic) doesn't otherwise bring.
-            var stackBoxes = boxes.Where(box => drawn.Contains(box.Ruleset) || box.Ruleset == rulesBox.Ruleset).ToList();
+            // (D-heroic) doesn't otherwise bring, as does the base game standing for the rules' own.
+            var stackBoxes = boxes.Where(box => drawn.Contains(box.Ruleset) || box.Ruleset == rulesBox.Ruleset || box.Ruleset == _componentsBox.Ruleset).ToList();
 
             // The parts the setup lays out: those its rules use, and those its drawn cards use (D-uses). Under the
             // mixing base game's rules a mixed setup's rules use the recruit stacks of every included base game
-            // (VIL p.21); under the other rules its cards of the mixing ruleset bring only what they use (#88).
+            // (VIL p.21); under the other rules its cards of the mixing ruleset bring only what they use (#88). Rules
+            // whose recruit stacks no included box has use those of the base game standing for theirs (D-editions, #240).
             var mixingRules = rulesBox == mixingBox;
             var rulesUse = mixed && mixingRules ? boxes.Where(box => box.IsBaseGame).SelectMany(box => box.Setup!.Uses) : rules.Uses;
+            if (rulesUse.Any(use => !boxes.Any(box => box.Components.Supplies(use.Part)?.Value > 0)))
+            {
+                rulesUse = _componentsBox.Setup!.Uses;
+            }
             // A part no included box supplies is replaced by its stand-in (D-heroic, FI p.2).
             // Tactics shuffled into the Villain Deck play with no abilities, so their Mastermind brings no parts (#113).
             // Every setup shuffles all the included Bystanders together, so special Bystanders bring their parts too (#125).
@@ -280,15 +336,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var used = rulesUse.Select(use => use.Part).Concat(cardParts.Select(StandInFor).OfType<Part>()).ToHashSet();
             var stoodIn = standIns.Values.Where(active => cardParts.Contains(active.Rule.Part)).ToList();
 
-            // A part only a required card uses can be one no included box supplies: the first loaded box that has it,
-            // a base game first, lays it out, as the player owns it (D-scheme-first, #138).
+            // A part the boxes of the drawn cards' rulesets lack comes from an included box of another that has it, as a
+            // Revised base game's Wounds serve a First Edition card (D-editions, #240). A part only a required card uses
+            // can be one no included box supplies: the first loaded box that has it, a base game first, lays it out, as
+            // the player owns it (D-scheme-first, #138).
             var borrowed = used
                 .Where(part => !stackBoxes.Any(box => box.Components.Supplies(part)?.Value > 0))
-                .ToDictionary(part => part, part => catalogBoxes.OrderByDescending(box => box.IsBaseGame).First(box => box.Components.Supplies(part)?.Value > 0));
+                .ToDictionary(part => part, part => boxes.Concat(catalogBoxes.OrderByDescending(box => box.IsBaseGame)).First(box => box.Components.Supplies(part)?.Value > 0));
 
-            // A mixed setup's notes name its parts in both rulesets' words, so its plan's notes are written again.
+            // A setup whose cards' rulesets name its parts by different words names them by both, so its plan's notes
+            // are written again. First Edition and Revised use the same words.
             var notes = new List<RuleNote>();
-            if (mixed)
+            if (drawn.Select(RulesetTerms.For).Distinct().Count() > 1)
             {
                 _terms = RulesetTerms.Mixed;
                 notes.AddRange(WithMastermind(Plan(plan.Scheme), mastermind).Notes);
@@ -300,7 +359,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             notes.AddRange(slotNotes);
 
-            foreach (var (part, from) in borrowed)
+            foreach (var (part, from) in borrowed.Where(entry => !boxes.Contains(entry.Value)))
             {
                 notes.Add(Note($"No included box has {StackName(part)} cards: the setup uses those of {from.Name}", SchemeFirst, rulesBox));
             }
@@ -331,7 +390,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                         ? "Mixed sets: lay out the recruit stacks of every included base game, and shuffle all Bystanders together"
                         : "Mixed sets: shuffle all Bystanders together",
                     mixing.Stacks, mixingBox));
-                var teams = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).Distinct().ToList();
+                var teams = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).DistinctBy(RulesetTerms.StartingTeam).ToList();
                 if (mixingRules && teams.Count > 1)
                 {
                     choices = teams;
@@ -371,9 +430,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             // With boxes of more than one ruleset included, the result names the card that decided its rules
             // ("Villains rules: the Commander is Dr. Strange"), or says the pair has no card of the mixing ruleset.
-            // Without a mixing base game, every card plays under the one included base game's rules (D-heroic).
-            RuleNote? reason = null;
-            if (boxes.Any(box => !baseRulesets.Contains(box.Ruleset)) && mixingBox is null)
+            // Without a mixing base game, every card plays under the one included base game's rules (D-heroic). A setup
+            // that follows one rule edition says why instead (D-editions, #240).
+            var reason = edition;
+            if (edition is null && boxes.Any(box => !baseRulesets.Contains(box.Ruleset)) && mixingBox is null)
             {
                 var other = boxes.First(box => !baseRulesets.Contains(box.Ruleset));
                 var source = other.OtherRuleset!.Source;
@@ -382,7 +442,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     source,
                     LinkOf(source, other));
             }
-            else if (mixingBox is not null)
+            else if (edition is null && mixingBox is not null)
             {
                 var source = mixingBox.Setup!.Mixing!.Rules;
                 var words = RulesetTerms.For(mixingBox.Ruleset);
@@ -451,7 +511,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     Stack(Part.NewRecruits, Supply(Part.NewRecruits)),
                     Stack(Part.Shards, Supply(Part.Shards)),
                     Stack(Part.Horrors, Supply(Part.Horrors))),
-                new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value, choices),
+                new PlayerDeck(rules.StartingDeck.Agents.Value, rules.StartingDeck.Troopers.Value, choices, StartingTeam()),
                 plan.Moves,
                 outside,
                 outsideHenchmen,
@@ -1196,12 +1256,20 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // pair's own, since only two rulesets exist and a pair with no card of the mixing one shares the other.
         // A pair of a ruleset with no included base game follows the included base game's rules when the boxes of
         // its cards of that ruleset can be played under another's (D-heroic), and is otherwise dropped.
+        // A Revised card with no Revised base game included is on the First Edition side, as is any card that isn't
+        // Villainous (D-editions, #240).
         private Ruleset RulesOf(Scheme scheme, Mastermind mastermind)
         {
-            var ruleset = mixingBox is not null && RulesetOf(mastermind.Id) == mixingBox.Ruleset ? mixingBox.Ruleset : RulesetOf(scheme.Id);
-            var pair = new[] { BoxOf(scheme.Id), BoxOf(mastermind.Id) }.Where(box => box.Ruleset == ruleset);
+            Ruleset Side(Ruleset ruleset) => ruleset == Ruleset.Revised && !baseRulesets.Contains(ruleset) ? Ruleset.FirstEdition : ruleset;
+            var ruleset = mixingBox is not null && RulesetOf(mastermind.Id) == mixingBox.Ruleset ? mixingBox.Ruleset : Side(RulesetOf(scheme.Id));
+            var pair = new[] { BoxOf(scheme.Id), BoxOf(mastermind.Id) }.Where(box => Side(box.Ruleset) == ruleset);
             return baseRulesets.Contains(ruleset) || pair.Any(box => box.OtherRuleset is null) ? ruleset : baseRulesets.Single();
         }
+
+        // The ruleset whose starting cards the players use when the rules' base game isn't included and the base game
+        // standing for it deals another team's, or null (D-editions, #240).
+        private Ruleset? StartingTeam() =>
+            RulesetTerms.StartingTeam(_componentsBox.Ruleset) == RulesetTerms.StartingTeam(rulesBox.Ruleset) ? null : _componentsBox.Ruleset;
 
         // The part a setup lays out for a card that uses this one: the part itself, its stand-in when no included box
         // supplies it, or null when the stand-in needs no part.
@@ -1227,16 +1295,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             from.Sources.FirstOrDefault(source => source.Key == citation.Split(' ')[0])?.Url;
     }
 
-    // A card is set up only when an included box of its own ruleset supplies every part it uses, or the part has a
-    // stand-in some included box supplies, or one that needs no part (D-heroic). Those boxes' stacks are laid out in
-    // every setup that draws the card.
-    private static bool Supplied(IReadOnlyList<Box> boxes, IReadOnlyDictionary<Part, ActiveStandIn> standIns, ICard card)
-    {
-        var ruleset = boxes.First(box => box.Holds(card.Id)).Ruleset;
-        return card.Parts.All(part => standIns.TryGetValue(part, out var active)
+    // A card is set up only when an included box supplies every part it uses, or the part has a stand-in some included
+    // box supplies, or one that needs no part (D-heroic). A part is the same card whichever ruleset's box holds it, as a
+    // Revised base game's Wounds serve a First Edition card (D-editions, #240).
+    private static bool Supplied(IReadOnlyList<Box> boxes, IReadOnlyDictionary<Part, ActiveStandIn> standIns, ICard card) =>
+        card.Parts.All(part => standIns.TryGetValue(part, out var active)
             ? active.Rule.With is not { } with || boxes.Any(box => box.Components.Supplies(with)?.Value > 0)
-            : boxes.Any(box => box.Ruleset == ruleset && box.Components.Supplies(part)?.Value > 0));
-    }
+            : boxes.Any(box => box.Components.Supplies(part)?.Value > 0));
 
     // A stand-in that applies to a setup, and the box that gives it.
     private sealed record ActiveStandIn(StandIn Rule, Box From);

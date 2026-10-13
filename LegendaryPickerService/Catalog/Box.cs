@@ -31,7 +31,7 @@ public sealed record PlayerCountValue(int[]? Players, int Value, string Source);
 // A setup can include boxes of both when a base game gives rules for mixing them (SetupRules.Mixing); the
 // Scheme and Mastermind it draws then decide which ruleset it follows (#73, #85, #88). An expansion with an
 // OtherRuleset section can also be included with base games of the other ruleset alone, whose rules it follows (#110).
-// A Revised setup is never mixed with the other rulesets until the owner rules on it (#141).
+// Boxes of any rulesets can be included together, under one rule edition the player chooses or a default (D-editions, #240).
 public enum Ruleset
 {
     FirstEdition,

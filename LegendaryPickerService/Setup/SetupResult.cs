@@ -132,11 +132,14 @@ public sealed record SetupStacks(
 
 // Each player's starting deck: S.H.I.E.L.D. Agents and Troopers, or under Villainous HYDRA Operatives and Soldiers.
 // Choices lists the rulesets whose starting decks the players choose between in a mixed setup that includes
-// base games of both (VIL p.21); it is null when there is no choice.
+// base games of both (VIL p.21); it is null when there is no choice. Team is the ruleset whose starting cards the
+// players use when the setup's rules come from a base game that isn't included and the included one standing for it
+// deals another team's, as the core box's S.H.I.E.L.D. cards under Villains rules (D-editions, #240); otherwise null.
 public sealed record PlayerDeck(
     int Agents,
     int Troopers,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<Ruleset>? Choices = null);
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<Ruleset>? Choices = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] Ruleset? Team = null);
 
 // One rule that changed the result, with its source key (for example "R p.6") and,
 // when the source is published, a link to it. Box names the box the rule comes from once

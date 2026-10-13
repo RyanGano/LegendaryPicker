@@ -261,8 +261,8 @@ public sealed class SetupEndpointTests : IDisposable
 
         var expected = JsonNode.Parse("""
             [
-              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition", "firstPublished": 2012, "mixesRulesets": false, "playsWithOtherRulesets": false },
-              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition", "firstPublished": 2020, "mixesRulesets": false, "playsWithOtherRulesets": false }
+              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition", "firstPublished": 2012 },
+              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition", "firstPublished": 2020 }
             ]
             """);
         var actual = JsonNode.Parse(body)!.AsArray();
@@ -292,26 +292,6 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal(
             ["core", "villains", "marvel-studios-phase-1", "marvel-studios-what-if", "second-edition", "dark-city", "fantastic-four", "paint-the-town-red", "guardians-of-the-galaxy", "fear-itself", "secret-wars-volume-1", "secret-wars-volume-2", "captain-america-75th-anniversary", "civil-war", "deadpool", "noir", "x-men", "spider-man-homecoming", "champions", "world-war-hulk", "ant-man", "venom", "dimensions", "revelations", "shield", "heroes-of-asgard", "the-new-mutants", "into-the-cosmos", "realm-of-kings", "annihilation", "messiah-complex", "doctor-strange-and-the-shadows-of-nightmare", "marvel-studios-guardians-of-the-galaxy", "black-panther", "black-widow", "marvel-studios-the-infinity-saga", "midnight-sons", "marvel-studios-ant-man-and-the-wasp", "2099", "weapon-x"],
             boxes!.Select(box => (string)box!["id"]!));
-    }
-
-    // Only Legendary: Villains has rules for mixing rulesets, and only Fear Itself can be played without a base game of
-    // its own ruleset (D-heroic), so the app can tell a player which ticked boxes can't be drawn together.
-    [Fact]
-    public async Task Boxes_says_which_base_game_can_mix_rulesets_and_which_expansion_plays_with_other_rulesets()
-    {
-        var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
-
-        Assert.Equal(
-            [
-                "core firstEdition base", "villains villainous base mixes", "marvel-studios-phase-1 firstEdition base", "marvel-studios-what-if revised base", "second-edition revised base", "dark-city firstEdition", "fantastic-four firstEdition",
-                "paint-the-town-red firstEdition", "guardians-of-the-galaxy firstEdition", "fear-itself villainous plays",
-                "secret-wars-volume-1 firstEdition", "secret-wars-volume-2 firstEdition", "captain-america-75th-anniversary firstEdition",
-                "civil-war firstEdition",
-                "deadpool firstEdition", "noir firstEdition", "x-men firstEdition", "spider-man-homecoming firstEdition", "champions firstEdition", "world-war-hulk firstEdition", "ant-man firstEdition", "venom firstEdition", "dimensions firstEdition", "revelations firstEdition", "shield firstEdition", "heroes-of-asgard firstEdition", "the-new-mutants firstEdition", "into-the-cosmos firstEdition", "realm-of-kings firstEdition", "annihilation firstEdition", "messiah-complex firstEdition", "doctor-strange-and-the-shadows-of-nightmare firstEdition", "marvel-studios-guardians-of-the-galaxy firstEdition", "black-panther firstEdition", "black-widow firstEdition", "marvel-studios-the-infinity-saga firstEdition", "midnight-sons firstEdition", "marvel-studios-ant-man-and-the-wasp revised", "2099 revised", "weapon-x revised",
-            ],
-            boxes!.Select(box =>
-                $"{box!["id"]} {box["ruleset"]}{((bool)box["baseGame"]! ? " base" : "")}{((bool)box["mixesRulesets"]! ? " mixes" : "")}"
-                + ((bool)box["playsWithOtherRulesets"]! ? " plays" : "")));
     }
 
     // The core box and Fear Itself alone draw a setup that says the core box's Wounds stand in for Bindings (D-heroic).
@@ -420,18 +400,27 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal(expected, (string?)problem!["errors"]!["boxes"]![0]);
     }
 
+    // The core box and Second Edition draw under Revised rules by default, and under First Edition rules on request (#240).
     [Fact]
-    public async Task Boxes_of_different_rulesets_with_no_rules_for_mixing_them_return_a_validation_problem()
+    public async Task Rules_choose_the_rule_edition_of_boxes_of_different_rulesets()
     {
-        var client = Client(catalog: BoxCatalog.Load(BaseGameTests.Directory));
+        var client = Client(new ScriptedRandom());
 
-        var response = await client.GetAsync("/api/setup?players=2&boxes=core,villains-fixture");
+        var revised = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,second-edition");
+        var firstEdition = await client.GetFromJsonAsync<JsonObject>("/api/setup?players=2&boxes=core,second-edition&rules=first-edition");
+
+        Assert.Equal(("revised", "Revised rules: a Revised base game is included"), ((string?)revised!["ruleset"], (string?)revised["rulesReason"]!["text"]));
+        Assert.Equal(("firstEdition", "First Edition rules: chosen by the player"), ((string?)firstEdition!["ruleset"], (string?)firstEdition["rulesReason"]!["text"]));
+    }
+
+    [Fact]
+    public async Task An_unknown_rule_edition_returns_a_validation_problem()
+    {
+        var response = await Client().GetAsync("/api/setup?players=2&rules=second-edition");
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var problem = await response.Content.ReadFromJsonAsync<JsonObject>();
-        Assert.Equal(
-            "Marvel Legendary First Edition core box and Villains Fixture follow different rulesets, and no included base game has rules for mixing them.",
-            (string?)problem!["errors"]!["boxes"]![0]);
+        Assert.Equal("rules must be one of first-edition, villains, revised.", (string?)problem!["errors"]!["rules"]![0]);
     }
 
     [Theory]
