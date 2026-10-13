@@ -13,10 +13,13 @@ namespace LegendaryPickerService.Catalog;
 // kebab-case segment. References name a full id, so a box can reference another box's groups.
 public sealed partial class BoxCatalog
 {
-    public const int SchemaVersion = 7;
+    public const int SchemaVersion = 8;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
+
+    // A box's description is a short paraphrase in our own words, never back-of-the-box or rulebook text.
+    public const int MaxBoxDescriptionWords = 50;
 
     // Setup step and Solo play rule labels are one short instruction in our own words, never card or rulebook text.
     public const int MaxStepLabelWords = 15;
@@ -189,6 +192,7 @@ public sealed partial class BoxCatalog
             }
 
             ValidateReleased(path, box);
+            ValidateDescription(path, box);
             ValidateTerms(path, box, sourceKeys);
             ValidateSteps(path, box);
             ValidateRuleSources(path, box, sourceKeys);
@@ -403,6 +407,16 @@ public sealed partial class BoxCatalog
         {
             throw new InvalidDataException(
                 $"{path}: box {box.Id} has released {box.About.Released.Value}; a release is a year and month such as 2014-10.");
+        }
+    }
+
+    private static void ValidateDescription(string path, Box box)
+    {
+        var words = WordCount(box.About.Description.Value);
+        if (words is 0 or > MaxBoxDescriptionWords)
+        {
+            throw new InvalidDataException(
+                $"{path}: box {box.Id} has a {words}-word description; a description is 1 to {MaxBoxDescriptionWords} words.");
         }
     }
 
@@ -1215,6 +1229,7 @@ public sealed partial class BoxCatalog
     private static IEnumerable<(string Rule, string Source)> RuleSources(Box box)
     {
         yield return ("about.released", box.About.Released.Source);
+        yield return ("about.description", box.About.Description.Source);
         if (box.Reprints is { } reprints)
         {
             yield return ("reprints", reprints.Source);

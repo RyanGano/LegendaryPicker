@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "messiah-complex",
   "name": "Messiah Complex",
   "ruleset": "firstEdition",
   "catalogSource": "MC p.2; C1",
-  "about": { "released": { "value": "2022-01", "source": "Q" } },
+  "about": { "released": { "value": "2022-01", "source": "Q" }, "description": { "value": "A mid-sized First Edition expansion about the mutant messiah hunt. It adds eight Heroes, four Villain Groups, two Henchman Groups and three Masterminds, with the Clone, Shatter, Tactical Formation and Prey keywords.", "source": "Q" } },
   "sources": [
     { "key": "MC", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Lgd_MessiahComplex_Rulesheet_Compressed.pdf" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }

@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "deadpool",
   "name": "Deadpool",
   "ruleset": "firstEdition",
   "catalogSource": "DP p.2; C1",
-  "about": {"released": {"value": "2016-10", "source": "Q"}},
+  "about": {"released": {"value": "2016-10", "source": "Q"}, "description": { "value": "A small First Edition expansion starring the Merc with a Mouth. It adds five Heroes such as Slapstick and Stingray, Deadpool's Friends and Evil Deadpool Corpse as Villain Groups, Evil Deadpool and Macho Gomez as Masterminds, and the Excessive Violence and Revenge keywords.", "source": "Q" }},
   "sources": [
     {"key": "DP", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Deadpool_RulesSheet.pdf"},
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}

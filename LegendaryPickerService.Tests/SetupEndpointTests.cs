@@ -261,11 +261,27 @@ public sealed class SetupEndpointTests : IDisposable
 
         var expected = JsonNode.Parse("""
             [
-              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition", "mixesRulesets": false, "playsWithOtherRulesets": false },
-              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition", "mixesRulesets": false, "playsWithOtherRulesets": false }
+              { "id": "core", "name": "Marvel Legendary First Edition core box", "baseGame": true, "ruleset": "firstEdition", "firstPublished": 2012, "mixesRulesets": false, "playsWithOtherRulesets": false },
+              { "id": "fixture", "name": "Fixture Expansion", "baseGame": false, "ruleset": "firstEdition", "firstPublished": 2020, "mixesRulesets": false, "playsWithOtherRulesets": false }
             ]
             """);
-        Assert.True(JsonNode.DeepEquals(expected, JsonNode.Parse(body)), body);
+        var actual = JsonNode.Parse(body)!.AsArray();
+        foreach (var box in actual)
+        {
+            box!.AsObject().Remove("description");
+        }
+
+        Assert.True(JsonNode.DeepEquals(expected, actual), body);
+    }
+
+    [Fact]
+    public async Task Boxes_give_the_year_first_published_and_a_description()
+    {
+        var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
+
+        var darkCity = boxes!.Single(box => (string)box!["id"]! == "dark-city")!;
+        Assert.Equal(2013, (int)darkCity["firstPublished"]!);
+        Assert.False(string.IsNullOrWhiteSpace((string)darkCity["description"]!));
     }
 
     [Fact]

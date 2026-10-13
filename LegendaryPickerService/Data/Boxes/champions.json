@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "champions",
   "name": "Champions",
   "ruleset": "firstEdition",
   "catalogSource": "CH p.2; C1",
-  "about": {"released": {"value": "2018-02", "source": "Q"}},
+  "about": {"released": {"value": "2018-02", "source": "Q"}, "description": { "value": "A small First Edition expansion for the young Champions team. It adds Gwenpool, Ms. Marvel, Nova and two other Heroes, Monsters Unleashed and the Wrecking Crew as Villain Groups, Fin Fang Foom and Pagliacci as Masterminds, and the Cheering Crowds and Demolish keywords.", "source": "Q" }},
   "sources": [
     {"key": "CH", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/17-marvel-legendary-champions-rules.pdf"},
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}

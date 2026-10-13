@@ -1,5 +1,5 @@
 {
- "schemaVersion": 7,
+ "schemaVersion": 8,
  "id": "marvel-studios-ant-man-and-the-wasp",
  "name": "Marvel Studios' Ant-Man and the Wasp",
  "ruleset": "revised",
@@ -8,7 +8,7 @@
   "released": {
    "value": "2023-12",
    "source": "Q"
-  }
+  }, "description": { "value": "A Revised-ruleset expansion for the Ant-Man and the Wasp films. It adds eight Heroes, four Villain Groups, three Henchman Groups and three Masterminds, including Kang, with the Heist, Double-Cross and Explore keywords. Drawn only with Revised boxes.", "source": "Q" }
  },
  "sources": [
   {

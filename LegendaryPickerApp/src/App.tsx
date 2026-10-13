@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { BoxInfo } from './BoxInfo.tsx'
 import { getBoxes, getSetup, ping, type Box, type Setup } from './api/setupApi.ts'
 import { setupTerms } from './rulesetTerms.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
@@ -306,17 +307,20 @@ function App() {
                 <h2 id="boxes-label">Boxes</h2>
                 <div className="box-options" role="group" aria-labelledby="boxes-label">
                   {listedBoxes.map((box) => (
-                    <label key={box.id} className="box-option">
-                      <input
-                        type="checkbox"
-                        checked={isIncluded(box)}
-                        disabled={loading}
-                        onChange={() => toggleBox(box.id)}
-                      />
-                      <span className="box-name">{box.name}</span>
-                      {box.baseGame && <> <span className="detail">Base game</span></>}
-                      {box.ruleset === 'revised' && <> <span className="detail">Revised rules</span></>}
-                    </label>
+                    <div key={box.id} className="box-option">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={isIncluded(box)}
+                          disabled={loading}
+                          onChange={() => toggleBox(box.id)}
+                        />
+                        <span className="box-name">{box.name}</span>
+                        {box.baseGame && <> <span className="detail">Base game</span></>}
+                        {box.ruleset === 'revised' && <> <span className="detail">Revised rules</span></>}
+                      </label>
+                      <BoxInfo box={box} />
+                    </div>
                   ))}
                 </div>
                 {hint && <p className="box-hint">{hint}</p>}

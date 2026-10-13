@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "revelations",
   "name": "Revelations",
   "ruleset": "firstEdition",
   "catalogSource": "R p.2; C1",
-  "about": {"released": {"value": "2019-08", "source": "Q"}},
+  "about": {"released": {"value": "2019-08", "source": "Q"}, "description": { "value": "A mid-sized First Edition expansion about Marvel's hidden villains. It adds nine Heroes, four Villain Groups, two Henchman Groups and three Masterminds, including the Hood and the Mandarin, with the Hyperspeed, Dark Memories, Last Stand and Location keywords.", "source": "Q" }},
   "sources": [
     {"key": "R", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/2019_Marvel_Legendary_Revelations_Rules_compressed.pdf"},
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}

@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "dimensions",
   "name": "Dimensions",
   "ruleset": "firstEdition",
   "catalogSource": "D p.2; C1",
-  "about": {"released": {"value": "2019-05", "source": "Q"}},
+  "about": {"released": {"value": "2019-05", "source": "Q"}, "description": { "value": "A tiny First Edition expansion of odd corners of the Marvel universe. It adds five Heroes, including Howard the Duck and Squirrel Girl, two Henchman Groups, the Mastermind J. Jonah Jameson and the Switcheroo keyword. It has no Villain Groups or Schemes.", "source": "Q" }},
   "sources": [
     {"key": "D", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Dimensions.pdf"},
     {"key": "C1", "url": "https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/dimensions.ts"},

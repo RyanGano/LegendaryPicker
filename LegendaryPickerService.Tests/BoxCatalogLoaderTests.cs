@@ -245,8 +245,8 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         WriteCoreBox(_ => { });
         WriteBox("pets.json", JsonNode.Parse("""
             {
-              "schemaVersion": 7, "id": "pets", "name": "Pets", "ruleset": "firstEdition", "catalogSource": "R p.1",
-              "about": { "released": { "value": "2020-01", "source": "R p.1" } },
+              "schemaVersion": 8, "id": "pets", "name": "Pets", "ruleset": "firstEdition", "catalogSource": "R p.1",
+              "about": { "released": { "value": "2020-01", "source": "R p.1" }, "description": { "value": "A made-up expansion for tests.", "source": "R p.1" } },
               "sources": [{ "key": "R", "url": "https://example.test/pets.pdf" }],
               "components": {
                 "heroCards": { "value": 14, "source": "R p.1" }, "villainGroupCards": { "value": 8, "source": "R p.1" },
@@ -419,11 +419,11 @@ public sealed class BoxCatalogLoaderTests : IDisposable
     {
         WriteCoreBox(core =>
         {
-            core["schemaVersion"] = 8;
-            core["fieldOnlyVersion8Has"] = true;
+            core["schemaVersion"] = 9;
+            core["fieldOnlyVersion9Has"] = true;
         });
 
-        AssertRejected("schemaVersion 8; this service reads version 7");
+        AssertRejected("schemaVersion 9; this service reads version 8");
     }
 
     [Theory]
@@ -443,6 +443,15 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         WriteCoreBox(core => core.Remove("about"));
 
         AssertRejected("about");
+    }
+
+    [Fact]
+    public void Rejects_a_description_over_the_word_limit()
+    {
+        var tooLong = string.Join(' ', Enumerable.Repeat("word", BoxCatalog.MaxBoxDescriptionWords + 1));
+        WriteCoreBox(core => core["about"]!["description"]!["value"] = tooLong);
+
+        AssertRejected($"box core has a {BoxCatalog.MaxBoxDescriptionWords + 1}-word description");
     }
 
     [Fact]

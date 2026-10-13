@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "spider-man-homecoming",
   "name": "Spider-Man Homecoming",
   "ruleset": "firstEdition",
   "catalogSource": "SM p.2; C1",
-  "about": {"released": {"value": "2017-10", "source": "Q"}},
+  "about": {"released": {"value": "2017-10", "source": "Q"}, "description": { "value": "A small First Edition expansion for the Spider-Man: Homecoming film. It adds five Heroes, Salvagers and Vulture Tech as Villain Groups, Adrian Toomes and the Vulture as Masterminds, and the Danger Sense, Striker and Coordinate keywords.", "source": "Q" }},
   "sources": [
     {"key": "SM", "url": "https://upperdeck.com/wp-content/uploads/2024/05/2017_Legendary_SMHC_Rules.pdf"},
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}

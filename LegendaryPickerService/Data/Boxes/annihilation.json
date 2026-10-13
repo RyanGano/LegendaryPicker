@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "annihilation",
   "name": "Annihilation",
   "ruleset": "firstEdition",
   "catalogSource": "AN p.2; C1",
-  "about": { "released": { "value": "2021-09", "source": "Q" } },
+  "about": { "released": { "value": "2021-09", "source": "Q" }, "description": { "value": "A small First Edition expansion about the cosmic war. It adds five Heroes including Super-Skrull, Annihilation Wave and Timelines of Kang as Villain Groups, Annihilus and Kang the Conqueror as Masterminds, and the Momentum keyword.", "source": "Q" } },
   "sources": [
     { "key": "AN", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Annihilation_Rules.pdf" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }

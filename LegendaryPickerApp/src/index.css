@@ -290,6 +290,25 @@ button:disabled {
   cursor: pointer;
 }
 
+/* A box in the picker is a row holding its checkbox label and its info button, so the button can sit outside the label. */
+div.box-option {
+  cursor: default;
+}
+
+.box-option > label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--space-3);
+  min-width: 0;
+  cursor: pointer;
+}
+
+.box-option:has(input:disabled) > label {
+  cursor: default;
+}
+
 .box-option:has(input:checked) {
   border-color: var(--accent);
 }
@@ -316,6 +335,42 @@ button:disabled {
   flex: none;
   font-size: var(--text-sm);
   color: var(--muted);
+}
+
+/* The info button is a 44px tap target around a small circled "i". */
+.box-info-button {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  margin: calc(-1 * var(--space-2)) calc(-1 * var(--space-3)) calc(-1 * var(--space-2)) 0;
+  padding: 0;
+  color: var(--accent);
+  background: none;
+  border: none;
+}
+
+.box-info-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-family: serif;
+  font-size: var(--text-sm);
+  font-style: italic;
+  font-weight: 700;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.box-info-button[aria-expanded='true'] .box-info-mark {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.box-info {
+  --kind: var(--accent);
 }
 
 /* Shown while no base game is ticked, since a setup takes its rules from one. */

@@ -233,6 +233,8 @@ export type Box = {
   ruleset?: Ruleset
   mixesRulesets?: boolean
   playsWithOtherRulesets?: boolean
+  firstPublished?: number
+  description?: string
 }
 
 // A sleeping App Service instance takes 10-30 seconds to wake, so give up well after that.

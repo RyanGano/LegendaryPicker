@@ -8,7 +8,7 @@ For an integrated product, the `Data record` points to its runtime catalog JSON.
 
 Research records are compact, card-by-card indexes that make the facts needed for implementation easy to find without replacing the printed cards.
 
-- Product name, release order/date, base game or expansion, and ruleset. Link the official rules PDF and any official contents list or card reference used.
+- Product name, release order/date (its year is shown as First published), base game or expansion, ruleset, and an original description of at most 50 words saying what the box is and adds (`about.description`; never the back copy, rulebook or store text). Link the official rules PDF and any official contents list or card reference used.
 - Component totals and card-group counts, with exact display names and physical card identities. Cover Heroes (including shared Hero Name, team, classes, and terms), Villain Groups, Henchman Groups, Masterminds, Schemes, and any product-specific card types.
 - For every distinct printed card face, record its title, type/group, verified copy count, Hero Name/team/classes where applicable, printed type and keyword icons, and visible numeric metadata such as cost, Recruit, Attack, or Victory Points. Link directly to a readable card image or other view of the printed face so the full ability remains available at its source.
 - For every Mastermind, its Always Leads group and type, plus any setup effect. For every Scheme, player-count limits and every setup effect: counts, required groups or Heroes, constraints, moves, stacks or parts set aside, and setup steps. Record printed card effects only as short paraphrases.

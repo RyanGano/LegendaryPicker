@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "marvel-studios-what-if",
   "name": "Marvel Studios' What If...?",
   "ruleset": "revised",
@@ -8,7 +8,7 @@
     "released": {
       "value": "2023-11",
       "source": "Q"
-    }
+    }, "description": { "value": "A base game on the Revised ruleset, themed on the animated What If...? series. It adds eight Heroes, five Villain Groups, four Masterminds and new keywords such as Soulbind and Liberate. It is drawn only with other Revised boxes.", "source": "Q" }
   },
   "sources": [
     {

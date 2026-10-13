@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "marvel-studios-phase-1",
   "name": "Marvel Studios Phase 1",
   "ruleset": "firstEdition",
   "catalogSource": "P1 p.18; C1",
-  "about": { "released": { "value": "2018-08", "source": "Q" } },
+  "about": { "released": { "value": "2018-08", "source": "Q" }, "description": { "value": "A First Edition base game for the first wave of Marvel Studios films. Its seven Heroes, two of its Villain Groups and two Masterminds are core box cards reprinted; it adds the Chitauri, Gamma Hunters and Iron Foes, four Henchman Groups, Iron Monger and new Schemes.", "source": "Q" } },
   "sources": [
     { "key": "P1", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Marvel_Studios_the_First_Ten_Years.pdf" },
     { "key": "D1", "url": "https://boardgamegeek.com/thread/993341/article/12653573" },

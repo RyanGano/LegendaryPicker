@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "core",
   "name": "Marvel Legendary First Edition core box",
   "ruleset": "firstEdition",
   "catalogSource": "R p.22; C1; C2",
-  "about": { "released": { "value": "2012-11", "source": "Q" } },
+  "about": { "released": { "value": "2012-11", "source": "Q" }, "description": { "value": "The original Marvel Legendary base game, played under First Edition rules. A cooperative deck-builder with fifteen Heroes, seven Villain Groups, four Henchman Groups and four Masterminds, including Dr. Doom, Loki and Magneto. First Edition expansions add to its card pool.", "source": "Q" } },
   "sources": [
     { "key": "R", "url": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf" },
     { "key": "F", "url": "https://boardgamegeek.com/wiki/page/Legendary_Marvel_FAQ" },

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "revised",
   "name": "Revised Fixture",
   "ruleset": "revised",
@@ -8,7 +8,7 @@
     "released": {
       "value": "2023-11",
       "source": "R p.1"
-    }
+    }, "description": { "value": "A made-up expansion for tests.", "source": "R p.1" }
   },
   "sources": [
     {
