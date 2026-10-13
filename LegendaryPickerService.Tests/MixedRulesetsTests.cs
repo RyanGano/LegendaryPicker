@@ -254,6 +254,7 @@ public class MixedRulesetsTests
 
         Assert.Equal("Maximum Carnage", setup.Scheme.Name);
         Assert.Equal((null, 18), (setup.Stacks.Wounds, setup.Stacks.Bindings));
+        Assert.Contains(setup.Notes, note => note.Text == "Scheme sets the Bindings/Wounds stack to 6 per player");
     }
 
     // Villains with Heroic expansions and no Heroic base game: a draw with no Villainous card would need the

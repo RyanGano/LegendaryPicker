@@ -79,8 +79,16 @@ public sealed record HeroDeck(
 }
 
 // Cards a Scheme moves during setup, from the pile their kind comes from. Count is what the
-// destination gets: with To StartingDecks, what each player's deck gets. Total is what leaves From.
-public sealed record MovedCards(CardKind Card, Pile From, Pile To, int Count, int Total);
+// destination gets: with To StartingDecks, what each player's deck gets. Total is what leaves From. StandsInFor is
+// the kind the Scheme names when Card stands in for it because no included box supplies it, as Wounds for Bindings
+// (#258), so the checklist names both.
+public sealed record MovedCards(
+    CardKind Card,
+    Pile From,
+    Pile To,
+    int Count,
+    int Total,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] CardKind? StandsInFor = null);
 
 // A Hero a Scheme draws outside the Hero Deck, and the pile all its cards go to.
 public sealed record OutsideHero(Hero Hero, Pile To, int Cards);

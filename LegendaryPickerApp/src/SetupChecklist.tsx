@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
-import type { CardKind, CardsBeside, Component, Move, Pile, RuleNote, Setup, SetupStacks } from './api/setupApi.ts'
+import type { CardKind, CardsBeside, Component, Move, Pile, RuleNote, Setup, SetupStacks, StandIn } from './api/setupApi.ts'
 import { cardTerms, setupTerms, startingDeckTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { SpecialCardsInfo } from './SpecialCardsInfo.tsx'
 import { TermKind } from './TermChips.tsx'
@@ -229,16 +229,12 @@ export function SetupChecklist({
       <Section title="Shared stacks" kind="wound">
         {STACKS.map(([stack, label]) => {
           const count = stacks[stack]
-          // A stack standing in for one no included box has, as Wounds for Bindings, says so; the rule notes say the
-          // real cards work too.
-          const standingIn = standIns.filter((standIn) => standIn.with === stack).map((standIn) => STACK_NAMES[standIn.part])
           const special = specialCards.filter((cards) => cards.stack === stack)
           return (
             count !== undefined && (
               <Item
                 key={stack}
-                label={label}
-                detail={standingIn.length > 0 ? `Standing in for ${standingIn.join(' and ')}` : undefined}
+                label={standInName(label, stack, standIns)}
                 count={count}
                 info={special.length > 0 && <SpecialCardsInfo stack={label} special={special} />}
               />
@@ -378,7 +374,7 @@ function MovedIn({ moves, to, terms }: { moves: Move[]; to: Pile; terms: Ruleset
       move.to === to && (
         <Item
           key={index}
-          label={`${cardNames(terms)[move.card]} from the ${pileNames(terms)[move.from]}`}
+          label={`${cardNames(terms)[move.card]}${move.standsInFor ? `/${cardNames(terms)[move.standsInFor]}` : ''} from the ${pileNames(terms)[move.from]}`}
           count={move.count}
         />
       ),
@@ -438,6 +434,13 @@ const STACK_NAMES: Record<keyof SetupStacks, string> = {
   horrors: 'Horrors',
 }
 const STACKS = Object.entries(STACK_NAMES) as [keyof SetupStacks, string][]
+
+// A stack standing in for one no included box has is named with both, stand-in first, as Wounds/Bindings, so the
+// player can use whichever cards they own (owner ruling, #141, #258).
+function standInName(name: string, stack: keyof SetupStacks, standIns: StandIn[]) {
+  const real = standIns.filter((standIn) => standIn.with === stack).map((standIn) => STACK_NAMES[standIn.part])
+  return real.length > 0 ? `${name}/${real.join('/')}` : name
+}
 
 function cardNames(terms: RulesetTerms): Record<CardKind, string> {
   return {
