@@ -366,6 +366,7 @@ public sealed partial class BoxCatalog
         // When a set-aside Mastermind joins is shown on the checklist, so it is held to the same limits.
         foreach (var scheme in box.Schemes)
         {
+            CheckLabels(path, scheme.Id, "mastermind joins", new[] { scheme.Setup.MastermindJoinsLater?.Value }.OfType<string>());
             CheckLabels(path, scheme.Id, "joins", (scheme.Setup.OutsideMasterminds ?? []).Select(outside => outside.Joins?.Value).OfType<string>());
         }
 

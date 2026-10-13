@@ -36,6 +36,7 @@ public sealed class MastermindLaterTests
         Assert.DoesNotContain(late.Notes, note => note.Text.Contains("Late Lord"));
 
         var reveal = Assert.IsType<MastermindReveal>(late.MastermindReveal);
+        Assert.Equal("joins when the lights go out", reveal.Joins);
         Assert.Equal(["Late Gang"], reveal.AlwaysLeads.Select(group => group.Name));
         Assert.Contains(reveal.Notes, note => note.Text == "Late Lord adds 1 Hero");
         Assert.Contains(reveal.Notes, note => note.Text == "Late Lord adds a setup step: Test Start of Game step");

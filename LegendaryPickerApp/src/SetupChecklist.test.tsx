@@ -1092,4 +1092,14 @@ describe('SetupChecklist', () => {
     expect(terms()).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('0 of 17 laid out')
   })
+
+  it('moves keyboard focus to the revealed Mastermind when the Reveal button is pressed', async () => {
+    renderChecklist(enshroudedIdentity)
+    const user = userEvent.setup()
+
+    screen.getByRole('button', { name: 'Reveal Mastermind' }).focus()
+    await user.keyboard('{Enter}')
+
+    expect(within(section('Scheme and Mastermind')).getByText('Red Skull, Hydra Overlord').closest('li')).toHaveFocus()
+  })
 })

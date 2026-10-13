@@ -688,7 +688,7 @@
      }
     ],
     "mastermindJoinsLater": {
-     "value": true,
+     "value": "joins when the Bodyguards are gone",
      "source": "Card"
     },
     "steps": [

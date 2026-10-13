@@ -38,7 +38,7 @@
       "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
-        "mastermindJoinsLater": { "value": true, "source": "Card" }
+        "mastermindJoinsLater": { "value": "joins when the lights go out", "source": "Card" }
       }
     },
     {

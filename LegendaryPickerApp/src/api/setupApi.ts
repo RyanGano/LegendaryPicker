@@ -101,11 +101,12 @@ export type OutsideHenchmen = {
 }
 
 // What revealing a Mastermind that joins mid-game shows with it: the groups it always leads, which are not in the
-// Villain Deck, notes for the Start of Game effects its card prints, and the ids of the glossary terms only it and
-// those groups bring, which stay out of the glossary until the reveal.
+// Villain Deck, notes for the Start of Game effects its card prints, the Scheme's note on when it joins, and the ids
+// of the glossary terms only it and those groups bring, which stay out of the glossary until the reveal.
 export type MastermindReveal = {
   alwaysLeads: Component[]
   notes: RuleNote[]
+  joins: string
   terms: string[]
 }
 
