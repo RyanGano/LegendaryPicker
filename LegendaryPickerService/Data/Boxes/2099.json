@@ -1,5 +1,5 @@
 {
- "schemaVersion": 7,
+ "schemaVersion": 8,
  "id": "2099",
  "name": "2099",
  "ruleset": "revised",
@@ -8,7 +8,7 @@
   "released": {
    "value": "2024-04",
    "source": "Q"
-  }
+  }, "description": { "value": "A Revised-ruleset expansion set in the dark future of 2099. It adds five Heroes such as Spider-Man 2099 and Ghost Rider 2099, Alchemax Enforcers and the False Aesir as Villain Groups, two Masterminds, and the Cyber-Mod and Fated Future keywords. Drawn only with Revised boxes.", "source": "Q" }
  },
  "sources": [
   {

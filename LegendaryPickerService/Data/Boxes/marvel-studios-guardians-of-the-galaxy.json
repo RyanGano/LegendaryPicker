@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "marvel-studios-guardians-of-the-galaxy",
   "name": "Marvel Studios' Guardians of the Galaxy",
   "ruleset": "firstEdition",
   "catalogSource": "MG p.2; C1",
-  "about": { "released": { "value": "2022-06", "source": "Q" } },
+  "about": { "released": { "value": "2022-06", "source": "Q" }, "description": { "value": "A small First Edition expansion drawn from the Marvel Studios Guardians films. It adds five Heroes, Followers of Ronan and the Ravagers as Villain Groups, Ronan and Ego as Masterminds, and the Triggered Artifact and Command keywords.", "source": "Q" } },
   "sources": [
     { "key": "MG", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Lgd_MCU_GOTG_Rulesheet.pdf" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }

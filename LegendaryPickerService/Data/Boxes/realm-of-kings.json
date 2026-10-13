@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "realm-of-kings",
   "name": "Realm of Kings",
   "ruleset": "firstEdition",
   "catalogSource": "RK p.2; C1",
-  "about": { "released": { "value": "2020-10", "source": "Q" } },
+  "about": { "released": { "value": "2020-10", "source": "Q" }, "description": { "value": "A small First Edition expansion about the Inhumans. It adds five Heroes such as Medusa and Black Bolt, Inhuman Rebellion and the Shi'ar Imperial Elite as Villain Groups, Maximus the Mad and Emperor Vulcan as Masterminds, and the Throne's Favor keyword.", "source": "Q" } },
   "sources": [
     { "key": "RK", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/RealmOfKings_Rules_Compressed.pdf" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }

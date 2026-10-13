@@ -1,5 +1,5 @@
 {
- "schemaVersion": 7,
+ "schemaVersion": 8,
  "id": "second-edition",
  "name": "Marvel Legendary Second Edition",
  "ruleset": "revised",
@@ -8,7 +8,7 @@
   "released": {
    "value": "2026-06",
    "source": "Q"
-  }
+  }, "description": { "value": "The Second Edition core box, a base game on the Revised ruleset with its own versions of the classic Heroes, Villains and Masterminds, plus Daring Sidekicks. It is drawn only with other Revised boxes, never with First Edition boxes.", "source": "Q" }
  },
  "sources": [
   {

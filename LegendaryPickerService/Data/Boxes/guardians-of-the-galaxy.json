@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "guardians-of-the-galaxy",
   "name": "Guardians of the Galaxy",
   "ruleset": "firstEdition",
   "catalogSource": "GG p.2; C1; C2",
-  "about": { "released": { "value": "2014-10", "source": "Q" } },
+  "about": { "released": { "value": "2014-10", "source": "Q" }, "description": { "value": "A small First Edition expansion set among the stars. It adds five Heroes from the Guardians team, the Infinity Gems and Kree Starforce as Villain Groups, Thanos and the Supreme Intelligence as Masterminds, and the Shard and Artifact keywords.", "source": "Q" } },
   "sources": [
     { "key": "GG", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Guardians_of_the_Galaxy.pdf" },
     { "key": "D-shards", "url": "https://github.com/RyanGano/LegendaryPicker/issues/107" },

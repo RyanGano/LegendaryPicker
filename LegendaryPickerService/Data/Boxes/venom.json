@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "venom",
   "name": "Venom",
   "ruleset": "firstEdition",
   "catalogSource": "V p.2; C1",
-  "about": {"released": {"value": "2019-03", "source": "Q"}},
+  "about": {"released": {"value": "2019-03", "source": "Q"}, "description": { "value": "A small First Edition expansion that brings symbiotes from across the Venomverse. It adds five Heroes, the Life Foundation and the Poisons as Villain Groups, Hybrid and Poison Thanos as Masterminds, and the Symbiote Bonds, Digest and Indigestion keywords.", "source": "Q" }},
   "sources": [
     {"key": "V", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Venom.pdf"},
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}

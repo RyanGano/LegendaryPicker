@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "doctor-strange-and-the-shadows-of-nightmare",
   "name": "Doctor Strange and the Shadows of Nightmare",
   "ruleset": "firstEdition",
   "catalogSource": "DS p.2; C1",
-  "about": { "released": { "value": "2022-03", "source": "Q" } },
+  "about": { "released": { "value": "2022-03", "source": "Q" }, "description": { "value": "A small First Edition expansion about the Sorcerer Supreme. It adds five Heroes such as Doctor Voodoo and Clea, the Fear Lords and Lords of the Netherworld as Villain Groups, Nightmare and Dormammu as Masterminds, and the Astral Plane keyword.", "source": "Q" } },
   "sources": [
     { "key": "DS", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_DoctorStrange_Rulesheet.pdf" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }

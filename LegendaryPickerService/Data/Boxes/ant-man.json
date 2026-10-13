@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "ant-man",
   "name": "Ant-Man",
   "ruleset": "firstEdition",
   "catalogSource": "AM p.2; C1",
-  "about": {"released": {"value": "2018-11", "source": "Q"}},
+  "about": {"released": {"value": "2018-11", "source": "Q"}, "description": { "value": "A small First Edition expansion about Ant-Man and the Avengers. It adds five Heroes such as Wasp and Jocasta, Queen's Vengeance and Ultron's Legacy as Villain Groups, Morgan Le Fay and Ultron as Masterminds, and the Microscopic Size-Changing and Empowered keywords.", "source": "Q" }},
   "sources": [
     {"key": "AM", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Ant-Man.pdf"},
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}

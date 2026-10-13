@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "noir",
   "name": "Noir",
   "ruleset": "firstEdition",
   "catalogSource": "N p.2; C1",
-  "about": {"released": {"value": "2017-02", "source": "Q"}},
+  "about": {"released": {"value": "2017-02", "source": "Q"}, "description": { "value": "A small First Edition expansion set in a gritty 1930s New York. It adds five noir versions of familiar Heroes, the Goblin's Freak Show and X-Men Noir as Villain Groups, two crime-boss Masterminds, and the Investigate and Hidden Witnesses keywords.", "source": "Q" }},
   "sources": [
     {"key": "N", "url": "https://upperdeck.com/wp-content/uploads/2024/05/2017_LegendaryNOIR_Rules.pdf"},
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}

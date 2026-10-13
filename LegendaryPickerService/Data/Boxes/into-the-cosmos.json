@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "into-the-cosmos",
   "name": "Into the Cosmos",
   "ruleset": "firstEdition",
   "catalogSource": "IC p.2; C1",
-  "about": { "released": { "value": "2020-08", "source": "Q" } },
+  "about": { "released": { "value": "2020-08", "source": "Q" }, "description": { "value": "A mid-sized First Edition expansion that goes out into space. It adds nine Heroes, four Villain Groups, two Henchman Groups and three Masterminds, including the Beyonder and the Grandmaster, with the Burn Shards, Contest of Champions and Celestial Boon keywords.", "source": "Q" } },
   "sources": [
     { "key": "IC", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/IntoTheCosmos_Rules.pdf" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }

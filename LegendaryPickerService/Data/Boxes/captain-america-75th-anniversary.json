@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "captain-america-75th-anniversary",
   "name": "Captain America 75th Anniversary",
   "ruleset": "firstEdition",
   "catalogSource": "CA75 p.2; C1",
-  "about": { "released": { "value": "2016-03", "source": "Q" } },
+  "about": { "released": { "value": "2016-03", "source": "Q" }, "description": { "value": "A small First Edition expansion marking Captain America's anniversary. It adds five Heroes from his history, Zola's Creations and the Masters of Evil as Villain Groups, Arnim Zola and Baron Zemo as Masterminds, and the Savior and Man Out of Time keywords.", "source": "Q" } },
   "sources": [
     { "key": "CA75", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary-Captain-America-Rulesheet.pdf" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }

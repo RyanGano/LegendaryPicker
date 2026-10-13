@@ -1,5 +1,5 @@
 {
- "schemaVersion": 7,
+ "schemaVersion": 8,
  "id": "midnight-sons",
  "name": "Midnight Sons",
  "ruleset": "firstEdition",
@@ -8,7 +8,7 @@
   "released": {
    "value": "2023-05",
    "source": "Q"
-  }
+  }, "description": { "value": "A small First Edition expansion of Marvel's supernatural horror teams. It adds five Heroes such as Morbius and Werewolf by Night, Lilin and the Fallen as Villain Groups, Lilith and Zarathos as Masterminds, and the Blood Frenzy, Haunt and Hunt for Victims keywords.", "source": "Q" }
  },
  "sources": [
   {

@@ -14,8 +14,13 @@ public enum GroupType
 
 public sealed record Sourced<T>(T Value, string Source);
 
-// Facts about the product itself, for listing it. Released is the year and month it first came out, as "2014-10" (#106).
-public sealed record About(Sourced<string> Released);
+// Facts about the product itself, for listing it. Released is the year and month it first came out, as "2014-10" (#106);
+// FirstPublished is its year. Description is a short original summary of what the box is and adds, shown from the box
+// picker's info button (#104).
+public sealed record About(Sourced<string> Released, Sourced<string> Description)
+{
+    public int FirstPublished => int.Parse(Released.Value[..4]);
+}
 
 // A count that can depend on the player count. Players is null when the value
 // applies at every player count the Scheme allows; player count 1 is Solo.

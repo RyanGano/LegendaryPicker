@@ -76,7 +76,7 @@ app.MapMethods("/api/health", ["GET", "HEAD"], (HttpRequest request) =>
 app.MapGet("/api/boxes", (BoxCatalog catalog) =>
     Results.Ok(catalog.Boxes.OrderByDescending(box => box.IsBaseGame).ThenBy(box => box.About.Released.Value, StringComparer.Ordinal).Select(box => new
     {
-        box.Id, box.Name, BaseGame = box.IsBaseGame, box.Ruleset, MixesRulesets = box.Setup?.Mixing is not null,
+        box.Id, box.Name, BaseGame = box.IsBaseGame, box.Ruleset, box.About.FirstPublished, Description = box.About.Description.Value, MixesRulesets = box.Setup?.Mixing is not null,
         PlaysWithOtherRulesets = box.OtherRuleset is not null,
     })));
 

@@ -1,5 +1,5 @@
 {
- "schemaVersion": 7,
+ "schemaVersion": 8,
  "id": "weapon-x",
  "name": "Weapon X",
  "ruleset": "revised",
@@ -8,7 +8,7 @@
   "released": {
    "value": "2024-10",
    "source": "Q"
-  }
+  }, "description": { "value": "A Revised-ruleset expansion about the Weapon X program. It adds four Heroes such as Fantomex and Marrow, Berserkers and Weapon Plus as Villain Groups, Omega Red, Romulus and Sabretooth as Masterminds, and the Berserk and Weapon X Sequence keywords. Drawn only with Revised boxes.", "source": "Q" }
  },
  "sources": [
   {

@@ -1,5 +1,5 @@
 {
- "schemaVersion": 7,
+ "schemaVersion": 8,
  "id": "black-widow",
  "name": "Black Widow",
  "ruleset": "firstEdition",
@@ -8,7 +8,7 @@
   "released": {
    "value": "2022-10",
    "source": "REL"
-  }
+  }, "description": { "value": "A small First Edition expansion for the Black Widow film. It adds five Heroes, including Yelena Belova and Red Guardian, Taskmaster's Thunderbolts and Elite Assassins as Villain Groups, Taskmaster and Indestructible Man as Masterminds, and the Unleash keyword.", "source": "REL" }
  },
  "sources": [
   {

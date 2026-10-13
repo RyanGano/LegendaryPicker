@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "paint-the-town-red",
   "name": "Paint the Town Red",
   "ruleset": "firstEdition",
   "catalogSource": "PTTR p.2; C1; C2",
-  "about": { "released": { "value": "2014-03", "source": "Q" } },
+  "about": { "released": { "value": "2014-03", "source": "Q" }, "description": { "value": "A small First Edition expansion on Spider-Man's New York street level. It adds five Heroes such as Black Cat and Moon Knight, Maximum Carnage and the Sinister Six as Villain Groups, Carnage and Mysterio as Masterminds, and the Wall-Crawl and Feast keywords.", "source": "Q" } },
   "sources": [
     { "key": "PTTR", "url": "https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Paint_The_Town_Red.pdf" },
     { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }

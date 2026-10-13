@@ -583,6 +583,27 @@ describe('App', () => {
     expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3&boxes=core,fixture$/)])
   })
 
+  it("opens a box's year and description from its info button without ticking the box, and Escape closes it", async () => {
+    boxesAnswer = () =>
+      json([core, { ...fixture, firstPublished: 2013, description: 'A made-up expansion about tests.' }])
+    const user = userEvent.setup()
+    renderApp()
+    const tick = await screen.findByRole('checkbox', { name: 'Fixture Expansion' })
+    expect(screen.getAllByRole('button', { name: /^About / })).toHaveLength(1)
+
+    const info = screen.getByRole('button', { name: 'About Fixture Expansion' })
+    await user.click(info)
+
+    const panel = screen.getByRole('dialog', { name: 'Fixture Expansion' })
+    expect(panel).toHaveTextContent('First published 2013')
+    expect(panel).toHaveTextContent('A made-up expansion about tests.')
+    expect(tick).not.toBeChecked()
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(info).toHaveFocus()
+    expect(tick).not.toBeChecked()
+  })
+
   it('remembers the ticked boxes on the next visit and forgets boxes the API no longer lists', async () => {
     boxesAnswer = () => json([core, fixture])
     const user = userEvent.setup()

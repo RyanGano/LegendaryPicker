@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "id": "the-new-mutants",
   "name": "The New Mutants",
   "ruleset": "firstEdition",
@@ -8,7 +8,7 @@
     "released": {
       "value": "2020-04",
       "source": "Q"
-    }
+    }, "description": { "value": "A small First Edition expansion for the young mutant team. It adds five Heroes such as Karma and Sunspot, Demons of Limbo and the Hellions as Villain Groups, Belasco and Emma Frost as Masterminds, and the Moonlight, Sunlight and Waking Nightmare keywords.", "source": "Q" }
   },
   "sources": [
     {

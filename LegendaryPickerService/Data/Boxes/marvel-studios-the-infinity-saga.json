@@ -1,5 +1,5 @@
 {
- "schemaVersion": 7,
+ "schemaVersion": 8,
  "id": "marvel-studios-the-infinity-saga",
  "name": "Marvel Studios' The Infinity Saga",
  "ruleset": "firstEdition",
@@ -8,7 +8,7 @@
   "released": {
    "value": "2023-03",
    "source": "Q"
-  }
+  }, "description": { "value": "A small First Edition expansion drawn from the Marvel Studios Infinity Saga films. It adds five Heroes, Children of Thanos and the Infinity Stones as Villain Groups, Ebony Maw and Thanos as Masterminds, and the Endgame and Sacrifice keywords.", "source": "Q" }
  },
  "sources": [
   {
