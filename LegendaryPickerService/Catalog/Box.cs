@@ -551,6 +551,8 @@ public sealed record CardMove(CardKind Card, Pile To, IReadOnlyList<PlayerCountV
 // counts, as Villains adds a 6th Ally with 5 players; it is part of the table, not a rule note. Mixing is
 // present on a base game whose rules cover a setup that also includes boxes of another ruleset. WarmupRound lists the
 // player counts at which each player's first turn plays no Villain Deck card, as What If...?'s 4 and 5 players (#203).
+// StandIns are the parts this base game lets a setup replace when no included box supplies them, as Villains' Bindings
+// serve cards that use Wounds (D-bindings-as-wounds, #241).
 public sealed record SetupRules(
     IReadOnlyList<PlayerCountSetup> PlayerCounts,
     Sourced<int> Heroes,
@@ -561,7 +563,8 @@ public sealed record SetupRules(
     IReadOnlyList<PartUse> Uses,
     IReadOnlyList<PlayerCountValue>? ExtraHeroes = null,
     Mixing? Mixing = null,
-    Sourced<int[]>? WarmupRound = null);
+    Sourced<int[]>? WarmupRound = null,
+    IReadOnlyList<StandIn>? StandIns = null);
 
 public sealed record PlayerCountSetup(int Players, int VillainGroups, int HenchmanGroups, int Bystanders, string Source);
 

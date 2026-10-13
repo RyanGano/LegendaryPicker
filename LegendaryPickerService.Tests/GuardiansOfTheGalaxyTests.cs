@@ -12,6 +12,7 @@ public class GuardiansOfTheGalaxyTests
     private const string GuardiansName = "Guardians of the Galaxy";
     private const string CoreName = "Marvel Legendary First Edition core box";
     private const string SchemeFirst = "https://github.com/RyanGano/LegendaryPicker/issues/138";
+    private const string BindingsAsWounds = "https://github.com/RyanGano/LegendaryPicker/issues/241";
 
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
     private static readonly Box Guardians = Catalog.Boxes.Single(box => box.Id == "guardians-of-the-galaxy");
@@ -34,7 +35,7 @@ public class GuardiansOfTheGalaxyTests
     // Without the core box's Skrulls The Kree-Skrull War can't be completed, so it is never drawn.
     // Without the core box the Kree-Skrull War is still drawn: the player owns the core box's Skrulls, so they fill a
     // Villain Group slot and the checklist names the box to pull them from (D-scheme-first, #138). Kree Starforce gives
-    // Wounds, which no included box has, so the core box's Wound stack is laid out too. Guardians of the Galaxy sorts
+    // Wounds, which no included box has, so the Villains Bindings stand in for them (#241). Guardians of the Galaxy sorts
     // before Villains, so the Kree-Skrull War is Scheme 2; a Guardians Mastermind would need First Edition rules, so
     // the Mastermind draw is from the Villains Commanders.
     [Fact]
@@ -45,9 +46,9 @@ public class GuardiansOfTheGalaxyTests
         Assert.Equal("The Kree-Skrull War", setup.Scheme.Name);
         Assert.StartsWith("villains_", setup.Mastermind.Id);
         Assert.Equal(["Kree Starforce", "Skrulls"], setup.VillainGroups.Take(2).Select(group => group.Name));
-        Assert.Equal(30, setup.Stacks.Wounds);
+        Assert.Null(setup.Stacks.Wounds);
         Assert.Contains(new RuleNote($"Scheme requires Skrulls, from {CoreName}, which isn't included", "D-scheme-first", SchemeFirst, GuardiansName), setup.Notes);
-        Assert.Contains(new RuleNote($"No included box has Wound cards: the setup uses those of {CoreName}", "D-scheme-first", SchemeFirst, "Legendary: Villains"), setup.Notes);
+        Assert.Contains(new RuleNote("No included box has Wound cards: use Bindings cards for them, or Wound cards if you have them", "D-bindings-as-wounds", BindingsAsWounds, "Legendary: Villains"), setup.Notes);
 
         var skrulls = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).VillainGroups.Single(group => group.Name == "Skrulls");
         Assert.Equal((CoreName, true), (skrulls.Box, skrulls.NotIncluded));

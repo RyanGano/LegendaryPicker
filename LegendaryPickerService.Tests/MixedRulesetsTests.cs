@@ -230,23 +230,30 @@ public class MixedRulesetsTests
         Assert.DoesNotContain(legacyVirus.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }
 
-    // Villains with Dark City has no box that supplies Wounds, so Mephisto, Stryfe and the Dark City cards that
-    // give Wounds can't be set up and are never drawn.
-    [Theory]
-    [InlineData(1)]
-    [InlineData(3)]
-    [InlineData(5)]
-    public void A_card_whose_Wounds_no_included_box_supplies_is_never_drawn(int players)
+    // Villains with Dark City has no box that supplies Wounds, so Iceman, whose card gives Wounds, is drawn with the
+    // Villains Bindings standing in for the Wound stack (owner ruling D-bindings-as-wounds, #241). Capture Baby Hope,
+    // Dr. Strange and the first groups are drawn; Iceman is the 11th of the 32 Heroes, Dark City's first.
+    [Fact]
+    public void A_Hero_that_gives_Wounds_is_drawn_with_Bindings_as_Wounds_when_no_included_box_has_Wounds()
     {
-        string[] boxes = ["villains", "dark-city"];
-        for (var seed = 0; seed < 4; seed++)
-        {
-            var setup = Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new CyclingRandom(seed, 3, 1, 4, 1, 5, 9, 2, 6)));
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(3, ["villains", "dark-city"], new ScriptedRandom(0, 0, 0, 0, 0, 10)));
 
-            ICard[] cards = [setup.Scheme, setup.Mastermind, .. setup.VillainGroups, .. setup.HenchmanGroups, .. setup.Heroes];
-            Assert.DoesNotContain(cards, card => card.Parts.Contains(Part.Wounds));
-            Assert.Null(setup.Stacks.Wounds);
-        }
+        Assert.Equal("Iceman", setup.Heroes[0].Name);
+        Assert.Equal((null, 30), (setup.Stacks.Wounds, setup.Stacks.Bindings));
+        Assert.Contains(new RuleNote(
+            "No included box has Wound cards: use Bindings cards for them, or Wound cards if you have them",
+            "D-bindings-as-wounds", "https://github.com/RyanGano/LegendaryPicker/issues/241", VillainsBox), setup.Notes);
+    }
+
+    // A Scheme that sets the Wound stack's size sets the Bindings standing in for them: Maximum Carnage, Scheme 1 with
+    // Villains and Venom, lays out 6 per player (#241).
+    [Fact]
+    public void A_Scheme_that_sizes_the_Wound_stack_sizes_the_Bindings_standing_in_for_it()
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(3, ["villains", "venom"], new ScriptedRandom(1)));
+
+        Assert.Equal("Maximum Carnage", setup.Scheme.Name);
+        Assert.Equal((null, 18), (setup.Stacks.Wounds, setup.Stacks.Bindings));
     }
 
     // Villains with Heroic expansions and no Heroic base game: a draw with no Villainous card would need the

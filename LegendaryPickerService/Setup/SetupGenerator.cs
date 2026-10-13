@@ -32,7 +32,8 @@ namespace LegendaryPickerService.Setup;
 //
 // An expansion can be played without a base game of its own ruleset when its box says how (OtherRuleset, D-heroic,
 // #110): its Schemes and Masterminds then follow the included base game's rules, and each part it uses that no
-// included box supplies is replaced by its stand-in, as Fear Itself's Bindings become Wounds (FI p.2).
+// included box supplies is replaced by its stand-in, as Fear Itself's Bindings become Wounds (FI p.2). A base game can
+// give stand-ins too: Villains' Bindings serve a card that uses Wounds when no included box has them (#241).
 //
 // Any boxes with a base game can be drawn together, whatever their rulesets, under one rule edition (D-editions, #240):
 // the one the player chooses, or else Revised when a Revised base game is included, and otherwise the Scheme and
@@ -70,7 +71,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // The stand-ins of the parts no included box supplies, from the first included box that gives one.
         var standIns = boxes
-            .SelectMany(box => (box.OtherRuleset?.StandIns ?? []).Select(standIn => new ActiveStandIn(standIn, box)))
+            .SelectMany(box => (box.OtherRuleset?.StandIns ?? []).Concat(box.Setup?.StandIns ?? []).Select(standIn => new ActiveStandIn(standIn, box)))
             .Where(active => !boxes.Any(box => box.Components.Supplies(active.Rule.Part)?.Value > 0))
             .DistinctBy(active => active.Rule.Part)
             .ToDictionary(active => active.Rule.Part);
@@ -472,6 +473,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 : stackBoxes.Sum(box => box.Components.Supplies(part)?.Value ?? 0);
             int? Stack(Part part, int size) => used.Contains(part) ? size : null;
 
+            // The size a Scheme sets for a part's stack, which sets its stand-in's stack when the part is stood in for,
+            // as Maximum Carnage's 6 Wounds per player set the Bindings standing in for them (#241).
+            int? Planned(Part part) => part switch
+            {
+                Part.Wounds => plan.Wounds,
+                Part.Officers => plan.Officers,
+                Part.Bindings => plan.Bindings,
+                _ => null,
+            };
+            int? Sized(Part part) => Planned(part)
+                ?? stoodIn.Where(active => active.Rule.With == part).Select(active => Planned(active.Rule.Part)).FirstOrDefault(size => size is not null);
+
             return new SetupResult(
                 players,
                 rulesBox.Ruleset,
@@ -502,11 +515,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     outsideHenchmen.Where(outside => outside.To == Pile.HeroDeck).Sum(outside => outside.Cards)),
                 plan.TwistsBeside,
                 new SetupStacks(
-                    Stack(Part.Wounds, (plan.Wounds ?? Supply(Part.Wounds)) - plan.MovedOut(Pile.Wounds)),
-                    Stack(Part.Officers, (plan.Officers ?? Supply(Part.Officers)) - plan.MovedOut(Pile.Officers)),
+                    Stack(Part.Wounds, (Sized(Part.Wounds) ?? Supply(Part.Wounds)) - plan.MovedOut(Pile.Wounds)),
+                    Stack(Part.Officers, (Sized(Part.Officers) ?? Supply(Part.Officers)) - plan.MovedOut(Pile.Officers)),
                     stackBoxes.Sum(box => box.Components.Bystanders?.Value ?? 0) - plan.Bystanders - plan.MovedOut(Pile.Bystanders),
                     Stack(Part.Sidekicks, Supply(Part.Sidekicks) - plan.MovedOut(Pile.Sidekicks)),
-                    Stack(Part.Bindings, (plan.Bindings ?? Supply(Part.Bindings)) - plan.MovedOut(Pile.Bindings)),
+                    Stack(Part.Bindings, (Sized(Part.Bindings) ?? Supply(Part.Bindings)) - plan.MovedOut(Pile.Bindings)),
                     Stack(Part.MadameHydra, Supply(Part.MadameHydra)),
                     Stack(Part.NewRecruits, Supply(Part.NewRecruits)),
                     Stack(Part.Shards, Supply(Part.Shards)),

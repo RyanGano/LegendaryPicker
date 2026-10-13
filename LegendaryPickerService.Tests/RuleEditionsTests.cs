@@ -70,6 +70,20 @@ public sealed class RuleEditionsTests
         Assert.Equal("First Edition rules: no Villainous Plot or Commander", setup.RulesReason?.Text);
     }
 
+    // Test Baron is Mastermind 0 and the first Villains Plot Scheme 1, after Test Uprising. No included box has Wounds, so
+    // Test Baron, whose card uses them, is drawn with the Bindings laid out as the Wound stack
+    // (owner ruling D-bindings-as-wounds, 2026-10-13, #241).
+    [Fact]
+    public void A_card_that_uses_Wounds_is_drawn_with_Bindings_as_Wounds_when_no_included_box_has_Wounds()
+    {
+        var setup = Draw(["villains", "heroic"], null, 1, 0);
+
+        Assert.Equal((Ruleset.Villainous, "Test Baron"), (setup.Ruleset, setup.Mastermind.Name));
+        Assert.Equal((25, null), (setup.Stacks.Bindings, setup.Stacks.Wounds));
+        Assert.Contains(setup.Notes, note => note.Text == "No included box has Wound cards: use Bindings cards for them, or Wound cards if you have them"
+            && note.Citation == "D-bindings-as-wounds");
+    }
+
     // Villains rules with only the core box: its S.H.I.E.L.D. starting cards and Officers stand for the HYDRA ones.
     [Fact]
     public void Villains_rules_without_a_Villainous_base_game_use_the_included_base_games_parts()
