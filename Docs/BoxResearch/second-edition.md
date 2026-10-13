@@ -1,6 +1,6 @@
 # Legendary: Marvel Second Edition (Jun 2026)
 
-**Research status: Partial.** The official rulebook and product listing verify the 550-card inventory, base setup, solo mode, and edition-compatibility rules. The complete card-name lists and card-level Scheme/Mastermind facts are not enumerated in the rulebook.
+**Research status: Integrated (#215); research partial.** The official rulebook and product listing verify the 550-card inventory, base setup, solo mode and edition-compatibility rules, and C1's transcribed card text (`coreset2.ts`, no card images exist; owner ruling 2026-10-12) gives the card-level Scheme, Mastermind and Always Leads facts, cited as `Card`. Runtime data: `LegendaryPickerService/Data/Boxes/second-edition.json`, a base game on the Revised ruleset.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -77,7 +77,11 @@ Glossary summaries are original paraphrases under 40 words. The rulebook does no
 
 ## Setup and implementation gaps
 
-Verify all 15 Hero group identities and metadata; the full eight Villain/four Henchman group inventory; all five Mastermind card names, Always Leads, and setup effects; all nine Scheme names and card-level setups; and complete Special Bystander/Officer Specialist identities and card-driven component dependencies. The rulebook provides the count tables and base setup but not those complete card-level lists. The roadmap's Second Edition classification remains separate from First Edition even though the rulebook states expansion compatibility.
+- **Henchman Group Sentinel:** C1 lists only three of the four Henchman Groups; the fourth, Sentinel, comes from the rulebook's first-game recipe and its pictured card (SE p.3, p.6: its Fight KOs one of your Heroes, so it uses no stack). Its copy count and Victory Points are not indexed.
+- **Printed titles:** C1 sorts "Legacy Virus, The"; the runtime name is "The Legacy Virus (Second Edition)". The Spider-Man Hero Names follow SE pp.19-20; C1 gives both as team Spider Friends.
+- **Always Leads:** Magneto's card also names any X-Men Villain Group and Red Skull's any Hydra group; only the group in this box is recorded. Doctor Octopus's "any Sinister" group has two candidates in the box.
+- **Copy counts:** per-face quantities of Heroes' and Masterminds' cards are not given by C1 or the rulebook beyond the 1 rare, 3 uncommon, 5 + 5 common split (SE p.22).
+- **Mixing with First Edition or Villainous boxes:** SE p.1 says the box is compatible with the Legendary expansions but gives no mixing procedure; it is refused until the owner rules (#141).
 
 ## Structured card-face metadata (C1)
 

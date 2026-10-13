@@ -25,6 +25,7 @@ public class BoxDataTests
         { "marvel-studios-the-infinity-saga", 5, 2, 0, 2, 4 },
         { "midnight-sons", 5, 2, 0, 2, 4 },
         { "marvel-studios-what-if", 8, 5, 3, 4, 4 },
+        { "second-edition", 15, 8, 4, 5, 9 },
         { "marvel-studios-ant-man-and-the-wasp", 8, 4, 3, 3, 4 },
         { "2099", 5, 2, 0, 2, 4 },
         { "weapon-x", 4, 2, 0, 3, 3 },
@@ -80,6 +81,6 @@ public class BoxDataTests
         var recorded = Catalog.Boxes.SelectMany(box => box.Masterminds).Where(m => m.Epic is not null).Select(m => m.Id).Order().ToList();
 
         Assert.Equal(offers, recorded);
-        Assert.Equal(53, recorded.Count);
+        Assert.Equal(58, recorded.Count);
     }
 }
