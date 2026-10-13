@@ -62,6 +62,10 @@ public abstract record SetupResponse
         // A stack the setup lays out brings the terms its included boxes attach to it (#127).
         var stackTerms = setup.Boxes.SelectMany(box => box.StackTerms ?? []).Where(stack => setup.Stacks.Lays(stack.Part)).Select(stack => stack.Term);
 
+        var specialCards = setup.Boxes
+            .SelectMany(box => (box.SpecialCards ?? []).Where(special => setup.Stacks.Lays(special.Stack)).Select(special => new SpecialCardsBody(special.Stack, box.Name, special.Cards)))
+            .ToList();
+
         return new SetupBody(
             setup.Players,
             setup.Ruleset,
@@ -86,7 +90,8 @@ public abstract record SetupResponse
             setup.RulesReason,
             setup.StandIns is { Count: > 0 } standIns ? standIns : null,
             outsideMasterminds.Count > 0 ? outsideMasterminds : null,
-            villainsSetAside.Count > 0 ? villainsSetAside : null);
+            villainsSetAside.Count > 0 ? villainsSetAside : null,
+            specialCards.Count > 0 ? specialCards : null);
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
@@ -157,7 +162,8 @@ public abstract record SetupResponse
 // lists each part the drawn cards use that no included box supplies and what replaces it ("with", null when
 // nothing does), written only when there is one, so the checklist can say a stack stands in for another.
 // OutsideMasterminds lists the Masterminds the Scheme draws besides its own, written only when it draws any. VillainsSetAside
-// lists the extra Villain Groups whose Villains the Mastermind sets aside, written only when it does.
+// lists the extra Villain Groups whose Villains the Mastermind sets aside, written only when it does. SpecialCards lists
+// the special cards each included box shuffles into a stack the setup lays out, written only when there are any (#244).
 public sealed record SetupBody(
     int Players,
     Ruleset Ruleset,
@@ -182,7 +188,8 @@ public sealed record SetupBody(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RuleNote? RulesReason = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<StandIn>? StandIns = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<OutsideMastermindBody>? OutsideMasterminds = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<VillainsSetAsideBody>? VillainsSetAside = null) : SetupResponse
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<VillainsSetAsideBody>? VillainsSetAside = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<SpecialCardsBody>? SpecialCards = null) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";
@@ -227,6 +234,10 @@ public sealed record OutsideMastermindBody(
 
 // The Villains of an extra Villain Group the Mastermind sets aside, count of them, written only when it sets any aside.
 public sealed record VillainsSetAsideBody(Component Group, int Count);
+
+// The special cards one included box adds to a stack the setup lays out: stack is its key in the response's stacks
+// ("bystanders"), box names the box, and cards are the printed names.
+public sealed record SpecialCardsBody(string Stack, string Box, IReadOnlyList<string> Cards);
 
 // Cards of a group the Scheme sets beside it: count of them, or, when card is present, that one card of the group.
 // fromVillainDeck is how many fewer cards the group puts in the Villain Deck because of it, 0 when the group isn't

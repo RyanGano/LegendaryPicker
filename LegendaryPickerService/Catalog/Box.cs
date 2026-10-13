@@ -46,7 +46,9 @@ public enum Ruleset
 // included (#34 D5, #147). OptionalTokens lists the ids of the box's own cards that its optional Token cards can be
 // used with; a setup that draws one tells the player the Tokens could be used (#148). The Tokens are never counted.
 // StackTerms attaches glossary terms to the stacks the box adds cards to, such as Civil War's Grievous Wounds with the
-// Wound Stack; a setup that lays the stack out shows them in its glossary (#127).
+// Wound Stack; a setup that lays the stack out shows them in its glossary (#127). SpecialCards names the special cards
+// the box shuffles into a shared stack, such as Dimensions' Special Bystanders, so the checklist can list them beside
+// the stack's line (#244).
 public sealed record Box(
     int SchemaVersion,
     string Id,
@@ -67,7 +69,8 @@ public sealed record Box(
     IReadOnlyList<PartUse>? BystanderUses = null,
     Sourced<string[]>? Reprints = null,
     Sourced<string[]>? OptionalTokens = null,
-    IReadOnlyList<StackTerm>? StackTerms = null)
+    IReadOnlyList<StackTerm>? StackTerms = null,
+    IReadOnlyList<SpecialCards>? SpecialCards = null)
 {
     // Only a base game supplies setup rules; an expansion's box file has no setup section.
     public bool IsBaseGame => Setup is not null;
@@ -167,6 +170,10 @@ public sealed record PartUse(Part Part, string Source);
 
 // A glossary term (by id) for the cards a box adds to a part's stack.
 public sealed record StackTerm(Part Part, string Term);
+
+// The printed names of the special cards a box adds to one of its shared stacks (Stack is the stack's name in the box's
+// components, such as "bystanders"), with their source.
+public sealed record SpecialCards(string Stack, IReadOnlyList<string> Cards, string Source);
 
 // A Hero, group, Mastermind or Scheme a setup can draw, with its display name and the keywords it uses. Uses lists
 // the parts its card text uses; it is left out when the card uses none.

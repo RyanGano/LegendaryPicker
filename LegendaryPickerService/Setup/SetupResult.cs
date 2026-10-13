@@ -115,6 +115,11 @@ public sealed record SetupStacks(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Shards = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? Horrors = null)
 {
+    // Whether the setup lays the stack of that name out (a box's component name, such as "bystanders"). Bystanders
+    // are always laid out; any other stack is the part of that name.
+    public bool Lays(string stack) =>
+        stack == "bystanders" || (Enum.TryParse<Part>(stack, ignoreCase: true, out var part) && Lays(part));
+
     // Whether the setup lays the part's stack out. The Ambition cards are a supply, not a stack, so never.
     public bool Lays(Part part) => part switch
     {

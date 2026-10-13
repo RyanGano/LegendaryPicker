@@ -169,6 +169,9 @@ _Avoid_: Keyword, for teams and classes; a keyword is one kind of glossary term.
 **Box description**:
 A box's short about text, shown from the info button beside it in the box picker with the year it was first published: an original summary of at most 50 words, in our own words, of what the box is and adds. Never the box's back copy, rulebook or store text.
 
+**Special cards**:
+The printed names of the special cards a box shuffles into a shared stack, such as Dimensions' Special Bystanders. The checklist lists them, by box, from an (i) button beside the stack's line.
+
 **No eligible Scheme**:
 The result when no Scheme in the included boxes is allowed at the player count, or no Mastermind is included. It is a result, not an error.
 

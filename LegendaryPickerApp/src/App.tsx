@@ -39,7 +39,7 @@ const RULEBOOK_URL =
 // Source VIL in LegendaryPickerService/Data/Boxes/villains.json: the Legendary: Villains rulebook.
 const VILLAINS_RULEBOOK_URL = 'https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf'
 // Source WI in LegendaryPickerService/Data/Boxes/marvel-studios-what-if.json: the What If...? rulebook.
-const WHAT_IF_RULEBOOK_URL = 'https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/WhatIf_Rulebook.pdf'
+const WHAT_IF_RULEBOOK_URL = 'https://upperdeck.com/wp-content/uploads/2024/05/WhatIf_Rulebook.pdf'
 // Source SE in LegendaryPickerService/Data/Boxes/second-edition.json: the Second Edition rulebook.
 const SECOND_EDITION_RULEBOOK_URL = 'https://upperdeck.com/wp-content/uploads/2026/08/Legendary-Second-Edition-Rulebook.pdf'
 const REPO_URL = 'https://github.com/RyanGano/LegendaryPicker'
@@ -333,7 +333,7 @@ function App() {
                         />
                         <span className="box-name">{box.name}</span>
                         {box.baseGame && <> <span className="detail">Base game</span></>}
-                        {box.ruleset === 'revised' && <> <span className="detail">Revised rules</span></>}
+                        {box.ruleset === 'revised' && <> <span className="detail ruleset-tag">Revised rules</span></>}
                       </label>
                       <BoxInfo box={box} />
                     </div>

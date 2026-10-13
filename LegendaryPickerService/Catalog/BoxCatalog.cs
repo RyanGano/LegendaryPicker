@@ -214,6 +214,7 @@ public sealed partial class BoxCatalog
             ValidateUses(path, box);
             ValidateOtherRuleset(path, box);
             ValidateOptionalTokens(path, box);
+            ValidateSpecialCards(path, box);
             ValidateEpicSides(path, box);
         }
 
@@ -835,6 +836,28 @@ public sealed partial class BoxCatalog
         }
     }
 
+    // Special cards go in a named stack, each named once.
+    private static void ValidateSpecialCards(string path, Box box)
+    {
+        foreach (var special in box.SpecialCards ?? [])
+        {
+            if (Stacks(box.Components).All(stack => stack.Name != special.Stack))
+            {
+                throw new InvalidDataException($"{path}: box {box.Id} lists specialCards for {special.Stack}, which is not a stack.");
+            }
+
+            if (special.Cards.Count == 0 || special.Cards.Distinct(StringComparer.OrdinalIgnoreCase).Count() != special.Cards.Count)
+            {
+                throw new InvalidDataException($"{path}: box {box.Id} specialCards for {special.Stack} must name each card once.");
+            }
+        }
+
+        if ((box.SpecialCards ?? []).GroupBy(special => special.Stack).FirstOrDefault(stack => stack.Count() > 1) is { } twice)
+        {
+            throw new InvalidDataException($"{path}: box {box.Id} lists specialCards for {twice.Key} more than once.");
+        }
+    }
+
     // The Token cards are used with cards of the box itself, each named once.
     private static void ValidateOptionalTokens(string path, Box box)
     {
@@ -1227,6 +1250,11 @@ public sealed partial class BoxCatalog
         if (box.OptionalTokens is { } tokens)
         {
             yield return ("optionalTokens", tokens.Source);
+        }
+
+        foreach (var special in box.SpecialCards ?? [])
+        {
+            yield return ($"specialCards.{special.Stack}", special.Source);
         }
 
         var components = box.Components;

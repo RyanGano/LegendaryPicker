@@ -32,4 +32,17 @@ public class DimensionsTests
 
         Assert.Equal(coreOnly.Stacks.Bystanders + 6, withBox.Stacks.Bystanders);
     }
+
+    [Fact]
+    public void The_response_names_the_Special_Bystanders_only_when_the_box_is_included()
+    {
+        var withBox = Assert.IsType<SetupBody>(SetupResponse.From(Generator.Generate(2, Boxes, new ScriptedRandom(0, 0)), Catalog));
+        var coreOnly = Assert.IsType<SetupBody>(SetupResponse.From(Generator.Generate(2, ["core"], new ScriptedRandom(0, 0)), Catalog));
+
+        var special = Assert.Single(withBox.SpecialCards!);
+        Assert.Equal(("bystanders", "Dimensions"), (special.Stack, special.Box));
+        Assert.Equal(6, special.Cards.Count);
+        Assert.Contains("Forklift Driver", special.Cards);
+        Assert.Null(coreOnly.SpecialCards);
+    }
 }

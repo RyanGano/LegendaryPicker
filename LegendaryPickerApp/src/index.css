@@ -338,7 +338,7 @@ div.box-option {
 }
 
 /* The info button is a 44px tap target around a small circled "i". */
-.box-info-button {
+.info-button {
   flex: none;
   min-width: 44px;
   min-height: 44px;
@@ -349,7 +349,7 @@ div.box-option {
   border: none;
 }
 
-.box-info-mark {
+.info-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -363,7 +363,7 @@ div.box-option {
   border-radius: 50%;
 }
 
-.box-info-button[aria-expanded='true'] .box-info-mark {
+.info-button[aria-expanded='true'] .info-mark {
   color: var(--bg);
   background: var(--accent);
   border-color: var(--accent);
@@ -371,6 +371,40 @@ div.box-option {
 
 .box-info {
   --kind: var(--accent);
+}
+
+/* On a phone a row keeps one tag beside its name: the ruleset tag moves into the box's info panel. */
+.box-info-ruleset {
+  display: none;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+@media (width < 37.5rem) {
+  .box-option .ruleset-tag {
+    display: none;
+  }
+
+  .box-info-ruleset {
+    display: block;
+  }
+}
+
+/* The info button beside a checklist line, in the tick box's row. */
+.row .info-button {
+  margin: calc(-1 * var(--space-2)) 0;
+}
+
+.special-box {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.special-cards {
+  padding-left: var(--space-4);
+  list-style: disc;
 }
 
 /* Shown while no base game is ticked, since a setup takes its rules from one. */

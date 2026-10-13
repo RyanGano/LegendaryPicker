@@ -116,6 +116,14 @@ export type VillainsSetAside = {
   count: number
 }
 
+// The special cards one included box shuffles into a shared stack the setup lays out: stack is its key in the setup's
+// stacks, box the box's name and cards their printed names.
+export type SpecialCards = {
+  stack: keyof SetupStacks
+  box: string
+  cards: string[]
+}
+
 // Cards of a group the Scheme sets beside it, whether or not the group is drawn: count of them, or, when card is
 // present, that one card of the group. fromVillainDeck is how many fewer cards the group puts in the Villain Deck
 // because of it (0 when it isn't drawn there); the Villain Deck's total already leaves them out.
@@ -209,6 +217,8 @@ export type Setup = {
   outsideMasterminds?: OutsideMastermind[]
   // Present only when the Mastermind sets aside the Villains of an extra Villain Group.
   villainsSetAside?: VillainsSetAside[]
+  // Present only when an included box shuffles special cards into a stack the setup lays out.
+  specialCards?: SpecialCards[]
   // The setup steps the Scheme and Mastermind print that change no count, Scheme first, each a short
   // instruction. Left out by an API from before setup steps.
   steps?: string[]
