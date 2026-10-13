@@ -58,12 +58,13 @@ public class ShieldTests
     private static int SchemeIndex(int players, string scheme, string[]? boxes = null)
     {
         boxes ??= Boxes;
-        var probe = new ScriptedRandom();
-        Generator.Generate(players, boxes, probe);
-        return Enumerable.Range(0, probe.Options[0])
-            .First(s => Assert.IsType<SetupResult>(Generator.Generate(players, boxes, new ScriptedRandom(s))).Scheme.Name == scheme);
+        return DrawIndexes.Scheme(Catalog, boxes, players, scheme);
     }
 
-    private static SetupResult Draw(int players, string scheme, string[]? boxes = null) =>
-        Assert.IsType<SetupResult>(Generator.Generate(players, boxes ?? Boxes, new ScriptedRandom(SchemeIndex(players, scheme, boxes))));
+    private static SetupResult Draw(int players, string scheme, string[]? boxes = null)
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(players, boxes ?? Boxes, new ScriptedRandom(SchemeIndex(players, scheme, boxes))));
+        Assert.Equal(scheme, setup.Scheme.Name);
+        return setup;
+    }
 }

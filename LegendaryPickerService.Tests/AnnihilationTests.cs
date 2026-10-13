@@ -41,11 +41,10 @@ public class AnnihilationTests
     [Fact]
     public void Annihilus_puts_6_Henchmen_in_a_Solo_Villain_Deck()
     {
-        var probe = new ScriptedRandom();
-        Generator.Generate(1, Boxes, probe);
-        var annihilus = Enumerable.Range(0, probe.Options[1])
-            .First(m => Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(0, m))).Mastermind.Name == "Annihilus");
-        var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(0, annihilus)));
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 1, "Midtown Bank Robbery");
+        var annihilus = DrawIndexes.Mastermind(Catalog, Boxes, "Midtown Bank Robbery", "Annihilus");
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(scheme, annihilus)));
+        Assert.Equal("Annihilus", setup.Mastermind.Name);
 
         Assert.Equal(6, setup.VillainDeck.HenchmanCards);
         Assert.Contains(setup.Notes, note => note.Text == "Annihilus puts 6 Henchmen of each Henchman Group in the Villain Deck");
@@ -53,10 +52,9 @@ public class AnnihilationTests
 
     private static SetupResult Draw(int players, string scheme)
     {
-        var probe = new ScriptedRandom();
-        Generator.Generate(players, Boxes, probe);
-        var index = Enumerable.Range(0, probe.Options[0])
-            .First(s => Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(s))).Scheme.Name == scheme);
-        return Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(index)));
+        var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(index)));
+        Assert.Equal(scheme, setup.Scheme.Name);
+        return setup;
     }
 }
