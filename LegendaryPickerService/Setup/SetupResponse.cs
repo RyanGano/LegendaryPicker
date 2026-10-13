@@ -11,7 +11,7 @@ public abstract record SetupResponse
 
     public static SetupResponse From(GenerationResult result, BoxCatalog catalog) => result switch
     {
-        SetupResult setup => FromSetup(setup, new Glossary(catalog, setup.Boxes, nameRulesets: setup.Mixed)),
+        SetupResult setup => FromSetup(setup, new Glossary(catalog, setup.Boxes, setup.Mixed, RulesetTerms.For(setup.Ruleset))),
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
@@ -111,9 +111,10 @@ public abstract record SetupResponse
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
     // A term links to the URL its box lists for its source key; the loader guarantees one per key.
     // When the setup includes more than one box, each entry names the box that defines the term, and
-    // each component the box it comes from. In a mixed setup each component also names its ruleset. A component
-    // from a box the setup doesn't include, which a Scheme requires (D-scheme-first, #138), always names its box.
-    private sealed class Glossary(BoxCatalog catalog, IReadOnlyList<Box> included, bool nameRulesets)
+    // each component the box it comes from. In a mixed setup each component also names its ruleset, and so does one
+    // whose ruleset calls the parts by other words than the rule edition's, as each card keeps its own words (#247). A
+    // component from a box the setup doesn't include, which a Scheme requires (D-scheme-first, #138), always names its box.
+    private sealed class Glossary(BoxCatalog catalog, IReadOnlyList<Box> included, bool mixed, RulesetTerms editionTerms)
     {
         private bool NameBoxes => included.Count > 1;
 
@@ -159,7 +160,7 @@ public abstract record SetupResponse
             var holders = included.Where(other => other.Holds(id)).ToList();
             var notIncluded = holders.Count == 0;
             var label = notIncluded ? box.Name : string.Join(" or ", holders.Select(holder => holder.Name));
-            return new(id, name, Ordered(terms).ToList(), NameBoxes || notIncluded ? label : null, nameRulesets ? box.Ruleset : null, notIncluded);
+            return new(id, name, Ordered(terms).ToList(), NameBoxes || notIncluded ? label : null, mixed || RulesetTerms.For(box.Ruleset) != editionTerms ? box.Ruleset : null, notIncluded);
         }
 
         public IReadOnlyList<GlossaryEntry> Entries(IEnumerable<string> terms) =>

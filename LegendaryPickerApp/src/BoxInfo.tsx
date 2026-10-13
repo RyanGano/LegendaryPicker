@@ -5,8 +5,8 @@ import { usePopover } from './usePopover.ts'
 // A box's info button and the panel it opens: the box's name, the year it was first published and a
 // short description, laid out like a glossary term's explanation (usePopover). It sits beside the
 // box's checkbox label rather than inside it, so tapping it never ticks the box. An API that sends no
-// description gets no button. A box that plays by the Revised rules says so here too; on a phone the picker's row
-// drops that tag, so each row keeps at most one tag beside its name (#244).
+// description gets no button. A box that plays by the Revised rules says so here too, as "Second Edition rules"
+// (#247); on a phone the picker's row drops that tag, so each row keeps at most one tag beside its name (#244).
 export function BoxInfo({ box }: { box: Box }) {
   const { id, open, position, trigger, popover, toggle, close } = usePopover()
   if (!box.description) return null
@@ -45,7 +45,7 @@ export function BoxInfo({ box }: { box: Box }) {
           </div>
           <h4 id={`${id}-name`}>{box.name}</h4>
           <p>{box.description}</p>
-          {box.ruleset === 'revised' && <p className="box-info-ruleset">Revised rules</p>}
+          {box.ruleset === 'revised' && <p className="box-info-ruleset">Second Edition rules</p>}
         </div>
       )}
     </>

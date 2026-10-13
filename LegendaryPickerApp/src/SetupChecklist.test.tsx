@@ -500,6 +500,22 @@ describe('SetupChecklist', () => {
     expect(screen.queryByText(/ or Adversary /)).not.toBeInTheDocument()
   })
 
+  it("keeps the First Edition cards' words under the Villains rules", () => {
+    const firstEdition = <T,>(component: T) => ({ ...component, ruleset: 'firstEdition' as const })
+    renderChecklist({
+      ...legacyVirusThreePlayers,
+      ruleset: 'villainous',
+      scheme: firstEdition(legacyVirusThreePlayers.scheme),
+      mastermind: firstEdition(legacyVirusThreePlayers.mastermind),
+      villainGroups: legacyVirusThreePlayers.villainGroups.map(firstEdition),
+      henchmanGroups: legacyVirusThreePlayers.henchmanGroups.map(firstEdition),
+      heroes: legacyVirusThreePlayers.heroes.map(firstEdition),
+    })
+
+    expect(screen.getByRole('heading', { name: 'Villain Deck', level: 3 })).toBeInTheDocument()
+    expect(screen.queryByText(/Adversary|Ally|Allies/)).not.toBeInTheDocument()
+  })
+
   it("names the included base game's starting cards when the setup's rules come from one that isn't", () => {
     renderChecklist({ ...twoPlayerVillainsGraduation, playerDeck: { ...twoPlayerVillainsGraduation.playerDeck, team: 'firstEdition' } })
 

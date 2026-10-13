@@ -87,12 +87,12 @@ const MIXED: RulesetTerms = {
   troopers: 'S.H.I.E.L.D. Troopers or HYDRA Soldiers',
 }
 
-// The words for the setup as a whole: its ruleset's, or both rulesets' when its cards come from rulesets that call the
-// parts by different words. First Edition and Revised cards share theirs. An API from before rulesets leaves the field
-// out; every setup it drew was First Edition.
+// The words for the setup as a whole: its drawn cards' (#247), or both rulesets' when its cards come from rulesets that
+// call the parts by different words. First Edition and Revised cards share theirs. A card names its ruleset only when
+// the setup is mixed or its words differ from the rule edition's; otherwise it uses the setup's ruleset. An API from
+// before rulesets leaves the field out; every setup it drew was First Edition.
 export function rulesetTerms(setup: Setup): RulesetTerms {
   const own = TERMS[setup.ruleset ?? 'firstEdition']
-  if (!setup.mixed) return own
   const cards = [
     setup.scheme,
     setup.mastermind,
@@ -104,7 +104,9 @@ export function rulesetTerms(setup: Setup): RulesetTerms {
     ...(setup.cardsBeside ?? []).map((beside) => beside.group),
     ...(setup.outsideMasterminds ?? []).map((outside) => outside.mastermind),
   ]
-  return new Set(cards.map((card) => (card.ruleset ? TERMS[card.ruleset] : own))).size > 1 ? MIXED : own
+  const words = new Set(cards.map((card) => (card.ruleset ? TERMS[card.ruleset] : own)))
+  const [only] = words
+  return words.size > 1 ? MIXED : (only ?? own)
 }
 
 // The words for some drawn cards: their own ruleset's when they share one, so a mixed setup still calls a

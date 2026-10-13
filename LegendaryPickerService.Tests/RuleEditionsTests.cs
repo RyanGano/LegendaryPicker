@@ -12,7 +12,11 @@ public sealed class RuleEditionsTests
 {
     private static readonly string FixtureDirectory = Path.Combine(AppContext.BaseDirectory, "Fixtures", "Editions");
 
-    private static readonly SetupGenerator Generator = new(BoxCatalog.Load(FixtureDirectory));
+    private static readonly BoxCatalog Catalog = BoxCatalog.Load(FixtureDirectory);
+
+    private static readonly SetupGenerator Generator = new(Catalog);
+
+    private const string EditionsUrl = "https://github.com/RyanGano/LegendaryPicker/issues/240";
 
     private const string Warmup = "Warmup Round: on each player's first turn, no card is played from the Villain Deck";
 
@@ -32,12 +36,12 @@ public sealed class RuleEditionsTests
         Assert.Equal(("Test Uprising", "Test Baron"), (revised.Scheme.Name, revised.Mastermind.Name));
         Assert.Equal((Ruleset.Revised, 16, 30), (revised.Ruleset, revised.VillainDeck.Bystanders, revised.Stacks.Wounds));
         Assert.Contains(revised.Notes, note => note.Text == Warmup);
-        Assert.Equal(new RuleNote("Revised rules: a Revised base game is included", "D-editions", null), revised.RulesReason);
+        Assert.Equal(new RuleNote("Revised rules: a Revised base game is included", "D-editions", "https://example.test/editions"), revised.RulesReason);
 
         // The core box's rules apply without its cards: the Revised base game's Officers are the recruit stack.
         Assert.Equal((Ruleset.FirstEdition, 12, 8), (firstEdition.Ruleset, firstEdition.VillainDeck.Bystanders, firstEdition.Stacks.Officers));
         Assert.DoesNotContain(firstEdition.Notes, note => note.Text == Warmup || note.Text.StartsWith("No included box has"));
-        Assert.Equal(new RuleNote("First Edition rules: chosen by the player", "D-editions", null), firstEdition.RulesReason);
+        Assert.Equal(new RuleNote("First Edition rules: chosen by the player", "D-editions", EditionsUrl), firstEdition.RulesReason);
     }
 
     // Test Blockade is Scheme 8, after the core box's 8, and Test Admiral Mastermind 4, after its 4.
@@ -52,12 +56,12 @@ public sealed class RuleEditionsTests
         Assert.Equal(("Test Blockade", "Test Admiral"), (firstEdition.Scheme.Name, firstEdition.Mastermind.Name));
         Assert.Equal((Ruleset.FirstEdition, 12), (firstEdition.Ruleset, firstEdition.VillainDeck.Bystanders));
         Assert.DoesNotContain(firstEdition.Notes, note => note.Text == Warmup);
-        Assert.Equal(new RuleNote("First Edition rules: the included base games follow them", "D-editions", null), firstEdition.RulesReason);
+        Assert.Equal(new RuleNote("First Edition rules: the included base games follow them", "D-editions", EditionsUrl), firstEdition.RulesReason);
 
         // The Revised fixture's rules apply without its cards, citing its rulebook.
         Assert.Equal((Ruleset.Revised, 16), (revised.Ruleset, revised.VillainDeck.Bystanders));
         Assert.Contains(new RuleNote(Warmup, "R p.2", "https://example.test/revised-rules.pdf", "Revised Fixture"), revised.Notes);
-        Assert.Equal(new RuleNote("Revised rules: chosen by the player", "D-editions", null), revised.RulesReason);
+        Assert.Equal(new RuleNote("Revised rules: chosen by the player", "D-editions", "https://example.test/editions"), revised.RulesReason);
     }
 
     // With the core box and Villains, a pair with no Villainous card follows First Edition rules (D-mixed), a Revised one too.
@@ -95,6 +99,19 @@ public sealed class RuleEditionsTests
         Assert.NotNull(setup.Stacks.Officers);
         Assert.Null(setup.Stacks.MadameHydra);
         Assert.Null(setup.Stacks.NewRecruits);
-        Assert.Equal(new RuleNote("Villains rules: chosen by the player", "D-editions", null), setup.RulesReason);
+        Assert.Equal(new RuleNote("Villains rules: chosen by the player", "D-editions", EditionsUrl), setup.RulesReason);
+    }
+
+    // Under chosen Villains rules the core box's Scheme keeps the First Edition word for the deck, not the Adversary Deck,
+    // and each card names its ruleset so the checklist uses the same words.
+    [Fact]
+    public void A_card_keeps_its_own_rulesets_words_under_another_rule_edition()
+    {
+        var setup = Draw(["core"], Ruleset.Villainous, 1, 0);
+        var body = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog));
+
+        Assert.Equal("Midtown Bank Robbery", setup.Scheme.Name);
+        Assert.Contains(setup.Notes, note => note.Text == "Scheme puts 12 Bystanders in the Villain Deck");
+        Assert.Equal((Ruleset.FirstEdition, Ruleset.FirstEdition), (body.Scheme.Ruleset, body.Mastermind.Ruleset));
     }
 }

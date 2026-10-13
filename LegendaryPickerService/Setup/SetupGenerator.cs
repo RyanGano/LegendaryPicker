@@ -131,19 +131,23 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         ?? catalog.Boxes.First(box => box.IsBaseGame && box.Ruleset == edition);
 
     // Why a setup follows a rule edition, or null when the player chose the one ruleset its boxes follow anyway.
-    private static RuleNote? EditionReason(IReadOnlyList<Box> boxes, Ruleset edition, bool chosen)
+    private RuleNote? EditionReason(IReadOnlyList<Box> boxes, Ruleset edition, bool chosen)
     {
         var name = RulesetTerms.RulesName(edition);
+        var link = LinkOf(Editions, EditionBox(boxes, edition));
         if (chosen)
         {
-            return boxes.All(box => box.Ruleset == edition) ? null : new RuleNote($"{name} rules: chosen by the player", Editions, null);
+            return boxes.All(box => box.Ruleset == edition) ? null : new RuleNote($"{name} rules: chosen by the player", Editions, link);
         }
 
         return new RuleNote(
             edition == Ruleset.Revised ? $"{name} rules: a Revised base game is included" : $"{name} rules: the included base games follow them",
             Editions,
-            null);
+            link);
     }
+
+    private static string? LinkOf(string citation, Box from) =>
+        from.Sources.FirstOrDefault(source => source.Key == citation.Split(' ')[0])?.Url;
 
     // Why a set of box ids can't be drawn from, or null when it can. A setup needs at least one base game for its
     // rules; any boxes with one can be drawn together, whatever their rulesets (D-editions, #240). A chosen rule edition
@@ -351,12 +355,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .Where(part => !stackBoxes.Any(box => box.Components.Supplies(part)?.Value > 0))
                 .ToDictionary(part => part, part => boxes.Concat(catalogBoxes.OrderByDescending(box => box.IsBaseGame)).First(box => box.Components.Supplies(part)?.Value > 0));
 
-            // A setup whose cards' rulesets name its parts by different words names them by both, so its plan's notes
-            // are written again. First Edition and Revised use the same words.
+            // A setup's notes use its drawn cards' words: both rulesets' when they name its parts by different words, or
+            // the cards' own when the rule edition is another ruleset's (D-editions, #247), so its plan's notes are
+            // written again. First Edition and Revised use the same words.
             var notes = new List<RuleNote>();
-            if (drawn.Select(RulesetTerms.For).Distinct().Count() > 1)
+            var cardTerms = drawn.Select(RulesetTerms.For).Distinct().ToList();
+            if (cardTerms.Count > 1 || cardTerms[0] != _terms)
             {
-                _terms = RulesetTerms.Mixed;
+                _terms = cardTerms.Count > 1 ? RulesetTerms.Mixed : cardTerms[0];
                 notes.AddRange(WithMastermind(Plan(plan.Scheme), mastermind).Notes);
             }
             else
@@ -1392,9 +1398,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var holders = cardId is null ? [] : boxes.Where(box => box.Holds(cardId)).ToList();
             return holders.Count == 0 ? from.Name : string.Join(" or ", holders.Select(box => box.Name));
         }
-
-        private static string? LinkOf(string citation, Box from) =>
-            from.Sources.FirstOrDefault(source => source.Key == citation.Split(' ')[0])?.Url;
     }
 
     // A card is set up only when an included box supplies every part it uses, or the part has a stand-in some included
