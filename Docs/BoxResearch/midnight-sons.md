@@ -46,7 +46,7 @@ Summaries are original paraphrases under 40 words. The insert names no new token
 
 ## Setup and implementation gaps
 
-Still open: per-face copy counts for the Heroes, the Masterminds and their Tactics, and the Schemes (C1 gives none). Integration notes: Elsa Bloodstone is named "(Marvel Knights)" because Secret Wars Volume 2 holds an Elsa Bloodstone, and both Blade, Daywalker and Wong carry the Hero Names Blade and Wong. Ritual Sacrifice to Summon Chthon prints 1 Twist total with Lilith, recorded by the Scheme's `setup.mastermindTwists`. Wounds are used by Morbius, both Villain Groups and both Masterminds; Werewolf by Night takes from the Sidekick Deck.
+Still open: per-face copy counts for the Heroes, the Masterminds and their Tactics, and the Schemes (C1 gives none). Integration notes: Elsa Bloodstone keeps her printed name although Secret Wars Volume 2 holds an Elsa Bloodstone (#243), and both Blade, Daywalker and Wong carry the Hero Names Blade and Wong. Ritual Sacrifice to Summon Chthon prints 1 Twist total with Lilith, recorded by the Scheme's `setup.mastermindTwists`. Wounds are used by Morbius, both Villain Groups and both Masterminds; Werewolf by Night takes from the Sidekick Deck.
 
 ## Structured card-face metadata (C1)
 

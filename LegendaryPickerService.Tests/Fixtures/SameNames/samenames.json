@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 8,
+  "id": "samenames",
+  "name": "Same Names Fixture",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.1",
+  "about": { "released": { "value": "2020-01", "source": "R p.1" }, "description": { "value": "A made-up expansion for tests.", "source": "R p.1" } },
+  "sources": [
+    { "key": "R", "url": "https://example.test/samenames-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" }
+  },
+  "heroes": [
+    { "id": "samenames_hero_cyclops", "name": "Cyclops", "heroName": "Cyclops", "team": null, "classes": ["core_term_ranged"], "terms": [] }
+  ],
+  "villainGroups": [],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "samenames_mastermind_test-warden",
+      "name": "Test Warden",
+      "terms": [],
+      "setup": { "requiredHeroes": [{ "heroId": "samenames_hero_cyclops", "source": "Card" }] }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "samenames_scheme_test-plain",
+      "name": "Test Plain",
+      "terms": ["core_term_scheme-twist"],
+      "setup": { "twists": [{ "players": null, "value": 8, "source": "Card" }] }
+    },
+    {
+      "id": "samenames_scheme_test-hydra-call",
+      "name": "Test Hydra Call",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "requiredGroups": [{ "groupId": "core_villain_hydra", "groupType": "villain", "source": "Card", "otherBox": { "source": "R p.1" } }]
+      }
+    }
+  ],
+  "glossary": []
+}

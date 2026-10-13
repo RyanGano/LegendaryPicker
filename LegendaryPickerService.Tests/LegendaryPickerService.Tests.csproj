@@ -153,6 +153,13 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\HeroVersionNames\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up expansion with a Hero named like a core Hero, beside copies of the core and Second Edition boxes. -->
+  <ItemGroup>
+    <None Include="Fixtures\SameNames\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\SameNames\core.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\second-edition.json" Link="Fixtures\SameNames\second-edition.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- A made-up expansion whose Mastermind has an Epic side with a Setup of its own, beside a copy of the core box. -->
   <ItemGroup>
     <None Include="Fixtures\Epic\*.json" CopyToOutputDirectory="PreserveNewest" />

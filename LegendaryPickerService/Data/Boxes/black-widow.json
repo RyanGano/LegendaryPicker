@@ -41,7 +41,7 @@
  "heroes": [
   {
    "id": "black-widow_hero_black-widow",
-   "name": "Black Widow (Black Widow)",
+   "name": "Black Widow",
    "heroName": "Black Widow",
    "team": "core_term_shield",
    "classes": [

@@ -217,21 +217,19 @@ public sealed partial class BoxCatalog
             ValidateEpicSides(path, box);
         }
 
-        // A setup names its cards by display name, so two Heroes, groups, Masterminds or Schemes sharing
-        // one would leave the player unsure which physical card to use. A new version of a character
-        // takes a distinguishing name, such as "Wolverine (X-Force)", and keeps heroName for Hero rules.
-        // Names differing only in case or surrounding spaces read as the same name.
-        var namedIn = new Dictionary<string, (string Id, string Path)>(StringComparer.OrdinalIgnoreCase);
+        // A display name is the printed card name, so boxes may repeat one and the box label tells the cards
+        // apart. Within one box a name belongs to one card of its kind. Names differing only in case or
+        // surrounding spaces read as the same name.
         foreach (var (path, box) in files)
         {
+            var namedIn = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var (kind, id, name) in NamedComponents(box))
             {
                 var key = $"{kind}:{name.Trim()}";
-                if (!namedIn.TryAdd(key, (id, path)))
+                if (!namedIn.TryAdd(key, id))
                 {
-                    var (otherId, otherPath) = namedIn[key];
                     throw new InvalidDataException(
-                        $"{path}: {kind} {id} is named \"{name}\", like {otherId} in {otherPath}; a setup must tell them apart.");
+                        $"{path}: {kind} {id} is named \"{name}\", like {namedIn[key]} in the same box; a box names each {kind} once.");
                 }
             }
         }

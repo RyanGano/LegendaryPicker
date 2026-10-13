@@ -30,14 +30,4 @@ public class HeroesOfAsgardTests
         Assert.NotNull(results["Hela, Goddess of Death"].Stacks.Wounds);
         Assert.Contains(results["Malekith the Accursed"].VillainGroups, g => g.Name == "Dark Council");
     }
-
-    // The box's Thor shares the core Thor's Hero Name but must name the physical card apart from it.
-    [Fact]
-    public void This_Thor_has_its_own_display_name_beside_the_core_Thor()
-    {
-        var thor = Catalog.Boxes.Single(b => b.Id == "heroes-of-asgard").Heroes.Single(h => h.HeroName == "Thor");
-
-        Assert.Equal("Thor (Heroes of Asgard)", thor.Name);
-        Assert.Contains(Catalog.Boxes.Single(b => b.Id == "core").Heroes, h => h.Name == "Thor");
-    }
 }

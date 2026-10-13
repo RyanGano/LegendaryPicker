@@ -12,7 +12,7 @@
   "components": {"heroCards": {"value": 14, "source": "V p.2"}, "villainGroupCards": {"value": 8, "source": "V p.2"}, "henchmanGroupCards": {"value": 0, "source": "V p.2"}, "schemeTwists": {"value": 0, "source": "V p.2"}},
   "heroes": [
     {"id": "venom_hero_carnage", "name": "Carnage", "team": "venom_term_venomverse", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest", "venom_term_indigestion"]},
-    {"id": "venom_hero_venom", "name": "Venom (Venomverse)", "heroName": "Venom", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest", "venom_term_indigestion"]},
+    {"id": "venom_hero_venom", "name": "Venom", "heroName": "Venom", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest", "venom_term_indigestion"]},
     {"id": "venom_hero_venom-rocket", "name": "Venom Rocket", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_ranged", "core_term_tech"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest"]},
     {"id": "venom_hero_venomized-dr-strange", "name": "Venomized Dr. Strange", "heroName": "Dr. Strange", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_ranged"], "terms": ["venom_term_digest"]},
     {"id": "venom_hero_venompool", "name": "Venompool", "team": "venom_term_venomverse", "classes": ["core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["deadpool_term_excessive-violence", "venom_term_digest", "venom_term_indigestion"]}

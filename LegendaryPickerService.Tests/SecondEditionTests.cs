@@ -28,7 +28,7 @@ public class SecondEditionTests
     [Fact]
     public void Killbots_keeps_one_extra_Twist_beside_the_Scheme()
     {
-        var setup = Draw(2, "Replace Earth's Leaders with Killbots (Second Edition)", "Loki (Second Edition)");
+        var setup = Draw(2, "Replace Earth's Leaders with Killbots", "Loki");
 
         Assert.Equal(10, setup.VillainDeck.Twists);
         Assert.Equal(1, setup.TwistsBesideScheme);
@@ -38,7 +38,7 @@ public class SecondEditionTests
     [Fact]
     public void Doctor_Octopus_brings_a_Sinister_Villain_Group()
     {
-        var setup = Draw(2, "Portals to the Dark Dimension (Second Edition)", "Doctor Octopus");
+        var setup = Draw(2, "Portals to the Dark Dimension", "Doctor Octopus");
 
         Assert.Contains(setup.VillainGroups, group => group.Name is "Sinister Spider-Foes" or "Sinister Syndicate");
     }

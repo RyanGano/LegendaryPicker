@@ -41,7 +41,7 @@
  "heroes": [
   {
    "id": "marvel-studios-the-infinity-saga_hero_doctor-strange",
-   "name": "Doctor Strange (Infinity Saga)",
+   "name": "Doctor Strange",
    "heroName": "Dr. Strange",
    "team": "core_term_avengers",
    "classes": [
@@ -56,7 +56,7 @@
   },
   {
    "id": "marvel-studios-the-infinity-saga_hero_black-panther",
-   "name": "Black Panther (Infinity Saga)",
+   "name": "Black Panther",
    "heroName": "Black Panther",
    "team": "core_term_avengers",
    "classes": [
@@ -73,7 +73,7 @@
   },
   {
    "id": "marvel-studios-the-infinity-saga_hero_bruce-banner",
-   "name": "Bruce Banner (Infinity Saga)",
+   "name": "Bruce Banner",
    "heroName": "Bruce Banner",
    "team": "core_term_avengers",
    "classes": [
@@ -93,7 +93,7 @@
   },
   {
    "id": "marvel-studios-the-infinity-saga_hero_captain-marvel",
-   "name": "Captain Marvel (Infinity Saga)",
+   "name": "Captain Marvel",
    "heroName": "Captain Marvel",
    "team": "core_term_avengers",
    "classes": [
@@ -201,7 +201,7 @@
   },
   {
    "id": "marvel-studios-the-infinity-saga_mastermind_thanos",
-   "name": "Thanos (Infinity Saga)",
+   "name": "Thanos",
    "terms": [
     "core_term_always-leads",
     "core_term_fight",

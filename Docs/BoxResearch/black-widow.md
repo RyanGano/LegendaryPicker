@@ -57,7 +57,7 @@ Summaries are original paraphrases under 40 words. Hero teams/classes/shared Her
 
 ## Setup and implementation gaps
 
-Still open: per-face copy counts for Heroes and Mastermind Tactics (C1 gives none); the printed Divided-card values. Each Divided Falcon & Winter Soldier image holds both halves (Attune/Atone on `_2Common`, Relocate/Reload on `_3Common`, New Wings/New Plan on `_4Uncommon`), so Atone, Reload and New Plan have no image of their own; OCR of those images at twice the size, and of Weave a Web of Spies, shows none of them uses Wounds, Officers or Sidekicks. Integration notes: the box file records Black Widow (Black Widow) with Hero Name Black Widow and Falcon & Winter Soldier under both Hero Names; Taskmaster has no Henchman Group because no Setup line asks for one.
+Still open: per-face copy counts for Heroes and Mastermind Tactics (C1 gives none); the printed Divided-card values. Each Divided Falcon & Winter Soldier image holds both halves (Attune/Atone on `_2Common`, Relocate/Reload on `_3Common`, New Wings/New Plan on `_4Uncommon`), so Atone, Reload and New Plan have no image of their own; OCR of those images at twice the size, and of Weave a Web of Spies, shows none of them uses Wounds, Officers or Sidekicks. Integration notes: the box file records Black Widow with Hero Name Black Widow and Falcon & Winter Soldier under both Hero Names; Taskmaster has no Henchman Group because no Setup line asks for one.
 
 ## Structured card-face metadata (C1)
 

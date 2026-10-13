@@ -87,7 +87,7 @@
  "heroes": [
   {
    "id": "second-edition_hero_black-widow",
-   "name": "Black Widow (Second Edition)",
+   "name": "Black Widow",
    "team": "second-edition_term_avengers",
    "classes": [
     "second-edition_term_covert",
@@ -100,7 +100,7 @@
   },
   {
    "id": "second-edition_hero_captain-america",
-   "name": "Captain America (Second Edition)",
+   "name": "Captain America",
    "team": "second-edition_term_avengers",
    "classes": [
     "second-edition_term_covert",
@@ -113,7 +113,7 @@
   },
   {
    "id": "second-edition_hero_cyclops",
-   "name": "Cyclops (Second Edition)",
+   "name": "Cyclops",
    "team": "second-edition_term_x-men",
    "classes": [
     "second-edition_term_ranged",
@@ -124,7 +124,7 @@
   },
   {
    "id": "second-edition_hero_emma-frost",
-   "name": "Emma Frost (Second Edition)",
+   "name": "Emma Frost",
    "team": "second-edition_term_x-men",
    "classes": [
     "second-edition_term_covert",
@@ -136,7 +136,7 @@
   },
   {
    "id": "second-edition_hero_gambit",
-   "name": "Gambit (Second Edition)",
+   "name": "Gambit",
    "team": "second-edition_term_x-men",
    "classes": [
     "second-edition_term_covert",
@@ -148,7 +148,7 @@
   },
   {
    "id": "second-edition_hero_hawkeye",
-   "name": "Hawkeye (Second Edition)",
+   "name": "Hawkeye",
    "team": "second-edition_term_avengers",
    "classes": [
     "second-edition_term_ranged",
@@ -159,7 +159,7 @@
   },
   {
    "id": "second-edition_hero_hulk",
-   "name": "Hulk (Second Edition)",
+   "name": "Hulk",
    "team": "second-edition_term_avengers",
    "classes": [
     "second-edition_term_instinct",
@@ -176,7 +176,7 @@
   },
   {
    "id": "second-edition_hero_iron-man",
-   "name": "Iron Man (Second Edition)",
+   "name": "Iron Man",
    "team": "second-edition_term_avengers",
    "classes": [
     "second-edition_term_ranged",
@@ -187,7 +187,7 @@
   },
   {
    "id": "second-edition_hero_nick-fury",
-   "name": "Nick Fury (Second Edition)",
+   "name": "Nick Fury",
    "team": "second-edition_term_shield",
    "classes": [
     "second-edition_term_covert",
@@ -204,7 +204,7 @@
   },
   {
    "id": "second-edition_hero_rogue",
-   "name": "Rogue (Second Edition)",
+   "name": "Rogue",
    "team": "second-edition_term_x-men",
    "classes": [
     "second-edition_term_covert",
@@ -248,7 +248,7 @@
   },
   {
    "id": "second-edition_hero_storm",
-   "name": "Storm (Second Edition)",
+   "name": "Storm",
    "team": "second-edition_term_x-men",
    "classes": [
     "second-edition_term_covert",
@@ -259,7 +259,7 @@
   },
   {
    "id": "second-edition_hero_thor",
-   "name": "Thor (Second Edition)",
+   "name": "Thor",
    "team": "second-edition_term_avengers",
    "classes": [
     "second-edition_term_ranged",
@@ -270,7 +270,7 @@
   },
   {
    "id": "second-edition_hero_wolverine",
-   "name": "Wolverine (Second Edition)",
+   "name": "Wolverine",
    "team": "second-edition_term_x-men",
    "classes": [
     "second-edition_term_instinct"
@@ -297,7 +297,7 @@
   },
   {
    "id": "second-edition_villain_enemies-of-asgard",
-   "name": "Enemies of Asgard (Second Edition)",
+   "name": "Enemies of Asgard",
    "terms": [
     "second-edition_term_ambush",
     "second-edition_term_escape",
@@ -312,7 +312,7 @@
   },
   {
    "id": "second-edition_villain_hydra",
-   "name": "Hydra (Second Edition)",
+   "name": "Hydra",
    "terms": [
     "second-edition_term_ambush",
     "second-edition_term_escape",
@@ -335,7 +335,7 @@
   },
   {
    "id": "second-edition_villain_masters-of-evil",
-   "name": "Masters of Evil (Second Edition)",
+   "name": "Masters of Evil",
    "terms": [
     "second-edition_term_ambush",
     "second-edition_term_escape",
@@ -350,7 +350,7 @@
   },
   {
    "id": "second-edition_villain_radiation",
-   "name": "Radiation (Second Edition)",
+   "name": "Radiation",
    "terms": [
     "second-edition_term_ambush",
     "second-edition_term_escape",
@@ -398,7 +398,7 @@
   },
   {
    "id": "second-edition_villain_skrulls",
-   "name": "Skrulls (Second Edition)",
+   "name": "Skrulls",
    "terms": [
     "second-edition_term_ambush",
     "second-edition_term_fight"
@@ -408,28 +408,28 @@
  "henchmanGroups": [
   {
    "id": "second-edition_henchman_doombot-legion",
-   "name": "Doombot Legion (Second Edition)",
+   "name": "Doombot Legion",
    "terms": [
     "second-edition_term_fight"
    ]
   },
   {
    "id": "second-edition_henchman_hand-ninjas",
-   "name": "Hand Ninjas (Second Edition)",
+   "name": "Hand Ninjas",
    "terms": [
     "second-edition_term_fight"
    ]
   },
   {
    "id": "second-edition_henchman_savage-land-mutates",
-   "name": "Savage Land Mutates (Second Edition)",
+   "name": "Savage Land Mutates",
    "terms": [
     "second-edition_term_fight"
    ]
   },
   {
    "id": "second-edition_henchman_sentinel",
-   "name": "Sentinel (Second Edition)",
+   "name": "Sentinel",
    "terms": [
     "second-edition_term_fight"
    ]
@@ -438,7 +438,7 @@
  "masterminds": [
   {
    "id": "second-edition_mastermind_doctor-doom",
-   "name": "Doctor Doom (Second Edition)",
+   "name": "Doctor Doom",
    "terms": [
     "second-edition_term_always-leads",
     "second-edition_term_fight",
@@ -509,7 +509,7 @@
   },
   {
    "id": "second-edition_mastermind_loki",
-   "name": "Loki (Second Edition)",
+   "name": "Loki",
    "terms": [
     "second-edition_term_always-leads",
     "second-edition_term_fight",
@@ -537,7 +537,7 @@
   },
   {
    "id": "second-edition_mastermind_magneto",
-   "name": "Magneto (Second Edition)",
+   "name": "Magneto",
    "terms": [
     "second-edition_term_always-leads",
     "second-edition_term_fight",
@@ -697,7 +697,7 @@
   },
   {
    "id": "second-edition_scheme_negative-zone-prison-breakout",
-   "name": "Negative Zone Prison Breakout (Second Edition)",
+   "name": "Negative Zone Prison Breakout",
    "terms": [
     "second-edition_term_scheme-twist"
    ],
@@ -757,7 +757,7 @@
   },
   {
    "id": "second-edition_scheme_portals-to-the-dark-dimension",
-   "name": "Portals to the Dark Dimension (Second Edition)",
+   "name": "Portals to the Dark Dimension",
    "terms": [
     "second-edition_term_scheme-twist"
    ],
@@ -773,7 +773,7 @@
   },
   {
    "id": "second-edition_scheme_replace-earth-s-leaders-with-killbots",
-   "name": "Replace Earth's Leaders with Killbots (Second Edition)",
+   "name": "Replace Earth's Leaders with Killbots",
    "terms": [
     "second-edition_term_scheme-twist"
    ],
@@ -793,7 +793,7 @@
   },
   {
    "id": "second-edition_scheme_secret-invasion-of-the-skrull-shapeshifters",
-   "name": "Secret Invasion of the Skrull Shapeshifters (Second Edition)",
+   "name": "Secret Invasion of the Skrull Shapeshifters",
    "terms": [
     "second-edition_term_scheme-twist"
    ],
@@ -836,7 +836,7 @@
   },
   {
    "id": "second-edition_scheme_superhero-civil-war",
-   "name": "Superhero Civil War (Second Edition)",
+   "name": "Superhero Civil War",
    "terms": [
     "second-edition_term_scheme-twist"
    ],
@@ -873,7 +873,7 @@
   },
   {
    "id": "second-edition_scheme_legacy-virus-the",
-   "name": "The Legacy Virus (Second Edition)",
+   "name": "The Legacy Virus",
    "terms": [
     "second-edition_term_scheme-twist"
    ],
@@ -899,7 +899,7 @@
   },
   {
    "id": "second-edition_scheme_unleash-the-power-of-the-cosmic-cube",
-   "name": "Unleash the Power of the Cosmic Cube (Second Edition)",
+   "name": "Unleash the Power of the Cosmic Cube",
    "terms": [
     "second-edition_term_scheme-twist"
    ],
