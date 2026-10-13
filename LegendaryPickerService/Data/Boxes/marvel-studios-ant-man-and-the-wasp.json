@@ -64,7 +64,7 @@
   },
   {
    "id": "marvel-studios-ant-man-and-the-wasp_hero_ant-man",
-   "name": "Ant-Man (Ant-Man and the Wasp)",
+   "name": "Ant-Man",
    "heroName": "Ant-Man",
    "team": "marvel-studios-ant-man-and-the-wasp_term_avengers",
    "classes": [
@@ -148,7 +148,7 @@
   },
   {
    "id": "marvel-studios-ant-man-and-the-wasp_hero_wasp",
-   "name": "Wasp (Ant-Man and the Wasp)",
+   "name": "Wasp",
    "heroName": "Wasp",
    "team": "marvel-studios-ant-man-and-the-wasp_term_avengers",
    "classes": [

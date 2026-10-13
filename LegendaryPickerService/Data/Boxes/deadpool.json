@@ -12,7 +12,7 @@
   "components": {"heroCards": {"value": 14, "source": "DP p.2"}, "villainGroupCards": {"value": 8, "source": "DP p.2"}, "henchmanGroupCards": {"value": 0, "source": "DP p.2"}, "schemeTwists": {"value": 0, "source": "DP p.2"}},
   "heroes": [
     {"id": "deadpool_hero_bob-agent-of-hydra", "name": "Bob, Agent of HYDRA", "team": "deadpool_term_hydra", "classes": ["core_term_covert", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"]},
-    {"id": "deadpool_hero_deadpool-mercs-for-money", "name": "Deadpool (Mercs for Money)", "heroName": "Deadpool", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"], "uses": [{"part": "wounds", "source": "Card"}]},
+    {"id": "deadpool_hero_deadpool-mercs-for-money", "name": "Deadpool", "heroName": "Deadpool", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"], "uses": [{"part": "wounds", "source": "Card"}]},
     {"id": "deadpool_hero_slapstick", "name": "Slapstick", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["deadpool_term_excessive-violence", "core_term_rescue-a-bystander"]},
     {"id": "deadpool_hero_solo", "name": "Solo", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_instinct", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"]},
     {"id": "deadpool_hero_stingray", "name": "Stingray", "team": "deadpool_term_mercs-for-money", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["deadpool_term_excessive-violence"]}

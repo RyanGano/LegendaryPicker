@@ -57,7 +57,7 @@ Summaries are original paraphrases under 40 words. Card-driven stacks (Wounds, O
 
 ## Setup and implementation gaps
 
-Still open: per-face copy counts for Mastermind Tactics and the Mastermind and Scheme cards (C1 gives none); C1 has no image for three Wanda & Vision halves (Let Go, Science, Grief), so their printed values are indexed only from the shared Divided-card faces. The Warp Reality into a TV Show city size (three spaces: the 50s, 60s and 70s) was confirmed by a reader's look at the face, since OCR reads its digit as 8. Integration notes: Doctor Strange, Black Panther, Captain Marvel and Bruce Banner are named "(Infinity Saga)" because earlier boxes hold those names; the Mastermind is "Thanos (Infinity Saga)". Wanda & Vision count under the Hero Names Wanda and Vision.
+Still open: per-face copy counts for Mastermind Tactics and the Mastermind and Scheme cards (C1 gives none); C1 has no image for three Wanda & Vision halves (Let Go, Science, Grief), so their printed values are indexed only from the shared Divided-card faces. The Warp Reality into a TV Show city size (three spaces: the 50s, 60s and 70s) was confirmed by a reader's look at the face, since OCR reads its digit as 8. Integration notes: Doctor Strange, Black Panther, Captain Marvel and Bruce Banner keep their printed names although earlier boxes hold them, and so does the Mastermind Thanos; the box label tells them apart (#243). Wanda & Vision count under the Hero Names Wanda and Vision.
 
 ## Structured card-face metadata (C1)
 

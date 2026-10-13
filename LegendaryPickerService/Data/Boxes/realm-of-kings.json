@@ -16,7 +16,7 @@
     "schemeTwists": { "value": 0, "source": "RK p.2" }
   },
   "heroes": [
-    {"id": "realm-of-kings_hero_black-bolt", "name": "Black Bolt (Realm of Kings)", "heroName": "Black Bolt", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["realm-of-kings_term_when-recruited", "realm-of-kings_term_thrones-favor"]},
+    {"id": "realm-of-kings_hero_black-bolt", "name": "Black Bolt", "heroName": "Black Bolt", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_ranged", "core_term_tech"], "terms": ["realm-of-kings_term_when-recruited", "realm-of-kings_term_thrones-favor"]},
     {"id": "realm-of-kings_hero_medusa", "name": "Medusa", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["realm-of-kings_term_when-recruited", "realm-of-kings_term_thrones-favor"]},
     {"id": "realm-of-kings_hero_crystal", "name": "Crystal", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": ["realm-of-kings_term_when-recruited", "realm-of-kings_term_thrones-favor"]},
     {"id": "realm-of-kings_hero_karnak", "name": "Karnak", "team": "realm-of-kings_term_inhumans", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["realm-of-kings_term_when-recruited"]},

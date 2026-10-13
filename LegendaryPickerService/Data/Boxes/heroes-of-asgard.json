@@ -13,7 +13,7 @@
   "heroes": [
     {"id": "heroes-of-asgard_hero_beta-ray-bill", "name": "Beta Ray Bill", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["heroes-of-asgard_term_thrown-artifact", "heroes-of-asgard_term_worthy"]},
     {"id": "heroes-of-asgard_hero_lady-sif", "name": "Lady Sif", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["heroes-of-asgard_term_thrown-artifact"]},
-    {"id": "heroes-of-asgard_hero_thor", "name": "Thor (Heroes of Asgard)", "heroName": "Thor", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["heroes-of-asgard_term_thrown-artifact", "heroes-of-asgard_term_worthy"]},
+    {"id": "heroes-of-asgard_hero_thor", "name": "Thor", "heroName": "Thor", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_ranged", "core_term_strength"], "terms": ["heroes-of-asgard_term_thrown-artifact", "heroes-of-asgard_term_worthy"]},
     {"id": "heroes-of-asgard_hero_valkyrie", "name": "Valkyrie", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["heroes-of-asgard_term_conqueror", "heroes-of-asgard_term_thrown-artifact"]},
     {"id": "heroes-of-asgard_hero_the-warriors-three", "name": "The Warriors Three", "team": "heroes-of-asgard_term_asgard", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength"], "terms": ["heroes-of-asgard_term_conqueror"]}
   ],

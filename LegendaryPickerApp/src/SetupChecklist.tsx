@@ -323,7 +323,7 @@ function SetBeside({ cardsBeside, terms }: { cardsBeside: CardsBeside[]; terms: 
     (beside) =>
       beside.fromVillainDeck > 0 && (
         <li key={beside.group.id} className="row">
-          <span className="label">{`${beside.card ?? beside.group.name} set beside the ${terms.scheme}`}</span>{' '}
+          <span className="label">{beside.card ?? names([beside.group])} set beside the {terms.scheme}</span>{' '}
           <span className="count">−{beside.fromVillainDeck}</span>
         </li>
       ),

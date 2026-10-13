@@ -62,7 +62,7 @@ The character a Hero card set is for (for example Jean Grey). Different Heroes c
 A Civil War Hero card printed as two half-cards. It is one card for every count, so a Hero of Divided Cards is still 14 cards, and it sorts by its left half's Hero Name. In hand it counts as both halves' Hero Names and teams, so a Hero whose halves show two teams fills either team's count, one at a time (Storm & Black Panther: X-Men or Avengers, #149).
 
 **Display name**:
-The name a setup shows for a Hero, Villain Group, Henchman Group, Mastermind or Scheme. No two of one kind share a display name across the boxes, so the player can always tell which card to use. A new version of a character takes a distinguishing name: its printed card title when that differs (Symbiote Spider-Man), otherwise the title with its version in brackets (Wolverine (X-Force)). It keeps the shared Hero Name.
+The printed name a setup shows for a Hero, Villain Group, Henchman Group, Mastermind or Scheme, without a set or version suffix (a bracket stays only when printed: Spider-Man (Peter Parker)). Two boxes can print the same name, and the box label tells those cards apart; one box names each card of a kind once. It keeps the shared Hero Name.
 
 **Reprint**:
 A box's printing of another box's Hero, group, Mastermind or Scheme, as Marvel Studios Phase 1's Hulk and Loki reprint the core box's. A reprint is the same card (roadmap decision D5, #34): a setup with either box can draw it, it is drawn at most once when both are included, and it names both boxes, since either box's card will do. A new version with different setup data is not a reprint; it takes a distinguishing display name.

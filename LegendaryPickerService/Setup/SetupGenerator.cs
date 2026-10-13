@@ -406,7 +406,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             foreach (var box in boxes.Where(box => box.OptionalTokens is not null))
             {
                 var tokens = box.OptionalTokens!;
-                var withTokens = cards.Where(card => tokens.Value.Contains(card.Id)).Select(card => card.Name).Distinct().ToList();
+                var withTokens = cards.Where(card => tokens.Value.Contains(card.Id)).Select(Called).Distinct().ToList();
                 if (withTokens.Count > 0)
                 {
                     notes.Add(Note($"Optional: the Token cards could be used with {string.Join(" and ", withTokens)}", tokens.Source, box));
@@ -451,12 +451,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 var deciders = new List<string>();
                 if (RulesetOf(plan.Scheme.Id) == mixingBox.Ruleset)
                 {
-                    deciders.Add($"the {words.Scheme} is {plan.Scheme.Name}");
+                    deciders.Add($"the {words.Scheme} is {Called(plan.Scheme)}");
                 }
 
                 if (RulesetOf(mastermind.Id) == mixingBox.Ruleset)
                 {
-                    deciders.Add($"the {words.Mastermind} is {mastermind.Name}");
+                    deciders.Add($"the {words.Mastermind} is {Called(mastermind)}");
                 }
 
                 reason = new RuleNote(
@@ -663,7 +663,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             foreach (var required in effect.RequiredHeroes ?? [])
             {
-                notes.Add(Card($"{schemeWord} requires {HeroNamed(required.HeroId)}", required.Source));
+                notes.Add(Card($"{schemeWord} requires {Called(CatalogHero(required.HeroId))}", required.Source));
             }
 
             foreach (var count in effect.HeroCounts ?? [])
@@ -693,7 +693,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
                 outside.Add(new OutsideDraw(rule, count.Value));
                 var which = rule.Hero is { } heroId
-                    ? HeroNamed(heroId)
+                    ? Called(CatalogHero(heroId))
                     : $"{count.Value} extra {HeroesOf(count.Value, rule.Team, rule.HeroName ?? (rule.HeroNames is { } any ? string.Join(" or ", any.Value) : null), rule.HeroNameContains)}";
                 var cards = rule.Cards is { } some ? $"{some} of {(count.Value == 1 ? "its" : "their")}" : count.Value == 1 ? "its" : "their";
                 notes.Add(Card($"{schemeWord} draws {which} outside the {_terms.HeroDeck} and puts {cards} cards {Onto(rule.To)}", count.Source));
@@ -727,7 +727,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
                 var each = rule.PerPlayer ? count.Value * players : count.Value;
                 cardsBeside.Add(new BesideDraw(rule, each));
-                var group = CatalogGroup(rule.GroupId).Name;
+                var group = Called(CatalogGroup(rule.GroupId));
                 var what = rule.Card is { } card ? $"{card} of {group}" : $"{each} {group}";
                 notes.Add(Card($"{schemeWord} sets {what} beside it{(rule.PerPlayer ? $", {count.Value} per player" : "")}", count.Source));
             }
@@ -795,7 +795,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             if (plan.Scheme.Setup.MastermindTwists?.FirstOrDefault(twists => twists.MastermindId == mastermind.Id) is { } printed)
             {
                 var note = Note(
-                    $"{SchemeWord(plan.Scheme)} uses {printed.Value} {(printed.Value == 1 ? _terms.Twist : _terms.Twists)} total with {mastermind.Name}",
+                    $"{SchemeWord(plan.Scheme)} uses {printed.Value} {(printed.Value == 1 ? _terms.Twist : _terms.Twists)} total with {Called(mastermind)}",
                     printed.Source, BoxOf(plan.Scheme.Id), plan.Scheme.Id);
                 plan = plan with { Twists = printed.Value, Notes = [.. plan.Notes, note] };
             }
@@ -811,19 +811,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 [
                     .. plan.Notes,
                     .. (effects.RequiredHeroes ?? []).Select(required =>
-                        Note($"{mastermind.Name} requires {HeroNamed(required.HeroId)}", required.Source, BoxOf(mastermind.Id), mastermind.Id)),
+                        Note($"{Called(mastermind)} requires {Called(CatalogHero(required.HeroId))}", required.Source, BoxOf(mastermind.Id), mastermind.Id)),
                 ],
             };
 
             if (plan.HenchmanCards is null && ForPlayers(effects.HenchmanCards ?? []) is { } henchmen)
             {
                 var note = Note(
-                    $"{mastermind.Name} puts {henchmen.Value} {_terms.Henchmen} of each {_terms.HenchmanGroup} in the {_terms.VillainDeck}",
+                    $"{Called(mastermind)} puts {henchmen.Value} {_terms.Henchmen} of each {_terms.HenchmanGroup} in the {_terms.VillainDeck}",
                     henchmen.Source, BoxOf(mastermind.Id), mastermind.Id);
                 plan = plan with { HenchmanCards = henchmen.Value, Notes = [.. plan.Notes, note] };
             }
 
-            return Add(plan, effects, mastermind.Name, BoxOf(mastermind.Id), mastermind.Id);
+            return Add(plan, effects, Called(mastermind), BoxOf(mastermind.Id), mastermind.Id);
         }
 
         // Adds each effect that applies at this player count to the plan's counts, and each setup step to
@@ -899,15 +899,17 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     required[standIn.Id] = rule;
                     chosen.Add(standIn);
                     notes.Add(Note(
-                        $"{SchemeWord(scheme)} uses {standIn.Name} in place of {group.Name}: {from.Name} isn't included",
+                        $"{SchemeWord(scheme)} uses {(SameName(standIn, group) ? Labelled(standIn) : Called(standIn))} in place of {group.Name}: {from.Name} isn't included",
                         substitute, BoxOf(scheme.Id), scheme.Id));
                     continue;
                 }
 
                 chosen.Add(group);
+                // A group from a box the setup doesn't include is named with that box below, so it needs no label of its own.
+                var name = included ? Called(group) : group.Name;
                 var text = rule.Cards is { } cards
-                    ? $"{SchemeWord(scheme)} requires {group.Name}, {cards} of its {CardName(CardKind.Henchman, cards)} in the {_terms.VillainDeck}"
-                    : $"{SchemeWord(scheme)} requires {group.Name}";
+                    ? $"{SchemeWord(scheme)} requires {name}, {cards} of its {CardName(CardKind.Henchman, cards)} in the {_terms.VillainDeck}"
+                    : $"{SchemeWord(scheme)} requires {name}";
                 notes.Add(included
                     ? Note(text, rule.Source, BoxOf(scheme.Id), scheme.Id)
                     : Note($"{text}, from {from.Name}, which isn't included", rule.OtherBox!.Source, BoxOf(scheme.Id), scheme.Id));
@@ -926,7 +928,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 required[group.Id] = new RequiredGroup(group.Id, type, choice.Source);
                 pool = pool.Where(g => g.Id == group.Id || !choice.GroupIds.Contains(g.Id)).ToList();
                 notes.Add(Note(
-                    $"{SchemeWord(scheme)} requires one of {string.Join(" and ", options.Select(g => g.Name))}, not both: {group.Name}",
+                    $"{SchemeWord(scheme)} requires one of {string.Join(" and ", options.Select(g => Called(g)))}, not both: {Called(group)}",
                     choice.Source, BoxOf(scheme.Id), scheme.Id));
             }
 
@@ -939,7 +941,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     chosen.Add(group);
                 }
 
-                notes.Add(Note($"{SchemeWord(scheme)} adds {other.Name}'s Always Leads group {group.Name}", source, BoxOf(scheme.Id), scheme.Id));
+                notes.Add(Note($"{SchemeWord(scheme)} adds {Called(other)}'s Always Leads group {Called(group)}", source, BoxOf(scheme.Id), scheme.Id));
             }
 
             // A set-aside Mastermind with no Always Leads group adds one extra Villain Group, drawn with the rest.
@@ -947,7 +949,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads is null))
                 {
-                    notes.Add(Note($"{SchemeWord(scheme)} adds an extra {_terms.VillainGroup} for {other.Name}, who leads no group", source, BoxOf(scheme.Id), scheme.Id));
+                    notes.Add(Note($"{SchemeWord(scheme)} adds an extra {_terms.VillainGroup} for {Called(other)}, who leads no group", source, BoxOf(scheme.Id), scheme.Id));
                 }
             }
 
@@ -956,7 +958,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             {
                 if (Ignores(mastermind))
                 {
-                    notes.Add(Note($"Solo ignores {mastermind.Name}'s Always Leads", rules.Solo.IgnoresAlwaysLeads.Source, rulesBox));
+                    notes.Add(Note($"Solo ignores {Called(mastermind)}'s Always Leads", rules.Solo.IgnoresAlwaysLeads.Source, rulesBox));
                 }
                 else
                 {
@@ -965,7 +967,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     if (!chosen.Any(g => leads.GroupIds.Contains(g.Id)) && chosen.Count >= slots)
                     {
                         notes.Add(Note(
-                            $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(g => g.Name))}, so {mastermind.Name}'s Always Leads group {string.Join(" or ", leads.GroupIds.Select(id => CatalogGroup(id).Name))} is dropped",
+                            $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(g => Called(g)))}, so {Called(mastermind)}'s Always Leads group {string.Join(" or ", leads.GroupIds.Select(id => Called(CatalogGroup(id))))} is dropped",
                             rules.Rulings.RequiredGroupDisplacesAlwaysLeads, rulesBox));
                     }
                     else
@@ -977,13 +979,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                         }
 
                         notes.Add(leads.OrGroupIds is null
-                            ? Note($"{mastermind.Name} always leads {group.Name}", rules.Rulings.AlwaysLeadsFillsSlot, rulesBox)
+                            ? Note($"{Called(mastermind)} always leads {Called(group)}", rules.Rulings.AlwaysLeadsFillsSlot, rulesBox)
                             : Note(
-                                $"{mastermind.Name} always leads {group.Name}, one of {string.Join(" and ", leads.GroupIds.Select(id => CatalogGroup(id).Name))}",
+                                $"{Called(mastermind)} always leads {Called(group)}, one of {string.Join(" and ", leads.GroupIds.Select(id => Called(CatalogGroup(id))))}",
                                 leads.Source, BoxOf(mastermind.Id), mastermind.Id));
                         if (IgnoresAlwaysLeads)
                         {
-                            notes.Add(Note($"{mastermind.Name} leads {group.Name} even in Solo", leads.Source, BoxOf(mastermind.Id), mastermind.Id));
+                            notes.Add(Note($"{Called(mastermind)} leads {Called(group)} even in Solo", leads.Source, BoxOf(mastermind.Id), mastermind.Id));
                         }
                     }
                 }
@@ -998,7 +1000,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 if (group is null && chosen.Count >= slots)
                 {
                     notes.Add(Note(
-                        $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(g => g.Name))}, so {mastermind.Name}'s other Always Leads group is dropped",
+                        $"{SchemeWord(scheme)} requires {string.Join(" and ", chosen.Select(g => Called(g)))}, so {Called(mastermind)}'s other Always Leads group is dropped",
                         rules.Rulings.RequiredGroupDisplacesAlwaysLeads, rulesBox));
                 }
                 else
@@ -1010,7 +1012,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     }
 
                     notes.Add(Note(
-                        $"{mastermind.Name} also always leads {group.Name}, one of {string.Join(" and ", options.Select(g => g.Name))}",
+                        $"{Called(mastermind)} also always leads {Called(group)}, one of {string.Join(" and ", options.Select(g => Called(g)))}",
                         also.Source, BoxOf(mastermind.Id), mastermind.Id));
                 }
             }
@@ -1138,7 +1140,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     {
                         var hero = DrawOne(left);
                         left.Remove(hero);
-                        seats.Add($"Player {seat}: {hero.Name}");
+                        seats.Add($"Player {seat}: {Called(hero)}");
                     }
 
                     label = label.Replace(PlayerHeroesPlaceholder, string.Join("; ", seats));
@@ -1174,7 +1176,24 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         }
 
         // Any loaded Hero, since a Scheme's named Hero is drawn even when no included box supplies a part it uses.
-        private string HeroNamed(string heroId) => catalogBoxes.SelectMany(box => box.Heroes).Single(hero => hero.Id == heroId).Name;
+        private Hero CatalogHero(string heroId) => catalogBoxes.SelectMany(box => box.Heroes).Single(hero => hero.Id == heroId);
+
+        // A card's printed name, with its box when another card of its kind in the included boxes prints the same name
+        // and more than one box is included, so a note never leaves the player unsure which physical card it means (#243).
+        private string Called(ICard card) => boxes.Count > 1 && SharedName(card) ? Labelled(card) : card.Name;
+
+        private string Labelled(ICard card) => $"{card.Name} (from {BoxLabel(BoxOf(card.Id), card.Id)})";
+
+        private static bool SameName(ICard card, ICard other) =>
+            other.Id != card.Id && string.Equals(other.Name, card.Name, StringComparison.OrdinalIgnoreCase);
+
+        private bool SharedName(ICard card)
+        {
+            var kind = card.Id.Split('_')[1];
+            return boxes
+                .SelectMany(box => box.Heroes.Cast<ICard>().Concat(box.VillainGroups).Concat(box.HenchmanGroups).Concat(box.Masterminds).Concat(box.Schemes))
+                .Any(other => other.Id.Split('_')[1] == kind && SameName(card, other));
+        }
 
         private string Onto(Pile to) => to switch
         {
@@ -1245,7 +1264,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .Select(group => new VillainsSetAside(group, Math.Max(0, DeckCards(plan, group.Id, GroupType.Villain) - group.AmbushSchemes)))
                 .ToList();
             notes.AddRange(aside.Select(entry => Note(
-                $"{mastermind.Name} sets aside the Villains of {entry.Group.Name}, its extra {_terms.VillainGroup}; their Ambush Schemes stay in the {_terms.VillainDeck}",
+                $"{Called(mastermind)} sets aside the Villains of {Called(entry.Group)}, its extra {_terms.VillainGroup}; their Ambush Schemes stay in the {_terms.VillainDeck}",
                 setAside.Source, BoxOf(mastermind.Id), mastermind.Id)));
             return aside;
         }

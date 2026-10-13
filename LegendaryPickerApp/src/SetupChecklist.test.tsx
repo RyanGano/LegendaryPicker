@@ -386,6 +386,16 @@ describe('SetupChecklist', () => {
     ])
   })
 
+  it('names the box of a group set beside the Plot when the setup names boxes', () => {
+    const [beside] = twoPlayerVillainsCageVillains.cardsBeside
+    renderChecklist({
+      ...twoPlayerVillainsCageVillains,
+      cardsBeside: [{ ...beside, group: { ...beside.group, box: 'Legendary: Villains' } }],
+    })
+
+    expect(rows('Adversary Deck')).toContain('Cops Legendary: Villains set beside the Plot −4')
+  })
+
   it('names the one card of a group a Plot sets beside it', () => {
     renderChecklist(twoPlayerVillainsCrownThor)
 
