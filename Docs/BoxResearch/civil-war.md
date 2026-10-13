@@ -67,9 +67,7 @@ Summaries are original paraphrases under 40 words. Other terms on the card faces
 
 ## Setup and implementation gaps
 
-The insert does not provide all eight Scheme setup lines or the five Masterminds' Always Leads/setup effects. Verify player limits, Twist values, required groups/Heroes, moves, constraints, and setup steps from the printed cards. The insert mentions Hero cards as substitutions for S.H.I.E.L.D. Clearance, but their complete setup role is not documented here. Exact Healing symbols/costs on Grievous Wound cards also need a clear card reference.
-
-The Special Sidekick, Grievous Wound, and Special Bystander stacks need conditional shared-stack representation. Divided Cards also need their left-side Hero Name and side-specific metadata represented without treating the two sides as two cards. No runtime data or code is changed in this record.
+Still open: per-face copy counts, and the exact Healing symbols and costs on the Grievous Wound cards. The Scheme Setup lines, Always Leads and part uses were read from the C1-linked card faces and the C2 card index (`Card`) and are in the box file. The special Sidekick, Grievous Wound and Special Bystander cards join the shared stacks, and Divided Cards count under both halves' Hero Names (#149).
 
 ## Structured card-face metadata (C1)
 

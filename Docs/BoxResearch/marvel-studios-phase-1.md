@@ -86,7 +86,7 @@ These are original paraphrases. The rulebook's generic terms do not verify all p
 
 ## Setup and implementation gaps
 
-The official contents/setup Bystander counts (42 listed versus 41 used) and six-versus-five Master Strike counts need reconciliation from the physical cards or another official list. Verify the other seven Schemes' player limits, Twist counts, required groups/Heroes, moves and effects, plus the other Masterminds' Always Leads/setup lines and all Hero metadata. The rulebook does not document mixing this base game with other boxes; do not infer mixing support. The current core runtime record has one generic Bystander count, so the Special Bystander representation also needs review before integration.
+Still open: per-face copy counts. The contents list's 42 Bystanders and six Master Strikes against the setup section's 41 and five are unreconciled; the box file uses the setup numbers. Every Scheme Setup line, Always Leads and part use was read from the C1-linked card faces (`Card`). The rulebook does not document mixing this base game with other boxes; do not infer mixing support.
 
 ## Structured card-face metadata (C1)
 

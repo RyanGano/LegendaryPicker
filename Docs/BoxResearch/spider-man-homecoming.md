@@ -63,7 +63,7 @@ Summaries are original paraphrases under 40 words. The insert does not establish
 
 ## Setup and implementation gaps
 
-Player-count restrictions, if any, remain unverified. Hero face counts are not available from C1; each Hero Group's 14-card total does not verify the count of each printed face. C1 does not index all visible icons, so check the linked images where fields are absent. Existing runtime data and sourced effects are unchanged.
+Still open: per-face copy counts (C1 gives none), and printed icons C1 does not index (check the linked images). The Scheme Setup lines and Always Leads were read from the C1-linked card faces (`Card`) and are in the box file.
 
 ## Scheme and Mastermind setup effects
 

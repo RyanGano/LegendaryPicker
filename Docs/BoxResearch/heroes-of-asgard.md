@@ -1,6 +1,6 @@
 # Heroes of Asgard (March 2020)
 
-**Research status: Partial.** The official insert verifies contents and several new card types/mechanics. For #174 the Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/heroes-of-asgard.json`; per-face copy counts remain open.
+**Research status: Partial; integrated (#174).** The official insert verifies contents and several new card types/mechanics. The Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/heroes-of-asgard.json`; per-face copy counts remain open.
 
 ## Sources
 
@@ -58,7 +58,7 @@ Summaries are original paraphrases under 40 words. Exact Hero teams/classes and 
 
 ## Setup and implementation gaps
 
-Verify the four Schemes' player limits, Twist counts, required groups/Heroes, moves, stacks, and setup steps, plus both Masterminds' Always Leads/setup effects and all Hero metadata. Integration must represent Artifact control and Thrown Artifacts, and track Villainous Weapons as attached cards that transfer or become player Artifacts. This record changes no runtime data or code.
+Still open: per-face copy counts. The Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face (`Card`) and are in the box file. Artifact control, Thrown Artifacts and Villainous Weapons are play mechanics and need no setup data.
 
 ## Structured card-face metadata (C1)
 

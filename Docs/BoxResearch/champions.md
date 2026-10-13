@@ -1,6 +1,6 @@
 # Champions (February 2018)
 
-**Research status: Partial.** The official insert verifies contents and several mechanics, but not the card-level setup lines or all icon-specific requirements.
+**Research status: Partial; integrated (#136).** The official insert verifies contents and several mechanics; the Scheme Setup lines, Always Leads and part uses in `LegendaryPickerService/Data/Boxes/champions.json` were read from the C1-linked card faces (`Card`). Per-face copy counts and the Size-Changing icon requirements remain open.
 
 ## Sources
 
@@ -56,7 +56,7 @@ Summaries are original paraphrases under 40 words. The insert does not establish
 
 ## Setup and implementation gaps
 
-Verify all four Schemes' player limits, Twist counts, required Heroes/groups, moves, stacks, and setup steps from the product cards. Verify each Mastermind's Always Leads and setup effects, Hero teams/classes/shared Hero Names, and the exact Size-Changing icon requirements. This record changes no runtime data or code.
+Still open: per-face copy counts (C1 gives none) and the exact Size-Changing icon combinations printed on each face. The Scheme Setup lines, Always Leads and part uses were read from the C1-linked card faces (`Card`) and are in the box file.
 
 ## Structured card-face metadata (C1)
 

@@ -74,9 +74,7 @@ Summaries are original paraphrases under 40 words. Remaining card terms, class/t
 
 ## Setup and implementation gaps
 
-The insert omits all eight Scheme setup lines and the six Masterminds' Always Leads/setup effects. Verify player limits, counts, required groups/Heroes, and setup steps from printed cards. Reconcile C1's ten Special Bystander names against the official nine-card count; verify token/Horror names and the Human Shields payment icon from clear card references.
-
-Integration must account for Traps, mid-game token cards, Horrors, double-sided Epic Masterminds, ascending Masterminds, and Heroic Bystanders. Optional Horrors and Epic sides remain governed by project decisions D4/D2; this record changes no runtime data or code.
+Still open: per-face copy counts, C1's ten Special Bystander names against the insert's nine, and the token and Horror names and the Human Shields payment icon. The Scheme Setup lines, Always Leads and part uses were read from C1 and its card-image links (`Card`) and are in the box file. Optional Horrors and Epic sides remain governed by project decisions D4/D2.
 
 ## Structured card-face metadata (C1)
 

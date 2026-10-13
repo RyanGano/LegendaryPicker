@@ -1,6 +1,6 @@
 # Fantastic Four (Oct 2013)
 
-**Research status: Partial.** Runtime integration exists; this note indexes C1 per-face metadata without duplicating the existing catalog and its cited setup values in [`fantastic-four.json`](../../LegendaryPickerService/Data/Boxes/fantastic-four.json). Remaining research gaps are listed below.
+**Research status: Partial.** Runtime integration exists; this note indexes C1 per-face metadata without duplicating the existing catalog and its cited setup values in [`fantastic-four.json`](../../LegendaryPickerService/Data/Boxes/fantastic-four.json). Per-face copy counts remain open.
 
 ## Sources
 | Key | Source | Facts supported |

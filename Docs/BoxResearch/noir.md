@@ -1,6 +1,6 @@
 # Noir (February 2017)
 
-**Research status: Partial.** The official insert verifies contents and the Investigate/Hidden Witness rules, but its contents list does not name cards and C1 reports one more Scheme identifier than the official Scheme count.
+**Research status: Partial; integrated (#130).** The official insert verifies contents and the Investigate/Hidden Witness rules; the Scheme Setup lines, Always Leads and part uses in `LegendaryPickerService/Data/Boxes/noir.json` were read from the C1 catalog and its card-image links (`Card`). Per-face copy counts remain open.
 
 ## Sources
 
@@ -54,7 +54,7 @@ Summaries are original paraphrases under 40 words. Hero metadata, other card ter
 
 ## Setup and implementation gaps
 
-The C1 Scheme roster must be reconciled with the official four-Scheme count without adding a possible promo. Verify each Scheme and Mastermind's setup effects, Always Leads, player limits, required groups, and Hero metadata from the product cards. This record does not change runtime data or code.
+Still open: per-face copy counts (C1 gives none). The Scheme Setup lines, Always Leads and part uses were read from the C1 catalog and its card-image links (`Card`) and are in the box file; four Schemes shipped, matching the official count (Detective Wolverine is a Bystander, not a Scheme).
 
 ## Structured card-face metadata (C1)
 

@@ -1,6 +1,6 @@
 # Revelations (August 2019)
 
-**Research status: Partial.** The official insert verifies the 200-card breakdown and new rules. For #170 the Scheme Setup lines (both sides), Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/revelations.json`; per-face copy counts and printed Hyperspeed icons remain open.
+**Research status: Partial; integrated (#170).** The official insert verifies the 200-card breakdown and new rules. The Scheme Setup lines (both sides), Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/revelations.json`; per-face copy counts and printed Hyperspeed icons remain open.
 
 ## Sources
 
@@ -61,7 +61,7 @@ Summaries are original paraphrases under 40 words. Verify the printed icons and 
 
 ## Setup and implementation gaps
 
-Verify all four Schemes' player limits, Twist counts, required groups/Heroes, moves, stacks, setup steps, and both sides' setup-dependent behavior. Verify each Mastermind's Always Leads/setup effects and Hero metadata. The catalog/generator must represent Locations as a distinct card type and allow two-sided Schemes to transform during play; this record changes no runtime data or code.
+Still open: per-face copy counts and the printed Hyperspeed icons. The Scheme Setup lines (both sides), Always Leads and part uses were read from OCR of every C1-linked face (`Card`) and are in the box file. Locations and transforming Schemes matter in play only.
 
 ## Structured card-face metadata (C1)
 
