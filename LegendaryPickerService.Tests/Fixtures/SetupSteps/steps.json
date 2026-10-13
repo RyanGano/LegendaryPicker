@@ -68,7 +68,8 @@
       "terms": ["core_term_scheme-twist"],
       "setup": {
         "twists": [{ "players": null, "value": 8, "source": "Card" }],
-        "steps": [{ "label": "Each player's own Hero, from the Hero Deck: {playerHeroes}", "source": "Card" }]
+        "playersChooseHeroes": { "value": true, "source": "Card" },
+        "steps": [{ "label": "Each player chooses a different Hero for the Hero Deck, listed or not", "source": "Card" }]
       }
     },
     {

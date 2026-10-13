@@ -40,6 +40,7 @@ export function SetupChecklist({
     outsideMasterminds = [],
     villainsSetAside = [],
     steps = [],
+    fillInHeroes = 0,
     standIns = [],
     specialCards = [],
   } = setup
@@ -202,6 +203,12 @@ export function SetupChecklist({
           detail={plural(setup.heroes.length, heroTerms.hero, heroTerms.heroes)}
           count={heroDeck.heroCards}
         />
+        {fillInHeroes > 0 && (
+          <li className="row">
+            <span className="label">{names(setup.heroes.slice(-fillInHeroes))}</span>{' '}
+            <span className="detail">{`only in place of an earlier listed ${heroTerms.hero} a player chose`}</span>
+          </li>
+        )}
         <MovedIn moves={moves} to="heroDeck" terms={t} />
         {outsideHenchmen.map(
           (outside) =>

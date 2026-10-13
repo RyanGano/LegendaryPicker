@@ -120,6 +120,15 @@ describe('SetupChecklist', () => {
     expect(tileNames('Henchman Groups')).toEqual(['Doombot Legion', 'Hand Ninjas'])
   })
 
+  it('marks the last Heroes as fill-ins when the players choose Heroes', () => {
+    const setup = structuredClone(killbots) as Setup
+    setup.fillInHeroes = 2
+    renderChecklist(setup)
+
+    const row = rows('Hero Deck').find((text) => text.includes('only in place of'))
+    expect(row).toBe('Captain America, Black Widow only in place of an earlier listed Hero a player chose')
+  })
+
   it('names a single drawn group in the singular', () => {
     renderChecklist(soloSecretInvasion)
 

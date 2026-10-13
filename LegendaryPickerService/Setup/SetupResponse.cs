@@ -105,7 +105,8 @@ public abstract record SetupResponse
             outsideMasterminds.Count > 0 ? outsideMasterminds : null,
             villainsSetAside.Count > 0 ? villainsSetAside : null,
             specialCards.Count > 0 ? specialCards : null,
-            reveal);
+            reveal,
+            setup.FillInHeroes);
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
@@ -207,7 +208,8 @@ public sealed record SetupBody(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<OutsideMastermindBody>? OutsideMasterminds = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<VillainsSetAsideBody>? VillainsSetAside = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<SpecialCardsBody>? SpecialCards = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] MastermindRevealBody? MastermindReveal = null) : SetupResponse
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] MastermindRevealBody? MastermindReveal = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int FillInHeroes = 0) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";

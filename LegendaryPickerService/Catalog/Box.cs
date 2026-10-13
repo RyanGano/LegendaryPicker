@@ -356,7 +356,9 @@ public sealed record SetupStep(string Label, string Source, bool OffersEpic = fa
 // Mix Tape's half of each group. MastermindJoinsLater is set for a Scheme whose card has no Mastermind at setup and adds a
 // random one mid-game, as Enshrouded Identity does when its Bodyguards are gone (#245): the Mastermind is still drawn, but
 // its Always Leads groups and setup effects are not part of the setup. Its value is the short note, in our own words,
-// that says when the Mastermind joins, shown beside the button that reveals it (#254).
+// that says when the Mastermind joins, shown beside the button that reveals it (#254). PlayersChooseHeroes is set for a
+// Scheme whose card has each player choose a Hero for the Hero Deck, as Sneak Attack the Heroes' Homes does (#259): the
+// Hero Deck is still drawn at its normal size, and the last Heroes, one per player, are marked as fill-ins.
 public sealed record SchemeSetup(
     IReadOnlyList<PlayerCountValue> Twists,
     Sourced<int[]>? AllowedPlayerCounts = null,
@@ -388,7 +390,8 @@ public sealed record SchemeSetup(
     Sourced<int>? Officers = null,
     Sourced<int>? VillainCards = null,
     IReadOnlyList<MastermindTwists>? MastermindTwists = null,
-    Sourced<string>? MastermindJoinsLater = null)
+    Sourced<string>? MastermindJoinsLater = null,
+    Sourced<bool>? PlayersChooseHeroes = null)
     : SetupEffects(ExtraHeroes, ExtraVillainGroups, ExtraHenchmanGroups, ExtraVillainDeckBystanders, Steps, HenchmanCards, RequiredHeroes);
 
 // A Twist count a Scheme prints for one Mastermind of its box, which replaces the Scheme's own Twists when that
