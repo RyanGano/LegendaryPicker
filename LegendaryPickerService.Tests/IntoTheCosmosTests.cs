@@ -47,10 +47,9 @@ public class IntoTheCosmosTests
 
     private static SetupResult Draw(int players, string scheme)
     {
-        var probe = new ScriptedRandom();
-        Generator.Generate(players, Boxes, probe);
-        var index = Enumerable.Range(0, probe.Options[0])
-            .First(s => Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(s))).Scheme.Name == scheme);
-        return Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(index)));
+        var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(index)));
+        Assert.Equal(scheme, setup.Scheme.Name);
+        return setup;
     }
 }

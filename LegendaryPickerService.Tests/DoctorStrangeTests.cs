@@ -35,14 +35,10 @@ public class DoctorStrangeTests
 
     private static SetupResult Draw(int players, string scheme, string mastermind, params int[] rest)
     {
-        var probe = new ScriptedRandom();
-        Generator.Generate(players, Boxes, probe);
-        var s = Enumerable.Range(0, probe.Options[0])
-            .First(i => Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(i))).Scheme.Name == scheme);
-        var mastermindProbe = new ScriptedRandom(s);
-        Generator.Generate(players, Boxes, mastermindProbe);
-        var m = Enumerable.Range(0, mastermindProbe.Options[1])
-            .First(i => Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(s, i))).Mastermind.Name == mastermind);
-        return Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom([s, m, .. rest])));
+        var s = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
+        var m = DrawIndexes.Mastermind(Catalog, Boxes, scheme, mastermind);
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom([s, m, .. rest])));
+        Assert.Equal((scheme, mastermind), (setup.Scheme.Name, setup.Mastermind.Name));
+        return setup;
     }
 }
