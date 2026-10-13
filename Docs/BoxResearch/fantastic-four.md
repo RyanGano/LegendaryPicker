@@ -108,3 +108,7 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 - **Mole Man** — Wounds: printed card text on **Mole Man** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/mole-man-01.png)).
 - **Human Torch** — Wounds: printed card text on **Hothead** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/human-torch-04.png)).
 - **Heralds of Galactus** — Wounds: printed card text on **Firelord** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/heralds-of-galactus-02.png)).
+
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 38 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). No face disagreed with the box file.

@@ -95,17 +95,17 @@ public sealed class CardMovesTests
     }
 
     // A Scheme uses the stack it moves cards from without listing it (D-uses). In Solo, Test Wounded with
-    // Dr. Doom, Skrulls, Doombot Legion and the first three Heroes has no other card that uses Wounds, so the
+    // Dr. Doom, Skrulls, Doombot Legion, Black Widow, Cyclops and Emma Frost has no other card that uses Wounds, so the
     // move alone keeps the Wound stack.
     [Fact]
     public void A_Scheme_that_moves_cards_from_a_stack_keeps_that_stack_in_the_setup()
     {
-        var setup = Draw(1, 8, 0, 5, 0, 0, 0, 0);
+        var setup = Draw(1, 8, 0, 5, 0, 0, 1, 2);
 
         Assert.Equal("Test Wounded", setup.Scheme.Name);
         Assert.Equal(["Skrulls"], setup.VillainGroups.Select(group => group.Name));
         Assert.Equal(["Doombot Legion"], setup.HenchmanGroups.Select(group => group.Name));
-        Assert.Equal(["Black Widow", "Captain America", "Cyclops"], setup.Heroes.Select(hero => hero.Name));
+        Assert.Equal(["Black Widow", "Cyclops", "Emma Frost"], setup.Heroes.Select(hero => hero.Name));
         Assert.Equal(29, setup.Stacks.Wounds);
         Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }

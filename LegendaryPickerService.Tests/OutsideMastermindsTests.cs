@@ -24,13 +24,15 @@ public sealed class OutsideMastermindsTests
     [Fact]
     public void A_Mastermind_set_aside_is_drawn_from_the_others_and_brings_the_parts_it_uses()
     {
-        // In Solo, Test Mob fills the one Villain Group slot and the first three core Heroes use no Wounds, so only
-        // Loki, set aside, brings the Wound stack. The last draw picks from the 3 Masterminds besides Dr. Doom.
-        var random = new ScriptedRandom(6, 0);
+        // In Solo, Test Mob fills the one Villain Group slot and the Heroes drawn (Black Widow, Cyclops, Emma Frost)
+        // use no Wounds, so only Loki, set aside, brings the Wound stack. The last draw picks from the 3 Masterminds
+        // besides Dr. Doom.
+        var random = new ScriptedRandom(6, 0, 0, 0, 1, 2);
 
         var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, random));
 
         Assert.Equal(("Test Alliance", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));
+        Assert.Equal(["Black Widow", "Cyclops", "Emma Frost"], setup.Heroes.Select(hero => hero.Name));
         Assert.Equal(3, random.Options[^1]);
         Assert.Equal([new OutsideMastermind(Mastermind("core_mastermind_loki"), Pile.SetAside, null)], setup.OutsideMasterminds);
         Assert.Equal(new VillainDeck(8, 1, 8, 3, 1, 0), setup.VillainDeck);
@@ -42,7 +44,7 @@ public sealed class OutsideMastermindsTests
     public void Tactics_shuffled_into_the_Villain_Deck_count_in_it_and_bring_no_parts()
     {
         // The same Solo draw as above, but Loki's and Magneto's Tactics play with no abilities, so nothing uses Wounds.
-        var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(7, 0)));
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(1, Boxes, new ScriptedRandom(7, 0, 0, 0, 1, 2)));
 
         Assert.Equal("Test Tyrants", setup.Scheme.Name);
         Assert.Equal(

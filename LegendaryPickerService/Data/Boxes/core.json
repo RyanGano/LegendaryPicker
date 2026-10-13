@@ -25,7 +25,7 @@
   },
   "heroes": [
     { "id": "core_hero_black-widow", "name": "Black Widow", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_tech"], "terms": ["core_term_rescue-a-bystander"] },
-    { "id": "core_hero_captain-america", "name": "Captain America", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": [] },
+    { "id": "core_hero_captain-america", "name": "Captain America", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": [], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "core_hero_cyclops", "name": "Cyclops", "team": "core_term_x-men", "classes": ["core_term_ranged", "core_term_strength"], "terms": [] },
     { "id": "core_hero_deadpool", "name": "Deadpool", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": [], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "core_hero_emma-frost", "name": "Emma Frost", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_ranged", "core_term_strength"], "terms": [] },
@@ -38,7 +38,7 @@
     { "id": "core_hero_spider-man", "name": "Spider-Man", "team": "core_term_spider-friends", "classes": ["core_term_covert", "core_term_instinct", "core_term_strength", "core_term_tech"], "terms": ["core_term_rescue-a-bystander"] },
     { "id": "core_hero_storm", "name": "Storm", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["core_term_rescue-a-bystander"] },
     { "id": "core_hero_thor", "name": "Thor", "team": "core_term_avengers", "classes": ["core_term_ranged", "core_term_strength"], "terms": [] },
-    { "id": "core_hero_wolverine", "name": "Wolverine", "team": "core_term_x-men", "classes": ["core_term_instinct"], "terms": [] }
+    { "id": "core_hero_wolverine", "name": "Wolverine", "team": "core_term_x-men", "classes": ["core_term_instinct"], "terms": [], "uses": [{ "part": "wounds", "source": "Card" }] }
   ],
   "villainGroups": [
     { "id": "core_villain_brotherhood", "name": "Brotherhood", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight"], "uses": [{ "part": "wounds", "source": "Card" }] },

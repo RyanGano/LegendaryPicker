@@ -278,9 +278,14 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 ### Checked against the printed face
 
 - **Stryfe** — Wounds: printed card text on **Swift Vengeance** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/stryfe-05.png)); **Tide of Retribution** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/stryfe-04.png)).
+- **Iceman** — Wounds: printed card text on **Impenetrable Ice Wall** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/iceman-01.png)) (#166).
 - **Colossus** — Wounds: printed card text on **Draw Their Fire** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/colossus-04.png)).
 - **Emissaries of Evil** — Wounds: printed card text on **Rhino** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/emissaries-of-evil-01.png)).
 - **Four Horsemen** — Wounds: printed card text on **War** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/four-horsemen-01-1.png)).
 - **Streets of New York** — Wounds: printed card text on **Tombstone** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/streets-of-new-york-04.png)).
 - **Underworld** — Wounds: printed card text on **Blackheart** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/underworld-01.png)); **Lilith, Daughter of Dracula** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/underworld-04.png)).
 - **Mephisto** — Wounds: printed card text on **Mephisto** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/mephisto-01.png)); **Pain Begets Pain** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/mephisto-04.png)).
+
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 122 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds, source Card, under that ruling: Iceman (Impenetrable Ice Wall, reacts to gaining a Wound). Iron Fist Focus Chi, unreadable in the cache, was read by a short-lived reader and names no stack.
