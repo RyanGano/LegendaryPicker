@@ -262,7 +262,9 @@ public sealed record AlsoLeadsGroup(IReadOnlyList<string> GroupIds, GroupType Gr
 
 // ExcludesMasterminds lists the Masterminds the Scheme's card rules out, recorded when its box is entered: those whose
 // Always Leads group it sets every card of beside it, as Clash of the Monsters Unleashed does Fin Fang Foom's
-// (D-scheme-first, #138). The draw reads the list and computes nothing; a test derives it from the card data.
+// (D-scheme-first, #138), and those whose required Heroes its Hero rules can't take, which the loader requires (#205);
+// these can be any box's Masterminds of its ruleset. The draw reads the list and computes nothing; a test derives the
+// Always Leads ones from the card data.
 // ChangesCitySpaces is the source for a Scheme whose card changes the number of city spaces, which a Mastermind with
 // NoCitySpaceSchemes (Ego) rules out, from any box (#192).
 public sealed record Scheme(
