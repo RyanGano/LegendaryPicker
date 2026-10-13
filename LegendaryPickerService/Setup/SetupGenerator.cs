@@ -634,27 +634,27 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             if (effect.WoundsPerPlayer is { } woundsPerPlayer)
             {
                 wounds = woundsPerPlayer.Value * players;
-                notes.Add(Card($"{schemeWord} sets the Wound stack to {woundsPerPlayer.Value} per player", woundsPerPlayer.Source));
+                notes.Add(Card($"{schemeWord} sets the {StackOf(CardKind.Wound, "Wound")} stack to {woundsPerPlayer.Value} per player", woundsPerPlayer.Source));
             }
 
             if (effect.Wounds is { } woundStack)
             {
                 wounds = woundStack.Value;
-                notes.Add(Card($"{schemeWord} sets the Wound stack to {woundStack.Value}", woundStack.Source));
+                notes.Add(Card($"{schemeWord} sets the {StackOf(CardKind.Wound, "Wound")} stack to {woundStack.Value}", woundStack.Source));
             }
 
             int? officers = null;
             if (effect.Officers is { } officerStack)
             {
                 officers = officerStack.Value;
-                notes.Add(Card($"{schemeWord} sets the {CardName(CardKind.Officer, 2)} stack to {officerStack.Value}", officerStack.Source));
+                notes.Add(Card($"{schemeWord} sets the {Named(CardKind.Officer, 2)} stack to {officerStack.Value}", officerStack.Source));
             }
 
             int? bindings = null;
             if (effect.BindingsPerPlayer is { } bindingsPerPlayer)
             {
                 bindings = bindingsPerPlayer.Value * players;
-                notes.Add(Card($"{schemeWord} sets the Bindings stack to {bindingsPerPlayer.Value} per player", bindingsPerPlayer.Source));
+                notes.Add(Card($"{schemeWord} sets the {Named(CardKind.Binding, 2)} stack to {bindingsPerPlayer.Value} per player", bindingsPerPlayer.Source));
             }
 
             var moves = new List<MovedCards>();
@@ -672,9 +672,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 var card = CardMove.PartOf(move.Card) is { } part && StandInFor(part) is { } standIn && CardMove.KindOf(standIn) is { } kind
                     ? move with { Card = kind }
                     : move;
-                moves.Add(new MovedCards(card.Card, card.From(), card.To, each, total));
+                moves.Add(new MovedCards(card.Card, card.From(), card.To, each, total, card.Card == move.Card ? null : move.Card));
                 notes.Add(Card(
-                    $"{schemeWord} moves {each} {CardName(card.Card, each)} {Into(card.To)}{(card.PerPlayer ? $", {count.Value} per player" : "")}",
+                    $"{schemeWord} moves {each} {Named(move.Card, each)} {Into(card.To)}{(card.PerPlayer ? $", {count.Value} per player" : "")}",
                     count.Source));
             }
 
@@ -1338,6 +1338,17 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             (CardKind.Ambition, false) => "Ambition cards",
             _ => throw new ArgumentOutOfRangeException(nameof(card), card, null),
         };
+
+        // A kind of card's name, or "<stand-in>/<real>" when the setup lays out a stand-in for its part because no
+        // included box supplies it, so the player can use whichever cards they own (owner ruling, #141, #258).
+        private string Named(CardKind card, int count) =>
+            CardMove.PartOf(card) is { } part && standIns.TryGetValue(part, out var active)
+            && active.Rule.With is { } with && CardMove.KindOf(with) is { } stoodIn
+                ? $"{CardName(stoodIn, count)}/{CardName(card, count)}"
+                : CardName(card, count);
+
+        // A stack's name in a rule note: the plain word, or the stand-in's slashed name in plural.
+        private string StackOf(CardKind card, string plain) => Named(card, 2) == CardName(card, 2) ? plain : Named(card, 2);
 
         private string Into(Pile to) => to switch
         {

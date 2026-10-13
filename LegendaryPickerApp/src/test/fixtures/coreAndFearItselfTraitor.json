@@ -156,7 +156,8 @@
       "from": "wounds",
       "to": "setAside",
       "count": 6,
-      "total": 6
+      "total": 6,
+      "standsInFor": "binding"
     },
     {
       "card": "twist",

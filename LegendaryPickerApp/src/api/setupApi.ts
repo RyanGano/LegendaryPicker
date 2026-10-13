@@ -81,6 +81,8 @@ export type Move = {
   to: Pile
   count: number
   total: number
+  // The kind the Scheme names when card stands in for it because no included box supplies it (#258).
+  standsInFor?: CardKind
 }
 
 // A Hero a Scheme draws outside the Hero Deck: all its cards go to one pile, the Villain Deck, beside

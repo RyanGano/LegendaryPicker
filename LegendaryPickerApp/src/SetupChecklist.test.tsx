@@ -701,11 +701,21 @@ describe('SetupChecklist', () => {
   it('lays out Wounds standing in for Bindings when no included box has Bindings', () => {
     renderChecklist(coreAndFearItselfTraitor)
 
-    expect(rows('Set aside')).toEqual(['Wounds from the Wound stack 6', 'Scheme Twists or Plot Twists from the unused Twists 1'])
-    expect(rows('Shared stacks')).toEqual(['Wounds Standing in for Bindings 24', 'S.H.I.E.L.D. Officers 30', 'Bystanders 28'])
+    expect(rows('Set aside')).toEqual(['Wounds/Bindings from the Wound stack 6', 'Scheme Twists or Plot Twists from the unused Twists 1'])
+    expect(rows('Shared stacks')).toEqual(['Wounds/Bindings 24', 'S.H.I.E.L.D. Officers 30', 'Bystanders 28'])
     expect(
       screen.getByText('No included box has Bindings cards: use Wound cards for them, or Bindings cards if you have them'),
     ).toBeInTheDocument()
+  })
+
+  it('names a moved card with its stand-in only when it stands in, though its stack stands in for another', () => {
+    // A Scheme moving real Wounds in a setup whose Wound stack also stands in for Bindings.
+    const [standIn, twist] = coreAndFearItselfTraitor.moves
+    const realWounds = { ...standIn, standsInFor: undefined }
+    renderChecklist({ ...coreAndFearItselfTraitor, moves: [realWounds, twist] })
+
+    expect(rows('Set aside')).toEqual(['Wounds from the Wound stack 6', 'Scheme Twists or Plot Twists from the unused Twists 1'])
+    expect(rows('Shared stacks')).toContain('Wounds/Bindings 24')
   })
 
   it('leaves out the Set aside section when the Scheme sets no cards aside', () => {

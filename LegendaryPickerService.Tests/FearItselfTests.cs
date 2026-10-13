@@ -64,11 +64,11 @@ public class FearItselfTests
 
         Assert.Equal(
             [
-                new MovedCards(CardKind.Wound, Pile.Wounds, Pile.SetAside, wounds, wounds),
+                new MovedCards(CardKind.Wound, Pile.Wounds, Pile.SetAside, wounds, wounds, CardKind.Binding),
                 new MovedCards(CardKind.Twist, Pile.Twists, Pile.SetAside, 1, 1),
             ],
             setup.Moves);
         Assert.Equal(30 - wounds, setup.Stacks.Wounds);
-        Assert.Contains(new RuleNote($"Plot moves {wounds} Wounds into a stack set aside, 3 per player", "Card", null, FearItselfName), setup.Notes);
+        Assert.Contains(new RuleNote($"Plot moves {wounds} Wounds/Bindings into a stack set aside, 3 per player", "Card", null, FearItselfName), setup.Notes);
     }
 }
