@@ -366,6 +366,11 @@ public sealed partial class BoxCatalog
         // When a set-aside Mastermind joins is shown on the checklist, so it is held to the same limits.
         foreach (var scheme in box.Schemes)
         {
+            if (scheme.Setup.PlayersChooseHeroes is { Value: false })
+            {
+                throw new InvalidDataException($"{path}: {scheme.Id} setup.playersChooseHeroes is false; leave it out instead.");
+            }
+
             CheckLabels(path, scheme.Id, "mastermind joins", new[] { scheme.Setup.MastermindJoinsLater?.Value }.OfType<string>());
             CheckLabels(path, scheme.Id, "joins", (scheme.Setup.OutsideMasterminds ?? []).Select(outside => outside.Joins?.Value).OfType<string>());
         }
@@ -1335,6 +1340,7 @@ public sealed partial class BoxCatalog
             if (effect.DistinctHeroNames is { } distinct) yield return ($"{scheme.Id} setup.distinctHeroNames", distinct.Source);
             if (effect.TeamSplit is { } split) yield return ($"{scheme.Id} setup.teamSplit", split.Source);
             if (effect.MastermindJoinsLater is { } joinsLater) yield return ($"{scheme.Id} setup.mastermindJoinsLater", joinsLater.Source);
+            if (effect.PlayersChooseHeroes is { } chooses) yield return ($"{scheme.Id} setup.playersChooseHeroes", chooses.Source);
             if (effect.OwnTactics is { } ownTactics) yield return ($"{scheme.Id} setup.ownTactics", ownTactics.Source);
             foreach (var outside in effect.OutsideMasterminds ?? [])
             {

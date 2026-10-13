@@ -236,6 +236,9 @@ export type Setup = {
   // The setup steps the Scheme and Mastermind print that change no count, Scheme first, each a short
   // instruction. Left out by an API from before setup steps.
   steps?: string[]
+  // Present only when the players choose Heroes of the Hero Deck: the last this many of heroes are fill-ins, used only in place
+  // of an earlier listed Hero a player chose.
+  fillInHeroes?: number
   notes: RuleNote[]
   // One entry per term any drawn component uses: teams, then classes, then keywords.
   glossary: GlossaryEntry[]

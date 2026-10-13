@@ -125,17 +125,20 @@ public sealed class SetupStepsTests
         Assert.Equal([$"If the test coin lands heads, add {unused[0]} (from {CoreName}) to the Hero Deck"], setup.Steps);
     }
 
-    // A step that would have each player pick a Hero of the Hero Deck names a different one for each player (#242).
-    // Test Homecoming is the 11th Scheme at 3 players; the seat draws take the first Hero left each time.
+    // A Scheme that has each player choose a Hero (#259) draws the Hero Deck at its normal size as if no one chose, and marks
+    // the last Heroes, one per player, as fill-ins. Test Homecoming is the 11th Scheme at 3 players.
     [Fact]
-    public void A_step_that_leaves_each_player_a_Hero_names_a_different_Hero_of_the_Hero_Deck_for_each()
+    public void A_Scheme_that_has_players_choose_Heroes_lists_the_normal_Hero_Deck_and_marks_one_fill_in_per_player()
     {
         var setup = Draw(3, 11, 3);
+        var plain = Draw(3, 8, 3);
 
-        var heroes = setup.Heroes.Select(hero => hero.Name).ToList();
         Assert.Equal("Test Homecoming", setup.Scheme.Name);
-        Assert.Equal([$"Each player's own Hero, from the Hero Deck: Player 1: {heroes[0]}; Player 2: {heroes[1]}; Player 3: {heroes[2]}"], setup.Steps);
-        Assert.Equal("Scheme adds a setup step: Each player's own Hero, from the Hero Deck: a Hero for each player", setup.Notes[0].Text);
+        Assert.Equal(plain.Heroes.Count, setup.Heroes.Count);
+        Assert.Equal(3, setup.FillInHeroes);
+        Assert.Equal(["Each player chooses a different Hero for the Hero Deck, listed or not"], setup.Steps);
+        Assert.Contains(setup.Notes, note => note.Text == "Scheme has each player choose a different Hero for the Hero Deck; the last 3 Heroes listed join it only in place of an earlier listed Hero a player chose");
+        Assert.Equal(0, plain.FillInHeroes);
     }
 
     private static IEnumerable<string> IncludedHeroes => Catalog.Boxes.SelectMany(box => box.Heroes).Select(hero => hero.Name);

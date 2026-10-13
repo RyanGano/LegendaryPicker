@@ -15,7 +15,8 @@ public sealed record NoEligibleScheme(int Players) : GenerationResult;
 // StandIns are the parts no included box supplies that the drawn cards use, each replaced by its stand-in (D-heroic).
 // OutsideMasterminds are the Masterminds the Scheme draws besides its own (#113). MastermindReveal is present when the
 // Scheme adds its Mastermind mid-game (#245): the Mastermind is drawn, but the setup has none of its Always Leads groups or
-// setup effects; they are listed there for the player to apply when it arrives.
+// setup effects; they are listed there for the player to apply when it arrives. FillInHeroes is how many of the last
+// Heroes are fill-ins, used only in place of an earlier listed Hero a player chose (#259).
 public sealed record SetupResult(
     int Players,
     Ruleset Ruleset,
@@ -41,7 +42,8 @@ public sealed record SetupResult(
     IReadOnlyList<StandIn>? StandIns = null,
     IReadOnlyList<OutsideMastermind>? OutsideMasterminds = null,
     IReadOnlyList<VillainsSetAside>? VillainsSetAside = null,
-    MastermindReveal? MastermindReveal = null) : GenerationResult;
+    MastermindReveal? MastermindReveal = null,
+    int FillInHeroes = 0) : GenerationResult;
 
 // MovedIn and MovedOut count the cards the setup's moves put in the deck and take out of it, and SetBeside
 // the cards of its drawn groups the Scheme sets beside it. The response lists each move under the setup's

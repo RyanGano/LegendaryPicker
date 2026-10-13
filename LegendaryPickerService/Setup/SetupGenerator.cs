@@ -549,7 +549,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 stoodIn.Select(active => active.Rule).ToList(),
                 outsideMasterminds,
                 villainsSetAside,
-                joinsLater is not null ? Reveal(plan.Scheme, drawnMastermind, joinsLater) : null);
+                joinsLater is not null ? Reveal(plan.Scheme, drawnMastermind, joinsLater) : null,
+                plan.Scheme.Setup.PlayersChooseHeroes is not null ? Math.Min(players, heroes.Count) : 0);
         }
 
         // What the player sees when the Mastermind of a Scheme that adds it mid-game is revealed: the Always Leads groups
@@ -752,6 +753,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 var group = Called(CatalogGroup(rule.GroupId));
                 var what = rule.Card is { } card ? $"{card} of {group}" : $"{each} {group}";
                 notes.Add(Card($"{schemeWord} sets {what} beside it{(rule.PerPlayer ? $", {count.Value} per player" : "")}", count.Source));
+            }
+
+            if (effect.PlayersChooseHeroes is { } chooses)
+            {
+                notes.Add(Card($"{schemeWord} has each player choose a different {_terms.Hero} for the {_terms.HeroDeck}; the last {players} {_terms.Heroes} listed join it only in place of an earlier listed {_terms.Hero} a player chose", chooses.Source));
             }
 
             if (effect.OwnTactics is { } ownTactics)
@@ -1137,14 +1143,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // A setup step that would leave a Hero to the players names a placeholder the app fills by drawing (#242): {hero}
         // is an extra Hero for the Hero Deck, as Avatarr's, drawn from the included Heroes the setup doesn't use that keep
-        // the Scheme's Hero rules met with it in the Hero Deck, else from any it doesn't use; {playerHeroes} gives each
-        // player a different Hero of the Hero Deck, as Sneak Attack the Heroes' Homes's. With none to draw, the step
+        // the Scheme's Hero rules met with it in the Hero Deck, else from any it doesn't use. With none to draw, the step
         // keeps the words its rule note uses.
         private const string HeroPlaceholder = "{hero}";
-        private const string PlayerHeroesPlaceholder = "{playerHeroes}";
 
         private static string Unfilled(string label) =>
-            label.Replace(HeroPlaceholder, "an extra Hero").Replace(PlayerHeroesPlaceholder, "a Hero for each player");
+            label.Replace(HeroPlaceholder, "an extra Hero");
 
         private IReadOnlyList<string> FillHeroSteps(SetupPlan plan, IReadOnlyList<Hero> deck, IReadOnlyList<OutsideHero> outside)
         {
@@ -1154,20 +1158,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             string Fill(string label)
             {
-                if (label.Contains(PlayerHeroesPlaceholder) && deck.Count >= players)
-                {
-                    var left = deck.ToList();
-                    var seats = new List<string>();
-                    for (var seat = 1; seat <= players; seat++)
-                    {
-                        var hero = DrawOne(left);
-                        left.Remove(hero);
-                        seats.Add($"Player {seat}: {Called(hero)}");
-                    }
-
-                    label = label.Replace(PlayerHeroesPlaceholder, string.Join("; ", seats));
-                }
-
                 if (label.Contains(HeroPlaceholder))
                 {
                     var unused = _heroes.Where(hero => !deck.Concat(outsideHeroes).Concat(extras).Any(other => other.Id == hero.Id)).ToList();
