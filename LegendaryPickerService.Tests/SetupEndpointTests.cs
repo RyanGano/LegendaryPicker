@@ -654,7 +654,7 @@ public sealed class SetupEndpointTests : IDisposable
               "id": "core_term_avengers",
               "name": "Avengers",
               "kind": "team",
-              "summary": "A Hero team. In the core box its members are Black Widow, Captain America, Hawkeye, Hulk, Iron Man and Thor.",
+              "summary": "A Hero team. Its icon on a card powers team Superpower abilities.",
               "citation": "R p.18",
               "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
             },
@@ -662,7 +662,7 @@ public sealed class SetupEndpointTests : IDisposable
               "id": "core_term_x-men",
               "name": "X-Men",
               "kind": "team",
-              "summary": "A Hero team. In the core box its members are Cyclops, Emma Frost, Gambit, Rogue, Storm and Wolverine.",
+              "summary": "A Hero team. Its icon on a card powers team Superpower abilities.",
               "citation": "R p.18",
               "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
             },

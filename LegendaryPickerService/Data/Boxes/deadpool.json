@@ -33,8 +33,8 @@
     {"id": "deadpool_scheme_everybody-hates-deadpool", "name": "Everybody Hates Deadpool", "terms": ["core_term_scheme-twist", "deadpool_term_revenge"], "setup": {"twists": [{"players": null, "value": 6, "source": "Card"}], "heroCounts": [{"team": "deadpool_term_mercs-for-money", "atLeast": 1, "source": "Card"}]}, "uses": [{"part": "wounds", "source": "Card"}]}
   ],
   "glossary": [
-    {"id": "deadpool_term_mercs-for-money", "name": "Mercs for Money", "kind": "team", "summary": "A Hero team. In this box its members are Deadpool, Slapstick, Solo and Stingray.", "source": "DP", "page": 1},
-    {"id": "deadpool_term_hydra", "name": "HYDRA", "kind": "team", "summary": "A Hero team. In this box its one member is Bob, Agent of HYDRA.", "source": "DP", "page": 1},
+    {"id": "deadpool_term_mercs-for-money", "name": "Mercs for Money", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "DP", "page": 1},
+    {"id": "deadpool_term_hydra", "name": "HYDRA", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "DP", "page": 1},
     {"id": "deadpool_term_excessive-violence", "name": "Excessive Violence", "kind": "keyword", "summary": "Once a turn, pay one Attack more than a fight costs to trigger every Excessive Violence ability on cards you played this turn. Villains with it trigger too.", "source": "DP", "page": 1},
     {"id": "deadpool_term_revenge", "name": "Revenge", "kind": "keyword", "summary": "A Villain with Revenge gains Attack for each Villain of the named group in your Victory Pile. Masterminds do not count as Villains for this.", "source": "DP", "page": 2}
   ]

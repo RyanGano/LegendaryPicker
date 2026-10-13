@@ -168,10 +168,10 @@
     }
   ],
   "glossary": [
-    { "id": "core_term_avengers", "name": "Avengers", "kind": "team", "summary": "A Hero team. In the core box its members are Black Widow, Captain America, Hawkeye, Hulk, Iron Man and Thor.", "source": "R", "page": 18 },
-    { "id": "core_term_shield", "name": "S.H.I.E.L.D.", "kind": "team", "summary": "A Hero team. Nick Fury is its core box Hero, and the Agents, Troopers and Officers that every game uses belong to it too.", "source": "R", "page": 18 },
-    { "id": "core_term_spider-friends", "name": "Spider Friends", "kind": "team", "summary": "A Hero team. Spider-Man is its only member in the core box.", "source": "R", "page": 18 },
-    { "id": "core_term_x-men", "name": "X-Men", "kind": "team", "summary": "A Hero team. In the core box its members are Cyclops, Emma Frost, Gambit, Rogue, Storm and Wolverine.", "source": "R", "page": 18 },
+    { "id": "core_term_avengers", "name": "Avengers", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "R", "page": 18 },
+    { "id": "core_term_shield", "name": "S.H.I.E.L.D.", "kind": "team", "summary": "A Hero team. The Agents, Troopers and Officers that every game uses belong to it too.", "source": "R", "page": 18 },
+    { "id": "core_term_spider-friends", "name": "Spider Friends", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "R", "page": 18 },
+    { "id": "core_term_x-men", "name": "X-Men", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "R", "page": 18 },
     { "id": "core_term_covert", "name": "Covert", "kind": "class", "summary": "A Hero class of fighters who prefer trickery and careful plans to open force.", "source": "R", "page": 18 },
     { "id": "core_term_instinct", "name": "Instinct", "kind": "class", "summary": "A Hero class of fighters who trust their gut and their senses in close combat.", "source": "R", "page": 18 },
     { "id": "core_term_ranged", "name": "Ranged", "kind": "class", "summary": "A Hero class of fighters who deal damage from a distance, by any kind of projected power.", "source": "R", "page": 18 },

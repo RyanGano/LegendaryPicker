@@ -33,7 +33,7 @@
     {"id": "heroes-of-asgard_scheme_war-of-the-frost-giants", "name": "War of the Frost Giants", "terms": ["core_term_scheme-twist", "heroes-of-asgard_term_worthy"], "setup": {"twists": [{"players": null, "value": 9, "source": "Card"}]}}
   ],
   "glossary": [
-    {"id": "heroes-of-asgard_term_asgard", "name": "Asgard", "kind": "team", "summary": "A Hero team. In this box its members are Beta Ray Bill, Lady Sif, Thor, Valkyrie and The Warriors Three.", "source": "Q", "page": 1},
+    {"id": "heroes-of-asgard_term_asgard", "name": "Asgard", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "Q", "page": 1},
     {"id": "heroes-of-asgard_term_artifact", "name": "Artifact", "kind": "keyword", "summary": "A card you play in front of you that stays there from turn to turn. Its once-per-turn abilities work only on your own turn.", "source": "HA", "page": 1},
     {"id": "heroes-of-asgard_term_thrown-artifact", "name": "Thrown Artifact", "kind": "keyword", "summary": "An Artifact you may throw on your turn: put it on the bottom of your deck and use its listed effect.", "source": "HA", "page": 1},
     {"id": "heroes-of-asgard_term_worthy", "name": "Worthy", "kind": "keyword", "summary": "You are Worthy while you have a Hero costing 5 or more in hand, played this turn, or controlled as an Artifact.", "source": "HA", "page": 1},

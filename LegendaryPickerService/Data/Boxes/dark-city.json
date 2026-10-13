@@ -167,8 +167,8 @@
     }
   ],
   "glossary": [
-    { "id": "dark-city_term_marvel-knights", "name": "Marvel Knights", "kind": "team", "summary": "A Hero team. In Dark City its members are Blade, Daredevil, Elektra, Ghost Rider, Iron Fist and Punisher.", "source": "DC", "page": 1 },
-    { "id": "dark-city_term_x-force", "name": "X-Force", "kind": "team", "summary": "A Hero team. In Dark City its members are Cable, Colossus, Domino, Forge and Wolverine.", "source": "DC", "page": 1 },
+    { "id": "dark-city_term_marvel-knights", "name": "Marvel Knights", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "DC", "page": 1 },
+    { "id": "dark-city_term_x-force", "name": "X-Force", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "DC", "page": 1 },
     { "id": "dark-city_term_bribe", "name": "Bribe", "kind": "keyword", "summary": "To defeat a Villain with Bribe, you may pay its Attack value with Recruit points, Attack points, or both together.", "source": "DC", "page": 1 },
     { "id": "dark-city_term_teleport", "name": "Teleport", "kind": "keyword", "summary": "You may keep this card out of play for the turn. It is then added to the next hand you draw, on top of the normal hand size.", "source": "DC", "page": 1 },
     { "id": "dark-city_term_versatile", "name": "Versatile", "kind": "keyword", "summary": "Pick one as you play this card: its Versatile number becomes that much Recruit, or that much Attack.", "source": "DC", "page": 1 }

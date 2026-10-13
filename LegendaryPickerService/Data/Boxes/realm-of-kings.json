@@ -38,7 +38,7 @@
     {"id": "realm-of-kings_scheme_devolve-with-xerogen-crystals", "name": "Devolve with Xerogen Crystals", "terms": ["core_term_scheme-twist", "captain-america-75th-anniversary_term_abomination"], "setup": {"twists": [{"players": [1], "value": 9, "source": "Card"}, {"players": [2], "value": 10, "source": "Card"}, {"players": [3], "value": 11, "source": "Card"}, {"players": [4], "value": 12, "source": "Card"}, {"players": [5], "value": 13, "source": "Card"}], "extraHenchmanGroups": [{"players": null, "value": 1, "source": "Card"}], "extraHenchmanCards": {"value": 10, "source": "Card"}, "steps": [{"label": "Call the extra Henchman Group the Xerogen Experiments", "source": "Card"}]}}
   ],
   "glossary": [
-    {"id": "realm-of-kings_term_inhumans", "name": "Inhumans", "kind": "team", "summary": "A Hero team. In this box its members are Black Bolt, Medusa, Crystal, Karnak and Gorgon.", "source": "RK", "page": 2},
+    {"id": "realm-of-kings_term_inhumans", "name": "Inhumans", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "RK", "page": 2},
     {"id": "realm-of-kings_term_when-recruited", "name": "When Recruited", "kind": "keyword", "summary": "Works once, right after you buy the Hero and the HQ is refilled. It does not work when the card is played later, nor when the Hero is gained without recruiting.", "source": "RK", "page": 1},
     {"id": "realm-of-kings_term_thrones-favor", "name": "Throne's Favor", "kind": "keyword", "summary": "A single shared marker held by one player or Mastermind, or nobody. Gaining it takes it from the holder; spending it sets it aside until someone gains it.", "source": "RK", "page": 1}
   ]

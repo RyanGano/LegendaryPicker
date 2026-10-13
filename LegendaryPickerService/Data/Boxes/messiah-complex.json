@@ -49,7 +49,7 @@
     {"id": "messiah-complex_scheme_raid-gene-banks-to", "name": "Raid Gene Banks To...", "terms": ["core_term_scheme-twist", "messiah-complex_term_veiled-scheme"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "steps": [{"label": "Start Veiled side up; keep your Unveiled Schemes ready for when it transforms", "source": "MC p.2"}]}}
   ],
   "glossary": [
-    {"id": "messiah-complex_term_x-factor-investigations", "name": "X-Factor Investigations", "kind": "team", "summary": "A Hero team. In this box its members are Multiple Man, M, Strong Guy, Siryn and Rictor.", "source": "MC", "page": 1},
+    {"id": "messiah-complex_term_x-factor-investigations", "name": "X-Factor Investigations", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "MC", "page": 1},
     {"id": "messiah-complex_term_clone", "name": "Clone", "kind": "keyword", "summary": "Take one more copy of the same card into your discard pile, from the HQ or else from its deck or stack, then shuffle that deck. A Villain's Clone brings a copy from the Villain Deck into the city.", "source": "MC", "page": 1},
     {"id": "messiah-complex_term_shatter", "name": "Shatter", "kind": "keyword", "summary": "Cuts a Villain's current fight value in half, rounding up, until the turn ends, and can be repeated. Some cards shatter the Mastermind for one fight, or halve an HQ Hero's cost.", "source": "MC", "page": 1},
     {"id": "messiah-complex_term_tactical-formation", "name": "Tactical Formation", "kind": "keyword", "summary": "A bonus that works only if the Heroes in your hand and played this turn, this card included, match the listed costs.", "source": "MC", "page": 1},
