@@ -77,7 +77,7 @@
     }
   ],
   "glossary": [
-    { "id": "fantastic-four_term_fantastic-four", "name": "Fantastic Four", "kind": "team", "summary": "A Hero team. In this box its members are Human Torch, Invisible Woman, Mr. Fantastic and Thing; the box's Silver Surfer belongs to no team.", "source": "FF", "page": 1 },
+    { "id": "fantastic-four_term_fantastic-four", "name": "Fantastic Four", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "FF", "page": 1 },
     { "id": "fantastic-four_term_focus", "name": "Focus", "kind": "keyword", "summary": "Trade the Recruit shown for the effect it buys. After playing the card you can buy that effect again and again until your turn ends, as long as your Recruit lasts.", "source": "FF", "page": 1 },
     { "id": "fantastic-four_term_burrow", "name": "Burrow", "kind": "keyword", "summary": "After you fight this Villain, if no Villain was in the Streets, it digs back into the Streets instead of leaving the city. Its Fight effects and any rescued Bystanders still count.", "source": "FF", "page": 1 },
     { "id": "fantastic-four_term_cosmic-threat", "name": "Cosmic Threat", "kind": "keyword", "summary": "Once a turn, reveal cards of the listed class: this enemy loses 3 Attack for each one. When several classes are listed, as on Galactus, pick one of them.", "source": "FF", "page": 1 }

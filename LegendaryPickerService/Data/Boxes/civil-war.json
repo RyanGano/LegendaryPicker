@@ -159,7 +159,7 @@
     }
   ],
   "glossary": [
-    { "id": "civil-war_term_new-warriors", "name": "New Warriors", "kind": "team", "summary": "A Hero team. In Civil War its one member is Speedball.", "source": "CW", "page": 1 },
+    { "id": "civil-war_term_new-warriors", "name": "New Warriors", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "CW", "page": 1 },
     { "id": "civil-war_term_divided-card", "name": "Divided Card", "kind": "keyword", "summary": "One card printed as two halves. You pick a half when you play it and use only that half; before then it has both halves' classes, teams and Hero Names. Sort it by its left half.", "source": "CW", "page": 1 },
     { "id": "civil-war_term_size-changing", "name": "Size-Changing", "kind": "keyword", "summary": "The card is 2 cheaper to recruit, or the Villain 2 cheaper to fight, once you have played a card of the shown class this turn.", "source": "CW", "page": 1 },
     { "id": "civil-war_term_phasing", "name": "Phasing", "kind": "keyword", "summary": "On your turn you may trade this card in your hand for the top card of your deck. That trade is neither playing nor drawing a card.", "source": "CW", "page": 1 },

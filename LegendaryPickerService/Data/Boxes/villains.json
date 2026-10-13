@@ -168,10 +168,10 @@
     }
   ],
   "glossary": [
-    { "id": "villains_term_brotherhood", "name": "Brotherhood", "kind": "team", "summary": "An Ally team of mutants who believe their kind should rule. In Villains its members are Juggernaut, Magneto, Mystique and Sabretooth.", "source": "VIL", "page": 19 },
-    { "id": "villains_term_crime-syndicate", "name": "Crime Syndicate", "kind": "team", "summary": "An Ally team of street-level crime bosses and hired killers. In Villains its members are Bullseye and Kingpin.", "source": "VIL", "page": 19 },
-    { "id": "villains_term_foes-of-asgard", "name": "Foes of Asgard", "kind": "team", "summary": "An Ally team of enemies of Thor's home realm. In Villains its members are Enchantress and Loki.", "source": "VIL", "page": 19 },
-    { "id": "villains_term_sinister-six", "name": "Sinister Six", "kind": "team", "summary": "An Ally team of Spider-Man's foes who band together against him. In Villains its members are Dr. Octopus, Electro, Green Goblin, Kraven, Mysterio and Venom.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_brotherhood", "name": "Brotherhood", "kind": "team", "summary": "An Ally team of mutants who believe their kind should rule.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_crime-syndicate", "name": "Crime Syndicate", "kind": "team", "summary": "An Ally team of street-level crime bosses and hired killers.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_foes-of-asgard", "name": "Foes of Asgard", "kind": "team", "summary": "An Ally team of enemies of Thor's home realm.", "source": "VIL", "page": 19 },
+    { "id": "villains_term_sinister-six", "name": "Sinister Six", "kind": "team", "summary": "An Ally team of Spider-Man's foes who band together against him.", "source": "VIL", "page": 19 },
     { "id": "villains_term_covert", "name": "Covert", "kind": "class", "summary": "An Ally class that wins through deceit, cunning schemes and subtle powers.", "source": "VIL", "page": 19 },
     { "id": "villains_term_instinct", "name": "Instinct", "kind": "class", "summary": "An Ally class that relies on ferocity, fast reactions and keen senses.", "source": "VIL", "page": 19 },
     { "id": "villains_term_ranged", "name": "Ranged", "kind": "class", "summary": "An Ally class that attacks from afar with blasts, beams and elemental or mental power.", "source": "VIL", "page": 19 },

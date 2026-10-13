@@ -38,7 +38,7 @@
     {"id": "black-panther_scheme_provoke-a-clash-of-nations", "name": "Provoke a Clash of Nations", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 11, "source": "Card"}]}}
   ],
   "glossary": [
-    {"id": "black-panther_term_heroes-of-wakanda", "name": "Heroes of Wakanda", "kind": "team", "summary": "A Hero team. In this box its members are King Black Panther, Queen Storm of Wakanda, Princess Shuri, General Okoye and White Wolf.", "source": "BP", "page": 2},
+    {"id": "black-panther_term_heroes-of-wakanda", "name": "Heroes of Wakanda", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "BP", "page": 2},
     {"id": "black-panther_term_hero-ambush", "name": "Hero Ambush", "kind": "keyword", "summary": "A Hero's Ambush ability fires when that Hero enters the HQ on your turn, provided you have a Hero in hand or played this turn.", "source": "BP", "page": 1},
     {"id": "black-panther_term_wounding", "name": "Wounding", "kind": "keyword", "summary": "Lay a Wound from the Wound Stack or KO pile on an enemy to lower its value by 1. The Wounds go back to the Wound Stack when it is defeated or leaves.", "source": "BP", "page": 1}
   ]

@@ -60,8 +60,8 @@
     {"id": "world-war-hulk_scheme_world-war-hulk", "name": "World War Hulk", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 9, "source": "Card"}], "outsideMasterminds": [{"to": "setAside", "count": [{"players": null, "value": 3, "source": "Card"}]}], "steps": [{"label": "Keep the 3 extra Masterminds out of play as Lurking Masterminds", "source": "Card"}, {"label": "Give each of the 4 Masterminds 2 random Tactics", "source": "Card"}]}}
   ],
   "glossary": [
-    {"id": "world-war-hulk_term_warbound", "name": "Warbound", "kind": "team", "summary": "A Hero team of Hulk's gladiator allies from Sakaar. In this box its members are Caiera, Gladiator Hulk, Hiroim, Korg, Miek and No-Name.", "source": "WWH", "page": 1},
-    {"id": "world-war-hulk_term_crime-syndicate", "name": "Crime Syndicate", "kind": "team", "summary": "A Hero team. In this box its one member is Joe Fixit, Grey Hulk.", "source": "WWH", "page": 1},
+    {"id": "world-war-hulk_term_warbound", "name": "Warbound", "kind": "team", "summary": "A Hero team of Hulk's gladiator allies from Sakaar.", "source": "WWH", "page": 1},
+    {"id": "world-war-hulk_term_crime-syndicate", "name": "Crime Syndicate", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "WWH", "page": 1},
     {"id": "world-war-hulk_term_transform", "name": "Transform", "kind": "keyword", "summary": "A card that turns into another form. The used Heroes' Transformed cards wait outside the Hero Deck in a Transformation Pile, and a Transforming Mastermind flips between its two sides.", "source": "WWH", "page": 1},
     {"id": "world-war-hulk_term_outwit", "name": "Outwit", "kind": "keyword", "summary": "An ability you may use only while you can show Heroes of three different costs, counting the Outwit card. Some enemies punish players who can't.", "source": "WWH", "page": 1},
     {"id": "world-war-hulk_term_smash", "name": "Smash", "kind": "keyword", "summary": "Throw away another card from your hand to gain the Attack shown beside Smash.", "source": "WWH", "page": 2},

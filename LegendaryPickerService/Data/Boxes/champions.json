@@ -33,7 +33,7 @@
     {"id": "champions_scheme_steal-all-oxygen-on-earth", "name": "Steal All Oxygen on Earth", "terms": ["core_term_scheme-twist"], "setup": {"twists": [{"players": null, "value": 8, "source": "Card"}], "steps": [{"label": "Start the Oxygen Level at 8", "source": "Card"}]}}
   ],
   "glossary": [
-    {"id": "champions_term_champions", "name": "Champions", "kind": "team", "summary": "A Hero team. In this box all five Heroes belong to it.", "source": "CH", "page": 1},
+    {"id": "champions_term_champions", "name": "Champions", "kind": "team", "summary": "A Hero team. Its icon on a card powers team Superpower abilities.", "source": "CH", "page": 1},
     {"id": "champions_term_cheering-crowds", "name": "Cheering Crowds", "kind": "keyword", "summary": "Return a Bystander from your Victory Pile to the bottom of the Bystander Stack to play the card a second time in a row.", "source": "CH", "page": 1},
     {"id": "champions_term_versatile", "name": "Versatile", "kind": "keyword", "summary": "Take the card's number as Recruit or as Attack when you play it, never split between them.", "source": "CH", "page": 1},
     {"id": "champions_term_demolish", "name": "Demolish", "kind": "keyword", "summary": "Reveal the Hero Deck's top card once, noting its cost, and put it on the bottom. Each player then discards a card of that cost from their hand.", "source": "CH", "page": 2}

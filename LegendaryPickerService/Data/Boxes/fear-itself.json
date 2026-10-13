@@ -74,7 +74,7 @@
     }
   ],
   "glossary": [
-    { "id": "fear-itself_term_hydra", "name": "HYDRA", "kind": "team", "summary": "An Ally team: the secret criminal army that Skadi, the Serpent's herald, commands. In Fear Itself its one member is Skadi.", "source": "FI", "page": 1 },
+    { "id": "fear-itself_term_hydra", "name": "HYDRA", "kind": "team", "summary": "An Ally team: a secret criminal army commanded by the Serpent's herald.", "source": "FI", "page": 1 },
     { "id": "fear-itself_term_thrown-artifact", "name": "Thrown Artifact", "kind": "keyword", "summary": "An Ally that stays in front of you between turns once you play it. On your turn, put it on the bottom of your deck to use its throw ability.", "source": "FI", "page": 1 },
     { "id": "fear-itself_term_uru-enchanted-weapons", "name": "Uru-Enchanted Weapons", "kind": "keyword", "summary": "Before fighting this enemy, reveal one Adversary Deck card per weapon; it gains Attack equal to their Victory Points. Fall short and the fight fails, ending your fighting this turn.", "source": "FI", "page": 1 },
     { "id": "fear-itself_term_fight-or-fail", "name": "Fight or Fail", "kind": "keyword", "summary": "Resolve this effect whether you defeat the enemy or its Uru-Enchanted Weapons make the fight fail.", "source": "FI", "page": 1 }
