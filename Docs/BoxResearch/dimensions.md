@@ -1,6 +1,6 @@
 # Dimensions (May 2019; includes the 3D promo)
 
-**Research status: Partial.** The official insert verifies the 100-card contents and new mechanics; 3D promo faces are indexed from C1, while the Forklift Driver count discrepancy and card-level setup details remain unresolved.
+**Research status: Partial.** The official insert verifies the 100-card contents and new mechanics; 3D promo faces are indexed from C1; Forklift Driver is counted as a sixth Special Bystander by owner ruling (#211), and card-level setup details remain unresolved.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -32,9 +32,9 @@ The listed categories sum to the official 100-card total. The insert identifies 
 - **Henchman Groups (two):** Circus of Crime; Spider-Slayer.
 - **Mastermind:** J. Jonah Jameson.
 - **Five Special Bystander names from C1-3D:** Bulldozer Driver; Double Agent of S.H.I.E.L.D.; Fortune Teller; Photographer; Stan Lee.
-- **Additional C1-Dim Bystander name lead:** Forklift Driver. It is not reconciled with the insert's five Special Bystanders or D5's 3D-promo identity and is not counted in the official 100-card breakdown.
+- **Additional C1-Dim Bystander name lead:** Forklift Driver. The insert's five do not include it and it is not in the official 100-card breakdown, but the owner ruled (2026-10-12, #211) to list it as a sixth Special Bystander (C1 for the card, the owner's ruling for including it); a player without it can substitute their own.
 
-The official insert does not list individual card names for all categories. The C1 face index below adds the main catalog and 3D promo records, with available metadata and image links; J. Jonah Jameson's Always Leads (Spider-Slayers), Start of Game (2 Officers per player, 3 on the Epic side, as the Angry Mobs stack) and Wound use were read from his card faces for #168; the Forklift Driver count discrepancy remains unresolved.
+The official insert does not list individual card names for all categories. The C1 face index below adds the main catalog and 3D promo records, with available metadata and image links; J. Jonah Jameson's Always Leads (Spider-Slayers), Start of Game (2 Officers per player, 3 on the Epic side, as the Angry Mobs stack) and Wound use were read from his card faces for #168; Forklift Driver is counted by owner ruling (#211).
 
 ## Rules and mechanisms
 
@@ -54,7 +54,7 @@ Summaries are original paraphrases under 40 words. Hero metadata, exact promo id
 
 ## Setup and implementation gaps
 
-This product contributes no Villain Groups or Schemes in the official contents list. Verify the J. Jonah Jameson Always Leads/setup text, card-level Hero teams/classes/shared Hero Names, and the exact physical 3D promo against an official card reference. C1's extra Forklift Driver entry must not be added to the 100-card count without resolving its relation to D5 and the five official Special Bystanders. Integration must represent Switcheroo and Teleport without treating them as recruitment; this record changes no runtime data or code.
+This product contributes no Villain Groups or Schemes in the official contents list. Verify the J. Jonah Jameson Always Leads/setup text, card-level Hero teams/classes/shared Hero Names, and the exact physical 3D promo against an official card reference. C1's extra Forklift Driver entry is outside the 100-card count; the owner ruled (2026-10-12, #211) to list it as a sixth Special Bystander anyway. Integration must represent Switcheroo and Teleport without treating them as recruitment; this record changes no runtime data or code.
 
 ## Structured card-face metadata (C1)
 

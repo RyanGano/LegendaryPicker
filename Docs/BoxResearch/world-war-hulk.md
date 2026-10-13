@@ -68,7 +68,7 @@ Summaries are original paraphrases under 40 words. The insert does not establish
 
 ## Setup and implementation gaps
 
-Every Scheme's Twists and Setup line, and every Mastermind's Always Leads and Start of Game effect, were read from the card faces linked below and are in the box file (#143); no Scheme prints a player limit. The Special Bystander identities and the exact Transformed-card associations remain as C1 gives them. Wounded Fury is recorded as using no part, since it only counts Wounds already in a discard pile (owner question on #143).
+Every Scheme's Twists and Setup line, and every Mastermind's Always Leads and Start of Game effect, were read from the card faces linked below and are in the box file (#143); no Scheme prints a player limit. The Special Bystander identities and the exact Transformed-card associations remain as C1 gives them. Wounded Fury counts Wounds in a discard pile; the owner ruled (2026-10-12, #211) that a card with it brings the Wound stack, so Aspects of the Void is recorded as using Wounds.
 
 ## Structured card-face metadata (C1)
 

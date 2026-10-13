@@ -193,9 +193,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // A Mastermind the Scheme sets aside and whose Always Leads group it adds (Symbiotic Absorption) is drawn
             // before the groups, since its group is one more of them.
             var drainedDraws = plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value == true).ToList();
-            // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out.
+            // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out. One with no Always
+            // Leads group (Ego) is drawable too: it adds a Villain Group drawn by the normal rules instead (#211).
             var drained = new Queue<Mastermind>(DrawMany(
-                _masterminds.Where(other => other.Id != mastermind.Id && other.AlwaysLeads is not null && other.AlwaysLeads.GroupId != mastermind.AlwaysLeads?.GroupId && !other.RuledOutBy(scheme)),
+                _masterminds.Where(other => other.Id != mastermind.Id && (other.AlwaysLeads is null || other.AlwaysLeads.GroupId != mastermind.AlwaysLeads?.GroupId) && !other.RuledOutBy(scheme)),
                 drainedDraws.Sum(draw => draw.Count)));
             var drainedLeads = drainedDraws
                 .SelectMany(draw => Enumerable.Repeat(draw.Rule.BringsAlwaysLeads!.Source, draw.Count))
@@ -203,8 +204,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .ToList();
             plan = plan with
             {
-                VillainGroups = plan.VillainGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads!.GroupType == GroupType.Villain),
-                HenchmanGroups = plan.HenchmanGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads!.GroupType == GroupType.Henchman),
+                VillainGroups = plan.VillainGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads is null || entry.other.AlwaysLeads.GroupType == GroupType.Villain),
+                HenchmanGroups = plan.HenchmanGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads?.GroupType == GroupType.Henchman),
             };
 
             // A group the Scheme sets every card of beside it has none left for the Villain Deck, so it isn't drawn there.
@@ -840,7 +841,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             }
 
             // The Always Leads group of each Mastermind the Scheme sets aside, as an extra group of its own.
-            foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads!.GroupType == type))
+            foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads?.GroupType == type))
             {
                 var group = (T)CatalogGroup(other.AlwaysLeads!.GroupId);
                 if (!chosen.Contains(group))
@@ -849,6 +850,15 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 }
 
                 notes.Add(Note($"{SchemeWord(scheme)} adds {other.Name}'s Always Leads group {group.Name}", source, BoxOf(scheme.Id), scheme.Id));
+            }
+
+            // A set-aside Mastermind with no Always Leads group adds one extra Villain Group, drawn with the rest.
+            if (type == GroupType.Villain)
+            {
+                foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads is null))
+                {
+                    notes.Add(Note($"{SchemeWord(scheme)} adds an extra {_terms.VillainGroup} for {other.Name}, who leads no group", source, BoxOf(scheme.Id), scheme.Id));
+                }
             }
 
             var leads = mastermind.AlwaysLeads;
@@ -1075,7 +1085,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 return [];
             }
 
-            var placed = plan.Required.Keys.Concat(drained.Select(entry => entry.Drained.AlwaysLeads!.GroupId)).ToHashSet();
+            var placed = plan.Required.Keys.Concat(drained.Where(entry => entry.Drained.AlwaysLeads is not null).Select(entry => entry.Drained.AlwaysLeads!.GroupId)).ToHashSet();
             if (!Ignores(mastermind))
             {
                 if (mastermind.AlwaysLeads is { } leads) placed.Add(leads.GroupId);

@@ -7,9 +7,11 @@
   "about": {"released": {"value": "2019-05", "source": "Q"}},
   "sources": [
     {"key": "D", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/Legendary_Rules-Dimensions.pdf"},
+    {"key": "C1", "url": "https://github.com/emfmesquita/master-strike/blob/master/packages/data/src/definitions/cards/dimensions.ts"},
+    {"key": "OT", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/dimensions.md"},
     {"key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md"}
   ],
-  "components": {"heroCards": {"value": 14, "source": "D p.2"}, "villainGroupCards": {"value": 0, "source": "D p.2"}, "henchmanGroupCards": {"value": 10, "source": "D p.2"}, "schemeTwists": {"value": 0, "source": "D p.2"}, "bystanders": {"value": 5, "source": "D p.2"}},
+  "components": {"heroCards": {"value": 14, "source": "D p.2"}, "villainGroupCards": {"value": 0, "source": "D p.2"}, "henchmanGroupCards": {"value": 10, "source": "D p.2"}, "schemeTwists": {"value": 0, "source": "D p.2"}, "bystanders": {"value": 6, "source": "OT"}},
   "heroes": [
     {"id": "dimensions_hero_howard-the-duck", "name": "Howard the Duck", "team": null, "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": []},
     {"id": "dimensions_hero_jessica-jones", "name": "Jessica Jones", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_strength"], "terms": ["dimensions_term_switcheroo", "noir_term_investigate"]},

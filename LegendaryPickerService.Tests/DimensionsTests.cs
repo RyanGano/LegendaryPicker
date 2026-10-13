@@ -25,11 +25,11 @@ public class DimensionsTests
     }
 
     [Fact]
-    public void The_5_Special_Bystanders_are_shuffled_into_the_Bystander_stack()
+    public void The_6_Special_Bystanders_are_shuffled_into_the_Bystander_stack()
     {
         var withBox = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(0, 0)));
         var coreOnly = Assert.IsType<SetupResult>(Generator.Generate(2, ["core"], new ScriptedRandom(0, 0)));
 
-        Assert.Equal(coreOnly.Stacks.Bystanders + 5, withBox.Stacks.Bystanders);
+        Assert.Equal(coreOnly.Stacks.Bystanders + 6, withBox.Stacks.Bystanders);
     }
 }
