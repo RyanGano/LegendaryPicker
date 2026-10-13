@@ -43,7 +43,7 @@ The current pass covers 2,581 unique image URLs across 40 product records: 2,566
 
 | Product (release order) | Product / ruleset | Status | Data record |
 |---|---|---|---|
-| Marvel Legendary First Edition core box (Nov 2012) | Base game · First Edition | Integrated; Research partial: C1 per-face values and Hero metadata indexed; missing copy counts and fields remain open; [#11](https://github.com/RyanGano/LegendaryPicker/issues/11) remains open; [card-face research](./core.md) | `LegendaryPickerService/Data/Boxes/core.json` |
+| Marvel Legendary First Edition core box (Nov 2012) | Base game · First Edition | Integrated; Research partial: C1 per-face values and Hero metadata indexed; missing copy counts and fields remain open; card list, Scheme Setup lines and Always Leads checked against the card faces 2026-10-12 ([#11](https://github.com/RyanGano/LegendaryPicker/issues/11)); [card-face research](./core.md) | `LegendaryPickerService/Data/Boxes/core.json` |
 | Dark City (Jun 2013) | Expansion · First Edition | Integrated; Research partial: C1 face metadata indexed; per-face copy counts remain open; [card-face research](./dark-city.md) | `LegendaryPickerService/Data/Boxes/dark-city.json` |
 | Fantastic Four (Oct 2013) | Expansion · First Edition | Integrated; Research partial: C1 face metadata indexed; per-face copy counts remain open; [card-face research](./fantastic-four.md) | `LegendaryPickerService/Data/Boxes/fantastic-four.json` |
 | Paint the Town Red (Mar 2014) | Expansion · First Edition | Integrated; Research partial: C1 face metadata indexed; per-face copy counts remain open; [card-face research](./paint-the-town-red.md) | `LegendaryPickerService/Data/Boxes/paint-the-town-red.json` |
@@ -86,7 +86,6 @@ The current pass covers 2,581 unique image URLs across 40 product records: 2,566
 
 ## Open collection and implementation work
 
-- Core-box card names, Scheme setups, and Always Leads mappings still need verification against First Edition cards or clear scans (#11).
 - The owner-directed stack-use and card-draw rules are being implemented in #87 and #88. They affect how collected product facts are represented; they do not authorize unsourced rules readings.
 - Guardians of the Galaxy (#95), Fear Itself (#96), Secret Wars Volume 1 (#113), Secret Wars Volume 2 (#117), Captain America 75th Anniversary (#121) and Civil War (#125) are integrated; research can proceed in release order without fabricating missing rules.
 - Later capability gates and product ordering remain in #34. Individual product issues are filed as each preceding wave lands.

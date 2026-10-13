@@ -1,6 +1,6 @@
 # Marvel Legendary First Edition core box (Nov 2012)
 
-**Research status: Partial.** The official rulebook supports the product's category counts and base setup. The card-by-card check in [#11](https://github.com/RyanGano/LegendaryPicker/issues/11) is not complete: no original cards or clear card-front scans were available in the sources reviewed for this pass.
+**Research status: Partial.** The official rulebook supports the product's category counts and base setup. The names, Scheme Twist counts and Setup lines, and Always Leads of the box file were checked against the printed card faces on 2026-10-12 ([#11](https://github.com/RyanGano/LegendaryPicker/issues/11), below); per-card values and copy counts stay open.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -67,9 +67,18 @@ The lists below are C1-listed titles and group mappings, not a verified physical
 
 - **Bystander**, **Wound**, and **S.H.I.E.L.D. Officer** are names in the C1 catalog; the rulebook verifies the shared-stack counts (R p.22). Individual face identities, printed values, terms, and abilities are Unverified. The rulebook setup identifies S.H.I.E.L.D. Agents and Troopers in the starting deck (R pp.4–6); their distinct printed face details are not verified here.
 
-## Open verification gap
+## Card-face check (#11, 2026-10-12)
 
-The rulebook's contents list does not verify the printed identities or card text. The C1 title index above is not a substitute for checking First Edition core cards or clear scans; per-card ability text, numeric values, Hero metadata, copy ratios, and per-face copy counts remain open; the Scheme Setup lines, Always Leads and part uses in the box file are read from the cards (`Card`). Agreement between C1 and C2, or the current runtime JSON, is not a substitute for those cards. Keep [#11](https://github.com/RyanGano/LegendaryPicker/issues/11) open until that comparison is documented.
+Method: the shared OCR cache (`_ocr/core.json`, 114 C1-linked faces: Hero, Villain, Henchman, Mastermind and Tactic faces) for titles and Always Leads markers, plus a fresh Windows OCR read of the eight Scheme faces (`Schemes/1Scheme(32)` to `8Scheme(39)`, not in the cache) and the four Mastermind faces, and of one or two faces of each group the cache's title match missed (Captain America, Emma Frost, Nick Fury, Rogue, Spider-Man, Skrulls, Doombot Legion, Hand Ninjas, Savage Land Mutates). The images are the First Edition (2012) faces; no card text is stored.
+
+| Checked | Result |
+|---|---|
+| 15 Hero, 7 Villain Group and 4 Henchman Group names | Match. The cache's title match covers 17 of the 26 groups; the re-read covers the rest (Villain and Henchman faces print the group, e.g. "Villain - Skrulls"). |
+| Scheme names | Match. The printed title of Legacy Virus is "The Legacy Virus"; the box file keeps the article-less display name, the same card. |
+| Scheme Twists and Setup lines | All eight match the Schemes table in `Docs/Plan.md`: Legacy Virus 8 Twists, 6 Wounds per player; Midtown Bank Robbery 8, 12 Bystanders; Negative Zone Prison Breakout 8, an extra Henchman Group; Portals to the Dark Dimension 7; Killbots 5, 3 more Twists beside the Scheme, 18 Bystanders; Secret Invasion 8, 6 Heroes, Skrulls required, 12 random Hero cards into the Villain Deck; Super Hero Civil War 8 at 2-3 players and 5 at 4-5, 4 Heroes at 2 players; Cosmic Cube 8. |
+| Mastermind Always Leads | Match: Dr. Doom - Doombot Legion, Loki - Enemies of Asgard, Magneto - Brotherhood, Red Skull - HYDRA. |
+
+No value differed, so no data changed. Per-card ability text, numeric values, Hero metadata, copy ratios and per-face copy counts remain unchecked.
 
 ## Structured card-face metadata (C1)
 
