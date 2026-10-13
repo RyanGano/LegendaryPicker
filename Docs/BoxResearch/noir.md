@@ -56,6 +56,10 @@ Summaries are original paraphrases under 40 words. Hero metadata, other card ter
 
 Still open: per-face copy counts (C1 gives none). The Scheme Setup lines, Always Leads and part uses were read from the C1 catalog and its card-image links (`Card`) and are in the box file; four Schemes shipped, matching the official count (Detective Wolverine is a Bystander, not a Scheme).
 
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 44 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds: Luke Cage Noir (Unbreakable Cage).
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.

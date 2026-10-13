@@ -76,6 +76,10 @@ Summaries are original paraphrases under 40 words. Remaining card terms, class/t
 
 Still open: per-face copy counts, C1's ten Special Bystander names against the insert's nine, and the token and Horror names and the Human Shields payment icon. The Scheme Setup lines, Always Leads and part uses were read from C1 and its card-image links (`Card`) and are in the box file. Optional Horrors and Epic sides remain governed by project decisions D4/D2.
 
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 147 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds: X-23 (Healing Factor Genome). The Epic Mastermind faces' Horrors were already in the box file.
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.

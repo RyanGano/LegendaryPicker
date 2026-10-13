@@ -88,6 +88,10 @@ These are original paraphrases. The rulebook's generic terms do not verify all p
 
 Still open: per-face copy counts. The contents list's 42 Bystanders and six Master Strikes against the setup section's 41 and five are unreconciled; the box file uses the setup numbers. Every Scheme Setup line, Always Leads and part use was read from the C1-linked card faces (`Card`). The rulebook does not document mixing this base game with other boxes; do not infer mixing support.
 
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 81 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). No `uses` changes; the faces agree with the box file. The reprinted core Heroes, Masterminds and Villain Groups share core's data, which was checked in #11.
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.
