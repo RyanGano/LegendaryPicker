@@ -81,7 +81,7 @@ Glossary summaries are original paraphrases under 40 words. The rulebook does no
 - **Printed titles:** C1 sorts "Legacy Virus, The"; the runtime name is "The Legacy Virus (Second Edition)". The Spider-Man Hero Names follow SE pp.19-20; C1 gives both as team Spider Friends.
 - **Always Leads:** Magneto's card also names any X-Men Villain Group and Red Skull's any Hydra group; only the group in this box is recorded. Doctor Octopus's "any Sinister" group has two candidates in the box.
 - **Copy counts:** per-face quantities of Heroes' and Masterminds' cards are not given by C1 or the rulebook beyond the 1 rare, 3 uncommon, 5 + 5 common split (SE p.22). Searched again in #222 (C1, BGG/RPGGeek card-text wikis, retailer listings): no source gives per-face copies, so they stay unrecorded.
-- **Mixing with First Edition or Villainous boxes:** SE p.1 says the box is compatible with the Legendary expansions but gives no mixing procedure; it is refused until the owner rules (#141).
+- **Mixing with First Edition or Villainous boxes:** SE p.1 says the box is compatible with the Legendary expansions but gives no mixing procedure; the owner ruled that any boxes combine under a rule edition the player can choose, by default Revised with a Revised base game (D-editions, 2026-10-13, #240).
 
 ## Structured card-face metadata (C1)
 

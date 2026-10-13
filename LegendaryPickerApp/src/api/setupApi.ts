@@ -152,16 +152,21 @@ export type StandIn = {
 // The two kinds of starting card each player gets: S.H.I.E.L.D. Agents and Troopers, or under the
 // Villainous ruleset HYDRA Operatives and Soldiers. choices lists the rulesets whose starting decks the
 // players choose between, present only in a mixed setup under the Villains rules that includes base games
-// of both.
+// of both. team is the ruleset whose starting cards the players use, present only when the setup's rules come from a
+// base game that isn't included and the included one standing for it deals another team's.
 export type PlayerDeck = {
   agents: number
   troopers: number
   choices?: Ruleset[]
+  team?: Ruleset
 }
 
-// The rules a box's cards are played under. A setup follows one ruleset, which its Scheme and Mastermind
-// decide when the included boxes follow more than one.
+// The rules a box's cards are played under. A setup follows one ruleset: the rule edition the player chose, or
+// else the one its boxes, or its Scheme and Mastermind, decide when the included boxes follow more than one.
 export type Ruleset = 'firstEdition' | 'villainous' | 'revised'
+
+// A rule edition the player can choose for the whole setup, as the API's rules= names it.
+export type RuleEdition = 'first-edition' | 'villains' | 'revised'
 
 // box names the box the rule comes from, and is present only when the setup includes more than one box.
 export type RuleNote = {
@@ -221,18 +226,13 @@ export type NoEligibleScheme = {
 
 export type SetupResponse = Setup | NoEligibleScheme
 
-// A box a setup can include. A base game supplies the setup rules; an expansion adds cards. mixesRulesets is true
-// for a base game with rules for mixing rulesets, which a setup with boxes of more than one ruleset needs, unless
-// every box of the ruleset with no ticked base game playsWithOtherRulesets: an expansion that can be played under the
-// other ruleset's base game. An API from before rulesets leaves ruleset out, and one from before mixesRulesets or
-// playsWithOtherRulesets leaves that out.
+// A box a setup can include. A base game supplies the setup rules; an expansion adds cards. An API from before
+// rulesets leaves ruleset out.
 export type Box = {
   id: string
   name: string
   baseGame: boolean
   ruleset?: Ruleset
-  mixesRulesets?: boolean
-  playsWithOtherRulesets?: boolean
   firstPublished?: number
   description?: string
 }
@@ -268,13 +268,21 @@ export async function getBoxes(): Promise<Box[]> {
 }
 
 // Draws from the named boxes, or from the core box alone when boxes is empty. With epic, a drawn Mastermind that has
-// an Epic side is played on that side.
+// an Epic side is played on that side. With rules, the whole setup follows that rule edition; without, the boxes decide.
 // Throws on a network failure, a non-2xx status (bad count or boxes, rate limit, server error),
 // an unrecognised body, or no answer within REQUEST_TIMEOUT_MS.
-export async function getSetup(players: number, boxes: string[] = [], epic = false): Promise<SetupResponse> {
+export async function getSetup(
+  players: number,
+  boxes: string[] = [],
+  epic = false,
+  rules: RuleEdition | null = null,
+): Promise<SetupResponse> {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
-  const query = (boxes.length > 0 ? `&boxes=${boxes.map(encodeURIComponent).join(',')}` : '') + (epic ? '&epic=true' : '')
+  const query =
+    (boxes.length > 0 ? `&boxes=${boxes.map(encodeURIComponent).join(',')}` : '') +
+    (epic ? '&epic=true' : '') +
+    (rules ? `&rules=${rules}` : '')
   try {
     const response = await fetch(`${apiBaseUrl}/api/setup?players=${players}${query}`, {
       signal: controller.signal,

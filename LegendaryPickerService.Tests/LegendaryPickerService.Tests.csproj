@@ -171,6 +171,15 @@
     <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\DrainedNoLeads\core.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- A made-up First Edition expansion and a made-up Revised expansion, each with a Mastermind that uses Wounds, beside the
+       Revised fixture base game and copies of the core box and Legendary: Villains, for choosing a rule edition (#240). -->
+  <ItemGroup>
+    <None Include="Fixtures\Editions\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\core.json" Link="Fixtures\Editions\core.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\LegendaryPickerService\Data\Boxes\villains.json" Link="Fixtures\Editions\villains.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Fixtures\Revised\revised.json" Link="Fixtures\Editions\revised.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- One made-up box, with its own teams, whose one Scheme has several overlapping Hero counts. -->
   <ItemGroup>
     <None Include="Fixtures\HeroRulesBudget\*.json" CopyToOutputDirectory="PreserveNewest" />

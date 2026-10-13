@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { BoxInfo } from './BoxInfo.tsx'
-import { getBoxes, getSetup, ping, type Box, type Setup } from './api/setupApi.ts'
+import { getBoxes, getSetup, ping, type Box, type RuleEdition, type Setup } from './api/setupApi.ts'
 import { setupTerms } from './rulesetTerms.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
 import { SetupSkeleton } from './SetupSkeleton.tsx'
@@ -19,6 +19,14 @@ const PLAYER_COUNT_KEY = 'legendaryPicker.playerCount'
 const BOXES_KEY = 'legendaryPicker.boxes'
 // Whether the player plays the Masterminds' Epic sides (#185).
 const EPIC_KEY = 'legendaryPicker.epic'
+// The rule edition the player chose for boxes of more than one ruleset, or none for the boxes' default (#240).
+const RULES_KEY = 'legendaryPicker.rules'
+// The rule editions a player can choose, after the default.
+const RULE_EDITIONS: { id: RuleEdition; name: string }[] = [
+  { id: 'first-edition', name: 'First Edition' },
+  { id: 'villains', name: 'Villains' },
+  { id: 'revised', name: 'Revised' },
+]
 // The expansions a returning player included before base games became picks (#71). The core box was
 // always in the setup then, so it joins them when they move to BOXES_KEY.
 const OLD_EXPANSIONS_KEY = 'legendaryPicker.expansions'
@@ -84,35 +92,34 @@ function readIds(key: string): string[] | null {
 }
 
 // Why the ticked boxes can't be drawn from, or null when they can. A setup takes its rules from a base game, so it
-// needs one, and boxes of more than one ruleset also need a base game with rules for mixing them, unless the base
-// games are of one ruleset and every box of the other plays with other rulesets (Fear Itself with the core box). Until
-// the box list loads there is nothing to check, and an API from before mixesRulesets doesn't say which base game has
-// those rules; either way the API decides.
+// needs one; any boxes with one can be drawn together (#240). Until the box list loads there is nothing to check, and
+// the API decides.
 function boxHint(available: Box[], included: string[]): string | null {
   const ticked = available.filter((box) => included.includes(box.id))
-  if (available.length > 0 && !ticked.some((box) => box.baseGame)) {
-    return 'Pick a base game to draw a setup.'
+  return available.length > 0 && !ticked.some((box) => box.baseGame) ? 'Pick a base game to draw a setup.' : null
+}
+
+// Whether the ticked boxes follow more than one ruleset, so the player can choose which rule edition the setup uses.
+function spansRulesets(available: Box[], included: string[]): boolean {
+  return new Set(available.filter((box) => included.includes(box.id)).map((box) => box.ruleset)).size > 1
+}
+
+function loadRules(): RuleEdition | null {
+  try {
+    const stored = localStorage.getItem(RULES_KEY)
+    return RULE_EDITIONS.some((edition) => edition.id === stored) ? (stored as RuleEdition) : null
+  } catch {
+    return null
   }
-  // A Revised box follows rules of its own that no base game mixes with the others, so it is drawn with Revised boxes only.
-  if (ticked.some((box) => box.ruleset === 'revised') && ticked.some((box) => box.ruleset !== 'revised')) {
-    return "Revised boxes can't be drawn with First Edition or Villainous boxes. Untick one kind to draw a setup."
+}
+
+function saveRules(rules: RuleEdition | null) {
+  try {
+    if (rules === null) localStorage.removeItem(RULES_KEY)
+    else localStorage.setItem(RULES_KEY, rules)
+  } catch {
+    // Remembering the choice is optional.
   }
-  const mixers = available.filter((box) => box.mixesRulesets)
-  const rulesets = new Set(ticked.map((box) => box.ruleset))
-  const baseRulesets = new Set(ticked.filter((box) => box.baseGame).map((box) => box.ruleset))
-  const playsUnderBaseGame =
-    baseRulesets.size === 1 && ticked.every((box) => baseRulesets.has(box.ruleset) || box.playsWithOtherRulesets)
-  if (
-    available.some((box) => box.mixesRulesets !== undefined) &&
-    rulesets.size > 1 &&
-    !ticked.some((box) => box.mixesRulesets) &&
-    !playsUnderBaseGame
-  ) {
-    return mixers.length > 0
-      ? `Heroic and Villainous boxes mix only with ${mixers.map((box) => box.name).join(' or ')}. Tick it too to draw a setup.`
-      : "Heroic and Villainous boxes can't be drawn together."
-  }
-  return null
 }
 
 function loadEpic(): boolean {
@@ -177,6 +184,7 @@ function App() {
   const [boxes, setBoxes] = useState<Box[]>([])
   const [included, setIncluded] = useState<string[]>(loadBoxes)
   const [epic, setEpic] = useState(loadEpic)
+  const [rules, setRules] = useState<RuleEdition | null>(loadRules)
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   // The intro explains the app until there is a setup on screen to explain it instead, so a first draw
   // that fails or finds no legal Scheme keeps it.
@@ -237,9 +245,16 @@ function App() {
     saveEpic(!epic)
   }
 
+  function chooseRules(edition: RuleEdition | null) {
+    setRules(edition)
+    saveRules(edition)
+  }
+
   // Stored ids the API no longer lists are ignored.
   const isIncluded = (box: Box) => included.includes(box.id)
   const hint = boxHint(boxes, included)
+  // The rule edition choice matters only while the ticked boxes follow more than one ruleset.
+  const choosesRules = spansRulesets(boxes, included)
   // Base games first, then expansions, each in the API's order.
   const listedBoxes = [...boxes.filter((box) => box.baseGame), ...boxes.filter((box) => !box.baseGame)]
 
@@ -259,6 +274,7 @@ function App() {
         players,
         drawn.map((box) => box.id),
         epic,
+        spansRulesets(available, included) ? rules : null,
       )
       if (response.kind === 'setup') {
         setStatus({ kind: 'result', setup: response })
@@ -324,6 +340,35 @@ function App() {
                   ))}
                 </div>
                 {hint && <p className="box-hint">{hint}</p>}
+              </>
+            )}
+            {choosesRules && (
+              <>
+                <h2 id="rules-label">Rules</h2>
+                <div className="box-options" role="radiogroup" aria-labelledby="rules-label">
+                  <label className="box-option">
+                    <input
+                      type="radio"
+                      name="rules"
+                      checked={rules === null}
+                      disabled={loading}
+                      onChange={() => chooseRules(null)}
+                    />
+                    <span className="box-name">Default</span> <span className="detail">Set by the boxes</span>
+                  </label>
+                  {RULE_EDITIONS.map((edition) => (
+                    <label key={edition.id} className="box-option">
+                      <input
+                        type="radio"
+                        name="rules"
+                        checked={rules === edition.id}
+                        disabled={loading}
+                        onChange={() => chooseRules(edition.id)}
+                      />
+                      <span className="box-name">{edition.name}</span>
+                    </label>
+                  ))}
+                </div>
               </>
             )}
             <h2 id="options-label">Options</h2>

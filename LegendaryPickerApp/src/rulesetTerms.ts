@@ -87,10 +87,24 @@ const MIXED: RulesetTerms = {
   troopers: 'S.H.I.E.L.D. Troopers or HYDRA Soldiers',
 }
 
-// The words for the setup as a whole: its ruleset's, or both rulesets' when its cards are mixed. An API from
-// before rulesets leaves the field out; every setup it drew was First Edition.
+// The words for the setup as a whole: its ruleset's, or both rulesets' when its cards come from rulesets that call the
+// parts by different words. First Edition and Revised cards share theirs. An API from before rulesets leaves the field
+// out; every setup it drew was First Edition.
 export function rulesetTerms(setup: Setup): RulesetTerms {
-  return setup.mixed ? MIXED : TERMS[setup.ruleset ?? 'firstEdition']
+  const own = TERMS[setup.ruleset ?? 'firstEdition']
+  if (!setup.mixed) return own
+  const cards = [
+    setup.scheme,
+    setup.mastermind,
+    ...setup.villainGroups,
+    ...setup.henchmanGroups,
+    ...setup.heroes,
+    ...(setup.outsideHeroes ?? []).map((outside) => outside.hero),
+    ...(setup.outsideHenchmen ?? []).map((outside) => outside.group),
+    ...(setup.cardsBeside ?? []).map((beside) => beside.group),
+    ...(setup.outsideMasterminds ?? []).map((outside) => outside.mastermind),
+  ]
+  return new Set(cards.map((card) => (card.ruleset ? TERMS[card.ruleset] : own))).size > 1 ? MIXED : own
 }
 
 // The words for some drawn cards: their own ruleset's when they share one, so a mixed setup still calls a
@@ -110,9 +124,11 @@ export function setupTerms(setup: Setup): RulesetTerms {
   }
 }
 
-// The starting decks' words: each choice's in a mixed setup that includes base games of both rulesets,
-// otherwise the setup's ruleset's.
+// The starting decks' words: each choice's in a mixed setup that includes base games of both rulesets, otherwise the
+// team's whose cards stand for those of a base game that isn't included, or else the setup's ruleset's.
 export function startingDeckTerms(setup: Setup): RulesetTerms[] {
   const choices = setup.playerDeck.choices ?? []
-  return choices.length > 0 ? choices.map((ruleset) => TERMS[ruleset]) : [TERMS[setup.ruleset ?? 'firstEdition']]
+  return choices.length > 0
+    ? choices.map((ruleset) => TERMS[ruleset])
+    : [TERMS[setup.playerDeck.team ?? setup.ruleset ?? 'firstEdition']]
 }
