@@ -103,6 +103,17 @@ describe('App', () => {
       'href',
       'https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf',
     )
+    expect(within(footer).getByRole('link', { name: 'What If...? rulebook' })).toHaveAttribute(
+      'href',
+      'https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/WhatIf_Rulebook.pdf',
+    )
+    expect(within(footer).getByRole('link', { name: 'Second Edition rulebook' })).toHaveAttribute(
+      'href',
+      'https://upperdeck.com/wp-content/uploads/2026/08/Legendary-Second-Edition-Rulebook.pdf',
+    )
+    expect(footer).toHaveTextContent(
+      'Setup rules follow the First Edition rulebook, the Villains rulebook, the What If...? rulebook, the Second Edition rulebook and official clarifications.',
+    )
     expect(within(footer).getByRole('link', { name: 'Source on GitHub' })).toHaveAttribute(
       'href',
       'https://github.com/RyanGano/LegendaryPicker',
