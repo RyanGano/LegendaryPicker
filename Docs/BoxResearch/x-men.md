@@ -1,6 +1,6 @@
 # X-Men (June 2017)
 
-**Research status: Partial; integrated (#132).** The official insert provides the 394-card breakdown and extensive mechanics, but not the full card manifest or individual Scheme/Mastermind setup lines. The Scheme Setup lines, Always Leads and part uses are now read from C1 and its card-image links into `LegendaryPickerService/Data/Boxes/x-men.json` (see the X-Men section of `Docs/Plan.md`). C1's Special Bystander names still exceed the official type count, and the token names remain open.
+**Research status: Partial; integrated (#132).** The official insert provides the 394-card breakdown and extensive mechanics, but not the full card manifest or individual Scheme/Mastermind setup lines. The Scheme Setup lines, Always Leads and part uses are now read from C1 and its card-image links into `LegendaryPickerService/Data/Boxes/x-men.json` (see the X-Men section of `Docs/Plan.md`). C1's Special Bystander names still exceed the official type count, and the Token cards are recorded from the card faces (#156).
 
 ## Sources
 
@@ -60,8 +60,8 @@ The official insert does not name the nine token cards or the 20 Horrors. The C1
 
 ## Required parts and glossary
 
-- The product adds nine token cards, one Master Strike, one Scheme Twist, nine Special Bystanders, and 20 Horrors (XM p.2). Exact token names remain unavailable in the insert.
-- **Token-marked cards (C1 card faces, `Card`):** C1 marks the Token symbol on Deathbird's Master Strike (both faces; the Shi'ar Battlecruiser and Battleship), the Hellfire Club's Corrupt the Phoenix Force and Murderworld's Animatronic Killer Clowns, so `optionalTokens` lists Deathbird, Hellfire Club and Murderworld. That accounts for four of the nine Token cards at most; the other Token-using cards are unresolved (no card-face check has found them), so the list may be incomplete (#156).
+- The product adds nine token cards, one Master Strike, one Scheme Twist, nine Special Bystanders, and 20 Horrors (XM p.2). The insert names none; the card faces name them (see below).
+- **Token-marked cards (C1 card faces, `Card`):** C1 marks the Token symbol on Deathbird's Master Strike (both faces; the Shi'ar Battlecruiser and Battleship), the Hellfire Club's Corrupt the Phoenix Force and Murderworld's Animatronic Killer Clowns, so `optionalTokens` lists Deathbird, Hellfire Club and Murderworld. #156 re-read every card face with OCR (the 147 faces in the shared cache plus the eight Scheme faces): no other Master Strike, Trap, Tactic, Villain, Henchman, Hero or Scheme text adds a named Token. Deathbird's four Tactics, Psychic Subjugation and the ascending Villains (Mastermind (Jason Wyngarde), Lady Mastermind) enter play as the card itself, not as a Token. The list is therefore complete from the faces; the insert's count of nine Token cards is more than the four named kinds (some are presumably several copies, such as the Killer Clowns), and which physical copies exist is not checked.
 - **X-Gene:** Use a conditional bonus once only if its specified card is already in the discard pile. (XM p.1)
 - **Piercing Energy:** A resource that fights enemies using their printed Victory Points instead of their Attack value. (XM p.1)
 - **Berserk:** Discard the deck's top card and gain Attack based on that card's printed value. (XM p.1)
