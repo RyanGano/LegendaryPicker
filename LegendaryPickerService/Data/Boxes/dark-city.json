@@ -27,7 +27,7 @@
     { "id": "dark-city_hero_elektra", "name": "Elektra", "team": "dark-city_term_marvel-knights", "classes": ["core_term_covert", "core_term_instinct"], "terms": [] },
     { "id": "dark-city_hero_forge", "name": "Forge", "team": "dark-city_term_x-force", "classes": ["core_term_tech"], "terms": ["dark-city_term_versatile"] },
     { "id": "dark-city_hero_ghost-rider", "name": "Ghost Rider", "team": "dark-city_term_marvel-knights", "classes": ["core_term_ranged", "core_term_strength", "core_term_tech"], "terms": [] },
-    { "id": "dark-city_hero_iceman", "name": "Iceman", "team": "core_term_x-men", "classes": ["core_term_ranged", "core_term_strength"], "terms": [] },
+    { "id": "dark-city_hero_iceman", "name": "Iceman", "team": "core_term_x-men", "classes": ["core_term_ranged", "core_term_strength"], "terms": [], "uses": [{ "part": "wounds", "source": "Card" }] },
     { "id": "dark-city_hero_iron-fist", "name": "Iron Fist", "team": "dark-city_term_marvel-knights", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["dark-city_term_versatile"] },
     { "id": "dark-city_hero_jean-grey", "name": "Jean Grey", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["core_term_rescue-a-bystander"] },
     { "id": "dark-city_hero_nightcrawler", "name": "Nightcrawler", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["dark-city_term_teleport"] },

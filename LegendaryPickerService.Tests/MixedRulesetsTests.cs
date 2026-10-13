@@ -206,7 +206,7 @@ public class MixedRulesetsTests
 
     // A mixed setup lays out Wounds and Bindings only where a drawn card uses them (D-uses). Dr. Strange's card
     // gives Bindings, and Legacy Virus sets the Wound stack alone. In Solo, Nick Fury, X-Men First Class (the
-    // 14th of the 7 Heroic and 7 Villainous groups), Doombot Legion and the first three Heroes use neither,
+    // 14th of the 7 Heroic and 7 Villainous groups), Doombot Legion, Black Widow, Cyclops and Emma Frost use neither,
     // so Midtown Bank Robbery leaves both out; with Legacy Virus the Wounds are back and the Bindings stay out.
     // The recruit stacks of both base games stay, since players recruit from them (VIL p.21).
     [Fact]
@@ -217,15 +217,15 @@ public class MixedRulesetsTests
         Assert.Equal(18, strange.Stacks.Wounds);
         Assert.Equal(30, strange.Stacks.Bindings);
 
-        var midtown = Draw(1, CoreAndVillains, "Midtown Bank Robbery", "Nick Fury", 13, 0, 0, 0, 0);
+        var midtown = Draw(1, CoreAndVillains, "Midtown Bank Robbery", "Nick Fury", 13, 0, 0, 1, 2);
         Assert.True(midtown.Mixed);
         Assert.Equal(["X-Men First Class"], midtown.VillainGroups.Select(group => group.Name));
         Assert.Equal(["Doombot Legion"], midtown.HenchmanGroups.Select(group => group.Name));
-        Assert.Equal(["Black Widow", "Captain America", "Cyclops"], midtown.Heroes.Select(hero => hero.Name));
+        Assert.Equal(["Black Widow", "Cyclops", "Emma Frost"], midtown.Heroes.Select(hero => hero.Name));
         Assert.Equal(new SetupStacks(null, 30, 30 + 41 - 12, MadameHydra: 12, NewRecruits: 15), midtown.Stacks);
         Assert.DoesNotContain(midtown.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
 
-        var legacyVirus = Draw(1, CoreAndVillains, "The Legacy Virus", "Nick Fury", 13, 0, 0, 0, 0);
+        var legacyVirus = Draw(1, CoreAndVillains, "The Legacy Virus", "Nick Fury", 13, 0, 0, 1, 2);
         Assert.Equal(new SetupStacks(6, 30, 30 + 41 - 1, MadameHydra: 12, NewRecruits: 15), legacyVirus.Stacks);
         Assert.DoesNotContain(legacyVirus.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }

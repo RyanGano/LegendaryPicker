@@ -342,6 +342,8 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 
 - **Deadpool** — Wounds: printed card text on **Random Acts of Unkindness** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/deadpool-01.png)).
 - **Hulk** — Wounds: printed card text on **Unstoppable Hulk** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/hulk-04.png)); **Crazed Rampage** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/hulk-02.png)).
+- **Captain America** — Wounds: printed card text on **Diving Block** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/captain-america-02.png)) (#166).
+- **Wolverine** — Wounds: printed card text on **Healing Factor** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/wolverine-03.png)) (#166).
 - **Nick Fury** — S.H.I.E.L.D. Officers: printed card text on **Battlefield Promotion** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/nick-fury-04.png)).
 - **Brotherhood** — Wounds: printed card text on **Sabretooth** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/brotherhood-01.png)).
 - **Enemies of Asgard** — Wounds: printed card text on **Frost Giant** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/enemies-of-asgard-04.png)); **Ymir, Frost Giant King** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Villains/enemies-of-asgard-01.png)).
@@ -353,3 +355,7 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 - **Magneto** — Wounds: printed card text on **Crushing Shockwave** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/magneto-03.png)).
 - **Legacy Virus** — Wounds: printed card text on **The Legacy Virus** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/4Scheme(35).png)).
 - **Unleash the Power of the Cosmic Cube** — Wounds: printed card text on **Unleash the Power of the Cosmic Cube** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/6Scheme(37).png)).
+
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 114 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds, source Card, under that ruling: Captain America (Diving Block, reacts to gaining a Wound) and Wolverine (Healing Factor, KOs a Wound from hand or discard). Faces the cache could not read (Black Widow Mission Accomplished, Captain America A Day Unlike Any Other, Brotherhood Blob) were read by a short-lived reader and name no stack.

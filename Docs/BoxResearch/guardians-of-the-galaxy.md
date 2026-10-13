@@ -320,3 +320,7 @@ The Shard and Artifact summaries in the runtime file were compared with GG p.1 a
 - **Hero teams and classes:** taken from C1 (team Guardians of the Galaxy; each Hero's classes are the union of its faces' class icons). The team term cites GG p.1, which introduces the Guardians as the box's Heroes.
 - **Villain manifest:** C1's per-face copy counts sum to 8 per group, matching GG p.2, which resolves the 13-versus-16 lead count above.
 - **The Kree-Skrull War in Solo:** both required groups fill the Villain Group slots, as GG p.2 says the deck will be larger than normal; no extra Villain Group effect is recorded.
+
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 43 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). No face disagreed with the box file; the Shard Heroes and Wound Masterminds matched.

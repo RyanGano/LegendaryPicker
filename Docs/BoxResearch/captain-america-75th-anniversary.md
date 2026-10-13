@@ -146,3 +146,7 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 38 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds, source Card, under that ruling: Captain America (Falcon) (Flying Shield Block, reacts to a player gaining a Wound; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/falcon-02.png)). Black Knight, unreadable in the cache, was read by a short-lived reader and names no stack.

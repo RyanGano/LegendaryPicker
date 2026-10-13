@@ -383,3 +383,7 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 - **Professor X** — Bindings: printed card text on **Telepathic Imprisonment** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/professor-x-02-1.png)).
 - **Build an Underground MegaVault Prison** — Bindings: printed card text on **Build an Underground MegaVault Prison** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/21Scheme(1).png)).
 - **Crush HYDRA** — Madame HYDRA, New Recruits: printed card text on **Crush HYDRA** ([card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Schemes/22Scheme(2).png)).
+
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 121 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Thor (Avengers Adversary), the one face the cache could not read, was read by a short-lived reader and names no stack. Bindings, New Recruits and Madame HYDRA entries already in the box file matched the faces.
