@@ -1,6 +1,6 @@
 # Deadpool (October 2016)
 
-**Research status: Partial.** The official rulesheet verifies the contents and two new mechanics, but full Scheme/Mastermind setup lines and card-level metadata remain open.
+**Research status: Partial; integrated (#128).** The official rulesheet verifies the contents and two new mechanics; the Scheme Setup lines, Always Leads and part uses in `LegendaryPickerService/Data/Boxes/deadpool.json` were read from the C1-linked card faces (`Card`). Per-face copy counts remain open.
 
 ## Sources
 
@@ -56,7 +56,7 @@ Summaries are original paraphrases under 40 words. Other card terms and abilitie
 
 ## Setup and implementation gaps
 
-Verify every Scheme's player-count limits and setup effects, both Masterminds' Always Leads and setup, Hero metadata, and the complete printed card identities. The insert's use of group-specific Revenge does not establish a Scheme's required groups. This record does not change runtime data or code.
+Still open: per-face copy counts (C1 gives none). The Scheme Setup lines, Always Leads and part uses were read from the C1-linked card faces (`Card`) and are in the box file; the insert's group-specific Revenge does not establish a Scheme's required groups.
 
 ## Structured card-face metadata (C1)
 

@@ -1,6 +1,6 @@
 # Dimensions (May 2019; includes the 3D promo)
 
-**Research status: Partial.** The official insert verifies the 100-card contents and new mechanics; 3D promo faces are indexed from C1; Forklift Driver is counted as a sixth Special Bystander by owner ruling (#211), and card-level setup details remain unresolved.
+**Research status: Partial; integrated (#168).** The official insert verifies the 100-card contents and new mechanics; 3D promo faces are indexed from C1; Forklift Driver is counted as a sixth Special Bystander by owner ruling (#211). J. Jonah Jameson's Always Leads and Start of Game and every card's part uses were read from the C1-linked card faces (`Card`) into `LegendaryPickerService/Data/Boxes/dimensions.json`; per-face copy counts remain open.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -54,7 +54,7 @@ Summaries are original paraphrases under 40 words. Hero metadata, exact promo id
 
 ## Setup and implementation gaps
 
-This product contributes no Villain Groups or Schemes in the official contents list. Verify the J. Jonah Jameson Always Leads/setup text, card-level Hero teams/classes/shared Hero Names, and the exact physical 3D promo against an official card reference. C1's extra Forklift Driver entry is outside the 100-card count; the owner ruled (2026-10-12, #211) to list it as a sixth Special Bystander anyway. Integration must represent Switcheroo and Teleport without treating them as recruitment; this record changes no runtime data or code.
+Still open: per-face copy counts, and the exact physical 3D promo against an official card reference. This product contributes no Villain Groups or Schemes. J. Jonah Jameson's Always Leads, Start of Game and every card's part uses were read from the C1-linked card faces (`Card`) and are in the box file. C1's extra Forklift Driver entry is outside the 100-card count; the owner ruled (2026-10-12, #211) to list it as a sixth Special Bystander anyway.
 
 ## Structured card-face metadata (C1)
 

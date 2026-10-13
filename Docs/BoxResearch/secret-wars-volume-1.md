@@ -66,9 +66,7 @@ Summaries above are original paraphrases, each under 40 words. Other teams, clas
 
 ## Setup and implementation gaps
 
-The insert does not provide a catalog of all eight Scheme setup lines, four Always Leads groups and setup effects, or the player-count effects on those cards. Its multiple-Mastermind rule identifies a new capability but not which individual Villains or Schemes trigger it. The detailed card roster also needs reconciliation with the 350-card total. No physical cards or clear scans were available to resolve those gaps; C1's structured face metadata is indexed below; its ability prose is not rules evidence.
-
-The roadmap marks Secret Wars Volume 1 as needing G6 (richer group selection), G7 (additional Masterminds drawn by a Scheme), and G9 (Mastermind variants). Optional “A Player is the Mastermind” mode remains excluded. Integration is separate from this research record.
+Still open: per-face copy counts, and the insert's categories totalling 348 against the stated 350 cards. The Scheme Setup lines, each Always Leads and the part uses were read from the card faces C1 links (`Card`) and are in the box file. Optional “A Player is the Mastermind” mode remains excluded.
 
 ## Structured card-face metadata (C1)
 

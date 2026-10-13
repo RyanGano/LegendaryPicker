@@ -1,6 +1,6 @@
 # Captain America 75th Anniversary (March 2016)
 
-**Research status: Partial.** The official rulesheet verifies the aggregate contents and new mechanics, but not every card roster or Scheme/Mastermind setup line.
+**Research status: Partial; integrated (#121).** The official rulesheet verifies the aggregate contents and new mechanics; the Scheme Setup lines, Always Leads and part uses in `LegendaryPickerService/Data/Boxes/captain-america-75th-anniversary.json` were read from the C1-linked card faces (`Card`). Per-face copy counts remain open.
 
 ## Sources
 | Key | Source | Facts supported |
@@ -56,7 +56,7 @@ Summaries are original paraphrases under 40 words. Any additional keywords found
 
 ## Implementation gaps
 
-This is an expansion, so it contributes no separate base-game setup. Complete Scheme player limits and effects, Mastermind Always Leads/setup effects, and Hero metadata still need card-level sources. This record does not change runtime data or code.
+This is an expansion, so it contributes no separate base-game setup. Scheme Setup lines, Always Leads and part uses were read from the C1-linked card faces (`Card`) and are in the box file; per-face copy counts remain open.
 
 ## Structured card-face metadata (C1)
 

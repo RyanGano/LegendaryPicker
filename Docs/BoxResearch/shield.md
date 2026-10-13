@@ -1,6 +1,6 @@
 # S.H.I.E.L.D. (December 2019)
 
-**Research status: Partial.** The official insert verifies contents, the special Officer stack, and several new mechanics. For #172 the Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/shield.json`; the special Officer faces (no C1 image) and per-face copy counts remain open.
+**Research status: Partial; integrated (#172).** The official insert verifies contents, the special Officer stack, and several new mechanics. The Scheme Setup lines, Always Leads and part uses were read from OCR of every C1-linked face and are in `LegendaryPickerService/Data/Boxes/shield.json`; the special Officer faces (no C1 image) and per-face copy counts remain open.
 
 ## Sources
 
@@ -59,7 +59,7 @@ Summaries are original paraphrases under 40 words. The card-level teams/classes,
 
 ## Setup and implementation gaps
 
-Verify each Scheme's player limits, Twist counts, required groups/Heroes, moves, and setup steps; each Adapting Mastermind's Always Leads and start effect; and all Hero metadata. Integration must add the 16 Special Officers only with this box, preserve their Hero identity/classes in the shared stack, and support a Mastermind whose active identity changes among four Tactics. This record changes no runtime data or code.
+Still open: per-face copy counts, and the special Officer faces and classes (C1 has no image for them). The Scheme Setup lines, Always Leads (printed on one Tactic of each Adapting Mastermind) and part uses were read from OCR of every C1-linked face (`Card`) and are in the box file; the 16 special Officers join the shared Officer stack only with this box.
 
 ## Structured card-face metadata (C1)
 

@@ -69,7 +69,7 @@ The lists below are C1-listed titles and group mappings, not a verified physical
 
 ## Open verification gap
 
-The rulebook's contents list does not verify the printed identities or card text. The C1 title index above is not a substitute for checking First Edition core cards or clear scans; per-card ability text, numeric values, Hero metadata, copy ratios, and the still-unknown setup lines and Always Leads mappings remain open. Agreement between C1 and C2, or the current runtime JSON, is not a substitute for those cards. Keep [#11](https://github.com/RyanGano/LegendaryPicker/issues/11) open until that comparison is documented; no runtime catalog changes are made here.
+The rulebook's contents list does not verify the printed identities or card text. The C1 title index above is not a substitute for checking First Edition core cards or clear scans; per-card ability text, numeric values, Hero metadata, copy ratios, and per-face copy counts remain open; the Scheme Setup lines, Always Leads and part uses in the box file are read from the cards (`Card`). Agreement between C1 and C2, or the current runtime JSON, is not a substitute for those cards. Keep [#11](https://github.com/RyanGano/LegendaryPicker/issues/11) open until that comparison is documented.
 
 ## Structured card-face metadata (C1)
 

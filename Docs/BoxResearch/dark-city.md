@@ -1,6 +1,6 @@
 # Dark City (Jun 2013)
 
-**Research status: Partial.** Runtime integration exists; this note indexes C1 per-face metadata without duplicating the existing catalog and its cited setup values in [`dark-city.json`](../../LegendaryPickerService/Data/Boxes/dark-city.json). Remaining research gaps are listed below.
+**Research status: Partial.** Runtime integration exists; this note indexes C1 per-face metadata without duplicating the existing catalog and its cited setup values in [`dark-city.json`](../../LegendaryPickerService/Data/Boxes/dark-city.json). Per-face copy counts remain open.
 
 ## Sources
 | Key | Source | Facts supported |
