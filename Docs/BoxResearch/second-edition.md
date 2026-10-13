@@ -250,15 +250,15 @@ This index uses C1 structured fields for printed identity, group, available valu
 
 ### Henchman Group: Doombot Legion
 
-- **Doombot Legion**; type/group: Henchman / Doombot Legion; copies: Unverified; printed values: not indexed in C1; card image: unavailable in C1.
+- **Doombot Legion**; type/group: Henchman / Doombot Legion; copies: 10 (SE p.22); printed values: Attack 3; VP 1; card image: unavailable in C1.
 
 ### Henchman Group: Hand Ninjas
 
-- **Hand Ninjas**; type/group: Henchman / Hand Ninjas; copies: Unverified; printed values: not indexed in C1; card image: unavailable in C1.
+- **Hand Ninjas**; type/group: Henchman / Hand Ninjas; copies: 10 (SE p.22); printed values: Attack 3; VP 1; card image: unavailable in C1.
 
 ### Henchman Group: Savage Land Mutates
 
-- **Savage Land Mutates**; type/group: Henchman / Savage Land Mutates; copies: Unverified; printed values: not indexed in C1; card image: unavailable in C1.
+- **Savage Land Mutates**; type/group: Henchman / Savage Land Mutates; copies: 10 (SE p.22); printed values: Attack 3; VP 1; card image: unavailable in C1.
 
 ### Mastermind: Red Skull, Hydra Overlord
 
