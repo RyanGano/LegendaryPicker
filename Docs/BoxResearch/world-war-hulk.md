@@ -70,6 +70,10 @@ Summaries are original paraphrases under 40 words. The insert does not establish
 
 Every Scheme's Twists and Setup line, and every Mastermind's Always Leads and Start of Game effect, were read from the card faces linked below and are in the box file (#143); no Scheme prints a player limit. The Special Bystander identities and the exact Transformed-card associations remain as C1 gives them. Wounded Fury counts Wounds in a discard pile; the owner ruled (2026-10-12, #211) that a card with it brings the Wound stack, so Aspects of the Void is recorded as using Wounds.
 
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 157 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds: Hiroim (Mystic Shadow Priest) and Korg (Nothing Beats Rock).
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.

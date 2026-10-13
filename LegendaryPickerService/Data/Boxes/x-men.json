@@ -28,7 +28,7 @@
     {"id": "x-men_hero_phoenix", "name": "Phoenix", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["x-men_term_piercing-energy", "x-men_term_berserk", "x-men_term_soaring-flight"]},
     {"id": "x-men_hero_polaris", "name": "Polaris", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_ranged"], "terms": ["x-men_term_x-gene", "x-men_term_piercing-energy", "x-men_term_soaring-flight"]},
     {"id": "x-men_hero_psylocke", "name": "Psylocke", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["x-men_term_x-gene", "x-men_term_piercing-energy"]},
-    {"id": "x-men_hero_x-23", "name": "X-23", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": ["x-men_term_x-gene", "x-men_term_berserk"]}
+    {"id": "x-men_hero_x-23", "name": "X-23", "team": "core_term_x-men", "classes": ["core_term_covert", "core_term_instinct", "core_term_tech"], "terms": ["x-men_term_x-gene", "x-men_term_berserk"], "uses": [{"part": "wounds", "source": "Card"}]}
   ],
   "villainGroups": [
     {"id": "x-men_villain_dark-descendants", "name": "Dark Descendants", "terms": ["core_term_ambush", "core_term_escape", "core_term_fight", "x-men_term_trap", "x-men_term_x-gene", "x-men_term_dominate"]},

@@ -81,6 +81,10 @@ The following are short setup-only summaries of the printed card faces; they omi
 - **Adrian Toomes (normal or Epic face):** Always Leads Salvagers; both faces use the same four Tactics (SM p.2). [Normal face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/adrian-toomes-01.png) · [Epic face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/adrian-toomes-02.png).
 - **Vulture (normal or Epic face):** Always Leads Vulture Tech; both faces use the same four Tactics (SM p.2). Both faces use the Wound stack (shared OCR markers, #185). [Normal face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/vulture-01.png) · [Epic face](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Masterminds/vulture-02.png).
 
+## Card-face `uses` check (#166, 2026-10-12)
+
+Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 45 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds: Happy Hogan (Head of Security), Salvagers (Tinkerer) and Adrian Toomes (More Harm than Good).
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.
