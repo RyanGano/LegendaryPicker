@@ -1204,6 +1204,7 @@ public sealed partial class BoxCatalog
             .Concat(box.HenchmanGroups.SelectMany(g => g.Terms.Select(t => (g.Id, t, TermKind.Keyword))))
             .Concat(box.Masterminds.SelectMany(m => m.Terms.Select(t => (m.Id, t, TermKind.Keyword))))
             .Concat(box.Schemes.SelectMany(s => s.Terms.Select(t => (s.Id, t, TermKind.Keyword))))
+            .Concat((box.StackTerms ?? []).Select(stack => ($"{box.Id} stackTerms", stack.Term, TermKind.Keyword)))
             .Concat(box.Schemes.SelectMany(s =>
                 (s.Setup.HeroCounts ?? []).Select(c => c.Team)
                     .Concat((s.Setup.OutsideHeroes ?? []).Select(o => o.Team))

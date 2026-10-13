@@ -59,6 +59,9 @@ public abstract record SetupResponse
             .. outsideMasterminds.Select(outside => outside.Mastermind),
         ];
 
+        // A stack the setup lays out brings the terms its included boxes attach to it (#127).
+        var stackTerms = setup.Boxes.SelectMany(box => box.StackTerms ?? []).Where(stack => setup.Stacks.Lays(stack.Part)).Select(stack => stack.Term);
+
         return new SetupBody(
             setup.Players,
             setup.Ruleset,
@@ -78,7 +81,7 @@ public abstract record SetupResponse
             cardsBeside,
             setup.Steps,
             setup.Notes,
-            glossary.Entries(components.SelectMany(component => component.Terms)),
+            glossary.Entries(components.SelectMany(component => component.Terms).Concat(stackTerms)),
             setup.Mixed,
             setup.RulesReason,
             setup.StandIns is { Count: > 0 } standIns ? standIns : null,

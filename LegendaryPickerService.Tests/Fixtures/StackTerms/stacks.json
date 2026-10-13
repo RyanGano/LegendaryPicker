@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 7,
+  "id": "stacks",
+  "name": "Stacks Fixture",
+  "ruleset": "firstEdition",
+  "catalogSource": "R p.1",
+  "about": { "released": { "value": "2020-01", "source": "R p.1" } },
+  "sources": [
+    { "key": "R", "url": "https://example.test/stacks-rules.pdf" }
+  ],
+  "components": {
+    "heroCards": { "value": 14, "source": "R p.1" },
+    "villainGroupCards": { "value": 8, "source": "R p.1" },
+    "henchmanGroupCards": { "value": 10, "source": "R p.1" },
+    "schemeTwists": { "value": 0, "source": "R p.1" },
+    "wounds": { "value": 5, "source": "R p.1" },
+    "sidekicks": { "value": 4, "source": "R p.1" }
+  },
+  "stackTerms": [
+    { "part": "wounds", "term": "stacks_term_test-wound" },
+    { "part": "sidekicks", "term": "stacks_term_test-sidekick" }
+  ],
+  "heroes": [],
+  "villainGroups": [
+    { "id": "stacks_villain_test-guard", "name": "Test Guard", "terms": ["core_term_fight"] }
+  ],
+  "henchmanGroups": [],
+  "masterminds": [
+    {
+      "id": "stacks_mastermind_test-recruiter",
+      "name": "Test Recruiter",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "uses": [{ "part": "sidekicks", "source": "Card" }],
+      "alwaysLeads": { "groupId": "stacks_villain_test-guard", "groupType": "villain", "source": "Card" }
+    },
+    {
+      "id": "stacks_mastermind_test-brute",
+      "name": "Test Brute",
+      "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"],
+      "uses": [{ "part": "wounds", "source": "Card" }],
+      "alwaysLeads": { "groupId": "stacks_villain_test-guard", "groupType": "villain", "source": "Card" }
+    }
+  ],
+  "schemes": [
+    {
+      "id": "stacks_scheme_test-patrol",
+      "name": "Test Patrol",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }]
+      }
+    }
+  ],
+  "glossary": [
+    { "id": "stacks_term_test-wound", "name": "Test Wound", "kind": "keyword", "summary": "A made-up Wound joined to the Wound Stack.", "source": "R", "page": 1 },
+    { "id": "stacks_term_test-sidekick", "name": "Test Sidekick", "kind": "keyword", "summary": "A made-up Sidekick joined to the Sidekick Stack.", "source": "R", "page": 1 }
+  ]
+}

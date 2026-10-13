@@ -40,6 +40,8 @@ public enum Ruleset
 // this box holds a printing of: each is one card with the original, in the pool once however many boxes holding it are
 // included (#34 D5, #147). OptionalTokens lists the ids of the box's own cards that its optional Token cards can be
 // used with; a setup that draws one tells the player the Tokens could be used (#148). The Tokens are never counted.
+// StackTerms attaches glossary terms to the stacks the box adds cards to, such as Civil War's Grievous Wounds with the
+// Wound Stack; a setup that lays the stack out shows them in its glossary (#127).
 public sealed record Box(
     int SchemaVersion,
     string Id,
@@ -59,7 +61,8 @@ public sealed record Box(
     OtherRuleset? OtherRuleset = null,
     IReadOnlyList<PartUse>? BystanderUses = null,
     Sourced<string[]>? Reprints = null,
-    Sourced<string[]>? OptionalTokens = null)
+    Sourced<string[]>? OptionalTokens = null,
+    IReadOnlyList<StackTerm>? StackTerms = null)
 {
     // Only a base game supplies setup rules; an expansion's box file has no setup section.
     public bool IsBaseGame => Setup is not null;
@@ -156,6 +159,9 @@ public enum Part
 // A part a card or a base game's rules use, with its source: Card for a card whose text gains, captures or
 // otherwise takes cards from the part's stack, or the rulebook page for the rules.
 public sealed record PartUse(Part Part, string Source);
+
+// A glossary term (by id) for the cards a box adds to a part's stack.
+public sealed record StackTerm(Part Part, string Term);
 
 // A Hero, group, Mastermind or Scheme a setup can draw, with its display name and the keywords it uses. Uses lists
 // the parts its card text uses; it is left out when the card uses none.
