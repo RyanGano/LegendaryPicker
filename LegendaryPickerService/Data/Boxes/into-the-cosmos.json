@@ -17,6 +17,7 @@
     "bystanders": { "value": 3, "source": "IC p.2" },
     "shards": { "value": 18, "source": "IC p.2" }
   },
+  "stackTerms": [{"part": "shards", "term": "guardians-of-the-galaxy_term_shard"}],
   "heroes": [
     {"id": "into-the-cosmos_hero_adam-warlock", "name": "Adam Warlock", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength"], "terms": ["guardians-of-the-galaxy_term_shard", "into-the-cosmos_term_burn-shards"], "uses": [{"part": "shards", "source": "Card"}]},
     {"id": "into-the-cosmos_hero_captain-mar-vell", "name": "Captain Mar-Vell", "team": "core_term_avengers", "classes": ["core_term_covert", "core_term_ranged", "core_term_strength", "core_term_tech"], "terms": ["guardians-of-the-galaxy_term_shard", "spider-man-homecoming_term_danger-sense"], "uses": [{"part": "shards", "source": "Card"}]},

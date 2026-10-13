@@ -18,6 +18,7 @@
     "schemeTwists": { "value": 0, "source": "GG p.2" },
     "shards": { "value": 18, "source": "GG p.2" }
   },
+  "stackTerms": [{"part": "shards", "term": "guardians-of-the-galaxy_term_shard"}],
   "heroes": [
     { "id": "guardians-of-the-galaxy_hero_drax-the-destroyer", "name": "Drax the Destroyer", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_instinct", "core_term_strength"], "terms": ["guardians-of-the-galaxy_term_artifact", "guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "shards", "source": "Card" }] },
     { "id": "guardians-of-the-galaxy_hero_gamora", "name": "Gamora", "team": "guardians-of-the-galaxy_term_guardians-of-the-galaxy", "classes": ["core_term_covert", "core_term_instinct"], "terms": ["guardians-of-the-galaxy_term_artifact", "guardians-of-the-galaxy_term_shard"], "uses": [{ "part": "shards", "source": "Card" }] },

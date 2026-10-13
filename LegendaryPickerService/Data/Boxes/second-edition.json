@@ -78,6 +78,12 @@
    "source": "SE p.22"
   }
  },
+ "stackTerms": [
+  {
+   "part": "sidekicks",
+   "term": "second-edition_term_daring-sidekick"
+  }
+ ],
  "heroes": [
   {
    "id": "second-edition_hero_black-widow",
@@ -1042,6 +1048,14 @@
    "summary": "Take a Bystander from the Bystander Deck into your Victory Pile; each is worth a Victory Point.",
    "source": "SE",
    "page": 7
+  },
+  {
+   "id": "second-edition_term_daring-sidekick",
+   "name": "Daring Sidekick",
+   "kind": "keyword",
+   "summary": "A cheap grey Hero from a shared Sidekick Deck. Once per turn a player may spend 2 Recruit to gain the top one; a played Sidekick returns to the bottom of that deck.",
+   "source": "SE",
+   "page": 14
   },
   {
    "id": "second-edition_term_scheme-twist",
