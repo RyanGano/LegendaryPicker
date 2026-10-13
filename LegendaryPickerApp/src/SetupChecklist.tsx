@@ -1,4 +1,4 @@
-import { Fragment, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import type { CardKind, CardsBeside, Component, Move, Pile, RuleNote, Setup, SetupStacks } from './api/setupApi.ts'
 import { cardTerms, setupTerms, startingDeckTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { SpecialCardsInfo } from './SpecialCardsInfo.tsx'
@@ -22,6 +22,8 @@ export function SetupChecklist({
   onShowMastermind?: () => void
 }) {
   const [shownHere, setShownHere] = useState(false)
+  const mastermindLine = useRef<HTMLLIElement>(null)
+  const focusRevealed = useRef(false)
   const shown = mastermindShown ?? shownHere
   // An API from before card moves, Heroes outside the Hero Deck, Henchman Groups outside the Villain Deck, cards
   // of a group beside the Scheme, setup steps or other Masterminds leaves them out; the site can deploy first, so
@@ -55,6 +57,14 @@ export function SetupChecklist({
 
   // Revealing a hidden Mastermind adds its lines, so the count follows it too.
   useLayoutEffect(() => setProgress(tickProgress(article.current!)), [setup, shown])
+  // The button goes away when pressed, so focus moves to the Mastermind it revealed; a Mastermind already shown, as
+  // in a remounted checklist, takes no focus.
+  useEffect(() => {
+    if (shown && focusRevealed.current) {
+      focusRevealed.current = false
+      mastermindLine.current?.focus()
+    }
+  }, [shown])
   const hiddenTerms = new Set(setup.mastermindReveal && !shown ? setup.mastermindReveal.terms : [])
   const glossary = setup.glossary.filter((term) => !hiddenTerms.has(term.id))
 
@@ -71,15 +81,17 @@ export function SetupChecklist({
             <button
               type="button"
               className="reveal-button"
-              aria-expanded="false"
-              onClick={() => (onShowMastermind ?? (() => setShownHere(true)))()}
+              onClick={() => {
+                focusRevealed.current = true
+                ;(onShowMastermind ?? (() => setShownHere(true)))()
+              }}
             >
               Reveal {t.mastermind}
             </button>
-            <span className="detail">joins when the Bodyguards are gone</span>
+            <span className="detail">{setup.mastermindReveal.joins}</span>
           </li>
         ) : (
-          <Item label={names([setup.mastermind])} detail={t.mastermind} />
+          <Item label={names([setup.mastermind])} detail={t.mastermind} itemRef={mastermindLine} />
         )}
         {setup.mastermindReveal && shown && (
           <>
@@ -330,9 +342,21 @@ function Section({
 // their names are the label and the detail says what they are. The whole line names the tick box,
 // so the spaces sit between the spans: a name computation may trim the text inside each one. An info button
 // sits beside the label, never inside it, so tapping it doesn't tick the line.
-function Item({ label, detail, count, info }: { label: ReactNode; detail?: string; count?: number; info?: ReactNode }) {
+function Item({
+  label,
+  detail,
+  count,
+  info,
+  itemRef,
+}: {
+  label: ReactNode
+  detail?: string
+  count?: number
+  info?: ReactNode
+  itemRef?: Ref<HTMLLIElement>
+}) {
   return (
-    <li className="row">
+    <li className="row" ref={itemRef} tabIndex={itemRef ? -1 : undefined}>
       <label>
         <input type="checkbox" />
         <span className="label">

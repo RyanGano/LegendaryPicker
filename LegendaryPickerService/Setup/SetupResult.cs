@@ -94,8 +94,8 @@ public sealed record OutsideHenchmanGroup(HenchmanGroup Group, Pile To, int Card
 public sealed record OutsideMastermind(Mastermind Mastermind, Pile To, int? Tactics, string? Joins = null);
 
 // What the player applies when a Mastermind that joins mid-game arrives: the groups it always leads, which are not in the
-// Villain Deck, and the notes for the Start of Game effects its card prints.
-public sealed record MastermindReveal(IReadOnlyList<ICard> AlwaysLeads, IReadOnlyList<RuleNote> Notes);
+// Villain Deck, the notes for the Start of Game effects its card prints, and Joins, the Scheme's note on when it arrives.
+public sealed record MastermindReveal(IReadOnlyList<ICard> AlwaysLeads, IReadOnlyList<RuleNote> Notes, string Joins);
 
 // The Villains of an extra Villain Group a Mastermind sets aside, Count of them, which its group puts in the Villain Deck
 // no more (#208).

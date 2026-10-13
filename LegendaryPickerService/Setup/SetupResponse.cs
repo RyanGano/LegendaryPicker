@@ -70,7 +70,7 @@ public abstract record SetupResponse
             var alwaysLeads = later.AlwaysLeads.Select(group => glossary.Component(group.Id, group.Name, group.Terms)).ToList();
             var visible = shown.SelectMany(component => component.Terms).Concat(stackTerms).ToHashSet(StringComparer.Ordinal);
             var hidden = glossary.Entries(mastermind.Terms.Concat(alwaysLeads.SelectMany(group => group.Terms)).Where(term => !visible.Contains(term)));
-            reveal = new MastermindRevealBody(alwaysLeads, later.Notes, hidden.Select(entry => entry.Id).ToList());
+            reveal = new MastermindRevealBody(alwaysLeads, later.Notes, later.Joins, hidden.Select(entry => entry.Id).ToList());
         }
 
         Component[] components = [.. shown, mastermind, .. reveal?.AlwaysLeads ?? []];
@@ -251,9 +251,9 @@ public sealed record OutsideMastermindBody(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Joins = null);
 
 // What revealing a Mastermind that joins mid-game shows besides it: the groups it always leads, which are not in the
-// Villain Deck, the notes for its Start of Game effects, and the ids of the glossary terms only it and those groups bring,
-// which the checklist leaves out of the glossary until the reveal.
-public sealed record MastermindRevealBody(IReadOnlyList<Component> AlwaysLeads, IReadOnlyList<RuleNote> Notes, IReadOnlyList<string> Terms);
+// Villain Deck, the notes for its Start of Game effects, the Scheme's note on when it joins, and the ids of the glossary
+// terms only it and those groups bring, which the checklist leaves out of the glossary until the reveal.
+public sealed record MastermindRevealBody(IReadOnlyList<Component> AlwaysLeads, IReadOnlyList<RuleNote> Notes, string Joins, IReadOnlyList<string> Terms);
 
 // The Villains of an extra Villain Group the Mastermind sets aside, count of them, written only when it sets any aside.
 public sealed record VillainsSetAsideBody(Component Group, int Count);
