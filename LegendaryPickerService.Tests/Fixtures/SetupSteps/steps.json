@@ -14,7 +14,9 @@
     "henchmanGroupCards": { "value": 10, "source": "R p.1" },
     "schemeTwists": { "value": 0, "source": "R p.1" }
   },
-  "heroes": [],
+  "heroes": [
+    { "id": "steps_hero_test-mutant", "name": "Test Mutant", "team": "core_term_x-men", "classes": ["core_term_strength"], "terms": [] }
+  ],
   "villainGroups": [
     { "id": "steps_villain_test-lookouts", "name": "Test Lookouts", "terms": [] }
   ],
@@ -49,6 +51,34 @@
           { "label": "Place the test beacon token on the Scheme", "source": "Card" },
           { "label": "Split the Villain Deck into two equal piles", "source": "R p.2" }
         ]
+      }
+    },
+    {
+      "id": "steps_scheme_test-lottery",
+      "name": "Test Lottery",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "steps": [{ "label": "If the test coin lands heads, add {hero} to the Hero Deck", "source": "Card" }]
+      }
+    },
+    {
+      "id": "steps_scheme_test-homecoming",
+      "name": "Test Homecoming",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "steps": [{ "label": "Each player's own Hero, from the Hero Deck: {playerHeroes}", "source": "Card" }]
+      }
+    },
+    {
+      "id": "steps_scheme_test-census",
+      "name": "Test Census",
+      "terms": ["core_term_scheme-twist"],
+      "setup": {
+        "twists": [{ "players": null, "value": 8, "source": "Card" }],
+        "heroCounts": [{ "team": "core_term_x-men", "exactly": 1, "source": "Card" }],
+        "steps": [{ "label": "If the test coin lands heads, add {hero} to the Hero Deck", "source": "Card" }]
       }
     }
   ],

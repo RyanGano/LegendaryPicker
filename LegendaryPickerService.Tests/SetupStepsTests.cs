@@ -14,7 +14,9 @@ public sealed class SetupStepsTests
 
     private const string FixtureName = "Steps Fixture";
 
-    private static readonly SetupGenerator Generator = new(BoxCatalog.Load(FixtureDirectory));
+    private static readonly BoxCatalog Catalog = BoxCatalog.Load(FixtureDirectory);
+
+    private static readonly SetupGenerator Generator = new(Catalog);
 
     private static readonly string[] Boxes = ["core", "steps"];
 
@@ -89,6 +91,56 @@ public sealed class SetupStepsTests
         Assert.Equal(redSkull.Stacks, watcher.Stacks);
         Assert.Equal(redSkull.PlayerDeck, watcher.PlayerDeck);
     }
+
+    // A step that would leave a Hero to the players names one the app draws, from the included Heroes the setup doesn't
+    // already use, with its box since the setup has two (#242). Test Lottery is the 10th Scheme at 2 players; every later
+    // draw takes the first option.
+    [Fact]
+    public void A_step_that_leaves_a_Hero_to_the_player_names_one_drawn_outside_the_setup()
+    {
+        var random = new ScriptedRandom(10, 3);
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, random));
+
+        var unused = IncludedHeroes.Except(setup.Heroes.Select(hero => hero.Name)).ToList();
+        Assert.Equal("Test Lottery", setup.Scheme.Name);
+        Assert.Equal(unused.Count, random.Options[^1]);
+        Assert.Equal([$"If the test coin lands heads, add {unused[0]} (from {CoreName}) to the Hero Deck"], setup.Steps);
+        Assert.Equal(
+            "Scheme adds a setup step: If the test coin lands heads, add an extra Hero to the Hero Deck",
+            setup.Notes[0].Text);
+    }
+
+    // The extra Hero joins the Hero Deck, so it keeps the Scheme's Hero rules: with exactly 1 X-Men Hero allowed and one
+    // already drawn, it is never another X-Men Hero (#242). Test Census is the 12th Scheme at 2 players.
+    [Fact]
+    public void A_drawn_extra_Hero_keeps_the_Schemes_Hero_rules()
+    {
+        var random = new ScriptedRandom(12, 3);
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, random));
+
+        var xMen = Catalog.Boxes.SelectMany(box => box.Heroes).Where(hero => hero.HasTeam("core_term_x-men")).Select(hero => hero.Name).ToList();
+        var unused = IncludedHeroes.Except(setup.Heroes.Select(hero => hero.Name)).Except(xMen).ToList();
+        Assert.Equal("Test Census", setup.Scheme.Name);
+        Assert.Equal(unused.Count, random.Options[^1]);
+        Assert.Equal([$"If the test coin lands heads, add {unused[0]} (from {CoreName}) to the Hero Deck"], setup.Steps);
+    }
+
+    // A step that would have each player pick a Hero of the Hero Deck names a different one for each player (#242).
+    // Test Homecoming is the 11th Scheme at 3 players; the seat draws take the first Hero left each time.
+    [Fact]
+    public void A_step_that_leaves_each_player_a_Hero_names_a_different_Hero_of_the_Hero_Deck_for_each()
+    {
+        var setup = Draw(3, 11, 3);
+
+        var heroes = setup.Heroes.Select(hero => hero.Name).ToList();
+        Assert.Equal("Test Homecoming", setup.Scheme.Name);
+        Assert.Equal([$"Each player's own Hero, from the Hero Deck: Player 1: {heroes[0]}; Player 2: {heroes[1]}; Player 3: {heroes[2]}"], setup.Steps);
+        Assert.Equal("Scheme adds a setup step: Each player's own Hero, from the Hero Deck: a Hero for each player", setup.Notes[0].Text);
+    }
+
+    private static IEnumerable<string> IncludedHeroes => Catalog.Boxes.SelectMany(box => box.Heroes).Select(hero => hero.Name);
+
+    private static string CoreName => Catalog.Boxes.Single(box => box.Id == "core").Name;
 
     private static SetupResult Draw(int players, params int[] draws) =>
         Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(draws)));

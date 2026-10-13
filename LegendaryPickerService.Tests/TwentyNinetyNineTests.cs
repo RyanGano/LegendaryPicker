@@ -21,7 +21,10 @@ public class TwentyNinetyNineTests
         Assert.Equal(6, setup.Heroes.Count);
         Assert.Contains("Alchemax Enforcers", setup.VillainGroups.Select(group => group.Name));
         Assert.NotNull(setup.Stacks.Wounds);
-        Assert.Contains("Adapt: shuffle the 4 Tactics. If Avatarr is on top, add an extra Hero", setup.Steps);
+        Assert.Contains("Shuffle the 4 Tactics and turn one face up on top as the Mastermind", setup.Steps);
+        var extra = Assert.Single(setup.Steps, step => step.StartsWith("If Avatarr is on top, add "));
+        Assert.EndsWith(" to the Hero Deck, then Adapt", extra);
+        Assert.DoesNotContain(setup.Heroes, hero => extra.Contains($"add {hero.Name} (from "));
     }
 
     // With Epic Masterminds on, the Adapting Mastermind plays on its Epic side and the step offering it goes (#212).
