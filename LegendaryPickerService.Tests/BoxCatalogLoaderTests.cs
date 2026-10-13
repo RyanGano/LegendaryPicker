@@ -230,15 +230,6 @@ public sealed class BoxCatalogLoaderTests : IDisposable
         AssertRejected("base game core uses sidekicks in setup.uses but has no components.sidekicks");
     }
 
-    // Special Bystanders come into a setup with their box, so the parts they use must be that box's own.
-    [Fact]
-    public void Rejects_Bystanders_that_use_a_part_their_box_does_not_supply()
-    {
-        WriteCoreBox(core => core["bystanderUses"] = JsonNode.Parse("""[{ "part": "sidekicks", "source": "Card" }]"""));
-
-        AssertRejected("box core uses sidekicks in bystanderUses but has no components.sidekicks");
-    }
-
     [Fact]
     public void Rejects_Bystander_uses_on_a_box_with_no_Bystanders()
     {

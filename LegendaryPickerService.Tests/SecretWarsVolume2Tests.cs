@@ -66,6 +66,19 @@ public class SecretWarsVolume2Tests
         Assert.Equal("Time-Traveling Jean Grey", Assert.Single(setup.OutsideHeroes).Hero.Name);
     }
 
+    // The Undercover Agent Bystander gives a S.H.I.E.L.D. Officer, and every setup shuffles in the box's Bystanders, so a
+    // setup with this box's cards lays out the Officer stack. With only the Villains base game, which has none, the core
+    // box's are laid out (#120).
+    [Fact]
+    public void The_Undercover_Agent_brings_the_Officer_stack_into_a_setup_without_the_core_box()
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, ["villains", "secret-wars-volume-2"], new ScriptedRandom(0, 0)));
+
+        Assert.Equal("Deadlands Hordes Charge the Wall", setup.Scheme.Name);
+        Assert.Equal(30, setup.Stacks.Officers);
+        Assert.Contains(setup.Notes, note => note.Text == "No included box has S.H.I.E.L.D. Officer cards: the setup uses those of Marvel Legendary First Edition core box");
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind)
     {
         var index = (players == 1 ? 6 : 8) + Array.IndexOf(SchemeNames, scheme);

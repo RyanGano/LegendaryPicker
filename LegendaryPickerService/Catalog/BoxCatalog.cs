@@ -786,8 +786,8 @@ public sealed partial class BoxCatalog
     }
 
     // A part listed twice would say nothing more. A base game's rules can use only parts it supplies, since a
-    // setup can include it alone. Special Bystanders come into a setup with their box, so the parts they use must be
-    // the box's own too, and only a box with Bystanders has them.
+    // setup can include it alone. Special Bystanders come into a setup with their box, so only a box with Bystanders has
+    // them; the parts they use are laid out from an included box that has them, as any card's uses are (#120).
     private static void ValidateUses(string path, Box box)
     {
         foreach (var (owner, uses) in UseLists(box))
@@ -807,18 +807,9 @@ public sealed partial class BoxCatalog
             }
         }
 
-        if (box.BystanderUses is { } bystanderUses)
+        if (box.BystanderUses is not null && !(box.Components.Bystanders?.Value > 0))
         {
-            if (!(box.Components.Bystanders?.Value > 0))
-            {
-                throw new InvalidDataException($"{path}: box {box.Id} has bystanderUses but no components.bystanders.");
-            }
-
-            foreach (var use in bystanderUses.Where(use => !(box.Components.Supplies(use.Part)?.Value > 0)))
-            {
-                throw new InvalidDataException(
-                    $"{path}: box {box.Id} uses {WireName(use.Part)} in bystanderUses but has no components.{WireName(use.Part)}.");
-            }
+            throw new InvalidDataException($"{path}: box {box.Id} has bystanderUses but no components.bystanders.");
         }
     }
 
