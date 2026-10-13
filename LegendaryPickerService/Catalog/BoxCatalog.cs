@@ -1337,6 +1337,11 @@ public sealed partial class BoxCatalog
             foreach (var use in uses) yield return (owner, use.Source);
         }
 
+        if (box.Setup?.StandIns is { } standIns)
+        {
+            foreach (var standIn in standIns) yield return ($"setup.standIns ({WireName(standIn.Part)})", standIn.Source);
+        }
+
         if (box.OtherRuleset is { } other)
         {
             yield return ("otherRuleset.source", other.Source);
