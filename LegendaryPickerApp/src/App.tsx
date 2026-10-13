@@ -29,6 +29,10 @@ const RULEBOOK_URL =
   'https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf'
 // Source VIL in LegendaryPickerService/Data/Boxes/villains.json: the Legendary: Villains rulebook.
 const VILLAINS_RULEBOOK_URL = 'https://upperdeck.com/wp-content/uploads/2024/05/Legendary_Rules-Villains.pdf'
+// Source WI in LegendaryPickerService/Data/Boxes/marvel-studios-what-if.json: the What If...? rulebook.
+const WHAT_IF_RULEBOOK_URL = 'https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/WhatIf_Rulebook.pdf'
+// Source SE in LegendaryPickerService/Data/Boxes/second-edition.json: the Second Edition rulebook.
+const SECOND_EDITION_RULEBOOK_URL = 'https://upperdeck.com/wp-content/uploads/2026/08/Legendary-Second-Edition-Rulebook.pdf'
 const REPO_URL = 'https://github.com/RyanGano/LegendaryPicker'
 
 // Storage is a convenience: private browsing or blocked site data must not break the page.
@@ -400,6 +404,14 @@ function App() {
           , the{' '}
           <a href={VILLAINS_RULEBOOK_URL} target="_blank" rel="noreferrer">
             Villains rulebook
+          </a>
+          , the{' '}
+          <a href={WHAT_IF_RULEBOOK_URL} target="_blank" rel="noreferrer">
+            What If...? rulebook
+          </a>
+          , the{' '}
+          <a href={SECOND_EDITION_RULEBOOK_URL} target="_blank" rel="noreferrer">
+            Second Edition rulebook
           </a>{' '}
           and official clarifications.
         </p>
