@@ -54,6 +54,17 @@ public class DeadpoolTests
         Assert.Equal(12, Draw(players, "Deadpool Wants a Chimichanga", EvilDeadpool).VillainDeck.Bystanders);
     }
 
+    [Fact]
+    public void A_draw_with_Evil_Deadpool_and_Deadpool_Writes_a_Scheme_rates_on_Deadpool_cards_by_name()
+    {
+        var setup = Draw(2, "Deadpool Writes a Scheme", EvilDeadpool);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Deadpool Writes a Scheme's Twists"));
+        // Evil Deadpool always leads Evil Deadpool Corpse.
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Wolverinepool on "));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind) =>
         Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(SchemeDraw(players, scheme), mastermind)));
 

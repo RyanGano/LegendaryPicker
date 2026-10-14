@@ -150,3 +150,23 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/deadpool.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons, and the owner's LegendaryAssistant data (`deadpool-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1. No card text is stored.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order. Villain copies are C1's (2 each).
+- **Printed 0+ icons.** Nighttime Is the Right Time (Recruit 0+ and Attack 0+) and Merc's Gotta Get Paid (Recruit 0+, Attack 2 1/2) are `both`.
+- **Conditional draws** carry `draw`, as in core (Bob's HYDRA Half-Wit, How Do I Get Out of Here??, Napoleon Complex, Guns on My Guns). Power abilities are a class want for the card's own class.
+- **Excessive Violence** is the player's own choice (one extra Attack), so a Hero's Excessive Violence bonus is not a self cost and Villains' Excessive Violence effects that only hurt the defeating player carry no tag. D.E.A.D.P.O.O.L.'s KO and Sluggo's Hero gain are such effects.
+- **Revenge** raises a Villain's Attack: `attack-inflation 1` on each Revenge Villain, on Fight (as Abomination in Captain America 75th). Everybody Hates Deadpool's doubling and Evil Deadpool's Revenge are on the Scheme and Mastermind card itself, which has no tag slot for them.
+- **It'll Grow Back** KOs a Wound or else gains one: `answers wounds 1` and `selfCost wound`, a want for the Wounds stack. Cut in Half lowers a Villain's Attack: `answers attack-inflation 1` (as Lightning Bolt in core).
+- **Evil Deadpool's Master Strike** makes every player discard a card and only the lowest discard gains a Wound: `hand-disruption 1` and `wounds 1`.
+- **Macho Gomez's Bounty** stacks Wounds on each Master Strike; tagged `wounds 2` (the Bounty can be moved for Recruit, so not 3). Both Masterminds' Tactics only hurt the other players or help the defeating player and carry no tag.
+- **Schemes.** Deadpool Writes a Scheme's six different Twists are one tag (per-effect timing is #292): `wounds 3`, `hand-disruption 1`, `bystander-pressure 1`, `escape-pressure 1`, amplifying `twist-density` because its sixth Twist loses. Deadpool Kills the Marvel Universe KOs Hero Deck cards, tagged `hq-disruption 2` (the nearest axis) amplifying `twist-density`.
+
+### Difficulty: no axis
+
+- Running Commentary (counts flavor text), Deadpool Rage! (extra turn), Electroplasmic Insanity (free recruit), Sting of the Stingray's Sting (optional KO), Deck Chairs on the Titanic's Villain move and Slapstick's optional bonuses carry no answer or want beyond class, cost and draw.
+- Blind Al and Deuce's discard-a-card-with-a-2 Fight cost is not a gate on a team or class; only its Revenge and Escape are tagged.
+- Hero Deck depletion (Deadpool Kills the Marvel Universe's loss) has no axis; see Schemes above.
