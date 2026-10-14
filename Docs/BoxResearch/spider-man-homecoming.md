@@ -85,6 +85,26 @@ The following are short setup-only summaries of the printed card faces; they omi
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 45 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds: Happy Hogan (Head of Security), Salvagers (Tinkerer) and Adrian Toomes (More Harm than Good).
 
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/spider-man-homecoming.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons and Villain copies, and the owner's LegendaryAssistant data (`homecoming-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1. No card text is stored.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order, with equal costs ordered by C1's face numbers (04, 03, 02, 01). High Tech Spider-Man and Peter Parker, Homecoming have four cost-2 cards, so which card has which count is a guess. Villain copies are C1's (2 each).
+- **Economy.** Printed 0+ Recruit or Attack icons count as the icon. Genius, Billionaire... is `both`; Advanced Targeting System has no icon (`none`).
+- **Conditional draws** (Advanced Targeting System, Heightened Senses) carry `draw 1`, as in core. Optional ("may") effects are not self costs, and no Hero card here has a self cost.
+- **Answers.** Head of Security KOs the Wounds gained that turn (`wounds 1`); Spider-Grip, Little Grey Area and May Parker shrink Villains' Attack (`attack-inflation` 1, 1 and 2). Class and team wants are tagged where a class or team icon gates an effect (Spider Friends for May Parker, Avengers for Little Grey Area).
+- **Striker** adds Attack for Master Strikes in the KO pile; it is tagged `attack-inflation 1` on the Villains that have it. Where a Striker card also has an Escape effect the single tag lists both timings, so the Escape effect also counts at Fight (per-effect timing is #292).
+- **Reveal-or-suffer** (Shocker #1's Instinct reveal, Tinkerer's Tech reveal) are `check`s, severity 1 for the discard and 2 for the Wound, as in earlier boxes. Fight KOs of the player's own Heroes are `deck-thinning` (1 for one 0-cost Hero, Hybrid Alien Tech; 2 for a Recruit-icon Hero, Chitauri Weapon Assault).
+- **Masterminds.** Adrian Toomes's Master Strike (every City Villain uses its Escape ability) is `escape-pressure 2`; Vulture's (a Wound under each HQ space, handed out when Heroes leave the HQ) is `wounds 2` and `hq-disruption 1`. Of the Tactics only Lurking Shadow (a Villain enters the Rooftops) is tagged; More Harm than Good, Bird of Prey and Winged Assault hit only the other players, as X-Men's did, and the rest help the player.
+- **Schemes.** Distract the Hero is `twist-density 2` (a Twist returns when the player scores nothing); Explosion at the Washington Monument `wounds 2` and `bystander-pressure 1`; Ferry Disaster `bystander-pressure 2`; Scavenge Alien Weaponry `escape-pressure 2` and `attack-inflation 1` (Smugglers have Striker). Each amplifies the loss condition it pushes.
+
+### Difficulty: no axis
+
+- Coordinate (offering a card to another player), Wall-Crawl (a recruited Hero goes on top of the deck) and Danger Sense (peek and reorder the Villain Deck's top) have no want or answer axis and carry no tag.
+- Striker on a Mastermind (Adrian Toomes's double and triple, Vulture's) has no tag slot beside the Master Strike and Tactics.
+- Shocker #2's hand reveal is `hand-disruption`, but Hybrid Alien Tech's Escape (the current player gains a 0-cost Hero from the KO pile unless they reveal a Ranged Hero) adds a weak card rather than taking one away, which no axis measures, so it carries none. Liz's extra draw when Coordinating, Michelle's Fight-with-Recruit, Mid Air Heist's restricted Recruit and Take Everything's discard-to-top have no axis.
+- Epic sides are not tagged (the difficulty rates the normal side).
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.

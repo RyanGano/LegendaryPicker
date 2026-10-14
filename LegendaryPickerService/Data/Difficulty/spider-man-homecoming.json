@@ -1,0 +1,512 @@
+{
+  "schemaVersion": 3,
+  "box": "spider-man-homecoming",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "spider-man-homecoming_hero_happy-hogan",
+      "cards": [
+        {
+          "name": "Head of Security",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Watchful Eye",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Loyal Friend",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Asset Management",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "spider-man-homecoming_hero_high-tech-spider-man",
+      "cards": [
+        {
+          "name": "Recon Drone Connection",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Advanced Targeting System",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Spider-Grip",
+          "copies": 3,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Friendly Neighborhood...",
+          "copies": 1,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "spider-man-homecoming_hero_peter-parker-homecoming",
+      "cards": [
+        {
+          "name": "Heightened Senses",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Avenger in Training",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Homemade Web-Shooters",
+          "copies": 3,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Something is Happening",
+          "copies": 1,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "spider-man-homecoming_hero_peter-s-allies",
+      "cards": [
+        {
+          "name": "Ned",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Michelle",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Liz",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "recruit"
+        },
+        {
+          "name": "May Parker",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "spider-friends",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "spider-man-homecoming_hero_tony-stark",
+      "cards": [
+        {
+          "name": "Genius, Billionaire...",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "both"
+        },
+        {
+          "name": "Stay Out of Trouble",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Little Grey Area",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "As Usual, I Did All the Work",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "spider-man-homecoming_mastermind_adrian-toomes",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "spider-man-homecoming_mastermind_vulture",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "hq-disruption",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Lurking Shadow",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "spider-man-homecoming_villain_salvagers",
+      "cards": [
+        {
+          "name": "Shocker #1",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Tinkerer",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Hybrid Alien Tech",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Shocker #2",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "spider-man-homecoming_villain_vulture-tech",
+      "cards": [
+        {
+          "name": "Razor Talons",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "High Tech Helmet",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Chitauri Weapon Assault",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              2
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Turbine Powered",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "spider-man-homecoming_scheme_distract-the-hero",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "spider-man-homecoming_scheme_explosion-at-the-washington-monument",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "spider-man-homecoming_scheme_ferry-disaster",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "spider-man-homecoming_scheme_scavenge-alien-weaponry",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}
