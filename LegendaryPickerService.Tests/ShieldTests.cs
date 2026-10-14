@@ -55,6 +55,17 @@ public class ShieldTests
         Assert.Equal(Aim, leads["Hydra Super-Adaptoid"]);
     }
 
+    // Its own Mastermind is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_the_Hydra_High_Council_rates_with_a_reason_naming_it()
+    {
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Hail Hydra", "Hydra High Council");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(SchemeIndex(2, "Hail Hydra"), mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Hydra High Council's Master Strikes"));
+    }
+
     private static int SchemeIndex(int players, string scheme, string[]? boxes = null)
     {
         boxes ??= Boxes;
