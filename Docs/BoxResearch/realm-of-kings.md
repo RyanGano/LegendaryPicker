@@ -148,3 +148,26 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/realm-of-kings.json` (format v3, source `Q`). Card facts: the shared OCR cache holds titles and keyword markers only (no card text, no new facts); the owner's LegendaryAssistant data has only the keyword explainers for this box and no card files; the card effects were read from the C1 catalog's ability data (tags only are recorded here). Names follow C1.
+
+- **Class conflicts.** None found between C1 and the box file's class lists; C1 per-face classes are used (Crystal's four faces are one class each).
+- **Copies.** C1 gives each Hero card's rarity, so copies are 5, 5, 3, 1 by rarity (common, common, uncommon, rare), which is also ascending cost for every Hero except Black Bolt (Wordless Murmur 5 costs more than Declaration of War 4 and keeps 5). Villain copies are C1's 2 each. Not `copies: default`.
+- **Printed N+ icons.** Cards with a printed N+ carry that one icon (`attack`; Break the Silence and Find Fatal Flaw `recruit`); Wordless Murmur has both printed icons: `both`; Seek the Center prints none: `none`.
+- **Draws.** Conditional and When Recruited draws are `draw` as in core: Splitting Hairs 1, Headstrong 2, Master the Four Elements 1, Brilliant Strategist 1, Declaration of War 1 and The King's Speech 2 (both after spending the Throne's Favor).
+- **Wants.** Class and Inhumans superpowers want that class or team; Earth, Air, Fire, and Water and Weave Four Into One want class `diversity` 2.
+- **Self costs and answers.** None: every discard, KO or Teleport on a Hero is optional, and no Hero answers an axis.
+- **Abomination.** `attack-inflation 1` on each Abomination Villain on Fight, as in Captain America 75th Anniversary; The Unspoken's Double Abomination is 2.
+- **Masterminds.** Maximus's Master Strike fires a random Tactic's Fight effect: `wounds 1`, `hand-disruption 1`, `hq-disruption 1`, one per Tactic family. His Tactics: Echo-Tech Chorus Sentries a `check` on Tech (the Inhumans half of its choice is not tagged) into Wounds; Sieve of Secrets `hand-disruption 1`; Seize the Inhuman Throne `hand-disruption 2`; Terrigen Bomb `hq-disruption 2` and `deck-thinning 1`. Vulcan's Master Strike `wounds 2` and `attack-inflation 1` (he gains Throne's Favor and +3 Attack); Blast Every Form of Energy and Vast Wealth of the Shi'ar `attack-inflation 1` (Vulcan gains the Favor).
+- **Villain Groups.** Inhuman Rebellion: Lash and The Unspoken's Ambush `hq-disruption 1`, The Unspoken's Fight KO `deck-thinning 1`. Shi'ar Imperial Elite: Plutonia and Starbolt `attack-inflation 1` (recruit cost or +2 Attack while the Mastermind has the Favor), Mentor `hand-disruption 1` and Gladiator `wounds 1` (each only if the Mastermind already had the Favor), Gladiator on Ambush and Escape.
+- **Schemes.** Ruin the Perfect Wedding `twist-density 2`; War of Kings `attack-inflation 2` and `wounds 1`; Tornado of Terrigen Mists `wounds 2` and `escape-pressure 2`, amplifies `escape-pressure`; Devolve with Xerogen Crystals `hq-disruption 1` and `escape-pressure 2`, amplifies `escape-pressure`.
+
+### Difficulty: no axis
+
+- Throne's Favor is a shared marker with no want kind; Hero cards that gain or spend it carry only their class or team wants.
+- Contempt for Weakness and Solar Cage (Vulcan's Tactics) only hit other players; Maximus's Highest Abomination and Vulcan's passive +3 Attack are on the Mastermind card, which has no tag slot. Maximus's Epic faces are tagged on the same slots.
+- War of Kings' recruit tax (pay per Battlefront) has no axis; `attack-inflation` is the closest. The Wedding stacks' KO clock and the Victorious General and Escape Pile counters of the other Schemes have no axis; tagged as the closest.
+- The Unspoken's no-eligible-Hero Wound fallback and Lineage's, Omega's and Lash's Fight effects (all help the fighter) are untagged; the extra Xerogen Henchmen's Abomination is untagged (a Scheme-supplied group).
+- Cards untagged beyond their cost and economy: Wordless Murmur, Queen of the Inhumans, Royal Command, Elemental Princess, Find Fatal Flaw, Shatter the Weak Point, Seek the Center, Trample Underhoof, Lineage's and Omega's Ambush (none).

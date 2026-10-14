@@ -1,0 +1,543 @@
+{
+  "schemaVersion": 3,
+  "box": "realm-of-kings",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "realm-of-kings_hero_black-bolt",
+      "cards": [
+        {
+          "name": "Break the Silence",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Wordless Murmur",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "Declaration of War",
+          "copies": 3,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "inhumans",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "The King's Speech",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "realm-of-kings_hero_medusa",
+      "cards": [
+        {
+          "name": "Queen of the Inhumans",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Splitting Hairs",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Royal Command",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "inhumans",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Headstrong",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "realm-of-kings_hero_crystal",
+      "cards": [
+        {
+          "name": "Earth, Air, Fire, and Water",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Master the Four Elements",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Elemental Princess",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Weave Four Into One",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "realm-of-kings_hero_karnak",
+      "cards": [
+        {
+          "name": "Brilliant Strategist",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Find Fatal Flaw",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Shatter the Weak Point",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Seek the Center",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "none"
+        }
+      ]
+    },
+    {
+      "hero": "realm-of-kings_hero_gorgon",
+      "cards": [
+        {
+          "name": "Lockjaw, Inhuman's Best Friend",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Stomping Shockwave",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Trample Underhoof",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Lead the Inhuman Elite",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "inhumans",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "realm-of-kings_mastermind_maximus-the-mad",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "hq-disruption",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Echo-Tech Chorus Sentries",
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1
+        },
+        {
+          "name": "Sieve of Secrets",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Seize the Inhuman Throne",
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Terrigen Bomb",
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "realm-of-kings_mastermind_emperor-vulcan-of-the-shiar",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Blast Every Form of Energy",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Vast Wealth of the Shi'ar",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "realm-of-kings_villain_inhuman-rebellion",
+      "cards": [
+        {
+          "name": "Lineage",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Omega",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Lash",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "The Unspoken",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "hq-disruption",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "realm-of-kings_villain_shiar-imperial-elite",
+      "cards": [
+        {
+          "name": "Plutonia",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Starbolt",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Mentor",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Gladiator",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "realm-of-kings_scheme_ruin-the-perfect-wedding",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "scheme": "realm-of-kings_scheme_war-of-kings",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "scheme": "realm-of-kings_scheme_tornado-of-terrigen-mists",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "realm-of-kings_scheme_devolve-with-xerogen-crystals",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            1
+          ],
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}
