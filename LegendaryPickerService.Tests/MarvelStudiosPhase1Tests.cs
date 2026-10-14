@@ -29,6 +29,17 @@ public class MarvelStudiosPhase1Tests
         Assert.Contains(new RuleNote("Solo: After each Twist, KO a Hero costing 6 or less from the HQ", "P1 p.17", Phase1.Sources.Single(s => s.Key == "P1").Url), setup.Notes);
     }
 
+    // Its own Scheme and Mastermind are tagged for difficulty (#269); the reprinted Heroes are the core box's tags.
+    [Fact]
+    public void A_draw_of_its_own_Scheme_and_Mastermind_rates_with_reasons_naming_them()
+    {
+        var setup = Draw(2, "Destroy the Cities of Earth!", "Iron Monger");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Destroy the Cities of Earth!'s Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Iron Monger's Master Strikes"));
+    }
+
     // With the core box each reprint is in its pool once: 8 core and 6 new Schemes, 4 core Masterminds and Iron Monger,
     // 7 core and 3 new Villain Groups, and the core box's 15 Heroes, as with the core box alone. Legacy Virus and Dr. Doom
     // are drawn, whose Doombot Legion fills the one Henchman slot.
