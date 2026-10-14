@@ -150,3 +150,26 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/annihilation.json` (format v3, source `Q`). Card facts: the shared OCR cache holds titles and keyword markers only (no card text, no new facts); the card effects were read from the C1 catalog's ability data (tags only are recorded here). Names follow C1.
+
+- **Class conflicts.** None found between C1 and the box file's class lists; C1 per-face classes are used.
+- **Copies: default.** C1 gives each Hero card's rarity (1, 1, 2, 3), so copies are 5, 5, 3, 1 in ascending cost order. Villain copies are C1's `qtd`.
+- **Printed N+ icons.** Cards printing both Recruit and Attack (including 0+) are `both`; others carry their one printed icon.
+- **Draws.** Conditional draws are `draw` as in core: Borrow from the Future 1, Silver Surfer 1, Stretching Credibility 1, Mr. Fantastic 2. Time Loop Experiments puts a card back, so it is not tagged.
+- **Wants.** Class and Fantastic Four superpowers want that class or team (Reshape Reality's double icon: strength 2; Slip the Timestream wants Instinct and Covert); Conqueror cards want `board villains-in-city`. Focus and Man/Woman Out of Time have no want kind.
+- **Self costs.** None: Human Torch's Wound and Put to the Torch's Wound are optional uses.
+- **Answers.** Human Torch's Focus KOs Wounds (`wounds 1`); Invisible Woman and Interdimensional Rescue rescue Bystanders (`bystanders 1`); Silver Surfer moves a Villain (`villain-flow 1`).
+- **Masterminds.** Annihilus's Master Strike puts a Villain in the city, moved an extra space, capturing a Bystander (`escape-pressure 2`, `bystander-pressure 1`); Deploy the Planet Killer `escape-pressure 2`. Kang's Master Strike (Time Incursion, +2 Attack) `attack-inflation 2`; Pull From the Future `escape-pressure 1`.
+- **Villain Groups.** Momentum and Conqueror bonuses are `attack-inflation` on Fight (1 for 2 to 3, Weaponized Galactus's Momentum 9 is 3). Armada and Queens Ambush put a Villain into the city (`escape-pressure 1`); Queens' Fight KO `deck-thinning 1`; Ravenous's and Immortus's Escape are checks (Strength, Ranged) into Wounds; Weaponized Galactus's Escape `wounds 2`, `escape-pressure 2`; Scarlet Centurion's Ambush `hand-disruption 1` and Fight KO `deck-thinning 1`.
+- **Schemes.** Pulse Waves `attack-inflation 1`; Sneak Attack `wounds 1`, `hand-disruption 1`; Put Humanity on Trial `twist-density 2`, amplifies `twist-density`; Breach Parallel Dimensions `twist-density 2`.
+
+### Difficulty: no axis
+
+- Focus is a spend-Recruit option with no want kind; Man/Woman Out of Time delays a card a turn with no axis.
+- The Cosmic Control Rod and Surging Annihilation only hit other players; Pull Into the Negative Zone, Iron Lad Grows Up to Become Kang, Leap Into the Timestream and Savior From Another Timeline only help the fighter.
+- Annihilus's and Kang's Mass Momentum and Conqueror passives are on the Mastermind card, which has no tag slot. Epic faces use the same slots.
+- Put Humanity on Trial's Juror vote loss and Breach Parallel Dimensions' destroyed Dimensions have no axis; `twist-density` is the closest.
+- Cards untagged beyond cost and economy: Protégé of Dr. Doom, Galactus Hungers, Avert Future Tragedy's Master Strike swap, Slip the Timestream and Reshape Reality's reveals, Iron Lad (a Villain that becomes a Hero), Ravenous's and Rama-Tut's swaps and moves.

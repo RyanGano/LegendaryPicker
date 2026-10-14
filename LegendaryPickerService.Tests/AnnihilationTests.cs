@@ -48,6 +48,19 @@ public class AnnihilationTests
         Assert.Contains(setup.Notes, note => note.Text == "Annihilus puts 6 Henchmen of each Henchman Group in the Villain Deck");
     }
 
+    // Its own Scheme and Mastermind are tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_and_Mastermind_rates_with_reasons_naming_them()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Put Humanity on Trial");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Put Humanity on Trial", "Annihilus");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Put Humanity on Trial's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Annihilus's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
