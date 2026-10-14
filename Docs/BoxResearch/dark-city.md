@@ -289,3 +289,18 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 ## Card-face `uses` check (#166, 2026-10-12)
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 122 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds, source Card, under that ruling: Iceman (Impenetrable Ice Wall, reacts to gaining a Wound). Iron Fist Focus Chi, unreadable in the cache, was read by a short-lived reader and names no stack.
+
+## Difficulty tags (#269, 2026-10-14)
+
+Runtime tags are in [`Data/Difficulty/dark-city.json`](../../LegendaryPickerService/Data/Difficulty/dark-city.json) (format v3, source key `Q`). Card facts were read from the owner's LegendaryAssistant data (Heroes, Villain Groups, Henchman Groups, Masterminds with Tactics, Schemes) and cross-checked against the C1 costs and classes above; the shared OCR cache holds no card text for this box, so it added nothing. No card text is stored.
+
+- **Copies: default.** No per-card Hero copy count was found in any source, so each Hero's cards use 5, 5, 3, 1 in ascending cost order. Villain Group cards use 2 each (the C1 per-face count). Wolverine's two 4-cost cards tie; Sudden Ambush got the 5-copy slot (a guess).
+- **Economy:** a Versatile card is tagged `both`, since it makes Recruit or Attack as chosen.
+
+### Difficulty: no axis
+
+- **X-Men team wants and checks cannot be loaded.** The X-Men team term is `core_term_x-men`, not a term of this box, and the loader only takes a team of the box's own glossary. Angel, Bishop, Jean Grey, Nightcrawler and Professor X cards with an X-Men Superpower are tagged without that want. Proposal for the owner: let a difficulty file name a team of the box's own `core_term_*` terms (a format change, not made here).
+- **Hero cards:** cost-diversity (Iron Fist's Focus Chi and Wield the Iron Fist; Daredevil's cost guesses; Punisher's The Punisher and Hail of Bullets partly), Teleport and Versatile keyword synergies (keyword wants are not scored), moving or swapping Villains between city spaces beyond one `villain-flow` answer, and Bribe's cheaper-to-fight effect on the opposition side.
+- **Villains:** Zero (discard three 0-cost cards to fight), Forearm (reveal four differently named Heroes to fight), Vertigo (discard and redraw the hand, no net loss), Azazel (a benefit to the players), Dracula's Hero Deck capture (tagged only as `hq-disruption` 1) and Reignfire's becoming a Master Strike (tagged `twist-density` as the nearest fit).
+- **Masterminds:** Apocalypse's +attack on the Four Horsemen, Mephisto's Wounds-on-top-of-deck rule, Kingpin's Bribe, Mr. Sinister's and Stryfe's attack growth, and the Tactics that only help the players (Immortal and Undefeated, Dirty Cops, Devilish Torment, Pain Begets Pain, Psychic Torment).
+- **Henchmen:** Organized Crime Wave gives Maggia Goons an Ambush; that is tagged on the Scheme's Twist, not the Henchman.
