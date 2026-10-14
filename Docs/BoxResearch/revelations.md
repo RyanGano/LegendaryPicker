@@ -247,3 +247,26 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/revelations.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons, and the owner's LegendaryAssistant data (`revelations-allies`, `-adversaries`, `-commanders`, `-followers`, `-schemes`) for what each card does. Names follow C1, including its spellings (Infrared Conversation, Coruscating Vengeance, Part-Time PI). Where C1's class differs from LegendaryAssistant's (Coruscating Vengeance), C1's icon is used. No card text is stored.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order. Villain copies are C1's; Henchman cards carry none.
+- **Printed 0+ icons.** Hawk Dive, Travel to Nullspace, Warflight, Too Fast to See, Military-Industrial Complex and Alter Reality carry both icons: `both`; the other 0+ cards carry one icon. Infrared Conversation and Chaos Magic have none: `none`.
+- **Draws.** Conditional and optional draws are `draw` as in core (Sword of S.H.I.E.L.D., Balance the Darkforce, Catlike Agility, Part-Time PI, Storm of Arrows, Race to the Rescue; Higher, Further, Faster 2 for a choice of three; Break the Sound Barrier 2; Warp Time and Space 1 for the card taken into hand).
+- **Dark Memories** is a `diversity` want; Hyperspeed counts as no axis beyond economy.
+- **Self costs.** Infrared Conversation and Ultraviolet Radiation require a discard to play: `discard`.
+- **Answers.** Bystander rescues on Simulated Target Practice and Overwhelming Firepower: `bystanders 1`.
+- **Masterminds.** Grim Reaper's Master Strike adds a Location that raises his attack (`attack-inflation 2`); Mandarin's sends a Ring into the city or a Wound (`escape-pressure 2`, `wounds 1`); The Hood's discards revealed non-grey Heroes from the top six (`hand-disruption 2`). Every Tactic either only hits other players or only helps the fighter, so none is tagged.
+- **Schemes.** Each is one entry for both sides; only the face with the Setup line and Twist text was read (the transformed faces are not in LegendaryAssistant, and the OCR holds no text). Earthquake Drains the Ocean `escape-pressure 1` (its Evil Wins counts escapes); House of M `hq-disruption 2` and `escape-pressure 1` (extra card played); Secret HYDRA Corruption `twist-density 2` (Officers set aside per Twist toward a loss at 15); The Korvac Saga `hand-disruption 2` (discard down to four), amplifying `twist-density`.
+
+### Difficulty: no axis
+
+- Last Stand and Double Last Stand, on Heroes (Dominate the Battlefield, Higher, Further, Faster, Coruscating Vengeance) and Villains (the Dark Avengers, The Dark Dimension, Sentry's Watchtower), and Location Attack bonuses (the Lethal Legion's "+3 while a Location is in the city", HYDRA Base, Grim Reaper per Location): Villain attack scaling has no axis.
+- Second Chance at Life (cancel a Strike or Twist), Light the Way (counts discards), Chaos Magic, Mysterious Identity, Travel to Nullspace, Speedy Delivery.
+- Mister Hyde's Recruit-to-fight rule and The Brothers Grimm's discard-two-identical-cards requirement: not a team or class gate.
+- Count Nefaria's reveal-all-hands class condition is a multi-class test; tagged as a flat `wounds 1`.
+- Madam Masque's guess-and-play Ambush and Mandarin's Rings other than Spectral (draw, KO, Villain Deck peeks) only help the fighter.
+- Dome of Darkforce, Dark Ms. Marvel, Carnival of Wonders, White Gorilla Cult, The Raft, Laser Maze and every Tactic hit only other players or only help the fighter: untagged.
+- Epic sides (extra Wound threshold, Epic Hood's deck discard) are optional and not modelled.
