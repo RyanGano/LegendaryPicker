@@ -1,0 +1,497 @@
+{
+  "schemaVersion": 3,
+  "box": "fear-itself",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "fear-itself_hero_greithoth-breaker-of-wills",
+      "cards": [
+        {
+          "name": "Absorb Metal",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "fear-itself_term_thrown-artifact",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mace of Chains",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Break the Will to Resist",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Body of Uru",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "fear-itself_hero_kuurth-breaker-of-stone",
+      "cards": [
+        {
+          "name": "Reach for Power",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Unstoppable Sledge",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Contest of Strength",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "foes-of-asgard",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Break Every Bone",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "fear-itself_hero_nerkkod-breaker-of-oceans",
+      "cards": [
+        {
+          "name": "Pull of the Tides",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Feed My Undersea Legions",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Cudgel of the Deep",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Break Their Loyalties",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "none",
+          "wants": [
+            [
+              "team",
+              "foes-of-asgard",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "fear-itself_hero_nul-breaker-of-worlds",
+      "cards": [
+        {
+          "name": "Demolition Derby",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Otherworldly Maul",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Nul Smash!",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Break the World",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bindings",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "fear-itself_hero_skadi",
+      "cards": [
+        {
+          "name": "Dark Prophecy",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Ancient Oath of HYDRA",
+          "copies": 5,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "hydra",
+              1
+            ]
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Hammer of the Serpent",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "War Banner of HYDRA",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "hydra",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "fear-itself_hero_skirn-breaker-of-men",
+      "cards": [
+        {
+          "name": "Titanic Bludgeon",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Towering Leader",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Underhanded Dealings",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Break Your Hopes",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "fear-itself_mastermind_uru-enchanted-iron-man",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      }
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "fear-itself_villain_the-mighty",
+      "cards": [
+        {
+          "name": "Spider-Man",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Iron Fist",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Hawkeye",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Black Widow",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Red She-Hulk",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Ms. Marvel",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Dr. Strange",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Wolverine",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [],
+  "schemes": [
+    {
+      "scheme": "fear-itself_scheme_fear-itself",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "fear-itself_scheme_last-stand-at-avengers-tower",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "fear-itself_scheme_the-traitor",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      }
+    }
+  ]
+}

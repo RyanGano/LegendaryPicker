@@ -249,3 +249,21 @@ Use official rulebooks/inserts, official clarifications, or the directly linked 
 ## Card-face `uses` check (#166, 2026-10-12)
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 37 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). The cache has no group labels for this box, so faces were matched by file name; the Bindings (Nul, The Mighty, Uru-Enchanted Iron Man), New Recruits (Nerkkod, Skirn) and Madame HYDRA (Skadi) entries matched.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/fear-itself.json` (format v3, source `Q`). Card facts: the shared OCR cache holds only face-level markers with unverified icon labels, so costs, classes, economy and effects were read from the owner's LegendaryAssistant data (`fear-itself-allies`, `-adversaries`, `-commanders`, `-schemes`); the card names follow C1 and the table above. No card text is stored.
+
+- **Mapping.** As in `villains.json`: Allies are the Heroes, the Adversary Group the Villain Group, the Commander the Mastermind (Command Strike is the Master Strike), Plots the Schemes. Bindings are tagged as `wounds`; Demolish is `hand-disruption`; Uru-Enchanted Weapons raise the Adversary's attack and are tagged `attack-inflation` (severity 1 per weapon), as is the Command Strike, which stacks a weapon on the Commander. Team wants use the Villains box's `foes-of-asgard` and this box's `hydra`. The Artifact keyword want on Absorb Metal uses the box's `thrown-artifact` term (the scorer does not score keyword wants yet).
+- **Copies: default.** Printed per-face Ally copy counts are unverified (the insert gives only the 14-card rarity split), so every Ally uses 5, 5, 3, 1 in ascending cost order; ties follow the listing order of the owner's data. The Mighty's cards are one copy each (FI p.2).
+- **Conditional draws** are tagged `draw` as in core.
+- **Thrown Artifacts** are tagged by what throwing them gives (recruit or attack); a throw bonus that depends on the turn (cards drawn, Allies played, cards discarded) carries no want unless a class or team is named, except Titanic Bludgeon's cards-drawn bonus, which takes the `draw` want.
+- **Competitive play.** The Commander's Tactics and effects that only hit other players are not tagged.
+
+### Difficulty: no axis
+
+- Dr. Strange's Ambush (reorders the top of the Adversary Deck) has no axis; he carries only his weapon.
+- Cards with both an Overrun and a weapon carry one tag: Spider-Man the Overrun Bindings (`wounds 2`), Ms. Marvel and Wolverine the Overrun check; their weapons are folded. Wolverine's return to the top of the Adversary Deck has no `villain-flow` inflict.
+- The Fight or Fail effects (KO an Ally, kidnap Bystanders, steal Adversaries, play revealed cards) fit no axis.
+- Feed My Undersea Legions' optional KO for a New Recruit, Nul Smash!'s slap and Break Their Loyalties' hand theft fit no want or answer; Hammer of the Serpent's discard count has no discard want.
+- The Fear Itself Plot's Fear Level loss fits `hq-disruption` only (Lair Allies are KO'd); "Good wins" is the Villains name for the players' loss, so the Fear Level 0 condition is the loss the Plot amplifies. The Traitor's hidden-traitor win has no axis; only its Bindings are tagged.

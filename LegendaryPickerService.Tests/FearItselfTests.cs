@@ -71,4 +71,14 @@ public class FearItselfTests
         Assert.Equal(30 - wounds, setup.Stacks.Wounds);
         Assert.Contains(new RuleNote($"Plot moves {wounds} Wounds/Bindings into a stack set aside, 3 per player", "Card", null, FearItselfName), setup.Notes);
     }
+
+    [Fact]
+    public void A_Fear_Itself_draw_rates_on_its_Commander_and_Plot_by_name()
+    {
+        var setup = Assert.IsType<SetupResult>(Generator.Generate(2, Boxes, new ScriptedRandom(0, 0)));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Uru-Enchanted Iron Man's Master Strikes"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Fear Itself's Twists"));
+    }
 }
