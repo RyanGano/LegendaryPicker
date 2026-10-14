@@ -11,14 +11,25 @@ public abstract record SetupResponse
 
     public static SetupResponse From(GenerationResult result, BoxCatalog catalog) => result switch
     {
-        SetupResult setup => FromSetup(setup, new Glossary(catalog, setup.Boxes, setup.Mixed, RulesetTerms.For(setup.Ruleset))),
+        SetupResult setup => FromSetup(setup, new Glossary(catalog, setup.Boxes, setup.Mixed, RulesetTerms.For(setup.Ruleset)), RateHeroDeck(setup, catalog)),
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
         _ => throw new ArgumentOutOfRangeException(nameof(result), result, "Unknown generation result."),
     };
 
-    private static SetupBody FromSetup(SetupResult setup, Glossary glossary)
+    // The rating comes from the Hero Deck's Heroes; the fill-ins at the end stand in for a Hero a player chose
+    // to replace, so they are not rated. A Hero whose box has no difficulty file is left out of the rating.
+    private static Difficulty RateHeroDeck(SetupResult setup, BoxCatalog catalog)
+    {
+        var scored = setup.Heroes.Take(setup.Heroes.Count - setup.FillInHeroes).Select(hero =>
+            new ScoredHero(
+                hero.Teams,
+                catalog.Difficulty.GetValueOrDefault(hero.Id.Split('_')[0])?.Heroes.FirstOrDefault(tags => tags.Hero == hero.Id)?.Cards));
+        return DifficultyScorer.Score(scored.ToList(), DifficultyTuning.Default);
+    }
+
+    private static SetupBody FromSetup(SetupResult setup, Glossary glossary, Difficulty difficulty)
     {
         var scheme = glossary.Component(setup.Scheme.Id, setup.Scheme.Name, setup.Scheme.Terms);
         var mastermind = glossary.Component(setup.Mastermind.Id, setup.Mastermind.Name, setup.Mastermind.Terms);
@@ -99,6 +110,7 @@ public abstract record SetupResponse
             setup.Steps,
             setup.Notes,
             glossary.Entries(components.SelectMany(component => component.Terms).Concat(stackTerms)),
+            difficulty,
             setup.Mixed,
             setup.RulesReason,
             setup.StandIns is { Count: > 0 } standIns ? standIns : null,
@@ -180,8 +192,9 @@ public abstract record SetupResponse
 // OutsideMasterminds lists the Masterminds the Scheme draws besides its own, written only when it draws any. VillainsSetAside
 // lists the extra Villain Groups whose Villains the Mastermind sets aside, written only when it does. SpecialCards lists
 // the special cards each included box shuffles into a stack the setup lays out, written only when there are any (#244).
-// MastermindReveal is written only when the Scheme adds its Mastermind mid-game (#245): the checklist then hides mastermind
-// behind a button, and the reveal holds what it shows with it.
+// Difficulty is always written: the rating of the drawn Hero Deck, 1 easiest to 5 (#264). MastermindReveal is written
+// only when the Scheme adds its Mastermind mid-game (#245): the checklist then hides mastermind behind a button, and the
+// reveal holds what it shows with it.
 public sealed record SetupBody(
     int Players,
     Ruleset Ruleset,
@@ -202,6 +215,7 @@ public sealed record SetupBody(
     IReadOnlyList<string> Steps,
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<GlossaryEntry> Glossary,
+    Difficulty Difficulty,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Mixed = false,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RuleNote? RulesReason = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<StandIn>? StandIns = null,

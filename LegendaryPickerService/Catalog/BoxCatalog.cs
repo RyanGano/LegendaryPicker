@@ -15,6 +15,9 @@ public sealed partial class BoxCatalog
 {
     public const int SchemaVersion = 8;
 
+    // The schema of the files in Data/Difficulty (#263).
+    public const int DifficultySchemaVersion = 1;
+
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
 
@@ -29,6 +32,8 @@ public sealed partial class BoxCatalog
     public const int MaxPlayers = 5;
 
     public static string DefaultDirectory { get; } = Path.Combine(AppContext.BaseDirectory, "Data", "Boxes");
+
+    public static string DefaultDifficultyDirectory { get; } = Path.Combine(AppContext.BaseDirectory, "Data", "Difficulty");
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -47,12 +52,22 @@ public sealed partial class BoxCatalog
 
     public IReadOnlyList<Box> Boxes { get; }
 
-    private BoxCatalog(IReadOnlyList<Box> boxes) => Boxes = boxes;
+    // The difficulty tags by box id; a box without a file is absent and rates neutral.
+    public IReadOnlyDictionary<string, BoxDifficulty> Difficulty { get; }
 
-    public static BoxCatalog Load(string directory) => Load(directory, HeroRules.LoadBudget);
+    private BoxCatalog(IReadOnlyList<Box> boxes, IReadOnlyDictionary<string, BoxDifficulty> difficulty)
+    {
+        Boxes = boxes;
+        Difficulty = difficulty;
+    }
+
+    // difficultyDirectory is where the difficulty files are; without it, the service's own difficulty files are
+    // read when directory is its box folder, and none otherwise.
+    public static BoxCatalog Load(string directory, string? difficultyDirectory = null) =>
+        Load(directory, HeroRules.LoadBudget, difficultyDirectory);
 
     // heroSearchBudget is how many steps the load-time Hero rules check may take for one Scheme at one player count.
-    internal static BoxCatalog Load(string directory, int heroSearchBudget)
+    internal static BoxCatalog Load(string directory, int heroSearchBudget, string? difficultyDirectory = null)
     {
         var files = Directory.GetFiles(directory, "*.json")
             .Order(StringComparer.Ordinal)
@@ -62,7 +77,101 @@ public sealed partial class BoxCatalog
         files = ResolveReprints(files);
         Validate(files, heroSearchBudget);
 
-        return new BoxCatalog(files.Select(file => file.Box).ToList());
+        var boxes = files.Select(file => file.Box).ToList();
+        difficultyDirectory ??= Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar) == Path.GetFullPath(DefaultDirectory).TrimEnd(Path.DirectorySeparatorChar)
+            ? DefaultDifficultyDirectory
+            : null;
+        return new BoxCatalog(boxes, LoadDifficulty(difficultyDirectory, boxes));
+    }
+
+    // Reads each Data/Difficulty file, rejecting what a box file would: unknown fields, missing values, and ids that
+    // don't resolve to a Hero of the box it names.
+    private static Dictionary<string, BoxDifficulty> LoadDifficulty(string? directory, IReadOnlyList<Box> boxes)
+    {
+        var loaded = new Dictionary<string, BoxDifficulty>(StringComparer.Ordinal);
+        if (directory is null || !Directory.Exists(directory))
+        {
+            return loaded;
+        }
+
+        foreach (var path in Directory.GetFiles(directory, "*.json").Order(StringComparer.Ordinal))
+        {
+            var difficulty = ReadDifficulty(path);
+            var box = boxes.FirstOrDefault(box => box.Id == difficulty.Box)
+                ?? throw new InvalidDataException($"{path} is for box {difficulty.Box}, which is not loaded.");
+            if (!loaded.TryAdd(box.Id, difficulty))
+            {
+                throw new InvalidDataException($"{path} is a second difficulty file for box {box.Id}.");
+            }
+
+            if (box.Sources.All(source => source.Key != difficulty.Source))
+            {
+                throw new InvalidDataException($"{path}: source {difficulty.Source} is not a source of box {box.Id}.");
+            }
+
+            var heroIds = box.Heroes.Select(hero => hero.Id).ToHashSet(StringComparer.Ordinal);
+            var seenHeroes = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var hero in difficulty.Heroes)
+            {
+                if (!heroIds.Contains(hero.Hero))
+                {
+                    throw new InvalidDataException($"{path}: {hero.Hero} is not a Hero of box {box.Id}.");
+                }
+
+                if (!seenHeroes.Add(hero.Hero))
+                {
+                    throw new InvalidDataException($"{path} lists {hero.Hero} more than once.");
+                }
+
+                if (hero.Cards.Count == 0)
+                {
+                    throw new InvalidDataException($"{path}: {hero.Hero} lists no cards.");
+                }
+
+                if (hero.Cards.GroupBy(card => card.Name, StringComparer.OrdinalIgnoreCase).FirstOrDefault(card => card.Count() > 1) is { } twice)
+                {
+                    throw new InvalidDataException($"{path}: {hero.Hero} lists card {twice.Key} more than once.");
+                }
+
+                foreach (var card in hero.Cards)
+                {
+                    if (card.Copies < 1 || card.Cost < 0 || card.Class.Count == 0)
+                    {
+                        throw new InvalidDataException(
+                            $"{path}: {hero.Hero} card {card.Name} needs at least 1 copy, a cost of 0 or more, and a class.");
+                    }
+                }
+            }
+        }
+
+        return loaded;
+    }
+
+    private static BoxDifficulty ReadDifficulty(string path)
+    {
+        try
+        {
+            using var stream = File.OpenRead(path);
+            using var document = JsonDocument.Parse(stream);
+
+            var version = document.RootElement.ValueKind == JsonValueKind.Object
+                && document.RootElement.TryGetProperty("schemaVersion", out var element)
+                && element.TryGetInt32(out var value)
+                    ? value
+                    : (int?)null;
+            if (version != DifficultySchemaVersion)
+            {
+                throw new InvalidDataException(
+                    $"{path} has schemaVersion {version?.ToString() ?? "(missing)"}; this service reads difficulty version {DifficultySchemaVersion}.");
+            }
+
+            return document.Deserialize<BoxDifficulty>(JsonOptions)
+                ?? throw new InvalidDataException($"{path} is empty.");
+        }
+        catch (JsonException ex)
+        {
+            throw new InvalidDataException($"{path} is not a valid difficulty file: {ex.Message}", ex);
+        }
     }
 
     private static Box LoadBox(string path)

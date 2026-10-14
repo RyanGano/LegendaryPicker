@@ -121,6 +121,12 @@ A named set of 8 Villain cards selected as one setup component.
 **Henchman Group**:
 A named set of 10 identical Henchman cards selected as one setup component.
 
+**Difficulty rating**:
+How likely the players are to lose a drawn setup, 1 (easiest) to 5, with a Band name and up to three reasons. It is computed from the whole setup and never changes the draw. The first version (#264) reads the Hero Deck only: its cost curve and its team and class mix, weighted by copies.
+
+**Band**:
+One of the five named steps of the Difficulty rating: Sidekick, Street-Level, Heavy Hitter, Cosmic Threat and Secret Wars. A display name only; the rating number is what the code uses.
+
 **Player count**:
 The number of players in a game; the First Edition core rules use it to determine setup quantities. This project targets one to five players.
 

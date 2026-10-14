@@ -1,0 +1,502 @@
+{
+  "schemaVersion": 1,
+  "box": "core",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "core_hero_black-widow",
+      "cards": [
+        {
+          "name": "Dangerous Rescue",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Mission Accomplished",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "none"
+        },
+        {
+          "name": "Covert Operation",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Silent Sniper",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_captain-america",
+      "cards": [
+        {
+          "name": "Avengers Assemble!",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Perfect Teamwork",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Diving Block",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "A Day Unlike Any Other",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_cyclops",
+      "cards": [
+        {
+          "name": "Determination",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "recruit"
+        },
+        {
+          "name": "Optic Blast",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Unending Energy",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "X-Men United",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_deadpool",
+      "cards": [
+        {
+          "name": "Here, Hold This for a Second",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Oddball",
+          "copies": 5,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Hey, Can I Get a Do-Over?",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Random Acts of Unkindness",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_emma-frost",
+      "cards": [
+        {
+          "name": "Mental Discipline",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Shadowed Thoughts",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Psychic Link",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Diamond Form",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "both"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_gambit",
+      "cards": [
+        {
+          "name": "Card Shark",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Stack the Deck",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "none"
+        },
+        {
+          "name": "Hypnotic Charm",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "High Stakes Jackpot",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_hawkeye",
+      "cards": [
+        {
+          "name": "Quick Draw",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Team Player",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Covering Fire",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Impossible Trick Shot",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_hulk",
+      "cards": [
+        {
+          "name": "Growing Anger",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Unstoppable Hulk",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Crazed Rampage",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Hulk Smash!",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_iron-man",
+      "cards": [
+        {
+          "name": "Endless Invention",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "none"
+        },
+        {
+          "name": "Repulsor Rays",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Arc Reactor",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Quantum Breakthrough",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "none"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_nick-fury",
+      "cards": [
+        {
+          "name": "Battlefield Promotion",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "none"
+        },
+        {
+          "name": "High-Tech Weaponry",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Legendary Commander",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Pure Fury",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "none"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_rogue",
+      "cards": [
+        {
+          "name": "Borrowed Brawn",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Energy Drain",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Copy Powers",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "none"
+        },
+        {
+          "name": "Steal Abilities",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_spider-man",
+      "cards": [
+        {
+          "name": "Astonishing Strength",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "recruit"
+        },
+        {
+          "name": "Great Responsibility",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Web-Shooters",
+          "copies": 3,
+          "class": "tech",
+          "cost": 2,
+          "economy": "none"
+        },
+        {
+          "name": "The Amazing Spider-Man",
+          "copies": 1,
+          "class": "covert",
+          "cost": 2,
+          "economy": "none"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_storm",
+      "cards": [
+        {
+          "name": "Gathering Stormclouds",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Lightning Bolt",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Spinning Cyclone",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Tidal Wave",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_thor",
+      "cards": [
+        {
+          "name": "Odinson",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Surge of Power",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "both"
+        },
+        {
+          "name": "Call Lightning",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "God of Thunder",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "both"
+        }
+      ]
+    },
+    {
+      "hero": "core_hero_wolverine",
+      "cards": [
+        {
+          "name": "Keen Senses",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Healing Factor",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Frenzied Slashing",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Berserker Rage",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    }
+  ]
+}
