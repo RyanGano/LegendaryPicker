@@ -43,6 +43,19 @@ public class AntManTests
         Assert.Equal(heroes, Draw(players, "Age of Ultron").Heroes.Count);
     }
 
+    // Its own Scheme and Mastermind are tagged for difficulty (#269); its Heroes are in the same draw.
+    [Fact]
+    public void A_draw_of_its_own_Scheme_and_Mastermind_rates_with_reasons_naming_them()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Age of Ultron");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Age of Ultron", "Ultron");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Age of Ultron's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Ultron's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);

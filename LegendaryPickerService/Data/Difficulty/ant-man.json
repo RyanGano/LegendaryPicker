@@ -1,0 +1,488 @@
+{
+  "schemaVersion": 3,
+  "box": "ant-man",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "ant-man_hero_ant-man",
+      "cards": [
+        {
+          "name": "Ride the Ants",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Risky Science",
+          "copies": 5,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Giant Ego",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Pym Particles",
+          "copies": 1,
+          "class": "tech",
+          "cost": 9,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "ant-man_hero_black-knight",
+      "cards": [
+        {
+          "name": "Amulet of Avalon",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Defend the Weak",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Flying Steed",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "draw": 3
+        },
+        {
+          "name": "The Ebony Blade",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "ant-man_hero_jocasta",
+      "cards": [
+        {
+          "name": "Creation of Ultron",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reprocess",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Holographic Image Inducer",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "none",
+          "draw": 2
+        },
+        {
+          "name": "Electromagnetic Eyebeams",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "ant-man_hero_wasp",
+      "cards": [
+        {
+          "name": "Bio-Electric Sting",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Tiny Winged Justice",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Swarm Tactics",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Founding Avenger",
+          "copies": 1,
+          "class": "covert",
+          "cost": 9,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "ant-man_hero_wonder-man",
+      "cards": [
+        {
+          "name": "One-Hit Wonder",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Ionic Energy",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Absorb Ambient Power",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "8th Wonder of the World",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "ant-man_mastermind_morgan-le-fay",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "covert"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 1
+      }
+    },
+    {
+      "mastermind": "ant-man_mastermind_ultron",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "tech"
+          ],
+          "onFail": "attack-inflation"
+        },
+        "severity": 2
+      }
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "ant-man_villain_queen-s-vengeance",
+      "cards": [
+        {
+          "name": "Pixie",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "escape-pressure"
+          },
+          "severity": 1,
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Blackbird",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Iron Knight",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Mordred the Evil",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Gigantus",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "ant-man_villain_ultron-s-legacy",
+      "cards": [
+        {
+          "name": "Original Ultron-1",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Ultron Roboticks",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Brutish Ultron-14",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Future Ultron Prime",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Crimson Cowl",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "ant-man_scheme_age-of-ultron",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "ant-man_scheme_pull-earth-into-medieval-times",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "ant-man_scheme_transform-commuters-into-giant-ants",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "ant-man_scheme_trap-heroes-in-the-microverse",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}
