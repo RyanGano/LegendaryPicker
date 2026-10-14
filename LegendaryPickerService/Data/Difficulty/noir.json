@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 3,
+  "box": "noir",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "noir_hero_angel-noir",
+      "cards": [
+        {
+          "name": "Impetuous Dive",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Multitalented",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "both",
+          "draw": 1
+        },
+        {
+          "name": "Identical Twin Brother",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "Missing Person Case",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "noir_hero_daredevil-noir",
+      "cards": [
+        {
+          "name": "Balancing Act",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Listen for Heartbeats",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Discover the Bodies",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hitting Rock Bottom",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "noir_hero_iron-man-noir",
+      "cards": [
+        {
+          "name": "Steam-Powered Arsenal",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Mechanized Plate-Mail",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Learn from Enemies",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Adventurers Assemble!",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "noir_hero_luke-cage-noir",
+      "cards": [
+        {
+          "name": "Follow Big Leads",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Private Investigations",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Unbreakable Cage",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Weight of the World",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "noir_hero_spider-man-noir",
+      "cards": [
+        {
+          "name": "Gumshoe's Revolver",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Webs of Darkness",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Solve the Crime",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Spider-Totem's Chosen",
+          "copies": 1,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "spider-friends",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "noir_mastermind_charles-xavier-professor-of-crime",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "X-Con Men",
+          "check": {
+            "requires": [
+              "team",
+              "x-men"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1
+        }
+      ]
+    },
+    {
+      "mastermind": "noir_mastermind_the-goblin-underworld-boss",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Blackmail the Judges",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Sinister Dreams",
+          "check": {
+            "requires": [
+              "team",
+              "spider-friends"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "noir_villain_goblin-s-freak-show",
+      "cards": [
+        {
+          "name": "Vulture, Carnival Cannibal",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "The Chameleon",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Kraven, Animal Trainer",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Ox",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "bystander-pressure"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Montana",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Fancy Dan",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "noir_villain_x-men-noir",
+      "cards": [
+        {
+          "name": "Scott “Cyclops“ Summers",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Warden Emma Frost",
+          "copies": 1,
+          "inflicts": [
+            [
+              "twist-density",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "noir_scheme_find-the-split-personality-killer",
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "noir_scheme_silence-the-witnesses",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "noir_scheme_five-families-of-crime",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "noir_scheme_hidden-heart-of-darkness",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}
