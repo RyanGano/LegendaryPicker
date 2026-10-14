@@ -1,0 +1,495 @@
+{
+  "schemaVersion": 3,
+  "box": "paint-the-town-red",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "paint-the-town-red_hero_black-cat",
+      "cards": [
+        {
+          "name": "Casual Bank Robbery",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Pickpocket",
+          "copies": 5,
+          "class": "covert",
+          "cost": 1,
+          "economy": "attack"
+        },
+        {
+          "name": "Jinx",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Cat Burglar",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "spider-friends",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "paint-the-town-red_hero_moon-knight",
+      "cards": [
+        {
+          "name": "Climbing Claws",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Lunar Communion",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Crescent Moon Darts",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Golden Ankh of Khonshu",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "paint-the-town-red_hero_scarlet-spider",
+      "cards": [
+        {
+          "name": "Flip Out",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "spider-friends",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Perfect Hunter",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Leap from Above",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Sting of the Spider",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "paint-the-town-red_hero_spider-woman",
+      "cards": [
+        {
+          "name": "Radioactive Spider",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "recruit"
+        },
+        {
+          "name": "Bioelectric Shock",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Venom Blast",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Arachno-Pheromones",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "none",
+          "wants": [
+            [
+              "team",
+              "spider-friends",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "paint-the-town-red_hero_symbiote-spider-man",
+      "cards": [
+        {
+          "name": "Dark Strength",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Spider-Sense Tingling",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Shadowed Spider",
+          "copies": 3,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Thwip!",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "attack"
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "paint-the-town-red_mastermind_carnage",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Drooling Jaws",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Endless Hunger",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Feed Me",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Om Nom Nom",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "paint-the-town-red_villain_maximum-carnage",
+      "cards": [
+        {
+          "name": "Carrion",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Demogoblin",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Doppelganger",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Shriek",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "paint-the-town-red_villain_sinister-six",
+      "cards": [
+        {
+          "name": "Hobgoblin",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Kraven the Hunter",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Sandman",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Shocker",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Vulture",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "paint-the-town-red_scheme_invade-the-daily-bugle-news-hq",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "paint-the-town-red_scheme_splice-humans-with-spider-dna",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ],
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "paint-the-town-red_scheme_the-clone-saga",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "paint-the-town-red_scheme_weave-a-web-of-lies",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    }
+  ]
+}

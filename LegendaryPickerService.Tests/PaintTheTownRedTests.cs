@@ -61,6 +61,16 @@ public class PaintTheTownRedTests
         Assert.Equal(["core", "paint-the-town-red"], setup.Boxes.Select(box => box.Id));
     }
 
+    [Fact]
+    public void A_draw_with_Carnage_and_The_Clone_Saga_rates_on_Paint_the_Town_Red_cards_by_name()
+    {
+        var setup = Draw(2, "The Clone Saga", Carnage);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Carnage's Master Strikes"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("The Clone Saga's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind)
     {
         var index = (players == 1 ? 6 : 8) + Array.IndexOf(SchemeNames, scheme);
