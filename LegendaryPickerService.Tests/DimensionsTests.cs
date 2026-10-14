@@ -45,4 +45,15 @@ public class DimensionsTests
         Assert.Contains("Forklift Driver", special.Cards);
         Assert.Null(coreOnly.SpecialCards);
     }
+
+    // Its own Mastermind is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_J_Jonah_Jameson_rates_with_a_reason_naming_him()
+    {
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "The Legacy Virus", "J. Jonah Jameson");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(DrawIndexes.Scheme(Catalog, Boxes, 2, "The Legacy Virus"), mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("J. Jonah Jameson's Master Strikes"));
+    }
 }
