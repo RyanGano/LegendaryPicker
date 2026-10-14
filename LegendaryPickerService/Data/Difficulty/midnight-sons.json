@@ -1,0 +1,597 @@
+{
+  "schemaVersion": 3,
+  "box": "midnight-sons",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "midnight-sons_hero_blade-daywalker",
+      "cards": [
+        {
+          "name": "Where Monsters Lurk",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Ride by Moonlight",
+          "copies": 5,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Hunt High And Low",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Creature of Dawn and Dusk",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "midnight-sons_hero_elsa-bloodstone",
+      "cards": [
+        {
+          "name": "Axe of the Slayer",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Silver Bullets",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Stalk the Night Stalkers",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Vengeance of the Bloodstone Gem",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "marvel-knights",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "midnight-sons_hero_morbius",
+      "cards": [
+        {
+          "name": "Mesmerize",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Insatiable Craving",
+          "copies": 5,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Scalded by Sunlight",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "It's Morbin' Time!",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "midnight-sons_hero_werewolf-by-night",
+      "cards": [
+        {
+          "name": "Starlit Path",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Snarling Fangs",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Release the Beast",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Track the Captives",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "midnight-sons_hero_wong",
+      "cards": [
+        {
+          "name": "Bridge Between Dimensions",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Searing Shards of Sunlight",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Seal the Rift",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "draw": 2
+        },
+        {
+          "name": "Face Your Demons",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "midnight-sons_mastermind_lilith",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Connoisseur of Souls",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mesopotamian Demon Goddess",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Offer of Corruption",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Respawn Demonic Offspring",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "midnight-sons_mastermind_zarathos",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Eruption of Hellfire",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Corrupted Spirit of Vengeance",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Imprison in the Soul Crystal",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Demonic Essence of Ghost Rider",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "midnight-sons_villain_lilin",
+      "cards": [
+        {
+          "name": "Meatmarket",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Outcast",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Sister Nil",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Skinner",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Blackout",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "midnight-sons_villain_fallen",
+      "cards": [
+        {
+          "name": "Metarchus",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Atrocity",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Patriarch",
+          "copies": 3,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Salomé, Sorceress Supreme",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "midnight-sons_scheme_sire-vampires-at-the-blood-bank",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ],
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "midnight-sons_scheme_ritual-sacrifice-to-summon-chthon",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            1
+          ],
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "midnight-sons_scheme_midnight-massacre",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    }
+  ]
+}
