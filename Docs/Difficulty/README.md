@@ -185,9 +185,10 @@ The opposition lists are optional. Each tag has at least one of `check`, `gate`,
   `strike` for a Master Strike and `twist` for a Scheme's Twist (both implied); a Tactic is a `fight`.
 - Axes: `wounds`, `bystander-pressure`, `hq-disruption`, `hand-disruption`, `attack-inflation`, `escape-pressure`,
   `deck-thinning`, `twist-density`. A Scheme's `amplifies` lists axes its loss condition makes worse.
-- A team value is a team term of the box (`<box>_term_<value>`); a class value is a Hero class. A Villain card says its
+- A team value is the `<value>` of a team term `<box>_term_<value>` of any loaded box, since a box's Heroes can belong
+  to a team another box defines (#269); a class value is a Hero class. A Villain card says its
   `copies`; a Henchman card does not (the Villain Deck's henchman cards are split over the drawn groups).
-- The loader rejects an unknown axis, timing or kind, a part the box does not declare, a team the box does not have, a
+- The loader rejects an unknown axis, timing or kind, a part the box does not declare, a team no loaded box has, a
   tag with no effect, a severity outside 1..3, a timing that does not fit the card, and a card with no `on`.
 
 - `source` is a key in the box file's `sources` for where the cards were read.
@@ -195,7 +196,7 @@ The opposition lists are optional. Each tag has at least one of `check`, `gate`,
 - `class` is `covert`, `instinct`, `ranged`, `strength` or `tech`; a multiclass card lists an array.
 - `cost` is the printed recruit cost; `economy` is `recruit`, `attack`, `both` or `none`.
 - `wants` is `[[kind, value, strength 1..3], ...]`, evaluated against the other drawn cards (a Hero's own cards never meet
-  its wants): `team` (a team of the box), `class`, `keyword` (a keyword term id of the box), `stack` (wounds, bystanders,
+  its wants): `team` (a team of any loaded box), `class`, `keyword` (a keyword term id of the box), `stack` (wounds, bystanders,
   shards, sidekicks, officers, bindings), `board` (villains-in-city, heroes-in-hq, ko-pile), `diversity` (value `class`),
   `draw` (value `extra-cards`). `answers` is `[[axis, strength 1..3], ...]` with axis `wounds`, `bystanders`, `hq`,
   `villain-flow`, `hand`, `attack-inflation` or `escape`. `selfCost` lists `discard`, `wound`, `ko-hand`; `draw` is the

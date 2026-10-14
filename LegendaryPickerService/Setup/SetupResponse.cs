@@ -24,7 +24,9 @@ public abstract record SetupResponse
     private static Difficulty RateHeroDeck(SetupResult setup, BoxCatalog catalog)
     {
         var scored = setup.Heroes.Take(setup.Heroes.Count - setup.FillInHeroes).Select(hero => DifficultyInputs.Scored(catalog, hero));
-        var names = setup.Boxes.SelectMany(box => box.Glossary).GroupBy(term => term.Id).ToDictionary(terms => terms.Key, terms => terms.First().Name);
+        // Names come from every loaded box: a Hero can want or a card check a team another box defines (#269), and that
+        // box need not be included.
+        var names = catalog.Boxes.SelectMany(box => box.Glossary).GroupBy(term => term.Id).ToDictionary(terms => terms.Key, terms => terms.First().Name);
         var opposition = DifficultyInputs.Opposition(
             catalog, setup.Scheme, setup.Mastermind, setup.VillainGroups, setup.HenchmanGroups,
             setup.VillainDeck.MasterStrikes, setup.VillainDeck.Twists, setup.VillainDeck.HenchmanCards, names);

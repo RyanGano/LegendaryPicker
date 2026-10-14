@@ -129,6 +129,21 @@ public sealed class DifficultyTests : IDisposable
     }
 
     [Fact]
+    public void A_check_on_a_team_another_box_defines_names_that_team()
+    {
+        var deck = new[] { Hero(["avengers"], 5, 3, 5, 3, 3, 4, 1, 5) };
+        var opposition = new ScoredOpposition(
+            [new OppositionPart("Test Master Strikes", "dark-city",
+                new OppositionTag(Check: new OppositionCheck(new Requirement(RequirementKind.Team, "x-men"), OppositionAxis.Wounds), Severity: 3),
+                [Timing.Strike], 30)],
+            [], new Dictionary<string, string> { ["core_term_x-men"] = "X-Men" });
+
+        var reasons = DifficultyScorer.Score(deck, DifficultyTuning.Default, opposition).Reasons;
+
+        Assert.Contains(reasons, reason => reason.StartsWith("Test Master Strikes: show X-Men or suffer Wounds"));
+    }
+
+    [Fact]
     public void A_Scheme_that_amplifies_an_axis_adds_to_its_load()
     {
         var deck = new[] { Hero(["x-men"], 5, 3, 5, 3, 3, 4, 1, 5) };
@@ -301,6 +316,17 @@ public sealed class DifficultyTests : IDisposable
         Write(file => Card(file)["wants"] = Parse("""[["team", "inhumans", 1]]"""));
 
         AssertRejected("inhumans");
+    }
+
+    [Fact]
+    public void Accepts_a_want_that_names_a_team_another_loaded_box_declares()
+    {
+        File.Copy(Path.Combine(BoxCatalog.DefaultDirectory, "dark-city.json"), Path.Combine(_boxes, "dark-city.json"));
+        Write(file => Card(file)["wants"] = Parse("""[["team", "x-force", 1]]"""));
+
+        var wants = BoxCatalog.Load(_boxes, _difficulty).Difficulty["core"].Heroes[0].Cards[0].Wants;
+
+        Assert.Equal("x-force", Assert.Single(wants!).Value);
     }
 
     [Fact]
