@@ -18,6 +18,13 @@ The opposition: what the Mastermind, Villain Groups, Henchman Groups and Scheme 
 Hero Deck rates differently against different oppositions. The format is schemaVersion 2 (below); `Setup/DifficultyScorer.cs`
 takes a `ScoredOpposition`, and the checklist's "Why this rating" lists the opposition's biggest contributors first.
 
+## What is built (#266)
+
+What the Heroes want and answer. The format is schemaVersion 3 (below): Hero cards gain optional `wants`, `answers`,
+`selfCost` and `draw`, and every core Hero card is tagged. `Setup/DifficultyScorer.cs` rates how well the Hero Deck meets
+its own wants, lets its answers cut the opposition's load, charges self costs, and names the biggest Hero-side causes in
+"Why this rating". Slice #267's weighting reads the same `Expected`, so a target draw sees the new terms too.
+
 ## What is built (#267)
 
 `GET /api/setup?difficulty=1..5` (anything else is a 400) weights the draw toward that rating; the format is unchanged.
@@ -42,19 +49,21 @@ takes a `ScoredOpposition`, and the checklist's "Why this rating" lists the oppo
   5; with no target 4, 5, 4, 4. The core box's opposition keeps most draws in the top bands (see Scorer v1), which
   calibration is to address.
 
-## Data format (schemaVersion 2)
+## Data format (schemaVersion 3)
 
 One file per box, `LegendaryPickerService/Data/Difficulty/<box-id>.json`. A box with no file is valid and rates neutral
 (3). Tags and numbers only, never card text.
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 3,
   "box": "core",
   "source": "Q",
   "heroes": [
     { "hero": "core_hero_cyclops",
-      "cards": [ { "name": "Determination", "copies": 5, "class": "strength", "cost": 2, "economy": "recruit" } ] }
+      "cards": [
+        { "name": "Determination", "copies": 5, "class": "strength", "cost": 2, "economy": "recruit", "selfCost": ["discard"] },
+        { "name": "X-Men United", "copies": 1, "class": "ranged", "cost": 8, "economy": "attack", "wants": [["team", "x-men", 3]] } ] }
   ],
   "masterminds": [
     { "mastermind": "core_mastermind_magneto",
@@ -95,6 +104,15 @@ The opposition lists are optional. Each tag has at least one of `check`, `gate`,
 - `copies` is how many of the Hero's 14 cards are that named card; the loader does not check they sum to 14 (#140).
 - `class` is `covert`, `instinct`, `ranged`, `strength` or `tech`; a multiclass card lists an array.
 - `cost` is the printed recruit cost; `economy` is `recruit`, `attack`, `both` or `none`.
+- `wants` is `[[kind, value, strength 1..3], ...]`, evaluated against the other drawn cards (a Hero's own cards never meet
+  its wants): `team` (a team of the box), `class`, `keyword` (a keyword term id of the box), `stack` (wounds, bystanders,
+  shards, sidekicks, officers, bindings), `board` (villains-in-city, heroes-in-hq, ko-pile), `diversity` (value `class`),
+  `draw` (value `extra-cards`). `answers` is `[[axis, strength 1..3], ...]` with axis `wounds`, `bystanders`, `hq`,
+  `villain-flow`, `hand`, `attack-inflation` or `escape`. `selfCost` lists `discard`, `wound`, `ko-hand`; `draw` is the
+  extra cards (0..3) the card draws outright. Effects that fit no axis are listed in the box's research record under
+  "Difficulty: no axis".
+- The loader also rejects an empty `wants`, `answers` or `selfCost`, an unknown want kind, answer axis or self cost, a
+  want value its kind cannot name (a team the box lacks, an unknown stack), a strength outside 1..3 and a `draw` outside 0..3.
 - The loader rejects unknown fields, missing values, an unknown class or economy, a source the box does not list, a
   Hero the box does not declare, a Hero or card listed twice, and a file for a box that is not loaded.
 
@@ -128,6 +146,31 @@ half and half (`OppositionWeight`). A setup with none of its opposition tagged r
 
 Watch for the opposition load dominating the Hero Deck terms; a note for calibration (#268). With the core box's fifteen
 Heroes, most draws rate in the top bands because the Hero Deck terms of #264 already lean hard.
+
+## Scorer v2: the Heroes' engine and answers
+
+Wants are scored against the other drawn cards, copy-weighted. A `team` or `class` want is met by
+`min(1, share / target)`, with `share` the other cards' share having that team or class and the targets
+`TeamWantTarget` and `ClassWantTarget` (0.25); `diversity` counts each class present at `DiversityClassShare` (0.10) of
+the other cards and is met at `DiversityTarget` (4) classes. A `stack` want for Wounds is met by the opposition's Wounds
+load (`StackWantLoad`, 3); keyword, board, draw and the other stacks are accepted by the loader but not scored yet and
+count as met. Each want adds `copies * strength * (1 - met)` to the unmet total; per deck card that maps to 0..1
+(`EngineUnmetEasy` 0.1, `EngineUnmetHard` 0.6) and joins the Hero Deck terms at weight `EngineWeight` (0.25). A deck with
+no wants tagged leaves the term out, as does a deck with no `draw` for the extra-cards term (`DrawWeight` 0.10, easy at
+`DrawMeanEasy` 0.5 cards per card).
+
+Answers cut the opposition's load. An answer maps to an opposition axis (`wounds` to Wounds, `bystanders` to Bystanders
+carried off, `hq` to HQ disruption, `hand` to hand disruption, `attack-inflation`, and `escape` and `villain-flow` to
+Villains pushed toward escape). The copy-weighted `strength / 3` share cuts that axis's check and inflict load by up to
+`MaxMitigation` (50%), reached at `AnswerTarget` (0.15). Deck thinning and extra Twists have no answer, and gates have no
+axis, so none is cut. A card's `selfCost` entries add `SelfCostPerCopy` (0.1) each to the opposition load, only when some
+opposition is tagged.
+
+Reasons: up to two Hero-side reasons (the biggest unmet wants, the answers that saved the most load, the self cost) come
+after the opposition's and before the Hero Deck measures, which are trimmed to keep the list short.
+
+Watch for the engine term never moving: most core wants fall on a class, and five Heroes usually carry all five, so
+class wants are mostly near met. A note for calibration (#268).
 
 ## Bands
 

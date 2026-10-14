@@ -382,3 +382,21 @@ Difficulty: no axis (cards tagged only in part or not at all):
 - Whirlwind, The Lizard: effects that depend on which city space the player chooses to fight in, so the players can avoid them.
 - Ultron's and Supreme HYDRA's Victory Point bonuses, and Skrull Queen Veranke's and Shapeshifters' Attack equal to a Hero's cost (only the HQ loss is tagged): scoring and Attack changes with no axis.
 - Dr. Doom's Tactics and Loki's, Red Skull's and Magneto's other Tactics: bonuses for the player, or effects on other players that do not change a team's chance of winning.
+
+## Difficulty data: Hero wants and answers (#266, 2026-10-13)
+
+`Data/Difficulty/core.json` (schemaVersion 3) tags 49 of the 60 Hero cards with `wants`, `answers`, `selfCost` and `draw`. Effects were read from the C2 catalog's ability text for the Heroes (https://github.com/nutki/legendary/tree/master/texttools/Legendary, `Heroes_and_Allies.txt`) and recorded only as tags, never as text; the same file's copy counts agree with the copies already in the data. Strengths (1 to 3) and the choice of kind are our judgement, soft until calibration (#268).
+
+Assumptions:
+
+- A `{POWER class}` ability is a `class` want of strength 1, and 2 where the bonus is large (Hulk Smash!, Arc Reactor, Borrowed Brawn, Call Lightning). A `{TEAMPOWER}` ability, or a card that counts teammates (A Day Unlike Any Other, X-Men United, Legendary Commander), is a `team` want of strength 1 to 3 by how much it pays.
+- "For each color of Hero you have" is a `diversity` want (Captain America's two commons at 2; Rogue's Copy Powers at 1). Cards that use a Wound in hand (Unstoppable Hulk, Healing Factor) want the `wounds` stack, and answer `wounds` because they KO one or negate one (Diving Block). Covert Operation wants `bystanders`, which is not scored (Bystanders can always be rescued).
+- Rescuing or protecting Bystanders (Black Widow's cards, Impossible Trick Shot, Web-Shooters, Spinning Cyclone) answers `bystanders`. Spinning Cyclone's Villain move also answers `villain-flow`. Lightning Bolt and Tidal Wave answer `attack-inflation` (they lower a Villain's Attack).
+- `selfCost`: Cyclops's two commons need a discard to play; Deadpool's Do-Over discards the hand; Random Acts of Unkindness and Crazed Rampage give a Wound.
+- `draw` is cards drawn outright, not under a Power or a condition: Mission Accomplished, Mental Discipline, Quick Draw and Endless Invention 1; Stack the Deck and Quantum Breakthrough 2; Berserker Rage 3.
+
+Difficulty: no axis (cards left with no tag, or tagged only in part):
+
+- Unending Energy, Astonishing Strength, Great Responsibility and The Amazing Spider-Man (they draw only a card that costs 2 or less, which depends on costs rather than teams or classes), Surge of Power and God of Thunder (Recruit and Attack conversions), Steal Abilities, Oddball (an odd-cost bonus), Diamond Form, High Stakes Jackpot, Hey, Can I Get a Do-Over? (a hand reset, only the discard is tagged).
+- Here, Hold This for a Second (a Villain captures a Bystander): a cost to the players with no `selfCost` value.
+- Shadowed Thoughts plays the top of the Villain Deck, a risk its class want does not cover. Pure Fury's KO-pile count is tagged only as a S.H.I.E.L.D. team want.
