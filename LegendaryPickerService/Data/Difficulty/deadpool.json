@@ -1,0 +1,546 @@
+{
+  "schemaVersion": 3,
+  "box": "deadpool",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "deadpool_hero_bob-agent-of-hydra",
+      "cards": [
+        {
+          "name": "HYDRA Half-Wit",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "hydra",
+              1
+            ],
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Bullets Flying, Bob Hiding",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "How Do I Get Out of Here??",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Epic Middle Manager",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "hydra",
+              1
+            ],
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ],
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "deadpool_hero_deadpool-mercs-for-money",
+      "cards": [
+        {
+          "name": "Nighttime Is the Right Time",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "It'll Grow Back",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "selfCost": [
+            "wound"
+          ]
+        },
+        {
+          "name": "Running Commentary",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Deadpool Rage!",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "deadpool_hero_slapstick",
+      "cards": [
+        {
+          "name": "Saturday Morning Harpoons",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Napoleon Complex",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Surprise Chainsaw",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Electroplasmic Insanity",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "deadpool_hero_solo",
+      "cards": [
+        {
+          "name": "Half-Cocked",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "both"
+        },
+        {
+          "name": "Merc's Gotta Get Paid",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Guns on My Guns",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Cut in Half",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "mercs-for-money",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "deadpool_hero_stingray",
+      "cards": [
+        {
+          "name": "Superpowered Swimsuit",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Deck Chairs on the Titanic",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Sting of the Stingray's Sting",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "recruit"
+        },
+        {
+          "name": "PhD in Oceanography",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "mercs-for-money",
+              1
+            ],
+            [
+              "board",
+              "ko-pile",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "deadpool_mastermind_evil-deadpool",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "deadpool_mastermind_macho-gomez",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      }
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "deadpool_villain_deadpool-s-friends",
+      "cards": [
+        {
+          "name": "Blind Al and Deuce",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Sluggo",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Taskmaster",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Weasel",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "deadpool_villain_evil-deadpool-corpse",
+      "cards": [
+        {
+          "name": "D.E.A.D.P.O.O.L.",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "The Deadpool Kid",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Ultimate Deadpool",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Wolverinepool",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "wounds",
+              2
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "deadpool_scheme_deadpool-kills-the-marvel-universe",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "deadpool_scheme_deadpool-wants-a-chimichanga",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "deadpool_scheme_deadpool-writes-a-scheme",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            3
+          ],
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "bystander-pressure",
+            1
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "deadpool_scheme_everybody-hates-deadpool",
+      "twist": {
+        "check": {
+          "requires": [
+            "team",
+            "mercs-for-money"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 2
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}
