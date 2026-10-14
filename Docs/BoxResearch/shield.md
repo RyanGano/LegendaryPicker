@@ -172,3 +172,26 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/shield.json` (format v3, source `Q`). Card facts: the shared OCR cache (titles and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons, and the owner's LegendaryAssistant data (`shield-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1 (Battle Staves, Reanimate Into Service, Hydra Elite, Hydra High Council). One source conflict: the owner's data lists Build the Strike Team as Strength where C1 and the box file's Coulson classes say Covert; tagged Covert.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order. Villain copies are C1's (2 each).
+- **Printed 0+ icons.** Headlok, Behind Enemy Lines and Infinity Formula carry both icons: `both`; the other 0+ and N+ cards carry one icon: `attack`.
+- **Draws.** Conditional and optional draws are `draw` as in core: Impeccable Planning 1, Authorize Lethal Force 1, Battle Staves 1, Infinity Formula 1, Fake But Inspiring Death 3.
+- **Wants.** S.H.I.E.L.D. Level and Undercover read S.H.I.E.L.D. cards in the player's Victory Pile and hand, so they are `team shield` wants (2 where a Level of 3 or more or a Hero from hand or discard is needed, else 1); class wants where a card names a class.
+- **Self costs.** Going Underground requires a discard to play: `discard`.
+- **Answers.** Roil the Earth cycles Heroes out of the HQ: `hq 1`.
+- **Masterminds.** Each Adapting Mastermind's Master Strike is whichever Tactic is on top, so the single Master Strike tag is the four faces' effects at severity 1 each. Hydra High Council: hand-disruption (Arnim Zola), deck-thinning (Red Skull), wounds (Baron Zemo, Viper). Hydra Super-Adaptoid: a Tech check for hand-disruption (Iron Man's Armor), wounds (Black Widow's Bite, Thor's Hammer); Captain America's Shield's discard and redraw is not tagged. Tactics tagged: Red Skull and Thor's Hammer force a KO of the fighter's own Heroes (`deck-thinning 1`, `fight`).
+- **Villain Groups.** Taskmaster `wounds 1` on fight and escape (the colour count is not a team or class); Superia `hand-disruption 1`; Graviton `hq-disruption 1`; Crossbones a S.H.I.E.L.D. team check for wounds (severity 2); Hive and Gorgon `hand-disruption 1`.
+- **Schemes.** Hail Hydra `bystander-pressure 1`, amplifies `twist-density` (loss on Twist 10); Hydra Helicarriers Hunt Heroes `hq-disruption 2`, amplifies `deck-thinning` (loss counts non-grey Heroes in the KO pile); Secret Empire of Betrayal `wounds 1`, amplifies `twist-density` (loss at 6 Vicious Betrayals); S.H.I.E.L.D. vs. HYDRA War `escape-pressure 2`, amplifies `escape-pressure` (Double Agents join the Escape Pile; loss at Hydra Level 11).
+
+### Difficulty: no axis
+
+- Every Villain's Ambush puts an Officer in the Escape Pile (raises Hydra Level). Hydra Level itself has no axis; it feeds several cards' checks, which are tagged as flat effects.
+- Mentallo (captured Officers, attack per Officer) and Growing Man (attack scales with Hydra Level): Villain attack scaling.
+- Hail Hydra's "can't fight this turn" choice: a lost action, no axis; only its Bystander capture alternative is tagged.
+- Hydra Level reveal counts (Taskmaster's colours, Crossbones, Hive, Gorgon): level-dependent tests are not a team or class, so tagged as flat effects.
+- Red Skull, Viper, Arnim Zola and Zemo attack scaling: Mastermind attack scaling.
+- Baron Zemo's Fight and the other Tactics that only hit other players or only help the fighter: untagged.

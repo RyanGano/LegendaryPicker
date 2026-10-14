@@ -1,0 +1,493 @@
+{
+  "schemaVersion": 3,
+  "box": "shield",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "shield_hero_agent-phil-coulson",
+      "cards": [
+        {
+          "name": "Impeccable Planning",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Build the Strike Team",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Approve Orbital Strike",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Fake But Inspiring Death",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ],
+          "draw": 3
+        }
+      ]
+    },
+    {
+      "hero": "shield_hero_deathlok",
+      "cards": [
+        {
+          "name": "Authorize Lethal Force",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Reanimate Into Service",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Headlok",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Behind Enemy Lines",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "shield_hero_mockingbird",
+      "cards": [
+        {
+          "name": "Take Cover",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Battle Staves",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Spymaster",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Infinity Formula",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ],
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "shield_hero_quake",
+      "cards": [
+        {
+          "name": "Going Underground",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ],
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Aftershock",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Tectonic Wave",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Roil the Earth",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ],
+          "answers": [
+            [
+              "hq",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "shield_mastermind_hydra-high-council",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "deck-thinning",
+            1
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Red Skull",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "shield_mastermind_hydra-super-adaptoid",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "tech"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Thor's Hammer",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "shield_villain_aim-hydra-offshoot",
+      "cards": [
+        {
+          "name": "Taskmaster",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Superia",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Graviton",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "shield_villain_hydra-elite",
+      "cards": [
+        {
+          "name": "Crossbones",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "team",
+              "shield"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Hive",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Gorgon",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "shield_scheme_hail-hydra",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "shield_scheme_hydra-helicarriers-hunt-heroes",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "deck-thinning"
+      ]
+    },
+    {
+      "scheme": "shield_scheme_secret-empire-of-betrayal",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "shield_scheme_shield-vs-hydra-war",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}
