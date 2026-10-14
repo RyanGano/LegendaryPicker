@@ -1,0 +1,390 @@
+{
+  "schemaVersion": 3,
+  "box": "venom",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "venom_hero_carnage",
+      "cards": [
+        {
+          "name": "Rending Claws",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Carnivore",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Gruesome Feast",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Feast or Famine",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "venom_hero_venom",
+      "cards": [
+        {
+          "name": "Devouring Drool",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Razor Teeth",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "both"
+        },
+        {
+          "name": "Symbiotic Adaptation",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "both"
+        },
+        {
+          "name": "Insatiable Hunger",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "venomverse",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "venom_hero_venom-rocket",
+      "cards": [
+        {
+          "name": "Hungry for Action",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Spring the Trap",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Serious Overkill",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Ultimate Survivor",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "venom_hero_venomized-dr-strange",
+      "cards": [
+        {
+          "name": "Cauldron of the Cosmos",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "See Future Timelines",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Complete the Grand Ritual",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Crystal of Kadavus",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "venomverse",
+              1
+            ]
+          ],
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "venom_hero_venompool",
+      "cards": [
+        {
+          "name": "Digest That Chimichanga",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Shenanigans",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "none",
+          "draw": 2
+        },
+        {
+          "name": "Can I Get a Little Gratitude?",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Play to the Crowd",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "venom_mastermind_hybrid",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "venom_mastermind_poison-thanos",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            3
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Soul Seize",
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "venom_villain_life-foundation",
+      "cards": [
+        {
+          "name": "Riot",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Agony",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "venom_villain_poisons",
+      "cards": [
+        {
+          "name": "Symbiotic Armor",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "venom_scheme_invasion-of-the-venom-symbiotes",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "venom_scheme_maximum-carnage",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "wounds",
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "venom_scheme_paralyzing-venom",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "scheme": "venom_scheme_symbiotic-absorption",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      }
+    }
+  ]
+}
