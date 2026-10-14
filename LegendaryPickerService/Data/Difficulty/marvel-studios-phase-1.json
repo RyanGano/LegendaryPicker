@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 3,
+  "box": "marvel-studios-phase-1",
+  "source": "Q",
+  "heroes": [],
+  "masterminds": [
+    {
+      "mastermind": "marvel-studios-phase-1_mastermind_iron-monger",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Hostile Takeover",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Unexpected Betrayal",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "marvel-studios-phase-1_villain_chitauri",
+      "cards": [
+        {
+          "name": "Chitauri Soldier",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Chitauri Commander",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Chitauri Leviathan",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-phase-1_villain_gamma-hunters",
+      "cards": [
+        {
+          "name": "Sonic Cannon",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Lt. Gen. “Thunderbolt” Ross",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Fighter Jet",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-phase-1_villain_iron-foes",
+      "cards": [
+        {
+          "name": "Raza, Ten Rings Leader",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Whiplash",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "marvel-studios-phase-1_henchman_ten-rings-fanatics",
+      "cards": [
+        {
+          "name": "Ten Rings Fanatics",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "marvel-studios-phase-1_scheme_asgard-under-siege",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-phase-1_scheme_destroy-the-cities-of-earth",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-phase-1_scheme_enslave-minds-with-the-chitauri-scepter",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-phase-1_scheme_invade-asgard",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-phase-1_scheme_radioactive-palladium-poisoning",
+      "twist": {
+        "check": {
+          "requires": [
+            "class",
+            "tech"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 2
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-phase-1_scheme_replace-earths-leaders-with-hydra",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ],
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}

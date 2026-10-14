@@ -92,6 +92,24 @@ Still open: per-face copy counts. The contents list's 42 Bystanders and six Mast
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 81 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). No `uses` changes; the faces agree with the box file. The reprinted core Heroes, Masterminds and Villain Groups share core's data, which was checked in #11.
 
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/marvel-studios-phase-1.json` (format v3, source `Q`). Card facts: the shared OCR cache (titles and markers only, no card text), C1 above for names and printed values, and the owner's LegendaryAssistant data (`studios-adversaries`, `-commanders`, `-followers`, `-schemes`) for what each card does. Names follow C1. No card text is stored.
+
+- **Reprints.** The box file declares no Heroes: all seven (Black Widow, Captain America, Hawkeye, Hulk, Iron Man, Nick Fury, Thor) are core's, so `heroes` is empty and they carry core's tags. The reprinted Enemies of Asgard and HYDRA groups, Loki, Red Skull, Super Hero Civil War and Unleash the Power of the Cosmic Cube are core's too and are not tagged here. Phase 1's printings differ in wording in places; the core tags stand, as the reprint is that card.
+- **Copies.** Villain copies are C1's (2 each). Henchman groups carry no copies.
+- **Villains.** Chitauri Soldier's capture is `bystander-pressure 1` (Ambush); Chitauri Commander's reveal that can bring a Villain into the Rooftops is `escape-pressure 1`; Chitauri Leviathan's conditional Wound (each player with no Bystander in their Victory Pile) is `wounds 1` on Fight and Escape. Sonic Cannon's discard two and draw one is `hand-disruption 1`, as is Thunderbolt Ross's discard-a-Strength-card-or-Wound (the player picks the discard). Fighter Jet's KO of a Hero is `deck-thinning 1`. Raza's captures from the stack and from every Victory Pile are `bystander-pressure 2`. Whiplash's Tech reveal is a `check` with a Wound, severity 2, as in earlier boxes.
+- **Henchmen.** Ten Rings Fanatics (KO one of your Heroes) is `deck-thinning 1` on Fight, as core's Sentinel. Hammer Drone Army, HYDRA Pilots and HYDRA Spies only help the player and are untagged.
+- **Mastermind.** Iron Monger's Master Strike is a Wound to each player when a Villain is in the Bank and otherwise a new Villain in the Bank: `wounds 1` and `escape-pressure 1`. Of the Tactics, Hostile Takeover and Unexpected Betrayal put a Villain into the Bank (`escape-pressure 1`, as Lurking Shadow in Homecoming); Overloaded Arsenal and Sonic Stunner hit only the other players and are untagged.
+- **Schemes.** Asgard Under Siege (play two cards) `escape-pressure 2`, amplifies escape; Destroy the Cities of Earth! `bystander-pressure 2` and `escape-pressure 1`, amplifies Bystanders; Enslave Minds `hq-disruption 2` and `escape-pressure 1`, amplifies escape; Invade Asgard `attack-inflation 2` (Dark Portals), amplifies Twists as the Cosmic Cube does; Radioactive Palladium Poisoning a Tech `check` for a Wound, severity 2, amplifies Wounds; Replace Earth's Leaders with HYDRA `attack-inflation 2` and `escape-pressure 2` (Infiltrators), amplifies escape.
+
+### Difficulty: no axis
+
+- Conqueror (a Villain's Attack bonus beside a space) has no tag slot and is untagged on all of the box's Villains.
+- Chitauri Chariot and Abomination, Raging Monster only move Villains between city spaces; Justin Hammer's Recruit and Hammer Drone Marine's KO help the player. None carries a tag.
+- Enslave Minds's Heroes in the Villain Deck, Destroy the Cities of Earth!'s Attack per Bystander and Replace Earth's Leaders's Infiltrator Attack are standing rules; the Twist's tag stands for them (a Scheme has no always-on slot), and Destroy's Attack bonus is not tagged separately.
+- Unexpected Betrayal depends on another player's Victory Pile; it is tagged as a Villain entering the Bank only.
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.
