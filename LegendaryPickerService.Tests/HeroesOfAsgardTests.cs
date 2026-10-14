@@ -30,4 +30,16 @@ public class HeroesOfAsgardTests
         Assert.NotNull(results["Hela, Goddess of Death"].Stacks.Wounds);
         Assert.Contains(results["Malekith the Accursed"].VillainGroups, g => g.Name == "Dark Council");
     }
+
+    // Its own Mastermind is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_Malekith_rates_with_a_reason_naming_him()
+    {
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "War of the Frost Giants", "Malekith the Accursed");
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "War of the Frost Giants");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Malekith the Accursed's Master Strikes"));
+    }
 }
