@@ -147,3 +147,25 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/doctor-strange-and-the-shadows-of-nightmare.json` (format v3, source `Q`). Card effects were read from the C1 catalog's ability data (tags only are recorded here). Names follow C1, except Possessed by Brother's Spirit, which C1 spells "Posessed"; OCR of its card face reads the printed title with a double S.
+
+- **Class conflicts.** None between C1 and the box file's class lists; C1 per-card classes are used.
+- **Cost conflict.** Book of Cagliostro is cost 2 in C1 and 5 in the owner's LegendaryAssistant data; OCR of the face did not read the cost, so C1's 2 is used.
+- **Copies.** C1 gives rarity only for Heroes, so copies are 5, 5, 3, 1 in rarity order. Villain copies are C1's `qtd`.
+- **Economy.** A printed N+ or 0+ icon counts as that icon; cards with no Recruit or Attack icon are `none`.
+- **Draws.** Keeper of the Sanctum draws 1 (conditional); Teachings of Kamar-Taj draws 2; The Orb of Agamotto puts 2 into hand; Oshtur draws 1 and The Book of the Vishanti 3 (both conditional, as in core).
+- **Wants and answers.** Class and team superpowers want that class; Medallion of Many Loas wants class diversity; Oshtur and The Book of the Vishanti want Wounds and answer them (`wounds 1`, `wounds 2`).
+- **Masterminds.** Nightmare's Master Strike `hand-disruption 1` (random discard when he is already in the Astral Plane). Dormammu's `wounds 1`, `hand-disruption 1` (a Demonic Bargain, then discard down to four).
+- **Villain Groups.** A Demonic Bargain is tagged `wounds 1` on its timing, since its cost can Wound and it cannot be declined; Mindless Ones and Umar also `hq-disruption 1`. Fear Lords: Nox `deck-thinning` on Fight; D'Spayre `bystander-pressure`, `deck-thinning`; Dreamstalker's Escape `hand-disruption`; The Lurking Unknown's Escape `deck-thinning`.
+- **Schemes.** War for the Dream Dimension `escape-pressure 1`, amplifying escape pressure; Claim Souls for Demons `wounds 1`, `bystander-pressure 1`, amplifying Wounds; Duels of Science and Magic `hand-disruption 1` (its reveal is an either/or of two classes, which a check cannot name).
+
+### Difficulty: no axis
+
+- Wand of Watoomb, Book of Cagliostro, The Eye of Agamotto and Staff of Legba (Ritual Artifact conditions), Commune with the Spirit World, Astral Confrontation, Prepare Dark Magic and Possessed by Brother's Spirit's effects fit no want kind or axis.
+- Keeper of the Sanctum's Artifact want is untagged: the Artifact keyword is the Heroes of Asgard term, not one of this box's.
+- Nightmare's Tactics (Don't Fall Asleep, Dream Weaver, Night Terrors, Deadly Waking Nightmares) and Dormammu's Tactics only hit other players or only help the fighter; Nightmare's Escape and both Epic faces are on the Mastermind card, which has no tag slot.
+- Cursed Pages of the Darkhold Tome moves Cursed Pages next to the Mastermind, which no axis names.
+- Demonic Descendant, Hoggoth, Agamotto's Bargains are optional and not tagged as self costs; Nox's and D'Spayre's Astral Plane moves, Dreamstalker's draw and The Lurking Unknown's Fight are untagged.
