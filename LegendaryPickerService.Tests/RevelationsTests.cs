@@ -36,6 +36,17 @@ public class RevelationsTests
         Assert.Equal(30, setup.Stacks.Officers);
     }
 
+    // Its own Mastermind is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_the_Mandarin_rates_with_a_reason_naming_him()
+    {
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "The Korvac Saga", "Mandarin");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(DrawIndexes.Scheme(Catalog, Boxes, 2, "The Korvac Saga"), mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Mandarin's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);

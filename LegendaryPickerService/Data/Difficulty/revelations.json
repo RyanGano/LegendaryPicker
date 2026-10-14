@@ -1,0 +1,894 @@
+{
+  "schemaVersion": 3,
+  "box": "revelations",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "revelations_hero_captain-marvel-agent-of-shield",
+      "cards": [
+        {
+          "name": "The Sword of S.H.I.E.L.D.",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Radiant Blast",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Dominate the Battlefield",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Higher, Further, Faster",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "revelations_hero_darkhawk",
+      "cards": [
+        {
+          "name": "Balance the Darkforce",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Hawk Dive",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "both"
+        },
+        {
+          "name": "Travel to Nullspace",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "both"
+        },
+        {
+          "name": "Warflight",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "revelations_hero_hellcat",
+      "cards": [
+        {
+          "name": "Catlike Agility",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Part-Time PI",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Demon Sight",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Second Chance at Life",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "revelations_hero_photon",
+      "cards": [
+        {
+          "name": "Infrared Conversation",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "none",
+          "selfCost": [
+            "discard"
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Ultraviolet Radiation",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Light the Way",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Coruscating Vengeance",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "revelations_hero_quicksilver",
+      "cards": [
+        {
+          "name": "Too Fast to See",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Perpetual Motion",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Jittery Impatience",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Around the World Punch",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "revelations_hero_ronin",
+      "cards": [
+        {
+          "name": "Mysterious Identity",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Storm of Arrows",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Haunted by Loss",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Brooding Fury",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "revelations_hero_scarlet-witch",
+      "cards": [
+        {
+          "name": "Hex Bolt",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Alter Reality",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Chaos Magic",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "none"
+        },
+        {
+          "name": "Warp Time and Space",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              2
+            ],
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ],
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "revelations_hero_speed",
+      "cards": [
+        {
+          "name": "Accelerate",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Speedy Delivery",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "both"
+        },
+        {
+          "name": "Race to the Rescue",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Break the Sound Barrier",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "revelations_hero_war-machine",
+      "cards": [
+        {
+          "name": "Simulated Target Practice",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Military-Industrial Complex",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "both"
+        },
+        {
+          "name": "Hypersonic Cannon",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Overwhelming Firepower",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack",
+          "draw": 1,
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "revelations_mastermind_grim-reaper",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "revelations_mastermind_mandarin",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "revelations_mastermind_the-hood",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      }
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "revelations_villain_army-of-evil",
+      "cards": [
+        {
+          "name": "Mister Hyde",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Klaw",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Count Nefaria",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Blackout",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "revelations_villain_dark-avengers",
+      "cards": [
+        {
+          "name": "Ares",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Captain Marvel (Noh-Varr)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Dark Hawkeye (Bullseye)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Dark Wolverine (Daken)",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Sentry",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "revelations_villain_hoods-gang",
+      "cards": [
+        {
+          "name": "Cancer",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Madam Masque",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "revelations_villain_lethal-legion",
+      "cards": [
+        {
+          "name": "Swordsman",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "M'Baku",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Power Man (Erik Josten)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Living Laser",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "revelations_henchman_hydra-base",
+      "cards": [
+        {
+          "name": "HYDRA Base",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "revelations_henchman_mandarins-rings",
+      "cards": [
+        {
+          "name": "Spectral, The Disintegration Beam",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "revelations_scheme_earthquake-drains-the-ocean",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "revelations_scheme_house-of-m",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "revelations_scheme_secret-hydra-corruption",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "revelations_scheme_the-korvac-saga",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}
