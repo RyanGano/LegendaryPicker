@@ -1,0 +1,1257 @@
+{
+  "schemaVersion": 3,
+  "box": "marvel-studios-what-if",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "marvel-studios-what-if_hero_captain-carter",
+      "cards": [
+        {
+          "name": "Super Soldier Serum",
+          "copies": 3,
+          "class": "strength",
+          "cost": 2,
+          "economy": "both"
+        },
+        {
+          "name": "Wartime Logistics",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Coordinated Assault",
+          "copies": 3,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "The Shield of Britain",
+          "copies": 2,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Give Them All We've Got",
+          "copies": 2,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Icon of Hope",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "both"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-what-if_hero_star-lord-tchalla",
+      "cards": [
+        {
+          "name": "Fight or Flight",
+          "copies": 3,
+          "class": [
+            "strength",
+            "covert"
+          ],
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Interstellar Adventures",
+          "copies": 3,
+          "class": [
+            "covert",
+            "tech"
+          ],
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Plan the Heist",
+          "copies": 3,
+          "class": [
+            "instinct",
+            "covert"
+          ],
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Unexpected Exit",
+          "copies": 2,
+          "class": [
+            "strength",
+            "instinct"
+          ],
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Cross the Multiverse",
+          "copies": 2,
+          "class": [
+            "strength",
+            "ranged"
+          ],
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Colliding Dreams",
+          "copies": 1,
+          "class": [
+            "tech",
+            "ranged"
+          ],
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-what-if_hero_party-thor",
+      "cards": [
+        {
+          "name": "Forecast Says Thunder",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "recruit"
+        },
+        {
+          "name": "Worthy Challenge",
+          "copies": 3,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Destructive Feast",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "recruit"
+        },
+        {
+          "name": "Asgardian Rager",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Only Son",
+          "copies": 2,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Worthy of the Lightning",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "both"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-what-if_hero_killmonger-spec-ops",
+      "cards": [
+        {
+          "name": "Hunt New Prey",
+          "copies": 3,
+          "class": [
+            "strength",
+            "tech"
+          ],
+          "cost": 2,
+          "economy": "recruit"
+        },
+        {
+          "name": "No Matter the Price",
+          "copies": 3,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Violence Leaves Scars",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hostage Rescue",
+          "copies": 2,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Plot a Betrayal",
+          "copies": 2,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "I'm the King Baby!",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-what-if_hero_apocalyptic-black-widow",
+      "cards": [
+        {
+          "name": "Humanity's Final Hope",
+          "copies": 3,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Plant Hidden Asset",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Precision Strike",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Relentless",
+          "copies": 2,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "The Last Avenger",
+          "copies": 2,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Time to Save the Multiverse",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-what-if_hero_gamora-destroyer-of-thanos",
+      "cards": [
+        {
+          "name": "Assassin's Stealth",
+          "copies": 3,
+          "class": "covert",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Tactical Insight",
+          "copies": 3,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Wield the Blade of Thanos",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Titanicide",
+          "copies": 2,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "draw": 2
+        },
+        {
+          "name": "Destroy an Infinity Stone",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Infinity Crusher",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "guardians-of-the-multiverse",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-what-if_hero_doctor-strange-supreme",
+      "cards": [
+        {
+          "name": "Seize Infernal Power",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Summon Demon Minions",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Wards of the Vishanti",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "To Save Christine",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Break the Absolute Point in Time",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Stygian Communion",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 3
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-what-if_hero_uatu-the-watcher",
+      "cards": [
+        {
+          "name": "Diverging Timestreams",
+          "copies": 3,
+          "class": "covert",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Another Dimension Crumbles",
+          "copies": 3,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Break the Oath",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Anoint a Champion",
+          "copies": 2,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "History Repeats",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Convoke the Guardians",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "marvel-studios-what-if_mastermind_hank-pym-yellowjacket",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Revenge for Ancient Grievance",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "marvel-studios-what-if_mastermind_zombie-scarlet-witch",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Chaos Hex",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Even the Odds",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Refuse to Accept Death",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Wistful Illusion",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "marvel-studios-what-if_mastermind_killmonger-the-betrayer",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Sunset Over Wakanda",
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "marvel-studios-what-if_mastermind_ultron-infinity",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Infinity of Minions",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Transcend Mortality",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "marvel-studios-what-if_villain_intergalactic-party-animals",
+      "cards": [
+        {
+          "name": "Captain Marvel, End of the Party",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Frigga, Mother of Thor",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Party Korg",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Party Nebula",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Party Korath",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Party Skrull",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Party Surtur",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-what-if_villain_rival-overlords",
+      "cards": [
+        {
+          "name": "Thanos",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Dormammu",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Ego",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Loki",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Red Skull, HYDRA Occultist",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Yondu",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Ulysses Klaue",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-what-if_villain_black-order-guards",
+      "cards": [
+        {
+          "name": "Corvus Glaive",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Proxima Midnight",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Ebony Maw",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-what-if_villain_zombie-avengers",
+      "cards": [
+        {
+          "name": "Zombie Wong",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Zombie Hawkeye",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Zombie Wasp",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Zombie Doctor Strange",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Zombie Iron Man",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Zombie Captain America",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-what-if_villain_stranges-demons",
+      "cards": [
+        {
+          "name": "Demon Dragon",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Demonbound Doctor Strange",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Demon Champion of Hydra",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "marvel-studios-what-if_henchman_ultron-sentries",
+      "cards": [
+        {
+          "name": "Ultron Sentries",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-what-if_henchman_vibranium-liberator-drones",
+      "cards": [
+        {
+          "name": "Vibranium Liberator Drones",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "marvel-studios-what-if_scheme_trash-earth-with-hugest-party-ever",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ],
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-what-if_scheme_marvel-zombies",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-what-if_scheme_collect-an-interstellar-zoo",
+      "twist": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "deck-thinning"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-what-if_scheme_breach-the-nexus-of-all-realities",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}
