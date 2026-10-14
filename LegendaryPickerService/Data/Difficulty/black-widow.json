@@ -1,0 +1,569 @@
+{
+  "schemaVersion": 3,
+  "box": "black-widow",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "black-widow_hero_black-widow",
+      "cards": [
+        {
+          "name": "Evasive Acrobatics",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Widow's Bite",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Weave a Web of Spies",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Infiltrate the Conspiracy",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "black-widow_hero_yelena-belova",
+      "cards": [
+        {
+          "name": "Strike and Fade",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Unveil Identity",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Twilight Ops",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Destroy the Red Room",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "black-widow_hero_red-guardian",
+      "cards": [
+        {
+          "name": "Sleeper Agent",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Magnetic Shield",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Death Was Only a Ruse",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Champion of the Winter Guard",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "black-widow_hero_white-tiger",
+      "cards": [
+        {
+          "name": "Dark Influence of the Hand",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Amulets of the Tiger God",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Camouflaged Huntress",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Shadowed Resurrection",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ],
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "black-widow_hero_falcon-and-winter-soldier",
+      "cards": [
+        {
+          "name": "Attune / Atone",
+          "copies": 5,
+          "class": [
+            "ranged",
+            "strength"
+          ],
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Relocate / Reload",
+          "copies": 5,
+          "class": [
+            "instinct",
+            "tech"
+          ],
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "New Wings / New Plan",
+          "copies": 3,
+          "class": [
+            "tech",
+            "covert"
+          ],
+          "cost": 5,
+          "economy": "attack",
+          "draw": 2
+        },
+        {
+          "name": "Captain America's Legacy",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ],
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "black-widow_mastermind_taskmaster",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "S.H.I.E.L.D. Initiative Trainer",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Photographic Reflexes",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Teacher and Assassin",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Henchman Instructor",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "black-widow_mastermind_indestructible-man",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "escape-pressure",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Manipulate Murderous Mad Monk",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Secrets of Indestructibility",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "International Arms Dealer",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Unveil Project Four",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "black-widow_villain_taskmasters-thunderbolts",
+      "cards": [
+        {
+          "name": "Jester",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Joystick",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Jack O'Lantern",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Bullseye",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "black-widow_villain_elite-assassins",
+      "cards": [
+        {
+          "name": "Blue Talon",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Iron Maiden",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Snapdragon",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "black-widow_scheme_corrupt-the-spy-agencies",
+      "twist": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            1
+          ],
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "black-widow_scheme_train-black-widows-in-the-red-room",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "black-widow_scheme_sniper-rifle-assassins",
+      "twist": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "deck-thinning"
+      ]
+    },
+    {
+      "scheme": "black-widow_scheme_frame-heroes-for-murder",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ],
+          [
+            "hq-disruption",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}

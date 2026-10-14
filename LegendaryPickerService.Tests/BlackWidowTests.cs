@@ -29,6 +29,18 @@ public class BlackWidowTests
         Assert.Equal(6, Draw(2, "Frame Heroes for Murder").Heroes.Count);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Sniper Rifle Assassins");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Sniper Rifle Assassins", "Taskmaster");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Sniper Rifle Assassins's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
