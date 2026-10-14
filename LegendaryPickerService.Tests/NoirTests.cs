@@ -47,6 +47,17 @@ public class NoirTests
         Assert.NotNull(Draw(2, "Silence the Witnesses", Goblin).Stacks.Wounds);
     }
 
+    [Fact]
+    public void A_draw_with_the_Goblin_and_Silence_the_Witnesses_rates_on_Noir_cards_by_name()
+    {
+        var setup = Draw(2, "Silence the Witnesses", Goblin);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Silence the Witnesses's Twists"));
+        // The Goblin always leads Goblin's Freak Show.
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Vulture, Carnival Cannibal"));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind) =>
         Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(SchemeDraw(players, scheme), mastermind)));
 

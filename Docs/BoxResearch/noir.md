@@ -157,3 +157,23 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/noir.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons, and the owner's LegendaryAssistant data (`noir-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1. No card text is stored.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order (the card images' numbering, 01 for the 1-copy rare, agrees). Spider-Man Noir's four cards all cost 2, so its order follows the image numbers. Villain copies are C1's.
+- **Printed 0+ and plus icons.** Identical Twin Brother (Recruit 0+ and Attack 0+) is `both`; Multitalented and Balancing Act print both icons. Impetuous Dive, Hitting Rock Bottom and Weight of the World are `attack`, Follow Big Leads is `recruit`.
+- **Investigate** that puts the found card in hand is `draw 1`, as core's conditional draws (Multitalented, Missing Person Case, Listen for Heartbeats, Mechanized Plate-Mail, Adventurers Assemble!, Private Investigations, Gumshoe's Revolver). Discover the Bodies and the Fight-side Investigates on X-Men Noir Villains help the players and carry no tag.
+- **Power abilities** are a class want for the card's own class; Spider-Totem's Chosen wants Spider Friends. Unbreakable Cage's optional replacement is `answers wounds 1`; Solve the Crime rescues a Bystander (`answers bystanders 1`).
+- **Steam-Powered Arsenal** must put another hand card on top of the deck: `selfCost discard` (the nearest, as core's Cyclops commons).
+- **Hidden Witnesses** on a Villain, Mastermind or Scheme are Bystanders carried off: `bystander-pressure`. A Villain's own captures are tagged on Ambush; Ox's is a check on a Strength Hero.
+- **Villains.** Vulture's Escape Wound is `wounds 2`; Kraven's Attack is the highest HQ cost (`attack-inflation 1`); Fancy Dan's Fight KOs one of your Heroes (`deck-thinning 1`); The Chameleon's Fight flips the next Villain (`escape-pressure 1`); Cyclops's Escape (`deck-thinning 1`) and Emma Frost's Escape (plays a Twist, `twist-density 2`) are the only tagged X-Men Noir cards. Vulture's Fight (other players lose a Bystander or gain a Wound, no reveal) carries no tag.
+- **Masterminds.** Charles Xavier's Master Strike (four HQ Heroes capture witnesses) is `hq-disruption 2` and `attack-inflation 1`, since each witness adds to his Attack (as Kraven's). The Goblin's is `bystander-pressure 2` and `wounds 1`. Tactics: Blackmail the Judges is `bystander-pressure 1`; X-Con Men (X-Men) and Sinister Dreams (Spider Friends or Sinister Six; the check names one team, so Spider Friends, the First Edition one) are reveal-or-Wound checks of severity 1, as core's Crushing Shockwave and the Captain America 75th record's reveal-or-suffer rule. The other Tactics help the defeating player or hit the other players with no reveal, and carry no tag.
+- **Schemes.** Silence the Witnesses: `bystander-pressure 2`, amplifying it. Five Families of Crime and Hidden Heart of Darkness: `escape-pressure 2`, amplifying it (per-effect timing is #292). Find the Split Personality Killer's sixth Twist can lose the game for a wrong guess: amplifies `twist-density` only.
+
+### Difficulty: no axis
+
+- Hitting Rock Bottom (discards from the top or bottom of the player's own deck), Weight of the World and Follow Big Leads (count other played cards), Identical Twin Brother (copies a Hero's icons), Learn from Enemies (reuses a Fight) and Balancing Act (changes where a recruit goes) carry no answer or want beyond class, cost and economy.
+- Hidden Witnesses make a Villain or the Mastermind unfightable until paid for in Recruit; the format has no Recruit-gate axis, so only the Bystanders carried off are tagged. The Goblin's Start of Game captures are untagged for the same reason. A Mastermind has no always-on slot, so Charles Xavier's per-Bystander Attack rides on his Master Strike's tag.
+- Find the Split Personality Killer's guess-the-killer end is a one-shot loss with no axis.
