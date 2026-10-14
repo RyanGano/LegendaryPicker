@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
-import type { CardKind, CardsBeside, Component, Move, Pile, RuleNote, Setup, SetupStacks, StandIn } from './api/setupApi.ts'
+import type { CardKind, CardsBeside, Component, Move, Pile, RatingBands, RuleNote, Setup, SetupStacks, StandIn } from './api/setupApi.ts'
 import { cardTerms, setupTerms, startingDeckTerms, type RulesetTerms } from './rulesetTerms.ts'
 import { ComplexityRating, DifficultyRating } from './DifficultyRating.tsx'
 import { SpecialCardsInfo } from './SpecialCardsInfo.tsx'
@@ -17,10 +17,13 @@ export function SetupChecklist({
   setup,
   mastermindShown,
   onShowMastermind,
+  bands,
 }: {
   setup: Setup
   mastermindShown?: boolean
   onShowMastermind?: () => void
+  // The rating band names, so a requested band shows by name beside the drawn one.
+  bands?: RatingBands | null
 }) {
   const [shownHere, setShownHere] = useState(false)
   const mastermindLine = useRef<HTMLLIElement>(null)
@@ -78,8 +81,8 @@ export function SetupChecklist({
 
       {(setup.difficulty || setup.complexity) && (
         <div className="ratings">
-          {setup.difficulty && <DifficultyRating difficulty={setup.difficulty} />}
-          {setup.complexity && <ComplexityRating complexity={setup.complexity} />}
+          {setup.difficulty && <DifficultyRating difficulty={setup.difficulty} bands={bands?.difficulty} />}
+          {setup.complexity && <ComplexityRating complexity={setup.complexity} bands={bands?.complexity} />}
         </div>
       )}
 

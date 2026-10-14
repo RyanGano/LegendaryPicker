@@ -38,6 +38,11 @@ const core: Box = { id: 'core', name: 'Marvel Legendary First Edition core box',
 const fixture: Box = { id: 'fixture', name: 'Fixture Expansion', baseGame: false, ruleset: 'firstEdition' }
 const villains: Box = { id: 'villains', name: 'Legendary: Villains', baseGame: true, ruleset: 'villainous' }
 
+const ratingBands = {
+  difficulty: ['Easy One', 'Easy Two', 'Middle', 'Hard Two', 'Hard One'],
+  complexity: ['Plain', 'Some', 'More', 'Lots', 'Most'],
+}
+
 type SetupAnswer = (signal: AbortSignal) => Promise<Response>
 
 const json = (body: unknown) => Promise.resolve(Response.json(body))
@@ -55,6 +60,7 @@ beforeEach(() => {
   fetchMock = vi.fn((url: string, init?: RequestInit) => {
     if (url.endsWith('/api/health')) return json({ status: 'ok' })
     if (url.endsWith('/api/boxes')) return boxesAnswer()
+    if (url.endsWith('/api/ratings')) return json(ratingBands)
     const answer = setupAnswers.shift()
     if (!answer) throw new Error(`Unexpected request ${url}`)
     return answer(init!.signal!)
@@ -757,5 +763,48 @@ describe('App', () => {
     await user.click(await screen.findByRole('checkbox', { name: 'Fixture Expansion' }))
 
     expect(screen.getByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
+  })
+
+  it('asks for the picked difficulty and complexity, and for neither on Any', async () => {
+    setupAnswers = [() => json(setup), () => json(setup)]
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.selectOptions(await screen.findByRole('combobox', { name: 'Difficulty' }), 'Hard Two')
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Complexity' }), 'Plain')
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Difficulty' }), 'Any')
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Complexity' }), 'Any')
+    await user.click(screen.getByRole('button', { name: 'Generate another' }))
+
+    await waitFor(() => expect(setupRequests()).toHaveLength(2))
+    expect(setupRequests()[0]).toMatch(/&difficulty=4&complexity=1$/)
+    expect(setupRequests()[1]).toMatch(/players=3&boxes=core$/)
+  })
+
+  it('shows the asked-for band beside the drawn one when they differ', async () => {
+    setupAnswers = [
+      () =>
+        json({
+          ...setup,
+          difficulty: { rating: 2, band: 'Easy Two', reasons: [], target: 5 },
+          complexity: { rating: 3, band: 'More', reasons: [], target: 3 },
+        }),
+    ]
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.selectOptions(await screen.findByRole('combobox', { name: 'Difficulty' }), 'Hard One')
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Complexity' }), 'More')
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    const difficulty = await screen.findByRole('region', { name: 'Difficulty' })
+    expect(difficulty).toHaveTextContent('Easy Two')
+    expect(difficulty).toHaveTextContent('You asked for Hard One. This is the closest legal setup drawn.')
+    expect(screen.getByRole('region', { name: 'Complexity' })).not.toHaveTextContent('You asked for')
   })
 })

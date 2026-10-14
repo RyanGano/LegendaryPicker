@@ -275,6 +275,17 @@ public sealed class SetupEndpointTests : IDisposable
     }
 
     [Fact]
+    public async Task Ratings_list_the_band_names_of_difficulty_and_complexity_by_rating()
+    {
+        var body = await Client().GetFromJsonAsync<JsonObject>("/api/ratings");
+
+        Assert.Equal(
+            DifficultyTuning.Default.BandNames, body!["difficulty"]!.AsArray().Select(name => (string)name!));
+        Assert.Equal(
+            ComplexityTuning.Default.BandNames, body["complexity"]!.AsArray().Select(name => (string)name!));
+    }
+
+    [Fact]
     public async Task Boxes_give_the_year_first_published_and_a_description()
     {
         var boxes = await Client().GetFromJsonAsync<JsonArray>("/api/boxes");
