@@ -9,6 +9,8 @@ import killbots from './test/fixtures/killbots.json'
 import legacyVirusThreePlayers from './test/fixtures/legacyVirusThreePlayers.json'
 import soloSecretInvasion from './test/fixtures/soloSecretInvasion.json'
 import twoPlayerCosmicCube from './test/fixtures/twoPlayerCosmicCube.json'
+// A live core-box draw with 2 players, whose body carries the difficulty rating.
+import coreDifficulty from './test/fixtures/coreDifficulty.json'
 // A live draw from the Second Edition box with 2 players: Enshrouded Identity with Red Skull, Hydra Overlord, whose
 // Mastermind joins mid-game.
 import enshroudedIdentity from './test/fixtures/enshroudedIdentity.json'
@@ -101,6 +103,22 @@ const chips = (container: HTMLElement) =>
 const tile = (sectionName: string, name: string) => within(section(sectionName)).getByText(name).closest('li')!
 
 describe('SetupChecklist', () => {
+  it('shows the difficulty rating and band name, with the reasons behind a Why button', async () => {
+    renderChecklist(coreDifficulty)
+
+    const rating = screen.getByRole('region', { name: 'Difficulty' })
+    expect(within(rating).getByRole('img', { name: '3 of 5' })).toBeInTheDocument()
+    expect(within(rating).getByText('Heavy Hitter')).toBeInTheDocument()
+    await userEvent.click(within(rating).getByText('Why this rating'))
+    expect(within(rating).getAllByRole('listitem').map((item) => item.textContent)).toEqual(coreDifficulty.difficulty.reasons)
+  })
+
+  it('shows no rating when the API gives none', () => {
+    renderChecklist(twoPlayerCosmicCube)
+
+    expect(screen.queryByRole('region', { name: 'Difficulty' })).not.toBeInTheDocument()
+  })
+
   it('puts the drawn Scheme and Mastermind names first, as headings', () => {
     renderChecklist(legacyVirusThreePlayers)
 

@@ -12,6 +12,10 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 - GitHub Pages deploys the frontend from `main`: https://ryangano.github.io/LegendaryPicker/.
 - The API is hosted on Azure App Service Free F1, Linux, West US 2, $0 a month (user decision, 2026-09-27). The web app is the one named by the `AZURE_WEBAPP_NAME` repository variable; the resource names and hostname are kept out of the repo. `.github/workflows/deploy-api.yml` deploys it from `main` through OIDC (the Entra app identified by the `AZURE_CLIENT_ID` repository variable, trusted for `refs/heads/main` only); the Pages build points at it through the `VITE_API_BASE_URL` repository variable (#7). Any other Azure resource needs explicit authorization.
 
+## Difficulty rating, first slice (#264, 2026-10-13)
+
+`GET /api/setup` setups carry `difficulty` (rating 1 to 5, band, up to three reasons) from a Hero-Deck-only scorer (`Setup/DifficultyScorer.cs`, constants in `DifficultyTuning`) reading `Data/Difficulty/core.json`. The core file's class and cost per card come from the C1 index in `Docs/BoxResearch/core.md`; copies are assumed 5, 5, 3, 1 by the card image's number (04 down to 01, which is rarity order except for Storm, whose rare is Tidal Wave), not read from the box. Format, vocabulary and bands: `Docs/Difficulty/README.md`. Thresholds are guesses until the calibration slice (#268).
+
 ## Resolved in the 2026-09-27 session
 
 - The whole core-box catalog is confirmed. An earlier note wrongly listed Sentinel and Hand Ninjas as Villain Groups; they are Henchman Groups.

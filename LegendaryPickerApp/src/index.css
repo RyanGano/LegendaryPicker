@@ -50,6 +50,9 @@
   --wound: #a3276b;
   --shield: #3b5a74;
 
+  /* The difficulty rating's pips and band name: the Mastermind accent, as the thing the Heroes are up against. */
+  --difficulty: var(--mastermind);
+
   /* One accent per glossary term kind, drawn from the card-type accents. */
   --term-team: var(--hero);
   --term-class: var(--shield);
@@ -793,6 +796,69 @@ div.box-option {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
+}
+
+/* The drawn setup's difficulty: five pips, the band name in the display face, and a "why" the player can open. */
+.difficulty {
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--difficulty);
+  border-radius: var(--radius-md);
+}
+
+.difficulty-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.difficulty-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.difficulty-band {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  letter-spacing: 0.02em;
+  color: var(--difficulty);
+}
+
+.difficulty-pips {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.difficulty-pip {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid var(--difficulty);
+  border-radius: 50%;
+}
+
+.difficulty-pip.on {
+  background: var(--difficulty);
+}
+
+.difficulty details {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+.difficulty summary {
+  cursor: pointer;
+  color: var(--link);
+}
+
+.difficulty ul {
+  margin: var(--space-1) 0 0;
+  color: var(--muted);
 }
 
 .setup h3,

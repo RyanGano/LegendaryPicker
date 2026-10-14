@@ -196,6 +196,14 @@ export type RuleNote = {
   box?: string
 }
 
+// How hard the drawn Hero Deck is to win with: rating 1 (easiest) to 5, the band's display name, and up to three
+// reasons in plain words. Left out by an API from before the rating, and never says anything about balance.
+export type Difficulty = {
+  rating: number
+  band: string
+  reasons: string[]
+}
+
 export type Setup = {
   kind: 'setup'
   players: number
@@ -242,6 +250,7 @@ export type Setup = {
   notes: RuleNote[]
   // One entry per term any drawn component uses: teams, then classes, then keywords.
   glossary: GlossaryEntry[]
+  difficulty?: Difficulty
 }
 
 // A valid answer, not an error: no Scheme can be set up legally at this count.

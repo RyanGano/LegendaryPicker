@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import type { CardKind, CardsBeside, Component, Move, Pile, RuleNote, Setup, SetupStacks, StandIn } from './api/setupApi.ts'
 import { cardTerms, setupTerms, startingDeckTerms, type RulesetTerms } from './rulesetTerms.ts'
+import { DifficultyRating } from './DifficultyRating.tsx'
 import { SpecialCardsInfo } from './SpecialCardsInfo.tsx'
 import { TermKind } from './TermChips.tsx'
 
@@ -74,6 +75,8 @@ export function SetupChecklist({
       <p className="progress" role="status">
         {progress.ticked} of {progress.total} laid out
       </p>
+
+      {setup.difficulty && <DifficultyRating difficulty={setup.difficulty} />}
 
       <Section title={`${t.scheme} and ${t.mastermind}`} kind="mastermind">
         <Item label={names([setup.scheme])} detail={t.scheme} />

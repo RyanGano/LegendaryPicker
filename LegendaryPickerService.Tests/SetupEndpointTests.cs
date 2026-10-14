@@ -315,7 +315,7 @@ public sealed class SetupEndpointTests : IDisposable
     public async Task Naming_only_the_core_box_returns_the_same_setup_as_naming_none()
     {
         // The fixture expansion is loaded but not included.
-        var client = Client(new ScriptedRandom(7, 3), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory));
+        var client = Client(new ScriptedRandom(7, 3), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory, BoxCatalog.DefaultDifficultyDirectory));
 
         var body = JsonNode.Parse(await client.GetStringAsync("/api/setup?players=2&boxes=core"));
 
@@ -787,7 +787,16 @@ public sealed class SetupEndpointTests : IDisposable
               "citation": "R p.10",
               "link": "https://web.archive.org/web/20130127000000id_/http://upperdeck.com/Checklist/Legendary_Rulebook_FINAL.pdf"
             }
-          ]
+          ],
+          "difficulty": {
+            "rating": 4,
+            "band": "Cosmic Threat",
+            "reasons": [
+              "All five classes are in the deck, which spreads the synergies thin.",
+              "Many Hero cards cost 6 or more.",
+              "No one class dominates, so class bonuses are rare."
+            ]
+          }
         }
         """;
 }
