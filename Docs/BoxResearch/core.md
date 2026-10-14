@@ -392,7 +392,7 @@ Assumptions:
 - A `{POWER class}` ability is a `class` want of strength 1, and 2 where the bonus is large (Hulk Smash!, Arc Reactor, Borrowed Brawn, Call Lightning). A `{TEAMPOWER}` ability, or a card that counts teammates (A Day Unlike Any Other, X-Men United, Legendary Commander), is a `team` want of strength 1 to 3 by how much it pays.
 - "For each color of Hero you have" is a `diversity` want (Captain America's two commons at 2; Rogue's Copy Powers at 1). Cards that use a Wound in hand (Unstoppable Hulk, Healing Factor) want the `wounds` stack, and answer `wounds` because they KO one or negate one (Diving Block). Covert Operation wants `bystanders`, which is not scored (Bystanders can always be rescued).
 - Rescuing or protecting Bystanders (Black Widow's cards, Impossible Trick Shot, Web-Shooters, Spinning Cyclone) answers `bystanders`. Spinning Cyclone's Villain move also answers `villain-flow`. Lightning Bolt and Tidal Wave answer `attack-inflation` (they lower a Villain's Attack).
-- `selfCost`: Cyclops's two commons need a discard to play; Deadpool's Do-Over discards the hand; Random Acts of Unkindness and Crazed Rampage give a Wound.
+- `selfCost`: Cyclops's two commons need a discard to play; Crazed Rampage gives a Wound. Deadpool's Do-Over and Random Acts of Unkindness are optional effects, so they carry no `selfCost` (#268).
 - `draw` is cards drawn outright, not under a Power or a condition: Mission Accomplished, Mental Discipline, Quick Draw and Endless Invention 1; Stack the Deck and Quantum Breakthrough 2; Berserker Rage 3.
 
 Difficulty: no axis (cards left with no tag, or tagged only in part):

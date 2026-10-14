@@ -3,7 +3,7 @@ using LegendaryPickerService.Catalog;
 namespace LegendaryPickerService.Setup;
 
 // Every constant the scorer uses (#264). Each *Easy and *Hard pair maps a measure to 0 (easy) .. 1 (hard), clamped.
-// These start as guesses to be set by the calibration slice (#268), not swept: change the numbers here and nowhere else.
+// Calibration (#268) set them once against the reference setups in DifficultyCalibrationTests; change the numbers here and nowhere else.
 // BandNames are display strings only; the rating 1..5 is what the code uses.
 public sealed record DifficultyTuning
 {
@@ -35,7 +35,7 @@ public sealed record DifficultyTuning
     public double ClassCountWeight { get; init; } = 0.15;
 
     // The raw score (0..1) at which each band above the first starts: five equal-width bands.
-    public IReadOnlyList<double> BandStarts { get; init; } = [0.2, 0.4, 0.6, 0.8];
+    public IReadOnlyList<double> BandStarts { get; init; } = [0.28, 0.365, 0.58, 0.74];
 
     // Band names by rating, 1 to 5.
     public IReadOnlyList<string> BandNames { get; init; } = ["Sidekick", "Street-Level", "Heavy Hitter", "Cosmic Threat", "Secret Wars"];
@@ -81,9 +81,9 @@ public sealed record DifficultyTuning
 
     // The opposition's total load (a sum of occurrences * severity) that is easy and hard, how much it counts toward the
     // raw score against the Hero Deck's terms, and the least load worth a reason.
-    public double LoadEasy { get; init; } = 4;
-    public double LoadHard { get; init; } = 24;
-    public double OppositionWeight { get; init; } = 0.5;
+    public double LoadEasy { get; init; } = 15;
+    public double LoadHard { get; init; } = 55;
+    public double OppositionWeight { get; init; } = 0.4;
     public double ReasonLoadMin { get; init; } = 0.75;
     public int MaxOppositionReasons { get; init; } = 3;
 
@@ -155,12 +155,21 @@ public static class DifficultyScorer
         return new Difficulty(rating, tuning.BandNames[rating - 1], evaluation.Reasons);
     }
 
-    // The rating a setup is expected to have on a continuous 1..5 scale, the middle of its band at the raw score, so a
-    // draw can weigh an option by how near it is to a target (#267). Neutral when there is nothing to measure.
-    public static double Expected(IReadOnlyList<ScoredHero> heroes, DifficultyTuning tuning, ScoredOpposition? opposition = null) =>
-        Evaluate(heroes, tuning, opposition) is { } evaluation
-            ? Math.Clamp(0.5 + evaluation.Raw * tuning.BandNames.Count, 1, tuning.BandNames.Count)
-            : tuning.NeutralRating;
+    // The rating a setup is expected to have on a continuous 1..5 scale, so a draw can weigh an option by how near it is to
+    // a target (#267). A band runs from n - 0.5 at its start to n + 0.5 at its end, so it rounds to the rating Score gives
+    // and follows BandStarts when the bands are not equal widths. Neutral when there is nothing to measure.
+    public static double Expected(IReadOnlyList<ScoredHero> heroes, DifficultyTuning tuning, ScoredOpposition? opposition = null)
+    {
+        if (Evaluate(heroes, tuning, opposition) is not { } evaluation)
+        {
+            return tuning.NeutralRating;
+        }
+
+        var edges = new[] { 0.0 }.Concat(tuning.BandStarts).Append(1.0).ToArray();
+        var band = Math.Min(tuning.BandStarts.Count(start => evaluation.Raw >= start), edges.Length - 2);
+        var along = (evaluation.Raw - edges[band]) / (edges[band + 1] - edges[band]);
+        return Math.Clamp(band + 0.5 + along, 1, edges.Length - 1);
+    }
 
     private sealed record Evaluation(double Raw, IReadOnlyList<string> Reasons);
 

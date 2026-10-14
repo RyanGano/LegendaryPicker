@@ -117,7 +117,7 @@ public sealed class DifficultyTests : IDisposable
         ScoredOpposition Strikes(string heroClass) => new(
             [new OppositionPart("Test Master Strikes", "core",
                 new OppositionTag(Check: new OppositionCheck(new Requirement(RequirementKind.Class, heroClass), OppositionAxis.Wounds), Severity: 3),
-                [Timing.Strike], 8)],
+                [Timing.Strike], 30)],
             [], new Dictionary<string, string>());
 
         var met = DifficultyScorer.Score(deck, tuning, Strikes("strength"));
@@ -256,7 +256,7 @@ public sealed class DifficultyTests : IDisposable
         var healer = new ScoredHero(["avengers"], [new HeroCardDifficulty("Healer", 6, [HeroClass.Strength], 3, CardEconomy.Attack,
             Answers: [new HeroAnswer(AnswerAxis.Wounds, 3)])]);
         var woundy = new ScoredOpposition(
-            [new OppositionPart("Test Twists", "core", new OppositionTag(Inflicts: [new Inflict(OppositionAxis.Wounds, 3)]), [Timing.Twist], 8)],
+            [new OppositionPart("Test Twists", "core", new OppositionTag(Inflicts: [new Inflict(OppositionAxis.Wounds, 3)]), [Timing.Twist], 20)],
             [], new Dictionary<string, string>());
 
         var without = DifficultyScorer.Expected([plain], tuning, woundy);
