@@ -52,6 +52,8 @@
 
   /* The difficulty rating's pips and band name: the Mastermind accent, as the thing the Heroes are up against. */
   --difficulty: var(--mastermind);
+  /* The complexity rating shares its panel with the difficulty and takes the Scheme accent: the rules to learn. */
+  --complexity: var(--scheme);
 
   /* One accent per glossary term kind, drawn from the card-type accents. */
   --term-team: var(--hero);
@@ -796,6 +798,18 @@ div.box-option {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
+}
+
+/* The difficulty and complexity panels sit side by side, and stack when the page is narrow. */
+.ratings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.difficulty.complexity {
+  --difficulty: var(--complexity);
 }
 
 /* The drawn setup's difficulty: five pips, the band name in the display face, and a "why" the player can open. */

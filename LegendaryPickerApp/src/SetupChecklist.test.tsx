@@ -11,6 +11,8 @@ import soloSecretInvasion from './test/fixtures/soloSecretInvasion.json'
 import twoPlayerCosmicCube from './test/fixtures/twoPlayerCosmicCube.json'
 // A live core-box draw with 2 players, whose body carries the difficulty rating.
 import coreDifficulty from './test/fixtures/coreDifficulty.json'
+// A live draw from the core box and four expansions with a complexity target of 4.
+import multiBoxComplexity from './test/fixtures/multiBoxComplexity.json'
 // A live draw from the Second Edition box with 2 players: Enshrouded Identity with Red Skull, Hydra Overlord, whose
 // Mastermind joins mid-game.
 import enshroudedIdentity from './test/fixtures/enshroudedIdentity.json'
@@ -113,10 +115,22 @@ describe('SetupChecklist', () => {
     expect(within(rating).getAllByRole('listitem').map((item) => item.textContent)).toEqual(coreDifficulty.difficulty.reasons)
   })
 
+  it('shows the complexity rating beside the difficulty, with its reasons behind a Why button', async () => {
+    renderChecklist(multiBoxComplexity)
+
+    const rating = screen.getByRole('region', { name: 'Complexity' })
+    expect(within(rating).getByRole('img', { name: '4 of 5' })).toBeInTheDocument()
+    expect(within(rating).getByText('Multiverse')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Difficulty' })).toBeInTheDocument()
+    await userEvent.click(within(rating).getByText('Why this rating'))
+    expect(within(rating).getAllByRole('listitem').map((item) => item.textContent)).toEqual(multiBoxComplexity.complexity.reasons)
+  })
+
   it('shows no rating when the API gives none', () => {
     renderChecklist(twoPlayerCosmicCube)
 
     expect(screen.queryByRole('region', { name: 'Difficulty' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Complexity' })).not.toBeInTheDocument()
   })
 
   it('puts the drawn Scheme and Mastermind names first, as headings', () => {
