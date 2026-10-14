@@ -271,3 +271,26 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/messiah-complex.json` (format v3, source `Q`). Card effects were read from the C1 catalog's ability data (tags only are recorded here); the shared OCR cache holds no card text. Names follow C1.
+
+- **Class conflicts.** None between C1 and the box file's class lists; C1 per-card classes are used.
+- **Copies.** C1 gives a quantity for the four Clone Heroes (4, 4, 4, 2). The other four Heroes have rarity only (1, 1, 2, 3), so copies are 5, 5, 3, 1 in that order. Villain copies are C1's `qtd`.
+- **Economy.** A printed N+ or 0+ icon counts as that icon; cards with no Recruit or Attack icon are `none`.
+- **Draws.** Me, Myself, and I, Gladiator's Blades and Three Sisters Combined draw 1 (conditional, as in core); Endless Endurance draws 2 extra at end of turn.
+- **Wants.** Class and team superpowers want that class or team; Penance Form also wants Wounds (it KOs one) and gains a Wound otherwise (`selfCost wound`).
+- **Answers.** Absorb Kinetic Energy discards instead of a Wound (`wounds 1`).
+- **Masterminds.** Lady Deathstrike's Master Strike (Finish the Prey) `wounds 2`, `hand-disruption 1`. Bastion's `hand-disruption 1`, `attack-inflation 1`; Template and Machine Man are checks (Covert into hand disruption, Tech into Wounds), Master Mold `escape-pressure 1`, Nimrod `hand-disruption 1`. Exodus's Master Strike `wounds 1`, `hand-disruption 1` (he chooses the team); Resurrect the Dead `escape-pressure 1`.
+- **Villain Groups.** Prey Finish effects are tagged on the Ambush that starts them (Reavers' KO, Wound, Bystander capture, discard; Purifiers' discard with `escape-pressure 1` for the Clone, Leper Queen's Wound, Stryker's and Hodge's captured Heroes as `deck-thinning`). Acolytes' printed Attack 16, 12 and 10 as `attack-inflation`, Frenzy's KO `deck-thinning 1`, Random's Escape discard `hand-disruption 1`. Clan Yashida captures Bystanders; Lord Shingen's Bodyguards `attack-inflation 1`; Gorgon `hand-disruption 2`, `deck-thinning 1`.
+- **Henchmen.** Mr. Sinister Clones' Ambush Clone `escape-pressure 1`; Sentinel Squad O*N*E* also `deck-thinning 1` on its Fight.
+- **Schemes.** Hack Cerebro Servers To... `hq-disruption 1`; Hire Singularity Investigations To... `escape-pressure 1`, `deck-thinning 1`.
+
+### Difficulty: no axis
+
+- Tactical Formation, Investigate, Clone and Shatter on Hero cards have no want kind or axis.
+- Lady Deathstrike's Tactics (Cybernetic Healing Factor, Prey on the Weak, Relentless Assassin, Stretching Adamantium Claws), Exodus's Unite All Mutantkind, Omega-Level Mutant and Avalon only hit other players or only help the fighter.
+- Bastion's and Exodus's passives (Sentinel +Attack per Master Strike, paying to Shatter) and Epic faces are on the Mastermind card, which has no tag slot.
+- Drain Mutants' Powers To... and Raid Gene Banks To... only stack Twists and Sidekicks or move a Villain, then transform into an Unveiled Scheme the data does not draw.
+- Cards untagged beyond cost and economy: Strong Guy's four cards, Scarlet Samurai (becomes a Hero), Tempo's draw, Silver Samurai's KO, the Stepford Cuckoos, Warpath's Grim Tracker, Dangerous Maneuver and Superhuman Senses, Siryn's Echolocation, Three-Octave Arpeggio and Splintering Shriek, Rictor's Unearth Tectonic Power and Massive Earthquake.
