@@ -1,0 +1,621 @@
+{
+  "schemaVersion": 3,
+  "box": "black-panther",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "black-panther_hero_king-black-panther",
+      "cards": [
+        {
+          "name": "Unseen Protector",
+          "copies": 5,
+          "class": [
+            "instinct",
+            "covert"
+          ],
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "heroes-of-wakanda",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Vibranium Claws",
+          "copies": 5,
+          "class": [
+            "instinct",
+            "tech"
+          ],
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Heart-Shaped Herb",
+          "copies": 3,
+          "class": [
+            "strength",
+            "covert"
+          ],
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Unite the Tribes of Wakanda",
+          "copies": 1,
+          "class": [
+            "strength",
+            "ranged"
+          ],
+          "cost": 8,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "heroes-of-wakanda",
+              1
+            ],
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "black-panther_hero_queen-storm-of-wakanda",
+      "cards": [
+        {
+          "name": "Hurricane Winds",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Torrential Downpour",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Forked Lightning",
+          "copies": 3,
+          "class": [
+            "covert",
+            "ranged"
+          ],
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Thunderous Tempest",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "heroes-of-wakanda",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "hq",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "black-panther_hero_princess-shuri",
+      "cards": [
+        {
+          "name": "Vibranium Experiments",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Kimoyo Beads",
+          "copies": 5,
+          "class": [
+            "tech",
+            "ranged"
+          ],
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Shock Net",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "hq",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Become the Next Black Panther",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "heroes-of-wakanda",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "black-panther_hero_general-okoye",
+      "cards": [
+        {
+          "name": "To My Last Breath",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Lead the Dora Milaje",
+          "copies": 5,
+          "class": [
+            "strength",
+            "instinct"
+          ],
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Sovereign Bodyguard",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Direct the Agents of Wakanda",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "heroes-of-wakanda",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "black-panther_hero_white-wolf",
+      "cards": [
+        {
+          "name": "Secret Assignment",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Cloaking Tech Ambush",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Command the Hatut Zeraze",
+          "copies": 3,
+          "class": [
+            "covert",
+            "tech"
+          ],
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "heroes-of-wakanda",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reflective Vibranium Armor",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "black-panther_mastermind_killmonger",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Altar of Resurrection",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "black-panther_mastermind_klaw",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Cohesive Sound Construct",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "black-panther_villain_killmongers-league",
+      "cards": [
+        {
+          "name": "Preyy",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Malice",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Baron Macabre",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Venomm",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "black-panther_villain_enemies-of-wakanda",
+      "cards": [
+        {
+          "name": "Jakarra",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Tetu",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Zenzi",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Reverend Achebe",
+          "copies": 1,
+          "inflicts": [
+            [
+              "twist-density",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "black-panther_scheme_seize-the-wakandan-throne",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "black-panther_scheme_poison-lakes-with-nanite-microbots",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "hq-disruption",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "black-panther_scheme_plunder-wakandas-vibranium",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "black-panther_scheme_provoke-a-clash-of-nations",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}

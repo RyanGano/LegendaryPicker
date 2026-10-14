@@ -7,7 +7,8 @@
   "about": { "released": { "value": "2022-08", "source": "REL" }, "description": { "value": "A small First Edition expansion set in Wakanda. It adds five Heroes such as Shuri and Okoye, Killmonger's League and Enemies of Wakanda as Villain Groups, Killmonger and Klaw as Masterminds, and the Hero Ambush and Wounding keywords.", "source": "REL" } },
   "sources": [
     { "key": "BP", "url": "https://theupperdeckco.wpenginepowered.com/wp-content/uploads/2024/05/2022-BlackPanther_Rulesheet.pdf" },
-    { "key": "REL", "url": "https://icv2.com/articles/news/view/51644/upper-deck-will-release-marvel-legendary-black-panther" }
+    { "key": "REL", "url": "https://icv2.com/articles/news/view/51644/upper-deck-will-release-marvel-legendary-black-panther" },
+    { "key": "Q", "url": "https://github.com/RyanGano/LegendaryPicker/blob/main/Docs/BoxResearch/README.md" }
   ],
   "components": {
     "heroCards": { "value": 14, "source": "BP p.2" },
