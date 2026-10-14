@@ -494,14 +494,12 @@ describe('App', () => {
 
     await screen.findByRole('checkbox', { name: 'Fixture Expansion' })
 
-    expect(
-      within(screen.getByRole('group', { name: 'Boxes' }))
-        .getAllByRole('checkbox')
-        .map((box) => [box.closest('label')!.textContent, (box as HTMLInputElement).checked]),
-    ).toEqual([
-      ['Marvel Legendary First Edition core box Base game', true],
-      ['Fixture Expansion', false],
-    ])
+    const baseGames = screen.getByRole('group', { name: /^Base games/ })
+    expect(baseGames).toHaveTextContent('Choose at least one')
+    expect(within(baseGames).getAllByRole('checkbox').map((box) => (box as HTMLInputElement).checked)).toEqual([true])
+    expect(within(baseGames).getByRole('checkbox', { name: 'Marvel Legendary First Edition core box' })).toBeChecked()
+    const expansions = screen.getByRole('group', { name: 'Expansions' })
+    expect(within(expansions).getByRole('checkbox', { name: 'Fixture Expansion' })).not.toBeChecked()
   })
 
   it('lets the core box be unticked, and disables Generate until a base game is ticked', async () => {
@@ -509,13 +507,14 @@ describe('App', () => {
     const user = userEvent.setup()
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
-    const coreBox = await screen.findByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' })
+    const coreBox = await screen.findByRole('checkbox', { name: 'Marvel Legendary First Edition core box' })
 
     await user.click(coreBox)
 
     expect(coreBox).not.toBeChecked()
     expect(screen.getByRole('button', { name: 'Generate' })).toBeDisabled()
     expect(screen.getByText('Pick a base game to draw a setup.')).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: /^Base games/ })).toHaveClass('needs-choice')
 
     await user.click(coreBox)
 
@@ -530,8 +529,8 @@ describe('App', () => {
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
 
-    await user.click(await screen.findByRole('checkbox', { name: "Marvel Studios' What If...? Base game Second Edition rules" }))
-    await user.click(screen.getByRole('checkbox', { name: 'Legendary: Villains Base game' }))
+    await user.click(await screen.findByRole('checkbox', { name: "Marvel Studios' What If...?" }))
+    await user.click(screen.getByRole('checkbox', { name: 'Legendary: Villains' }))
 
     expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
     expect(document.querySelector('.box-hint')).toBeNull()
@@ -544,11 +543,11 @@ describe('App', () => {
     const user = userEvent.setup()
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
-    await screen.findByRole('checkbox', { name: 'Marvel Legendary Second Edition Base game Second Edition rules' })
+    await screen.findByRole('checkbox', { name: 'Marvel Legendary Second Edition' })
 
     expect(screen.queryByRole('radiogroup', { name: 'Rules' })).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary Second Edition Base game Second Edition rules' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary Second Edition' }))
     const rules = screen.getByRole('radiogroup', { name: 'Rules' })
     expect(within(rules).getByRole('radio', { name: 'Default Set by the boxes' })).toBeChecked()
     expect(within(rules).getByRole('radio', { name: 'Second Edition Also What If...?' })).toBeInTheDocument()
@@ -565,7 +564,7 @@ describe('App', () => {
     ])
     expect(localStorage.getItem('legendaryPicker.rules')).toBe('first-edition')
 
-    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box' }))
 
     expect(screen.queryByRole('radiogroup', { name: 'Rules' })).not.toBeInTheDocument()
   })
@@ -641,7 +640,7 @@ describe('App', () => {
     renderApp()
 
     expect(await screen.findByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
-    expect(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' })).not.toBeChecked()
+    expect(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box' })).not.toBeChecked()
     expect(screen.getByText('Pick a base game to draw a setup.')).toBeInTheDocument()
   })
 
@@ -651,7 +650,7 @@ describe('App', () => {
     renderApp()
 
     expect(await screen.findByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
-    expect(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' })).toBeChecked()
+    expect(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box' })).toBeChecked()
     expect(localStorage.getItem('legendaryPicker.boxes')).toBe('["core","fixture"]')
     expect(localStorage.getItem('legendaryPicker.expansions')).toBeNull()
   })
@@ -662,7 +661,7 @@ describe('App', () => {
     boxesAnswer = () => json([core, villains, fixture])
     renderApp()
 
-    expect(await screen.findByRole('checkbox', { name: 'Legendary: Villains Base game' })).toBeChecked()
+    expect(await screen.findByRole('checkbox', { name: 'Legendary: Villains' })).toBeChecked()
     expect(screen.getByRole('checkbox', { name: 'Fixture Expansion' })).not.toBeChecked()
     expect(localStorage.getItem('legendaryPicker.expansions')).toBeNull()
   })
@@ -674,13 +673,13 @@ describe('App', () => {
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
 
-    await user.click(await screen.findByRole('checkbox', { name: 'Legendary: Villains Base game' }))
+    await user.click(await screen.findByRole('checkbox', { name: 'Legendary: Villains' }))
     await user.click(screen.getByRole('button', { name: 'Generate' }))
 
     expect(await screen.findByRole('heading', { name: 'Setup for 3 players', level: 2 })).toBeInTheDocument()
     expect(announced()).toBe('Setup ready. Plot: Crush HYDRA. Mastermind: Magneto.')
 
-    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box Base game' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box' }))
     await user.click(screen.getByRole('checkbox', { name: 'Fixture Expansion' }))
     await user.click(screen.getByRole('button', { name: 'Generate another' }))
 

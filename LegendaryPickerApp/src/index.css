@@ -325,16 +325,66 @@ div.box-option {
   accent-color: var(--accent);
 }
 
+/* A box's title never wraps: a long one is cut with an ellipsis (the full name is its checkbox's label). */
 .box-option .box-name {
   flex: 1;
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .box-option .detail {
   flex: none;
   font-size: var(--text-sm);
   color: var(--muted);
+}
+
+/* Base games and expansions are separate groups; the base games carry the accent and the "choose one" note. */
+.box-group-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.box-group-note {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.base-games {
+  margin-bottom: var(--space-4);
+  padding: var(--space-3);
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-md);
+}
+
+.base-games .box-group-label {
+  color: var(--accent);
+}
+
+.base-games .box-options {
+  margin-bottom: 0;
+}
+
+/* No base game ticked: the group's border and note warn until one is. */
+.base-games.needs-choice {
+  border-style: dashed;
+}
+
+.base-games.needs-choice .box-group-note,
+.base-games.needs-choice .box-hint {
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* The info button is a 44px tap target around a small circled "i". */
@@ -373,21 +423,10 @@ div.box-option {
   --kind: var(--accent);
 }
 
-/* On a phone a row keeps one tag beside its name: the ruleset tag moves into the box's info panel. */
+/* A Revised-rules box says so in its info panel. */
 .box-info-ruleset {
-  display: none;
   font-size: var(--text-sm);
   color: var(--muted);
-}
-
-@media (width < 37.5rem) {
-  .box-option .ruleset-tag {
-    display: none;
-  }
-
-  .box-info-ruleset {
-    display: block;
-  }
 }
 
 /* The info button beside a checklist line, in the tick box's row. */
@@ -409,6 +448,7 @@ div.box-option {
 
 /* Shown while no base game is ticked, since a setup takes its rules from one. */
 .box-hint {
+  margin: var(--space-2) 0 0;
   font-size: var(--text-sm);
   color: var(--muted);
 }
