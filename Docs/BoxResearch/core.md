@@ -363,3 +363,22 @@ Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the sh
 ## Difficulty data (#264, 2026-10-13)
 
 `LegendaryPickerService/Data/Difficulty/core.json` tags the 60 Hero cards with class, cost and economy, read from the C1 index above (printed values and class icons), and a card with no Attack or Recruit value is `none`. Copies were not read from the box: the C1 catalog has no per-face quantity, so they are assumed 5, 5, 3, 1 by the card image's number (04, 03, 02, 01), which follows rarity for 14 of the 15 Heroes; each Hero's four sum to 14. Storm is the exception: its image numbers put Spinning Cyclone (cost 6, storm-01) as the rare, but its rare is Tidal Wave (cost 7, storm-02), the highest-cost card as for every other core Hero and as the ascending-cost default in #264 gives, so Tidal Wave has 1 copy and Spinning Cyclone 3 (review of #273). Multiclass cards: none found in the core box. No card text was stored. Difficulty: no axis: nothing recorded yet, since this slice tags Hero cards only.
+
+## Difficulty data: opposition (#265, 2026-10-13)
+
+`Data/Difficulty/core.json` (schemaVersion 2) also tags the Masterminds, Villain Groups, Henchman Groups and Schemes. Effects were read from the C2 catalog's ability text for the core set (https://github.com/nutki/legendary/tree/master/texttools/Legendary, the Villains, Henchmen, Masterminds and Schemes files) and recorded only as tags, severities and copy counts, never as text. Copies come from the same files; the Henchman cards carry none (the count is the Villain Deck's henchman cards split over the drawn groups). Severity (1 to 3) and the choice of axis are our judgement, soft until calibration (#268).
+
+Assumptions:
+
+- Master Strikes, Twists, Ambush, Fight and Escape effects that hurt the players are tagged. Tactic Fights that only help the player are not; Magneto's Crushing Shockwave, which hurts the other players, is the one Tactic tagged.
+- A "reveal a team or class Hero or suffer X" effect is a `check`; "can't defeat unless you have" is a `gate` (Blob, Venom). Dr. Doom's Strike applies only to a player with exactly 6 cards, so it is a severity 1 check.
+- KO of the players' own Heroes is `deck-thinning`; an extra play from the Villain Deck is `escape-pressure`; a Villain that becomes a Twist is `twist-density`; a Hero taken from the HQ is `hq-disruption`; a captured Bystander is `bystander-pressure`.
+- Cosmic Cube's Twists only wound from the fifth on, so its `wounds` inflict is severity 2 rather than 3.
+- A Scheme's `amplifies` follows its loss condition: Wounds (Legacy Virus), Bystanders (Midtown Bank Robbery), escaped Villains (Negative Zone, Killbots, Secret Invasion), the Twist count (Portals, Cosmic Cube) and the Hero Deck running out (Civil War, `hq-disruption`).
+
+Difficulty: no axis (cards tagged only in part or not at all):
+
+- Enchantress, HYDRA Kidnappers, Supreme HYDRA, Baron Zemo, Melter, Abomination, Paibok, Doctor Octopus, Doombot Legion, Hand Ninjas and Savage Land Mutates: Fight effects that only help the defeating player.
+- Whirlwind, The Lizard: effects that depend on which city space the player chooses to fight in, so the players can avoid them.
+- Ultron's and Supreme HYDRA's Victory Point bonuses, and Skrull Queen Veranke's and Shapeshifters' Attack equal to a Hero's cost (only the HQ loss is tagged): scoring and Attack changes with no axis.
+- Dr. Doom's Tactics and Loki's, Red Skull's and Magneto's other Tactics: bonuses for the player, or effects on other players that do not change a team's chance of winning.

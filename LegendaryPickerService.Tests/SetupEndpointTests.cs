@@ -789,9 +789,12 @@ public sealed class SetupEndpointTests : IDisposable
             }
           ],
           "difficulty": {
-            "rating": 4,
-            "band": "Cosmic Threat",
+            "rating": 5,
+            "band": "Secret Wars",
             "reasons": [
+              "Unleash the Power of the Cosmic Cube's Twists: Wounds.",
+              "Red Skull's Master Strikes: Heroes KO'd.",
+              "Juggernaut on ambush and escape: Heroes KO'd.",
               "All five classes are in the deck, which spreads the synergies thin.",
               "Many Hero cards cost 6 or more.",
               "No one class dominates, so class bonuses are rare."
