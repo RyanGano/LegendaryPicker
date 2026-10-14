@@ -70,6 +70,17 @@ public class SecretWarsVolume1Tests
             setup.Notes);
     }
 
+    // A draw with the box's Scheme and Mastermind rates on them by name (#269).
+    [Fact]
+    public void A_Secret_Wars_draw_rates_on_its_Scheme_and_Mastermind_by_name()
+    {
+        var setup = Draw(2, "Pan-Dimensional Plague", Madelyne);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Pan-Dimensional Plague's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Madelyne Pryor, Goblin Queen's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind)
     {
         var index = (players == 1 ? 6 : 8) + Array.IndexOf(SchemeNames, scheme);
