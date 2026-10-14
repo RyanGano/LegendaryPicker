@@ -55,6 +55,16 @@ public class AntManAndTheWaspTests
         Assert.Equal(aside.Group.Id.StartsWith(BoxId) ? 7 : 8, aside.Count);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var result = Draw(2, "Safeguard Dark Secrets", "Kang, Quantum Conqueror");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Safeguard Dark Secrets's Twists"));
+    }
+
     // Draws the Scheme and Mastermind by name, in the order the generator lists them across the two boxes.
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
