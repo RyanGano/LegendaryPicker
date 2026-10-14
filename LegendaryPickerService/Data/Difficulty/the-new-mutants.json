@@ -1,0 +1,656 @@
+{
+  "schemaVersion": 3,
+  "box": "the-new-mutants",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "the-new-mutants_hero_karma",
+      "cards": [
+        {
+          "name": "Sow Rivalry",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Temporary Possession",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Karmic Balance",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "recruit"
+        },
+        {
+          "name": "Control Like a Puppet",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              2
+            ],
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "the-new-mutants_hero_mirage",
+      "cards": [
+        {
+          "name": "Dreams Made Real",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_moonlight",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Empathic Link",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_waking-nightmare",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Nightmare Wolves",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Haunted By the Demon Bear",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_waking-nightmare",
+              2
+            ],
+            [
+              "keyword",
+              "the-new-mutants_term_moonlight",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "the-new-mutants_hero_sunspot",
+      "cards": [
+        {
+          "name": "Absorb Radiation",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_sunlight",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "hq",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Solar-Powered",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_sunlight",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Thermokinetic Fury",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_sunlight",
+              1
+            ],
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ],
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Empyreal Force",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_sunlight",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "hq",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "the-new-mutants_hero_warlock",
+      "cards": [
+        {
+          "name": "Earthling Choices",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Analyze Planetary Rotation",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_sunlight",
+              1
+            ],
+            [
+              "keyword",
+              "the-new-mutants_term_moonlight",
+              1
+            ],
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Techno-Organic Adaptation",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Nanite Shapeshifter",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_sunlight",
+              1
+            ],
+            [
+              "keyword",
+              "the-new-mutants_term_moonlight",
+              1
+            ],
+            [
+              "team",
+              "x-men",
+              2
+            ]
+          ],
+          "draw": 3
+        }
+      ]
+    },
+    {
+      "hero": "the-new-mutants_hero_wolfsbane",
+      "cards": [
+        {
+          "name": "Night Vision",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_moonlight",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Wolf Out",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_sunlight",
+              1
+            ],
+            [
+              "keyword",
+              "the-new-mutants_term_moonlight",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "hq",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Howl at the Moon",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_moonlight",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Nocturnal Savagery",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "the-new-mutants_term_moonlight",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "the-new-mutants_mastermind_belasco-demon-lord-of-limbo",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ],
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Cleaving Demonblade",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "the-new-mutants_mastermind_emma-frost-the-white-queen",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ],
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "tactics": []
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "the-new-mutants_villain_demons-of-limbo",
+      "cards": [
+        {
+          "name": "Crotus",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "N'astirh",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "S'ym",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Demon Bear",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Witchfire",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "the-new-mutants_villain_hellions",
+      "cards": [
+        {
+          "name": "Catseye",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Thunderbird",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Tarot",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "twist-density",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Roulette",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Empath",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Jetstream",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "team",
+              "x-men"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [],
+  "schemes": [
+    {
+      "scheme": "the-new-mutants_scheme_the-demon-bear-saga",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "the-new-mutants_scheme_crash-the-moon-into-the-sun",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "the-new-mutants_scheme_trapped-in-the-insane-asylum",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hand-disruption"
+      ]
+    },
+    {
+      "scheme": "the-new-mutants_scheme_superhuman-baseball-game",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}

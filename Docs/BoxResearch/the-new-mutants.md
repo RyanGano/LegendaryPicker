@@ -148,3 +148,27 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/the-new-mutants.json` (format v3, source `Q`). Card facts: the shared OCR cache (titles and keyword markers only, no card text), the C1 index above for names, classes, costs, printed Recruit/Attack icons and Villain copies, and the owner's LegendaryAssistant data (`new-mutants-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1 (S'ym, Cleaving Demonblade, Haunted By the Demon Bear, Solar-Powered).
+
+- **Class conflict.** Empathic Link is Instinct in C1 and Covert in the owner's data; C1 is used.
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order (ties: Mirage's two cost-3 cards and Wolfsbane's two cost-3 cards take 5 and 5). Villain copies are C1's.
+- **Printed 0+ icons.** Analyze Planetary Rotation and Nanite Shapeshifter (Recruit 0+, Attack 0+) are `both`; other N+ cards carry one icon: `attack`. Earthling Choices has no icon: `none`.
+- **Draws.** Conditional and optional draws are `draw` as in core: Dreams Made Real 1, Absorb Radiation 1, Wolf Out 1, Earthling Choices 1, Nanite Shapeshifter 3.
+- **Wants.** Moonlight and Sunlight cards want that keyword (strength 2 where it is the whole payoff); Waking Nightmare cards want the Waking Nightmare keyword; X-Men team superpowers want `team x-men`; Karma's Villain-count cards want `board villains-in-city`; Warlock's Tech payoffs want `class tech`. Keyword wants are not scored yet.
+- **Self costs.** Thermokinetic Fury requires a card put on the bottom of the deck to play: `discard`. Nightmare Wolves' and Karmic Balance's optional effects are not tagged.
+- **Answers.** Cards that put HQ Heroes on the bottom of the Hero Deck are `hq` (Absorb Radiation, Wolf Out 1; Empyreal Force 2).
+- **Masterminds.** Belasco's Master Strike: `deck-thinning 2`, `hand-disruption 1` (Waking Nightmares) and `attack-inflation 1` (his KO-pile bonus); Cleaving Demonblade hits the HQ (`hq-disruption 1`). Emma Frost's Master Strike: `hand-disruption 2` (the stacked Strikes escalate) and `attack-inflation 2` (+Attack per grey Hero).
+- **Villain Groups.** S'ym (reveal Strength or Wound, plus Waking Nightmares) is a `check` on ambush and escape; Empath (reveal Covert or Waking Nightmare) a `check` on ambush and escape; Jetstream's Escape (discard an X-Men or Wound) a `check` on `x-men`. Crotus, Witchfire (HQ and bystander pressure) are ambush; Demon Bear's Waking Nightmares and Attack bonus ambush; N'astirh, Catseye and Thunderbird KO a Hero on Fight (`deck-thinning 1`) and carry their Moonlight/Sunlight Attack bonus as `attack-inflation 1`; Tarot and Roulette's reveals are Wounds and Twist/Waking Nightmare pressure.
+- **Schemes.** The Demon Bear Saga `escape-pressure 2`, amplifies `escape-pressure`; Crash the Moon into the Sun `twist-density 2`, amplifies `twist-density`; Trapped in the Insane Asylum `hand-disruption 2`, amplifies `hand-disruption`; Superhuman Baseball Game `escape-pressure 2`, amplifies `escape-pressure`.
+
+### Difficulty: no axis
+
+- Moonlight and Sunlight are HQ-parity conditions, not a team or class: no check, gate or want axis names them; they are tagged as keyword wants only.
+- Moonlight/Sunlight Attack bonuses on Crotus and Witchfire, and Empath's +Attack per grey Hero, are untagged: their other tagged effects fire at Ambush or Escape and one card has one timing (#292). The same bonuses on N'astirh, Catseye and Thunderbird are tagged on their Fight; Emma Frost's per-grey-Hero bonus is on her Master Strike slot.
+- Jetstream's Ambush reposition on the Bridge, Witchfire's and Demon Bear's captured-Hero KO on Escape, Crotus's and N'astirh's Sunlight recruit surcharge: no axis beyond what is tagged.
+- Crash the Moon into the Sun's parity-driven Altered Orbits: tagged `twist-density` as the closest axis; the HQ-manipulation counterplay has no axis.
+- Trapped in the Insane Asylum's Sanity Test and passed Psychotic Breaks (a forced random play from hand): tagged `hand-disruption`; passing the Twist between players has no axis.
+- Tactics untagged because they only hit other players or only help the fighter: A Demon's Mercy, Bargain for Souls, Rescue from Limbo, Contempt for Weaklings, Psychic X-Men Link, Tempting Bargain, Assume Diamond Form. Belasco's and Emma Frost's per-Hero Attack scaling is a passive, tagged on the Master Strike.
