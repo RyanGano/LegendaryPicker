@@ -1,0 +1,496 @@
+{
+  "schemaVersion": 3,
+  "box": "champions",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "champions_hero_gwenpool",
+      "cards": [
+        {
+          "name": "Come On, Nobody Reads Card Names",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "I'll Rescue You If I Feel Like It",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "I Heard Keywords Are Powerful",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "I'm the Best at Board Games",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "champions_hero_ms-marvel",
+      "cards": [
+        {
+          "name": "Long Arm of the Law",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Big Impact",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "both"
+        },
+        {
+          "name": "Need to Stretch My Legs",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "champions",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Rising Hope",
+          "copies": 1,
+          "class": "strength",
+          "cost": 9,
+          "economy": "both"
+        }
+      ]
+    },
+    {
+      "hero": "champions_hero_nova",
+      "cards": [
+        {
+          "name": "Space Cop",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "champions",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Interstellar Hero",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "both"
+        },
+        {
+          "name": "Holographic Projection",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Growing Nova Force",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 9,
+          "economy": "both"
+        }
+      ]
+    },
+    {
+      "hero": "champions_hero_totally-awesome-hulk",
+      "cards": [
+        {
+          "name": "Beloved Behemoth",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Incredible Mind, Awesome Body",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Growing Pains",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "selfCost": [
+            "wound"
+          ]
+        },
+        {
+          "name": "7th Smartest Man in the World",
+          "copies": 1,
+          "class": "tech",
+          "cost": 9,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "champions_hero_viv-vision",
+      "cards": [
+        {
+          "name": "Walking Wi-Fi",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Expanding Neural Network",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Crowdsourcing",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "both"
+        },
+        {
+          "name": "Alter Molecular Density",
+          "copies": 1,
+          "class": "tech",
+          "cost": 9,
+          "economy": "both"
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "champions_mastermind_fin-fang-foom",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "champions_mastermind_pagliacci",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ],
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      }
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "champions_villain_monsters-unleashed",
+      "cards": [
+        {
+          "name": "Goom",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Groot from Planet X",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Trull the Unhuman",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Zzutak",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "champions_villain_wrecking-crew",
+      "cards": [
+        {
+          "name": "Bulldozer",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Piledriver",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "The Wrecker",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "champions_scheme_clash-of-the-monsters-unleashed",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "champions_scheme_hypnotize-every-human",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "champions_scheme_steal-all-oxygen-on-earth",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    }
+  ]
+}

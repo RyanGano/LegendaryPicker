@@ -62,6 +62,26 @@ Still open: per-face copy counts (C1 gives none) and the exact Size-Changing ico
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 44 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). No `uses` changes; the faces agree with the box file.
 
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/champions.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index below for names, classes, costs and printed Recruit/Attack icons and Villain copies, and the owner's LegendaryAssistant data (`champions-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1 ("Tim Boo Ba" is C1's spelling; it is untagged anyway).
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order (Beloved Behemoth and Incredible Mind, Awesome Body both cost 4 and both take a 5). Villain copies are C1's (1 each in Monsters Unleashed, 2 each in Wrecking Crew).
+- **Economy.** Printed 0+ Recruit or Attack icons count as the icon (Versatile cards and the 0+/0+ cards are `both`). Long Arm of the Law has no icon (`none`).
+- **Size-Changing** lowers a card's cost or Attack; printed cost is used and the cards are not tagged for it. **Conditional draws** (a class icon or a team icon gating a draw) carry `draw 1`, as in core. Optional ("may") effects are not self costs; Growing Pains's forced Wound when none can be KO'd is `selfCost wound` (with `answers wounds 1` for the KO).
+- **Answers.** Rescuing a Bystander (Gwenpool's I'll Rescue You, Long Arm of the Law, Space Cop, Beloved Behemoth, Walking Wi-Fi) is `bystanders 1`; Need to Stretch My Legs and Growing Pains can KO a Wound (`wounds 1`). Class wants where a class icon gates an effect (a Size-Changing class lowers the cost and is not a want, so Growing Pains has none); Champions team wants for Need to Stretch My Legs and Space Cop.
+- **Demolish** (each player reveals their hand and discards a card of the revealed cost) is `hand-disruption` 1 on a single Demolish, 2 for The Wrecker (once per Wrecking Crew Villain in the city), 3 for Fin Fang Foom's Master Strike (repeats per Monsters Unleashed Villain in the City and Escape Pile). Pagliacci's Master Strike is `hand-disruption 2` and, since two of five Strikes become Scheme Twists, `twist-density 2`. Where a card has several timings, the single tag lists them all (per-effect timing is #292).
+- **Fight KOs of the player's own Hero** (Goom, Piledriver) are `deck-thinning 2`, as in earlier boxes.
+- **Schemes.** Clash of the Monsters Unleashed is `wounds 2` and `escape-pressure 1` (a Monster enters the city), amplifying wounds; Hypnotize Every Human is `escape-pressure 2` (Hypno-Thralls block fighting; later Twists push Villains into the Escape Pile), amplifying escape pressure; Steal All Oxygen on Earth is `hq-disruption 3` (a falling Oxygen Level KOs HQ Heroes), amplifying HQ disruption.
+- **Divide and Conquer is untagged:** its text is in none of the allowed card-text sources here (not in the LegendaryAssistant data, and not found online), and it was not read from the card image. Revisit when a text source turns up.
+
+### Difficulty: no axis
+
+- Cheering Crowds (playing a card twice by returning a Bystander) and Size-Changing have no want or answer axis and carry no tag.
+- Orrgo's "cannot be fought unless another Villain was defeated this turn" is not a team or class gate and has no axis. Monsteroso, Sporr and Tim Boo Ba's Fight effects help the player and carry no tag.
+- Thunderball's Demolish and the Tactics of both Masterminds that hit only the other players (Flammable Acid Breath, Multipronged Assault, Supersonic Dive Attack, Commedia Dell'Morte, Insane Clown Has a Posse, Jester of a Twisted Opera) are untagged, as other boxes' other-player-only effects were. Alien Dragon Technology and Creative Assassin help the player.
+- Epic sides are not tagged (the difficulty rates the normal side).
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.

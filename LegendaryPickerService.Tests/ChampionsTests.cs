@@ -36,6 +36,16 @@ public class ChampionsTests
         Assert.Contains("Start the Oxygen Level at 8", setup.Steps);
     }
 
+    [Fact]
+    public void A_draw_with_Steal_All_Oxygen_on_Earth_and_Fin_Fang_Foom_rates_with_reasons_naming_them()
+    {
+        var setup = Draw(2, "Steal All Oxygen on Earth", "Fin Fang Foom");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Steal All Oxygen on Earth's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Fin Fang Foom's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
         var s = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
