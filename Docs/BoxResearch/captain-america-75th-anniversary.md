@@ -150,3 +150,24 @@ Use official rulebooks/inserts, official clarifications, or the directly linked 
 ## Card-face `uses` check (#166, 2026-10-12)
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 38 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds, source Card, under that ruling: Captain America (Falcon) (Flying Shield Block, reacts to a player gaining a Wound; [card image](https://nyc3.digitaloceanspaces.com/bageltop/CardImages/Heroes/falcon-02.png)). Black Knight, unreadable in the cache, was read by a short-lived reader and names no stack.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/captain-america-75th-anniversary.json` (format v3, source `Q`). Card facts: the shared OCR cache holds only face-level markers (no card text), so effects were read from the owner's LegendaryAssistant data (`captain-america-75th-allies`, `-adversaries`, `-commanders`, `-schemes`). Names, classes, costs and printed Recruit/Attack icons follow the C1 index above. No card text is stored.
+
+- **Copies: default for Heroes.** Per-face Hero copy counts are unverified, so every Hero uses 5, 5, 3, 1 in ascending cost order (the one tie follows the C1 listing order: Agent X-13's Paramilitary Ops before Spy Network). Villain copies are C1's (2 each).
+- **Source conflict.** The owner's data lists only one class on the multiclass cards' Hero-level rows and names a few cards differently (Internalation Strike Force, Reassign to Civillian Duty, Melter (WWWI)); C1's names and classes are used.
+- **Economy** follows C1's printed icons with a `0+` icon counted, so Star-Spangled Hero and International Strike Force are `both`, and Spy Network, Storm the Beachhead and Paramilitary Ops are `attack`.
+- **Savior** is tagged as a `stack` want for bystanders (strength 1); the scorer does not score it yet. Conditional draws (Savior, Tech) carry `draw`, as the core box does.
+- **Abomination** raises a Villain's Attack by the Hero beneath it; tagged `attack-inflation 1` on each Abomination Villain: on Fight, except Man-Fish, whose one tag is on Escape for its Wounds (Fight and Escape weigh the same). Fight effects that only help the defeating player and "each other player" effects that only hurt teammates carry no tag; reveal-or-suffer checks are tagged as in the core box.
+- **Heroes' answers.** Flying Shield Block's Wound replacement answers `wounds 1`.
+
+### Difficulty: no axis
+
+- Primus's "also discard a card costing 2, 3, 5 or 7 to fight" is a fight cost with no axis; only its Escape discard is tagged (`hand-disruption 1`).
+- Pet Projects' reveal-a-Zola's-Creations-Villain-or-gain-a-Wound check names a Villain Group, which no check kind can; approximated as `wounds 1`.
+- Arnim Zola's Ultimate Abomination (Attack from all Heroes in the HQ) and Baron Zemo's +9 Attack for a non-Savior are on the Mastermind card itself, which has no tag slot; not tagged.
+- Change the Outcome of WWII's changing city size and conquered capitals are tagged only as `escape-pressure 2` and `twist-density 2` for the Twist's two extra plays.
+- The Unbreakable Enigma Code's guess-the-colours Mastermind fight is approximated as `attack-inflation 2`; the Hero Deck's face-down cards are `hq-disruption 1`.
+- Brainwash the Military's Officers-as-Villains (Attack 3 plus stacked Twists) have no tag beyond the Twist's `escape-pressure` and `twist-density`.
+- Reassign to Civilian Duty's optional KO and Mobilize for War's optional KOs are not self costs; KGB Training's seven-other-cards bonus and 2>4's Man Out of Time grant fit no want.

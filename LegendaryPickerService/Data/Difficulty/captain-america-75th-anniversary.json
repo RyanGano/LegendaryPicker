@@ -1,0 +1,607 @@
+{
+  "schemaVersion": 3,
+  "box": "captain-america-75th-anniversary",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "captain-america-75th-anniversary_hero_agent-x-13",
+      "cards": [
+        {
+          "name": "Sniper Squad",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Paramilitary Ops",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Spy Network",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Mobilize for War",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ],
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "captain-america-75th-anniversary_hero_captain-america-falcon",
+      "cards": [
+        {
+          "name": "Aerial Catch",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Winged Salvation",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Flying Shield Block",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Star-Spangled Hero",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ],
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "captain-america-75th-anniversary_hero_captain-america-1941",
+      "cards": [
+        {
+          "name": "Devoted Patriot",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Storm the Beachhead",
+          "copies": 5,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Liberate the Prisoners",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ],
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Punch Evil in the Face",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "captain-america-75th-anniversary_hero_steve-rogers-director-of-s-h-i-e-l-d",
+      "cards": [
+        {
+          "name": "International Strike Force",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ],
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Shadow of Wars Past",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reassign to Civilian Duty",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Save the World",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "captain-america-75th-anniversary_hero_winter-soldier",
+      "cards": [
+        {
+          "name": "Bionic Arm",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Sniper Nest",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "KGB Training",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "2>4",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "captain-america-75th-anniversary_mastermind_arnim-zola",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Computer-Uploaded Genius",
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1
+        },
+        {
+          "name": "Pet Projects",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "captain-america-75th-anniversary_mastermind_baron-heinrich-zemo",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Fallen Idols",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Finding Zemo",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Prisoners of War",
+          "check": {
+            "requires": [
+              "team",
+              "avengers"
+            ],
+            "onFail": "bystander-pressure"
+          },
+          "severity": 1
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "captain-america-75th-anniversary_villain_zola-s-creations",
+      "cards": [
+        {
+          "name": "Captain Zolandia",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Doughboy",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Man-Fish",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Primus",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "captain-america-75th-anniversary_villain_masters-of-evil-wwii",
+      "cards": [
+        {
+          "name": "Black Knight",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Executioner",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Melter (WWII)",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Radioactive Man",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "captain-america-75th-anniversary_scheme_brainwash-the-military",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "captain-america-75th-anniversary_scheme_change-the-outcome-of-wwii",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "captain-america-75th-anniversary_scheme_go-back-in-time-to-slay-heroes-ancestors",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "captain-america-75th-anniversary_scheme_the-unbreakable-enigma-code",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            1
+          ],
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      }
+    }
+  ]
+}

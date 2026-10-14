@@ -41,6 +41,17 @@ public class CaptainAmerica75Tests
         Assert.NotNull(Draw(2, "The Unbreakable Enigma Code", Zemo).Stacks.Wounds);
     }
 
+    // A draw with the box's Scheme and Mastermind rates on them by name (#269).
+    [Fact]
+    public void A_Captain_America_75th_Anniversary_draw_rates_on_its_Scheme_and_Mastermind_by_name()
+    {
+        var setup = Draw(2, "Go Back in Time to Slay Heroes' Ancestors", Zola);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Go Back in Time to Slay Heroes' Ancestors's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Arnim Zola's"));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind) =>
         Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(Array.IndexOf(SchemeNames, scheme), mastermind)));
 }
