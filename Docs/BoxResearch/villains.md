@@ -387,3 +387,21 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 ## Card-face `uses` check (#166, 2026-10-12)
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 121 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Thor (Avengers Adversary), the one face the cache could not read, was read by a short-lived reader and names no stack. Bindings, New Recruits and Madame HYDRA entries already in the box file matched the faces.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/villains.json` (format v3, source `Q`). Card facts: the shared OCR cache holds only title and keyword markers for this box (no printed values), so costs, classes, economy and effects were read from the owner's LegendaryAssistant data (`villains-allies`, `-adversaries`, `-commanders`, `-schemes`, `-followers`). Card names follow C1. No card text is stored.
+
+- **Mapping.** Allies are the Heroes, Adversary Groups the Villain Groups, Commanders the Masterminds (Command Strike is the Master Strike), Plots the Schemes (Plot Twist is the Twist). Bindings are tagged as `wounds` (the stand-in, D-bindings-as-wounds); the Lair is the HQ; Overrun is the `escape` timing; Kidnap a Bystander is tagged as a `bystanders` answer; Demolish (a matching-cost discard) is `hand-disruption`. Team wants name the box's own four Ally teams (`sinister-six`, `brotherhood`, `crime-syndicate`, `foes-of-asgard`).
+- **Copies: default.** Printed Ally copy counts were not found, so every Ally uses 5, 5, 3, 1 in ascending cost order; ties follow the C1 listing order above (Juggernaut, Kingpin, Mystique). Adversary and Henchman copies: one per named card (`copies: 1`); the printed group sizes were not verified.
+- **Conditional draws** are tagged `draw` as in core.
+- **Competitive play.** Fight effects that only hit other players, and all four Commanders' Tactics (Fight effects that reward the fighter or hit others), are not tagged, so the Commanders carry only their Command Strike.
+
+### Difficulty: no axis
+
+- Dodge (discard to replace a card), Elusive, X-Treme Attack and the Adversaries' attack set by the board: no axis. Wasp, Ant-Man, Iron Fist, Luke Cage, Black Panther, Black Cat, Scarlet Witch, Rogue, Shadowcat, Nightcrawler, Storm, Colossus, Angel and Iceman carry no tag.
+- Iron Fist's and Cyclops's extra cost to fight (reveal different costs, discard a card) fit no gate; Cyclops carries only its Overrun check.
+- Cards with more than one tagged effect carry the stronger one: Captain America's Overrun Demolish and Hulk's, Ghost Rider's and Spider-Man's second effects are folded or dropped.
+- Allies whose effects fit no want or answer: Fulfill the Contract, Perfect Aim, Octo-Pulverize, Eighth Time's a Charm, Electroshock Therapy, Supercharge, Pumpkin Bombs, Goblin Glider, Experimental Goblin Serum, Pull the Strings, Import Illegal Weapons, He's the Best Around, Father of Lies, Magnetic Levitation, Holographic Illusion, Show Your True Colors, Turn the Tide, Spy Games, Army of Ultrons, Horrify the Populace; discard-count cards (Supercharge, Pumpkin Bombs, Experimental Goblin Serum) have no discard want.
+- Henchmen: Asgardian Warriors and Cops (Fight draws or gains a New Recruit) carry no tag.
+- Plots: Cage Villains in Power-Suppressing Cells (Cops on Allies, lost when the Cop stack runs out) has no matching `amplifies` axis; Mass Produce War Machine Armor's Assault Squad strength is folded into `attack-inflation 1`.
