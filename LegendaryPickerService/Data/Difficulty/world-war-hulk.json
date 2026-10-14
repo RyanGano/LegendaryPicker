@@ -1,0 +1,1614 @@
+{
+  "schemaVersion": 3,
+  "box": "world-war-hulk",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "world-war-hulk_hero_amadeus-cho",
+      "cards": [
+        {
+          "name": "Extrapolate",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Gamma-Draining Nanites",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Renegade Genius",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Visualize the Variables",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_bruce-banner",
+      "cards": [
+        {
+          "name": "Solve the Impossible",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Gamma Bomb Disaster",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Dangerous Testing",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Gamma Ray Experiment",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_caiera",
+      "cards": [
+        {
+          "name": "Shadow Queen",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Shadowforged Blade",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Focus The Old Power",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Dutiful Protector",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "none",
+          "wants": [
+            [
+              "board",
+              "ko-pile",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_gladiator-hulk",
+      "cards": [
+        {
+          "name": "Don't Make Me Angry",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Seize The Throne",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "The Green Scar",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Double-Fisted Smashing",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_hiroim",
+      "cards": [
+        {
+          "name": "Seek Redemption",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Save from the Rubble",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Mystic Shadow Priest",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "warbound",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Blade of the People",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "none",
+          "answers": [
+            [
+              "bystanders",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_hulkbuster-iron-man",
+      "cards": [
+        {
+          "name": "Pound for Pound",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Attune Techtonic Transducer",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Build the Suit",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Final Battle",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_joe-fixit-grey-hulk",
+      "cards": [
+        {
+          "name": "Carefully Considered Smashing",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Threaten And Bribe",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Ambitious Enforcer",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Hulk Runs This Town",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "recruit"
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_korg",
+      "cards": [
+        {
+          "name": "Nothing Beats Rock",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Forged by Fire",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Move Mountains",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Kronan Tactician",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "answers": [
+            [
+              "hq",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_miek-the-unhived",
+      "cards": [
+        {
+          "name": "This Bug Smashes You",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Devouring Frenzy",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Endless Appetite",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Metamorphosis",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "recruit"
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_namora",
+      "cards": [
+        {
+          "name": "Crushing Tsunami",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Heart of the Ocean",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Herculean Effort",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "recruit"
+        },
+        {
+          "name": "Turning The Tide",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_no-name-brood-queen",
+      "cards": [
+        {
+          "name": "Surprise Attack",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Bursting with Life",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Appetite for Destruction",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "World-Spanning Hunger",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_rick-jones",
+      "cards": [
+        {
+          "name": "Hacktivist",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Seek the Nega-Bands",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Irradiated Blood",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Caught in Kree-Skrull War",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_sentry",
+      "cards": [
+        {
+          "name": "Agoraphobia",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "none"
+        },
+        {
+          "name": "Mournful Sentinel",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Rival Personalities",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Vast Unstable Power",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_she-hulk",
+      "cards": [
+        {
+          "name": "Hurl Legal Objections",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Window of Opportunity",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Radioactive Riot",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Jade Giantess",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "both"
+        }
+      ]
+    },
+    {
+      "hero": "world-war-hulk_hero_skaar-son-of-hulk",
+      "cards": [
+        {
+          "name": "Anger Management",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Scarred Past",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mood Swings",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Planetary-Level Revenge",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "draw": 1,
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "world-war-hulk_mastermind_general-thunderbolt-ross",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Bust You Down to Private",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Call Out the Army",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Personal Arsenal",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Urban Warfare",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "world-war-hulk_mastermind_illuminati-secret-society",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Black Bolt's Omni-Shout",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Dr. Strange's Orb of Agamotto",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hulkbuster's Hammer Fist",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Zom's Manacles of Living Bondage",
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1
+        }
+      ]
+    },
+    {
+      "mastermind": "world-war-hulk_mastermind_king-hulk-sakaarson",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "deck-thinning",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Fury of the Green Scar",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Oath of the Warbound",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Revenge from the Stars",
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "world-war-hulk_mastermind_m-o-d-o-k",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "deck-thinning",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Redundancy Algorithim",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "world-war-hulk_mastermind_the-red-king",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "tech"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Haughty Spite",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Royal Bodyguard",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Vast Armies of Sakaar",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "world-war-hulk_mastermind_the-sentry",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "deck-thinning",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Pacifying Light",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Power of a Million Exploding Suns",
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Repressed Darkness",
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "escape-pressure"
+          },
+          "severity": 1
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "world-war-hulk_villain_aspects-of-the-void",
+      "cards": [
+        {
+          "name": "Black Anti-Hurricane",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Demonform",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Infini-Tendrils",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Psychotic Break",
+          "copies": 1,
+          "inflicts": [
+            [
+              "twist-density",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "world-war-hulk_villain_code-red",
+      "cards": [
+        {
+          "name": "Caught Red-Handed",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Elektra, Red Blades",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Red She-Hulk",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Thundra",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "world-war-hulk_villain_illuminati",
+      "cards": [
+        {
+          "name": "Black Bolt",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Dr. Strange",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Dr. Strange, Possessed by Zom",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Enchain the Hulk",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Hulkbuster Iron Man",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "world-war-hulk_villain_intelligencia",
+      "cards": [
+        {
+          "name": "Battle of Wits",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Cosmic Hulk Robot",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Doc Samson",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "The Leader, Gamma Fiend",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "world-war-hulk_villain_sakaar-imperial-guard",
+      "cards": [
+        {
+          "name": "Gladiators' Colosseum",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Great Devil Corker",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Headman Charr",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Primus Vand",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "world-war-hulk_villain_u-foes",
+      "cards": [
+        {
+          "name": "Vapor",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Ironclad",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "deck-thinning"
+          },
+          "severity": 1,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Unidentified Flying U-Foes",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "escape-pressure"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "world-war-hulk_villain_warbound",
+      "cards": [
+        {
+          "name": "Hiroim",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Korg",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Miek The Unhived",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "No-Name, Brood Queen",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Warbound Rescue",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "world-war-hulk_henchman_cytoplasm-spikes",
+      "cards": [
+        {
+          "name": "Cytoplasm Spikes",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "world-war-hulk_henchman_sakaaran-hivelings",
+      "cards": [
+        {
+          "name": "Sakaaran Hivelings",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "world-war-hulk_scheme_break-the-planet-asunder",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "world-war-hulk_scheme_cytoplasm-spike-invasion",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure",
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "world-war-hulk_scheme_fall-of-the-hulks",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "world-war-hulk_scheme_gladiator-pits-of-sakaar",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "world-war-hulk_scheme_mutating-gamma-rays",
+      "twist": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "world-war-hulk_scheme_shoot-hulk-into-space",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "world-war-hulk_scheme_subjugate-with-obedience-disks",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "world-war-hulk_scheme_world-war-hulk",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}
