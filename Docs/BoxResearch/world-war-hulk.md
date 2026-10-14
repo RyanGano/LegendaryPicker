@@ -74,6 +74,28 @@ Every Scheme's Twists and Setup line, and every Mastermind's Always Leads and St
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 157 C1-linked faces in the cache, no card text stored) compared with each card's `uses`. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added `uses` wounds: Hiroim (Mystic Shadow Priest) and Korg (Nothing Beats Rock).
 
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/world-war-hulk.json` (format v3, source `Q`). Card facts: the shared OCR cache holds only title and keyword markers (no card text), so effects were read from the owner's LegendaryAssistant data (`world-war-hulk-allies`, `-adversaries`, `-commanders`, `-schemes`); names, classes, costs, printed Recruit/Attack icons, teams and Villain copies follow the C1 index below. No card text is stored.
+
+- **Copies: default for Heroes.** C1 gives no per-face Hero copies; each Hero's four cards that sit in the Hero Deck take 5, 5, 3, 1 in ascending cost order (ties follow C1's listing order: Skaar's Anger Management and Scarred Past both cost 3). Villain copies are C1's; Henchman cards take none.
+- **Transformed cards stay out of the Hero Deck** (they wait in the Transformation Pile), so only the four Hero Deck cards of each Hero are tagged; Rick Jones's and the Sentry's extra transformed faces are untagged too. The tags are for the Hero Deck faces only.
+- **Masterminds** carry one Master Strike tag that merges both sides' Strikes (the Mastermind flips on each Strike and Tactic, so both sides fire in a game); the Tactics are tagged once. Tactics that only hit the other players are tagged as in core (not as in Champions).
+- **Economy** counts a printed 0+ icon as the icon (Carefully Considered Smashing and Jade Giantess are `both`); Smash and Outwit are optional ("may") and are not self costs.
+- **Conditional draws** (Outwit draws, Endless Appetite, Hacktivist) carry `draw 1`, as in core. Rescuing Bystanders is `answers bystanders`, KOing Wounds `answers wounds`, Wounded Fury and Gladiator Hulk's Rampage a `stack wounds` want.
+- **Cross-Dimensional Hulk Rampage** is `wounds 2` on the card's Fight or Escape and in Strikes, as in Secret Wars Volume 1; Enchain the Hulk's failed Trap is `wounds 1`. Traps tag their failure effect on Ambush (a Trap is drawn from the Villain Deck); a reveal-or-suffer Trap is a `check`.
+- **Henchmen.** The owner's data has no Henchman text; Cytoplasm Spikes and Sakaaran Hivelings are tagged `deck-thinning 1` on Fight from their Feast keyword only. Not tagged: Death's Heads (Outwit only).
+- **Cards not tagged (no text source):** Death's Heads. Cards tagged from keyword alone: Cytoplasm Spikes, Sakaaran Hivelings.
+
+### Difficulty: no axis
+
+- Outwit (three different costs, four under M.O.D.O.K.) is a cost-diversity condition; only the class-diversity `diversity` want exists, so Outwit conditions are untagged and only what they unlock is tagged.
+- Transform on Heroes, and General Ross's Helicopters ("can't fight while any Helicopters") and the Red King's "can't fight while Villains are in the city", have no gate axis; Helicopters are approximated by `attack-inflation 1` on Ross's Tactics.
+- The Sentry's Start of Game (2 Wounds shuffled into each starting deck) and Vast Unstable Power's added Mastermind have no tag location.
+- Extra Masterminds and Lurking swaps (World War Hulk) are approximated with `attack-inflation 1`; the Prison Ship fill (Shoot Hulk into Space) with `twist-density 2`.
+- Heroes: Threaten And Bribe, Hulk Runs This Town (spend Recruit and Attack interchangeably), Kronan Tactician's Attack from HQ cards (tagged `answers hq 1` as nearest), Feast and Smash payoffs, cost-bonus effects.
+- Left untagged because they only help the players or only reshuffle a hand: Tactics Brain Scramble, Designed Only for K.O.I.ing, Don't Get a Big Head About It, Rule by the Strongest, Treasury of Sakaar and Reflexive Teleportation; Villains Shadow Man, Crimson Dynamo, Punisher (Red Dot Sniper), Lieutenant Caiera, Vector, X-Ray and Elloe Kaifi; the Hero cards' Transformed faces.
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.

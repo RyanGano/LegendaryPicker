@@ -56,6 +56,16 @@ public class WorldWarHulkTests
         Assert.Contains("Give each of the 4 Masterminds 2 random Tactics", setup.Steps);
     }
 
+    [Fact]
+    public void A_draw_with_Subjugate_with_Obedience_Disks_and_The_Sentry_rates_with_reasons_naming_them()
+    {
+        var setup = Draw(2, "Subjugate with Obedience Disks", "The Sentry");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Subjugate with Obedience Disks's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("The Sentry's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
         var s = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
