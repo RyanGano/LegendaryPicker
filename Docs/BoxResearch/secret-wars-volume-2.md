@@ -328,3 +328,26 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/secret-wars-volume-2.json` (format v3, source `Q`). Card facts: the shared OCR cache holds only face-level markers (no card text), so effects were read from the owner's LegendaryAssistant data (`secret-wars-vol2-allies`, `-adversaries`, `-commanders`, `-schemes`, `-followers`; the Deadpool's Secret Secret Wars group is in `deadpool-adversaries`). Card names, classes, costs and printed Recruit/Attack icons follow the C1 index above. No card text is stored.
+
+- **Copies: default for Heroes.** Per-face Hero copy counts are unverified, so every Hero uses 5, 5, 3, 1 in ascending cost order (ties follow the listing order of the owner's data; Silk's and Spider-Gwen's four cards all cost 2). Villain copies are C1's; Henchman cards take none.
+- **Source conflict.** The owner's data lists a single class on many multiclass cards (for example Fateful Bridge, Government Payroll, Sweep the Streets of Trash) and gives Possessed by the Soulsword a Recruit icon where C1 prints Attack 3+; C1 is used, since its classes union to the box file's Hero classes.
+- **Economy** follows C1's printed icons with a `0+` icon counted (as in Dark City, Fantastic Four and Secret Wars Volume 1), so Government Payroll, Big Slimeportunity, Shapeshifting Symbiote, Lord of Dragons, Let None Escape You, Heir to Legends and Form of Solid Ruby are `both`.
+- **Spectrum** (three classes among the cards played) is tagged as a `diversity` want, 1 for a small bonus and 2 for a large one or a card that needs it to draw. **Patrol** is not tagged as a want (it wants an empty space, and no board state says so); a Patrol that draws a card carries `draw`, as the core box does for conditional draws.
+- **Circle of Kung-Fu** raises an enemy's Attack unless a cost-N Hero is shown; it is tagged `attack-inflation` (1 for the 3rd and 4th Circles, 2 for the 5th and 6th, on Fight) and, where an Escape effect asks for the same cost, hand disruption or Wounds.
+- **Charge** is tagged `escape-pressure` (1 per space or part-space, up to 3 for Hyperion's Master Strike and the Deadlands Scheme).
+- **Cross-Dimensional Rampage** is tagged as `wounds 2` on the card's Fight or Escape, as in Secret Wars Volume 1; an Escape that ascends the Villain is tagged with the Master Strike it adds (Deadpool, Angela, Warrior Woman, '92 Professor X).
+- **Heroes that KO themselves** (Reincarnate, Destruction Is Creation) carry `selfCost: ko-hand` as the nearest entry; Extinction Blast's three discards are three `discard` entries.
+- **Competitive play.** Ambition cards and the optional "a player is the Mastermind" mode are not tagged; effects that only hurt "each other player" are not tagged on their own.
+
+### Difficulty: no axis
+
+- Fateful Resurrection (every card with it, the Fountain of Eternal Life's all-card version, Drax, Groot, Bug, Magma Men's rider, Shiklah's Tactics): a defeated card returning on a Twist or Strike is villain flow that fits no axis; only the Fountain's Twist, which adds a Villain, is tagged (`escape-pressure`).
+- Extra Masterminds (Enthrone the Barons of Battleworld, The God-Emperor of Battleworld, Secret Wars) and the God-Emperor's "KO all other Masterminds" Twist: more Masterminds to defeat has no axis; they are approximated with `attack-inflation`.
+- Doop's "can't fight next to a Villain" and Nighthawk's and Marcus's wolf-form Attack bonuses in some city spaces carry no tag (Nighthawk's Escape Twist is tagged `twist-density`).
+- The Mark of Khonshu's Heroes in the Villain Deck, with Attack equal to their cost, fit no axis; its "play two cards" Twist is tagged `escape-pressure 2` since its loss condition counts escapes.
+- Tactics that only help (Imperial Edict, King Hyperion's four Tactics, Shiklah's four Tactics, Control Arachnid Genes) and Villains that are gained as Heroes ('92 Jubilee, '92 Beast's Fight) carry no tag.
+- Hero effects that fit no want or answer: Circle-free cost reductions (Upside-Down Thinking), Colossus-card Rampage conditions, Captain Britain's team-icon bonuses, Dino-Roar of Triumph's adjacent Attack reduction beyond `attack-inflation 1`, Ice Magic's Villain-Attack bonus, Teleport on Guerrilla Warfare and Muscle Memory's shuffle effect.

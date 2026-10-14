@@ -79,6 +79,17 @@ public class SecretWarsVolume2Tests
         Assert.Contains(setup.Notes, note => note.Text == "No included box has S.H.I.E.L.D. Officer cards: the setup uses those of Marvel Legendary First Edition core box");
     }
 
+    // A draw with the box's Scheme and Mastermind rates on them by name (#269).
+    [Fact]
+    public void A_Secret_Wars_Volume_2_draw_rates_on_its_Scheme_and_Mastermind_by_name()
+    {
+        var setup = Draw(2, "Master the Mysteries of Kung-Fu", Zheng);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Master the Mysteries of Kung-Fu's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Immortal Emperor Zheng-Zhu's"));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind)
     {
         var index = (players == 1 ? 6 : 8) + Array.IndexOf(SchemeNames, scheme);
