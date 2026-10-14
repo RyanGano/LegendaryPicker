@@ -58,6 +58,24 @@ Summaries are original paraphrases under 40 words. Exact qualifying icons, Hero 
 
 Every Scheme's Twists and Setup line, and both Masterminds' Always Leads and Epic side, were read from the card faces linked below and are in the box file (#163); no Scheme prints a player limit. Hero teams and classes are as C1 gives them.
 
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/ant-man.json` (format v3, source `Q`). Card facts: the shared OCR cache (titles and keyword markers only, no card text), the C1 index below for names, classes, costs and printed Recruit/Attack icons and Villain copies, and the owner's LegendaryAssistant data (`ant-man-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1 (Jocasta, Queen's Vengeance, Stolen Tomes of Merlin, Transmogrify). No card text is stored.
+
+- **Copies: default** for all five Heroes (5, 5, 3, 1 in ascending cost order; Black Knight's two cost-3 cards are listed in C1 order). Villain copies are C1's (1 each); the box has no Henchman Group.
+- **Heroes.** Printed 0+ icons: Amulet of Avalon, The Ebony Blade and One-Hit Wonder are `attack`; Absorb Ambient Power is `both`; Holographic Image Inducer has no printed icon (`none`, `draw` 2). Draws: Ride the Ants 1, Tiny Winged Justice 1 (a Covert draw), One-Hit Wonder 1 (a choice with Empowered), Flying Steed 3 (a conditional draw reacting to a Master Strike). Wants are class bonuses written on the card (Tech, Covert, Strength, Ranged) and Founding Avenger's Avengers bonus (`team avengers`); Giant Ego wants extra cards drawn.
+- **Villains.** Pixie's Fight (reveal Covert or another Villain Deck card) is a `check` for `escape-pressure`; Iron Knight (Escape) and Brutish Ultron-14 (Fight and Escape) are Tech and Strength `check`s for a Wound, severity 2 as in earlier boxes. Blackbird, Gigantus, Original Ultron-1 and Ultron Roboticks KO one of your Heroes (`deck-thinning 1`, Fight); Mordred the Evil hands a discard card to another player (`deck-thinning 1`, Fight and Escape). Future Ultron Prime's Ambush is `hq-disruption 2`; Crimson Cowl's Ambush capture is `bystander-pressure 1`.
+- **Masterminds.** Morgan Le Fay's Master Strike (the normal side) is a Covert `check` for a Wound, severity 1; the Epic side is not tagged separately. Ultron's is a Tech `check` that makes him stronger, `attack-inflation`, severity 2. The Tactics only help the fighter or hit the other players and are untagged.
+- **Schemes.** Age of Ultron's Evolved Ultron entering the city is `escape-pressure 3` (it can lose the game), amplifies escape; Pull Earth into Medieval Times `escape-pressure 2` (Twists 7 and 8 return Villains), amplifies escape; Transform Commuters into Giant Ants `bystander-pressure 3` (the Giant Ants are Bystanders turned Villains and ten lose the game), amplifies Bystanders; Trap Heroes in the Microverse (play two cards) `escape-pressure 2`, amplifies escape.
+
+### Difficulty: no axis
+
+- Size-Changing and Microscopic Size-Changing (a Hero's cost or a Villain's Attack drops with matching classes) and Empowered (a bonus for matching colours in the HQ) have no slot; the cost and Attack are printed values. Pym Particles and Ultron-Pym granting Size-Changing are untagged.
+- Chivalrous Duel (only one Hero Name's points may fight) restricts the fight with no axis; it is untagged on Queen's Vengeance, Morgan Le Fay and Pull Earth into Medieval Times's Twists 1 to 6.
+- Reverse the Flow of Time (turn order) and Self-Repairing Legions, Sorcerous Blasts and Transmogrify (only the other players) are untagged.
+- Giant Ants' and Age of Ultron's loss counters, and Trap Heroes in the Microverse's Heroes in the Villain Deck, are standing rules; the Twist tag stands for them.
+- Absorb Ambient Power, Ionic Energy and 8th Wonder of the World move HQ cards to the bottom of the Hero Deck; helpful, no axis.
+
 ## Structured card-face metadata (C1)
 
 This index uses C1 structured fields for printed identity, group, available values/icons, and the directly linked card face. `copies: Unverified` is deliberate when the catalog has no per-face quantity. Keyword labels are factual tags only; card ability prose is not reproduced, summarized, or used as rules authority. Missing C1 fields remain unverified rather than inferred.
