@@ -50,6 +50,16 @@ public class WhatIfTests
         Assert.Equal(10, setup.VillainDeck.Bystanders);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var result = Draw(2, "Marvel Zombies", "Ultron Infinity");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Marvel Zombies's Twists"));
+    }
+
     // Draws the Scheme and Mastermind by name, as the generator lists them at the player count.
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
