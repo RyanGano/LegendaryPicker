@@ -307,3 +307,26 @@ Use official rulebooks/inserts, official clarifications, or the directly linked 
 ## Card-face `uses` check (#166, 2026-10-12)
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 108 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). Added: Black Panther gains the Sidekick stack (King of Wakanda gains three Sidekicks), `uses` sidekicks, source Card; it had none. Faces the cache could not read (Black Bolt Speak No Words, Ultimate Spider-Man Leaping Spider, Thor Corps) were read by a short-lived reader and add nothing.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/secret-wars-volume-1.json` (format v3, source `Q`). Card facts: the shared OCR cache holds only face-level markers (no card text), so costs, classes and effects were read from the owner's LegendaryAssistant data (`secret-wars-vol1-allies`, `-adversaries`, `-commanders`, `-schemes`, `-followers`); card names follow C1 and the index above. No card text is stored.
+
+- **Mapping.** Allies are the Heroes, adversaries the Villain Groups, Commanders the Masterminds, followers the Henchmen. Multiclass cards list every class. Team wants use this box's `illuminati` and `cabal`; the Multiclass want on Multifaceted Genius uses the box's `multiclass` term (the scorer does not score keyword wants yet), and Disrupt Circuits' HQ count is a `board` want.
+- **Copies: default for Heroes.** Printed per-face Hero copy counts are unverified, so every Hero uses 5, 5, 3, 1 in ascending cost order (ties follow the listing order of the owner's data; Ultimate Spider-Man's four cards all cost 2). Villain copies are the C1 counts above; Henchman cards take none.
+- **Source conflict.** The owner's data and C1 disagree on two Black Bolt cards' classes (Speak No Words, Silence is Golden); C1's classes are used, since together they give the box file's Black Bolt classes (Covert, Ranged, Strength).
+- **Economy** follows the printed icons in C1's values, a `0+` icon included (as in Dark City and Fantastic Four), so Silence is Golden, Chosen by Asgard, Living Thunderstorm, Master Combatant and General of the Black Order are `both`, and Ultimate Spider-Man's three `0+` cards `attack`.
+- **Conditional draws** are tagged `draw` as in core. Untouchable's draw is a reaction and carries `draw 3`.
+- **Cross-Dimensional Rampage** (a named character, not a team or class) is tagged as `wounds 2` when it is an Escape or Fight effect.
+- **An Escape that ascends the Villain as a new Mastermind** is tagged with the Master Strike it adds (Sinister, Loki, Thanos, Magneto, Kingpin), as if it hit the players once.
+- **Competitive play.** Ambition cards and the optional "a player is the Mastermind" mode are not tagged.
+
+### Difficulty: no axis
+
+- Rise of the Living Dead (every Deadlands card, Ghost Racers, Zombie Green Goblin's Master Strike and Tactics): returning Villains from a Victory Pile fits no axis. It is the effect this box adds most; if a later box repeats it, propose an axis.
+- Nimrod's "can't fight unless 6 Recruit" and Wasteland Hulk's attack that grows with Tactics are Mastermind conditions with no axis.
+- Teleport and cards that only help the players (Apocalyptic Blink, Manhattan's Traps, Zombie Baron Zemo, Zombie Mysterio, M.O.D.O.K.s, Thor Corps, Sentinel Territories' alter-the-future Fights) carry no tag. Zombie Mysterio's Escape that adds a Tactic that draws is beneficial.
+- Black Bolt's no-rules-text synergies, Stalk the Urban Jungle and Wield the Soulsword's Victory Pile attack, Loner, No More Heroes, Hero from Another Dimension's cost-based bonus fit no want.
+- Wasteland Spider-Girl's Fight, and the Tactics that only help (Detect Mutation, Teleport and Incarcerate, Radioactive Regeneration, Revert to Bruce Banner), carry no tag; Love to Have You for Dinner's KO from the Hero Deck fits no axis.
+- Lady Thor's "6 Recruit this turn" conditions fit no want. Rage Out's Rampage wounds the other players and Galactic Domination moves Bystanders between players; neither fits a self cost or an answer, so neither is tagged for it.
+- Dark Alliance's second Mastermind joining is tagged only by its Twist's twist-density; its extra Mastermind to defeat has no axis.
