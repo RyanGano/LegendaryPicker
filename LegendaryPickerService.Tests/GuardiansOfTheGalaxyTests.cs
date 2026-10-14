@@ -76,6 +76,16 @@ public class GuardiansOfTheGalaxyTests
         Assert.DoesNotContain(setup.Notes, note => note.Text.StartsWith("Leave out", StringComparison.Ordinal));
     }
 
+    [Fact]
+    public void A_draw_with_Thanos_and_Forge_the_Infinity_Gauntlet_rates_on_Guardians_cards_by_name()
+    {
+        var setup = Draw(2, "Forge the Infinity Gauntlet", Thanos);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Thanos's Master Strikes"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Forge the Infinity Gauntlet's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind)
     {
         var index = (players == 1 ? 6 : 8) + Array.IndexOf(SchemeNames, scheme);
