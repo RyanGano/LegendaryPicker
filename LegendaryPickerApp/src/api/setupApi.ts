@@ -198,10 +198,12 @@ export type RuleNote = {
 
 // How hard the drawn Hero Deck is to win with: rating 1 (easiest) to 5, the band's display name, and up to three
 // reasons in plain words. Left out by an API from before the rating, and never says anything about balance.
+// target is the rating the request asked for, present only when it asked for one (#267).
 export type Difficulty = {
   rating: number
   band: string
   reasons: string[]
+  target?: number
 }
 
 // How much there is to learn and remember in the drawn setup: rating 1 (simplest) to 5, the band's display name, and up
@@ -210,6 +212,7 @@ export type Complexity = {
   rating: number
   band: string
   reasons: string[]
+  target?: number
 }
 
 export type Setup = {
@@ -282,6 +285,12 @@ export type Box = {
   description?: string
 }
 
+// The band names of each rating, index 0 for rating 1, as the API's scorers name them.
+export type RatingBands = {
+  difficulty: string[]
+  complexity: string[]
+}
+
 // A sleeping App Service instance takes 10-30 seconds to wake, so give up well after that.
 export const REQUEST_TIMEOUT_MS = 45_000
 
@@ -312,8 +321,24 @@ export async function getBoxes(): Promise<Box[]> {
   }
 }
 
+// The band names the difficulty and complexity pickers list. Throws like getBoxes.
+export async function getRatingBands(): Promise<RatingBands> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/ratings`, { signal: controller.signal })
+    if (!response.ok) {
+      throw new Error(`GET /api/ratings returned ${response.status}.`)
+    }
+    return (await response.json()) as RatingBands
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
 // Draws from the named boxes, or from the core box alone when boxes is empty. With epic, a drawn Mastermind that has
 // an Epic side is played on that side. With rules, the whole setup follows that rule edition; without, the boxes decide.
+// With difficulty or complexity (1 to 5), the draw leans toward that rating; without, the draw is plain.
 // Throws on a network failure, a non-2xx status (bad count or boxes, rate limit, server error),
 // an unrecognised body, or no answer within REQUEST_TIMEOUT_MS.
 export async function getSetup(
@@ -321,13 +346,17 @@ export async function getSetup(
   boxes: string[] = [],
   epic = false,
   rules: RuleEdition | null = null,
+  difficulty: number | null = null,
+  complexity: number | null = null,
 ): Promise<SetupResponse> {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
   const query =
     (boxes.length > 0 ? `&boxes=${boxes.map(encodeURIComponent).join(',')}` : '') +
     (epic ? '&epic=true' : '') +
-    (rules ? `&rules=${rules}` : '')
+    (rules ? `&rules=${rules}` : '') +
+    (difficulty ? `&difficulty=${difficulty}` : '') +
+    (complexity ? `&complexity=${complexity}` : '')
   try {
     const response = await fetch(`${apiBaseUrl}/api/setup?players=${players}${query}`, {
       signal: controller.signal,

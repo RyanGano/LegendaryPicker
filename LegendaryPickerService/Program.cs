@@ -77,6 +77,13 @@ app.MapGet("/api/boxes", (BoxCatalog catalog) =>
         box.Id, box.Name, BaseGame = box.IsBaseGame, box.Ruleset, box.About.FirstPublished, Description = box.About.Description.Value,
     })));
 
+// The band names by rating, 1 to 5, so the picker lists the bands the scorers use instead of keeping its own copy (#271).
+app.MapGet("/api/ratings", () => Results.Ok(new
+{
+    Difficulty = DifficultyTuning.Default.BandNames,
+    Complexity = ComplexityTuning.Default.BandNames,
+}));
+
 // The rule editions a player can choose with rules=, by their names in the query string (#240).
 var editions = new Dictionary<string, Ruleset>(StringComparer.Ordinal)
 {

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { BoxInfo } from './BoxInfo.tsx'
-import { getBoxes, getSetup, ping, type Box, type RuleEdition, type Setup } from './api/setupApi.ts'
+import { getBoxes, getRatingBands, getSetup, ping, type Box, type RatingBands, type RuleEdition, type Setup } from './api/setupApi.ts'
+import { RatingPicker } from './RatingPicker.tsx'
 import { setupTerms } from './rulesetTerms.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
 import { SetupSkeleton } from './SetupSkeleton.tsx'
@@ -21,6 +22,9 @@ const BOXES_KEY = 'legendaryPicker.boxes'
 const EPIC_KEY = 'legendaryPicker.epic'
 // The rule edition the player chose for boxes of more than one ruleset, or none for the boxes' default (#240).
 const RULES_KEY = 'legendaryPicker.rules'
+// The difficulty and complexity the player asked the draw to lean toward, or none for any (#271).
+const DIFFICULTY_KEY = 'legendaryPicker.difficulty'
+const COMPLEXITY_KEY = 'legendaryPicker.complexity'
 // The rule editions a player can choose, after the default.
 const RULE_EDITIONS: { id: RuleEdition; name: string; detail?: string }[] = [
   { id: 'first-edition', name: 'First Edition' },
@@ -122,6 +126,24 @@ function saveRules(rules: RuleEdition | null) {
   }
 }
 
+function loadRating(key: string): number | null {
+  try {
+    const stored = Number(localStorage.getItem(key))
+    return Number.isInteger(stored) && stored >= 1 && stored <= 5 ? stored : null
+  } catch {
+    return null
+  }
+}
+
+function saveRating(key: string, rating: number | null) {
+  try {
+    if (rating === null) localStorage.removeItem(key)
+    else localStorage.setItem(key, String(rating))
+  } catch {
+    // Remembering the choice is optional.
+  }
+}
+
 function loadEpic(): boolean {
   try {
     return localStorage.getItem(EPIC_KEY) === 'true'
@@ -188,6 +210,10 @@ function App() {
   const [included, setIncluded] = useState<string[]>(loadBoxes)
   const [epic, setEpic] = useState(loadEpic)
   const [rules, setRules] = useState<RuleEdition | null>(loadRules)
+  const [difficulty, setDifficulty] = useState<number | null>(() => loadRating(DIFFICULTY_KEY))
+  const [complexity, setComplexity] = useState<number | null>(() => loadRating(COMPLEXITY_KEY))
+  // Band names from the API; without them the pickers stay hidden and the draw is plain.
+  const [bands, setBands] = useState<RatingBands | null>(null)
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   const [mastermindShown, setMastermindShown] = useState(false)
   // The intro explains the app until there is a setup on screen to explain it instead, so a first draw
@@ -208,6 +234,10 @@ function App() {
     const request = getBoxes().catch((): Box[] => [])
     boxesRequest.current = request
     void request.then(setBoxes)
+  }, [])
+
+  useEffect(() => {
+    void getRatingBands().then(setBands, () => {})
   }, [])
 
   const loading = status.kind === 'loading'
@@ -249,6 +279,16 @@ function App() {
     const next = boxes.every((box) => included.includes(box.id)) ? [] : boxes.map((box) => box.id)
     setIncluded(next)
     saveBoxes(next)
+  }
+
+  function chooseDifficulty(rating: number | null) {
+    setDifficulty(rating)
+    saveRating(DIFFICULTY_KEY, rating)
+  }
+
+  function chooseComplexity(rating: number | null) {
+    setComplexity(rating)
+    saveRating(COMPLEXITY_KEY, rating)
   }
 
   function toggleEpic() {
@@ -298,6 +338,8 @@ function App() {
         drawn.map((box) => box.id),
         epic,
         spansRulesets(available, included) ? rules : null,
+        bands ? difficulty : null,
+        bands ? complexity : null,
       )
       if (response.kind === 'setup') {
         setStatus({ kind: 'result', setup: response })
@@ -352,6 +394,24 @@ function App() {
                 </button>
               ))}
             </div>
+            {bands && (
+              <div className="rating-pickers">
+                <RatingPicker
+                  label="Difficulty"
+                  bands={bands.difficulty}
+                  value={difficulty}
+                  disabled={loading}
+                  onChange={chooseDifficulty}
+                />
+                <RatingPicker
+                  label="Complexity"
+                  bands={bands.complexity}
+                  value={complexity}
+                  disabled={loading}
+                  onChange={chooseComplexity}
+                />
+              </div>
+            )}
             {boxes.length > 0 && (
               <>
                 <div className="boxes-heading">
@@ -453,7 +513,7 @@ function App() {
               <SetupSkeleton />
             </>
           )}
-          {status.kind === 'result' && <SetupChecklist setup={status.setup} mastermindShown={mastermindShown} onShowMastermind={() => setMastermindShown(true)} />}
+          {status.kind === 'result' && <SetupChecklist setup={status.setup} bands={bands} mastermindShown={mastermindShown} onShowMastermind={() => setMastermindShown(true)} />}
           {status.kind === 'noEligibleScheme' && (
             <div className="state-card scheme">
               <p>{status.message}</p>

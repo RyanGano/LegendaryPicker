@@ -137,8 +137,7 @@ naming the biggest contributors first ("Adds Sidekicks and Shards", "11 keywords
 distance in each weighted draw (`DifficultyWeights.Distance`), so both targets can be asked for at once and neither is a
 filter. The expected complexity is the cards drawn so far plus the pool's average extra points for each Hero slot still
 open, mapped to a continuous rating that rounds to the band (1 at no points, k + 0.5 where band k + 1 starts, 5 at
-`PointsHard`), so a target of 2 leans toward Team-Up setups. Stacks a stand-in replaces count as the stand-in only. Not built: a picker in the web app (it ships with the difficulty picker) and the
-count of Solo play rules; calibration of the constants is a later pass.
+`PointsHard`), so a target of 2 leans toward Team-Up setups. Stacks a stand-in replaces count as the stand-in only. Not built: the count of Solo play rules; calibration of the constants is a later pass.
 
 ## Data format (schemaVersion 3)
 
@@ -278,3 +277,7 @@ Band names are display strings only, renameable in `DifficultyTuning`.
 
 `difficulty` is always present on a setup: `{ "rating": 4, "band": "Cosmic Threat", "reasons": ["...", "..."], "target": 1 }` (`target` only when the request had `difficulty=`), with up
 to three reasons about the opposition followed by up to three about the Hero Deck, in plain words. The web app shows it when present and shows nothing when an older API leaves it out.
+
+`GET /api/ratings` lists the band names of both ratings by rating, for the web app's Difficulty and Complexity pickers
+(#271). A picked band is sent as `difficulty=` or `complexity=`; when the response's `target` differs from its `rating`, the
+panel names the band asked for and says the closest legal setup was drawn.
