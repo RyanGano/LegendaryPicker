@@ -16,7 +16,7 @@ public sealed partial class BoxCatalog
     public const int SchemaVersion = 8;
 
     // The schema of the files in Data/Difficulty (#263).
-    public const int DifficultySchemaVersion = 2;
+    public const int DifficultySchemaVersion = 3;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
@@ -47,6 +47,8 @@ public sealed partial class BoxCatalog
             new KebabEnumConverter<OppositionAxis>(),
             new KebabEnumConverter<RequirementKind>(),
             new KebabEnumConverter<Timing>(),
+            new KebabEnumConverter<AnswerAxis>(),
+            new KebabEnumConverter<SelfCost>(),
             new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, allowIntegerValues: false),
         },
     };
@@ -149,11 +151,58 @@ public sealed partial class BoxCatalog
                         throw new InvalidDataException(
                             $"{path}: {hero.Hero} card {card.Name} needs at least 1 copy, a cost of 0 or more, and a class.");
                     }
+
+                    ValidateHeroCard(path, box, hero.Hero, card);
                 }
             }
         }
 
         return loaded;
+    }
+
+    // Checks a Hero card's wants, answers, self costs and draw (#266): each is non-empty when present, each strength is 1
+    // to 3, draw is 0 to 3, and a want's value is one of its kind's: a team of the box, a class, a keyword the box
+    // declares, a stack or board state of the closed lists, "class" for diversity and "extra-cards" for draw.
+    private static void ValidateHeroCard(string path, Box box, string hero, HeroCardDifficulty card)
+    {
+        var where = $"{path}: {hero} card {card.Name}";
+        foreach (var want in card.Wants ?? [])
+        {
+            if (want.Strength is < 1 or > 3)
+            {
+                throw new InvalidDataException($"{where}: want {want.Kind} {want.Value} needs a strength of 1 to 3.");
+            }
+
+            var found = want.Kind switch
+            {
+                WantKind.Team => box.Glossary.Any(term => term.Kind == TermKind.Team && term.Id == $"{box.Id}_term_{want.Value}"),
+                WantKind.Class => Enum.GetNames<HeroClass>().Any(name => string.Equals(name, want.Value, StringComparison.OrdinalIgnoreCase)),
+                WantKind.Keyword => box.Glossary.Any(term => term.Kind == TermKind.Keyword && term.Id == want.Value),
+                WantKind.Stack => WantValues.Stacks.Contains(want.Value),
+                WantKind.Board => WantValues.BoardStates.Contains(want.Value),
+                WantKind.Diversity => want.Value == WantValues.DiversityValue,
+                _ => want.Value == WantValues.DrawValue,
+            };
+            if (!found)
+            {
+                throw new InvalidDataException($"{where}: {want.Value} is not a value a {want.Kind.ToString().ToLowerInvariant()} want can name in box {box.Id}.");
+            }
+        }
+
+        if (card.Wants is { Count: 0 } || card.Answers is { Count: 0 } || card.SelfCost is { Count: 0 })
+        {
+            throw new InvalidDataException($"{where} lists an empty wants, answers or selfCost.");
+        }
+
+        if (card.Answers?.FirstOrDefault(answer => answer.Strength is < 1 or > 3) is { } weak)
+        {
+            throw new InvalidDataException($"{where}: answer {weak.Axis} needs a strength of 1 to 3.");
+        }
+
+        if (card.Draw is < 0 or > 3)
+        {
+            throw new InvalidDataException($"{where}: draw must be 0 to 3.");
+        }
     }
 
     // Checks the opposition tags of a difficulty file: each part named is one of the box's, no effect is empty or out of

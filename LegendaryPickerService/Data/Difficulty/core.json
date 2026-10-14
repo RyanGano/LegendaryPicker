@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "box": "core",
   "source": "Q",
   "heroes": [
@@ -11,28 +11,68 @@
           "copies": 5,
           "class": "covert",
           "cost": 3,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
         },
         {
           "name": "Mission Accomplished",
           "copies": 5,
           "class": "tech",
           "cost": 2,
-          "economy": "none"
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ],
+          "draw": 1
         },
         {
           "name": "Covert Operation",
           "copies": 3,
           "class": "covert",
           "cost": 4,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
         },
         {
           "name": "Silent Sniper",
           "copies": 1,
           "class": "covert",
           "cost": 7,
-          "economy": "attack"
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
         }
       ]
     },
@@ -44,28 +84,55 @@
           "copies": 5,
           "class": "instinct",
           "cost": 3,
-          "economy": "recruit"
+          "economy": "recruit",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
         },
         {
           "name": "Perfect Teamwork",
           "copies": 5,
           "class": "strength",
           "cost": 4,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
         },
         {
           "name": "Diving Block",
           "copies": 3,
           "class": "tech",
           "cost": 6,
-          "economy": "attack"
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
         },
         {
           "name": "A Day Unlike Any Other",
           "copies": 1,
           "class": "covert",
           "cost": 7,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              3
+            ]
+          ]
         }
       ]
     },
@@ -77,14 +144,20 @@
           "copies": 5,
           "class": "strength",
           "cost": 2,
-          "economy": "recruit"
+          "economy": "recruit",
+          "selfCost": [
+            "discard"
+          ]
         },
         {
           "name": "Optic Blast",
           "copies": 5,
           "class": "ranged",
           "cost": 3,
-          "economy": "attack"
+          "economy": "attack",
+          "selfCost": [
+            "discard"
+          ]
         },
         {
           "name": "Unending Energy",
@@ -98,7 +171,14 @@
           "copies": 1,
           "class": "ranged",
           "cost": 8,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              3
+            ]
+          ]
         }
       ]
     },
@@ -124,14 +204,20 @@
           "copies": 3,
           "class": "instinct",
           "cost": 3,
-          "economy": "attack"
+          "economy": "attack",
+          "selfCost": [
+            "discard"
+          ]
         },
         {
           "name": "Random Acts of Unkindness",
           "copies": 1,
           "class": "instinct",
           "cost": 7,
-          "economy": "attack"
+          "economy": "attack",
+          "selfCost": [
+            "wound"
+          ]
         }
       ]
     },
@@ -143,21 +229,36 @@
           "copies": 5,
           "class": "ranged",
           "cost": 3,
-          "economy": "recruit"
+          "economy": "recruit",
+          "draw": 1
         },
         {
           "name": "Shadowed Thoughts",
           "copies": 5,
           "class": "covert",
           "cost": 4,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
         },
         {
           "name": "Psychic Link",
           "copies": 3,
           "class": "instinct",
           "cost": 5,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ]
         },
         {
           "name": "Diamond Form",
@@ -176,21 +277,36 @@
           "copies": 5,
           "class": "ranged",
           "cost": 4,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ]
         },
         {
           "name": "Stack the Deck",
           "copies": 5,
           "class": "covert",
           "cost": 2,
-          "economy": "none"
+          "economy": "none",
+          "draw": 2
         },
         {
           "name": "Hypnotic Charm",
           "copies": 3,
           "class": "instinct",
           "cost": 3,
-          "economy": "recruit"
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
         },
         {
           "name": "High Stakes Jackpot",
@@ -209,28 +325,49 @@
           "copies": 5,
           "class": "instinct",
           "cost": 3,
-          "economy": "attack"
+          "economy": "attack",
+          "draw": 1
         },
         {
           "name": "Team Player",
           "copies": 5,
           "class": "tech",
           "cost": 4,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
         },
         {
           "name": "Covering Fire",
           "copies": 3,
           "class": "tech",
           "cost": 5,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
         },
         {
           "name": "Impossible Trick Shot",
           "copies": 1,
           "class": "tech",
           "cost": 7,
-          "economy": "attack"
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              2
+            ]
+          ]
         }
       ]
     },
@@ -242,28 +379,58 @@
           "copies": 5,
           "class": "strength",
           "cost": 3,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
         },
         {
           "name": "Unstoppable Hulk",
           "copies": 5,
           "class": "instinct",
           "cost": 4,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
         },
         {
           "name": "Crazed Rampage",
           "copies": 3,
           "class": "strength",
           "cost": 5,
-          "economy": "attack"
+          "economy": "attack",
+          "selfCost": [
+            "wound"
+          ]
         },
         {
           "name": "Hulk Smash!",
           "copies": 1,
           "class": "strength",
           "cost": 8,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              2
+            ]
+          ]
         }
       ]
     },
@@ -275,28 +442,58 @@
           "copies": 5,
           "class": "tech",
           "cost": 3,
-          "economy": "none"
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
         },
         {
           "name": "Repulsor Rays",
           "copies": 5,
           "class": "ranged",
           "cost": 3,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
         },
         {
           "name": "Arc Reactor",
           "copies": 3,
           "class": "tech",
           "cost": 5,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ]
+          ]
         },
         {
           "name": "Quantum Breakthrough",
           "copies": 1,
           "class": "tech",
           "cost": 7,
-          "economy": "none"
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 2
         }
       ]
     },
@@ -308,28 +505,56 @@
           "copies": 5,
           "class": "covert",
           "cost": 4,
-          "economy": "none"
+          "economy": "none",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ]
         },
         {
           "name": "High-Tech Weaponry",
           "copies": 5,
           "class": "tech",
           "cost": 3,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
         },
         {
           "name": "Legendary Commander",
           "copies": 3,
           "class": "strength",
           "cost": 6,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              2
+            ]
+          ]
         },
         {
           "name": "Pure Fury",
           "copies": 1,
           "class": "tech",
           "cost": 8,
-          "economy": "none"
+          "economy": "none",
+          "wants": [
+            [
+              "team",
+              "shield",
+              3
+            ]
+          ]
         }
       ]
     },
@@ -341,21 +566,42 @@
           "copies": 5,
           "class": "strength",
           "cost": 4,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              2
+            ]
+          ]
         },
         {
           "name": "Energy Drain",
           "copies": 5,
           "class": "covert",
           "cost": 3,
-          "economy": "recruit"
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
         },
         {
           "name": "Copy Powers",
           "copies": 3,
           "class": "covert",
           "cost": 5,
-          "economy": "none"
+          "economy": "none",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
         },
         {
           "name": "Steal Abilities",
@@ -388,7 +634,13 @@
           "copies": 3,
           "class": "tech",
           "cost": 2,
-          "economy": "none"
+          "economy": "none",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
         },
         {
           "name": "The Amazing Spider-Man",
@@ -407,28 +659,64 @@
           "copies": 5,
           "class": "ranged",
           "cost": 3,
-          "economy": "recruit"
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
         },
         {
           "name": "Lightning Bolt",
           "copies": 5,
           "class": "ranged",
           "cost": 4,
-          "economy": "attack"
+          "economy": "attack",
+          "answers": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
         },
         {
           "name": "Spinning Cyclone",
           "copies": 3,
           "class": "covert",
           "cost": 6,
-          "economy": "attack"
+          "economy": "attack",
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ],
+            [
+              "bystanders",
+              1
+            ]
+          ]
         },
         {
           "name": "Tidal Wave",
           "copies": 1,
           "class": "ranged",
           "cost": 7,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
         }
       ]
     },
@@ -440,7 +728,14 @@
           "copies": 5,
           "class": "strength",
           "cost": 3,
-          "economy": "recruit"
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
         },
         {
           "name": "Surge of Power",
@@ -454,7 +749,14 @@
           "copies": 3,
           "class": "ranged",
           "cost": 6,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              2
+            ]
+          ]
         },
         {
           "name": "God of Thunder",
@@ -473,28 +775,63 @@
           "copies": 5,
           "class": "instinct",
           "cost": 2,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
         },
         {
           "name": "Healing Factor",
           "copies": 5,
           "class": "instinct",
           "cost": 3,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              2
+            ]
+          ]
         },
         {
           "name": "Frenzied Slashing",
           "copies": 3,
           "class": "instinct",
           "cost": 5,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
         },
         {
           "name": "Berserker Rage",
           "copies": 1,
           "class": "instinct",
           "cost": 8,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 3
         }
       ]
     }

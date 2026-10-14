@@ -38,9 +38,9 @@ public sealed class DifficultyTests : IDisposable
     [Fact]
     public void Rejects_an_unknown_field()
     {
-        Write(file => Card(file)["wants"] = new JsonArray());
+        Write(file => Card(file)["mood"] = new JsonArray());
 
-        AssertRejected("wants");
+        AssertRejected("mood");
     }
 
     [Fact]
@@ -246,6 +246,95 @@ public sealed class DifficultyTests : IDisposable
         AssertRejected("\"on\"");
     }
 
+    // The Heroes' wants and answers (#266)
+
+    [Fact]
+    public void A_Hero_that_answers_Wounds_rates_easier_against_a_Wound_heavy_opposition_and_says_so()
+    {
+        var tuning = DifficultyTuning.Default;
+        var plain = Hero(["x-men"], 5, 3, 5, 3, 3, 4, 1, 5);
+        var healer = new ScoredHero(["avengers"], [new HeroCardDifficulty("Healer", 6, [HeroClass.Strength], 3, CardEconomy.Attack,
+            Answers: [new HeroAnswer(AnswerAxis.Wounds, 3)])]);
+        var woundy = new ScoredOpposition(
+            [new OppositionPart("Test Twists", "core", new OppositionTag(Inflicts: [new Inflict(OppositionAxis.Wounds, 3)]), [Timing.Twist], 8)],
+            [], new Dictionary<string, string>());
+
+        var without = DifficultyScorer.Expected([plain], tuning, woundy);
+        var with = DifficultyScorer.Expected([plain, healer], tuning, woundy);
+        var reasons = DifficultyScorer.Score([plain, healer], tuning, woundy).Reasons;
+
+        Assert.True(with < without, $"without {without:0.00}, with {with:0.00}");
+        Assert.Contains(reasons, reason => reason.Contains("Hero cards answer Wounds"));
+    }
+
+    [Fact]
+    public void A_card_that_wants_X_Men_is_weaker_with_no_X_Men_in_the_rest_of_the_deck_and_says_so()
+    {
+        var tuning = DifficultyTuning.Default;
+        // One card of the wanting Hero is an X-Men want itself: its own team never meets the want.
+        var wanter = new ScoredHero(["x-men"], [new HeroCardDifficulty("United", 14, [HeroClass.Ranged], 4, CardEconomy.Attack,
+            Wants: [new HeroWant(WantKind.Team, "x-men", 3)])]);
+        var names = new Dictionary<string, string> { ["core_term_x-men"] = "X-Men" };
+        var none = Hero(["avengers"], 5, 4, 5, 4, 3, 4, 1, 4);
+        var some = Hero(["x-men"], 5, 4, 5, 4, 3, 4, 1, 4);
+        var opposition = new ScoredOpposition([], [], names);
+
+        var alone = DifficultyScorer.Score([wanter, none], tuning, opposition);
+        var together = DifficultyScorer.Score([wanter, some], tuning, opposition);
+
+        Assert.True(DifficultyScorer.Expected([wanter, none], tuning) > DifficultyScorer.Expected([wanter, some], tuning));
+        Assert.Contains("1 Hero wants X-Men teammates, but no other X-Men Hero is drawn.", alone.Reasons);
+        Assert.DoesNotContain(together.Reasons, reason => reason.Contains("teammates"));
+    }
+
+    [Fact]
+    public void Rejects_a_want_kind_outside_the_closed_vocabulary()
+    {
+        Write(file => Card(file)["wants"] = Parse("""[["mood", "x-men", 1]]"""));
+
+        AssertRejected("WantKind");
+    }
+
+    [Fact]
+    public void Rejects_a_want_that_names_a_team_the_box_does_not_declare()
+    {
+        Write(file => Card(file)["wants"] = Parse("""[["team", "inhumans", 1]]"""));
+
+        AssertRejected("inhumans");
+    }
+
+    [Fact]
+    public void Rejects_a_want_strength_out_of_range()
+    {
+        Write(file => Card(file)["wants"] = Parse("""[["class", "tech", 4]]"""));
+
+        AssertRejected("strength");
+    }
+
+    [Fact]
+    public void Rejects_an_answer_axis_outside_the_closed_vocabulary()
+    {
+        Write(file => Card(file)["answers"] = Parse("""[["despair", 1]]"""));
+
+        AssertRejected("AnswerAxis");
+    }
+
+    [Fact]
+    public void Rejects_a_self_cost_outside_the_closed_vocabulary()
+    {
+        Write(file => Card(file)["selfCost"] = Parse("""["sulk"]"""));
+
+        AssertRejected("SelfCost");
+    }
+
+    [Fact]
+    public void Rejects_a_draw_out_of_range()
+    {
+        Write(file => Card(file)["draw"] = 4);
+
+        AssertRejected("draw");
+    }
+
     private static JsonNode Parse(string json) => JsonNode.Parse(json)!;
 
     // One Hero of one team with four named cards, given as (copies, cost) pairs in order, all of one class.
@@ -262,7 +351,7 @@ public sealed class DifficultyTests : IDisposable
     {
         var file = JsonNode.Parse("""
             {
-              "schemaVersion": 2,
+              "schemaVersion": 3,
               "box": "core",
               "source": "Q",
               "heroes": [

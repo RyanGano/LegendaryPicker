@@ -129,18 +129,130 @@ internal sealed class InflictsConverter : JsonConverter<IReadOnlyList<Inflict>>
 public sealed record HeroDifficulty(string Hero, IReadOnlyList<HeroCardDifficulty> Cards);
 
 // Copies is how many of the Hero's 14 cards are this one; Cost is the printed recruit cost. A multiclass card lists
-// every class it has, as one value or an array.
+// every class it has, as one value or an array. Wants name what the card needs from the other drawn cards, Answers what
+// it does about the opposition's pressure, SelfCost what it costs the player, and Draw how many extra cards it draws
+// outright (0..3); all four are optional (#266).
 public sealed record HeroCardDifficulty(
     string Name,
     int Copies,
     [property: JsonConverter(typeof(OneOrManyConverter<HeroClass>))] IReadOnlyList<HeroClass> Class,
     int Cost,
-    CardEconomy Economy);
+    CardEconomy Economy,
+    [property: JsonConverter(typeof(WantsConverter))] IReadOnlyList<HeroWant>? Wants = null,
+    [property: JsonConverter(typeof(AnswersConverter))] IReadOnlyList<HeroAnswer>? Answers = null,
+    IReadOnlyList<SelfCost>? SelfCost = null,
+    int? Draw = null);
+
+// A want is [kind, value, strength 1..3]: a team or class value, a keyword term id, a stack, a board state, "class" for
+// diversity, or "extra-cards" for draw.
+public sealed record HeroWant(WantKind Kind, string Value, int Strength);
+
+// An answer is [axis, strength 1..3].
+public sealed record HeroAnswer(AnswerAxis Axis, int Strength);
+
+public enum WantKind { Team, Class, Keyword, Stack, Board, Diversity, Draw }
+
+public enum AnswerAxis { Wounds, Bystanders, Hq, VillainFlow, Hand, AttackInflation, Escape }
+
+public enum SelfCost { Discard, Wound, KoHand }
+
+// The stacks and board states a want may name.
+public static class WantValues
+{
+    public static readonly IReadOnlyList<string> Stacks = ["wounds", "bystanders", "shards", "sidekicks", "officers", "bindings"];
+    public static readonly IReadOnlyList<string> BoardStates = ["villains-in-city", "heroes-in-hq", "ko-pile"];
+    public const string DiversityValue = "class";
+    public const string DrawValue = "extra-cards";
+}
 
 public enum HeroClass { Covert, Instinct, Ranged, Strength, Tech }
 
 // What a card mainly gives when played: Recruit, Attack, both, or neither.
 public enum CardEconomy { Recruit, Attack, Both, None }
+
+// Reads [["team", "x-men", 3], ...] as wants.
+internal sealed class WantsConverter : JsonConverter<IReadOnlyList<HeroWant>>
+{
+    public override IReadOnlyList<HeroWant> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var wants = new List<HeroWant>();
+        if (reader.TokenType != JsonTokenType.StartArray)
+        {
+            throw new JsonException("Wants is a list of [kind, value, strength] triples.");
+        }
+
+        while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+        {
+            if (reader.TokenType != JsonTokenType.StartArray || !reader.Read())
+            {
+                throw new JsonException("A want is [kind, value, strength].");
+            }
+
+            var kind = JsonSerializer.Deserialize<WantKind>(ref reader, options);
+            if (!reader.Read() || reader.TokenType != JsonTokenType.String)
+            {
+                throw new JsonException("A want's value is a string.");
+            }
+
+            var value = reader.GetString()!;
+            if (!reader.Read() || reader.TokenType != JsonTokenType.Number || !reader.TryGetInt32(out var strength))
+            {
+                throw new JsonException("A want's strength is a whole number.");
+            }
+
+            if (!reader.Read() || reader.TokenType != JsonTokenType.EndArray)
+            {
+                throw new JsonException("A want is exactly three items.");
+            }
+
+            wants.Add(new HeroWant(kind, value, strength));
+        }
+
+        return wants;
+    }
+
+    public override void Write(Utf8JsonWriter writer, IReadOnlyList<HeroWant> value, JsonSerializerOptions options) =>
+        throw new NotSupportedException();
+}
+
+// Reads [["wounds", 2], ...] as answers.
+internal sealed class AnswersConverter : JsonConverter<IReadOnlyList<HeroAnswer>>
+{
+    public override IReadOnlyList<HeroAnswer> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var answers = new List<HeroAnswer>();
+        if (reader.TokenType != JsonTokenType.StartArray)
+        {
+            throw new JsonException("Answers is a list of [axis, strength] pairs.");
+        }
+
+        while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+        {
+            if (reader.TokenType != JsonTokenType.StartArray || !reader.Read())
+            {
+                throw new JsonException("An answer is [axis, strength].");
+            }
+
+            var axis = JsonSerializer.Deserialize<AnswerAxis>(ref reader, options);
+            if (!reader.Read() || reader.TokenType != JsonTokenType.Number || !reader.TryGetInt32(out var strength))
+            {
+                throw new JsonException("An answer's strength is a whole number.");
+            }
+
+            if (!reader.Read() || reader.TokenType != JsonTokenType.EndArray)
+            {
+                throw new JsonException("An answer is exactly two items.");
+            }
+
+            answers.Add(new HeroAnswer(axis, strength));
+        }
+
+        return answers;
+    }
+
+    public override void Write(Utf8JsonWriter writer, IReadOnlyList<HeroAnswer> value, JsonSerializerOptions options) =>
+        throw new NotSupportedException();
+}
 
 // Reads a JSON value that is one item or an array of them as a list.
 internal sealed class OneOrManyConverter<T> : JsonConverter<IReadOnlyList<T>>
