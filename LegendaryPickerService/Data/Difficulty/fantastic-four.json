@@ -1,0 +1,452 @@
+{
+  "schemaVersion": 3,
+  "box": "fantastic-four",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "fantastic-four_hero_human-torch",
+      "cards": [
+        {
+          "name": "Call for Backup",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hothead",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "selfCost": [
+            "wound"
+          ]
+        },
+        {
+          "name": "Flame On!",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Nova Flame",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "fantastic-four",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "fantastic-four_hero_invisible-woman",
+      "cards": [
+        {
+          "name": "Disappearing Act",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Unseen Rescue",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Four of a Kind",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Invisible Barrier",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "fantastic-four_hero_mr-fantastic",
+      "cards": [
+        {
+          "name": "Twisting Equations",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Unstable Molecules",
+          "copies": 5,
+          "class": "tech",
+          "cost": 5,
+          "economy": "none",
+          "draw": 2
+        },
+        {
+          "name": "One Gigantic Hand",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "fantastic-four",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Ultimate Nullifier",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "fantastic-four_hero_silver-surfer",
+      "cards": [
+        {
+          "name": "Warp Speed",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Epic Destiny",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "The Power Cosmic",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "both"
+        },
+        {
+          "name": "Energy Surge",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "recruit"
+        }
+      ]
+    },
+    {
+      "hero": "fantastic-four_hero_thing",
+      "cards": [
+        {
+          "name": "It Started on Yancy Street",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "fantastic-four",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Knuckle Sandwich",
+          "copies": 5,
+          "class": "strength",
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "Crime Stopper",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ],
+            [
+              "villain-flow",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "It's Clobberin' Time!",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "fantastic-four_mastermind_galactus",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            3
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Sunder the Earth",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "fantastic-four_mastermind_mole-man",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Dig to Freedom",
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "fantastic-four_villain_heralds-of-galactus",
+      "cards": [
+        {
+          "name": "Firelord",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "gate": [
+            "class",
+            "ranged"
+          ],
+          "severity": 2,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Stardust",
+          "copies": 2,
+          "gate": [
+            "class",
+            "covert"
+          ],
+          "severity": 2
+        },
+        {
+          "name": "Terrax the Tamer",
+          "copies": 2,
+          "gate": [
+            "class",
+            "strength"
+          ],
+          "severity": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Morg",
+          "copies": 2,
+          "gate": [
+            "class",
+            "instinct"
+          ],
+          "severity": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "fantastic-four_villain_subterranea",
+      "cards": [
+        {
+          "name": "Moloids",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Ra'ktar the Molan King",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Megataur",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "fantastic-four_scheme_bathe-the-earth-in-cosmic-rays",
+      "twist": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "deck-thinning"
+      ]
+    },
+    {
+      "scheme": "fantastic-four_scheme_flood-the-planet-with-melted-glaciers",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "fantastic-four_scheme_invincible-force-field",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "attack-inflation"
+      ]
+    },
+    {
+      "scheme": "fantastic-four_scheme_pull-reality-into-the-negative-zone",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "attack-inflation"
+      ]
+    }
+  ]
+}

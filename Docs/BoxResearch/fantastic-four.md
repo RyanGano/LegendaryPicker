@@ -112,3 +112,16 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 ## Card-face `uses` check (#166, 2026-10-12)
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 38 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). No face disagreed with the box file.
+
+## Difficulty tags (#269, 2026-10-14)
+
+`Data/Difficulty/fantastic-four.json` (format v3, source `Q`). Card facts were read from the owner's LegendaryAssistant data (allies, adversaries, commanders and schemes for this box) with the shared OCR cache as a title and marker cross-check (all 38 faces recognised; no values taken from it); no card text is stored here or in the data. Printed Hero copy counts were not found, so every Hero uses the default 5, 5, 3, 1 in ascending cost order (**copies: default**); the three cost-4 Invisible Woman cards were ordered Disappearing Act, Unseen Rescue, Four of a Kind, which is arbitrary. Villain copies (2 each) are the printed C1 counts. Card names follow C1 ("Nova Flame", "Ra'ktar", "Megataur"); LegendaryAssistant spells some differently.
+
+### Difficulty: no axis
+
+- Focus (a conditional bonus for spending Recruit): the format's keyword wants are not scored yet, so a Focus payoff is untagged unless it is a card draw (Warp Speed and Twisting Equations carry `draw: 1`, like the core box's conditional draws).
+- Burrow (Subterranea cards re-enter the city): no axis for extra Villain flow.
+- Cosmic Threat on Galactus himself (needs a card of each class): a Mastermind has no gate field; only the Heralds' single-class Cosmic Threats are tagged as gates.
+- Invisible Barrier (cancels an Ambush for a draw), Ultimate Nullifier (cancels a Fight effect) and Master of Monsters (plays Villains from the deck): no matching answer or inflict axis.
+- Untagged because they help the player or do not fit: Galactus's Cosmic Entity, Force of Eternity and Panicked Mobs; Mole Man's Secret Tunnel and Underground Riches; Giganto; Stardust's Fight effect.
+- Invincible Force Field and Pull Reality Into the Negative Zone also lose on Twist 7; only their attack-inflation load is tagged.

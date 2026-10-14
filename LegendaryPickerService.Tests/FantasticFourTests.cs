@@ -61,6 +61,16 @@ public class FantasticFourTests
         Assert.Equal(["core", "dark-city", "fantastic-four"], setup.Boxes.Select(box => box.Id));
     }
 
+    [Fact]
+    public void A_draw_with_Galactus_and_Flood_the_Planet_rates_on_Fantastic_Four_cards_by_name()
+    {
+        var setup = Draw(2, "Flood the Planet with Melted Glaciers", Galactus);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Galactus's Master Strikes"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Flood the Planet with Melted Glaciers's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind)
     {
         var index = (players == 1 ? 6 : 8) + Array.IndexOf(SchemeNames, scheme);
