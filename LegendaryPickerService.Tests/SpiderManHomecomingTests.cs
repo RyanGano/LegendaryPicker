@@ -35,6 +35,16 @@ public class SpiderManHomecomingTests
             setup.Moves.Select(move => (move.Card, move.To, move.Count)));
     }
 
+    [Fact]
+    public void A_draw_with_Ferry_Disaster_and_Vulture_rates_with_reasons_naming_them()
+    {
+        var setup = Draw(2, "Ferry Disaster", "Vulture");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Ferry Disaster's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Vulture's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
         var s = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
