@@ -1,0 +1,451 @@
+{
+  "schemaVersion": 3,
+  "box": "doctor-strange-and-the-shadows-of-nightmare",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "doctor-strange-and-the-shadows-of-nightmare_hero_doctor-strange",
+      "cards": [
+        {
+          "name": "Wand of Watoomb",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "none"
+        },
+        {
+          "name": "Keeper of the Sanctum",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Book of Cagliostro",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "none"
+        },
+        {
+          "name": "The Eye of Agamotto",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "none"
+        }
+      ]
+    },
+    {
+      "hero": "doctor-strange-and-the-shadows-of-nightmare_hero_doctor-voodoo",
+      "cards": [
+        {
+          "name": "Commune with the Spirit World",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Medallion of Many Loas",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "none",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Staff of Legba",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "none"
+        },
+        {
+          "name": "Possessed by Brother's Spirit",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "both"
+        }
+      ]
+    },
+    {
+      "hero": "doctor-strange-and-the-shadows-of-nightmare_hero_clea",
+      "cards": [
+        {
+          "name": "Prepare Dark Magic",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Demonic Descendant",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Bind the Dark Dimension",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Purple Gem",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "none"
+        }
+      ]
+    },
+    {
+      "hero": "doctor-strange-and-the-shadows-of-nightmare_hero_the-ancient-one",
+      "cards": [
+        {
+          "name": "Astral Confrontation",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Teachings of Kamar-Taj",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "none",
+          "draw": 2
+        },
+        {
+          "name": "War of the Mind",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Orb of Agamotto",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "none",
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "doctor-strange-and-the-shadows-of-nightmare_hero_the-vishanti",
+      "cards": [
+        {
+          "name": "Oshtur",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Hoggoth",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Agamotto",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Book of the Vishanti",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "none",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "draw": 3
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "doctor-strange-and-the-shadows-of-nightmare_mastermind_nightmare",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "doctor-strange-and-the-shadows-of-nightmare_mastermind_dormammu",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      }
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "doctor-strange-and-the-shadows-of-nightmare_villain_fear-lords",
+      "cards": [
+        {
+          "name": "Nox",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "D'Spayre",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Dreamstalker",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "The Lurking Unknown",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "doctor-strange-and-the-shadows-of-nightmare_villain_lords-of-the-netherworld",
+      "cards": [
+        {
+          "name": "Mindless Ones",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Baron Mordo",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Satana Hellstrom",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Satannish",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Umar",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "doctor-strange-and-the-shadows-of-nightmare_scheme_war-for-the-dream-dimension",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "doctor-strange-and-the-shadows-of-nightmare_scheme_claim-souls-for-demons",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "doctor-strange-and-the-shadows-of-nightmare_scheme_duels-of-science-and-magic",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      }
+    }
+  ]
+}
