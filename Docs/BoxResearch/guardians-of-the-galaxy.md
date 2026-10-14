@@ -324,3 +324,22 @@ The Shard and Artifact summaries in the runtime file were compared with GG p.1 a
 ## Card-face `uses` check (#166, 2026-10-12)
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 43 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). No face disagreed with the box file; the Shard Heroes and Wound Masterminds matched.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/guardians-of-the-galaxy.json` (format v3, source `Q`). Card facts: the shared OCR cache (title, keyword and stack markers only, no card text), C1 per-face values above for names, class, cost and economy, and the owner's LegendaryAssistant data (`guardians-of-the-galaxy-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1 (Vengeance is Rocket, Korath the Pursuer).
+
+- **Copies.** Villain copies are C1's printed counts. Hero copies are not printed in any source found: they follow C1's face-number slot (04 and 03 are the two commons at 5, 02 the uncommon at 3, 01 the rare at 1), which matches ascending cost; Star-Lord has no slot 02, so its two `01` faces split 3 and 1 by cost. Treat as `copies: default`.
+- **Teams.** `guardians-of-the-galaxy` is this box's own team term, used as a `wants` value.
+- **Shards.** Gaining Shards is tagged as attack economy on the Hero; a Villain or Mastermind gaining one is `attack-inflation 1` on its trigger. Time Gem also plays another Villain Deck card, so it adds `twist-density 2`.
+- **Thanos.** His Bound Souls Master Strike takes a Hero from each hand for good, so it is tagged `deck-thinning 3`.
+- **Conditional draws** (Gritty Scavenger's discard-then-draw) and Surviving Sprig's end-of-turn extra card are tagged `draw: 1`, as in core.
+
+### Difficulty: no axis
+
+- Shatterax (Shards placed on HQ Heroes) helps the players; it carries no tag.
+- Bounty Hunter (a Villain gains a Shard), Drax's Interstellar Tracker (top-card KO) and Prune the Growths (optional KO for a Shard) have no want or answer axis; only the cards' other effects are tagged.
+- Legendary Outlaw (copies an Artifact's ability) and the Artifact keyword synergies (The Destroyer's discard line, Sentient Starship) have no Hero-side axis beyond the team want; keyword wants are not scored yet.
+- The Gems' Fight (the Gem becomes a player's Artifact) and Thanos's Attack reduction per Gem Artifact are player-side effects with no axis.
+- The Kree-Skrull War's Conquest tie handling is approximated as `escape-pressure 3`, since every Twist but the last makes Villains escape.
+- Gamora's Galactic Assassin removes Shard attack from a Villain or the Mastermind: tagged `attack-inflation` answer 1.

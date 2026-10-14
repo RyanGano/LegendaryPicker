@@ -1,0 +1,585 @@
+{
+  "schemaVersion": 3,
+  "box": "guardians-of-the-galaxy",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "guardians-of-the-galaxy_hero_drax-the-destroyer",
+      "cards": [
+        {
+          "name": "Interstellar Tracker",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Knives of the Hunter",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "The Destroyer",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "guardians-of-the-galaxy",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Avatar of Destruction",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "guardians-of-the-galaxy_hero_gamora",
+      "cards": [
+        {
+          "name": "Bounty Hunter",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "recruit"
+        },
+        {
+          "name": "Deadliest Woman in the Universe",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Galactic Assassin",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              2
+            ]
+          ],
+          "answers": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Godslayer Blade",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "guardians-of-the-galaxy_hero_groot",
+      "cards": [
+        {
+          "name": "Surviving Sprig",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Prune the Growths",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Groot and Branches",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "I Am Groot",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "recruit"
+        }
+      ]
+    },
+    {
+      "hero": "guardians-of-the-galaxy_hero_rocket-raccoon",
+      "cards": [
+        {
+          "name": "Gritty Scavenger",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Trigger Happy",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "guardians-of-the-galaxy",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Incoming Detector",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Vengeance is Rocket",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "board",
+              "ko-pile",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "guardians-of-the-galaxy_hero_star-lord",
+      "cards": [
+        {
+          "name": "Element Guns",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Legendary Outlaw",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Implanted Memory Chip",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Sentient Starship",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "guardians-of-the-galaxy_mastermind_supreme-intelligence-of-the-kree",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Combined Knowledge of All Kree",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Cosmic Omniscience",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Countermeasure Protocols",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Guide Kree Evolution",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "guardians-of-the-galaxy_mastermind_thanos",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            3
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Centuries of Envy",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "God of Death",
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Keeper of Souls",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Mad Titan",
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "guardians-of-the-galaxy_villain_infinity-gems",
+      "cards": [
+        {
+          "name": "Mind Gem",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Power Gem",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Reality Gem",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Soul Gem",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Space Gem",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Time Gem",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "twist-density",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "guardians-of-the-galaxy_villain_kree-starforce",
+      "cards": [
+        {
+          "name": "Captain Atlas",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Demon Druid",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Dr. Minerva",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Korath the Pursuer",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Ronan the Accuser",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Supremor",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "guardians-of-the-galaxy_scheme_forge-the-infinity-gauntlet",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "guardians-of-the-galaxy_scheme_intergalactic-kree-nega-bomb",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ],
+          [
+            "wounds",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "guardians-of-the-galaxy_scheme_the-kree-skrull-war",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "guardians-of-the-galaxy_scheme_unite-the-shards",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "attack-inflation"
+      ]
+    }
+  ]
+}
