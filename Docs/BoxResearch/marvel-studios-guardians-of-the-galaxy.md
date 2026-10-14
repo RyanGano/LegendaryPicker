@@ -176,3 +176,24 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/marvel-studios-guardians-of-the-galaxy.json` (format v3, source `Q`). Card effects were read from the C1 catalog's ability data (tags only are recorded here); the shared OCR file holds no card text for this box. Names follow C1, including its spellings "Scavanged Blade" and the paired curly quotes in "The Dark Aster" Flagship and Ravager Starship "Eclector".
+
+- **Class conflicts.** None found between C1 per-card classes and the box file's Hero class lists; C1 is used.
+- **Copies.** C1 gives per-face counts, used as the physical card count (each Divided Card is one entry listing both names, as Civil War does); each Hero totals 14.
+- **Divided Cards.** Class is both sides' classes; cost is the shared cost; economy is `both` when the sides differ (Give / Take, Forgive / Resent, and so on).
+- **Economy.** A printed N+ or 0+ icon counts as that icon; Artifacts with no icon are `none`; Revenge for my Family (doubles Attack) is `attack`.
+- **Draws.** Expandable Helmet, Sharpen Blades, Gravity Mines (on Excessive Violence), Forgive / Resent, Passion / Compassion and Selfless / Selfish draw 1 (conditional); Resourceful Fugitive draws 2 and must put a card from hand on the bottom of the deck (`selfCost discard`).
+- **Wants.** Guardians of the Galaxy team on Give / Take; class superpowers want that class (Don't Press / Press, Forgive / Resent, Also Illegal, Selfless / Selfish); I am Invisible's reveal and Dual Knives' trigger want Strength or Instinct.
+- **Masterminds.** Ronan's Master Strike: random discard (`hand-disruption 1`) and a captured Villainous Weapon (`attack-inflation 1`); his four Weapon Tactics KO a Hero (`deck-thinning 1`) and join him as Weapons (`attack-inflation 1`). Ego's Master Strike: Wound if 3 Villains are in the city and another card from the Villain Deck (`wounds 1`, `escape-pressure 1`); each Tactic destroys the leftmost city space so a Villain escapes (`escape-pressure 1`).
+- **Villain Groups.** Villainous Weapons are `attack-inflation` on ambush by bonus (+2 and +3: 1; +4 and +6: 2), plus Dark Aster's conditional Wound and The Orb's HQ reset (`hq-disruption 1`). Exolon Attendants and Korath the Pursuer put more Villains in play (`escape-pressure 1`); Exolon Monks, Tullk and Yondu KO Heroes (`deck-thinning`); Sakaaran Mercenaries Wounds on ambush; Nebula `attack-inflation 1`; Scavanged Blade also plays another card.
+- **Schemes.** Kyln Space Prison `wounds 1`, `hq-disruption 2`, amplifying HQ disruption (its spend-or-suffer Twist is not a Hero reveal, so no check). Provoke the Sovereign War Fleet `escape-pressure 2`, `twist-density 1`, amplifying escape pressure. Awesome Mix Tape `hq-disruption 2` (KOs the HQ), amplifying HQ disruption. Abilisk Space Monster `deck-thinning 2` (a Tentacle captures a Hero from the discard pile), amplifying Twist density.
+
+### Difficulty: no axis
+
+- Artifact wants (Starship Sensors, Borrowed Nova Blaster, Expandable Helmet, Hadron Enforcer, Give / Take, Don't Need that Stuff, Sharpen Blades) are untagged: the Artifact keyword is the Heroes of Asgard term, not one of this box's. Draw payoffs (Retractable Sword, Stolen Necroblaster, Guardians Escape) and "different card names" payoffs (Tricky, We are Groot) fit no want kind. Excessive Violence and Excessive Kindness payoffs are untagged keyword triggers.
+- Optional "may" effects (Give / Take's discard, Stolen Necroblaster's KO, Press the Button's KO, Sleep) are not self costs.
+- Every Villain's +2 Attack while Commanding is a standing bonus with no Ambush, Fight or Escape timing, so it has no tag slot. Gef's, Kraglin's and Taserface's Fight effects only help the fighter and their Ambush swaps fit no axis, so they are untagged.
+- Both Epic faces are on the Mastermind card, which has no tag slot.

@@ -53,6 +53,18 @@ public class MarvelStudiosGuardiansTests
         Assert.NotEqual("Ego, the Living Planet", setup.Mastermind.Name);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Provoke the Sovereign War Fleet");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Provoke the Sovereign War Fleet", "Ronan the Accuser");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Provoke the Sovereign War Fleet's Twists"));
+    }
+
     // Draws the box's Scheme and Mastermind by name: the box's Schemes and Masterminds follow the core box's in catalog order.
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {

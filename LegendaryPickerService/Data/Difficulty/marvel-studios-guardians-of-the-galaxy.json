@@ -1,0 +1,734 @@
+{
+  "schemaVersion": 3,
+  "box": "marvel-studios-guardians-of-the-galaxy",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "marvel-studios-guardians-of-the-galaxy_hero_star-lord",
+      "cards": [
+        {
+          "name": "Starship Sensors",
+          "copies": 3,
+          "class": "tech",
+          "cost": 2,
+          "economy": "none"
+        },
+        {
+          "name": "Borrowed Nova Blaster",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "none"
+        },
+        {
+          "name": "Expandable Helmet",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Give / Take",
+          "copies": 2,
+          "class": [
+            "covert",
+            "ranged"
+          ],
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "guardians-of-the-galaxy",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Don't Need that Stuff",
+          "copies": 2,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Hadron Enforcer",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "none"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-guardians-of-the-galaxy_hero_gamora",
+      "cards": [
+        {
+          "name": "Sharpen Blades",
+          "copies": 3,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Resourceful Fugitive",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "none",
+          "selfCost": [
+            "discard"
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Retractable Sword",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "none"
+        },
+        {
+          "name": "Forgive / Resent",
+          "copies": 2,
+          "class": [
+            "covert",
+            "instinct"
+          ],
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Stolen Necroblaster",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Guardians Escape",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-guardians-of-the-galaxy_hero_rocket-and-groot",
+      "cards": [
+        {
+          "name": "Baby Groot",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Passion / Compassion",
+          "copies": 3,
+          "class": [
+            "tech",
+            "covert"
+          ],
+          "cost": 2,
+          "economy": "both",
+          "draw": 1
+        },
+        {
+          "name": "Don't Press this Button / Press the Button",
+          "copies": 3,
+          "class": [
+            "ranged",
+            "tech"
+          ],
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Gravity Mines",
+          "copies": 2,
+          "class": "tech",
+          "cost": 4,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Tricky / Simple",
+          "copies": 2,
+          "class": [
+            "tech",
+            "strength"
+          ],
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "We are Groot",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-guardians-of-the-galaxy_hero_drax",
+      "cards": [
+        {
+          "name": "Nothing Goes over my Head",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Prison Riot",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "I am Invisible / Xandar is Invincible",
+          "copies": 3,
+          "class": [
+            "instinct",
+            "tech"
+          ],
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Remove his Spine / Also Illegal",
+          "copies": 2,
+          "class": [
+            "strength",
+            "instinct"
+          ],
+          "cost": 6,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Dual Knives",
+          "copies": 2,
+          "class": "strength",
+          "cost": 4,
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Revenge for my Family",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-guardians-of-the-galaxy_hero_mantis",
+      "cards": [
+        {
+          "name": "Empathic Bond",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Selfless / Selfish",
+          "copies": 3,
+          "class": [
+            "instinct",
+            "ranged"
+          ],
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Inspire Courage",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "Sleep",
+          "copies": 2,
+          "class": "covert",
+          "cost": 5,
+          "economy": "recruit"
+        },
+        {
+          "name": "Emotional Wave",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "both"
+        },
+        {
+          "name": "Discover the Dead",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "marvel-studios-guardians-of-the-galaxy_mastermind_ronan-the-accuser",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Ronan's Throne",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hood of the Accuser",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Ancient Kree Armor",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Cosmi-Rod Warhammer",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "marvel-studios-guardians-of-the-galaxy_mastermind_ego-the-living-planet",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "I'm a Celestial, Sweetheart",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Cover All That Exists",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Expansion is My Purpose",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Until Everything is... Me!",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "marvel-studios-guardians-of-the-galaxy_villain_followers-of-ronan",
+      "cards": [
+        {
+          "name": "Exolon Attendants",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Exolon Monks",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Sakaaran Mercenaries",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Korath the Pursuer",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Nebula",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Korath's Disrupter Rifle",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "“The Dark Aster“ Flagship",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Orb",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-guardians-of-the-galaxy_villain_ravagers",
+      "cards": [
+        {
+          "name": "Tullk",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Yondu Udonta",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Scavanged Blade",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Ravager Starship “Eclector“",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Yaka Arrow",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "marvel-studios-guardians-of-the-galaxy_scheme_inescapable-kyln-space-prison",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-guardians-of-the-galaxy_scheme_provoke-the-sovereign-war-fleet",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-guardians-of-the-galaxy_scheme_star-lords-awesome-mix-tape",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-guardians-of-the-galaxy_scheme_unleash-the-abilisk-space-monster",
+      "twist": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}
