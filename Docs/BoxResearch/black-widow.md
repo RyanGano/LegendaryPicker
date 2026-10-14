@@ -152,3 +152,25 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/black-widow.json` (format v3, source `Q`, added to the box file's sources). Card effects were read from the C1 catalog's ability data (tags only are recorded here); the shared OCR file holds no card text for this box. Names follow C1.
+
+- **Class conflicts.** None between C1 per-card classes and the box file's Hero class lists; C1 is used.
+- **Copies.** C1 gives no Hero counts, so each Hero is the default 5/5/3/1 in ascending cost; Villain copies are C1's `qtd`. Falcon & Winter Soldier's three Divided Cards are one entry each ("left / right", union of classes, shared cost) and Captain America's Legacy is the fourth, as in Civil War.
+- **Wants.** Class superpowers want that class (Unveil Identity instinct; Red Guardian's Strike-Undercover cards covert; Relocate / Reload instinct and tech); Dark Memories cards want class diversity; Infiltrate the Conspiracy wants Bystanders; Captain America's Legacy wants class diversity (it pays per Hero Class) and Avengers.
+- **Draws.** Sleeper Agent (covert), Amulets of the Tiger God (conditional), Shadowed Resurrection (Dark Memories instead of Attack) and Reload (tech) draw 1; New Plan draws 2.
+- **Answers.** Dark Influence of the Hand fights a Bystander as a Henchman and rescues it (`bystanders 1`).
+- **Masterminds.** Taskmaster's Master Strike: a Wound if a Henchman is in the city, and his Henchman bonus (`wounds 1`, `attack-inflation 1`). Indestructible Man's: shuffles Villains back into the deck or Wounds, and his fight requires shuffling Assassins in (`wounds 1`, `escape-pressure 1`, `attack-inflation 1`). Every Tactic either returns a Henchman to the city or plays two Villain Deck cards (`escape-pressure 1`).
+- **Villain Groups.** Jester captures a Bystander on Ambush (`bystander-pressure 1`); Joystick returns a Henchman on Ambush (`escape-pressure 1`); Jack O'Lantern's escape Wounds (`wounds 1`); Bullseye captures a Hero and gains Attack (`attack-inflation 1`); Blue Talon: reveal Ranged or take a Wound (check); Iron Maiden sends Heroes Undercover (`deck-thinning 1`); Snapdragon discards a Hero (`hand-disruption 1`).
+- **Schemes.** Corrupt the Spy Agencies `deck-thinning 1`, `twist-density 1`; Train Black Widows in the Red Room `escape-pressure 2`; Sniper Rifle Assassins `deck-thinning 2` (KOs); Frame Heroes for Murder `twist-density 2`, `hq-disruption 1`; each amplifies its loss condition's axis.
+
+### Difficulty: no axis
+
+- Undercover itself (Strike and Fade, Weave a Web of Spies, Infiltrate the Conspiracy, Unleash cards) moves Heroes to the Victory Pile and back and is not a cost the format has; the optional ones are not self costs.
+- Dodge and Attune's discard are optional or net-neutral; Evasive Acrobatics' second Dodge draws nothing extra.
+- Camouflaged Huntress's KO and Falcon half Attune's discard are optional.
+- Villain effects with only one timing slot: Jester's Fight (play Henchmen from the top four) and Jack O'Lantern's Fight (Henchman returns) are not recorded beside their Ambush or Escape; Black Lotus's Ambush (discard a 0-cost card) and Fight (Attack for the fighter) are untagged.
+- Tactics' effects that hit only other players or only help the fighter (Teacher and Assassin's and Henchman Instructor's other-player clauses, Arms Dealer's reveal-or-Wound, Unveil Project Four's discard, Photographic Reflexes, S.H.I.E.L.D. Initiative Trainer's KO-and-gain) add nothing beyond the `escape-pressure` already tagged.
+- Both Epic faces are on the Mastermind card, which has no tag slot.
