@@ -147,6 +147,29 @@ describe('App', () => {
     expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3&boxes=core$/)])
   })
 
+  it('draws from the Generate button at the top of the controls too', async () => {
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate setup' }))
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+  })
+
+  it('checks every box, then unchecks them all, from one button', async () => {
+    boxesAnswer = () => json([core, fixture])
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(await screen.findByRole('button', { name: 'Check all' }))
+    const boxChecks = screen.getAllByRole('checkbox').filter((box) => !/Epic Masterminds/.test(box.parentElement?.textContent ?? ''))
+    expect(boxChecks.every((box) => (box as HTMLInputElement).checked)).toBe(true)
+
+    await user.click(screen.getByRole('button', { name: 'Uncheck all' }))
+    expect(boxChecks.some((box) => (box as HTMLInputElement).checked)).toBe(false)
+  })
+
   it('asks for Epic Masterminds only once the option is ticked, and remembers it', async () => {
     setupAnswers.push(() => json(setup), () => json(setup))
     const user = userEvent.setup()

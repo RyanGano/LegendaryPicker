@@ -244,6 +244,13 @@ function App() {
     saveBoxes(next)
   }
 
+  // Ticks every listed box, or unticks them all once every one is ticked.
+  function toggleAllBoxes() {
+    const next = boxes.every((box) => included.includes(box.id)) ? [] : boxes.map((box) => box.id)
+    setIncluded(next)
+    saveBoxes(next)
+  }
+
   function toggleEpic() {
     setEpic(!epic)
     saveEpic(!epic)
@@ -256,6 +263,7 @@ function App() {
 
   // Stored ids the API no longer lists are ignored.
   const isIncluded = (box: Box) => included.includes(box.id)
+  const allIncluded = boxes.length > 0 && boxes.every(isIncluded)
   const hint = boxHint(boxes, included)
   // The rule edition choice matters only while the ticked boxes follow more than one ruleset.
   const choosesRules = spansRulesets(boxes, included)
@@ -308,6 +316,17 @@ function App() {
         {/* The controls and the drawn cards. On a wide screen they stay in view beside the checklist. */}
         <div className="rail">
           <section className="controls">
+            {/* A second Generate at the top, so a long box list doesn't mean scrolling to draw. On a wide
+                screen it stays in view at the top of the rail. Its label differs so each button is findable. */}
+            <button
+              type="button"
+              className="primary generate-top"
+              aria-label="Generate setup"
+              disabled={players === null || loading || hint !== null}
+              onClick={generate}
+            >
+              Generate
+            </button>
             <h2 id="players-label">Players</h2>
             <div className="player-counts" role="group" aria-labelledby="players-label">
               {PLAYER_COUNTS.map((count) => (
@@ -325,7 +344,12 @@ function App() {
             </div>
             {boxes.length > 0 && (
               <>
-                <h2 id="boxes-label">Boxes</h2>
+                <div className="boxes-heading">
+                  <h2 id="boxes-label">Boxes</h2>
+                  <button type="button" className="link-button" disabled={loading} onClick={toggleAllBoxes}>
+                    {allIncluded ? 'Uncheck all' : 'Check all'}
+                  </button>
+                </div>
                 <div className="box-options" role="group" aria-labelledby="boxes-label">
                   {listedBoxes.map((box) => (
                     <div key={box.id} className="box-option">

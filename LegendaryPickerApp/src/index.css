@@ -422,6 +422,43 @@ div.box-option {
   box-shadow: var(--shadow-sm);
 }
 
+/* The Boxes heading with its check/uncheck all toggle beside it. */
+.boxes-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.boxes-heading h2 {
+  margin: 0;
+}
+
+.link-button {
+  padding: 0;
+  font: inherit;
+  font-size: var(--text-sm);
+  color: var(--link);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* The top Generate stays at the top of the rail while the box list scrolls under it. */
+.generate-top {
+  margin-bottom: var(--space-4);
+}
+
+@media (width >= 56.25rem) {
+  .generate-top {
+    position: sticky;
+    top: calc(-1 * var(--space-1));
+    z-index: 2;
+  }
+}
+
 .status {
   display: flex;
   flex-direction: column;
