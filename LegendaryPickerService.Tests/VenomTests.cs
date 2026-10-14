@@ -32,6 +32,19 @@ public class VenomTests
         Assert.Equal(11, setup.VillainDeck.Twists);
     }
 
+    // Its own Scheme and Mastermind are tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_and_Mastermind_rates_with_reasons_naming_them()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Maximum Carnage");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Maximum Carnage", "Poison Thanos");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Maximum Carnage's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Poison Thanos's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);

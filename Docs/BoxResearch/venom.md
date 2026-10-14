@@ -156,3 +156,24 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/venom.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons, and the owner's LegendaryAssistant data (`venom-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1. No card text is stored.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order. Villain copies are C1's.
+- **Printed 0+ icons.** Devouring Drool, Razor Teeth, Symbiotic Adaptation and Insatiable Hunger carry both a Recruit and an Attack icon: `both`. Carnivore (Recruit 0+) is `recruit`; Digest That Chimichanga (Attack 0+) and Spring the Trap (Attack 2+) are `attack`. Shenanigans has no icon: `none`.
+- **Draws.** Unconditional or easy draws carry `draw` (Shenanigans 2; Cauldron of the Cosmos 1 at Digest 2; Crystal of Kadavus 1). Excessive Violence and Digest 3 or more draws are narrow (an extra Attack or a Victory Pile of 3 or more) and are left untagged, so Rending Claws, Carnivore and Hungry for Action carry none.
+- **Optional effects** (Hungry for Action's discard, Ultimate Survivor, Serious Overkill, Gruesome Feast, Feast or Famine) are "may" effects and carry no `selfCost`.
+- **Bystanders.** Rescues are `answers bystanders 1` (Digest That Chimichanga, Play to the Crowd); Can I Get a Little Gratitude? and Play to the Crowd want the Bystander stack.
+- **Masterminds.** Hybrid's Master Strike gains Wounds only when it is already bonded: `wounds 1`. Poison Thanos's Master Strike takes a non-grey Hero from each player: `deck-thinning 3`, and his Attack grows with the pile: `attack-inflation 1`. Soul Seize, which empties the HQ of Heroes costing 5 or more, is `hq-disruption 2`.
+- **Villains.** Riot's Fight KOs a Hero (`deck-thinning 2`), Agony's Escape is a Covert check for a Wound, and Symbiotic Armor bonds with the Mastermind (`attack-inflation 1`) and KOs a Hero on the Fight (`deck-thinning 1`).
+- **Schemes.** Invasion adds a Villain per Twist (`escape-pressure 2`, amplified by its Escape Pile loss). Maximum Carnage is `wounds 2` and `bystander-pressure 1`, amplifying both. Paralyzing Venom is `hand-disruption 2`. Symbiotic Absorption's repeated Master Strikes are approximated as `twist-density 1`.
+
+### Difficulty: no axis
+
+- Symbiote Bonds (Lasher, Riot's Ambush, Phage, Scream, Hybrid's bonding Tactics and Master Strike, the Poison Traps' Fight) joins Villains in the city and has no axis; the Poison Traps gain a Hero when they cannot bond, so they carry no tag.
+- Dr. Carlton Drake's Fight and Life Foundation Research only help the player.
+- Searing Poisons and Poisoned Loyalties only hurt the other players (untagged, as in other boxes) and Desperate Rescue only helps the player. Symbiotic Absorption's Tactic shuffling is not an axis.
+- Complete the Grand Ritual (cost conditions), Symbiotic Adaptation's count of played cards and Ultimate Survivor's Master Strike reaction carry no want or answer beyond class, cost and economy.
+- Insatiable Hunger's mandatory KO from hand or discard is a thinning choice, not a `ko-hand` cost.
