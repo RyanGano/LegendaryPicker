@@ -1,0 +1,1121 @@
+{
+  "schemaVersion": 3,
+  "box": "into-the-cosmos",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "into-the-cosmos_hero_adam-warlock",
+      "cards": [
+        {
+          "name": "Transmute Matter",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Regenerative Cocoon",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "none",
+          "selfCost": [
+            "discard"
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Soulblast",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "stack",
+              "shards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Manifest the Soul Gem",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              2
+            ],
+            [
+              "stack",
+              "shards",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "into-the-cosmos_hero_captain-mar-vell",
+      "cards": [
+        {
+          "name": "Cosmic Awareness",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Kree Genetics",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "stack",
+              "shards",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Channel the Nega-Bands",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Protector of the Universe",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "shards",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "into-the-cosmos_hero_moondragon",
+      "cards": [
+        {
+          "name": "Peaceful Meditation",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Psionic Warning",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Psychokinetic Blast",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Lunar Dragon Form",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "into-the-cosmos_hero_nebula",
+      "cards": [
+        {
+          "name": "Ruthless Cyborg",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Illusion Device",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Galactic Rogue",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Daring Raid",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "into-the-cosmos_hero_nova",
+      "cards": [
+        {
+          "name": "Draw From the Worldmind",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Electromagnetic Wave",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Declare Galactic Threat",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "none",
+          "draw": 2
+        },
+        {
+          "name": "Mobilize the Nova Corps",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "none",
+          "draw": 3
+        }
+      ]
+    },
+    {
+      "hero": "into-the-cosmos_hero_phyla-vell",
+      "cards": [
+        {
+          "name": "Channel Cosmic Power",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Martyr",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Quantum Sword",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "shards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Avatar of Oblivion",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "shards",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "into-the-cosmos_hero_quasar",
+      "cards": [
+        {
+          "name": "Manipulate Gravitons",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Cosmic Champion",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "shards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Quantum Bands",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "The Star Brand",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "shards",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "into-the-cosmos_hero_ronan-the-accuser",
+      "cards": [
+        {
+          "name": "Universal Weapon",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "stack",
+              "shards",
+              1
+            ]
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Rally Kree Warriors",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Accuse Enemies of the Empire",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Seek the Infinity Gems",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "into-the-cosmos_hero_yondu",
+      "cards": [
+        {
+          "name": "Whistling Arrow",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Interstellar Hunter",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Anticipate Their Movements",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "guardians-of-the-galaxy",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Space Pirate",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "guardians-of-the-galaxy",
+              3
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "into-the-cosmos_mastermind_the-beyonder",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Dimensional Collapse",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Pull Earth Into The Beyond",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "into-the-cosmos_mastermind_the-grandmaster",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Deal With Death",
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "attack-inflation"
+          },
+          "severity": 1
+        },
+        {
+          "name": "Galactic Marathon",
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "attack-inflation"
+          },
+          "severity": 1
+        },
+        {
+          "name": "Cheat Against Thanos",
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "attack-inflation"
+          },
+          "severity": 1
+        },
+        {
+          "name": "Match Offenders vs. Defenders",
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "attack-inflation"
+          },
+          "severity": 1
+        }
+      ]
+    },
+    {
+      "mastermind": "into-the-cosmos_mastermind_magus",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "attack-inflation",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Seize Cosmic Power",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Dark Side of Adam Warlock",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Resurrected as the Child Magus",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Conjured Shade of Thanos",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "into-the-cosmos_villain_black-order-of-thanos",
+      "cards": [
+        {
+          "name": "Corvus Glaive",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Black Dwarf",
+          "copies": 2,
+          "inflicts": [
+            [
+              "twist-density",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Supergiant",
+          "copies": 2,
+          "inflicts": [
+            [
+              "twist-density",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Proxima Midnight",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "twist-density",
+              2
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Ebony Maw",
+          "copies": 1,
+          "inflicts": [
+            [
+              "twist-density",
+              2
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "into-the-cosmos_villain_celestials",
+      "cards": [
+        {
+          "name": "Nezarr, The Calculator",
+          "copies": 2,
+          "gate": [
+            "class",
+            "covert"
+          ],
+          "severity": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Gammenon, The Gatherer",
+          "copies": 2,
+          "gate": [
+            "class",
+            "strength"
+          ],
+          "severity": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Exitar, The Exterminator",
+          "copies": 2,
+          "gate": [
+            "class",
+            "tech"
+          ],
+          "severity": 1
+        },
+        {
+          "name": "Arishem, The Judge",
+          "copies": 1,
+          "gate": [
+            "class",
+            "ranged"
+          ],
+          "severity": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Tiamut, The Dreaming Celestial",
+          "copies": 1,
+          "gate": [
+            "class",
+            "instinct"
+          ],
+          "severity": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              3
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "into-the-cosmos_villain_elders-of-the-universe",
+      "cards": [
+        {
+          "name": "The Runner",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Trader",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "hq-disruption"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Champion of the Universe",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "The Collector",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "into-the-cosmos_villain_from-beyond",
+      "cards": [
+        {
+          "name": "The Mapmakers",
+          "copies": 3,
+          "gate": [
+            "class",
+            "tech"
+          ],
+          "severity": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "The Shaper of Worlds",
+          "copies": 2,
+          "gate": [
+            "class",
+            "ranged"
+          ],
+          "severity": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Kubik",
+          "copies": 2,
+          "gate": [
+            "class",
+            "instinct"
+          ],
+          "severity": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Kosmos",
+          "copies": 1,
+          "gate": [
+            "class",
+            "covert"
+          ],
+          "severity": 2
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "into-the-cosmos_henchman_sidera-maris-bridge-builders",
+      "cards": [
+        {
+          "name": "Sidera Maris, Bridge Builders",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "into-the-cosmos_henchman_universal-church-of-truth",
+      "cards": [
+        {
+          "name": "Universal Church of Truth",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "into-the-cosmos_scheme_the-contest-of-champions",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hand-disruption"
+      ]
+    },
+    {
+      "scheme": "into-the-cosmos_scheme_turn-the-soul-of-adam-warlock",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "attack-inflation"
+      ]
+    },
+    {
+      "scheme": "into-the-cosmos_scheme_destroy-the-nova-corps",
+      "twist": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "deck-thinning"
+      ]
+    },
+    {
+      "scheme": "into-the-cosmos_scheme_annihilation-conquest",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}

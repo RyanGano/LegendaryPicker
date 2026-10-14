@@ -45,6 +45,18 @@ public class IntoTheCosmosTests
         Assert.Equal(5, Draw(1, "Destroy the Nova Corps").Heroes.Count);
     }
 
+    // Its own Mastermind is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_Magus_rates_with_a_reason_naming_him()
+    {
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Annihilation: Conquest", "Magus");
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Annihilation: Conquest");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Magus's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
