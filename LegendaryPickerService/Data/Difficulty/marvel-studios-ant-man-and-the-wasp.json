@@ -1,0 +1,1213 @@
+{
+  "schemaVersion": 3,
+  "box": "marvel-studios-ant-man-and-the-wasp",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "marvel-studios-ant-man-and-the-wasp_hero_scott-lang-cat-burglar",
+      "cards": [
+        {
+          "name": "Petty Larceny",
+          "copies": 3,
+          "class": "covert",
+          "cost": 1,
+          "economy": "recruit"
+        },
+        {
+          "name": "Shocking Support",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "X-Con Security Van",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Anything for Cassie",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "both",
+          "answers": [
+            [
+              "wounds",
+              2
+            ],
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Putting a Crew Together",
+          "copies": 2,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "The Big Score",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-ant-man-and-the-wasp_hero_ant-man",
+      "cards": [
+        {
+          "name": "Hitch a Ride",
+          "copies": 3,
+          "class": "covert",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "keyword",
+              "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Look Out for the Little Guy!",
+          "copies": 3,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Shrink Away",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Bug Swarm",
+          "copies": 2,
+          "class": "strength",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              2
+            ],
+            [
+              "keyword",
+              "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Tiny little Risk",
+          "copies": 2,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              2
+            ]
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Giant-Man",
+          "copies": 1,
+          "class": "strength",
+          "cost": 9,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              3
+            ],
+            [
+              "keyword",
+              "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-ant-man-and-the-wasp_hero_wasp",
+      "cards": [
+        {
+          "name": "Flitting Sting",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Positive Ions",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Master Physicist",
+          "copies": 3,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Follow my Lead",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Infiltrate",
+          "copies": 2,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Hope Returns",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 9,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-ant-man-and-the-wasp_hero_cassie-lang",
+      "cards": [
+        {
+          "name": "Start Small",
+          "copies": 3,
+          "class": "tech",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "selfCost": [
+            "discard"
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Giant Hug",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Colossal Stomp",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Quantum Beacon",
+          "copies": 2,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ],
+            [
+              "villain-flow",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Learn from the Past",
+          "copies": 2,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Inspire Revolution",
+          "copies": 1,
+          "class": "strength",
+          "cost": 9,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-ant-man-and-the-wasp_hero_janet-van-dyne",
+      "cards": [
+        {
+          "name": "Search for Peace",
+          "copies": 3,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Prepare for War",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Wasp of Another Generation",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Subatomic Size",
+          "copies": 2,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              2
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Quantum Contradiction",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "both"
+        },
+        {
+          "name": "Finally Found You",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-ant-man-and-the-wasp_hero_freedom-fighters",
+      "cards": [
+        {
+          "name": "Mystics",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Steel Warrior",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Xolum",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Veb",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Quaz",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Freedom Forever",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-ant-man-and-the-wasp_hero_jentorra",
+      "cards": [
+        {
+          "name": "Take the High Ground",
+          "copies": 3,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Hit and Run",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Unite the Oppressed",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Find Your Courage",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Lead Powerful Allies",
+          "copies": 2,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Conquer the Conqueror",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-ant-man-and-the-wasp_hero_ant-army",
+      "cards": [
+        {
+          "name": "Up the Ante",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 1,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Antagonize",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "keyword",
+              "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Anticipate",
+          "copies": 3,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "keyword",
+              "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Antiproton Experiments",
+          "copies": 2,
+          "class": "tech",
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ],
+            [
+              "keyword",
+              "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Anti-Tank Weapons",
+          "copies": 2,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Revolutionary Anthem",
+          "copies": 1,
+          "class": "tech",
+          "cost": 9,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              3
+            ],
+            [
+              "keyword",
+              "marvel-studios-ant-man-and-the-wasp_term_size-changing",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "marvel-studios-ant-man-and-the-wasp_mastermind_darren-cross",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "instinct"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Corporate Raider",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Protect My Investments",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "marvel-studios-ant-man-and-the-wasp_mastermind_ghost-master-thief",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "instinct"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 2,
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Shadowy Abduction",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "marvel-studios-ant-man-and-the-wasp_mastermind_kang-quantum-conqueror",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "strength"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Conqueror's Wrath",
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Kang's Defiance",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "marvel-studios-ant-man-and-the-wasp_villain_cross-technologies",
+      "cards": [
+        {
+          "name": "Cross' Security Detail",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Yellowjacket Prototype",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Take Over Pym Technologies",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-ant-man-and-the-wasp_villain_ghost-chasers",
+      "cards": [
+        {
+          "name": "Corrupted Government Agents",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Sonny Burch",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Dr. Bill Foster",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Goliath",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "High-Speed Car Chase",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-ant-man-and-the-wasp_villain_armada-of-kang",
+      "cards": [
+        {
+          "name": "Quantumnaut Elite",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Troop Ships of Kang",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "City Defense System",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Energy Shield",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "M.O.D.O.K.",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Build a Conquering Army",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-ant-man-and-the-wasp_villain_quantum-realm",
+      "cards": [
+        {
+          "name": "Hungering Energy",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Quantumoeba",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Quantumania",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "marvel-studios-ant-man-and-the-wasp_henchman_quantumnauts",
+      "cards": [
+        {
+          "name": "Quantumnauts",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-ant-man-and-the-wasp_henchman_quantum-hound",
+      "cards": [
+        {
+          "name": "Quantum Hound",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-ant-man-and-the-wasp_henchman_tardigrade",
+      "cards": [
+        {
+          "name": "Tardigrade",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "marvel-studios-ant-man-and-the-wasp_scheme_auction-shrink-tech-to-highest-bidder",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-ant-man-and-the-wasp_scheme_safeguard-dark-secrets",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-ant-man-and-the-wasp_scheme_escape-an-imprisoning-dimension",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-ant-man-and-the-wasp_scheme_siphon-energy-from-the-quantum-realm",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}
