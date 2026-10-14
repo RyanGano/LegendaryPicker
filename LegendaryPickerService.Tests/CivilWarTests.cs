@@ -92,6 +92,16 @@ public class CivilWarTests
         Assert.Contains("Sidekick", setup.Glossary.Select(entry => entry.Name));
     }
 
+    [Fact]
+    public void A_draw_with_Ragnarok_and_Epic_Super_Hero_Civil_War_rates_on_Civil_War_cards_by_name()
+    {
+        var setup = Draw(2, "Epic Super Hero Civil War", Ragnarok);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Ragnarok's Master Strikes"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Epic Super Hero Civil War's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme, int mastermind) =>
         Assert.IsType<SetupResult>(Generator.Generate(players, Boxes, new ScriptedRandom(Array.IndexOf(SchemeNames, scheme), mastermind)));
 }
