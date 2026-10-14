@@ -73,6 +73,16 @@ public class DarkCityTests
         Assert.Contains(new RuleNote("Scheme puts 0 Bystanders in the Villain Deck", "Card", null, DarkCityName), setup.Notes);
     }
 
+    [Fact]
+    public void A_draw_with_Mephisto_and_Save_Humanity_rates_on_Dark_City_cards_by_name()
+    {
+        var setup = Draw(2, "Save Humanity");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Mephisto's Master Strikes"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Save Humanity's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = (players == 1 ? 6 : 8) + Array.IndexOf(SchemeNames, scheme);

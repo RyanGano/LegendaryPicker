@@ -1,0 +1,1538 @@
+{
+  "schemaVersion": 3,
+  "box": "dark-city",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "dark-city_hero_angel",
+      "cards": [
+        {
+          "name": "High-Speed Chase",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Diving Catch",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Drop off a Friend",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Strength of Spirit",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_bishop",
+      "cards": [
+        {
+          "name": "Whatever the Cost",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "none",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Absorb Energies",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Concussive Blast",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Firepower from the Future",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_blade",
+      "cards": [
+        {
+          "name": "Stalk the Prey",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Night Hunter",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "both"
+        },
+        {
+          "name": "Nowhere to Hide",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Vampiric Surge",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_cable",
+      "cards": [
+        {
+          "name": "Disaster Survivalist",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "answers": [
+            [
+              "hand",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Strike at the Heart of Evil",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Rapid Response Force",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-force",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Army of One",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_colossus",
+      "cards": [
+        {
+          "name": "Draw Their Fire",
+          "copies": 5,
+          "class": "strength",
+          "cost": 1,
+          "economy": "attack",
+          "selfCost": [
+            "wound"
+          ]
+        },
+        {
+          "name": "Invulnerability",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Silent Statue",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Russian Heavy Tank",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_daredevil",
+      "cards": [
+        {
+          "name": "Backflip",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Radar Sense",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Blind Justice",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "The Man Without Fear",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_domino",
+      "cards": [
+        {
+          "name": "Lucky Break",
+          "copies": 5,
+          "class": "tech",
+          "cost": 1,
+          "economy": "both",
+          "draw": 1,
+          "wants": [
+            [
+              "team",
+              "x-force",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Ready for Anything",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Specialized Ammunition",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "Against All Odds",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "x-force",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_elektra",
+      "cards": [
+        {
+          "name": "First Strike",
+          "copies": 5,
+          "class": "covert",
+          "cost": 1,
+          "economy": "attack"
+        },
+        {
+          "name": "Ninjitsu",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "recruit",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Sai Blades",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Silent Meditation",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "marvel-knights",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_forge",
+      "cards": [
+        {
+          "name": "Dirty Work",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reboot",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Overdrive",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "both"
+        },
+        {
+          "name": "B.F.G.",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_ghost-rider",
+      "cards": [
+        {
+          "name": "Infernal Chains",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "none",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hell on Wheels",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "marvel-knights",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Blazing Hellfire",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Penance Stare",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "marvel-knights",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_iceman",
+      "cards": [
+        {
+          "name": "Deep Freeze",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "recruit",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Ice Slide",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Frost Spike Armor",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Impenetrable Ice Wall",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              2
+            ],
+            [
+              "hand",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_iron-fist",
+      "cards": [
+        {
+          "name": "Ancient Legacy",
+          "copies": 5,
+          "class": "strength",
+          "cost": 1,
+          "economy": "both",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "strength",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Focus Chi",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Wield the Iron Fist",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Living Weapon",
+          "copies": 1,
+          "class": "strength",
+          "cost": 9,
+          "economy": "attack",
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_jean-grey",
+      "cards": [
+        {
+          "name": "Psychic Search",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Read Your Thoughts",
+          "copies": 5,
+          "class": "covert",
+          "cost": 5,
+          "economy": "recruit",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mind Over Matter",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Telekinetic Mastery",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_nightcrawler",
+      "cards": [
+        {
+          "name": "Bamf!",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Blend Into Shadows",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Swashbuckler",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Along for the Ride",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_professor-x",
+      "cards": [
+        {
+          "name": "Psionic Astral Form",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Class Dismissed",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "hq",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Telepathic Probe",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mind Control",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_punisher",
+      "cards": [
+        {
+          "name": "Boom Goes the Dynamite",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hostile Interrogation",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hail of Bullets",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "The Punisher",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "dark-city_hero_wolverine-x-force",
+      "cards": [
+        {
+          "name": "Animal Instincts",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "draw": 1,
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Sudden Ambush",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "No Mercy",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Reckless Abandon",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "dark-city_mastermind_apocalypse",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            3
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Apocalyptic Destruction",
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "The End of All Things",
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Horsemen Are Drawing Nearer",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "dark-city_mastermind_kingpin",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "team",
+            "marvel-knights"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 2
+      },
+      "tactics": [
+        {
+          "name": "Call a Hit",
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Criminal Empire",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mob War",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "dark-city_mastermind_mephisto",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "team",
+            "marvel-knights"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 2
+      },
+      "tactics": [
+        {
+          "name": "The Price of Failure",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Damned If You Do...",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "dark-city_mastermind_mr-sinister",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "covert"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 2,
+        "inflicts": [
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Human Experimentation",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Master Geneticist",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Plans Within Plans",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Telepathic Manipulation",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "dark-city_mastermind_stryfe",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "team",
+            "x-force"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 2,
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Furious Wrath",
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Swift Vengeance",
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Tide of Retribution",
+          "check": {
+            "requires": [
+              "team",
+              "x-force"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "dark-city_villain_emissaries-of-evil",
+      "cards": [
+        {
+          "name": "Egghead",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Rhino",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Gladiator",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Electro",
+          "copies": 2,
+          "inflicts": [
+            [
+              "twist-density",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "dark-city_villain_four-horsemen",
+      "cards": [
+        {
+          "name": "Famine",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Pestilence",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "War",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Death",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "dark-city_villain_marauders",
+      "cards": [
+        {
+          "name": "Chimera",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Blockbuster",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Scalphunter",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "dark-city_villain_mutant-liberation-front",
+      "cards": [
+        {
+          "name": "Wildside",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Reignfire",
+          "copies": 2,
+          "inflicts": [
+            [
+              "twist-density",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "dark-city_villain_streets-of-new-york",
+      "cards": [
+        {
+          "name": "Hammerhead",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Bullseye",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Tombstone",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Jigsaw",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "dark-city_villain_underworld",
+      "cards": [
+        {
+          "name": "Dracula",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Lilith, Daughter of Dracula",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Blackheart",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "team",
+              "marvel-knights"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "dark-city_henchman_maggia-goons",
+      "cards": [
+        {
+          "name": "Maggia Goons",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "dark-city_henchman_phalanx",
+      "cards": [
+        {
+          "name": "Phalanx",
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "deck-thinning"
+          },
+          "severity": 1,
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "dark-city_scheme_capture-baby-hope",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "dark-city_scheme_detonate-the-helicarrier",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "dark-city_scheme_massive-earthquake-generator",
+      "twist": {
+        "check": {
+          "requires": [
+            "class",
+            "strength"
+          ],
+          "onFail": "deck-thinning"
+        },
+        "severity": 2
+      },
+      "amplifies": [
+        "deck-thinning"
+      ]
+    },
+    {
+      "scheme": "dark-city_scheme_organized-crime-wave",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "dark-city_scheme_save-humanity",
+      "twist": {
+        "check": {
+          "requires": [
+            "class",
+            "instinct"
+          ],
+          "onFail": "bystander-pressure"
+        },
+        "severity": 2
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "dark-city_scheme_steal-the-weaponized-plutonium",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "dark-city_scheme_transform-citizens-into-demons",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "dark-city_scheme_x-cutioners-song",
+      "twist": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "deck-thinning"
+      ]
+    }
+  ]
+}
