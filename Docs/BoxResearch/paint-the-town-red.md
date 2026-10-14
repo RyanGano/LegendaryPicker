@@ -114,3 +114,23 @@ Each card with a `uses` entry in this box's runtime file is listed below with th
 ## Card-face `uses` check (#166, 2026-10-12)
 
 Every Hero, Villain, Henchman, Mastermind and Tactic face was checked for the shared stacks it takes cards from (Wounds, Sidekicks, Officers, Horrors, Bindings, Shards). Method: the shared OCR cache's stack markers per face (`Card`; 40 C1-linked faces in the cache, no card text stored) compared with each card's `uses`; faces the cache could not read were re-read locally. A card whose text only means something when a stack is in play (it KOs a Wound, or reacts to a player gaining one) also brings that stack, and when unsure the part is added (owner ruling, #141, 2026-10-12). No face disagreed with the box file.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/paint-the-town-red.json` (format v3, source `Q`). Card facts: the shared OCR cache (counts and keyword markers only), C1 per-face values above for names, class, cost and economy, and the owner's LegendaryAssistant data (`paint-the-town-red-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1 where LegendaryAssistant differs (Venom Blast, Arachno-Pheromones, Leap from Above).
+
+- **Copies.** Villain copies are C1's printed counts. Hero copies are not printed in any source found: they follow C1's face-number slot (04 and 03 are the two commons at 5, 02 the uncommon at 3, 01 the rare at 1), which matches the 5/5/3/1 split. Ascending cost gives the same split for every Hero but Symbiote Spider-Man, whose four cards all cost 2; the face slot breaks that tie. Treat as `copies: default`.
+- **Teams.** `spider-friends` is a team term of the core box, used as a `wants` value.
+- **Conditional draws** (reveal-and-draw, Sting of the Spider's draw) are tagged `draw: 1`, as in core.
+- **Feast** (KO the top card of a deck) is tagged `deck-thinning 1` on Fight; Demogoblin carries both its Ambush capture and its Feast as one tag over `ambush` and `fight`, which counts the capture's Fight half weight too.
+
+### Difficulty: no axis
+
+- Wall-Crawl (recruited Hero goes on the deck): no axis; only the cards' other effects are tagged.
+- Thwip! and Radioactive Spider put cards from hand on the deck to play: not a discard, Wound or KO, so no `selfCost`.
+- Lunar Communion's KO, Jinx, Pickpocket, Spider-Sense Tingling's cost filter, Arachno-Pheromones's free recruit, and Dark Strength's and Shadowed Spider's cost-1-or-2 conditions: Hero effects with no want or answer axis.
+- Doppelganger, Kraven the Hunter, Sandman: attack set by the board or HQ; Chameleon's copied effect; Vulture's swap of city spaces.
+- Mysterio's Master Strike (shuffles into his Tactics) and his Tactics (shuffle or play Master Strikes): no axis, so Mysterio carries no tags.
+- Weave a Web of Lies's gate on fighting the Mastermind (a Bystander per stacked Twist) is approximated as `bystander-pressure 2`.
+- The Clone Saga's Twist asks for two same-named Heroes, not a team or class, so it is tagged as `hand-disruption 2` with no check.
+- Invade the Daily Bugle News HQ's six extra Henchmen in the Hero Deck carry no tag beyond the Twist. Splice Humans with Spider DNA's +3 attack for the Sinister Six is folded into its Twist as `attack-inflation 2`, beside `escape-pressure 2` for the Twist's replayed Villain (as Negative Zone Prison Breakout in core).
