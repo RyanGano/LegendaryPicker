@@ -1,0 +1,819 @@
+{
+  "schemaVersion": 3,
+  "box": "marvel-studios-the-infinity-saga",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "marvel-studios-the-infinity-saga_hero_doctor-strange",
+      "cards": [
+        {
+          "name": "Open Portals",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Defend this Dimension",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Sift Futures",
+          "copies": 3,
+          "class": [
+            "instinct",
+            "ranged"
+          ],
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Invoke the Time Stone",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Bind Evil",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "1 in 14,000,065",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 3
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-the-infinity-saga_hero_black-panther",
+      "cards": [
+        {
+          "name": "Wakanda Forever",
+          "copies": 3,
+          "class": [
+            "covert",
+            "tech"
+          ],
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Avengers Reassembled",
+          "copies": 3,
+          "class": [
+            "instinct",
+            "covert"
+          ],
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Great Many Lives Lost",
+          "copies": 3,
+          "class": [
+            "strength",
+            "instinct"
+          ],
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Council of War",
+          "copies": 2,
+          "class": [
+            "strength",
+            "covert"
+          ],
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Vibranium Nanites",
+          "copies": 2,
+          "class": [
+            "tech",
+            "ranged"
+          ],
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Fateful Return",
+          "copies": 1,
+          "class": [
+            "instinct",
+            "tech"
+          ],
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-the-infinity-saga_hero_bruce-banner",
+      "cards": [
+        {
+          "name": "Burst of Rage",
+          "copies": 3,
+          "class": "strength",
+          "cost": 1,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Brains and Brawn",
+          "copies": 3,
+          "class": [
+            "strength",
+            "tech"
+          ],
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hulkbuster Armor",
+          "copies": 3,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hulk Gets Smashed",
+          "copies": 2,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Crush Puny Weaklings",
+          "copies": 2,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reverse the Snap",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-the-infinity-saga_hero_captain-marvel",
+      "cards": [
+        {
+          "name": "Dawning Hope",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 2,
+          "economy": "none",
+          "draw": 2
+        },
+        {
+          "name": "Infused by the Tesseract",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "both",
+          "draw": 1
+        },
+        {
+          "name": "Return from the Stars",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Turning Point",
+          "copies": 3,
+          "class": [
+            "strength",
+            "ranged"
+          ],
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Moment of Destiny",
+          "copies": 2,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Time to End It",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "marvel-studios-the-infinity-saga_hero_wanda-and-vision",
+      "cards": [
+        {
+          "name": "We Have to Destroy It",
+          "copies": 3,
+          "class": "tech",
+          "cost": 1,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Witchcraft",
+          "copies": 3,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Hold On / Let Go",
+          "copies": 3,
+          "class": [
+            "covert",
+            "ranged"
+          ],
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 3
+        },
+        {
+          "name": "Magic / Science",
+          "copies": 2,
+          "class": [
+            "ranged",
+            "tech"
+          ],
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Rage / Grief",
+          "copies": 2,
+          "class": [
+            "covert",
+            "tech"
+          ],
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "board",
+              "ko-pile",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Odd Couple",
+          "copies": 1,
+          "class": [
+            "covert",
+            "ranged"
+          ],
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "marvel-studios-the-infinity-saga_mastermind_ebony-maw",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "marvel-studios-the-infinity-saga_mastermind_thanos",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "The Snap",
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "You Should Have Gone for the Head",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "marvel-studios-the-infinity-saga_villain_children-of-thanos",
+      "cards": [
+        {
+          "name": "Endless Armies of Chitauri",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Outrider Dropships",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Outrider Threshers",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Cull Obsidian",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Corvus Glaive",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Chitauri Gorilla",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Proxima Midnight",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "marvel-studios-the-infinity-saga_villain_infinity-stones",
+      "cards": [
+        {
+          "name": "The Power Stone",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Space Stone",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Reality Stone",
+          "copies": 1,
+          "inflicts": [
+            [
+              "twist-density",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Time Stone",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Soul Stone",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Mind Stone",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Nebula, Stone Seeker",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Stonekeeper",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "marvel-studios-the-infinity-saga_scheme_halve-all-life-in-the-universe",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-the-infinity-saga_scheme_sacrifice-for-the-soul-stone",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "deck-thinning",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-the-infinity-saga_scheme_the-time-heist",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "marvel-studios-the-infinity-saga_scheme_warp-reality-into-a-tv-show",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    }
+  ]
+}

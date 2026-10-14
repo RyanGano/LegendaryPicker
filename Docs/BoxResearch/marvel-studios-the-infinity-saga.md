@@ -170,3 +170,23 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/marvel-studios-the-infinity-saga.json` (format v3, source `Q`, already in the box file's sources). Card effects were read from the C1 catalog's ability data (tags only are recorded here); the shared OCR file holds no card text for this box. Names follow C1.
+
+- **Class conflicts.** None between C1 per-card classes and the box file's Hero class lists; C1 is used.
+- **Copies.** C1 gives per-card counts (3/3/3/2/2/1 per Hero), used as printed. Wanda & Vision's three Divided Cards are one entry each ("left / right", union of classes, shared cost): Hold On / Let Go, Magic / Science and Rage / Grief; Witchcraft, We Have to Destroy It and Odd Couple are single faces. Villain copies are C1's `qtd` (1 each).
+- **Wants.** Class superpowers want that class (Strange, Banner, Captain Marvel, Wanda & Vision); Avengers Reassembled and Fateful Return pay per Hero Class, so they want class diversity; Hulkbuster Armor wants and answers Wounds (it KOs one); Rage / Grief wants a KO'd Hero (`board ko-pile`, accepted but not scored yet).
+- **Draws.** Sift Futures, Wakanda Forever, Vibranium Nanites and Witchcraft are conditional draws (1); Infused by the Tesseract is an unconditional draw (1); Dawning Hope draws 1 or 2 (tagged 2); 1 in 14,000,065 draws six on a correct guess and Let Go draws 3 (both tagged 3, the format's cap).
+- **Masterminds.** Thanos's Master Strike makes an Infinity Stone escape (the loss condition) and Wounds players without a Stone in their Victory Pile (`escape-pressure 2`, `wounds 1`); Ebony Maw's discards each player's highest-cost Hero (`hand-disruption 2`). Tactics tagged: The Snap destroys half the HQ (`hq-disruption 2`); You Should Have Gone for the Head KOs the fighter's Hero and needs one more fight (`attack-inflation 1`, `deck-thinning 1`).
+- **Villain Groups.** Endless Armies of Chitauri and Outrider Threshers KO one of the fighter's Heroes (`deck-thinning 1`, Fight); Outrider Dropships add a Villain on Ambush (`escape-pressure 1`); Cull Obsidian and Corvus Glaive's Wound is conditional on Endgame (`wounds 1`, Ambush and Escape); Chitauri Gorilla captures a Bystander; Proxima Midnight: reveal an Instinct Hero or take a Wound (check). Infinity Stones: Power Stone Wounds (`wounds 2`), Space Stone captures three Bystanders and moves a Stone (`bystander-pressure 2`, `escape-pressure 1`), Reality Stone plays a Master Strike (`twist-density 1`), Time Stone plays another Villain Deck card (`escape-pressure 1`), Soul Stone KOs a Hero from each discard (`deck-thinning 1`), Mind Stone and Nebula cost or take HQ Heroes (`hq-disruption 1`), Stonekeeper discards (`hand-disruption 1`).
+- **Schemes.** Halve All Life `hq-disruption 2`; Sacrifice for the Soul Stone `hq-disruption 2`, `deck-thinning 1`; Warp Reality into a TV Show `hq-disruption 2`, `escape-pressure 1`; The Time Heist `twist-density 2` (its tenth Twist loses). Each amplifies its loss condition's axis.
+
+### Difficulty: no axis
+
+- Phasing, Sacrifice's extra turn (Invoke the Time Stone, The Time Stone's Fight) and the optional KOs (Burst of Rage, Great Many Lives Lost, Hulk Gets Smashed's Wound, Let Go, We Have to Destroy It) are not tagged.
+- Endgame bonuses (Attack on Ebony Maw and the Children of Thanos, Captain Marvel's Endgame cards) are not tagged: they depend on the Villain Deck size.
+- Council of War and Vibranium Nanites care about multicolored Heroes and Crush Puny Weaklings about Henchmen in the Victory Pile; the format has no such want. Bind Evil's Master Strike KO and Defend this Dimension's reveal are conditional on the top Villain Deck card and fit no answer axis.
+- Tactics that hit only other players (Destiny Arrives All the Same, Price to Pay, Your Powers are Quaint, You May Think This is Suffering) or only help the fighter (Hear Me and Rejoice, Smile...Even in Death) are untagged, as are Outriders (optional KO) and the fight-side Reality Stone, Time Stone and Soul Stone effects.
+- Both Epic faces are on the Mastermind card, which has no tag slot; the normal and Epic Master Strikes share one tag.

@@ -28,6 +28,18 @@ public class MarvelStudiosInfinitySagaTests
         Assert.Equal(8, Draw(4, "Sacrifice for the Soul Stone", "Ebony Maw").VillainDeck.Twists);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Halve All Life in the Universe");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Halve All Life in the Universe", "Ebony Maw");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Halve All Life in the Universe's Twists"));
+    }
+
     // Draws the Scheme and Mastermind by name: the box's follow the core box's in catalog order.
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
