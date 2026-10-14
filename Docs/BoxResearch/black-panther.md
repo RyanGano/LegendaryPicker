@@ -150,3 +150,24 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/black-panther.json` (format v3, source `Q`, added to the box file's sources). Card effects were read from the C1 catalog's ability data (tags only are recorded here); the shared OCR file holds no card text for this box. Names follow C1, including "Cloaking Tech Ambush".
+
+- **Class conflicts.** None between C1 per-card classes and the box file's Hero class lists; C1 is used.
+- **Copies.** C1 gives no Hero counts, so each Hero is the default 5/5/3/1 in ascending cost; Villain copies are C1's `qtd`.
+- **Wants.** Class superpowers want that class; Heroes of Wakanda superpowers want the team; Unite the Tribes of Wakanda also wants class diversity (it pays per Hero Class).
+- **Draws.** Heart-Shaped Herb (look, draw or KO), Vibranium Experiments, To My Last Breath and Sovereign Bodyguard draw 1 (conditional or optional).
+- **Answers.** Unseen Protector's Hero Ambush rescues a Bystander (`bystanders 1`); Lead the Dora Milaje and Direct the Agents of Wakanda may KO a Wound (`wounds 1`); Sovereign Bodyguard returns a Wound to the stack (`wounds 2`); Hurricane Winds moves a Villain (`villain-flow 1`); Thunderous Tempest and Shock Net cycle the HQ (`hq 1`).
+- **Masterminds.** Killmonger's Master Strike: reveal 4 different classes or take a Wound, else discard down (`wounds 1`, `hand-disruption 1`; "4 different Hero Classes" is not a team or class check). Klaw's: a Wound unless a card shares a color with the Sonic Frequency (`wounds 1`; the color is random, so no class check) and his Empowered bonus (`attack-inflation 1`). Tactics that put a Villain back in the city or play a Strike are `escape-pressure 1` (Altar of Resurrection, Cohesive Sound Construct).
+- **Villain Groups.** Preyy: reveal Instinct or take a Wound (check). Malice returns Wounds to the stack (`attack-inflation 1`). Baron Macabre pulls a Villain from a Victory Pile into the city (`escape-pressure 1`). Venomm's escape spreads his Wounds (`wounds 2`). Jakarra KOs a Hero (`deck-thinning 1`); Tetu cycles the HQ on Ambush and Fight (`hq-disruption 1`); Zenzi captures Bystanders (`bystander-pressure 1`); Reverend Achebe escapes as a Twist (`twist-density 1`).
+- **Schemes.** Seize the Wakandan Throne `twist-density 2`, `escape-pressure 1`, amplifying Twist density (it is lost on stacked Twists); Poison Lakes `wounds 2`, `hq-disruption 1`, amplifying Wounds; Plunder Wakanda's Vibranium `escape-pressure 2`, `attack-inflation 1`, amplifying escape pressure; Provoke a Clash of Nations `twist-density 2`, amplifying Twist density (a failed task stacks a Crisis; the vote is not a class check).
+
+### Difficulty: no axis
+
+- Wounding enemies, and the Wound-then-fight Villains (Preyy, Malice, Venomm, Killmonger): spending Attack to Wound them is the fight itself with a bonus, so they carry no inflation tag beyond the above.
+- Empowered (Nightshade, Jakarra, Tetu, Zenzi, Reverend Achebe, Klaw) is a standing bonus with no timing slot; Nightshade's Fight only helps the fighter.
+- Tactics that hit only other players or only help the fighter (A Scar for Every Kill, Rite of Challenge, Throw from the Waterfall, Convert Matter to Sound, Ultrasonic Boom, Cruelty Provokes Resistance) are untagged.
+- Kimoyo Beads (colour choice for Empowered), Secret Assignment's and Cloaking Tech Ambush's Wounding, Command the Hatut Zeraze's optional KO and Reflective Vibranium Armor's Strike cancel fit no axis.
+- Both Epic faces are on the Mastermind card, which has no tag slot.

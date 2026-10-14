@@ -23,6 +23,18 @@ public class BlackPantherTests
         Assert.Equal(30, setup.Stacks.Wounds);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Poison Lakes with Nanite Microbots");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Poison Lakes with Nanite Microbots", "Klaw");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Poison Lakes with Nanite Microbots's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
