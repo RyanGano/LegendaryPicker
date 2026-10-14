@@ -405,3 +405,23 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/civil-war.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons, and the owner's LegendaryAssistant data (`civil-war-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1. No card text is stored.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order, matching C1's face numbers (04, 03, 02, 01). Peter Parker's four slots all cost 2, so they follow C1's face numbers (Conflicted Loyalties, Spider-Man Unmasked, Protect My Family, Reluctant Celebrity). Villain copies are C1's (2 each).
+- **Divided Cards.** The format has no per-half record, so each Divided Card is one entry named "left / right" with the union of both halves' classes, the higher-arity economy (`both` when one half has Attack and the other Recruit, a printed 0+ counting as the icon), and the shared printed cost. Both teams count at the Hero level through the box file's `team` and `alsoTeam`. A per-half effect (the Wound on Half-Kree or Reckless, the discard on Manly Dullard) is optional because the player may use the other half, so it carries no `selfCost`. Not expressible: a half's own team on a Hero whose halves differ (Cloak & Dagger's Marvel Knights half), so wants on those teams see the Hero's teams as a whole.
+- **Size-Changing, Phasing** are tagged as a class want for the card's own class(es), as a Power ability is in core; keyword wants are not scored yet.
+- **Fortify** that parks on a stack or place is tagged by what it blocks: Ms. Marvel and Yellowjacket `hq-disruption`, Radioactive Man `wounds 2`, Venom `bystander-pressure 2`, Colleen Wing `attack-inflation 2` (the Mastermind cannot be fought), Authoritarian Iron Man's Master Strike `attack-inflation 2`.
+- **S.H.I.E.L.D. Clearance** is a `gate` on team `shield`, severity 1 (S.H.I.E.L.D. Elite, Cape-Killers).
+- **Conditional draws** carry `draw`, as in core. Printed 0+ icons: Bold Leadership `recruit`, Incredible Effort / Effortless `both`.
+- **Not read.** Mandroid and Cape-Killers have no text in any source reached (C1 and the cache hold none; searches found none), so Mandroid is untagged and Cape-Killers carries only its Clearance keyword's gate. The owner's data also lists a Legion Hero and a Hellfire Club group, which are not in this box (stray entries); ignored.
+
+### Difficulty: no axis
+
+- Patriot's New Generation of Heroes and Intuitive Tactician count distinct Hero Names, which no want kind can express.
+- Falcon's Rapid Reinforcements (moves an HQ Hero) and Tigra's Can't Surprise a Cat (cancels an Ambush) fit no answer axis; Speedball's Kinetic Force Field (cancels a Master Strike) only carries its draw.
+- Penance's Attack gain, Squirrel Girl's one-card fight limit and Fortify on the Sidekick Stack, Blade, Flatman, Fixer, Moonstone and the Tactics that only hurt the other players (Freeze Domestic Assets, Blasted Henchmen, Endless Minions, Revenge for My Father, Evacuation Code Epsilon, the Misty Knight Tactics) carry no tag.
+- Maria Hill's Double Clearance and Misty Knight's Bribe, and Ragnarok's Attack from the HQ's classes, are on the Mastermind card itself, which has no tag slot.
+- United States Split by Civil War's Twists only count toward its loss condition: no Twist tag, `amplifies twist-density`. Avengers vs. X-Men's two-team check cannot be one requirement, so it is `wounds 2`.

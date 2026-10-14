@@ -1,0 +1,1595 @@
+{
+  "schemaVersion": 3,
+  "box": "civil-war",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "civil-war_hero_captain-america-secret-avenger",
+      "cards": [
+        {
+          "name": "Bold Leadership",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Inspire a Nation / Inspire a Man",
+          "copies": 5,
+          "class": [
+            "strength",
+            "instinct"
+          ],
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Secret Avengers Assemble!",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Freedom Never Dies",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_cloak-and-dagger",
+      "cards": [
+        {
+          "name": "Above / Below",
+          "copies": 5,
+          "class": [
+            "covert",
+            "ranged"
+          ],
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Flee / Fight",
+          "copies": 5,
+          "class": [
+            "covert",
+            "ranged"
+          ],
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Darkness / Light",
+          "copies": 3,
+          "class": [
+            "covert",
+            "ranged"
+          ],
+          "cost": 6,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Penumbra",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_daredevil-civil-war",
+      "cards": [
+        {
+          "name": "Dual Existence",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Roundhouse Side Kick",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Hidden Identity / Revealed Identity",
+          "copies": 3,
+          "class": [
+            "instinct",
+            "strength"
+          ],
+          "cost": 6,
+          "economy": "both"
+        },
+        {
+          "name": "Master of Martial Arts",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_falcon",
+      "cards": [
+        {
+          "name": "Rapid Reinforcements",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Talk with Birds / Squawk Back",
+          "copies": 5,
+          "class": [
+            "ranged",
+            "instinct"
+          ],
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Scout the Battlefield",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Fly in a Friend",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_goliath",
+      "cards": [
+        {
+          "name": "Brilliant Biochemist / Massive Warrior",
+          "copies": 5,
+          "class": [
+            "tech",
+            "strength"
+          ],
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Growth Industry",
+          "copies": 5,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Being Big is Best",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Enormous Implications",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_hercules",
+      "cards": [
+        {
+          "name": "Manly Dullard / Boy Genius",
+          "copies": 5,
+          "class": [
+            "strength",
+            "tech"
+          ],
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Crowd Favorite",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Prince of Power",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Son of Zeus",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_hulkling",
+      "cards": [
+        {
+          "name": "Half-Kree / Half-Skrull",
+          "copies": 5,
+          "class": [
+            "strength",
+            "covert"
+          ],
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Cellular Regeneration",
+          "copies": 5,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Impersonate",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Enormous Shapeshifter",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_luke-cage",
+      "cards": [
+        {
+          "name": "Cautious / Reckless",
+          "copies": 5,
+          "class": [
+            "strength",
+            "instinct"
+          ],
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Take a Bullet for the Team",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "both",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Sweet Christmas",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Unbreakable Skin",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_patriot",
+      "cards": [
+        {
+          "name": "New Generation of Heroes",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "recruit"
+        },
+        {
+          "name": "Intuitive Tactician",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Incredible Effort / Effortless",
+          "copies": 3,
+          "class": [
+            "covert",
+            "tech"
+          ],
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Lead the Young Avengers",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_peter-parker",
+      "cards": [
+        {
+          "name": "Conflicted Loyalties",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Spider-Man Unmasked",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Protect My Family / Hot Bowl of Soup",
+          "copies": 3,
+          "class": [
+            "tech",
+            "instinct"
+          ],
+          "cost": 2,
+          "economy": "both",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reluctant Celebrity",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_speedball",
+      "cards": [
+        {
+          "name": "Reckless Rescue Attempt",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Bounce Around",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Double Down / Bubble Up",
+          "copies": 3,
+          "class": [
+            "ranged",
+            "covert"
+          ],
+          "cost": 5,
+          "economy": "attack",
+          "draw": 2
+        },
+        {
+          "name": "Kinetic Force Field",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_stature",
+      "cards": [
+        {
+          "name": "Shrink to Nothing",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Crush Ants / Crush File Sizes",
+          "copies": 5,
+          "class": [
+            "strength",
+            "tech"
+          ],
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Growing Confidence",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Trample the Tiny",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_storm-and-black-panther",
+      "cards": [
+        {
+          "name": "Gathering Rain Clouds / Gathering Clues",
+          "copies": 5,
+          "class": [
+            "ranged",
+            "instinct"
+          ],
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Lightning Strike / Pouncing Strike",
+          "copies": 5,
+          "class": [
+            "ranged",
+            "instinct"
+          ],
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Tsunami of Water / Tsunami of Justice",
+          "copies": 3,
+          "class": [
+            "ranged",
+            "covert"
+          ],
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              2
+            ],
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "King & Queen of Wakanda",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_tigra",
+      "cards": [
+        {
+          "name": "Friendship / Ferocity",
+          "copies": 5,
+          "class": [
+            "covert",
+            "instinct"
+          ],
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Supernatural Senses",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Can't Surprise a Cat",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Mystic Talisman",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_vision",
+      "cards": [
+        {
+          "name": "Solar Energy",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Through Solid Objects",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Lighter than Air / Harder than Diamond",
+          "copies": 3,
+          "class": [
+            "ranged",
+            "tech"
+          ],
+          "cost": 6,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Insubstantial Accomplishments",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "civil-war_hero_wiccan",
+      "cards": [
+        {
+          "name": "Sorcerous Illusions",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Astral Projection",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Supersonic Spells / Supersonic Speed",
+          "copies": 3,
+          "class": [
+            "ranged",
+            "covert"
+          ],
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Clairvoyance",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "civil-war_mastermind_authoritarian-iron-man",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Man the Fortifications",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Recall to Service",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "civil-war_mastermind_baron-helmut-zemo",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "civil-war_mastermind_maria-hill-director-of-s-h-i-e-l-d",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Declare Martial Law",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Rapid Response Team",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "civil-war_mastermind_misty-knight",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "civil-war_mastermind_ragnarok",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Hammer Goliath",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Unnatural Storm Clouds",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "civil-war_villain_csa-special-marshals",
+      "cards": [
+        {
+          "name": "Bullseye",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Venom",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "civil-war_villain_great-lakes-avengers",
+      "cards": [
+        {
+          "name": "Mr. Immortal",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Big Bertha",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "civil-war_villain_heroes-for-hire",
+      "cards": [
+        {
+          "name": "Shang-Chi",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Humbug",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Tarantula",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Colleen Wing",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "civil-war_villain_registration-enforcers",
+      "cards": [
+        {
+          "name": "Captain Marvel",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Deadpool",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Micromax",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "civil-war_villain_s-h-i-e-l-d-elite",
+      "cards": [
+        {
+          "name": "Agent Eric Marshall",
+          "copies": 2,
+          "gate": [
+            "team",
+            "shield"
+          ],
+          "severity": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Agent Gabe Jones",
+          "copies": 2,
+          "gate": [
+            "team",
+            "shield"
+          ],
+          "severity": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Dum Dum Dugan",
+          "copies": 2,
+          "gate": [
+            "team",
+            "shield"
+          ],
+          "severity": 1,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Sharon Carter, Agent 13",
+          "copies": 2,
+          "gate": [
+            "team",
+            "shield"
+          ],
+          "severity": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "civil-war_villain_superhuman-registration-act",
+      "cards": [
+        {
+          "name": "Iron Spider",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Ms. Marvel",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "She-Hulk",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Yellowjacket",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "civil-war_villain_thunderbolts",
+      "cards": [
+        {
+          "name": "Mach-IV",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Radioactive Man",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Songbird",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "civil-war_henchman_cape-killers",
+      "cards": [
+        {
+          "name": "Cape-Killers",
+          "gate": [
+            "team",
+            "shield"
+          ],
+          "severity": 1
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "civil-war_scheme_avengers-vs-x-men",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "civil-war_scheme_dark-reign-of-h-a-m-m-e-r-officers",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "civil-war_scheme_epic-super-hero-civil-war",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "civil-war_scheme_imprison-unregistered-superhumans",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ],
+          [
+            "bystander-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "civil-war_scheme_nitro-the-supervillain-threatens-crowds",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "civil-war_scheme_predict-future-crime",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "civil-war_scheme_reveal-heroes-secret-identities",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "civil-war_scheme_united-states-split-by-civil-war",
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}
