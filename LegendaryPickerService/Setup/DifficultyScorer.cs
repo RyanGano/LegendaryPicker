@@ -312,15 +312,12 @@ public static class DifficultyScorer
             }
         }
 
-        string TeamName(string value) =>
-            opposition?.TermNames.FirstOrDefault(name => name.Key.EndsWith($"_term_{value}", StringComparison.Ordinal)).Value ?? value;
-
         foreach (var ((kind, value), (unmet, wanters, _, found)) in unmetByWant.Where(want => want.Value.Unmet >= tuning.ReasonWantMin))
         {
             var who = wanters == 1 ? "1 Hero wants" : $"{wanters} Heroes want";
             string? reason = kind switch
             {
-                WantKind.Team => TeamReason(who, TeamName(value), (int)Math.Round(found)),
+                WantKind.Team => TeamReason(who, TeamName(opposition?.TermNames, value), (int)Math.Round(found)),
                 WantKind.Class => $"{who} {Capitalize(value)} cards from the other Heroes, but they have {(found < 0.05 ? "none" : $"only {found:0.#}")}.",
                 WantKind.Diversity => $"{who} a mix of classes from the other Heroes, but they bring only {found:0} of the five.",
                 WantKind.Stack => $"{who} {Capitalize(value)} in play, but this opposition inflicts few.",
@@ -424,7 +421,8 @@ public static class DifficultyScorer
             if (requirement.Kind == RequirementKind.Team)
             {
                 cards = teams.Where(team => TeamValue(team.Key) == requirement.Value).Sum(team => team.Value);
-                name = opposition.TermNames.GetValueOrDefault($"{part.Box}_term_{requirement.Value}", requirement.Value);
+                name = opposition.TermNames.GetValueOrDefault($"{part.Box}_term_{requirement.Value}")
+                    ?? TeamName(opposition.TermNames, requirement.Value);
             }
             else
             {
@@ -504,6 +502,10 @@ public static class DifficultyScorer
     };
 
     private static string Capitalize(string value) => char.ToUpperInvariant(value[0]) + value[1..];
+
+    // A team's display name from any box's term of that value ("x-men"), or the value itself when no name is known.
+    private static string TeamName(IReadOnlyDictionary<string, string>? names, string value) =>
+        names?.FirstOrDefault(name => name.Key.EndsWith($"_term_{value}", StringComparison.Ordinal)).Value ?? value;
 
     // "core_term_x-men" and "x-men" are both the team x-men.
     private static string TeamValue(string team) =>

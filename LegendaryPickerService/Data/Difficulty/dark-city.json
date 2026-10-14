@@ -87,7 +87,14 @@
           "copies": 1,
           "class": "tech",
           "cost": 7,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ]
         }
       ]
     },
@@ -590,6 +597,13 @@
               "bystanders",
               1
             ]
+          ],
+          "wants": [
+            [
+              "team",
+              "x-men",
+              2
+            ]
           ]
         },
         {
@@ -627,6 +641,13 @@
           "answers": [
             [
               "bystanders",
+              2
+            ]
+          ],
+          "wants": [
+            [
+              "team",
+              "x-men",
               2
             ]
           ]
@@ -686,7 +707,14 @@
           "copies": 5,
           "class": "ranged",
           "cost": 2,
-          "economy": "attack"
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              2
+            ]
+          ]
         },
         {
           "name": "Class Dismissed",

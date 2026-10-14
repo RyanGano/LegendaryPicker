@@ -103,6 +103,13 @@ public sealed partial class BoxCatalog
             return loaded;
         }
 
+        // A team is named by its value ("x-men"); it may be any team term of any loaded box, since a box's Heroes can
+        // belong to a team another box defines.
+        var teamValues = boxes.SelectMany(b => b.Glossary)
+            .Where(term => term.Kind == TermKind.Team)
+            .Select(term => term.Id[(term.Id.IndexOf("_term_", StringComparison.Ordinal) + "_term_".Length)..])
+            .ToHashSet(StringComparer.Ordinal);
+
         foreach (var path in Directory.GetFiles(directory, "*.json").Order(StringComparer.Ordinal))
         {
             var difficulty = ReadDifficulty(path);
@@ -118,7 +125,7 @@ public sealed partial class BoxCatalog
                 throw new InvalidDataException($"{path}: source {difficulty.Source} is not a source of box {box.Id}.");
             }
 
-            ValidateOpposition(path, box, difficulty);
+            ValidateOpposition(path, box, difficulty, teamValues);
 
             var heroIds = box.Heroes.Select(hero => hero.Id).ToHashSet(StringComparer.Ordinal);
             var seenHeroes = new HashSet<string>(StringComparer.Ordinal);
@@ -152,7 +159,7 @@ public sealed partial class BoxCatalog
                             $"{path}: {hero.Hero} card {card.Name} needs at least 1 copy, a cost of 0 or more, and a class.");
                     }
 
-                    ValidateHeroCard(path, box, hero.Hero, card);
+                    ValidateHeroCard(path, box, hero.Hero, card, teamValues);
                 }
             }
         }
@@ -161,9 +168,9 @@ public sealed partial class BoxCatalog
     }
 
     // Checks a Hero card's wants, answers, self costs and draw (#266): each is non-empty when present, each strength is 1
-    // to 3, draw is 0 to 3, and a want's value is one of its kind's: a team of the box, a class, a keyword the box
+    // to 3, draw is 0 to 3, and a want's value is one of its kind's: a team of any loaded box, a class, a keyword the box
     // declares, a stack or board state of the closed lists, "class" for diversity and "extra-cards" for draw.
-    private static void ValidateHeroCard(string path, Box box, string hero, HeroCardDifficulty card)
+    private static void ValidateHeroCard(string path, Box box, string hero, HeroCardDifficulty card, HashSet<string> teamValues)
     {
         var where = $"{path}: {hero} card {card.Name}";
         foreach (var want in card.Wants ?? [])
@@ -175,7 +182,7 @@ public sealed partial class BoxCatalog
 
             var found = want.Kind switch
             {
-                WantKind.Team => box.Glossary.Any(term => term.Kind == TermKind.Team && term.Id == $"{box.Id}_term_{want.Value}"),
+                WantKind.Team => teamValues.Contains(want.Value),
                 WantKind.Class => Enum.GetNames<HeroClass>().Any(name => string.Equals(name, want.Value, StringComparison.OrdinalIgnoreCase)),
                 WantKind.Keyword => box.Glossary.Any(term => term.Kind == TermKind.Keyword && term.Id == want.Value),
                 WantKind.Stack => WantValues.Stacks.Contains(want.Value),
@@ -206,8 +213,8 @@ public sealed partial class BoxCatalog
     }
 
     // Checks the opposition tags of a difficulty file: each part named is one of the box's, no effect is empty or out of
-    // range, a timing fits the card it is on, and a team or class named is one the box declares.
-    private static void ValidateOpposition(string path, Box box, BoxDifficulty difficulty)
+    // range, a timing fits the card it is on, and a team named is a team term of some loaded box and a class is one of the five.
+    private static void ValidateOpposition(string path, Box box, BoxDifficulty difficulty, HashSet<string> teamValues)
     {
         void Known(IEnumerable<string> ids, IEnumerable<string> declared, string kind)
         {
@@ -235,8 +242,6 @@ public sealed partial class BoxCatalog
         Known(villainGroups.Select(g => g.Group), box.VillainGroups.Select(g => g.Id), "Villain Group");
         Known(henchmanGroups.Select(g => g.Group), box.HenchmanGroups.Select(g => g.Id), "Henchman Group");
         Known(schemes.Select(s => s.Scheme), box.Schemes.Select(s => s.Id), "Scheme");
-
-        var teams = box.Glossary.Where(term => term.Kind == TermKind.Team).Select(term => term.Id).ToHashSet(StringComparer.Ordinal);
 
         void Tag(string owner, OppositionTag tag, Timing[] allowed, bool impliedOn, bool named, bool needsCopies)
         {
@@ -280,7 +285,7 @@ public sealed partial class BoxCatalog
             foreach (var requirement in new[] { tag.Check?.Requires, tag.Gate }.OfType<Requirement>())
             {
                 var found = requirement.Kind == RequirementKind.Team
-                    ? teams.Contains($"{box.Id}_term_{requirement.Value}")
+                    ? teamValues.Contains(requirement.Value)
                     : Enum.GetNames<HeroClass>().Contains(requirement.Value, StringComparer.OrdinalIgnoreCase);
                 if (!found)
                 {
