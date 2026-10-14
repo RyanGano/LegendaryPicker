@@ -1,0 +1,562 @@
+{
+  "schemaVersion": 3,
+  "box": "annihilation",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "annihilation_hero_brainstorm",
+      "cards": [
+        {
+          "name": "Time Loop Experiments",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Borrow from the Future",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Reprogram Doombot Legions",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "fantastic-four",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Protégé of Dr. Doom",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "annihilation_hero_fantastic-four-united",
+      "cards": [
+        {
+          "name": "Human Torch",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "both",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Thing",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "fantastic-four",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Invisible Woman",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mr. Fantastic",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "both",
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "annihilation_hero_heralds-of-galactus",
+      "cards": [
+        {
+          "name": "Firelord",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Silver Surfer",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "recruit",
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Stardust",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "both",
+          "wants": [
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Galactus Hungers",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 10,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "annihilation_hero_psi-lord",
+      "cards": [
+        {
+          "name": "Avert Future Tragedy",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Interdimensional Rescue",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Slip the Timestream",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reshape Reality",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "fantastic-four",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "annihilation_hero_super-skrull",
+      "cards": [
+        {
+          "name": "Stretching Credibility",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Rock Solid",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Transparent Motives",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Put to the Torch",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "annihilation_mastermind_annihilus",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Deploy the Planet Killer",
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "annihilation_mastermind_kang-the-conqueror",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Pull From the Future",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "annihilation_villain_annihilation-wave",
+      "cards": [
+        {
+          "name": "Annihilation Armada",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Queens of Annihilation",
+          "copies": 3,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Ravenous",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Weaponized Galactus",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              3
+            ],
+            [
+              "wounds",
+              2
+            ],
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "annihilation_villain_timelines-of-kang",
+      "cards": [
+        {
+          "name": "Immortus",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Pharaoh Rama-Tut",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Scarlet Centurion",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "annihilation_scheme_pulse-waves-from-the-negative-zone",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "scheme": "annihilation_scheme_sneak-attack-the-heroes-homes",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "scheme": "annihilation_scheme_put-humanity-on-trial",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "annihilation_scheme_breach-parallel-dimensions",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      }
+    }
+  ]
+}
