@@ -29,7 +29,7 @@ its own wants, lets its answers cut the opposition's load, charges self costs, a
 
 `GET /api/setup?difficulty=1..5` (anything else is a 400) weights the draw toward that rating; the format is unchanged.
 `SetupGenerator.Generate` takes the target, and `Setup/DifficultyWeights.cs` does the weighting with the scorer's
-`Expected` (a continuous rating, the middle of the band at the raw score).
+`Expected` (a continuous rating, n - 0.5 to n + 0.5 across band n).
 
 - Order is unchanged: Scheme, Mastermind, open Villain and Henchman Groups, then the Hero Deck's Heroes. Each of these is
   one weighted pick among the options the rules left, weight `exp(-|expected - target| / Temperature)`. Draws outside the
@@ -47,7 +47,72 @@ its own wants, lets its answers cut the opposition's load, charges self costs, a
   few Masterminds or Heroes at an extreme target and raise it if so.
 - On four fixed seeds in the core box, 2 players, `difficulty=1` drew ratings 3, 4, 4, 4 and `difficulty=5` drew 5, 4, 4,
   5; with no target 4, 5, 4, 4. The core box's opposition keeps most draws in the top bands (see Scorer v1), which
-  calibration is to address.
+  calibration (#268) addressed.
+
+## Calibration (#268)
+
+Fitted once, on the core box, to eight reference setups (`DifficultyCalibrationTests`). The expected bands are proposed
+from the cards' tags and game knowledge, not owner-confirmed; the owner is asked to confirm them in the PR.
+
+The setups are three Hero decks against three oppositions, 8 of the 9 pairings. The decks: five cheap Avengers that
+share a team (Black Widow, Iron Man, Hawkeye, Hulk, Spider-Man); a mixed deck (Storm, Wolverine, Captain America, Emma
+Frost, Spider-Man); and five scattered, costly Heroes (Nick Fury, Cyclops, Rogue, Thor, Deadpool). The oppositions are
+by the tagged load of the Mastermind, Scheme and groups against the mixed deck: light (Loki, Portals to the Dark
+Dimension, Enemies of Asgard, Masters of Evil, Sentinels), middle (Dr. Doom, Negative Zone Prison Breakout, HYDRA,
+Spider-Foes, Sentinels) and heavy (Red Skull, Replace Earth's Leaders with Killbots, Skrulls, Brotherhood, Sentinels),
+all at 2 players with 5 Master Strikes, 8 Twists and 10 Henchman cards.
+
+| Deck | Light | Middle | Heavy |
+|---|---|---|---|
+| Cheap, one team | 1 | 2 | 3 |
+| Mixed | 2 | 3 | 4 |
+| Scattered, costly | not used | 4 | 5 |
+
+What was tuned, once:
+
+- `LoadEasy` 4 to 15 and `LoadHard` 24 to 55. Every core opposition already saturated the old scale (loads of 20 to 53),
+  so the opposition term could not tell a light opposition from a heavy one.
+- `OppositionWeight` 0.5 to 0.4. At 0.5 a cheap one-team deck against the heavy opposition rated above a scattered,
+  costly deck against the middle one; the Hero Deck needs more say.
+- `BandStarts` from 0.2, 0.4, 0.6, 0.8 to 0.28, 0.365, 0.58, 0.74. The reference setups' raw scores run from 0.22 to 0.86,
+  so the bands are no longer equal: the first is narrower and the top is wider.
+- `DifficultyScorer.Expected` now follows `BandStarts`: a band runs from rating n - 0.5 at its start to n + 0.5 at its
+  end, which equals 0.5 + raw * 5 for equal bands, so a target draw weighs options by the same bands `Score` uses.
+- Deadpool's two self costs are untagged: Do-Over's discard and Random Acts of Unkindness's Wound are optional effects,
+  not a cost of playing the card. The two Cyclops commons (a discard to play) and Crazed Rampage's Wound stay.
+
+Before and after, the core box, 2 players:
+
+| Reference setup | Expected | Before | After |
+|---|---|---|---|
+| Cheap one-team deck, light | 1 | 4 | 1 |
+| Mixed deck, light | 2 | 4 | 2 |
+| Cheap one-team deck, middle | 2 | 4 | 2 |
+| Mixed deck, middle | 3 | 4 | 3 |
+| Scattered costly deck, middle | 4 | 5 | 4 |
+| Cheap one-team deck, heavy | 3 | 4 | 3 |
+| Mixed deck, heavy | 4 | 4 | 4 |
+| Scattered costly deck, heavy | 5 | 5 | 5 |
+
+Four fixed seeds (the `DifficultyTargetTests` pattern), ratings drawn: no target 4, 5, 4, 4 before and 3, 4, 3, 3 after;
+`difficulty=1` 3, 3, 4, 4 before and 1, 2, 3, 4 after; `difficulty=5` 5, 4, 4, 5 before and 3, 4, 4, 5 after. Both
+extremes are reachable, 1 at target 1 and 5 at target 5, but a target of 5 mostly lands on 4: only a scattered, costly
+deck against a heavy opposition reaches 5, and the weighted draw has to find all of it.
+
+Remaining disagreements and what to watch:
+
+- Two constants do most of the work: `LoadEasy` and `LoadHard` set where the opposition's weight bites, and the mean cost
+  weight sets the Hero Deck's spread (0.29 to 0.8 raw across the three decks). Neither was searched; both were set from
+  the printed loads and raw scores of the reference setups.
+- The Scheme dominates the opposition's load (9 to 26 per Scheme against 0.5 to 7 per Mastermind and 1 to 6 per
+  group), because its Twists fire 8 times. The Mastermind barely moves a rating. Left for the Mastermind's tactics and
+  Fight effects to be tagged more fully.
+- Legacy Virus and the Cosmic Cube rate as light Schemes (their checks and wounds are often met by a Tech or
+  Strength-heavy deck); in play they are widely held to be hard. The tags measure what the data says, so the rating
+  follows it.
+- The engine term (`EngineUnmet*`, `EngineWeight`) is not changed: most core wants fall on a class and five Heroes
+  usually carry all five, so it rarely moves a rating. Unchanged on purpose; a later box's wants will test it.
+- Only the core box is tagged. A box with no difficulty file rates 3.
 
 ## What is built (#270)
 
@@ -156,8 +221,8 @@ rates 3). Every share is weighted by copies:
 | distinct classes present | all five is harder |
 
 Each maps to 0 (easy) .. 1 (hard) between two constants, and a weighted sum gives the raw score. All constants, the band
-starts and the band names live in one record, `DifficultyTuning`. They are starting guesses; the calibration slice (#268)
-sets them. The first band starts at raw 0 and the others at 0.2, 0.4, 0.6 and 0.8.
+starts and the band names live in one record, `DifficultyTuning`. Calibration (#268) set them (see Calibration). The first
+band starts at raw 0 and the others at 0.28, 0.365, 0.58 and 0.74.
 
 ## Scorer v1: the opposition
 
@@ -167,11 +232,10 @@ sees (`OccurrenceShare`, 0.7) and by when it fires (Ambush, Strike and Twist 1.0
 choose whom to fight). A check or gate is multiplied by the chance the players cannot show it,
 `1 - chanceToShow` with `chanceToShow = 1 - (1 - A * share)^H`, where `share` is the Hero Deck's copy-weighted share of the
 team or class, `A` = 0.6 (`HeroDeckShare`, the starting deck dilutes the rest) and `H` = 6 (`HandSize`). Axes the Scheme
-amplifies count 1.5 times. The total load maps to 0..1 (`LoadEasy` 4, `LoadHard` 24) and joins the Hero Deck's raw score
-half and half (`OppositionWeight`). A setup with none of its opposition tagged rates on the Hero Deck alone.
+amplifies count 1.5 times. The total load maps to 0..1 (`LoadEasy` 15, `LoadHard` 55) and counts 0.4 of the raw score
+against the Hero Deck's 0.6 (`OppositionWeight`). A setup with none of its opposition tagged rates on the Hero Deck alone.
 
-Watch for the opposition load dominating the Hero Deck terms; a note for calibration (#268). With the core box's fifteen
-Heroes, most draws rate in the top bands because the Hero Deck terms of #264 already lean hard.
+These were 4, 24 and half and half until calibration (#268): the opposition load saturated that scale on the core box.
 
 ## Scorer v2: the Heroes' engine and answers
 
@@ -196,7 +260,7 @@ Reasons: up to two Hero-side reasons (the biggest unmet wants, the answers that 
 after the opposition's and before the Hero Deck measures, which are trimmed to keep the list short.
 
 Watch for the engine term never moving: most core wants fall on a class, and five Heroes usually carry all five, so
-class wants are mostly near met. A note for calibration (#268).
+class wants are mostly near met. Calibration (#268) left it unchanged.
 
 ## Bands
 

@@ -204,20 +204,14 @@
           "copies": 3,
           "class": "instinct",
           "cost": 3,
-          "economy": "attack",
-          "selfCost": [
-            "discard"
-          ]
+          "economy": "attack"
         },
         {
           "name": "Random Acts of Unkindness",
           "copies": 1,
           "class": "instinct",
           "cost": 7,
-          "economy": "attack",
-          "selfCost": [
-            "wound"
-          ]
+          "economy": "attack"
         }
       ]
     },
