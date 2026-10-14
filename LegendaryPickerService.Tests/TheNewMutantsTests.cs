@@ -38,6 +38,18 @@ public class TheNewMutantsTests
         Assert.Equal(3, Draw(2, "Superhuman Baseball Game").VillainGroups.Count);
     }
 
+    // Its own Mastermind is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_Emma_Frost_rates_with_a_reason_naming_her()
+    {
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Superhuman Baseball Game", "Emma Frost, The White Queen");
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Superhuman Baseball Game");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Emma Frost, The White Queen's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
