@@ -20,6 +20,10 @@ public class VillainsTests
 
     private const int Odin = 2;
 
+    private const int NickFury = 1;
+
+    private const int Resurrect = 7;
+
     [Fact]
     public void The_Villainous_setup_follows_the_rulebook()
     {
@@ -74,6 +78,16 @@ public class VillainsTests
             new RuleNote(
                 "Plot requires S.H.I.E.L.D. Assault Squad, so Odin's Always Leads group Asgardian Warriors is dropped", "VIL p.18", Rulebook),
             setup.Notes);
+    }
+
+    [Fact]
+    public void A_draw_with_Nick_Fury_and_Resurrect_Heroes_with_Norn_Stones_rates_on_Villains_cards_by_name()
+    {
+        var setup = Draw(2, Resurrect, NickFury);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Nick Fury's Master Strikes"));
+        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Resurrect Heroes with Norn Stones's Twists"));
     }
 
     private static SetupResult Draw(int players, int plot, int commander) =>
