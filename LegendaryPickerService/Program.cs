@@ -90,7 +90,7 @@ var editions = new Dictionary<string, Ruleset>(StringComparer.Ordinal)
 // Mastermind that has an Epic side on that side (#185). rules names the rule edition the whole setup follows; without
 // it the boxes decide (D-editions, #240).
 // NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
-app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? rules, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
+app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? rules, string? difficulty, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
 {
     // "Generate another" must always draw a fresh setup.
     response.Headers.CacheControl = "no-store";
@@ -117,6 +117,21 @@ app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? ru
         edition = named;
     }
 
+    // difficulty is the rating the draw leans toward, 1 to 5; without it the draw is plain (#267).
+    int? target = null;
+    if (!string.IsNullOrEmpty(difficulty))
+    {
+        if (!int.TryParse(difficulty, out var wanted) || wanted is < 1 or > 5)
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]>
+            {
+                ["difficulty"] = ["difficulty must be a whole number from 1 to 5."],
+            });
+        }
+
+        target = wanted;
+    }
+
     var included = (boxes ?? SetupGenerator.CoreBoxId)
         .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
         .ToHashSet(StringComparer.Ordinal);
@@ -125,7 +140,7 @@ app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? ru
         return Results.ValidationProblem(new Dictionary<string, string[]> { ["boxes"] = [problem] });
     }
 
-    return Results.Ok(SetupResponse.From(generator.Generate(count, included, random, epic ?? false, edition), catalog));
+    return Results.Ok(SetupResponse.From(generator.Generate(count, included, random, epic ?? false, edition, target), catalog, target));
 }).RequireRateLimiting(SetupRateLimit);
 
 app.Run();

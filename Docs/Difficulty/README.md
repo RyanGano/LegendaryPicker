@@ -18,6 +18,30 @@ The opposition: what the Mastermind, Villain Groups, Henchman Groups and Scheme 
 Hero Deck rates differently against different oppositions. The format is schemaVersion 2 (below); `Setup/DifficultyScorer.cs`
 takes a `ScoredOpposition`, and the checklist's "Why this rating" lists the opposition's biggest contributors first.
 
+## What is built (#267)
+
+`GET /api/setup?difficulty=1..5` (anything else is a 400) weights the draw toward that rating; the format is unchanged.
+`SetupGenerator.Generate` takes the target, and `Setup/DifficultyWeights.cs` does the weighting with the scorer's
+`Expected` (a continuous rating, the middle of the band at the raw score).
+
+- Order is unchanged: Scheme, Mastermind, open Villain and Henchman Groups, then the Hero Deck's Heroes. Each of these is
+  one weighted pick among the options the rules left, weight `exp(-|expected - target| / Temperature)`. Draws outside the
+  Hero Deck (outside Heroes, set-aside Masterminds, outside Henchmen, a group an Always Leads or a Scheme requires) stay uniform.
+- An option's expected rating is the setup so far plus the option plus the pool-average Hero Deck for the Heroes not yet
+  drawn (each pool Hero counted at an equal share of the open slots). The Villain Deck's counts are not known yet, so
+  `EstimatedMasterStrikes`, `EstimatedTwists` and `EstimatedHenchmanCards` stand in. Early draws therefore see only part
+  of the opposition and rate low in absolute terms; only their order against each other matters, and calibration (#268)
+  can revisit it.
+- With a target, each weighted draw takes a number below `WeightResolution` (1000) from the random source and walks the
+  cumulative weights. Without one nothing changes, draw for draw.
+- An unreachable target returns the closest legal draw and its real rating, never an error. The response's `difficulty`
+  gains `target` (omitted when none was asked for).
+- `Temperature` starts at 0.5 (a Hero spread of about 1.4 rating points across the core box's Heroes). Watch for the same
+  few Masterminds or Heroes at an extreme target and raise it if so.
+- On four fixed seeds in the core box, 2 players, `difficulty=1` drew ratings 3, 4, 4, 4 and `difficulty=5` drew 5, 4, 4,
+  5; with no target 4, 5, 4, 4. The core box's opposition keeps most draws in the top bands (see Scorer v1), which
+  calibration is to address.
+
 ## Data format (schemaVersion 2)
 
 One file per box, `LegendaryPickerService/Data/Difficulty/<box-id>.json`. A box with no file is valid and rates neutral
@@ -119,5 +143,5 @@ Band names are display strings only, renameable in `DifficultyTuning`.
 
 ## Response
 
-`difficulty` is always present on a setup: `{ "rating": 4, "band": "Cosmic Threat", "reasons": ["...", "..."] }`, with up
+`difficulty` is always present on a setup: `{ "rating": 4, "band": "Cosmic Threat", "reasons": ["...", "..."], "target": 1 }` (`target` only when the request had `difficulty=`), with up
 to three reasons about the opposition followed by up to three about the Hero Deck, in plain words. The web app shows it when present and shows nothing when an older API leaves it out.
