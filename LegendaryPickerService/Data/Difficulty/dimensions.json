@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 3,
+  "box": "dimensions",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "dimensions_hero_howard-the-duck",
+      "cards": [
+        {
+          "name": "Traveling Companion",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Rebel Without a Cause",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Right Place, Wrong Time",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Interplanetary Visitor",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "dimensions_hero_jessica-jones",
+      "cards": [
+        {
+          "name": "Alter Ego",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Alias Investigations",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Crack the Case",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Uncover Hidden Evil",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dimensions_hero_man-thing",
+      "cards": [
+        {
+          "name": "Form from Ooze",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Burn the Fearful",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Travel the Nexus of Realities",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "recruit",
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Eternity of Solitude",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dimensions_hero_ms-america",
+      "cards": [
+        {
+          "name": "Star Power",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Search Parallel Dimensions",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Kick a Hole in Reality",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hyper-Cosmic Awareness",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "dimensions_hero_squirrel-girl",
+      "cards": [
+        {
+          "name": "Find Tiny Friends",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Nut Punch",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Squirrelgility",
+          "copies": 3,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Unbeatable Squirrel Girl",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "dimensions_mastermind_j-jonah-jameson",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            1
+          ],
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Incite Violent Riots",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -143,3 +143,23 @@ C1-3D records are indexed separately because the product combines the Dimensions
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/dimensions.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons, and the owner's LegendaryAssistant data (`dimensions-allies`, `-commanders`, `-followers`) for what each card does. Names follow C1 (LegendaryAssistant's "Interplanetary Visions" and "J. Jonah Jamison" are not used). No card text is stored.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order.
+- **Printed 0+ icons.** Star Power, Nut Punch, Squirrelgility, Form from Ooze, Eternity of Solitude and Hyper-Cosmic Awareness carry only an Attack icon: `attack`. Find Tiny Friends has no icon: `none`.
+- **Draws.** Investigate and reveal-and-draw effects (Rebel Without a Cause, Interplanetary Visitor, Alias Investigations, Crack the Case, Find Tiny Friends) carry `draw 1`, as conditional draws do in core. Search Parallel Dimensions teleports its find to the next hand rather than drawing, so it carries none.
+- **Wants.** Card-level class bonuses are `class` wants of strength 1 (Star Power, Kick a Hole in Reality, Eternity of Solitude, Uncover Hidden Evil, Nut Punch, and Unbeatable Squirrel Girl's double-Instinct wider number); Search Parallel Dimensions wants Avengers; Hyper-Cosmic Awareness wants extra cards.
+- **Answers.** Traveling Companion's Special Bystander rescue is `bystanders 1`; Travel the Nexus of Realities moves a Villain, `villain-flow 1`.
+- **Mastermind.** J. Jonah Jameson's Master Strike has each player Investigate a card of their deck into the Angry Mobs stack (`deck-thinning 1`: the player picks it, and a revealed Mob returns to a discard pile), and the Mastermind cannot be fought until the growing stack is spent at 4 Attack per card (`attack-inflation 2`, each Strike adds one card per player). Incite Violent Riots feeds Wounds into the stack that later reach discard piles (`wounds 1`).
+
+### Difficulty: no axis
+
+- Switcheroo, Teleport and the Hero-side Investigate keyword carry no axis beyond class, cost and economy.
+- Right Place, Wrong Time (counts Heroes with no team icon), Squirrelgility (cards entering the HQ), Burn the Fearful and Form from Ooze (conditional attack and Villain reduction), Kick a Hole in Reality (KO or teleport the top card) and Uncover Hidden Evil's Villain Deck investigation have no want or answer.
+- Spider-Slayer and Circus of Crime only help the player on a Fight; both Henchman Groups are left untagged.
+- Promote Spider-Slayer Security, Slanderous Editorial and That Menace Spider-Man! only hit other players (untagged, as in other boxes).
+- The Epic side's extra Wound on a cost-0 Master Strike card and the Epic Angry Mobs size are not modelled: the Epic side is optional.
+- J. Jonah Jameson's Spider-Slayer Always Leads group and Officer stack are setup, not difficulty axes.
