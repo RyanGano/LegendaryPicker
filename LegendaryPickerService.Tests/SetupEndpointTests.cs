@@ -326,7 +326,11 @@ public sealed class SetupEndpointTests : IDisposable
     public async Task Naming_only_the_core_box_returns_the_same_setup_as_naming_none()
     {
         // The fixture expansion is loaded but not included.
-        var client = Client(new ScriptedRandom(7, 3), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory, BoxCatalog.DefaultDifficultyDirectory));
+        // Only the core box's difficulty file goes with it: the fixture catalog does not hold the other boxes.
+        var difficulty = Directory.CreateTempSubdirectory("legendary-endpoint-").FullName;
+        _directories.Add(difficulty);
+        File.Copy(Path.Combine(BoxCatalog.DefaultDifficultyDirectory, "core.json"), Path.Combine(difficulty, "core.json"));
+        var client = Client(new ScriptedRandom(7, 3), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory, difficulty));
 
         var body = JsonNode.Parse(await client.GetStringAsync("/api/setup?players=2&boxes=core"));
 
