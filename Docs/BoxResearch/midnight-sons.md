@@ -140,3 +140,22 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/midnight-sons.json` (format v3, source `Q`, already in the box file's sources). Card effects were read from the C1 catalog's ability data (tags only are recorded here); the shared OCR file holds no card text for this box. Names follow C1.
+
+- **Class conflicts.** None between C1 per-card classes and the box file's Hero class lists; C1 is used. The owner's LegendaryAssistant data gives Face Your Demons as Covert where C1's card entry gives Ranged; C1 (linked card image) is kept.
+- **Copies.** C1 gives no Hero counts, so the insert's rarity split (MS p.2) sets them: the two commons 5 each, the uncommon 3, the rare 1. Villain copies are C1's `qtd`.
+- **Wants.** Class bonuses want that class (Axe of the Slayer, Silver Bullets, Stalk the Night Stalkers, Insatiable Craving, Release the Beast, Track the Captives, Searing Shards of Sunlight, It's Morbin' Time!); Vengeance of the Bloodstone Gem wants two Marvel Knights.
+- **Draws.** Patrol and Moonlight draws are conditional (Where Monsters Lurk, Starlit Path, Bridge Between Dimensions 1; Seal the Rift 2); It's Morbin' Time! draws per distinct Victory Point value (tagged 2).
+- **Answers.** Stalk the Night Stalkers, Track the Captives and Face Your Demons rescue a Bystander (`bystanders`); Scalded by Sunlight's Moonlight KOs a Wound (`wounds`).
+- **Masterminds.** Lilith's Master Strike hunts and can Wound everyone (`wounds 1`, `bystander-pressure 1`); Zarathos's haunts the costliest Hero and Wounds if one is haunted (`hq-disruption 2`, `wounds 1`). Every Lilith Tactic ends with her Hunt for Victims (`bystander-pressure 1`); Offer of Corruption adds `wounds 1` and Respawn Demonic Offspring `escape-pressure 1`. All four Zarathos Tactics haunt (`hq-disruption 1`).
+- **Villain Groups.** Lilin's Ambush Hunt for Victims is `bystander-pressure 1`, with Outcast's and Sister Nil's discards (`hand-disruption 1`), Sister Nil's Wound, Skinner's Fight KO (`deck-thinning 1`) and Blackout's Moonlight Escape Wound. Fallen haunt on Ambush (`hq-disruption 1`), Metarchus's Fight KOs a Hero, and Salomé ascends on Escape (`escape-pressure 2`, `wounds 1`).
+- **Schemes.** Sire Vampires `bystander-pressure 2`, `twist-density 1`; Ritual Sacrifice `bystander-pressure 1`, `twist-density 1` (Chthon's Twists destroy players); Midnight Massacre `hq-disruption 2`, `twist-density 1` (the Hero Deck running out loses).
+
+### Difficulty: no axis
+
+- Wager at Blackjack for Heroes' Souls is untagged: its Twist is a 21-style gamble whose loss (4 Wagered Souls) fits no axis.
+- Cards not tagged: Ride by Moonlight, Hunt High And Low, Creature of Dawn and Dusk, Mesmerize, Snarling Fangs (optional KOs, moves and Blood Frenzy bonuses); the fight-side effects of Connoisseur of Souls and Mesopotamian Demon Goddess (help the fighter or only hit other players; their Hunt for Victims is tagged); both Epic faces share the normal Master Strike tag.
+- Haunted Heroes' Exorcise cost, Moonlight/Sunlight HQ-parity checks and Lilith's `+attack per Bystander in the KO pile` have no axis; Sister Nil's reveal-more-Heroes check is not a team or class check, so it is folded into `wounds`.

@@ -29,6 +29,16 @@ public class MidnightSonsTests
         Assert.Equal(5, setup.Heroes.Count);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var result = Draw(2, "Sire Vampires at the Blood Bank", "Zarathos");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Sire Vampires at the Blood Bank's Twists"));
+    }
+
     // Draws the Scheme and Mastermind by name: the box's follow the core box's in catalog order.
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
