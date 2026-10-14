@@ -41,6 +41,19 @@ public class RealmOfKingsTests
         Assert.NotNull(Draw(3, "War of Kings").Stacks.Officers);
     }
 
+    // Its own Scheme and Mastermind are tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_and_Mastermind_rates_with_reasons_naming_them()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Tornado of Terrigen Mists");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Tornado of Terrigen Mists", "Emperor Vulcan of the Shi'ar");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Tornado of Terrigen Mists's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Emperor Vulcan of the Shi'ar's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme)
     {
         var index = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
