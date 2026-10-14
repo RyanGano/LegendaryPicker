@@ -154,3 +154,28 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/heroes-of-asgard.json` (format v3, source `Q`). Card facts: the shared OCR cache (titles and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack icons, and the owner's LegendaryAssistant data (`heroes-of-asgard-allies`, `-adversaries`, `-commanders`, `-schemes`) for what each card does. Names follow C1 (Bio-Engineered Cyborg, Fandral the Dashing, Black Hammer of the Accursed). No class conflicts between C1 and the owner's data.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order. Villain copies are C1's.
+- **Printed 0+ icons.** Test of Virtue (Recruit 2, Attack 0+) and Dimensional Blade (Thrown, +1 Recruit and +1 Attack) are `both`; other N+ cards carry one icon: `attack`. Thrown Artifacts with no printed icon are tagged by the resource they give when thrown.
+- **Draws.** Conditional and optional draws are `draw` as in core: Hope of the Korbinites 1, Bio-Engineered Cyborg 1, The Warship Skuttlebutt 2, Royal Decree 1, Flying Stallion 2, Fandral the Dashing 1.
+- **Wants.** Worthy cards want the Worthy keyword (strength 2 where it is the whole payoff); Conqueror cards want `board villains-in-city`; Weapons Master wants the Artifact keyword; Asgard team superpowers want `team asgard`.
+- **Self costs.** Hope of the Korbinites requires a discard to play: `discard`. Throwing Stormbreaker's discard is an optional use, so not tagged.
+- **Answers.** Winged Helm prevents a Wound: `wounds 2`; Fandral moves a Villain between city spaces: `villain-flow 1`.
+- **Masterminds.** Hela's Master Strike: two Villains enter (`escape-pressure 2`), a conditional Wound, and her Conqueror bonus (`attack-inflation 1`); Seize Bifrost and Naglfar put a Villain into the city (`escape-pressure 1`, fight). Malekith's Master Strike and three Weapon Tactics capture Villainous Weapons (`attack-inflation`); Vulnerable to Cold Iron only helps the fighter.
+- **Villain Groups.** Villainous Weapons are tagged `attack-inflation` on ambush by bonus size; Ulik and Skurge KO the fighter's Hero (`deck-thinning 1`, fight), and Skurge's and Jormungand's Conqueror bonuses are `attack-inflation` on their Fight (1 and 2); Laufey and Surtur's Escapes are conditional on holding a Weapon (`hand-disruption 1`; `wounds 1`, `hq-disruption 1`); The Mangog's Escape Wounds only non-Worthy players (`wounds 1`).
+- **Schemes.** Asgardian Test of Worth `hand-disruption 1`, amplifies `twist-density` (Moral Failings); The Dark World of Svartalfheim `attack-inflation 1` and `hq-disruption 2`, amplifies `hq-disruption`; Ragnarok `escape-pressure 2`, amplifies `twist-density`; War of the Frost Giants `escape-pressure 2`, amplifies `escape-pressure`.
+
+### Difficulty: no axis
+
+- Worthy is a cost-5-or-higher Hero test, not a team or class, so checks and gates cannot name it: Ulik's +2 Attack when not Worthy, The Mangog's Worthy Escape and the Frost Giant Invader's +4 are flat effects or untagged attack scaling.
+- Villain attack scaling: The Mangog (Villains in the right-hand player's Victory Pile), Ulik, Jormungand (Conqueror on every space as a flat `attack-inflation`).
+- Royal Decree's -1 Attack on cheap Villains: a one-turn help, not an answer.
+- Sindr's Fight (+2 Recruit if Worthy), Jormungand's Fight (Heroes cost less), Surtur becoming an Artifact, Hela's Cloak and The Nightsword (rescue Bystanders, become Weapons), Vulnerable to Cold Iron: only help the fighter; untagged.
+- Laufey's and Malekith's Weapon captures from a player's control or discard pile, and Artifact control itself: no axis beyond `attack-inflation`.
+- Hela's and Ragnarok's re-entry of Villains from a Victory Pile: tagged `escape-pressure` only.
+- Three Stand as One (three other non-grey Heroes with different names) and Stormbreaker's discard count: no axis; Three Stand as One is tagged on its Asgard team and Conqueror want.
+- Dark World of Svartalfheim's covered spaces (Villains +1 Attack, HQ Heroes +1 cost): tagged `attack-inflation` and `hq-disruption`; the loss on covered spaces is its `amplifies`.

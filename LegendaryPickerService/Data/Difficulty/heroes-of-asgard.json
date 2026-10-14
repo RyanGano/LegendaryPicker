@@ -1,0 +1,640 @@
+{
+  "schemaVersion": 3,
+  "box": "heroes-of-asgard",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "heroes-of-asgard_hero_beta-ray-bill",
+      "cards": [
+        {
+          "name": "Hope of the Korbinites",
+          "copies": 5,
+          "class": "strength",
+          "cost": 1,
+          "economy": "recruit",
+          "wants": [
+            [
+              "keyword",
+              "heroes-of-asgard_term_worthy",
+              1
+            ]
+          ],
+          "selfCost": [
+            "discard"
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Stormbreaker",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "heroes-of-asgard_term_worthy",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Bio-Engineered Cyborg",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "The Warship Skuttlebutt",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack",
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "heroes-of-asgard_hero_lady-sif",
+      "cards": [
+        {
+          "name": "Dimensional Blade",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "both"
+        },
+        {
+          "name": "Winged Helm",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Weapons Master",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "heroes-of-asgard_term_artifact",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Golden Apples of Idunn",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "heroes-of-asgard_hero_thor",
+      "cards": [
+        {
+          "name": "Test of Virtue",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "keyword",
+              "heroes-of-asgard_term_worthy",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mjolnir",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "heroes-of-asgard_term_worthy",
+              1
+            ],
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Divine Lightning",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "keyword",
+              "heroes-of-asgard_term_worthy",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Royal Decree",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "asgard",
+              1
+            ],
+            [
+              "keyword",
+              "heroes-of-asgard_term_worthy",
+              1
+            ]
+          ],
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "heroes-of-asgard_hero_valkyrie",
+      "cards": [
+        {
+          "name": "Dragonfang",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Flying Stallion",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Usher to Valhalla",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "asgard",
+              1
+            ],
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Ride of the Valkyries",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "board",
+              "ko-pile",
+              1
+            ],
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "heroes-of-asgard_hero_the-warriors-three",
+      "cards": [
+        {
+          "name": "Fandral the Dashing",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Hogun the Grim",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Volstagg the Valiant",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ],
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Three Stand as One",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "asgard",
+              1
+            ],
+            [
+              "board",
+              "villains-in-city",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "heroes-of-asgard_mastermind_hela-goddess-of-death",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Seize Bifrost, The Rainbow Bridge",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Naglfar, Longship of Fingernails",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "heroes-of-asgard_mastermind_malekith-the-accursed",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Black Hammer of the Accursed",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Dagger of Living Abyss",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Hunting Horn of Faerie",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "heroes-of-asgard_villain_dark-council",
+      "cards": [
+        {
+          "name": "Laufey, Father Of Loki",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "The Mangog",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Ulik, The Troll",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Jarnbjorn, First Axe of Thor",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Casket of Ancient Winters",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "heroes-of-asgard_villain_omens-of-ragnarok",
+      "cards": [
+        {
+          "name": "The Eternal Flame",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Hel-Crown",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Skurge, The Executioner",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Surtur, Fire Giant King",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Jormungand, The World-Serpent",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "The Fenris Wolf",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [],
+  "schemes": [
+    {
+      "scheme": "heroes-of-asgard_scheme_asgardian-test-of-worth",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "heroes-of-asgard_scheme_the-dark-world-of-svartalfheim",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ],
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "heroes-of-asgard_scheme_ragnarok-twilight-of-the-gods",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "heroes-of-asgard_scheme_war-of-the-frost-giants",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    }
+  ]
+}
