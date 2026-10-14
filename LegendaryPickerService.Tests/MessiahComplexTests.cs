@@ -31,6 +31,18 @@ public class MessiahComplexTests
         Assert.Equal(14, setup.Stacks.Sidekicks);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var scheme = DrawIndexes.Scheme(Catalog, Boxes, 2, "Hire Singularity Investigations To...");
+        var mastermind = DrawIndexes.Mastermind(Catalog, Boxes, "Hire Singularity Investigations To...", "Exodus");
+        var result = Generator.Generate(2, Boxes, new ScriptedRandom(scheme, mastermind));
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(result, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Hire Singularity Investigations To...'s Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
         var s = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);

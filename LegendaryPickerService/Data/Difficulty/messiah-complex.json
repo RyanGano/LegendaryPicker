@@ -1,0 +1,896 @@
+{
+  "schemaVersion": 3,
+  "box": "messiah-complex",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "messiah-complex_hero_multiple-man",
+      "cards": [
+        {
+          "name": "Finding Myself",
+          "copies": 4,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Me, Myself, and I",
+          "copies": 4,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Perfect Match",
+          "copies": 4,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reabsorb Duplicates",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-factor-investigations",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "messiah-complex_hero_shatterstar",
+      "cards": [
+        {
+          "name": "Strive for Greatness",
+          "copies": 4,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Bioelectric Surge",
+          "copies": 4,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Gladiator's Blades",
+          "copies": 4,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Gene-Spliced Creation",
+          "copies": 2,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-force",
+              1
+            ],
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "messiah-complex_hero_stepford-cuckoos",
+      "cards": [
+        {
+          "name": "Find Mutants with Cerebro",
+          "copies": 4,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Shared Thoughts",
+          "copies": 4,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Telepathic Warning",
+          "copies": 4,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Mind Wipe",
+          "copies": 2,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "messiah-complex_hero_m",
+      "cards": [
+        {
+          "name": "Penance Form",
+          "copies": 4,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "selfCost": [
+            "wound"
+          ]
+        },
+        {
+          "name": "Three Sisters Combined",
+          "copies": 4,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Uncover Family Secrets",
+          "copies": 4,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Interweaving Powers",
+          "copies": 2,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-factor-investigations",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "messiah-complex_hero_strong-guy",
+      "cards": [
+        {
+          "name": "X-Factor Investigations",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit"
+        },
+        {
+          "name": "Absorb Kinetic Energy",
+          "copies": 5,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Go Big",
+          "copies": 3,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Treasure Hunt",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "messiah-complex_hero_warpath",
+      "cards": [
+        {
+          "name": "Grim Tracker",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Endless Endurance",
+          "copies": 5,
+          "class": "strength",
+          "cost": 5,
+          "economy": "none",
+          "draw": 2
+        },
+        {
+          "name": "Dangerous Maneuver",
+          "copies": 3,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Superhuman Senses",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "messiah-complex_hero_siryn",
+      "cards": [
+        {
+          "name": "Echolocation",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Hypnotic Call",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Three-Octave Arpeggio",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Splintering Shriek",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "none"
+        }
+      ]
+    },
+    {
+      "hero": "messiah-complex_hero_rictor",
+      "cards": [
+        {
+          "name": "Underground Cave-In",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Unearth Tectonic Power",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Trace the Fault Lines",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Massive Earthquake",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "none"
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "messiah-complex_mastermind_lady-deathstrike",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "messiah-complex_mastermind_bastion-fused-sentinel",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Master Mold, Sentinel Factory",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Template, Infected Sentinel",
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1
+        },
+        {
+          "name": "Nimrod, Future Sentinel",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Machine Man, Sentinel Supreme",
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1
+        }
+      ]
+    },
+    {
+      "mastermind": "messiah-complex_mastermind_exodus",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Resurrect the Dead",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "messiah-complex_villain_reavers",
+      "cards": [
+        {
+          "name": "Donald Pierce",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Bonebreaker",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Skullbuster",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Pretty Boy",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "messiah-complex_villain_purifiers",
+      "cards": [
+        {
+          "name": "Predator X (Ranged)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Predator X (Tech)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Predator X (Covert)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Predator X (Instinct)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Predator X (Strength)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Leper Queen",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Reverend William Stryker",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Cameron Hodge",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "messiah-complex_villain_acolytes",
+      "cards": [
+        {
+          "name": "Unuscione",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Tempo",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Frenzy",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Random",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "messiah-complex_villain_clan-yashida",
+      "cards": [
+        {
+          "name": "Silver Samurai",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Lord Shingen",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Gorgon",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "messiah-complex_henchman_mr-sinister-clones",
+      "cards": [
+        {
+          "name": "Mr. Sinister Clones",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "messiah-complex_henchman_sentinel-squad-one",
+      "cards": [
+        {
+          "name": "Sentinel Squad O*N*E*",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "messiah-complex_scheme_hack-cerebro-servers-to",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "scheme": "messiah-complex_scheme_hire-singularity-investigations-to",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            1
+          ],
+          [
+            "deck-thinning",
+            1
+          ]
+        ]
+      }
+    }
+  ]
+}
