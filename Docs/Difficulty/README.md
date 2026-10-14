@@ -49,6 +49,32 @@ its own wants, lets its answers cut the opposition's load, charges self costs, a
   5; with no target 4, 5, 4, 4. The core box's opposition keeps most draws in the top bands (see Scorer v1), which
   calibration is to address.
 
+## What is built (#270)
+
+A second rating beside the difficulty: complexity, how much there is to learn and remember. It is independent: it lives in
+`Setup/ComplexityScorer.cs` and `ComplexityTuning`, reads no difficulty tag, and the difficulty reads none of its weights.
+There is no data file; it reads what the drawn cards already carry.
+
+| Measure | Points |
+|---|---|
+| distinct keyword terms of an expansion box (a base game's own keywords are baseline) | 1 each |
+| stacks beyond the baseline (Wounds and Officers): Sidekicks, Bindings, Shards, Horrors, Madame HYDRA, New Recruits | 2 each |
+| rulesets mixed beyond the first | 3 |
+| stand-in parts (`otherRuleset`) | 1.5 each |
+| boxes beyond the first that supply a drawn card | 0.5 each |
+| setup steps of the Scheme and Mastermind | 0.75 each |
+
+The points map to 0..1 between `PointsEasy` (4) and `PointsHard` (20) and fall into five equal bands: Origin Story, Team-Up,
+Crossover, Multiverse, Event Series. The response's `complexity` is `{ rating, band, reasons, target? }`, the reasons
+naming the biggest contributors first ("Adds Sidekicks and Shards", "11 keywords to know: ..."). A core-only setup rates 1.
+
+`GET /api/setup?complexity=1..5` (anything else is a 400) adds `|expected complexity - target|` to the difficulty's
+distance in each weighted draw (`DifficultyWeights.Distance`), so both targets can be asked for at once and neither is a
+filter. The expected complexity is the cards drawn so far plus the pool's average extra points for each Hero slot still
+open, mapped to a continuous rating that rounds to the band (1 at no points, k + 0.5 where band k + 1 starts, 5 at
+`PointsHard`), so a target of 2 leans toward Team-Up setups. Stacks a stand-in replaces count as the stand-in only. Not built: a picker in the web app (it ships with the difficulty picker) and the
+count of Solo play rules; calibration of the constants is a later pass.
+
 ## Data format (schemaVersion 3)
 
 One file per box, `LegendaryPickerService/Data/Difficulty/<box-id>.json`. A box with no file is valid and rates neutral

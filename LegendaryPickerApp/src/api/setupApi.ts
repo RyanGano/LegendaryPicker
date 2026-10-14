@@ -204,6 +204,14 @@ export type Difficulty = {
   reasons: string[]
 }
 
+// How much there is to learn and remember in the drawn setup: rating 1 (simplest) to 5, the band's display name, and up
+// to three reasons in plain words. Independent of the difficulty. Left out by an API from before the rating.
+export type Complexity = {
+  rating: number
+  band: string
+  reasons: string[]
+}
+
 export type Setup = {
   kind: 'setup'
   players: number
@@ -251,6 +259,7 @@ export type Setup = {
   // One entry per term any drawn component uses: teams, then classes, then keywords.
   glossary: GlossaryEntry[]
   difficulty?: Difficulty
+  complexity?: Complexity
 }
 
 // A valid answer, not an error: no Scheme can be set up legally at this count.

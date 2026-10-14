@@ -9,9 +9,9 @@ public abstract record SetupResponse
 {
     public abstract string Kind { get; }
 
-    public static SetupResponse From(GenerationResult result, BoxCatalog catalog, int? target = null) => result switch
+    public static SetupResponse From(GenerationResult result, BoxCatalog catalog, int? target = null, int? complexityTarget = null) => result switch
     {
-        SetupResult setup => FromSetup(setup, new Glossary(catalog, setup.Boxes, setup.Mixed, RulesetTerms.For(setup.Ruleset)), RateHeroDeck(setup, catalog) with { Target = target }),
+        SetupResult setup => FromSetup(setup, new Glossary(catalog, setup.Boxes, setup.Mixed, RulesetTerms.For(setup.Ruleset)), RateHeroDeck(setup, catalog) with { Target = target }, RateComplexity(setup, catalog) with { Target = complexityTarget }),
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
@@ -31,7 +31,22 @@ public abstract record SetupResponse
         return DifficultyScorer.Score(scored.ToList(), DifficultyTuning.Default, opposition);
     }
 
-    private static SetupBody FromSetup(SetupResult setup, Glossary glossary, Difficulty difficulty)
+    // The complexity reads every card drawn into the setup, the Heroes outside the Hero Deck and the Masterminds the
+    // Scheme adds too, and the stacks the finished setup lays out; never the difficulty tags (#270).
+    private static Complexity RateComplexity(SetupResult setup, BoxCatalog catalog)
+    {
+        var cards = new List<ICard> { setup.Scheme, setup.Mastermind };
+        cards.AddRange(setup.VillainGroups);
+        cards.AddRange(setup.HenchmanGroups);
+        cards.AddRange(setup.Heroes.Take(setup.Heroes.Count - setup.FillInHeroes));
+        cards.AddRange(setup.OutsideHeroes.Select(outside => outside.Hero));
+        cards.AddRange((setup.OutsideMasterminds ?? []).Select(outside => outside.Mastermind));
+        var stacks = Enum.GetValues<Part>().Where(setup.Stacks.Lays);
+        var meter = new ComplexityMeter(catalog);
+        return meter.Score(meter.Inputs(cards, stacks, setup.StandIns));
+    }
+
+    private static SetupBody FromSetup(SetupResult setup, Glossary glossary, Difficulty difficulty, Complexity complexity)
     {
         var scheme = glossary.Component(setup.Scheme.Id, setup.Scheme.Name, setup.Scheme.Terms);
         var mastermind = glossary.Component(setup.Mastermind.Id, setup.Mastermind.Name, setup.Mastermind.Terms);
@@ -113,6 +128,7 @@ public abstract record SetupResponse
             setup.Notes,
             glossary.Entries(components.SelectMany(component => component.Terms).Concat(stackTerms)),
             difficulty,
+            complexity,
             setup.Mixed,
             setup.RulesReason,
             setup.StandIns is { Count: > 0 } standIns ? standIns : null,
@@ -194,7 +210,8 @@ public abstract record SetupResponse
 // OutsideMasterminds lists the Masterminds the Scheme draws besides its own, written only when it draws any. VillainsSetAside
 // lists the extra Villain Groups whose Villains the Mastermind sets aside, written only when it does. SpecialCards lists
 // the special cards each included box shuffles into a stack the setup lays out, written only when there are any (#244).
-// Difficulty is always written: the rating of the drawn Hero Deck, 1 easiest to 5 (#264). MastermindReveal is written
+// Difficulty is always written: the rating of the drawn Hero Deck, 1 easiest to 5 (#264). Complexity is always written:
+// how much there is to learn and remember, 1 simplest to 5 (#270). MastermindReveal is written
 // only when the Scheme adds its Mastermind mid-game (#245): the checklist then hides mastermind behind a button, and the
 // reveal holds what it shows with it.
 public sealed record SetupBody(
@@ -218,6 +235,7 @@ public sealed record SetupBody(
     IReadOnlyList<RuleNote> Notes,
     IReadOnlyList<GlossaryEntry> Glossary,
     Difficulty Difficulty,
+    Complexity Complexity,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Mixed = false,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RuleNote? RulesReason = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<StandIn>? StandIns = null,

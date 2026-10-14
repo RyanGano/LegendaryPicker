@@ -59,10 +59,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     // setup follows that rule edition, from the first loaded base game of it when none is included (#240). With a
     // difficulty from 1 to 5, the Scheme, Mastermind, open groups and Hero Deck Heroes are each drawn with weights that
     // favour the options nearest that rating among those the rules allow; no rule is relaxed and no Scheme is redrawn
-    // (#267). Without one, no weight is applied and the draw is the plain one.
+    // (#267). A complexity from 1 to 5 weights the same draws toward that rating of rules to learn (#270), alone or with
+    // a difficulty. Without a target, no weight is applied and the draw is the plain one.
     public GenerationResult Generate(
         int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random, bool epic = false, Ruleset? rules = null,
-        int? difficulty = null)
+        int? difficulty = null, int? complexity = null)
     {
         if (CheckBoxes(includedBoxes, rules) is { } problem)
         {
@@ -81,10 +82,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             .DistinctBy(active => active.Rule.Part)
             .ToDictionary(active => active.Rule.Part);
         var baseRulesets = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).ToHashSet();
-        var weights = difficulty is { } target
+        var weights = difficulty is not null || complexity is not null
             ? new DifficultyWeights(
-                catalog, DifficultyTuning.Default, target,
-                boxes.SelectMany(box => box.AllHeroes).DistinctBy(hero => hero.Id).Where(hero => Supplied(boxes, standIns, hero)).ToList())
+                catalog, DifficultyTuning.Default, difficulty,
+                boxes.SelectMany(box => box.AllHeroes).DistinctBy(hero => hero.Id).Where(hero => Supplied(boxes, standIns, hero)).ToList(),
+                complexity)
             : null;
 
         TableDraw Table(Box rulesBox, RuleNote? edition)
@@ -196,7 +198,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         var scheme = weights is null
             ? schemes[random.Next(schemes.Count)]
-            : weights.Pick(random, schemes, option => weights.Expected(new DifficultyWeights.Drawn(Scheme: option)));
+            : weights.Pick(random, schemes, option => weights.Distance(new DifficultyWeights.Drawn(Scheme: option)));
         var pairs = masterminds
             .Where(mastermind => !mastermind.RuledOutBy(scheme))
             .Select(mastermind => (Mastermind: mastermind, Draw: draws.FirstOrDefault(draw => draw.Follows(scheme, mastermind))))
@@ -204,7 +206,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             .ToList();
         var (drawn, draw) = weights is null
             ? pairs[random.Next(pairs.Count)]
-            : weights.Pick(random, pairs, pair => weights.Expected(new DifficultyWeights.Drawn(Scheme: scheme, Mastermind: pair.Mastermind)));
+            : weights.Pick(random, pairs, pair => weights.Distance(new DifficultyWeights.Drawn(Scheme: scheme, Mastermind: pair.Mastermind)));
         return draw!.Finish(scheme, epic ? draw.PlayedEpic(drawn) : drawn);
     }
 
@@ -290,11 +292,11 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             var villainGroups = FillSlots(
                 _villainGroups.Where(g => DeckCards(plan, g.Id, GroupType.Villain) > 0).ToList(), GroupType.Villain,
                 plan.VillainGroups, plan.Scheme, mastermind, required, slotNotes, drainedLeads,
-                weights is null ? null : groups => weights.Expected(new DifficultyWeights.Drawn(plan.Scheme, mastermind, VillainGroups: groups)));
+                weights is null ? null : groups => weights.Distance(new DifficultyWeights.Drawn(plan.Scheme, mastermind, VillainGroups: groups)));
             var henchmanGroups = FillSlots(
                 _henchmanGroups.Where(g => DeckCards(plan, g.Id, GroupType.Henchman) > 0).ToList(), GroupType.Henchman,
                 plan.HenchmanGroups, plan.Scheme, mastermind, required, slotNotes, drainedLeads,
-                weights is null ? null : groups => weights.Expected(new DifficultyWeights.Drawn(plan.Scheme, mastermind, villainGroups, groups)));
+                weights is null ? null : groups => weights.Distance(new DifficultyWeights.Drawn(plan.Scheme, mastermind, villainGroups, groups)));
             plan = plan with { Required = required };
             var extraHenchmen = ExtraHenchmanGroups(plan, henchmanGroups.Select(g => g.Id).ToList());
             var villainsSetAside = VillainsSetAside(plan, mastermind, villainGroups, drainedLeads, slotNotes);
@@ -1160,7 +1162,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 // the pool's average for the slots left (#267).
                 deck.Add(weights is null
                     ? DrawOne(drawable)
-                    : weights.Pick(random, drawable, hero => weights.Expected(new DifficultyWeights.Drawn(
+                    : weights.Pick(random, drawable, hero => weights.Distance(new DifficultyWeights.Drawn(
                         plan.Scheme, plan.Mastermind, villainGroups, henchmanGroups, [.. deck, hero], rules.DeckSlots))));
             }
 

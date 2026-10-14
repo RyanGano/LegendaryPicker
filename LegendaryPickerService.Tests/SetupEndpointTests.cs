@@ -799,6 +799,11 @@ public sealed class SetupEndpointTests : IDisposable
               "All five classes are in the deck, which spreads the synergies thin.",
               "Many Hero cards cost 6 or more."
             ]
+          },
+          "complexity": {
+            "rating": 1,
+            "band": "Origin Story",
+            "reasons": []
           }
         }
         """;
