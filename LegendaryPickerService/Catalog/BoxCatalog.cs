@@ -16,7 +16,7 @@ public sealed partial class BoxCatalog
     public const int SchemaVersion = 8;
 
     // The schema of the files in Data/Difficulty (#263).
-    public const int DifficultySchemaVersion = 1;
+    public const int DifficultySchemaVersion = 2;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
@@ -41,7 +41,14 @@ public sealed partial class BoxCatalog
         RespectNullableAnnotations = true,
         RespectRequiredConstructorParameters = true,
         UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow,
-        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, allowIntegerValues: false) },
+        // The difficulty vocabulary is kebab-case ("hand-disruption"); every other enum is camelCase.
+        Converters =
+        {
+            new KebabEnumConverter<OppositionAxis>(),
+            new KebabEnumConverter<RequirementKind>(),
+            new KebabEnumConverter<Timing>(),
+            new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, allowIntegerValues: false),
+        },
     };
 
     [GeneratedRegex("^[a-z0-9]+(-[a-z0-9]+)*$")]
@@ -109,6 +116,8 @@ public sealed partial class BoxCatalog
                 throw new InvalidDataException($"{path}: source {difficulty.Source} is not a source of box {box.Id}.");
             }
 
+            ValidateOpposition(path, box, difficulty);
+
             var heroIds = box.Heroes.Select(hero => hero.Id).ToHashSet(StringComparer.Ordinal);
             var seenHeroes = new HashSet<string>(StringComparer.Ordinal);
             foreach (var hero in difficulty.Heroes)
@@ -145,6 +154,127 @@ public sealed partial class BoxCatalog
         }
 
         return loaded;
+    }
+
+    // Checks the opposition tags of a difficulty file: each part named is one of the box's, no effect is empty or out of
+    // range, a timing fits the card it is on, and a team or class named is one the box declares.
+    private static void ValidateOpposition(string path, Box box, BoxDifficulty difficulty)
+    {
+        void Known(IEnumerable<string> ids, IEnumerable<string> declared, string kind)
+        {
+            var have = declared.ToHashSet(StringComparer.Ordinal);
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var id in ids)
+            {
+                if (!have.Contains(id))
+                {
+                    throw new InvalidDataException($"{path}: {id} is not a {kind} of box {box.Id}.");
+                }
+
+                if (!seen.Add(id))
+                {
+                    throw new InvalidDataException($"{path} lists {id} more than once.");
+                }
+            }
+        }
+
+        var masterminds = difficulty.Masterminds ?? [];
+        var villainGroups = difficulty.VillainGroups ?? [];
+        var henchmanGroups = difficulty.HenchmanGroups ?? [];
+        var schemes = difficulty.Schemes ?? [];
+        Known(masterminds.Select(m => m.Mastermind), box.Masterminds.Select(m => m.Id), "Mastermind");
+        Known(villainGroups.Select(g => g.Group), box.VillainGroups.Select(g => g.Id), "Villain Group");
+        Known(henchmanGroups.Select(g => g.Group), box.HenchmanGroups.Select(g => g.Id), "Henchman Group");
+        Known(schemes.Select(s => s.Scheme), box.Schemes.Select(s => s.Id), "Scheme");
+
+        var teams = box.Glossary.Where(term => term.Kind == TermKind.Team).Select(term => term.Id).ToHashSet(StringComparer.Ordinal);
+
+        void Tag(string owner, OppositionTag tag, Timing[] allowed, bool impliedOn, bool named, bool needsCopies)
+        {
+            var where = $"{path}: {owner}{(tag.Name is null ? "" : $" card {tag.Name}")}";
+            if (named != (tag.Name is not null))
+            {
+                throw new InvalidDataException($"{where} {(named ? "needs a name" : "does not take a name")}.");
+            }
+
+            if (needsCopies != (tag.Copies is not null) || tag.Copies is < 1)
+            {
+                throw new InvalidDataException($"{where} {(needsCopies ? "needs at least 1 copy" : "does not take copies")}.");
+            }
+
+            if (tag.Check is null && tag.Gate is null && (tag.Inflicts is null || tag.Inflicts.Count == 0))
+            {
+                throw new InvalidDataException($"{where} has no check, gate or inflicts.");
+            }
+
+            var hasRequirement = tag.Check is not null || tag.Gate is not null;
+            if (hasRequirement != (tag.Severity is not null) || tag.Severity is < 1 or > 3)
+            {
+                throw new InvalidDataException($"{where} needs a severity of 1 to 3 on its check or gate, and only there.");
+            }
+
+            if (tag.Inflicts?.FirstOrDefault(inflict => inflict.Severity is < 1 or > 3) is { } bad)
+            {
+                throw new InvalidDataException($"{where}: inflicts {bad.Axis} needs a severity of 1 to 3.");
+            }
+
+            if (tag.On is { } on && (on.Count == 0 || on.Any(timing => !allowed.Contains(timing))))
+            {
+                throw new InvalidDataException($"{where} has a timing that does not fit it; allowed: {string.Join(", ", allowed)}.");
+            }
+
+            if (tag.On is null && !impliedOn && tag.Gate is null)
+            {
+                throw new InvalidDataException($"{where} needs an \"on\".");
+            }
+
+            foreach (var requirement in new[] { tag.Check?.Requires, tag.Gate }.OfType<Requirement>())
+            {
+                var found = requirement.Kind == RequirementKind.Team
+                    ? teams.Contains($"{box.Id}_term_{requirement.Value}")
+                    : Enum.GetNames<HeroClass>().Contains(requirement.Value, StringComparer.OrdinalIgnoreCase);
+                if (!found)
+                {
+                    throw new InvalidDataException(
+                        $"{where}: {requirement.Kind.ToString().ToLowerInvariant()} {requirement.Value} is not one of box {box.Id}.");
+                }
+            }
+        }
+
+        Timing[] cardTimings = [Timing.Ambush, Timing.Fight, Timing.Escape];
+        foreach (var mastermind in masterminds)
+        {
+            if (mastermind.MasterStrike is { } strike)
+            {
+                Tag(mastermind.Mastermind, strike, [Timing.Strike], impliedOn: true, named: false, needsCopies: false);
+            }
+
+            foreach (var tactic in mastermind.Tactics ?? [])
+            {
+                Tag(mastermind.Mastermind, tactic, [Timing.Fight], impliedOn: true, named: true, needsCopies: false);
+            }
+        }
+
+        foreach (var group in villainGroups)
+        {
+            foreach (var card in group.Cards)
+            {
+                Tag(group.Group, card, cardTimings, impliedOn: false, named: true, needsCopies: true);
+            }
+        }
+
+        foreach (var group in henchmanGroups)
+        {
+            foreach (var card in group.Cards)
+            {
+                Tag(group.Group, card, cardTimings, impliedOn: false, named: true, needsCopies: false);
+            }
+        }
+
+        foreach (var scheme in schemes.Where(scheme => scheme.Twist is not null))
+        {
+            Tag(scheme.Scheme, scheme.Twist!, [Timing.Twist], impliedOn: true, named: false, needsCopies: false);
+        }
     }
 
     private static BoxDifficulty ReadDifficulty(string path)

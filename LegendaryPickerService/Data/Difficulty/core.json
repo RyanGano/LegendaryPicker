@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "box": "core",
   "source": "Q",
   "heroes": [
@@ -496,6 +496,501 @@
           "cost": 8,
           "economy": "attack"
         }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "core_mastermind_dr-doom",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "tech"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 1
+      }
+    },
+    {
+      "mastermind": "core_mastermind_loki",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "strength"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 2
+      }
+    },
+    {
+      "mastermind": "core_mastermind_magneto",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "team",
+            "x-men"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 2
+      },
+      "tactics": [
+        {
+          "name": "Crushing Shockwave",
+          "check": {
+            "requires": [
+              "team",
+              "x-men"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1
+        }
+      ]
+    },
+    {
+      "mastermind": "core_mastermind_red-skull",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ]
+        ]
+      }
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "core_villain_brotherhood",
+      "cards": [
+        {
+          "name": "Blob",
+          "copies": 2,
+          "gate": [
+            "team",
+            "x-men"
+          ],
+          "severity": 2
+        },
+        {
+          "name": "Juggernaut",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Mystique",
+          "copies": 2,
+          "inflicts": [
+            [
+              "twist-density",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Sabretooth",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "team",
+              "x-men"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "core_villain_enemies-of-asgard",
+      "cards": [
+        {
+          "name": "Destroyer",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Frost Giant",
+          "copies": 3,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Ymir, Frost Giant King",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "core_villain_hydra",
+      "cards": [
+        {
+          "name": "Endless Armies of HYDRA",
+          "copies": 3,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Viper",
+          "copies": 1,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "core_villain_masters-of-evil",
+      "cards": [
+        {
+          "name": "Ultron",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "core_villain_radiation",
+      "cards": [
+        {
+          "name": "The Leader",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Maestro",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Zzzax",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "core_villain_skrulls",
+      "cards": [
+        {
+          "name": "Skrull Queen Veranke",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Skrull Shapeshifters",
+          "copies": 3,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Super-Skrull",
+          "copies": 3,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "core_villain_spider-foes",
+      "cards": [
+        {
+          "name": "Green Goblin",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Venom",
+          "copies": 2,
+          "gate": [
+            "class",
+            "covert"
+          ],
+          "severity": 2,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "core_henchman_sentinel",
+      "cards": [
+        {
+          "name": "Sentinel",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "core_scheme_legacy-virus",
+      "twist": {
+        "check": {
+          "requires": [
+            "class",
+            "tech"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 2
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "core_scheme_midtown-bank-robbery",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "core_scheme_negative-zone-prison-breakout",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "core_scheme_portals-to-the-dark-dimension",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "core_scheme_replace-earths-leaders-with-killbots",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ],
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "core_scheme_secret-invasion-of-the-skrull-shapeshifters",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "core_scheme_super-hero-civil-war",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "core_scheme_unleash-the-power-of-the-cosmic-cube",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
       ]
     }
   ]

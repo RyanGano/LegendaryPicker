@@ -19,14 +19,73 @@ public abstract record SetupResponse
     };
 
     // The rating comes from the Hero Deck's Heroes; the fill-ins at the end stand in for a Hero a player chose
-    // to replace, so they are not rated. A Hero whose box has no difficulty file is left out of the rating.
+    // to replace, so they are not rated. A Hero whose box has no difficulty file is left out of the rating, and so is
+    // a Mastermind, group or Scheme the file does not tag.
     private static Difficulty RateHeroDeck(SetupResult setup, BoxCatalog catalog)
     {
         var scored = setup.Heroes.Take(setup.Heroes.Count - setup.FillInHeroes).Select(hero =>
             new ScoredHero(
                 hero.Teams,
-                catalog.Difficulty.GetValueOrDefault(hero.Id.Split('_')[0])?.Heroes.FirstOrDefault(tags => tags.Hero == hero.Id)?.Cards));
-        return DifficultyScorer.Score(scored.ToList(), DifficultyTuning.Default);
+                catalog.Difficulty.GetValueOrDefault(BoxOf(hero.Id))?.Heroes.FirstOrDefault(tags => tags.Hero == hero.Id)?.Cards));
+        return DifficultyScorer.Score(scored.ToList(), DifficultyTuning.Default, TagOpposition(setup, catalog));
+    }
+
+    private static string BoxOf(string id) => id.Split('_')[0];
+
+    private static ScoredOpposition TagOpposition(SetupResult setup, BoxCatalog catalog)
+    {
+        var parts = new List<OppositionPart>();
+        var amplified = new List<OppositionAxis>();
+
+        // A tag's timing: the ones it names, or the one its holder implies.
+        IReadOnlyList<Timing> When(OppositionTag tag, Timing implied) => tag.On ?? [implied];
+        BoxDifficulty? Of(string id) => catalog.Difficulty.GetValueOrDefault(BoxOf(id));
+
+        var mastermind = setup.Mastermind;
+        if (Of(mastermind.Id)?.Masterminds?.FirstOrDefault(tags => tags.Mastermind == mastermind.Id) is { } mastermindTags)
+        {
+            var box = BoxOf(mastermind.Id);
+            if (mastermindTags.MasterStrike is { } strike)
+            {
+                parts.Add(new OppositionPart($"{mastermind.Name}'s Master Strikes", box, strike, When(strike, Timing.Strike), setup.VillainDeck.MasterStrikes));
+            }
+
+            foreach (var tactic in mastermindTags.Tactics ?? [])
+            {
+                parts.Add(new OppositionPart($"{mastermind.Name}'s {tactic.Name} Tactic", box, tactic, When(tactic, Timing.Fight), 1));
+            }
+        }
+
+        foreach (var group in setup.VillainGroups)
+        {
+            foreach (var card in Of(group.Id)?.VillainGroups?.FirstOrDefault(tags => tags.Group == group.Id)?.Cards ?? [])
+            {
+                parts.Add(new OppositionPart(card.Name!, BoxOf(group.Id), card, When(card, Timing.Fight), card.Copies!.Value));
+            }
+        }
+
+        // A Henchman Group's cards are copies of one card, as many as the Villain Deck holds of its groups.
+        foreach (var group in setup.HenchmanGroups)
+        {
+            var copies = setup.VillainDeck.HenchmanCards / (double)setup.HenchmanGroups.Count;
+            foreach (var card in Of(group.Id)?.HenchmanGroups?.FirstOrDefault(tags => tags.Group == group.Id)?.Cards ?? [])
+            {
+                parts.Add(new OppositionPart(group.Name, BoxOf(group.Id), card, When(card, Timing.Fight), copies));
+            }
+        }
+
+        var scheme = setup.Scheme;
+        if (Of(scheme.Id)?.Schemes?.FirstOrDefault(tags => tags.Scheme == scheme.Id) is { } schemeTags)
+        {
+            amplified.AddRange(schemeTags.Amplifies ?? []);
+            if (schemeTags.Twist is { } twist)
+            {
+                parts.Add(new OppositionPart($"{scheme.Name}'s Twists", BoxOf(scheme.Id), twist, When(twist, Timing.Twist), setup.VillainDeck.Twists));
+            }
+        }
+
+        var names = setup.Boxes.SelectMany(box => box.Glossary).GroupBy(term => term.Id).ToDictionary(terms => terms.Key, terms => terms.First().Name);
+        return new ScoredOpposition(parts, amplified, names);
     }
 
     private static SetupBody FromSetup(SetupResult setup, Glossary glossary, Difficulty difficulty)
