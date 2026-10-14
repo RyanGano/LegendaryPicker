@@ -270,6 +270,16 @@ function App() {
   // Base games first, then expansions, each in the API's order.
   const listedBoxes = [...boxes.filter((box) => box.baseGame), ...boxes.filter((box) => !box.baseGame)]
 
+  const renderBox = (box: Box) => (
+    <div key={box.id} className="box-option">
+      <label>
+        <input type="checkbox" checked={isIncluded(box)} disabled={loading} onChange={() => toggleBox(box.id)} />
+        <span className="box-name">{box.name}</span>
+      </label>
+      <BoxInfo box={box} />
+    </div>
+  )
+
   // Generate, Generate another and Retry all draw for the selected count and boxes.
   async function generate() {
     if (players === null) return
@@ -350,25 +360,26 @@ function App() {
                     {allIncluded ? 'Uncheck all' : 'Check all'}
                   </button>
                 </div>
-                <div className="box-options" role="group" aria-labelledby="boxes-label">
-                  {listedBoxes.map((box) => (
-                    <div key={box.id} className="box-option">
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={isIncluded(box)}
-                          disabled={loading}
-                          onChange={() => toggleBox(box.id)}
-                        />
-                        <span className="box-name">{box.name}</span>
-                        {box.baseGame && <> <span className="detail">Base game</span></>}
-                        {box.ruleset === 'revised' && <> <span className="detail ruleset-tag">Second Edition rules</span></>}
-                      </label>
-                      <BoxInfo box={box} />
-                    </div>
-                  ))}
+                {/* One base game is always needed, so the base games sit in their own accented group that says so. */}
+                <div
+                  className={`box-group base-games${hint ? ' needs-choice' : ''}`}
+                  role="group"
+                  aria-labelledby="base-games-label"
+                >
+                  <h3 id="base-games-label" className="box-group-label">
+                    Base games <span className="box-group-note">Choose at least one</span>
+                  </h3>
+                  <div className="box-options">{listedBoxes.filter((box) => box.baseGame).map(renderBox)}</div>
+                  {hint && <p className="box-hint">{hint}</p>}
                 </div>
-                {hint && <p className="box-hint">{hint}</p>}
+                {listedBoxes.some((box) => !box.baseGame) && (
+                  <div className="box-group" role="group" aria-labelledby="expansions-label">
+                    <h3 id="expansions-label" className="box-group-label">
+                      Expansions
+                    </h3>
+                    <div className="box-options">{listedBoxes.filter((box) => !box.baseGame).map(renderBox)}</div>
+                  </div>
+                )}
               </>
             )}
             {choosesRules && (
