@@ -1,0 +1,1726 @@
+{
+  "schemaVersion": 3,
+  "box": "x-men",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "x-men_hero_aurora-and-northstar",
+      "cards": [
+        {
+          "name": "Northern Lights",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Blazing Flare / Blazing Fists",
+          "copies": 5,
+          "class": [
+            "ranged",
+            "strength"
+          ],
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Twin Blast",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mach 10",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_banshee",
+      "cards": [
+        {
+          "name": "Sonar Detection",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Speed of Sound",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Sonic Blastwave",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Bone-Shattering Howl",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ],
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_beast-x-men",
+      "cards": [
+        {
+          "name": "Captivating Conundrum",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Furry Fury",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Calculated Rage",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Recursive Pummeling",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_cannonball",
+      "cards": [
+        {
+          "name": "Kinetic Blast Field",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Carry to the Air",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Natural Leader",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Human Cannon",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_colossus-and-wolverine",
+      "cards": [
+        {
+          "name": "Reliable / Unpredictable",
+          "copies": 5,
+          "class": [
+            "strength",
+            "instinct"
+          ],
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Fastball Special",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Insane Disregard for Danger",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack",
+          "selfCost": [
+            "wound"
+          ]
+        },
+        {
+          "name": "Uncanny X-Men",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              2
+            ]
+          ],
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_dazzler",
+      "cards": [
+        {
+          "name": "Convert Sound to Light",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Dazzling Glamour",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Citywide Mega-Concert",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Inspire the World",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_havok",
+      "cards": [
+        {
+          "name": "Blinding Burst",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Unleash Havok",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Concussive Plasma",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Radiation Focus Array",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_jubilee",
+      "cards": [
+        {
+          "name": "Light a Spark",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Blasting Fireworks",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Unexpected Explosion",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Prismatic Cascade",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_kitty-pryde",
+      "cards": [
+        {
+          "name": "Intangible Qualities",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Going through a Phase",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Ghost in the Machine",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Lockheed, Kitty's Dragon",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_legion",
+      "cards": [
+        {
+          "name": "Bend Steel / Bend Light",
+          "copies": 5,
+          "class": [
+            "strength",
+            "covert"
+          ],
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Split Personality / Split Eardrums",
+          "copies": 5,
+          "class": [
+            "tech",
+            "ranged"
+          ],
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Channel Time / Channel Fire",
+          "copies": 3,
+          "class": [
+            "instinct",
+            "tech"
+          ],
+          "cost": 5,
+          "economy": "attack",
+          "draw": 2
+        },
+        {
+          "name": "Maelstrom of Clashing Powers",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_longshot",
+      "cards": [
+        {
+          "name": "Fortune Favors the Bold",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Flurry of Blades",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Make My Own Luck",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Escape from Mojo World",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_phoenix",
+      "cards": [
+        {
+          "name": "Life & Death Incarnate",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Obliterating Fire",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Reincarnating Phoenix",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "none",
+          "draw": 2
+        },
+        {
+          "name": "Driven Mad by Power",
+          "copies": 1,
+          "class": "strength",
+          "cost": 9,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_polaris",
+      "cards": [
+        {
+          "name": "Ride the Magnetic Waves",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Electromagnetic Pulse",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Subtle Attunement",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Reverse Polarity",
+          "copies": 1,
+          "class": "covert",
+          "cost": 8,
+          "economy": "recruit",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_psylocke",
+      "cards": [
+        {
+          "name": "Psychic Knife",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Precognition",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Butterfly Effect",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Telepathic Ninjutsu",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "x-men_hero_x-23",
+      "cards": [
+        {
+          "name": "Adamantium Foot Claws",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Healing Factor Genome",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Bioengineered Assassin",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Heir to Wolverine",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "x-men_mastermind_arcade",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Welcome to my Theme Park!",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Roulette Wheel of Death",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "I Love a Parade!",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "I Need an Audience",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "x-men_mastermind_dark-phoenix",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "x-men_mastermind_deathbird",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Shi'ar Elite Bodyguards",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Shi'ar Extermination Legion",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Shi'ar Hovertake Battalion",
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Shi'ar Master Spies",
+          "inflicts": [
+            [
+              "twist-density",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "x-men_mastermind_mojo",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "tech"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "bystander-pressure",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Cross-Dimensional Marketing",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Mojo Branding Opportunity",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "x-men_mastermind_onslaught",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Godlike Psionic Entity",
+          "inflicts": [
+            [
+              "hq-disruption",
+              3
+            ]
+          ]
+        },
+        {
+          "name": "Xavier and Magneto Combined",
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "x-men_mastermind_shadow-king",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Psychic Seduction",
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Telepathic Betrayal",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "x-men_villain_dark-descendants",
+      "cards": [
+        {
+          "name": "Fatale",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Havok, Brainwashed",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Nemesis",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Psychic Subjugation",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Random",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "x-men_villain_hellfire-club",
+      "cards": [
+        {
+          "name": "Corrupt the Phoenix Force",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Emma Frost (White Queen)",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Mastermind (Jason Wyngarde)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Sebastian Shaw (Black King)",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "x-men_villain_mojoverse",
+      "cards": [
+        {
+          "name": "Mindwarping TV Broadcast",
+          "copies": 1,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Minor Domo",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Major Domo",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Spiral",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Warwolves",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "x-men_villain_murderworld",
+      "cards": [
+        {
+          "name": "Animatronic Killer Clowns",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Guillotine Rollercoaster",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hand-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Miss Locke",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "twist-density",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Monstrous Pinball Machine",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ],
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Sulfuric Acid Water Slide",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "x-men_villain_shadow-x",
+      "cards": [
+        {
+          "name": "Betrayal of the Shadow",
+          "copies": 1,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Dark Cyclops",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Dark Marvel Girl",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "x-men_villain_shi-ar-imperial-guard",
+      "cards": [
+        {
+          "name": "Blackthorn",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Gladiator",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "team",
+              "x-men"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 2,
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Oracle",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Shi'ar Trial by Combat",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Smasher",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "hand-disruption"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "x-men_villain_sisterhood-of-mutants",
+      "cards": [
+        {
+          "name": "Lady Deathstrike",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Lady Mastermind",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Resurrect Madelyne Pryor",
+          "copies": 1,
+          "inflicts": [
+            [
+              "twist-density",
+              2
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Typhoid Mary",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "x-men_henchman_the-brood",
+      "cards": [
+        {
+          "name": "The Brood",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "x-men_henchman_sapien-league",
+      "cards": [
+        {
+          "name": "Sapien League",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "x-men_henchman_shi-ar-death-commandos",
+      "cards": [
+        {
+          "name": "Shi'ar Death Commandos",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "x-men_scheme_alien-brood-encounters",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "x-men_scheme_anti-mutant-hatred",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "x-men_scheme_the-dark-phoenix-saga",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "x-men_scheme_mutant-hunting-super-sentinels",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "x-men_scheme_nuclear-armageddon",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "x-men_scheme_televised-deathtraps-of-mojoworld",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "x-men_scheme_x-men-danger-room-goes-berserk",
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}

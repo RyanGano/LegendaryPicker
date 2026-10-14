@@ -58,6 +58,31 @@ The official insert does not name the nine token cards or the 20 Horrors. The C1
 - **Multiple Masterminds (XM p.2):** Certain Villains can ascend into Masterminds. Players must defeat all Masterminds; each Master Strike resolves for each one in an order chosen by the active player.
 - **Divided Cards (XM p.2):** These return from Civil War. Choose one side when playing; the sides share a cost, and only the chosen side's effects apply.
 
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/x-men.json` (format v3, source `Q`). Card facts: the shared OCR cache (title and keyword markers only, no card text), the C1 index above for names, classes, costs and printed Recruit/Attack/Piercing icons and Villain copies, and the owner's LegendaryAssistant data (`xmen-allies`, `-adversaries`, `-commanders`, `-followers`, `-schemes`) for what each card does. Names follow C1. No card text is stored.
+
+- **Copies: default.** No source gives Hero copies; each Hero's four slots are 5, 5, 3, 1 in ascending cost order, which agrees with C1's face numbers (04, 03, 02, 01). Villain copies are C1's (1 or 2). Henchman cards carry no copies, as in earlier boxes.
+- **Divided Cards.** Aurora & Northstar, Colossus & Wolverine and Legion carry "left / right" entries as in Civil War: union of classes, the higher-arity economy, the shared printed cost. A per-half effect is not a `selfCost`.
+- **Piercing Energy** prints Piercing instead of Attack; it is tagged `attack` (and `both` beside a Recruit icon), since the format has no Piercing economy. Printed 0+ icons count as the icon.
+- **Lightshow and X-Gene** are tagged as a class want for the class the card names (its own class for Lightshow), as Size-Changing is in Civil War; X-Gene that names X-Men is a team want. Berserk, Soaring Flight and Piercing Energy carry no want. Conditional draws carry `draw`, as in core (Uncanny X-Men, a draw per Berserked X-Men card, is 2).
+- **Self costs.** Insane Disregard for Danger's mandatory Wound is `selfCost wound`; Unleash Havok's discard and Fortune Favors the Bold's put-a-card-back are `discard` (the nearest, as Noir's Steam-Powered Arsenal). Healing Factor Genome's optional Wound KO is `answers wounds 1`.
+- **Dominate** that takes Heroes from hands, discards or the Hero Deck for good-as-gone is `deck-thinning` (1 for one Hero each, 2 when it also KOs or the Mastermind's Strike repeats it); from the HQ it is `hq-disruption`. Ascending Villains (Mastermind (Jason Wyngarde), Lady Mastermind) add a Mastermind to defeat: `attack-inflation 2` and `deck-thinning 1`. Fight KOs of the player's own Hero are `deck-thinning 1` on Henchmen (as Noir's Fancy Dan) and 2 on Villains.
+- **Human Shields** captured on Ambush are `bystander-pressure` (2 for two shields, as Noir's Hidden Witnesses). They make the card unfightable until paid in Recruit; the format has no Recruit-gate axis, so only the Bystanders are tagged.
+- **Traps** resolve when drawn, so their penalty is tagged on `ambush`: Psychic Subjugation and Shi'ar Trial by Combat are the Heroes or Villains left in play, the rest are the stated penalty (Sulfuric Acid Water Slide `wounds 2`, Guillotine Rollercoaster `hand-disruption 2`). A "have no X in the city" Trap that spawns a Villain is `escape-pressure`. Resurrect Madelyne Pryor, which becomes a Scheme Twist, is `twist-density 2`.
+- **Reveal-or-suffer** (Spiral, Dark Cyclops, Smasher, Gladiator, Lady Deathstrike's Escape, Mojo's Master Strike) are `check`s of severity 1, 2 for Gladiator's Wound.
+- **Masterminds.** Arcade's Strike is `bystander-pressure 2` and `wounds 1`; Dark Phoenix's (KO of the Hero Deck, her loss condition) `hq-disruption 3`; Deathbird's `wounds 1` and `escape-pressure 1` for the Battlecruiser; Onslaught's and Shadow King's `deck-thinning 2`. The Tactics tagged are those that hurt the fighting player's table or the board; those that only hit the other players carry none. Epic sides are not tagged (the difficulty rates the normal side).
+- **Schemes.** Alien Brood Encounters, Anti-Mutant Hatred and Televised Deathtraps tag the Wounds of their Twists (the last also `attack-inflation 1`, the cost to avoid them) and amplify the loss condition they push; The Dark Phoenix Saga, Mutant-Hunting Super Sentinels and Nuclear Armageddon are `escape-pressure`; X-Men Danger Room Goes Berserk only amplifies `twist-density` (its Twist shuffles back in when paid).
+- **Source gap.** The owner's data files Hellfire Club and Legion under Civil War (stray entries there); their text was read from those files.
+
+### Difficulty: no axis
+
+- Horror of Horrors (each Twist plays a random Horror) has no tag: Horrors are a new penalty card with no axis, so the Scheme carries nothing. Epic Horror plays on Masterminds likewise.
+- Harry Leland's Heroes-cost-1-more (Recruit cost inflation), Onslaught's smaller hand size (always on, no tag slot) and Arcade's and Mojo's Start of Game captures carry no tag.
+- Intangible Qualities and Lockheed (cycle an HQ card to the Hero Deck bottom), Inspire the World, Precognition's recruit option, Natural Leader and Human Cannon (count other cards), Phoenix's KO-self cards (Life & Death Incarnate, Obliterating Fire) and Driven Mad by Power's win-the-game condition have no want or answer beyond class, cost and economy.
+- Selene, Dark Angel, Dark Iceman, Dark Beast, Hellfire Cult and Shi'ar Patrol Craft only help the player or have no penalty and are untagged. Burn the World to Ashes, Consume an Entire Galaxy, Brain-Melting TV Marathon, Billions of TV Viewers, Sins of X-Men Past, Fiend of the Astral Plane and Poison their Minds hit only the other players with no reveal and carry no tag.
+- The Special Bystander Heroes (C1's Bystander sets) are not Hero Deck cards and are untagged.
+
 ## Required parts and glossary
 
 - The product adds nine token cards, one Master Strike, one Scheme Twist, nine Special Bystanders, and 20 Horrors (XM p.2). The insert names none; the card faces name them (see below).

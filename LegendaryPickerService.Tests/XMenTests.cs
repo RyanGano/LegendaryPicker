@@ -57,6 +57,16 @@ public class XMenTests
         Assert.NotNull(setup.Stacks.Wounds);
     }
 
+    [Fact]
+    public void A_draw_with_Arcade_and_Alien_Brood_Encounters_rates_on_X_Men_cards_by_name()
+    {
+        var setup = Draw(2, "Alien Brood Encounters", "Arcade");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Alien Brood Encounters's Twists"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Arcade's Master Strikes"));
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
         var s = DrawIndexes.Scheme(Catalog, Boxes, players, scheme);
