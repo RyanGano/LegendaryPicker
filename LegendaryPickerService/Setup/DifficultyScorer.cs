@@ -48,6 +48,18 @@ public sealed record DifficultyTuning
     // The rating when there is nothing to measure.
     public int NeutralRating { get; init; } = 3;
 
+    // Weighting a draw toward a target difficulty (#267). An option's weight is exp(-|expected - target| / Temperature):
+    // a bigger Temperature flattens the weights toward a plain draw. The draw takes a number below WeightResolution from
+    // the random source and walks the cumulative weights with it.
+    public double Temperature { get; init; } = 0.5;
+    public int WeightResolution { get; init; } = 1000;
+
+    // What a draw cannot know before the Villain Deck is built: how many Master Strikes, Scheme Twists and Henchman cards
+    // it will hold, taken as the usual counts for the rating of an option.
+    public int EstimatedMasterStrikes { get; init; } = 5;
+    public int EstimatedTwists { get; init; } = 8;
+    public int EstimatedHenchmanCards { get; init; } = 10;
+
     // The opposition (#265). A check is met when a card of the hand has the team or class: each of the HandSize cards is
     // a Hero Deck card with probability HeroDeckShare (the starting deck dilutes the rest) and then has the team or class
     // with the Hero Deck's copy-weighted share, so chanceToShow = 1 - (1 - A * share)^H.
@@ -77,7 +89,9 @@ public sealed record DifficultyTuning
 }
 
 // A drawn Hero as the scorer sees it: its teams and its tagged cards, or none when its box has no difficulty file.
-public sealed record ScoredHero(IReadOnlyList<string> Teams, IReadOnlyList<HeroCardDifficulty>? Cards);
+// Weight counts the Hero's cards that many times: 1 for a drawn Hero, and a fraction for one of the pool's Heroes standing
+// in for the slots a draw has not filled yet (#267).
+public sealed record ScoredHero(IReadOnlyList<string> Teams, IReadOnlyList<HeroCardDifficulty>? Cards, double Weight = 1);
 
 // One tagged card or ability the setup holds. Subject is how a reason names it ("Magneto's Master Strikes",
 // "Sabretooth"), Count how many of it the setup holds (Twists, Master Strikes, copies), Timings when it fires, and Box
@@ -89,8 +103,10 @@ public sealed record OppositionPart(string Subject, string Box, OppositionTag Ta
 public sealed record ScoredOpposition(
     IReadOnlyList<OppositionPart> Parts, IReadOnlyList<OppositionAxis> Amplified, IReadOnlyDictionary<string, string> TermNames);
 
-// What the response shows: rating 1 (easiest) to 5, its band name and up to three reasons in plain words.
-public sealed record Difficulty(int Rating, string Band, IReadOnlyList<string> Reasons);
+// What the response shows: rating 1 (easiest) to 5, its band name and up to three reasons in plain words. Target is the
+// difficulty the request asked for (#267), absent when it asked for none; the rating is what the draw really has.
+public sealed record Difficulty(int Rating, string Band, IReadOnlyList<string> Reasons,
+    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] int? Target = null);
 
 // Rates how hard a drawn setup is to win: the Hero Deck's cost curve and team and class mix (#264), and, when the
 // opposition is tagged, how often its checks, gates and inflicts land against that deck (#265). Every share is weighted
@@ -99,23 +115,43 @@ public static class DifficultyScorer
 {
     public static Difficulty Score(IReadOnlyList<ScoredHero> heroes, DifficultyTuning tuning, ScoredOpposition? opposition = null)
     {
-        var tagged = heroes.Where(hero => hero.Cards is { Count: > 0 }).ToList();
-        var copies = tagged.Sum(hero => hero.Cards!.Sum(card => card.Copies));
-        if (copies == 0)
+        if (Evaluate(heroes, tuning, opposition) is not { } evaluation)
         {
             return new Difficulty(tuning.NeutralRating, tuning.BandNames[tuning.NeutralRating - 1],
                 ["No card data for these Heroes yet, so the rating is average."]);
         }
 
-        var cards = tagged.SelectMany(hero => hero.Cards!).ToList();
-        var meanCost = cards.Sum(card => card.Cost * card.Copies) / (double)copies;
-        var highShare = cards.Where(card => card.Cost >= tuning.HighCost).Sum(card => card.Copies) / (double)copies;
+        var rating = 1 + tuning.BandStarts.Count(start => evaluation.Raw >= start);
+        return new Difficulty(rating, tuning.BandNames[rating - 1], evaluation.Reasons);
+    }
+
+    // The rating a setup is expected to have on a continuous 1..5 scale, the middle of its band at the raw score, so a
+    // draw can weigh an option by how near it is to a target (#267). Neutral when there is nothing to measure.
+    public static double Expected(IReadOnlyList<ScoredHero> heroes, DifficultyTuning tuning, ScoredOpposition? opposition = null) =>
+        Evaluate(heroes, tuning, opposition) is { } evaluation
+            ? Math.Clamp(0.5 + evaluation.Raw * tuning.BandNames.Count, 1, tuning.BandNames.Count)
+            : tuning.NeutralRating;
+
+    private sealed record Evaluation(double Raw, IReadOnlyList<string> Reasons);
+
+    private static Evaluation? Evaluate(IReadOnlyList<ScoredHero> heroes, DifficultyTuning tuning, ScoredOpposition? opposition)
+    {
+        var tagged = heroes.Where(hero => hero.Cards is { Count: > 0 } && hero.Weight > 0).ToList();
+        var cards = tagged.SelectMany(hero => hero.Cards!.Select(card => (card.Cost, card.Class, Copies: card.Copies * hero.Weight))).ToList();
+        var copies = cards.Sum(card => card.Copies);
+        if (copies == 0)
+        {
+            return null;
+        }
+
+        var meanCost = cards.Sum(card => card.Cost * card.Copies) / copies;
+        var highShare = cards.Where(card => card.Cost >= tuning.HighCost).Sum(card => card.Copies) / copies;
 
         // A card with several teams or classes counts for each, its copies split between them.
         var teams = new Dictionary<string, double>(StringComparer.Ordinal);
         foreach (var hero in tagged.Where(hero => hero.Teams.Count > 0))
         {
-            var each = hero.Cards!.Sum(card => card.Copies) / (double)hero.Teams.Count;
+            var each = hero.Cards!.Sum(card => card.Copies) * hero.Weight / hero.Teams.Count;
             foreach (var team in hero.Teams)
             {
                 teams[team] = teams.GetValueOrDefault(team) + each;
@@ -127,7 +163,7 @@ public static class DifficultyScorer
         {
             foreach (var heroClass in card.Class)
             {
-                classes[heroClass] = classes.GetValueOrDefault(heroClass) + card.Copies / (double)card.Class.Count;
+                classes[heroClass] = classes.GetValueOrDefault(heroClass) + card.Copies / card.Class.Count;
             }
         }
 
@@ -163,8 +199,6 @@ public static class DifficultyScorer
                 .ToList();
         }
 
-        var rating = 1 + tuning.BandStarts.Count(start => raw >= start);
-
         var reasons = measures
             .Where(measure => Math.Abs(measure.Hard - 0.5) >= tuning.ReasonMargin)
             .OrderByDescending(measure => Math.Abs(measure.Hard - 0.5) * measure.Weight)
@@ -172,7 +206,7 @@ public static class DifficultyScorer
             .Select(measure => measure.Hard > 0.5 ? measure.HardReason : measure.EasyReason)
             .ToList();
 
-        return new Difficulty(rating, tuning.BandNames[rating - 1], [.. oppositionReasons, .. reasons]);
+        return new Evaluation(raw, [.. oppositionReasons, .. reasons]);
     }
 
     private sealed record Contribution(double Load, string Reason);
@@ -180,7 +214,7 @@ public static class DifficultyScorer
     // The load each tag adds: occurrences * severity, less the chance the players can show a check's requirement or meet
     // a gate's, and worse on the axes the Scheme amplifies.
     private static List<Contribution> Contribute(
-        ScoredOpposition opposition, Dictionary<string, double> teams, Dictionary<HeroClass, double> classes, int copies,
+        ScoredOpposition opposition, Dictionary<string, double> teams, Dictionary<HeroClass, double> classes, double copies,
         DifficultyTuning tuning)
     {
         double Weight(Timing timing) => timing switch

@@ -16,6 +16,8 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 
 `GET /api/setup` setups carry `difficulty` (rating 1 to 5, band, up to three reasons) from a Hero-Deck-only scorer (`Setup/DifficultyScorer.cs`, constants in `DifficultyTuning`) reading `Data/Difficulty/core.json`. The core file's class and cost per card come from the C1 index in `Docs/BoxResearch/core.md`; copies are assumed 5, 5, 3, 1 by the card image's number (04 down to 01, which is rarity order except for Storm, whose rare is Tidal Wave), not read from the box. Format, vocabulary and bands: `Docs/Difficulty/README.md`. Thresholds are guesses until the calibration slice (#268).
 
+A request may ask for a target with `difficulty=1..5` (#267; anything else is a 400). The target only weights each draw (Scheme, Mastermind, open Villain and Henchman Groups, Hero Deck Heroes) among the options the rules already allow, by `exp(-|expected - target| / Temperature)` in `Setup/DifficultyWeights.cs`; it never relaxes a rule or drops or redraws a Scheme, and an unreachable target returns the nearest legal draw with its real rating. Without a target the draw is unchanged. The response's `difficulty` carries `target` beside the real rating.
+
 ## Resolved in the 2026-09-27 session
 
 - The whole core-box catalog is confirmed. An earlier note wrongly listed Sentinel and Hand Ninjas as Villain Groups; they are Henchman Groups.
