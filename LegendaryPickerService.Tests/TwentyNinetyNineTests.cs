@@ -53,6 +53,16 @@ public class TwentyNinetyNineTests
         Assert.Contains(setup.Notes, note => note.Text == "Sinister Six 2099 always leads False Aesir of Alchemax, one of Alchemax Enforcers and False Aesir of Alchemax");
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var setup = Draw(2, "Subjugate Earth with Mega-Corporations", "Alchemax Executives", epic: false);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Subjugate Earth with Mega-Corporations's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind, bool epic)
     {
         var included = Catalog.Boxes.Where(box => Boxes.Contains(box.Id)).ToList();
