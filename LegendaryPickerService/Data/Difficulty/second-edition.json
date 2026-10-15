@@ -1,0 +1,1747 @@
+{
+  "schemaVersion": 3,
+  "box": "second-edition",
+  "source": "Q",
+  "heroes": [
+    {
+      "hero": "second-edition_hero_black-widow",
+      "cards": [
+        {
+          "name": "Covert Operation",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Gather Intel",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ],
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Dangerous Rescue",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Intelligence Network",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "bystanders",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ],
+          "draw": 1
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_captain-america",
+      "cards": [
+        {
+          "name": "Avengers Assemble!",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Perfect Teamwork",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Vibranium Shield",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "A Day Unlike Any Other",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              2
+            ],
+            [
+              "team",
+              "avengers",
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_cyclops",
+      "cards": [
+        {
+          "name": "Determination",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "recruit",
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Optic Blast",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Unending Energy",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "X-Men United",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              3
+            ]
+          ],
+          "selfCost": [
+            "discard"
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_emma-frost",
+      "cards": [
+        {
+          "name": "Mental Discipline",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Shadowed Thoughts",
+          "copies": 5,
+          "class": "covert",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Psychic Link",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Diamond Form",
+          "copies": 1,
+          "class": "strength",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_gambit",
+      "cards": [
+        {
+          "name": "Stack the Deck",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "none",
+          "draw": 1
+        },
+        {
+          "name": "Kinetic Card",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Hypnotic Charm",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "High-Stakes Jackpot",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_hawkeye",
+      "cards": [
+        {
+          "name": "Trick Arrow",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "draw",
+              "extra-cards",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Quick Draw",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "draw": 1
+        },
+        {
+          "name": "Supporting Fire",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Pinpoint Precision",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_hulk",
+      "cards": [
+        {
+          "name": "Growing Rage",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Don't Make Me Angry",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Crazed Rampage",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "selfCost": [
+            "wound"
+          ]
+        },
+        {
+          "name": "Hulk Smash!",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_iron-man",
+      "cards": [
+        {
+          "name": "Endless Invention",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "none",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Repulsor Rays",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack"
+        },
+        {
+          "name": "Overloaded Unibeam",
+          "copies": 3,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Quantum Breakthrough",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "none",
+          "wants": [
+            [
+              "team",
+              "avengers",
+              1
+            ]
+          ],
+          "draw": 3
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_nick-fury",
+      "cards": [
+        {
+          "name": "Stealth Assault Squad",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Weapon Bank",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Battlefield Promotion",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ],
+            [
+              "team",
+              "shield",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Pure Fury",
+          "copies": 1,
+          "class": "tech",
+          "cost": 8,
+          "economy": "none",
+          "wants": [
+            [
+              "team",
+              "shield",
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_rogue",
+      "cards": [
+        {
+          "name": "Borrowed Brawn",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Energy Drain",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Stolen Powers",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "none",
+          "wants": [
+            [
+              "diversity",
+              "class",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Grand Larceny",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-men",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_spider-man-peter-parker",
+      "cards": [
+        {
+          "name": "Witty Banter",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Web-Shooters",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Astonishing Strength",
+          "copies": 3,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "With Great Power...",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "none",
+          "wants": [
+            [
+              "team",
+              "spider-friends",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ],
+          "draw": 2
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_spider-man-miles-morales",
+      "cards": [
+        {
+          "name": "Venom Strike",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Web-Trap",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Spider-Camouflage",
+          "copies": 3,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack"
+        },
+        {
+          "name": "Jump Dimensions",
+          "copies": 1,
+          "class": "tech",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "spider-friends",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "bystanders",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_storm",
+      "cards": [
+        {
+          "name": "Revitalizing Rain",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Lightning Bolt",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Spinning Cyclone",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack",
+          "answers": [
+            [
+              "villain-flow",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Tidal Wave",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_thor",
+      "cards": [
+        {
+          "name": "Odinson",
+          "copies": 5,
+          "class": "strength",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Glory of Asgard",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "both"
+        },
+        {
+          "name": "Spark of the Divine",
+          "copies": 3,
+          "class": "ranged",
+          "cost": 6,
+          "economy": "both"
+        },
+        {
+          "name": "God of Thunder",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "recruit"
+        }
+      ]
+    },
+    {
+      "hero": "second-edition_hero_wolverine",
+      "cards": [
+        {
+          "name": "Keen Senses",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Healing Factor",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Frenzied Slashing",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 2
+        },
+        {
+          "name": "Berserker Rage",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 3
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "second-edition_mastermind_red-skull",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "tech"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Two More Shall Take Its Place",
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "second-edition_mastermind_magneto",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "team",
+            "x-men"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "second-edition_mastermind_doctor-doom",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "mastermind": "second-edition_mastermind_loki",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "strength"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Whispers and Lies",
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "second-edition_mastermind_doctor-octopus",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "team",
+            "spider-friends"
+          ],
+          "onFail": "hand-disruption"
+        },
+        "severity": 2,
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      }
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "second-edition_villain_brotherhood-of-mutants",
+      "cards": [
+        {
+          "name": "The Blob",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Mystique",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "twist-density",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Sabretooth",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Juggernaut",
+          "copies": 2,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ],
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "second-edition_villain_enemies-of-asgard",
+      "cards": [
+        {
+          "name": "Frost Giant Warrior",
+          "copies": 3,
+          "check": {
+            "requires": [
+              "class",
+              "ranged"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Enchantress",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Ymir, Frost Giant King",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Destroyer",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "second-edition_villain_hydra",
+      "cards": [
+        {
+          "name": "Endless Armies of Hydra",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Viper",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Baron Strucker, Supreme Hydra",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "escape-pressure",
+              2
+            ],
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "second-edition_villain_masters-of-evil",
+      "cards": [
+        {
+          "name": "Whirlwind",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Baron Zemo",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              2
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Ultron",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "tech"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "second-edition_villain_radiation",
+      "cards": [
+        {
+          "name": "The Leader",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "escape-pressure"
+          },
+          "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Zzzax",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "strength"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Abomination",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Maestro, Wasteland Hulk",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "second-edition_villain_sinister-spider-foes",
+      "cards": [
+        {
+          "name": "The Lizard",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Scorpion",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Green Goblin",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Venom",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "second-edition_villain_sinister-syndicate",
+      "cards": [
+        {
+          "name": "Beetle",
+          "copies": 2,
+          "check": {
+            "requires": [
+              "class",
+              "covert"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Boomerang",
+          "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Hydro-Man",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Speed Demon",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              2
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "second-edition_villain_skrulls",
+      "cards": [
+        {
+          "name": "Skrull Shapeshifter",
+          "copies": 3,
+          "inflicts": [
+            [
+              "hq-disruption",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Super-Skrull",
+          "copies": 3,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Paibok the Power Skrull",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Skrull Queen Veranke",
+          "copies": 1,
+          "inflicts": [
+            [
+              "hq-disruption",
+              2
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        }
+      ]
+    }
+  ],
+  "henchmanGroups": [
+    {
+      "group": "second-edition_henchman_hand-ninjas",
+      "cards": [
+        {
+          "name": "Hand Ninjas",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "second-edition_henchman_sentinel",
+      "cards": [
+        {
+          "name": "Sentinel",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "second-edition_scheme_bank-robbery-hostage-crisis",
+      "twist": {
+        "inflicts": [
+          [
+            "bystander-pressure",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "bystander-pressure"
+      ]
+    },
+    {
+      "scheme": "second-edition_scheme_enshrouded-identity",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "second-edition_scheme_legacy-virus-the",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "wounds"
+      ]
+    },
+    {
+      "scheme": "second-edition_scheme_negative-zone-prison-breakout",
+      "twist": {
+        "inflicts": [
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "second-edition_scheme_portals-to-the-dark-dimension",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "second-edition_scheme_replace-earth-s-leaders-with-killbots",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ],
+          [
+            "escape-pressure",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "second-edition_scheme_secret-invasion-of-the-skrull-shapeshifters",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "escape-pressure",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "escape-pressure"
+      ]
+    },
+    {
+      "scheme": "second-edition_scheme_superhero-civil-war",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            3
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "second-edition_scheme_unleash-the-power-of-the-cosmic-cube",
+      "twist": {
+        "inflicts": [
+          [
+            "wounds",
+            2
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}

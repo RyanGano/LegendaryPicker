@@ -43,6 +43,16 @@ public class SecondEditionTests
         Assert.Contains(setup.VillainGroups, group => group.Name is "Sinister Spider-Foes" or "Sinister Syndicate");
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var setup = Draw(2, "Superhero Civil War", "Loki");
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Superhero Civil War's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind)
     {
         var box = Catalog.Boxes.Single(b => b.Id == "second-edition");
