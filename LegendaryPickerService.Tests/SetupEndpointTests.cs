@@ -565,13 +565,15 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal("no-store", response.Headers.CacheControl?.ToString());
     }
 
-    [Fact]
-    public async Task A_preflight_from_a_configured_origin_is_allowed()
+    [Theory]
+    [InlineData("http://localhost:5173")]
+    [InlineData("https://legendary.ryangano.com")]
+    public async Task A_preflight_from_a_configured_origin_is_allowed(string origin)
     {
-        var response = await Client().SendAsync(Preflight("http://localhost:5173"));
+        var response = await Client().SendAsync(Preflight(origin));
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-        Assert.Equal(["http://localhost:5173"], response.Headers.GetValues("Access-Control-Allow-Origin"));
+        Assert.Equal([origin], response.Headers.GetValues("Access-Control-Allow-Origin"));
     }
 
     [Fact]
