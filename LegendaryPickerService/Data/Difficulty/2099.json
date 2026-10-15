@@ -1,0 +1,627 @@
+{
+  "schemaVersion": 3,
+  "box": "2099",
+  "source": "C1",
+  "heroes": [
+    {
+      "hero": "2099_hero_spider-man-2099",
+      "cards": [
+        {
+          "name": "Retractable Talons",
+          "copies": 5,
+          "class": "covert",
+          "cost": 2,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Venomous Fangs",
+          "copies": 5,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "covert",
+              2
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Spider-Silk Webbing",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Spider-Sense Telepathy",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "spider-friends",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "2099_hero_ghost-rider-2099",
+      "cards": [
+        {
+          "name": "Cyber-Specter",
+          "copies": 5,
+          "class": "tech",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "tech",
+              2
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Hell Ride",
+          "copies": 5,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              3
+            ]
+          ]
+        },
+        {
+          "name": "Death Beyond Death",
+          "copies": 3,
+          "class": "covert",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "marvel-knights",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Infernal Chainsaw",
+          "copies": 1,
+          "class": "tech",
+          "cost": 7,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "2099_hero_doctor-doom-2099",
+      "cards": [
+        {
+          "name": "Subvert This New Future",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "recruit"
+        },
+        {
+          "name": "Doomblast",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              3
+            ]
+          ]
+        },
+        {
+          "name": "Flesh-Grafted Doombots",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Tear Through Time Itself",
+          "copies": 1,
+          "class": "ranged",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "ranged",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "2099_hero_hulk-2099",
+      "cards": [
+        {
+          "name": "Rage Incarnate",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Push Pain Under the Surface",
+          "copies": 5,
+          "class": "strength",
+          "cost": 4,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ],
+            [
+              "stack",
+              "wounds",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Massive Gamma Detonation",
+          "copies": 3,
+          "class": "tech",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ],
+          "selfCost": [
+            "discard"
+          ]
+        },
+        {
+          "name": "Cataclysmic Frenzy",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "stack",
+              "wounds",
+              2
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "2099_hero_ravage-2099",
+      "cards": [
+        {
+          "name": "Down in the Dregs",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "recruit",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "draw": 1
+        },
+        {
+          "name": "Toxic Mutations",
+          "copies": 5,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Detect Vibrations",
+          "copies": 3,
+          "class": "covert",
+          "cost": 6,
+          "economy": "attack"
+        },
+        {
+          "name": "Overhorns and Underhorns",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "marvel-knights",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "2099_mastermind_sinister-six-2099",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Goblin 2099",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Epic Goblin 2099",
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "2099_mastermind_alchemax-executives",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "John Herod, Executive VP",
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ]
+        },
+        {
+          "name": "Epic John Herod",
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "2099_villain_false-aesir-of-alchemax",
+      "cards": [
+        {
+          "name": "Heimdall 2099",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Hela 2099",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Loki 2099",
+          "copies": 2,
+          "inflicts": [
+            [
+              "twist-density",
+              1
+            ],
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Thor 2099",
+          "copies": 2,
+          "inflicts": [
+            [
+              "wounds",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "2099_villain_alchemax-enforcers",
+      "cards": [
+        {
+          "name": "Cyber-Nostra",
+          "copies": 3,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Whackoid",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Venture",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Jigsaw 2099",
+          "copies": 1,
+          "inflicts": [
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "2099_scheme_pull-reality-into-cyberspace",
+      "twist": {
+        "inflicts": [
+          [
+            "attack-inflation",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "2099_scheme_become-president-of-the-united-states",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "twist-density",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "2099_scheme_subjugate-earth-with-mega-corporations",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "2099_scheme_befoul-earth-into-a-polluted-wasteland",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    }
+  ]
+}
