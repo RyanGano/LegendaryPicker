@@ -46,6 +46,16 @@ public class WeaponXTests
         Assert.Equal(40, setup.Stacks.Wounds);
     }
 
+    // Its own Scheme is tagged for difficulty (#269).
+    [Fact]
+    public void A_draw_of_its_own_Scheme_rates_with_a_reason_naming_it()
+    {
+        var setup = Draw(2, "Go After Heroes' Loved Ones", "Sabretooth", epic: false);
+
+        var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Go After Heroes' Loved Ones's Twists"));
+    }
+
     private static SetupResult Draw(int players, string scheme, string mastermind, bool epic)
     {
         var included = Catalog.Boxes.Where(box => Boxes.Contains(box.Id)).ToList();
