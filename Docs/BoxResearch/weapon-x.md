@@ -203,3 +203,22 @@ This index uses C1 structured fields for printed identity, group, available valu
 ### Setup interpretation boundary
 
 Use official rulebooks/inserts, official clarifications, or the directly linked printed Scheme/Mastermind face for setup effects. C1 ability prose is not a rules source. Any setup value not already supported by such a source remains unverified; runtime data and its citations are linked above rather than duplicated.
+
+## Difficulty data (#269, 2026-10-14)
+
+`Data/Difficulty/weapon-x.json` (format v3, source `C1`, already in the box file's sources). Card effects were read from the C1 catalog's ability data (tags only are recorded here); the shared OCR file holds no faces for this box and the owner's LegendaryAssistant data does not cover it, so names follow C1.
+
+- **Class conflicts.** None between C1 per-card classes and the box file's Hero class lists; C1 is used.
+- **Copies.** C1 and LegendaryAssistant give no Hero copy counts, so the default 5/5/3/1 by rarity applies to every Hero (copies: default). Villains use C1's counts.
+- **Wants.** Cards with a class Superpower or a Berserk that needs the class want that class (1 for one icon); Bone Shards wants X-Force. The Berserk and Weapon X Sequence keywords are not wants, since they read the deck and the HQ and not another drawn card.
+- **Draws.** Three Brains draws conditionally (`draw 1`); Osteogenesis draws two and puts one back (net `draw 1`). Misdirection's extra card is put back, so it is not tagged.
+- **Self costs.** None. Infuse Skeleton with Adamantium's put-back and the optional Wounds of Violent Conditioning and Escape the Weapon X Lab are not costs.
+- **Answers.** Raging Regeneration KOs a Wound from hand or discard (`wounds 1`).
+- **Masterminds.** Omega Red's Strike is Covert or Wound (check, `wounds`) and his Wound bonus (`attack-inflation 1`); Carbonadium Tentacles makes every player discard down (`hand-disruption 1`). Romulus's Strike is a Wound unless the player shows a greater Sequence and may become a Scheme Twist (`wounds 1`, `twist-density 1`, `attack-inflation 1` for the Sequence); Anoint an Heir raises an HQ Hero as an extra Mastermind (`escape-pressure 1`, `hq-disruption 1`) and Master of Schemes plays a Strike or Twist (`twist-density 1`). Sabretooth's Strike KOs a Hero or Wounds (`deck-thinning 2`, `wounds 1`) and adds a Savagery that makes him Berserk more (`attack-inflation 1`); Sudden Savagery adds another Savagery (`attack-inflation 1`).
+- **Villain Groups.** Berserkers: every card is `attack-inflation 1`, Wild Child (three Berserks) 2; Cyber's Fail and Escape discard or Wound and its Fight KOs a Hero and may put it back (`escape-pressure 1`); Feral's Fail KOs from the discard and its Escape discards a Hero; Thornn's Ambush brings a Feral into the city (`escape-pressure 1`) and its Fail discards. Weapon Plus: Sequence cards are `attack-inflation 1`, Ultimaton's doubled Sequence and Daken's Sequence plus Berserk 2; Huntsman captures Heroes from the Hero Deck (`hq-disruption 1`); Skinless Man takes a Bystander or Wounds (`bystander-pressure 1`, `wounds 1`); Nuke's Escape Wounds everyone.
+- **Schemes.** Condition Logan into Weapon X `hand-disruption 1`, `wounds 1` (amplifies `twist-density`); Go After Heroes' Loved Ones `hq-disruption 2`, `hand-disruption 1` (amplifies `hq-disruption`); Wipe Heroes' Memories replays the Twist (`twist-density 2`, amplifies `twist-density`).
+
+### Difficulty: no axis
+
+- Deck-order and look effects (Metabolic Overdrive, The Future of Warfare), Drain Life Force's shuffle back into the Tactics, Typhoid Mary's Personalities and Huntsman's returned captures have no axis and are untagged.
+- Tactics that only hit other players (Death Pheromones, Bite of the Muramasa Blade, Adamantium-Laced Claws) or only help the fighter (The Carbonadium Synthesizer, Take Over the Weapon X Program, Lethal Fangs, Salivating Prowl) are untagged.

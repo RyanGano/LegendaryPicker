@@ -1,0 +1,585 @@
+{
+  "schemaVersion": 3,
+  "box": "weapon-x",
+  "source": "C1",
+  "heroes": [
+    {
+      "hero": "weapon-x_hero_fantomex",
+      "cards": [
+        {
+          "name": "Sentient Bullets",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 1,
+          "economy": "attack"
+        },
+        {
+          "name": "Three Brains",
+          "copies": 5,
+          "class": "tech",
+          "cost": 2,
+          "economy": "recruit",
+          "draw": 1
+        },
+        {
+          "name": "Misdirection",
+          "copies": 3,
+          "class": "covert",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Weapon XIII",
+          "copies": 1,
+          "class": "tech",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "tech",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "weapon-x_hero_marrow",
+      "cards": [
+        {
+          "name": "Bone Shards",
+          "copies": 5,
+          "class": "ranged",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "team",
+              "x-force",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Hyper-Adaptive Skeleton",
+          "copies": 5,
+          "class": "strength",
+          "cost": 2,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Osteogenesis",
+          "copies": 3,
+          "class": "strength",
+          "cost": 6,
+          "economy": "both",
+          "draw": 1
+        },
+        {
+          "name": "Metabolic Overdrive",
+          "copies": 1,
+          "class": "covert",
+          "cost": 7,
+          "economy": "attack"
+        }
+      ]
+    },
+    {
+      "hero": "weapon-x_hero_weapon-h",
+      "cards": [
+        {
+          "name": "Evolving Abilities",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "both",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "The Future of Warfare",
+          "copies": 5,
+          "class": "strength",
+          "cost": 3,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Slice and Smash",
+          "copies": 3,
+          "class": "strength",
+          "cost": 5,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Ultimate Killing Machine",
+          "copies": 1,
+          "class": "strength",
+          "cost": 8,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "strength",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "hero": "weapon-x_hero_weapon-x-wolverine",
+      "cards": [
+        {
+          "name": "Infuse Skeleton with Adamantium",
+          "copies": 5,
+          "class": "tech",
+          "cost": 5,
+          "economy": "attack"
+        },
+        {
+          "name": "Raging Regeneration",
+          "copies": 5,
+          "class": "instinct",
+          "cost": 4,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ],
+          "answers": [
+            [
+              "wounds",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Violent Conditioning",
+          "copies": 3,
+          "class": "instinct",
+          "cost": 3,
+          "economy": "attack"
+        },
+        {
+          "name": "Escape the Weapon X Lab",
+          "copies": 1,
+          "class": "instinct",
+          "cost": 6,
+          "economy": "attack",
+          "wants": [
+            [
+              "class",
+              "instinct",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "masterminds": [
+    {
+      "mastermind": "weapon-x_mastermind_omega-red",
+      "masterStrike": {
+        "check": {
+          "requires": [
+            "class",
+            "covert"
+          ],
+          "onFail": "wounds"
+        },
+        "severity": 1,
+        "inflicts": [
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Carbonadium Tentacles",
+          "inflicts": [
+            [
+              "hand-disruption",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "weapon-x_mastermind_romulus",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "wounds",
+            1
+          ],
+          [
+            "twist-density",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Anoint an Heir to Take My Place",
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ]
+        },
+        {
+          "name": "Master of Schemes",
+          "inflicts": [
+            [
+              "twist-density",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "mastermind": "weapon-x_mastermind_sabretooth",
+      "masterStrike": {
+        "inflicts": [
+          [
+            "deck-thinning",
+            2
+          ],
+          [
+            "wounds",
+            1
+          ],
+          [
+            "attack-inflation",
+            1
+          ]
+        ]
+      },
+      "tactics": [
+        {
+          "name": "Sudden Savagery",
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "villainGroups": [
+    {
+      "group": "weapon-x_villain_berserkers",
+      "cards": [
+        {
+          "name": "Cyber",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Feral",
+          "copies": 3,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Thornn",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "escape-pressure",
+              1
+            ],
+            [
+              "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Wild Child",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "weapon-x_villain_weapon-plus",
+      "cards": [
+        {
+          "name": "Daken",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "deck-thinning",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Huntsman (Weapon XII)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "hq-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Nuke (Weapon VII)",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "fight",
+            "escape"
+          ]
+        },
+        {
+          "name": "Skinless Man (Weapon III)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ],
+            [
+              "bystander-pressure",
+              1
+            ],
+            [
+              "wounds",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Typhoid Mary (Weapon IX)",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Ultimaton (Weapon XV)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ],
+            [
+              "hand-disruption",
+              1
+            ],
+            [
+              "deck-thinning",
+              1
+            ]
+          ],
+          "on": [
+            "ambush",
+            "fight",
+            "escape"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemes": [
+    {
+      "scheme": "weapon-x_scheme_condition-logan-into-weapon-x",
+      "twist": {
+        "inflicts": [
+          [
+            "hand-disruption",
+            1
+          ],
+          [
+            "wounds",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    },
+    {
+      "scheme": "weapon-x_scheme_go-after-heroes-loved-ones",
+      "twist": {
+        "inflicts": [
+          [
+            "hq-disruption",
+            2
+          ],
+          [
+            "hand-disruption",
+            1
+          ]
+        ]
+      },
+      "amplifies": [
+        "hq-disruption"
+      ]
+    },
+    {
+      "scheme": "weapon-x_scheme_wipe-heroes-memories",
+      "twist": {
+        "inflicts": [
+          [
+            "twist-density",
+            2
+          ]
+        ]
+      },
+      "amplifies": [
+        "twist-density"
+      ]
+    }
+  ]
+}
