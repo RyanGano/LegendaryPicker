@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.GITHUB_ACTIONS === 'true' ? '/LegendaryPicker/' : '/',
+  base: '/',
   plugins: [react()],
   test: {
     environment: 'jsdom',
