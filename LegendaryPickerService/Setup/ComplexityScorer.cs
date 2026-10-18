@@ -41,9 +41,12 @@ public sealed record ComplexityTuning
 }
 
 // What the response shows: rating 1 (simplest) to 5, its band name and up to three reasons in plain words. Target is the
-// complexity the request asked for, absent when it asked for none; the rating is what the draw really has.
+// complexity the request asked for, absent when it asked for none; the rating is what the draw really has. Reached and
+// Note are as on Difficulty (#329).
 public sealed record Complexity(int Rating, string Band, IReadOnlyList<string> Reasons,
-    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] int? Target = null);
+    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] int? Target = null,
+    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] bool? Reached = null,
+    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] string? Note = null);
 
 // What the rating reads from a drawn setup: the keywords in play, the stacks beyond the baseline, how many rulesets are
 // mixed, the stand-ins, the boxes that supply drawn cards, and the setup steps the Scheme and Mastermind add.
@@ -99,20 +102,18 @@ public sealed class ComplexityMeter
         + Math.Max(inputs.Boxes - 1, 0) * _tuning.BoxPoints
         + inputs.Steps * _tuning.StepPoints;
 
-    // The extra points one more Hero would add to a draw so far, on average over the pool: only the keywords and stacks
-    // the draw does not have yet count.
-    public double MeanHeroPoints(ComplexityInputs drawn, IReadOnlyList<Hero> pool) =>
-        pool.Count == 0
-            ? 0
-            : pool.Average(hero =>
-                hero.Terms.Where(term => IsKeyword(term) && !drawn.Keywords.Contains(term)).Distinct().Count() * _tuning.KeywordPoints
-                + ((ICard)hero).Parts.Where(part => part != Part.Ambitions && !_tuning.BaselineStacks.Contains(part) && !drawn.Stacks.Contains(part)).Distinct().Count() * _tuning.StackPoints);
-
     public double Raw(double points) => Math.Clamp((points - _tuning.PointsEasy) / (_tuning.PointsHard - _tuning.PointsEasy), 0, 1);
 
-    // A continuous rating for weighting a draw that rounds to the band Score gives: it runs from 1 at no points to 1.5
-    // where band 2 starts, crosses k + 0.5 where band k + 1 starts, and reaches 5 at PointsHard. It keeps rising inside
-    // the first band, so two options that both rate 1 still differ.
+    // The band, 1 to 5, that Score gives a setup with this many points.
+    public int Rating(double points)
+    {
+        var raw = Raw(points);
+        return 1 + _tuning.BandStarts.Count(start => raw >= start);
+    }
+
+    // A continuous rating for judging a draw against a target, which rounds to the band Score gives: it runs from 1 at no
+    // points to 1.5 where band 2 starts, crosses k + 0.5 where band k + 1 starts, and reaches 5 at PointsHard. It keeps
+    // rising inside the first band, so two choices that both rate 1 still differ.
     public double Expected(double points)
     {
         var knots = new List<(double Points, double Rating)> { (0, 1) };
@@ -134,8 +135,7 @@ public sealed class ComplexityMeter
 
     public Complexity Score(ComplexityInputs inputs)
     {
-        var raw = Raw(Points(inputs));
-        var rating = 1 + _tuning.BandStarts.Count(start => raw >= start);
+        var rating = Rating(Points(inputs));
         return new Complexity(rating, _tuning.BandNames[rating - 1], Reasons(inputs));
     }
 

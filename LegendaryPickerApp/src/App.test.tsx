@@ -785,13 +785,20 @@ describe('App', () => {
     expect(setupRequests()[1]).toMatch(/players=3&boxes=core$/)
   })
 
-  it('shows the asked-for band beside the drawn one when they differ', async () => {
+  it("shows the API's note beside the drawn band when the draw missed the asked-for one", async () => {
     setupAnswers = [
       () =>
         json({
           ...setup,
-          difficulty: { rating: 2, band: 'Easy Two', reasons: [], target: 5 },
-          complexity: { rating: 3, band: 'More', reasons: [], target: 3 },
+          difficulty: {
+            rating: 2,
+            band: 'Easy Two',
+            reasons: [],
+            target: 5,
+            reached: false,
+            note: 'The closest to Hard One the draw found with this Scheme is Easy Two.',
+          },
+          complexity: { rating: 3, band: 'More', reasons: [], target: 3, reached: true },
         }),
     ]
     const user = userEvent.setup()
@@ -804,7 +811,7 @@ describe('App', () => {
 
     const difficulty = await screen.findByRole('region', { name: 'Difficulty' })
     expect(difficulty).toHaveTextContent('Easy Two')
-    expect(difficulty).toHaveTextContent('You asked for Hard One. This is the closest legal setup drawn.')
-    expect(screen.getByRole('region', { name: 'Complexity' })).not.toHaveTextContent('You asked for')
+    expect(difficulty).toHaveTextContent('The closest to Hard One the draw found with this Scheme is Easy Two.')
+    expect(screen.getByRole('region', { name: 'Complexity' })).not.toHaveTextContent('The closest')
   })
 })

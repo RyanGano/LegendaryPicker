@@ -1,21 +1,19 @@
 import type { Complexity, Difficulty } from './api/setupApi.ts'
 
-type Rated = { rating: number; band: string; reasons: string[]; target?: number }
+type Rated = { rating: number; band: string; reasons: string[]; note?: string }
 
-// A rating the API gives the drawn setup: five pips, the band name, and a "why" the player can open. The client only
-// shows what the API says; it never works out a rating.
+// A rating the API gives the drawn setup: five pips, the band name, the API's note when the draw missed the band the
+// player asked for, and a "why" the player can open. The client only shows what the API says; it never works out a rating.
 function RatingPanel({
   label,
   className,
   rated,
-  bands,
 }: {
   label: string
   className: string
   rated: Rated
-  bands?: string[]
 }) {
-  const { rating, band, reasons, target } = rated
+  const { rating, band, reasons, note } = rated
   return (
     <section className={className} aria-label={label}>
       <div className="difficulty-head">
@@ -27,11 +25,7 @@ function RatingPanel({
         </span>
         <span className="difficulty-band">{band}</span>
       </div>
-      {target !== undefined && target !== rating && (
-        <p className="difficulty-request">
-          You asked for {bands?.[target - 1] ?? `rating ${target}`}. This is the closest legal setup drawn.
-        </p>
-      )}
+      {note && <p className="difficulty-request">{note}</p>}
       {reasons.length > 0 && (
         <details>
           <summary>Why this rating</summary>
@@ -46,11 +40,11 @@ function RatingPanel({
   )
 }
 
-export function DifficultyRating({ difficulty, bands }: { difficulty: Difficulty; bands?: string[] }) {
-  return <RatingPanel label="Difficulty" className="difficulty" rated={difficulty} bands={bands} />
+export function DifficultyRating({ difficulty }: { difficulty: Difficulty }) {
+  return <RatingPanel label="Difficulty" className="difficulty" rated={difficulty} />
 }
 
 // How much there is to learn and remember in the drawn setup, shown beside the difficulty.
-export function ComplexityRating({ complexity, bands }: { complexity: Complexity; bands?: string[] }) {
-  return <RatingPanel label="Complexity" className="difficulty complexity" rated={complexity} bands={bands} />
+export function ComplexityRating({ complexity }: { complexity: Complexity }) {
+  return <RatingPanel label="Complexity" className="difficulty complexity" rated={complexity} />
 }

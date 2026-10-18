@@ -198,21 +198,27 @@ export type RuleNote = {
 
 // How hard the drawn Hero Deck is to win with: rating 1 (easiest) to 5, the band's display name, and up to three
 // reasons in plain words. Left out by an API from before the rating, and never says anything about balance.
-// target is the rating the request asked for, present only when it asked for one (#267).
+// target is the rating the request asked for, present only when it asked for one (#267); reached then says whether the
+// rating is the target, and note, present only when it isn't, says how close the draw came (#329).
 export type Difficulty = {
   rating: number
   band: string
   reasons: string[]
   target?: number
+  reached?: boolean
+  note?: string
 }
 
 // How much there is to learn and remember in the drawn setup: rating 1 (simplest) to 5, the band's display name, and up
-// to three reasons in plain words. Independent of the difficulty. Left out by an API from before the rating.
+// to three reasons in plain words. Independent of the difficulty. Left out by an API from before the rating. target,
+// reached and note are as on Difficulty.
 export type Complexity = {
   rating: number
   band: string
   reasons: string[]
   target?: number
+  reached?: boolean
+  note?: string
 }
 
 export type Setup = {

@@ -27,27 +27,45 @@ its own wants, lets its answers cut the opposition's load, charges self costs, a
 
 ## What is built (#267)
 
-`GET /api/setup?difficulty=1..5` (anything else is a 400) weights the draw toward that rating; the format is unchanged.
-`SetupGenerator.Generate` takes the target, and `Setup/DifficultyWeights.cs` does the weighting with the scorer's
-`Expected` (a continuous rating, n - 0.5 to n + 0.5 across band n).
+`GET /api/setup?difficulty=1..5` (anything else is a 400) asks for a rating; the format is unchanged. The first version
+weighted each draw toward it. That missed the band most of the time and was replaced by draw, then repair (#329, below).
 
-- Order is unchanged: Scheme, Mastermind, open Villain and Henchman Groups, then the Hero Deck's Heroes. Each of these is
-  one weighted pick among the options the rules left, weight `exp(-|expected - target| / Temperature)`. Draws outside the
-  Hero Deck (outside Heroes, set-aside Masterminds, outside Henchmen, a group an Always Leads or a Scheme requires) stay uniform.
-- An option's expected rating is the setup so far plus the option plus the pool-average Hero Deck for the Heroes not yet
-  drawn (each pool Hero counted at an equal share of the open slots). The Villain Deck's counts are not known yet, so
-  `EstimatedMasterStrikes`, `EstimatedTwists` and `EstimatedHenchmanCards` stand in. Early draws therefore see only part
-  of the opposition and rate low in absolute terms; only their order against each other matters, and calibration (#268)
-  can revisit it.
-- With a target, each weighted draw takes a number below `WeightResolution` (1000) from the random source and walks the
-  cumulative weights. Without one nothing changes, draw for draw.
-- An unreachable target returns the closest legal draw and its real rating, never an error. The response's `difficulty`
-  gains `target` (omitted when none was asked for).
-- `Temperature` starts at 0.5 (a Hero spread of about 1.4 rating points across the core box's Heroes). Watch for the same
-  few Masterminds or Heroes at an extreme target and raise it if so.
-- On four fixed seeds in the core box, 2 players, `difficulty=1` drew ratings 3, 4, 4, 4 and `difficulty=5` drew 5, 4, 4,
-  5; with no target 4, 5, 4, 4. The core box's opposition keeps most draws in the top bands (see Scorer v1), which
-  calibration (#268) addressed.
+## Draw, then repair (#329)
+
+`SetupGenerator.Generate` takes the targets, and `Setup/RatingTargets.cs` judges a choice with the scorers the response
+uses.
+
+- The setup is drawn plainly first, so the Scheme and Mastermind are the ones an untargeted draw takes from the same
+  random source, and they are never changed.
+- The open picks are the Hero Deck's Heroes no card requires (fill-ins the players may choose are left alone) and the
+  Villain and Henchman Groups drawn into open slots: not a required group, an Always Leads group, a substitute or a group
+  from a box that isn't included.
+- Each round rates every single swap of an open pick for another of its pool, with `DifficultyScorer.Measure` on the
+  plan's real Master Strike, Twist and Henchman counts and, for complexity, `ComplexityMeter` on the drawn cards and the
+  stacks they lay out. If some swaps land in every target band, one of them is drawn at random, so setups stay varied;
+  otherwise the swap whose continuous rating comes closest is taken. The repair stops in band, when no swap comes closer,
+  or after 6 rounds. With both targets the distance is the sum of the two.
+- A Hero swap must keep `HeroRules.CanComplete`, so a Scheme's Hero rules still hold; a Henchman Group the Scheme draws
+  outside the Villain Deck is never swapped in. Outside Heroes, set-aside Villains, other Masterminds, cards beside the
+  Scheme and the stacks are drawn and built once, from the final choice.
+- A target the repair doesn't reach keeps the closest choice. The response's `difficulty` and `complexity` carry
+  `target`, `reached` and, only when it was not reached, a `note` ("The closest to Secret Wars the draw found with this
+  Scheme is Cosmic Threat."), which never names a rule. The web app shows the note beside the band.
+- Measured on 2 players, seeds 1000 onward, before and after (hits of the target band):
+
+  | Boxes | Target | Before | After |
+  |---|---|---|---|
+  | core | difficulty 1 | 5/20 | 19/20 |
+  | core | difficulty 5 | 3/20 | 10/20 |
+  | core, Dark City, Secret Wars Vol. 1 | difficulty 1 | 2/20 | 15/20 |
+  | core, Dark City, Secret Wars Vol. 1 | difficulty 5 | 6/20 | 20/20 |
+  | core, Dark City, Secret Wars Vol. 1 | complexity 3 | 2/20 | 16/20 |
+  | all boxes | difficulty 1 | 0/4 | 4/4 |
+  | all boxes | complexity 1 | 0/4 | 0/4 (3 at band 2) |
+
+  A targeted draw with every box ticked took about 4.6 s before and about 0.6 s after. Core at difficulty 5 stops at
+  Cosmic Threat half the time: core's opposition is light once the Scheme and Mastermind are fixed. Complexity with every
+  box ticked stops at 2 when the Scheme and Mastermind alone bring that much. Not built: retrying with another Mastermind.
 
 ## Calibration (#268)
 
@@ -133,11 +151,10 @@ The points map to 0..1 between `PointsEasy` (4) and `PointsHard` (20) and fall i
 Crossover, Multiverse, Event Series. The response's `complexity` is `{ rating, band, reasons, target? }`, the reasons
 naming the biggest contributors first ("Adds Sidekicks and Shards", "11 keywords to know: ..."). A core-only setup rates 1.
 
-`GET /api/setup?complexity=1..5` (anything else is a 400) adds `|expected complexity - target|` to the difficulty's
-distance in each weighted draw (`DifficultyWeights.Distance`), so both targets can be asked for at once and neither is a
-filter. The expected complexity is the cards drawn so far plus the pool's average extra points for each Hero slot still
-open, mapped to a continuous rating that rounds to the band (1 at no points, k + 0.5 where band k + 1 starts, 5 at
-`PointsHard`), so a target of 2 leans toward Team-Up setups. Stacks a stand-in replaces count as the stand-in only. Not built: the count of Solo play rules; calibration of the constants is a later pass.
+`GET /api/setup?complexity=1..5` (anything else is a 400) repairs the draw toward that band as above (#329), alone or
+with a difficulty, and neither target is a filter. The repair reads the points of the drawn cards as a continuous rating
+that rounds to the band (1 at no points, k + 0.5 where band k + 1 starts, 5 at `PointsHard`), so it can tell which swap
+comes closer. Stacks a stand-in replaces count as the stand-in only. Not built: the count of Solo play rules; calibration of the constants is a later pass.
 
 ## Data format (schemaVersion 4)
 

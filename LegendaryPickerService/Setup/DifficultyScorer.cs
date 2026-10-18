@@ -48,18 +48,6 @@ public sealed record DifficultyTuning
     // The rating when there is nothing to measure.
     public int NeutralRating { get; init; } = 3;
 
-    // Weighting a draw toward a target difficulty (#267). An option's weight is exp(-|expected - target| / Temperature):
-    // a bigger Temperature flattens the weights toward a plain draw. The draw takes a number below WeightResolution from
-    // the random source and walks the cumulative weights with it.
-    public double Temperature { get; init; } = 0.5;
-    public int WeightResolution { get; init; } = 1000;
-
-    // What a draw cannot know before the Villain Deck is built: how many Master Strikes, Scheme Twists and Henchman cards
-    // it will hold, taken as the usual counts for the rating of an option.
-    public int EstimatedMasterStrikes { get; init; } = 5;
-    public int EstimatedTwists { get; init; } = 8;
-    public int EstimatedHenchmanCards { get; init; } = 10;
-
     // The opposition (#265). A check is met when a card of the hand has the team or class: each of the HandSize cards is
     // a Hero Deck card with probability HeroDeckShare (the starting deck dilutes the rest) and then has the team or class
     // with the Hero Deck's copy-weighted share, so chanceToShow = 1 - (1 - A * share)^H.
@@ -134,9 +122,13 @@ public sealed record ScoredOpposition(
     IReadOnlyList<OppositionPart> Parts, IReadOnlyList<OppositionAxis> Amplified, IReadOnlyDictionary<string, string> TermNames);
 
 // What the response shows: rating 1 (easiest) to 5, its band name and up to three reasons in plain words. Target is the
-// difficulty the request asked for (#267), absent when it asked for none; the rating is what the draw really has.
+// difficulty the request asked for (#267), absent when it asked for none; the rating is what the draw really has. With a
+// target, Reached says whether the rating is the target, and Note, written only when it isn't, names the closest band the
+// draw found (#329).
 public sealed record Difficulty(int Rating, string Band, IReadOnlyList<string> Reasons,
-    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] int? Target = null);
+    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] int? Target = null,
+    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] bool? Reached = null,
+    [property: System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)] string? Note = null);
 
 // Rates how hard a drawn setup is to win: the Hero Deck's cost curve and team and class mix (#264), and, when the
 // opposition is tagged, how often its checks, gates and inflicts land against that deck (#265). Every share is weighted
@@ -155,20 +147,26 @@ public static class DifficultyScorer
         return new Difficulty(rating, tuning.BandNames[rating - 1], evaluation.Reasons);
     }
 
-    // The rating a setup is expected to have on a continuous 1..5 scale, so a draw can weigh an option by how near it is to
-    // a target (#267). A band runs from n - 0.5 at its start to n + 0.5 at its end, so it rounds to the rating Score gives
+    // The rating a setup is expected to have on a continuous 1..5 scale, so a draw can tell how near a choice is to a
+    // target (#267). A band runs from n - 0.5 at its start to n + 0.5 at its end, so it rounds to the rating Score gives
     // and follows BandStarts when the bands are not equal widths. Neutral when there is nothing to measure.
-    public static double Expected(IReadOnlyList<ScoredHero> heroes, DifficultyTuning tuning, ScoredOpposition? opposition = null)
+    public static double Expected(IReadOnlyList<ScoredHero> heroes, DifficultyTuning tuning, ScoredOpposition? opposition = null) =>
+        Measure(heroes, tuning, opposition).Expected;
+
+    // The rating Score gives and the continuous rating Expected gives, from one evaluation, so the generator can judge a
+    // choice by the band the response will show and by how far it is from a target (#329).
+    public static (int Rating, double Expected) Measure(IReadOnlyList<ScoredHero> heroes, DifficultyTuning tuning, ScoredOpposition? opposition = null)
     {
         if (Evaluate(heroes, tuning, opposition) is not { } evaluation)
         {
-            return tuning.NeutralRating;
+            return (tuning.NeutralRating, tuning.NeutralRating);
         }
 
         var edges = new[] { 0.0 }.Concat(tuning.BandStarts).Append(1.0).ToArray();
-        var band = Math.Min(tuning.BandStarts.Count(start => evaluation.Raw >= start), edges.Length - 2);
+        var started = tuning.BandStarts.Count(start => evaluation.Raw >= start);
+        var band = Math.Min(started, edges.Length - 2);
         var along = (evaluation.Raw - edges[band]) / (edges[band + 1] - edges[band]);
-        return Math.Clamp(band + 0.5 + along, 1, edges.Length - 1);
+        return (1 + started, Math.Clamp(band + 0.5 + along, 1, edges.Length - 1));
     }
 
     private sealed record Evaluation(double Raw, IReadOnlyList<string> Reasons);
