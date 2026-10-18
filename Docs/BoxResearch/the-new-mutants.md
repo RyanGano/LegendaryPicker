@@ -167,7 +167,7 @@ Use official rulebooks/inserts, official clarifications, or the directly linked 
 ### Difficulty: no axis
 
 - Moonlight and Sunlight are HQ-parity conditions, not a team or class: no check, gate or want axis names them; they are tagged as keyword wants only.
-- Moonlight/Sunlight Attack bonuses on Crotus and Witchfire, and Empath's +Attack per grey Hero, are untagged: their other tagged effects fire at Ambush or Escape and one card has one timing (#292). The same bonuses on N'astirh, Catseye and Thunderbird are tagged on their Fight; Emma Frost's per-grey-Hero bonus is on her Master Strike slot.
+- Moonlight/Sunlight Attack bonuses on Crotus and Witchfire, and Empath's +Attack per grey Hero, are untagged: their other tagged effects fire at Ambush or Escape, and format version 3 gave a card one timing. Since #292 they could be tagged at Fight. The same bonuses on N'astirh, Catseye and Thunderbird are tagged on their Fight; Emma Frost's per-grey-Hero bonus is on her Master Strike slot.
 - Jetstream's Ambush reposition on the Bridge, Witchfire's and Demon Bear's captured-Hero KO on Escape, Crotus's and N'astirh's Sunlight recruit surcharge: no axis beyond what is tagged.
 - Crash the Moon into the Sun's parity-driven Altered Orbits: tagged `twist-density` as the closest axis; the HQ-manipulation counterplay has no axis.
 - Trapped in the Insane Asylum's Sanity Test and passed Psychotic Breaks (a forced random play from hand): tagged `hand-disruption`; passing the Twist between players has no axis.

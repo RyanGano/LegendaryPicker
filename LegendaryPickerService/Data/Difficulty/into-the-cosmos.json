@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "into-the-cosmos",
   "source": "Q",
   "heroes": [
@@ -681,7 +681,16 @@
             [
               "twist-density",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Black Dwarf",
+          "copies": 2,
+          "inflicts": [
             [
               "attack-inflation",
               1
@@ -692,7 +701,6 @@
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -716,14 +724,6 @@
         {
           "name": "Proxima Midnight",
           "copies": 1,
-          "check": {
-            "requires": [
-              "class",
-              "instinct"
-            ],
-            "onFail": "wounds"
-          },
-          "severity": 1,
           "inflicts": [
             [
               "twist-density",
@@ -735,7 +735,21 @@
             ]
           ],
           "on": [
-            "ambush",
+            "ambush"
+          ]
+        },
+        {
+          "name": "Proxima Midnight",
+          "copies": 1,
+          "check": {
+            "requires": [
+              "class",
+              "instinct"
+            ],
+            "onFail": "wounds"
+          },
+          "severity": 1,
+          "on": [
             "escape"
           ]
         },
@@ -904,6 +918,13 @@
             "onFail": "wounds"
           },
           "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Champion of the Universe",
+          "copies": 2,
           "inflicts": [
             [
               "attack-inflation",
@@ -915,7 +936,6 @@
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -1021,14 +1041,21 @@
             [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Sidera Maris, Bridge Builders",
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }

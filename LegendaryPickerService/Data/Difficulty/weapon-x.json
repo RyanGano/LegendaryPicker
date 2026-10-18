@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "weapon-x",
   "source": "C1",
   "heroes": [
@@ -329,20 +329,28 @@
               1
             ],
             [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Cyber",
+          "copies": 1,
+          "inflicts": [
+            [
               "hand-disruption",
               1
             ],
             [
               "wounds",
               1
-            ],
-            [
-              "escape-pressure",
-              1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
@@ -357,15 +365,36 @@
             [
               "deck-thinning",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Feral",
+          "copies": 3,
+          "inflicts": [
             [
               "hand-disruption",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
+          ]
+        },
+        {
+          "name": "Thornn",
+          "copies": 2,
+          "inflicts": [
+            [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
           ]
         },
         {
@@ -377,16 +406,11 @@
               1
             ],
             [
-              "escape-pressure",
-              1
-            ],
-            [
               "hand-disruption",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -438,16 +462,24 @@
           "copies": 1,
           "inflicts": [
             [
-              "attack-inflation",
-              1
-            ],
-            [
               "hq-disruption",
               1
             ]
           ],
           "on": [
-            "ambush",
+            "ambush"
+          ]
+        },
+        {
+          "name": "Huntsman (Weapon XII)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
             "fight"
           ]
         },
@@ -458,14 +490,22 @@
             [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Nuke (Weapon VII)",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
@@ -473,10 +513,6 @@
           "name": "Skinless Man (Weapon III)",
           "copies": 1,
           "inflicts": [
-            [
-              "attack-inflation",
-              1
-            ],
             [
               "bystander-pressure",
               1
@@ -487,7 +523,19 @@
             ]
           ],
           "on": [
-            "ambush",
+            "ambush"
+          ]
+        },
+        {
+          "name": "Skinless Man (Weapon III)",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
             "fight"
           ]
         },

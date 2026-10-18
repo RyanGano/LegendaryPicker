@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "paint-the-town-red",
   "source": "Q",
   "heroes": [
@@ -309,14 +309,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Demogoblin",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -340,14 +348,22 @@
             [
               "deck-thinning",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Shriek",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               2
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         }

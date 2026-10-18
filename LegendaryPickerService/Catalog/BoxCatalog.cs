@@ -16,7 +16,7 @@ public sealed partial class BoxCatalog
     public const int SchemaVersion = 8;
 
     // The schema of the files in Data/Difficulty (#263).
-    public const int DifficultySchemaVersion = 3;
+    public const int DifficultySchemaVersion = 4;
 
     // Glossary summaries are short paraphrases in our own words, never rulebook text.
     public const int MaxSummaryWords = 40;
@@ -309,12 +309,31 @@ public sealed partial class BoxCatalog
             }
         }
 
+        // A card whose effects fire at different times is listed once per timing, each entry with its own effects and
+        // "on" (#292); its entries must agree on how many copies it has.
+        void SameCopies(string group, IReadOnlyList<OppositionTag> cards)
+        {
+            var copies = new Dictionary<string, int?>(StringComparer.Ordinal);
+            foreach (var card in cards)
+            {
+                if (!copies.TryAdd(card.Name!, card.Copies))
+                {
+                    if (copies[card.Name!] != card.Copies)
+                    {
+                        throw new InvalidDataException($"{path}: {group} card {card.Name} has entries with different copies.");
+                    }
+                }
+            }
+        }
+
         foreach (var group in villainGroups)
         {
             foreach (var card in group.Cards)
             {
                 Tag(group.Group, card, cardTimings, impliedOn: false, named: true, needsCopies: true);
             }
+
+            SameCopies(group.Group, group.Cards);
         }
 
         foreach (var group in henchmanGroups)
@@ -323,6 +342,8 @@ public sealed partial class BoxCatalog
             {
                 Tag(group.Group, card, cardTimings, impliedOn: false, named: true, needsCopies: false);
             }
+
+            SameCopies(group.Group, group.Cards);
         }
 
         foreach (var scheme in schemes.Where(scheme => scheme.Twist is not null))

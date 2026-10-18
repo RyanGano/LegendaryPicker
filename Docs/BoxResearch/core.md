@@ -385,7 +385,7 @@ Difficulty: no axis (cards tagged only in part or not at all):
 
 ## Difficulty data: Hero wants and answers (#266, 2026-10-13)
 
-`Data/Difficulty/core.json` (schemaVersion 3) tags 49 of the 60 Hero cards with `wants`, `answers`, `selfCost` and `draw`. Effects were read from the C2 catalog's ability text for the Heroes (https://github.com/nutki/legendary/tree/master/texttools/Legendary, `Heroes_and_Allies.txt`) and recorded only as tags, never as text; the same file's copy counts agree with the copies already in the data. Strengths (1 to 3) and the choice of kind are our judgement, soft until calibration (#268).
+`Data/Difficulty/core.json` (now schemaVersion 4) tags 49 of the 60 Hero cards with `wants`, `answers`, `selfCost` and `draw`. Effects were read from the C2 catalog's ability text for the Heroes (https://github.com/nutki/legendary/tree/master/texttools/Legendary, `Heroes_and_Allies.txt`) and recorded only as tags, never as text; the same file's copy counts agree with the copies already in the data. Strengths (1 to 3) and the choice of kind are our judgement, soft until calibration (#268).
 
 Assumptions:
 

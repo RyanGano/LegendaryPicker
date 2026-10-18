@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "midnight-sons",
   "source": "Q",
   "heroes": [
@@ -422,14 +422,22 @@
             [
               "wounds",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Sister Nil",
+          "copies": 1,
+          "inflicts": [
             [
               "hand-disruption",
               1
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         },
@@ -440,14 +448,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Skinner",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -458,14 +474,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Blackout",
+          "copies": 1,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         }
@@ -481,14 +505,22 @@
             [
               "hq-disruption",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Metarchus",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },

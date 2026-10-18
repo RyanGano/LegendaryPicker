@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "captain-america-75th-anniversary",
   "source": "Q",
   "heroes": [
@@ -478,14 +478,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Black Knight",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -523,14 +531,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Radioactive Man",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               2
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         }

@@ -30,6 +30,8 @@ public sealed record SchemeDifficulty(string Scheme, OppositionTag? Twist = null
 // is a requirement the players show or suffer OnFail; Gate is a requirement to defeat the card. Severity (1..3) belongs
 // to a Check or Gate, and each Inflicts pair carries its own. On says when it fires; it defaults to Strike for a Master
 // Strike, Twist for a Scheme's Twist, Fight for a Tactic or a Gate, and is required otherwise.
+// A card whose effects fire at different times is listed once per timing, same name and copies, each entry with its own
+// effects and On (#292).
 public sealed record OppositionTag(
     string? Name = null,
     int? Copies = null,

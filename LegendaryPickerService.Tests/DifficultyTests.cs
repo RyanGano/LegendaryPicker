@@ -252,6 +252,46 @@ public sealed class DifficultyTests : IDisposable
     }
 
     [Fact]
+    public void A_card_listed_once_per_timing_scores_each_effect_at_only_its_own_timing()
+    {
+        Write(file => file["villainGroups"] = Parse("""
+            [{ "group": "core_villain_hydra", "cards": [
+              { "name": "Viper", "copies": 2, "inflicts": [["wounds", 1]], "on": ["ambush"] },
+              { "name": "Viper", "copies": 2, "inflicts": [["deck-thinning", 1]], "on": ["fight", "escape"] }] }]
+            """));
+        var catalog = BoxCatalog.Load(_boxes, _difficulty);
+        var hydra = catalog.Boxes.Single().VillainGroups.Single(group => group.Id == "core_villain_hydra");
+
+        var parts = DifficultyInputs.Opposition(catalog, null, null, [hydra], [], 5, 8, 0, new Dictionary<string, string>()).Parts;
+
+        Assert.Equal(
+            [(OppositionAxis.Wounds, "Ambush"), (OppositionAxis.DeckThinning, "Fight, Escape")],
+            parts.Select(part => (part.Tag.Inflicts!.Single().Axis, string.Join(", ", part.Timings))));
+    }
+
+    [Fact]
+    public void Rejects_a_card_whose_entries_disagree_on_copies()
+    {
+        Write(file => file["villainGroups"] = Parse("""
+            [{ "group": "core_villain_hydra", "cards": [
+              { "name": "Viper", "copies": 2, "inflicts": [["wounds", 1]], "on": ["ambush"] },
+              { "name": "Viper", "copies": 1, "inflicts": [["deck-thinning", 1]], "on": ["fight"] }] }]
+            """));
+
+        AssertRejected("different copies");
+    }
+
+    [Fact]
+    public void Rejects_a_Villain_card_with_no_name()
+    {
+        Write(file => file["villainGroups"] = Parse("""
+            [{ "group": "core_villain_hydra", "cards": [{ "copies": 2, "inflicts": [["wounds", 1]], "on": ["ambush"] }] }]
+            """));
+
+        AssertRejected("needs a name");
+    }
+
+    [Fact]
     public void Rejects_a_Villain_card_that_does_not_say_when_it_fires()
     {
         Write(file => file["villainGroups"] = Parse("""
@@ -377,7 +417,7 @@ public sealed class DifficultyTests : IDisposable
     {
         var file = JsonNode.Parse("""
             {
-              "schemaVersion": 3,
+              "schemaVersion": 4,
               "box": "core",
               "source": "Q",
               "heroes": [

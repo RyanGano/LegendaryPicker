@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "annihilation",
   "source": "Q",
   "heroes": [
@@ -362,17 +362,38 @@
           "copies": 2,
           "inflicts": [
             [
+              "escape-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Annihilation Armada",
+          "copies": 2,
+          "inflicts": [
+            [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Queens of Annihilation",
+          "copies": 3,
+          "inflicts": [
             [
               "escape-pressure",
               1
             ]
           ],
           "on": [
-            "ambush",
-            "fight"
+            "ambush"
           ]
         },
         {
@@ -384,16 +405,11 @@
               1
             ],
             [
-              "escape-pressure",
-              1
-            ],
-            [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -408,6 +424,13 @@
             "onFail": "wounds"
           },
           "severity": 1,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Ravenous",
+          "copies": 2,
           "inflicts": [
             [
               "attack-inflation",
@@ -415,8 +438,7 @@
             ]
           ],
           "on": [
-            "fight",
-            "escape"
+            "fight"
           ]
         },
         {
@@ -426,7 +448,16 @@
             [
               "attack-inflation",
               3
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Weaponized Galactus",
+          "copies": 1,
+          "inflicts": [
             [
               "wounds",
               2
@@ -437,7 +468,6 @@
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         }
@@ -457,6 +487,13 @@
             "onFail": "wounds"
           },
           "severity": 1,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Immortus",
+          "copies": 2,
           "inflicts": [
             [
               "attack-inflation",
@@ -464,8 +501,7 @@
             ]
           ],
           "on": [
-            "fight",
-            "escape"
+            "fight"
           ]
         },
         {
@@ -486,11 +522,20 @@
           "copies": 2,
           "inflicts": [
             [
-              "attack-inflation",
-              1
-            ],
-            [
               "hand-disruption",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Scarlet Centurion",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
               1
             ],
             [
@@ -499,7 +544,6 @@
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "2099",
   "source": "C1",
   "heroes": [
@@ -402,7 +402,16 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Heimdall 2099",
+          "copies": 2,
+          "inflicts": [
             [
               "escape-pressure",
               1
@@ -413,7 +422,6 @@
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -428,14 +436,22 @@
             [
               "escape-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Hela 2099",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
@@ -446,16 +462,25 @@
             [
               "twist-density",
               1
-            ],
-            [
-              "attack-inflation",
-              2
             ]
           ],
           "on": [
             "ambush",
             "fight",
             "escape"
+          ]
+        },
+        {
+          "name": "Loki 2099",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
           ]
         },
         {
@@ -469,16 +494,24 @@
             [
               "hand-disruption",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush",
+            "escape"
+          ]
+        },
+        {
+          "name": "Thor 2099",
+          "copies": 2,
+          "inflicts": [
             [
               "attack-inflation",
               1
             ]
           ],
           "on": [
-            "ambush",
-            "fight",
-            "escape"
+            "fight"
           ]
         }
       ]
@@ -540,14 +573,22 @@
             [
               "escape-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Jigsaw 2099",
+          "copies": 1,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         }

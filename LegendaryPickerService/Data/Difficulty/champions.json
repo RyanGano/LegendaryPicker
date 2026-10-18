@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "champions",
   "source": "Q",
   "heroes": [
@@ -335,14 +335,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Goom",
+          "copies": 1,
+          "inflicts": [
             [
               "deck-thinning",
               2
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -418,14 +426,22 @@
             [
               "deck-thinning",
               2
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Piledriver",
+          "copies": 2,
+          "inflicts": [
             [
               "hand-disruption",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },

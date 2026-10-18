@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "realm-of-kings",
   "source": "Q",
   "heroes": [
@@ -380,16 +380,24 @@
           "copies": 2,
           "inflicts": [
             [
-              "attack-inflation",
-              1
-            ],
-            [
               "hq-disruption",
               1
             ]
           ],
           "on": [
-            "ambush",
+            "ambush"
+          ]
+        },
+        {
+          "name": "Lash",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
             "fight"
           ]
         },
@@ -404,14 +412,22 @@
             [
               "hq-disruption",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Unspoken",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "second-edition",
   "source": "Q",
   "heroes": [
@@ -1277,6 +1277,13 @@
             "onFail": "wounds"
           },
           "severity": 1,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Ultron",
+          "copies": 2,
           "inflicts": [
             [
               "attack-inflation",
@@ -1284,8 +1291,7 @@
             ]
           ],
           "on": [
-            "fight",
-            "escape"
+            "fight"
           ]
         }
       ]

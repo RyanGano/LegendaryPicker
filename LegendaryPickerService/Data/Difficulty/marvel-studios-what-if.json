@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "marvel-studios-what-if",
   "source": "Q",
   "heroes": [
@@ -737,6 +737,13 @@
             "onFail": "wounds"
           },
           "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Captain Marvel, End of the Party",
+          "copies": 1,
           "inflicts": [
             [
               "escape-pressure",
@@ -744,7 +751,6 @@
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         },
@@ -768,14 +774,22 @@
             [
               "deck-thinning",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Party Korg",
+          "copies": 1,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
@@ -909,14 +923,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Yondu",
+          "copies": 1,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -927,14 +949,22 @@
             [
               "escape-pressure",
               2
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Ulysses Klaue",
+          "copies": 1,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }
@@ -963,14 +993,22 @@
             [
               "wounds",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Proxima Midnight",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -981,14 +1019,22 @@
             [
               "hand-disruption",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Ebony Maw",
+          "copies": 1,
+          "inflicts": [
             [
               "escape-pressure",
               2
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         }
@@ -1030,14 +1076,22 @@
             [
               "escape-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Zombie Wasp",
+          "copies": 1,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -1048,14 +1102,22 @@
             [
               "escape-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Zombie Doctor Strange",
+          "copies": 1,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         },
@@ -1070,6 +1132,13 @@
             "onFail": "wounds"
           },
           "severity": 1,
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Zombie Iron Man",
+          "copies": 1,
           "inflicts": [
             [
               "escape-pressure",
@@ -1077,7 +1146,6 @@
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         },
@@ -1088,14 +1156,22 @@
             [
               "escape-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Zombie Captain America",
+          "copies": 1,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         }
@@ -1142,14 +1218,22 @@
             [
               "wounds",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Demon Champion of Hydra",
+          "copies": 1,
+          "inflicts": [
             [
               "escape-pressure",
               2
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         }

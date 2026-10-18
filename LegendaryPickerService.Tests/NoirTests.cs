@@ -54,8 +54,7 @@ public class NoirTests
 
         var difficulty = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
         Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("Silence the Witnesses's Twists"));
-        // The Goblin always leads Goblin's Freak Show.
-        Assert.Contains(difficulty.Reasons, reason => reason.Contains("Vulture, Carnival Cannibal"));
+        Assert.Contains(difficulty.Reasons, reason => reason.StartsWith("The Goblin, Underworld Boss's Master Strikes"));
     }
 
     private static SetupResult Draw(int players, string scheme, int mastermind) =>

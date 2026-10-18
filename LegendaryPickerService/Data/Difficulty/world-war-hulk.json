@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "world-war-hulk",
   "source": "Q",
   "heroes": [
@@ -1185,14 +1185,22 @@
             [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Hulkbuster Iron Man",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               2
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         }
@@ -1297,14 +1305,22 @@
             [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Headman Charr",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
