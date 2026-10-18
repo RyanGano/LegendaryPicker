@@ -147,7 +147,7 @@ There is no data file; it reads what the drawn cards already carry.
 | boxes beyond the first that supply a drawn card | 0.5 each |
 | setup steps of the Scheme and Mastermind | 0.75 each |
 
-The points map to 0..1 between `PointsEasy` (4) and `PointsHard` (20) and fall into five equal bands: Origin Story, Team-Up,
+The points map to 0..1 between `PointsEasy` (4) and `PointsHard` (40; 20 until #281) and fall into five equal bands: Origin Story, Team-Up,
 Crossover, Multiverse, Event Series. The response's `complexity` is `{ rating, band, reasons, target? }`, the reasons
 naming the biggest contributors first ("Adds Sidekicks and Shards", "11 keywords to know: ..."). A core-only setup rates 1.
 
@@ -245,7 +245,7 @@ rates 3). Every share is weighted by copies:
 
 Each maps to 0 (easy) .. 1 (hard) between two constants, and a weighted sum gives the raw score. All constants, the band
 starts and the band names live in one record, `DifficultyTuning`. Calibration (#268) set them (see Calibration). The first
-band starts at raw 0 and the others at 0.28, 0.365, 0.58 and 0.74.
+band starts at raw 0 and the others at 0.29, 0.39, 0.58 and 0.74 (see Re-calibration, #281).
 
 ## Scorer v1: the opposition
 
@@ -316,4 +316,66 @@ entry where its effects share their timings, where the effect is the same at eac
 available to split it by (Wolverinepool, Umar, Cross' Security Detail, Demonbound Doctor Strange, Rand K'ai, S'ym,
 Ultimaton, Juggernaut, Scorpion and Venom of Second Edition, Shi'ar Death Commandos). The static Attack raises
 (`attack-inflation`) sit at Fight where a card lists it. Ratings fall slightly on the affected cards and nowhere else;
-calibration of the bands stays with #281.
+calibration of the bands stays with #281 (below).
+
+## Re-calibration with every box (#281)
+
+Refitted once, after every box had difficulty data (#269), the per-effect format (#292) and draw-then-repair (#329)
+were in.
+
+Method: 4 seeds (`new Random(1..4)`) of untargeted draws at 1, 2, 4 and 5 players from four selections (core; core, Dark
+City and Secret Wars Vol. 1; Villains, Fear Itself and X-Men; every box), 64 draws in all. Each draw's Hero-Deck raw
+score and opposition load were recorded once, and `LoadEasy` (10 to 25), `LoadHard` (55 to 110), `OppositionWeight`
+(0.25 to 0.5) and the band starts were fitted offline to those numbers, keeping every #268 reference setup in its band.
+No new draws were made for the fit. Targeted draws (`difficulty=1` and `5`, same seeds, 2 and 4 players) were run once
+before and once after.
+
+What changed:
+
+- Difficulty `BandStarts` 0.28, 0.365, 0.58, 0.74 to 0.29, 0.39, 0.58, 0.74. The first band is a little wider, so
+  `difficulty=1` lands more often, and the second takes some of the third. Every reference setup keeps its band (raw
+  0.25, 0.32, 0.32, 0.41, 0.55, 0.60, 0.64, 0.83 against starts 0.29, 0.39, 0.58, 0.74); none needed to move.
+- `LoadEasy` 15, `LoadHard` 55 and `OppositionWeight` 0.4 are unchanged. The fit's best spread (`OppositionWeight` 0.45,
+  starts up to about 0.80) cut the untargeted 5s from 8 to 5 of 64, but `difficulty=5` on the core box then landed 2 of
+  4 times at 2 players instead of 4, and a wider `LoadHard` misplaces the reference setups. Both were rejected.
+- Complexity `PointsHard` 20 to 40. With many boxes ticked a draw has about 18 to 46 points, so every such draw rated 5,
+  Event Series, and `complexity=1` could rarely leave it. The bands stay five equal widths.
+
+Before and after, ratings of the four seeds:
+
+| Boxes | Players | Rating | Before | After |
+|---|---|---|---|---|
+| core | 2 | difficulty, untargeted | 3, 4, 3, 3 | 3, 4, 3, 3 |
+| core | 2 | `difficulty=1` | 1, 1, 1, 2 | 1, 1, 1, 1 |
+| core | 2 | `difficulty=5` | 5, 5, 5, 5 | 5, 5, 5, 5 |
+| core, Dark City, Secret Wars Vol. 1 | 2 | difficulty, untargeted | 2, 3, 3, 3 | 2, 3, 2, 3 |
+| core, Dark City, Secret Wars Vol. 1 | 2 | `difficulty=1` / `5` | 1, 1, 1, 2 / 4, 5, 5, 5 | same |
+| every box | 2 | difficulty, untargeted | 4, 4, 4, 4 | 4, 4, 4, 4 |
+| every box | 2 | `difficulty=1` / `5` | 2, 1, 1, 1 / 5, 5, 5, 5 | same |
+| core | 4 | difficulty, untargeted | 3, 3, 2, 3 | 3, 3, 1, 3 |
+| Villains, Fear Itself, X-Men | 4 | `difficulty=1` | 1, 1, 3, 1 | 1, 1, 2, 1 |
+| every box | 4 | difficulty, untargeted | 5, 5, 4, 5 | 5, 5, 4, 5 |
+| every box | 4 | `difficulty=1` / `5` | 3, 3, 1, 3 / 5, 5, 5, 5 | same |
+| Villains, Fear Itself, X-Men | 2 | complexity, untargeted | 4, 4, 5, 5 | 2, 2, 3, 3 |
+| every box | 2 | complexity, untargeted | 5, 5, 5, 5 | 4, 4, 3, 4 |
+| every box | 2 | `complexity=1` | 1, 5, 1, 5 | 1, 3, 1, 2 |
+| every box | 4 | complexity, untargeted | 5, 5, 5, 5 | 3, 5, 4, 4 |
+| every box | 4 | `complexity=1` | 3, 5, 5, 5 | 2, 4, 2, 2 |
+
+Over all 64 untargeted draws the difficulty counts by rating 1 to 5 went from 3, 4, 25, 24, 8 to 4, 4, 24, 24, 8.
+Targets of 1 and 5 already land almost every time since #329, so the bands had little left to fix at 2 players, where
+no untargeted multi-box draw rated 5. The 3-box set at `complexity=5` now stays at 1 (it was 2 or 3): those boxes bring
+few rules, so a 5 is not in reach there.
+
+What to watch:
+
+- The 5s come from player count, not from the bands. Every drawn Villain Group adds its full load, so the opposition
+  load with every box ticked is 30 to 49 at 2 players, 42 to 73 at 4 and 58 to 87 at 5, past `LoadHard` 55; 6 of the 8
+  untargeted draws of every box at 4 and 5 players rated 5. No setting of the band starts, `LoadEasy`, `LoadHard` or
+  `OppositionWeight` fixes that and keeps the core reference setups in their bands. The fix is in the model (for
+  example, weighing a group's load by its share of the Villain Deck), and it is a question of whether more players
+  should rate harder at all.
+- A draw from many boxes rates 4 at 2 players because its Heroes cost more (a mean cost of about 4.0 to 4.2, near `MeanCostHard`)
+  and share fewer teams. `MeanCostEasy` and `MeanCostHard` were fitted on the core box; they were left alone here.
+- No reference setups from other boxes were added: their bands would be guesses for the owner to confirm, and the fit
+  above did not need them.

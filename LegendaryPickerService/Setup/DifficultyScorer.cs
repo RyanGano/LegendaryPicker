@@ -3,7 +3,8 @@ using LegendaryPickerService.Catalog;
 namespace LegendaryPickerService.Setup;
 
 // Every constant the scorer uses (#264). Each *Easy and *Hard pair maps a measure to 0 (easy) .. 1 (hard), clamped.
-// Calibration (#268) set them once against the reference setups in DifficultyCalibrationTests; change the numbers here and nowhere else.
+// Calibration (#268) set them against the reference setups in DifficultyCalibrationTests, and #281 re-fitted the band
+// starts once every box had data; change the numbers here and nowhere else.
 // BandNames are display strings only; the rating 1..5 is what the code uses.
 public sealed record DifficultyTuning
 {
@@ -34,8 +35,9 @@ public sealed record DifficultyTuning
     public double ClassShareWeight { get; init; } = 0.10;
     public double ClassCountWeight { get; init; } = 0.15;
 
-    // The raw score (0..1) at which each band above the first starts: five equal-width bands.
-    public IReadOnlyList<double> BandStarts { get; init; } = [0.28, 0.365, 0.58, 0.74];
+    // The raw score (0..1) at which each band above the first starts. Fitted to the core reference setups (#268) and
+    // re-fitted with every box's data in (#281), so they are not equal widths.
+    public IReadOnlyList<double> BandStarts { get; init; } = [0.29, 0.39, 0.58, 0.74];
 
     // Band names by rating, 1 to 5.
     public IReadOnlyList<string> BandNames { get; init; } = ["Sidekick", "Street-Level", "Heavy Hitter", "Cosmic Threat", "Secret Wars"];

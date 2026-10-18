@@ -14,6 +14,9 @@ public sealed class ComplexityTests
 {
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
 
+    // A fixed pair rather than every box, so adding a box never changes these draws (#154).
+    private static readonly string[] CoreAnd2099 = ["core", "2099"];
+
     private static Complexity Rate(params string[] boxes) =>
         Assert.IsType<SetupBody>(SetupResponse.From(
             new SetupGenerator(Catalog).Generate(2, boxes, new ScriptedRandom(0, 0)), Catalog)).Complexity;
@@ -27,9 +30,9 @@ public sealed class ComplexityTests
     }
 
     [Fact]
-    public void Several_expansions_rate_higher_than_the_core_box_alone()
+    public void An_expansion_draw_rates_higher_than_the_core_box_alone()
     {
-        Assert.True(Rate("core", "dark-city", "fear-itself", "world-war-hulk", "secret-wars-volume-1", "civil-war").Rating > Rate("core").Rating);
+        Assert.True(Rate(CoreAnd2099).Rating > Rate("core").Rating);
     }
 
     [Fact]
@@ -59,14 +62,13 @@ public sealed class ComplexityTests
     [Fact]
     public void A_multi_box_draw_at_a_target_of_1_is_repaired_to_the_simplest_band_and_keeps_its_Scheme()
     {
-        // Save Humanity against Authoritarian Iron Man rates 2, Team-Up, drawn plainly from these boxes.
-        string[] boxes = ["core", "dark-city", "fear-itself", "world-war-hulk", "secret-wars-volume-1", "civil-war"];
-        SetupResult Draw(int? target) => Assert.IsType<SetupResult>(new SetupGenerator(Catalog).Generate(2, boxes, new ScriptedRandom(20), complexity: target));
+        // Become President of the United States against Alchemax Executives rates 2, Team-Up, drawn plainly from these boxes.
+        SetupResult Draw(int? target) => Assert.IsType<SetupResult>(new SetupGenerator(Catalog).Generate(2, CoreAnd2099, new ScriptedRandom(0, 0), complexity: target));
         Assert.Equal(2, Assert.IsType<SetupBody>(SetupResponse.From(Draw(null), Catalog)).Complexity.Rating);
 
         var setup = Draw(1);
 
-        Assert.Equal("Save Humanity", setup.Scheme.Name);
+        Assert.Equal("Become President of the United States", setup.Scheme.Name);
         var complexity = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog, complexityTarget: 1)).Complexity;
         Assert.Equal((1, true), (complexity.Rating, complexity.Reached));
     }
