@@ -9,64 +9,98 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LegendaryPickerService.Tests;
 
-// A requested target difficulty weights the draw among the options the rules allow (#267).
+// A requested target difficulty repairs the plain draw's open picks toward that band (#267, #329).
 public sealed class DifficultyTargetTests
 {
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
 
-    // Every draw asks for a number below 1000 with a target, so 500 is the middle of the cumulative weights each time.
-    private static ScriptedRandom Middle() => new(Enumerable.Repeat(500, 40).ToArray());
+    // The core box's Super Hero Civil War against Dr. Doom, which rates 3, Heavy Hitter, drawn plainly.
+    private static ScriptedRandom CivilWar() => new(6);
 
-    private static SetupResult Draw(int? difficulty, IRandomSource random) =>
-        Assert.IsType<SetupResult>(new SetupGenerator(Catalog).Generate(2, ["core"], random, difficulty: difficulty));
+    private static SetupResult Draw(int? difficulty, IRandomSource random, params string[] boxes) =>
+        Assert.IsType<SetupResult>(new SetupGenerator(Catalog).Generate(2, boxes.Length > 0 ? boxes : ["core"], random, difficulty: difficulty));
 
-    [Fact]
-    public void The_same_scripted_number_picks_the_easier_option_for_a_target_of_1_and_the_harder_for_5()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(5)]
+    public void A_draw_that_rates_3_is_repaired_into_the_target_band_and_keeps_its_Scheme_and_Mastermind(int target)
     {
-        var expected = new[] { 1.5, 4.5 };
+        Assert.Equal(3, Rating(Draw(null, CivilWar())).Rating);
 
-        var easy = new DifficultyWeights(Catalog, DifficultyTuning.Default, 1, []).Pick(new ScriptedRandom(500), expected);
-        var hard = new DifficultyWeights(Catalog, DifficultyTuning.Default, 5, []).Pick(new ScriptedRandom(500), expected);
+        var setup = Draw(target, CivilWar());
 
-        Assert.Equal((0, 1), (easy, hard));
+        Assert.Equal(("Super Hero Civil War", "Dr. Doom"), (setup.Scheme.Name, setup.Mastermind.Name));
+        var difficulty = Rating(setup, target);
+        Assert.Equal((target, true, null), (difficulty.Rating, difficulty.Reached, difficulty.Note));
     }
 
     [Fact]
-    public void Four_seeds_at_a_target_of_1_rate_lower_in_total_than_at_5()
+    public void A_draw_already_in_the_target_band_is_the_plain_draw()
     {
-        int Total(int target) => Enumerable.Range(0, 4).Sum(seed =>
-            Rating(Draw(target, new CyclingRandom(Enumerable.Range(0, 30).Select(i => (seed * 7919 + i * 104729 + 13) % 100003).ToArray()))).Rating);
+        var plain = Draw(null, CivilWar());
 
-        Assert.True(Total(1) < Total(5), $"target 1 {Total(1)}, target 5 {Total(5)}");
+        var setup = Draw(3, CivilWar());
+
+        Assert.Equal(plain.Heroes.Concat<ICard>(plain.VillainGroups).Concat(plain.HenchmanGroups).Select(card => card.Id),
+            setup.Heroes.Concat<ICard>(setup.VillainGroups).Concat(setup.HenchmanGroups).Select(card => card.Id));
     }
 
     [Fact]
-    public void A_target_that_no_draw_reaches_still_returns_a_legal_setup_with_its_real_rating()
+    public void A_target_the_repair_does_not_reach_returns_the_nearest_band_it_found_and_says_so()
     {
-        // The last option in every draw, at the hardest target.
-        var setup = Draw(5, new ScriptedRandom(Enumerable.Repeat(999, 40).ToArray()));
+        // The Legacy Virus against Dr. Doom comes no closer to Secret Wars than Cosmic Threat in the core box.
+        var difficulty = Rating(Draw(5, new ScriptedRandom(0)), 5);
 
-        Assert.Equal(5, setup.Heroes.Count);
-        Assert.InRange(Rating(setup).Rating, 1, 5);
+        Assert.Equal(
+            (4, false, "The closest to Secret Wars the draw found with this Scheme is Cosmic Threat."),
+            (difficulty.Rating, difficulty.Reached, difficulty.Note));
     }
 
     [Fact]
-    public void Without_a_target_no_draw_is_weighted()
+    public void A_Scheme_with_Hero_rules_keeps_them_when_the_repair_swaps_its_Heroes()
     {
-        var random = new ScriptedRandom();
+        // Fall of the Hulks needs exactly 2 Heroes with "Hulk" in their Hero Names.
+        var plain = Draw(null, new ScriptedRandom(10), "core", "world-war-hulk");
 
-        Draw(null, random);
+        var setup = Draw(5, new ScriptedRandom(10), "core", "world-war-hulk");
 
-        Assert.DoesNotContain(1000, random.Options);
+        Assert.Equal("Fall of the Hulks", setup.Scheme.Name);
+        Assert.NotEqual(plain.Heroes.Select(hero => hero.Id), setup.Heroes.Select(hero => hero.Id));
+        Assert.Equal(5, Rating(setup, 5).Rating);
+        Assert.Equal(2, setup.Heroes.Count(hero => hero.HasInHeroName("Hulk")));
     }
 
     [Fact]
-    public async Task The_response_carries_the_requested_target_and_the_real_rating()
+    public void Four_seeds_keep_the_plain_draws_Scheme_and_land_in_band_or_say_how_close_they_came()
     {
-        var body = await Client(Middle()).GetFromJsonAsync<JsonObject>("/api/setup?players=2&difficulty=1");
+        foreach (var boxes in new[] { new[] { "core" }, ["core", "dark-city", "secret-wars-volume-1"] })
+        {
+            foreach (var target in new[] { 1, 5 })
+            {
+                for (var seed = 0; seed < 4; seed++)
+                {
+                    CyclingRandom Seeded() => new(Enumerable.Range(0, 30).Select(i => (seed * 7919 + i * 104729 + 13) % 100003).ToArray());
+
+                    var setup = Draw(target, Seeded(), boxes);
+
+                    Assert.Equal(Draw(null, Seeded(), boxes).Scheme.Id, setup.Scheme.Id);
+                    var difficulty = Rating(setup, target);
+                    Assert.True(difficulty.Reached == true ? difficulty.Rating == target && difficulty.Note is null : difficulty.Note is not null,
+                        $"{string.Join(",", boxes)} target {target} seed {seed}: {difficulty}");
+                }
+            }
+        }
+    }
+
+    [Fact]
+    public async Task The_response_carries_the_requested_target_the_real_rating_and_whether_it_was_reached()
+    {
+        var body = await Client(CivilWar()).GetFromJsonAsync<JsonObject>("/api/setup?players=2&difficulty=1");
 
         Assert.Equal(1, (int?)body!["difficulty"]!["target"]);
-        Assert.InRange((int)body["difficulty"]!["rating"]!, 1, 5);
+        Assert.Equal(1, (int?)body["difficulty"]!["rating"]);
+        Assert.True((bool?)body["difficulty"]!["reached"]);
+        Assert.Null(body["difficulty"]!["note"]);
     }
 
     [Theory]
@@ -75,15 +109,15 @@ public sealed class DifficultyTargetTests
     [InlineData("hard")]
     public async Task A_difficulty_outside_1_to_5_returns_a_validation_problem(string difficulty)
     {
-        var response = await Client(Middle()).GetAsync($"/api/setup?players=2&difficulty={difficulty}");
+        var response = await Client(new ScriptedRandom()).GetAsync($"/api/setup?players=2&difficulty={difficulty}");
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var problem = await response.Content.ReadFromJsonAsync<JsonObject>();
         Assert.Equal("difficulty must be a whole number from 1 to 5.", (string?)problem!["errors"]!["difficulty"]![0]);
     }
 
-    private static Difficulty Rating(SetupResult setup) =>
-        Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog)).Difficulty;
+    private static Difficulty Rating(SetupResult setup, int? target = null) =>
+        Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog, target)).Difficulty;
 
     private static HttpClient Client(IRandomSource random)
     {

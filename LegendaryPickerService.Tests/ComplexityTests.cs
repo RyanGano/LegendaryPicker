@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LegendaryPickerService.Tests;
 
-// The complexity rating reads the rules a setup brings to learn, and a requested target weights the draw (#270).
+// The complexity rating reads the rules a setup brings to learn, and a requested target repairs the draw toward it (#270, #329).
 public sealed class ComplexityTests
 {
     private static readonly BoxCatalog Catalog = BoxCatalog.Load(BoxCatalog.DefaultDirectory);
@@ -57,39 +57,18 @@ public sealed class ComplexityTests
     }
 
     [Fact]
-    public void The_same_scripted_number_picks_the_simpler_option_for_a_target_of_1_and_the_more_complex_for_5()
+    public void A_multi_box_draw_at_a_target_of_1_is_repaired_to_the_simplest_band_and_keeps_its_Scheme()
     {
-        // Two Heroes to choose between: one with no extra stack and one with Shards.
-        var plain = new Hero("core_hero_a", "A", null, [], []);
-        var shards = plain with { Id = "core_hero_b", Name = "B", Uses = [new PartUse(Part.Shards, "Card")] };
-        Hero Choose(DifficultyWeights weights) => weights.Pick(
-            new ScriptedRandom(500), [plain, shards], hero => weights.Distance(new DifficultyWeights.Drawn(Deck: [hero])));
+        // Save Humanity against Authoritarian Iron Man rates 2, Team-Up, drawn plainly from these boxes.
+        string[] boxes = ["core", "dark-city", "fear-itself", "world-war-hulk", "secret-wars-volume-1", "civil-war"];
+        SetupResult Draw(int? target) => Assert.IsType<SetupResult>(new SetupGenerator(Catalog).Generate(2, boxes, new ScriptedRandom(20), complexity: target));
+        Assert.Equal(2, Assert.IsType<SetupBody>(SetupResponse.From(Draw(null), Catalog)).Complexity.Rating);
 
-        var simple = Choose(new DifficultyWeights(Catalog, DifficultyTuning.Default, null, [], 1));
-        var complex = Choose(new DifficultyWeights(Catalog, DifficultyTuning.Default, null, [], 5));
+        var setup = Draw(1);
 
-        Assert.Equal(("A", "B"), (simple.Name, complex.Name));
-    }
-
-    [Fact]
-    public void A_target_of_2_leans_toward_the_option_that_rates_2_not_the_one_that_rates_1()
-    {
-        // Two stacks (4 points) rate 1, Origin Story; four stacks (8 points) rate 2, Team-Up.
-        var meter = new ComplexityMeter(Catalog);
-        var plain = new Hero("core_hero_a", "A", null, [], []);
-        var two = plain with { Uses = [new PartUse(Part.Shards, "Card"), new PartUse(Part.Sidekicks, "Card")] };
-        var four = plain with
-        {
-            Id = "core_hero_b", Name = "B",
-            Uses = [.. two.Uses!, new PartUse(Part.Bindings, "Card"), new PartUse(Part.Horrors, "Card")],
-        };
-        Assert.Equal((1, 2), (meter.Score(meter.Inputs([two])).Rating, meter.Score(meter.Inputs([four])).Rating));
-        var weights = new DifficultyWeights(Catalog, DifficultyTuning.Default, null, [], 2);
-
-        var picked = weights.Pick(
-            new ScriptedRandom(500), [two, four], hero => weights.Distance(new DifficultyWeights.Drawn(Deck: [hero])));
-
-        Assert.Equal("B", picked.Name);
+        Assert.Equal("Save Humanity", setup.Scheme.Name);
+        var complexity = Assert.IsType<SetupBody>(SetupResponse.From(setup, Catalog, complexityTarget: 1)).Complexity;
+        Assert.Equal((1, true), (complexity.Rating, complexity.Reached));
     }
 
     [Fact]
@@ -106,7 +85,7 @@ public sealed class ComplexityTests
     [Fact]
     public async Task The_response_carries_the_complexity_and_the_requested_target()
     {
-        var body = await Client(new ScriptedRandom(Enumerable.Repeat(500, 40).ToArray()))
+        var body = await Client(new ScriptedRandom())
             .GetFromJsonAsync<JsonObject>("/api/setup?players=2&complexity=1");
 
         Assert.Equal(1, (int?)body!["complexity"]!["target"]);
@@ -114,13 +93,12 @@ public sealed class ComplexityTests
     }
 
     [Fact]
-    public async Task Without_a_target_the_response_has_no_target_and_no_draw_is_weighted()
+    public async Task Without_a_target_the_response_has_no_target()
     {
-        var random = new ScriptedRandom();
-        var body = await Client(random).GetFromJsonAsync<JsonObject>("/api/setup?players=2");
+        var body = await Client(new ScriptedRandom()).GetFromJsonAsync<JsonObject>("/api/setup?players=2");
 
         Assert.Null(body!["complexity"]!["target"]);
-        Assert.DoesNotContain(1000, random.Options);
+        Assert.Null(body["complexity"]!["reached"]);
     }
 
     [Theory]

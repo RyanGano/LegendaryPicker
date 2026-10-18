@@ -513,7 +513,7 @@ function App() {
               <SetupSkeleton />
             </>
           )}
-          {status.kind === 'result' && <SetupChecklist setup={status.setup} bands={bands} mastermindShown={mastermindShown} onShowMastermind={() => setMastermindShown(true)} />}
+          {status.kind === 'result' && <SetupChecklist setup={status.setup} mastermindShown={mastermindShown} onShowMastermind={() => setMastermindShown(true)} />}
           {status.kind === 'noEligibleScheme' && (
             <div className="state-card scheme">
               <p>{status.message}</p>

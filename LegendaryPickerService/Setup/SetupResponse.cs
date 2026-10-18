@@ -11,12 +11,36 @@ public abstract record SetupResponse
 
     public static SetupResponse From(GenerationResult result, BoxCatalog catalog, int? target = null, int? complexityTarget = null) => result switch
     {
-        SetupResult setup => FromSetup(setup, new Glossary(catalog, setup.Boxes, setup.Mixed, RulesetTerms.For(setup.Ruleset)), RateHeroDeck(setup, catalog) with { Target = target }, RateComplexity(setup, catalog) with { Target = complexityTarget }),
+        SetupResult setup => FromSetup(
+            setup,
+            new Glossary(catalog, setup.Boxes, setup.Mixed, RulesetTerms.For(setup.Ruleset)),
+            RateHeroDeck(setup, catalog) is var difficulty && target is not null
+                ? difficulty with
+                {
+                    Target = target, Reached = difficulty.Rating == target,
+                    Note = Closest(setup, catalog, difficulty.Rating, target.Value, difficulty.Band, DifficultyTuning.Default.BandNames),
+                }
+                : difficulty,
+            RateComplexity(setup, catalog) is var complexity && complexityTarget is not null
+                ? complexity with
+                {
+                    Target = complexityTarget, Reached = complexity.Rating == complexityTarget,
+                    Note = Closest(setup, catalog, complexity.Rating, complexityTarget.Value, complexity.Band, ComplexityTuning.Default.BandNames),
+                }
+                : complexity),
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
         _ => throw new ArgumentOutOfRangeException(nameof(result), result, "Unknown generation result."),
     };
+
+    // What the response says when a draw's rating misses its target (#329): the closest band the draw found with its
+    // Scheme, which stays as drawn. It names no rule, since a target is never one. Null when the rating is the target.
+    private static string? Closest(SetupResult setup, BoxCatalog catalog, int rating, int target, string band, IReadOnlyList<string> bands)
+    {
+        var scheme = RulesetTerms.For(catalog.Boxes.Single(box => setup.Scheme.Id.StartsWith(box.Id + "_", StringComparison.Ordinal)).Ruleset).Scheme;
+        return rating == target ? null : $"The closest to {bands[target - 1]} the draw found with this {scheme} is {band}.";
+    }
 
     // The rating comes from the Hero Deck's Heroes; the fill-ins at the end stand in for a Hero a player chose
     // to replace, so they are not rated. A Hero whose box has no difficulty file is left out of the rating, and so is

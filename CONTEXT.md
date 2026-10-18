@@ -122,16 +122,16 @@ A named set of 8 Villain cards selected as one setup component.
 A named set of 10 identical Henchman cards selected as one setup component.
 
 **Difficulty rating**:
-How likely the players are to lose a drawn setup, 1 (easiest) to 5, with a Band name and up to three reasons. It is computed from the whole setup, and a request may name a **Difficulty target** (1 to 5) that only weights the draw among the options the rules already allow: it never relaxes a rule or drops or redraws a Scheme (#267). The first version (#264) reads the Hero Deck only: its cost curve and its team and class mix, weighted by copies.
+How likely the players are to lose a drawn setup, 1 (easiest) to 5, with a Band name and up to three reasons. It is computed from the whole setup, and a request may name a **Difficulty target** (1 to 5) that only steers the draw among the options the rules already allow: it never relaxes a rule or drops or redraws a Scheme (#267, #329). The first version (#264) reads the Hero Deck only: its cost curve and its team and class mix, weighted by copies.
 
 **Difficulty target**:
-The 1 to 5 rating a request asks for with `difficulty=`. Each draw is a weighted pick among the legal options, favouring those whose expected rating is nearest it; the response carries the target beside the setup's real rating, which may differ.
+The 1 to 5 rating a request asks for with `difficulty=`. A target is not a rule: the setup is drawn plainly, then its open picks (the Hero Deck Heroes no card requires and the groups drawn into open slots) are swapped among legal options until its real rating is the target, or as close as the swaps found (#329). The Scheme and Mastermind stay as drawn. The response carries the target, the real rating, whether it was reached and, when it wasn't, a note naming the closest band found.
 
 **Band**:
 One of the five named steps of the Difficulty rating: Sidekick, Street-Level, Heavy Hitter, Cosmic Threat and Secret Wars. A display name only; the rating number is what the code uses.
 
 **Complexity**:
-How much there is to learn and remember in a drawn setup, 1 (simplest) to 5, with a Band name (Origin Story, Team-Up, Crossover, Multiverse, Event Series) and up to three reasons; independent of Difficulty (#270). It reads the expansion keywords and the stacks beyond Wounds and Officers the drawn cards need, mixed rulesets and stand-ins, the boxes drawn cards come from and the Scheme and Mastermind setup steps, never the difficulty tags. A request may name a **Complexity target** with `complexity=`; like the Difficulty target it only weights the draw among legal options.
+How much there is to learn and remember in a drawn setup, 1 (simplest) to 5, with a Band name (Origin Story, Team-Up, Crossover, Multiverse, Event Series) and up to three reasons; independent of Difficulty (#270). It reads the expansion keywords and the stacks beyond Wounds and Officers the drawn cards need, mixed rulesets and stand-ins, the boxes drawn cards come from and the Scheme and Mastermind setup steps, never the difficulty tags. A request may name a **Complexity target** with `complexity=`; like the Difficulty target it only repairs the open picks among legal options, and with both targets the repair minimises the sum of the two distances.
 
 **Player count**:
 The number of players in a game; the First Edition core rules use it to determine setup quantities. This project targets one to five players.
