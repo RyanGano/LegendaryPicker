@@ -25,8 +25,9 @@ public sealed record ComplexityTuning
     public IReadOnlyList<Part> BaselineStacks { get; init; } = [Part.Wounds, Part.Officers];
 
     // Rule-load points at or below which the setup is as simple as it gets, and at or above which it is as complex.
+    // PointsHard was 20 until every box was in (#281): a draw from many boxes reaches about 18 to 46 points and nearly always rated 5.
     public double PointsEasy { get; init; } = 4;
-    public double PointsHard { get; init; } = 20;
+    public double PointsHard { get; init; } = 40;
 
     // The raw score (0..1) at which each band above the first starts: five equal-width bands.
     public IReadOnlyList<double> BandStarts { get; init; } = [0.2, 0.4, 0.6, 0.8];
