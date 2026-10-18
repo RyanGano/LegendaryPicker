@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "marvel-studios-ant-man-and-the-wasp",
   "source": "Q",
   "heroes": [
@@ -1016,14 +1016,22 @@
             [
               "hand-disruption",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "M.O.D.O.K.",
+          "copies": 1,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },

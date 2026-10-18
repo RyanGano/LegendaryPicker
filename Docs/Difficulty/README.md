@@ -20,7 +20,7 @@ takes a `ScoredOpposition`, and the checklist's "Why this rating" lists the oppo
 
 ## What is built (#266)
 
-What the Heroes want and answer. The format is schemaVersion 3 (below): Hero cards gain optional `wants`, `answers`,
+What the Heroes want and answer. Format version 3 (now 4, below): Hero cards gain optional `wants`, `answers`,
 `selfCost` and `draw`, and every core Hero card is tagged. `Setup/DifficultyScorer.cs` rates how well the Hero Deck meets
 its own wants, lets its answers cut the opposition's load, charges self costs, and names the biggest Hero-side causes in
 "Why this rating". Slice #267's weighting reads the same `Expected`, so a target draw sees the new terms too.
@@ -139,14 +139,14 @@ filter. The expected complexity is the cards drawn so far plus the pool's averag
 open, mapped to a continuous rating that rounds to the band (1 at no points, k + 0.5 where band k + 1 starts, 5 at
 `PointsHard`), so a target of 2 leans toward Team-Up setups. Stacks a stand-in replaces count as the stand-in only. Not built: the count of Solo play rules; calibration of the constants is a later pass.
 
-## Data format (schemaVersion 3)
+## Data format (schemaVersion 4)
 
 One file per box, `LegendaryPickerService/Data/Difficulty/<box-id>.json`. A box with no file is valid and rates neutral
 (3). Tags and numbers only, never card text.
 
 ```json
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "core",
   "source": "Q",
   "heroes": [
@@ -164,7 +164,9 @@ One file per box, `LegendaryPickerService/Data/Difficulty/<box-id>.json`. A box 
     { "group": "core_villain_brotherhood",
       "cards": [
         { "name": "Blob", "copies": 2, "gate": ["team", "x-men"], "severity": 2 },
-        { "name": "Juggernaut", "copies": 2, "inflicts": [["deck-thinning", 2]], "on": ["ambush", "escape"] } ] }
+        { "name": "Juggernaut", "copies": 2, "inflicts": [["deck-thinning", 2]], "on": ["ambush", "escape"] },
+        { "name": "Mystique", "copies": 2, "inflicts": [["bystander-pressure", 1]], "on": ["ambush"] },
+        { "name": "Mystique", "copies": 2, "inflicts": [["wounds", 1]], "on": ["escape"] } ] }
   ],
   "henchmanGroups": [
     { "group": "core_henchman_sentinel", "cards": [ { "name": "Sentinel", "inflicts": [["deck-thinning", 1]], "on": ["fight"] } ] }
@@ -183,6 +185,10 @@ The opposition lists are optional. Each tag has at least one of `check`, `gate`,
   needed to defeat the card; `severity` (1..3) belongs to a check or gate; `inflicts` is `[[axis, severity 1..3], ...]`.
 - `on`: `ambush`, `fight`, `escape` for a Villain or Henchman card (required, except a gate, which is a Fight);
   `strike` for a Master Strike and `twist` for a Scheme's Twist (both implied); a Tactic is a `fight`.
+- A tag's effects share one `on`. A card whose effects fire at different times is listed once per timing (#292, the
+  change from version 3, where one `on` covered every effect of a card): same `name` and `copies`, each entry with its own
+  effects and `on`, as Mystique above. The scorer reads each entry as its own part, so an effect counts only at its own
+  timing; the loader rejects entries of one card that disagree on `copies`.
 - Axes: `wounds`, `bystander-pressure`, `hq-disruption`, `hand-disruption`, `attack-inflation`, `escape-pressure`,
   `deck-thinning`, `twist-density`. A Scheme's `amplifies` lists axes its loss condition makes worse.
 - A team value is the `<value>` of a team term `<box>_term_<value>` of any loaded box, since a box's Heroes can belong
@@ -282,3 +288,15 @@ to three reasons about the opposition followed by up to three about the Hero Dec
 `GET /api/ratings` lists the band names of both ratings by rating, for the web app's Difficulty and Complexity pickers
 (#271). A picked band is sent as `difficulty=` or `complexity=`; when the response's `target` differs from its `rating`, the
 panel names the band asked for and says the closest legal setup was drawn.
+
+## Per-effect timing (#292)
+
+Format version 4. Version 3 allowed one `on` list per opposition card, so a card with an Ambush effect and an Escape
+effect counted both at both. A card now appears once per timing (see the format above), and every Data/Difficulty file
+moved to version 4; the service reads only version 4. 78 cards were split across the 40 box files, assigning each tagged
+effect to the timing of the effect it came from, never adding a timing a card did not already list. A card kept as one
+entry where its effects share their timings, where the effect is the same at each timing, or where no card text was
+available to split it by (Wolverinepool, Umar, Cross' Security Detail, Demonbound Doctor Strange, Rand K'ai, S'ym,
+Ultimaton, Juggernaut, Scorpion and Venom of Second Edition, Shi'ar Death Commandos). The static Attack raises
+(`attack-inflation`) sit at Fight where a card lists it. Ratings fall slightly on the affected cards and nowhere else;
+calibration of the bands stays with #281.

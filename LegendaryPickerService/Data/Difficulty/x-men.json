@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "x-men",
   "source": "Q",
   "heroes": [
@@ -1064,14 +1064,22 @@
             [
               "deck-thinning",
               2
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Fatale",
+          "copies": 2,
+          "inflicts": [
             [
               "hq-disruption",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
@@ -1221,14 +1229,22 @@
             [
               "bystander-pressure",
               2
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Minor Domo",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         },
@@ -1239,14 +1255,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Major Domo",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               1
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         },
@@ -1273,14 +1297,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Warwolves",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }
@@ -1500,6 +1532,19 @@
         {
           "name": "Lady Deathstrike",
           "copies": 2,
+          "inflicts": [
+            [
+              "deck-thinning",
+              2
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Lady Deathstrike",
+          "copies": 2,
           "check": {
             "requires": [
               "class",
@@ -1508,14 +1553,7 @@
             "onFail": "wounds"
           },
           "severity": 1,
-          "inflicts": [
-            [
-              "deck-thinning",
-              2
-            ]
-          ],
           "on": [
-            "fight",
             "escape"
           ]
         },

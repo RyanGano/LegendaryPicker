@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "messiah-complex",
   "source": "Q",
   "heroes": [
@@ -756,14 +756,22 @@
             [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Random",
+          "copies": 2,
+          "inflicts": [
             [
               "hand-disruption",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         }
@@ -792,14 +800,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Lord Shingen",
+          "copies": 2,
+          "inflicts": [
             [
               "attack-inflation",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -810,14 +826,22 @@
             [
               "hand-disruption",
               2
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Gorgon",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }
@@ -851,14 +875,21 @@
             [
               "escape-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Sentinel Squad O*N*E*",
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }

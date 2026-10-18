@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "spider-man-homecoming",
   "source": "Q",
   "heroes": [
@@ -312,6 +312,13 @@
             "onFail": "hand-disruption"
           },
           "severity": 1,
+          "on": [
+            "escape"
+          ]
+        },
+        {
+          "name": "Shocker #1",
+          "copies": 2,
           "inflicts": [
             [
               "attack-inflation",
@@ -319,8 +326,7 @@
             ]
           ],
           "on": [
-            "fight",
-            "escape"
+            "fight"
           ]
         },
         {
@@ -411,15 +417,36 @@
             [
               "deck-thinning",
               2
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Chitauri Weapon Assault",
+          "copies": 2,
+          "inflicts": [
             [
               "hand-disruption",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
+          ]
+        },
+        {
+          "name": "Turbine Powered",
+          "copies": 2,
+          "inflicts": [
+            [
+              "bystander-pressure",
+              1
+            ]
+          ],
+          "on": [
+            "ambush"
           ]
         },
         {
@@ -429,14 +456,9 @@
             [
               "attack-inflation",
               1
-            ],
-            [
-              "bystander-pressure",
-              1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }

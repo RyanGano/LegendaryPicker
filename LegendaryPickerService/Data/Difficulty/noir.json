@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "noir",
   "source": "Q",
   "heroes": [
@@ -311,14 +311,22 @@
             [
               "bystander-pressure",
               2
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Vulture, Carnival Cannibal",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               2
             ]
           ],
           "on": [
-            "ambush",
             "escape"
           ]
         },
@@ -329,14 +337,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "The Chameleon",
+          "copies": 2,
+          "inflicts": [
             [
               "escape-pressure",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -347,14 +363,22 @@
             [
               "bystander-pressure",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Kraven, Animal Trainer",
+          "copies": 1,
+          "inflicts": [
             [
               "attack-inflation",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         },
@@ -393,14 +417,22 @@
             [
               "bystander-pressure",
               2
-            ],
+            ]
+          ],
+          "on": [
+            "ambush"
+          ]
+        },
+        {
+          "name": "Fancy Dan",
+          "copies": 1,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "ambush",
             "fight"
           ]
         }

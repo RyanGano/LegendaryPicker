@@ -252,4 +252,4 @@ Use official rulebooks/inserts, official clarifications, or the directly linked 
 - The Contest of Champions' Evil Triumph counter and Annihilation: Conquest's Phalanx-Infected count are tagged as the closest axes; their loss conditions have no axis. Evil choosing from more Hero Deck cards each Contest has none either.
 - Kubik's reveal-two-same-cost Ambush has no class or team requirement, so it is `wounds 1`, not a `check`.
 - Tactics untagged because they only hit other players or only help the fighter: Playthings of a Petulant God, Create the Secret Wars. Passive attack bonuses of Magus per Villain with Shards and the Epic faces are tagged on the Master Strike slot.
-- A card has one timing set (#292): Black Dwarf, Champion of the Universe, Proxima Midnight and Sidera Maris apply their inflicts at each of their listed timings.
+- Per-effect timing (#292): Black Dwarf, Champion of the Universe, Proxima Midnight and Sidera Maris are listed once per timing, each effect at its own.

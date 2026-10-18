@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "box": "deadpool",
   "source": "Q",
   "heroes": [
@@ -321,10 +321,6 @@
           "copies": 2,
           "inflicts": [
             [
-              "attack-inflation",
-              1
-            ],
-            [
               "hand-disruption",
               1
             ]
@@ -335,20 +331,41 @@
           ]
         },
         {
+          "name": "Blind Al and Deuce",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
           "name": "Sluggo",
           "copies": 2,
           "inflicts": [
             [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Sluggo",
+          "copies": 2,
+          "inflicts": [
             [
               "wounds",
               2
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
@@ -374,16 +391,25 @@
           "copies": 2,
           "inflicts": [
             [
-              "attack-inflation",
-              1
-            ],
-            [
               "hand-disruption",
               1
             ]
           ],
           "on": [
             "ambush",
+            "fight"
+          ]
+        },
+        {
+          "name": "Weasel",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
             "fight"
           ]
         }
@@ -412,14 +438,22 @@
             [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "The Deadpool Kid",
+          "copies": 2,
+          "inflicts": [
             [
               "deck-thinning",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
@@ -430,14 +464,22 @@
             [
               "attack-inflation",
               1
-            ],
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
+          "name": "Ultimate Deadpool",
+          "copies": 2,
+          "inflicts": [
             [
               "hq-disruption",
               1
             ]
           ],
           "on": [
-            "fight",
             "escape"
           ]
         },
