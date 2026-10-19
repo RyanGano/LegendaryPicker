@@ -864,6 +864,89 @@ describe('setup codes', () => {
     await waitFor(() => expect(setupRequests()[1]).toMatch(/\/api\/setup\?players=3&boxes=core$/))
   })
 
+  it('saves a setup on this device with a name and note, and reloads it from its code', async () => {
+    setupAnswers.push(() => json(coded))
+    const user = userEvent.setup()
+    const { unmount } = renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    const shown = await screen.findByRole('region', { name: 'Setup code' })
+    await user.click(within(shown).getByRole('button', { name: 'Save' }))
+    const name = within(shown).getByRole('textbox', { name: 'Name' })
+    expect(name).toHaveValue('Midtown Bank Robbery')
+    await user.clear(name)
+    await user.type(name, 'Bank job')
+    await user.type(within(shown).getByRole('textbox', { name: /Note/ }), 'Close game')
+    await user.click(within(shown).getByRole('button', { name: 'Save on this device' }))
+
+    expect(within(shown).getByRole('status')).toHaveTextContent('Saved on this device')
+    const [stored] = JSON.parse(localStorage.getItem('legendaryPicker.savedSetups')!) as Record<string, string>[]
+    expect(Object.keys(stored).sort()).toEqual(['code', 'name', 'note', 'savedAt'])
+    expect(stored).toMatchObject({ code, name: 'Bank job', note: 'Close game' })
+
+    // A later visit lists it and reloads it from its code.
+    unmount()
+    setupAnswers.push(() => json(coded))
+    renderApp()
+    const list = screen.getByRole('region', { name: 'Saved setups' })
+    expect(list).toHaveTextContent('Bank job')
+    expect(list).toHaveTextContent('Close game')
+    await user.click(within(list).getByRole('button', { name: 'Load Bank job' }))
+    expect(await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })).toBeInTheDocument()
+    expect(setupRequests()[1]).toMatch(new RegExp(`/api/setup/${code}$`))
+  })
+
+  it('deletes a saved setup', async () => {
+    const entry = { code, name: 'Bank job', note: '', savedAt: '2026-10-18T12:00:00.000Z' }
+    const other = { ...entry, code: 'other', name: 'Other' }
+    localStorage.setItem('legendaryPicker.savedSetups', JSON.stringify([entry, other]))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: 'Delete Bank job' }))
+
+    expect(screen.queryByRole('button', { name: 'Load Bank job' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Load Other' })).toBeInTheDocument()
+    expect(JSON.parse(localStorage.getItem('legendaryPicker.savedSetups')!)).toEqual([other])
+  })
+
+  it('keeps a setup saved in another tab when this one saves', async () => {
+    setupAnswers.push(() => json(coded))
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    const shown = await screen.findByRole('region', { name: 'Setup code' })
+    const other = { code: 'other', name: 'Other', note: '', savedAt: '2026-10-18T12:00:00.000Z' }
+    localStorage.setItem('legendaryPicker.savedSetups', JSON.stringify([other]))
+
+    await user.click(within(shown).getByRole('button', { name: 'Save' }))
+    await user.click(within(shown).getByRole('button', { name: 'Save on this device' }))
+
+    const stored = JSON.parse(localStorage.getItem('legendaryPicker.savedSetups')!) as { code: string }[]
+    expect(stored.map((entry) => entry.code)).toEqual([code, 'other'])
+    expect(screen.getByRole('button', { name: 'Load Other' })).toBeInTheDocument()
+  })
+
+  it("says so when the browser won't keep a saved setup", async () => {
+    setupAnswers.push(() => json(coded))
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    const shown = await screen.findByRole('region', { name: 'Setup code' })
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('Blocked', 'SecurityError')
+    })
+
+    await user.click(within(shown).getByRole('button', { name: 'Save' }))
+    await user.click(within(shown).getByRole('button', { name: 'Save on this device' }))
+
+    expect(within(shown).getByRole('status')).toHaveTextContent("Couldn't save: this browser isn't keeping site data.")
+    expect(screen.queryByRole('region', { name: 'Saved setups' })).not.toBeInTheDocument()
+  })
+
   it("says so when the API can no longer give a code's cards", async () => {
     const message = 'This setup code can no longer give the same cards: the card data or setup rules have changed since it was made.'
     setupAnswers.push(() => Promise.resolve(Response.json({ title: 'Setup code out of date', status: 409, detail: message }, { status: 409 })))

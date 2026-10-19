@@ -14,6 +14,8 @@ import {
 } from './api/setupApi.ts'
 import { RatingPicker } from './RatingPicker.tsx'
 import { setupTerms } from './rulesetTerms.ts'
+import { SavedSetups } from './SavedSetups.tsx'
+import { loadSavedSetups, storeSavedSetups, withSaved, type SavedSetup } from './savedSetups.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
 import { SetupCode } from './SetupCode.tsx'
 import { SetupSkeleton } from './SetupSkeleton.tsx'
@@ -250,6 +252,7 @@ function App() {
   const [showWakeUpNotice, setShowWakeUpNotice] = useState(false)
   // The code typed or pasted into Load a setup.
   const [codeInput, setCodeInput] = useState('')
+  const [saved, setSaved] = useState<SavedSetup[]>(loadSavedSetups)
 
   // Wake the API while the player is still choosing a count. Strict mode may repeat this harmlessly.
   useEffect(() => {
@@ -392,6 +395,21 @@ function App() {
     } catch {
       setStatus({ kind: 'error' })
     }
+  }
+
+  // Saves the setup on screen under Saved setups; false when the browser won't keep it, and then the list is unchanged.
+  // Each change starts from what storage holds now, so a setup saved in another tab since this page loaded is kept.
+  function saveSetup(code: string, name: string, note: string): boolean {
+    const next = withSaved(loadSavedSetups(), { code, name, note, savedAt: new Date().toISOString() })
+    if (!storeSavedSetups(next)) return false
+    setSaved(next)
+    return true
+  }
+
+  function deleteSaved(code: string) {
+    const next = loadSavedSetups().filter((entry) => entry.code !== code)
+    storeSavedSetups(next)
+    setSaved(next)
   }
 
   // Reloads the setup a code names, as it was shown (#335).
@@ -571,6 +589,7 @@ function App() {
                 </button>
               </div>
             </form>
+            <SavedSetups saved={saved} disabled={loading} onLoad={(code) => void loadCode(code)} onDelete={deleteSaved} />
             {!shownSetup && (
               <p className="intro">
                 Get a random legal setup and a checklist for laying it out, following the official rules.
@@ -578,7 +597,15 @@ function App() {
             )}
           </section>
           {status.kind === 'result' && <SetupSummary setup={status.setup} headingRef={resultHeading} mastermindShown={mastermindShown} />}
-          {status.kind === 'result' && status.setup.code && <SetupCode key={status.setup.code} code={status.setup.code} />}
+          {status.kind === 'result' && status.setup.code && (
+            <SetupCode
+              key={status.setup.code}
+              code={status.setup.code}
+              defaultName={status.setup.scheme.name}
+              saved={saved.find((entry) => entry.code === status.setup.code)}
+              onSave={(name, note) => saveSetup(status.setup.code!, name, note)}
+            />
+          )}
         </div>
 
         {/* Announces each state change. The status below is not live, so a new checklist isn't read

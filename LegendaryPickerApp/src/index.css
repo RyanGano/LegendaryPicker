@@ -486,7 +486,8 @@ div.box-option {
   gap: var(--space-2);
 }
 
-.code-row input {
+.code-row input,
+.save-form input {
   flex: 1;
   min-width: 0;
   min-height: 44px;
@@ -857,6 +858,79 @@ div.box-option {
   min-height: 1.5em;
   font-size: var(--text-sm);
   color: var(--muted);
+}
+
+/* Saving the drawn setup on this device: a name, an optional note, and the save button (#335). */
+.save-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.save-form label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.save-form .detail {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* The setups saved on this device, under Load a setup (#335). */
+.saved-setups {
+  margin-top: var(--space-5);
+}
+
+.saved-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.saved-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.saved-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.saved-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.saved-note {
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.saved-date {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.saved-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .progress {
