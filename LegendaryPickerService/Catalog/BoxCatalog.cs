@@ -1,4 +1,6 @@
 using LegendaryPickerService.Setup;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -64,10 +66,16 @@ public sealed partial class BoxCatalog
     // The difficulty tags by box id; a box without a file is absent and rates neutral.
     public IReadOnlyDictionary<string, BoxDifficulty> Difficulty { get; }
 
-    private BoxCatalog(IReadOnlyList<Box> boxes, IReadOnlyDictionary<string, BoxDifficulty> difficulty)
+    // The version of the box data the cards were drawn from: a SHA-256 of every box file, by name and content, with line
+    // endings normalized so a Windows and a Linux checkout agree. A setup code records it (#335). The difficulty files
+    // are left out, since they change a setup's ratings but never its cards.
+    public string DataVersion { get; }
+
+    private BoxCatalog(IReadOnlyList<Box> boxes, IReadOnlyDictionary<string, BoxDifficulty> difficulty, string dataVersion)
     {
         Boxes = boxes;
         Difficulty = difficulty;
+        DataVersion = dataVersion;
     }
 
     // difficultyDirectory is where the difficulty files are; without it, the service's own difficulty files are
@@ -90,7 +98,18 @@ public sealed partial class BoxCatalog
         difficultyDirectory ??= Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar) == Path.GetFullPath(DefaultDirectory).TrimEnd(Path.DirectorySeparatorChar)
             ? DefaultDifficultyDirectory
             : null;
-        return new BoxCatalog(boxes, LoadDifficulty(difficultyDirectory, boxes));
+        return new BoxCatalog(boxes, LoadDifficulty(difficultyDirectory, boxes), VersionOf(files.Select(file => file.Path)));
+    }
+
+    private static string VersionOf(IEnumerable<string> paths)
+    {
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        foreach (var path in paths.Order(StringComparer.Ordinal))
+        {
+            hash.AppendData(Encoding.UTF8.GetBytes(Path.GetFileName(path) + "\n" + File.ReadAllText(path).Replace("\r\n", "\n") + "\n"));
+        }
+
+        return Convert.ToHexStringLower(hash.GetHashAndReset());
     }
 
     // Reads each Data/Difficulty file, rejecting what a box file would: unknown fields, missing values, and ids that

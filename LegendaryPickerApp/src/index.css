@@ -467,6 +467,38 @@ div.box-option {
   box-shadow: var(--shadow-sm);
 }
 
+/* A quieter action beside a field or under the drawn cards: copying or loading a setup code. */
+.secondary {
+  padding: 0 var(--space-4);
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+}
+
+/* Load a setup: a pasted setup code and its Load button on one row (#335). */
+.code-form {
+  margin-top: var(--space-5);
+}
+
+.code-row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.code-row input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 var(--space-3);
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
 /* The Boxes heading with its check/uncheck all toggle beside it. */
 .boxes-heading {
   display: flex;
@@ -787,6 +819,44 @@ div.box-option {
 .rules-reason cite {
   font-style: normal;
   white-space: nowrap;
+}
+
+/* The drawn setup's code, which reloads it (#335), with its copy buttons. */
+.setup-code {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.setup-code-heading {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.setup-code-value code {
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.setup-code-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.setup-code-copied {
+  min-height: 1.5em;
+  font-size: var(--text-sm);
+  color: var(--muted);
 }
 
 .progress {
