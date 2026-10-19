@@ -260,6 +260,9 @@ against the Hero Deck's 0.6 (`OppositionWeight`). A setup with none of its oppos
 
 These were 4, 24 and half and half until calibration (#268): the opposition load saturated that scale on the core box.
 
+The scale is relative to the player count (#334): at a count other than 2, `LoadEasy` and `LoadHard` both move up by the
+load that count's own Villain Deck adds over the 2-player one (see Relative to the player count, below).
+
 ## Scorer v2: the Heroes' engine and answers
 
 Wants are scored against the other drawn cards, copy-weighted. A `team` or `class` want is met by
@@ -372,10 +375,90 @@ What to watch:
 - The 5s come from player count, not from the bands. Every drawn Villain Group adds its full load, so the opposition
   load with every box ticked is 30 to 49 at 2 players, 42 to 73 at 4 and 58 to 87 at 5, past `LoadHard` 55; 6 of the 8
   untargeted draws of every box at 4 and 5 players rated 5. No setting of the band starts, `LoadEasy`, `LoadHard` or
-  `OppositionWeight` fixes that and keeps the core reference setups in their bands. The fix is in the model (for
-  example, weighing a group's load by its share of the Villain Deck), and it is a question of whether more players
-  should rate harder at all.
+  `OppositionWeight` fixes that and keeps the core reference setups in their bands. The owner decided more players
+  should not rate harder; #334 (below) makes the rating relative to the player count.
 - A draw from many boxes rates 4 at 2 players because its Heroes cost more (a mean cost of about 4.0 to 4.2, near `MeanCostHard`)
   and share fewer teams. `MeanCostEasy` and `MeanCostHard` were fitted on the core box; they were left alone here.
 - No reference setups from other boxes were added: their bands would be guesses for the owner to confirm, and the fit
   above did not need them.
+
+## Relative to the player count (#334)
+
+Owner decision (2026-10-18): the rating is relative to the player count. A 1 or 2 player setup has lower bands than a 4
+or 5 player one, so the easiest 5-player setup is about a middle or hard band on the 2-player scale, and a 5-player
+draw is not mostly 5s.
+
+How: the band starts stay, and the load scale moves with the Villain Deck the player count's rules build.
+`DifficultyInputs.Opposition` reads, from the first loaded base game of the rules the setup follows, how many more
+Villain Groups, Henchman cards and Master Strikes that count's table gives than the 2-player row. A Scheme's own changes
+to the counts are not taken off, so a Scheme that adds a group still rates harder. `DifficultyScorer` moves `LoadEasy`
+and `LoadHard` up by their mean load: `LoadPerVillainGroup` 6.1, `LoadPerHenchmanCard` 0.32 and `LoadPerMasterStrike`
+1.7. These were measured once from the model, not guessed: every loaded box's Villain Groups, Henchman Groups and
+Masterminds' Master Strikes, each rated alone (no Scheme) against the three #268 reference decks and averaged, an untagged
+one counting 0 as the scorer gives it no load. 131 of 132 Villain Groups are tagged (6.16 on average, 1.1 to 19.6); 29
+of 48 Henchman Groups are (0.54 per card).
+
+| Players | First Edition and Villains | Revised (Second Edition, What If...?) |
+|---|---|---|
+| 1 (Solo) | 1 group, 3 Henchman cards and, in First Edition, 1 Master Strike: -15.1 (Villains -8.3) | 1 group, 2 Henchman cards: -8.7 |
+| 2 | 0 | 0 |
+| 3 | 1 more group: +6.1 | +6.1 |
+| 4 | 1 more group, 10 more Henchman cards: +9.3 | 2 more groups, 10 more cards: +15.4 |
+| 5 | 2 more groups, 10 more Henchman cards: +15.4 | 3 more groups, 10 more cards: +21.5 |
+
+At 2 players nothing moves, so every #268 reference setup keeps its band and every 2-player draw below is unchanged.
+
+Complexity is unchanged. More players draw more groups, which can add a keyword or a stack, but the measured complexity
+with every box ticked was already alike at 2 and 4 players (4, 4, 3, 4 and 3, 5, 4, 4 after #281), so a shift there was
+not clearly needed.
+
+Before and after, untargeted, 4 seeds (`new Random(1..4)`, the #281 method), with each draw's opposition load:
+
+| Boxes | Players | Load | Before | After |
+|---|---|---|---|---|
+| core | 1 | 17 to 28 | 3, 1, 3, 1 | 4, 3, 4, 3 |
+| core, Dark City, Secret Wars Vol. 1 | 1 | 15 to 29 | 1, 3, 2, 2 | 3, 4, 3, 3 |
+| Villains, Fear Itself, X-Men | 1 | 13 to 34 | 3, 3, 4, 4 | 3, 3, 4, 4 |
+| every box | 1 | 12 to 40 | 4, 3, 3, 4 | 4, 3, 3, 5 |
+| each of the four | 2 | 22 to 62 | (#281 above) | no change |
+| core | 4 | 29 to 33 | 3, 3, 1, 3 | 3, 2, 1, 2 |
+| core, Dark City, Secret Wars Vol. 1 | 4 | 29 to 54 | 3, 4, 3, 5 | 2, 4, 3, 4 |
+| Villains, Fear Itself, X-Men | 4 | 29 to 44 | 3, 3, 4, 4 | 2, 3, 4, 3 |
+| every box | 4 | 42 to 73 | 5, 5, 4, 5 | 5, 5, 3, 5 |
+| core | 5 | 33 to 42 | 4, 4, 3, 4 | 3, 3, 2, 3 |
+| core, Dark City, Secret Wars Vol. 1 | 5 | 39 to 60 | 3, 4, 4, 5 | 2, 3, 3, 4 |
+| Villains, Fear Itself, X-Men | 5 | 39 to 70 | 3, 4, 4, 4 | 3, 3, 4, 3 |
+| every box | 5 | 58 to 87 | 4, 5, 5, 5 | 4, 4, 4, 5 |
+
+The mean untargeted rating at 1, 2, 4 and 5 players went from 2.75, 3.31, 3.63, 4.06 to 3.50, 3.31, 3.19, 3.31, so
+every count now spreads about the same way. The 5s at 4 and 5 players fell from 8 of 32 to 4.
+
+Targeted, same seeds, `difficulty=1` / `difficulty=5`:
+
+| Boxes | Players | Before | After |
+|---|---|---|---|
+| core | 1 | 1, 1, 1, 1 / 4, 3, 4, 3 | 1, 2, 1, 2 / 5, 4, 5, 4 |
+| core, Dark City, Secret Wars Vol. 1 | 1 | 1, 1, 1, 1 / 4, 5, 4, 5 | 1, 1, 1, 2 / 5, 5, 5, 5 |
+| every box | 1 | 1, 1, 1, 1 / 5, 5, 5, 5 | 1, 1, 1, 2 / 5, 5, 5, 5 |
+| each of the four | 2 | (#281 above) | no change |
+| core | 4 | 1, 1, 1, 1 / 5, 5, 5, 5 | 1, 1, 1, 1 / 4, 4, 4, 4 |
+| every box | 4 | 3, 3, 1, 3 / 5, 5, 5, 5 | 1, 1, 1, 1 / 5, 5, 5, 5 |
+| core | 5 | 1, 1, 1, 2 / 5, 5, 5, 5 | 1, 1, 1, 1 / 4, 4, 4, 4 |
+| every box | 5 | 3, 3, 3, 3 / 5, 5, 5, 5 | 1, 1, 1, 1 / 5, 5, 5, 5 |
+
+Both extremes stay reachable at every count: `DifficultyTargetTests` reaches 1 and 5 at 1, 4 and 5 players with core,
+Dark City and Secret Wars Vol. 1, and `DifficultyCalibrationTests` rates the cheap deck against the light opposition 1
+and the costly deck against the heavy one 5 with their 5-player groups.
+
+What to watch:
+
+- The core box's Villain Groups are lighter than the catalog's (about 4 against 6.1 on average), so a core-only game at
+  4 or 5 players rates about a band lower than before, and `difficulty=5` there stopped at Cosmic Threat in all four
+  seeds (it reached Secret Wars before). Secret Wars is still in reach with core alone (the costly deck against the heavy
+  opposition rates 5 at 5 players), but the repair keeps the drawn Scheme and Mastermind, and these seeds' were lighter.
+- Solo moves furthest, since First Edition Solo has 1 Master Strike against 5: its ratings rose about a band, and
+  `difficulty=1` with core alone landed 2 of 4 times instead of 4. Whether Solo should rate like 2 players is untested in
+  play.
+- The three means were measured against the core reference decks. A deck that fails other boxes' checks more often meets
+  more load per extra group than the shift allows, so every box at 4 players still rates 5 in 3 of 4 seeds. Re-measure
+  the means when many groups are re-tagged.
