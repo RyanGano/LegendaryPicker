@@ -815,3 +815,66 @@ describe('App', () => {
     expect(screen.getByRole('region', { name: 'Complexity' })).not.toHaveTextContent('The closest')
   })
 })
+
+describe('setup codes', () => {
+  const code = '1-a0dul3-30020-4q6n7x-vqv4c39p6bg7'
+  const coded: Setup = { ...setup, boxes: ['core'], code }
+
+  afterEach(() => window.history.replaceState(null, '', '/'))
+
+  it('shows the code with the setup and copies a link that reloads it', async () => {
+    setupAnswers.push(() => json(coded))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    const shown = await screen.findByRole('region', { name: 'Setup code' })
+    expect(shown).toHaveTextContent(code)
+    await user.click(within(shown).getByRole('button', { name: 'Copy link' }))
+    expect(await navigator.clipboard.readText()).toBe(`${window.location.origin}/?code=${code}`)
+    expect(within(shown).getByRole('status')).toHaveTextContent('Link copied')
+  })
+
+  it('reloads a pasted code', async () => {
+    setupAnswers.push(() => json(coded))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.type(screen.getByRole('textbox', { name: 'Setup code' }), ` ${code} `)
+    await user.click(screen.getByRole('button', { name: 'Load' }))
+
+    expect(await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })).toBeInTheDocument()
+    expect(setupRequests()).toEqual([expect.stringMatching(new RegExp(`/api/setup/${code}$`))])
+  })
+
+  it('opens a link on its setup once and takes the code out of the address', async () => {
+    window.history.replaceState(null, '', `/?code=${code}`)
+    setupAnswers.push(() => json(coded), () => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    expect(await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })).toBeInTheDocument()
+    expect(setupRequests()).toEqual([expect.stringMatching(new RegExp(`/api/setup/${code}$`))])
+    expect(window.location.search).toBe('')
+
+    // No count was picked before the link opened, so Generate another draws for the loaded setup's.
+    await user.click(screen.getByRole('button', { name: 'Generate another' }))
+    await waitFor(() => expect(setupRequests()[1]).toMatch(/\/api\/setup\?players=3&boxes=core$/))
+  })
+
+  it("says so when the API can no longer give a code's cards", async () => {
+    const message = 'This setup code can no longer give the same cards: the card data or setup rules have changed since it was made.'
+    setupAnswers.push(() => Promise.resolve(Response.json({ title: 'Setup code out of date', status: 409, detail: message }, { status: 409 })))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.type(screen.getByRole('textbox', { name: 'Setup code' }), code)
+    await user.click(screen.getByRole('button', { name: 'Load' }))
+
+    await waitFor(() => expect(announced()).toBe(message))
+    expect(document.querySelector('.status')).toHaveTextContent(`${message}Generate a new setup instead.`)
+    expect(screen.queryByRole('heading', { name: 'Midtown Bank Robbery' })).not.toBeInTheDocument()
+  })
+})

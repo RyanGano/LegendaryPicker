@@ -190,6 +190,9 @@ A box's short about text, shown from the info button beside it in the box picker
 **Special cards**:
 The printed names of the special cards a box shuffles into a shared stack, such as Dimensions' Special Bystanders. The checklist lists them, by box, from an (i) button beside the stack's line.
 
+**Setup code**:
+A short string that reloads one drawn setup (#335), shown under the drawn cards with buttons to copy it or a link (`?code=`) that opens it. It names the cards, not a seed: the box data version, the player count, the chosen rule edition, Epic Masterminds, the targets, the included boxes and each drawn card, every id as a six-character token. Reloading draws again with each draw taking the card the code names, so a code keeps working while its cards can still be drawn together, even after other box data changes; when they can't, it says so instead of showing another setup. `GET /api/setup/{code}` returns the setup with its shown ratings, player count and box ids.
+
 **No eligible Scheme**:
 The result when no Scheme in the included boxes is allowed at the player count, or no Mastermind is included. It is a result, not an error.
 

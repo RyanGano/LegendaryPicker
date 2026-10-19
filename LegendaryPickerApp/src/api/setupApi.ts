@@ -224,6 +224,10 @@ export type Complexity = {
 export type Setup = {
   kind: 'setup'
   players: number
+  // The ids of the included boxes. Left out by an API from before setup codes.
+  boxes?: string[]
+  // The setup code that reloads this setup (#335). Left out by an API from before setup codes.
+  code?: string
   // Left out by an API from before rulesets, which drew First Edition setups only.
   ruleset?: Ruleset
   // Present, and true, only when the drawn cards come from more than one ruleset.
@@ -373,6 +377,34 @@ export async function getSetup(
     const body = (await response.json()) as SetupResponse
     if (body.kind !== 'setup' && body.kind !== 'noEligibleScheme') {
       throw new Error('GET /api/setup returned an unknown result.')
+    }
+    return body
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
+// A setup code the API can't reload: message says why, in words for the player (not a code, or one the current card
+// data can no longer reproduce).
+export class SetupCodeError extends Error {}
+
+// The setup a setup code names, as it was shown (#335). Throws SetupCodeError when the API says the code isn't one or
+// can no longer give the same cards, and throws like getSetup on any other failure.
+export async function getSetupByCode(code: string): Promise<Setup> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/setup/${encodeURIComponent(code)}`, { signal: controller.signal })
+    if (response.status === 400 || response.status === 409) {
+      const problem = (await response.json()) as { detail?: string; errors?: { code?: string[] } }
+      throw new SetupCodeError(problem.errors?.code?.[0] ?? problem.detail ?? "That setup code can't be loaded.")
+    }
+    if (!response.ok) {
+      throw new Error(`GET /api/setup/{code} returned ${response.status}.`)
+    }
+    const body = (await response.json()) as Setup
+    if (body.kind !== 'setup') {
+      throw new Error('GET /api/setup/{code} returned an unknown result.')
     }
     return body
   } finally {

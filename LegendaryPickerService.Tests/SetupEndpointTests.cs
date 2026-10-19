@@ -31,7 +31,7 @@ public sealed class SetupEndpointTests : IDisposable
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
-        var body = JsonNode.Parse(await response.Content.ReadAsStringAsync());
+        var body = WithoutCode(await response.Content.ReadAsStringAsync());
         Assert.True(JsonNode.DeepEquals(JsonNode.Parse(ExpectedTwoPlayerSetup), body), body?.ToJsonString());
     }
 
@@ -332,7 +332,7 @@ public sealed class SetupEndpointTests : IDisposable
         File.Copy(Path.Combine(BoxCatalog.DefaultDifficultyDirectory, "core.json"), Path.Combine(difficulty, "core.json"));
         var client = Client(new ScriptedRandom(7, 3), BoxCatalog.Load(MultiBoxSetupTests.FixtureDirectory, difficulty));
 
-        var body = JsonNode.Parse(await client.GetStringAsync("/api/setup?players=2&boxes=core"));
+        var body = WithoutCode(await client.GetStringAsync("/api/setup?players=2&boxes=core"));
 
         Assert.True(JsonNode.DeepEquals(JsonNode.Parse(ExpectedTwoPlayerSetup), body), body?.ToJsonString());
     }
@@ -636,6 +636,14 @@ public sealed class SetupEndpointTests : IDisposable
         return factory.CreateClient();
     }
 
+    // A setup's body less its setup code, which changes with the box data (#335); SetupCodeTests covers it.
+    private static JsonNode WithoutCode(string json)
+    {
+        var body = JsonNode.Parse(json)!.AsObject();
+        Assert.True(body.Remove("code"));
+        return body;
+    }
+
     private static HttpRequestMessage Preflight(string origin) => new(HttpMethod.Options, "/api/setup?players=3")
     {
         Headers =
@@ -649,6 +657,7 @@ public sealed class SetupEndpointTests : IDisposable
         {
           "kind": "setup",
           "players": 2,
+          "boxes": ["core"],
           "ruleset": "firstEdition",
           "scheme": { "id": "core_scheme_unleash-the-power-of-the-cosmic-cube", "name": "Unleash the Power of the Cosmic Cube", "terms": ["core_term_scheme-twist"] },
           "mastermind": { "id": "core_mastermind_red-skull", "name": "Red Skull", "terms": ["core_term_always-leads", "core_term_fight", "core_term_master-strike", "core_term_mastermind-tactic"] },

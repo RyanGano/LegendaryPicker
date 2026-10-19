@@ -54,6 +54,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddSingleton(BoxCatalog.Load(BoxCatalog.DefaultDirectory));
 builder.Services.AddSingleton<SetupGenerator>();
+builder.Services.AddSingleton<SetupCodes>();
 builder.Services.AddSingleton<IRandomSource, SharedRandomSource>();
 
 var app = builder.Build();
@@ -97,7 +98,7 @@ var editions = new Dictionary<string, Ruleset>(StringComparer.Ordinal)
 // Mastermind that has an Epic side on that side (#185). rules names the rule edition the whole setup follows; without
 // it the boxes decide (D-editions, #240).
 // NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
-app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? rules, string? difficulty, string? complexity, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog) =>
+app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? rules, string? difficulty, string? complexity, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog, SetupCodes codes) =>
 {
     // "Generate another" must always draw a fresh setup.
     response.Headers.CacheControl = "no-store";
@@ -162,7 +163,23 @@ app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? ru
         return Results.ValidationProblem(new Dictionary<string, string[]> { ["boxes"] = [problem] });
     }
 
-    return Results.Ok(SetupResponse.From(generator.Generate(count, included, random, epic ?? false, edition, target, complexityTarget), catalog, target, complexityTarget));
+    var result = generator.Generate(count, included, random, epic ?? false, edition, target, complexityTarget);
+    return Results.Ok(SetupResponse.From(result, catalog, target, complexityTarget, codes.For(result, edition, epic ?? false, target, complexityTarget)));
+}).RequireRateLimiting(SetupRateLimit);
+
+// The setup a setup code names (#335), with the ratings and targets it was shown with, so the app can reload a pasted
+// code or a link and a script can read a code's setup without the browser. A code that isn't one is a 400; one the
+// current data can no longer reproduce is a 409, whose detail says so.
+app.MapGet("/api/setup/{code}", (string code, HttpResponse response, BoxCatalog catalog, SetupCodes codes) =>
+{
+    response.Headers.CacheControl = "no-store";
+    return codes.Load(code) switch
+    {
+        SetupCodes.Loaded loaded => Results.Ok(SetupResponse.From(loaded.Setup, catalog, loaded.Difficulty, loaded.Complexity, loaded.Code)),
+        SetupCodes.Invalid invalid => Results.ValidationProblem(new Dictionary<string, string[]> { ["code"] = [invalid.Message] }),
+        SetupCodes.Outdated outdated => Results.Problem(outdated.Message, statusCode: StatusCodes.Status409Conflict, title: "Setup code out of date"),
+        var other => throw new InvalidOperationException($"Unknown reload {other}."),
+    };
 }).RequireRateLimiting(SetupRateLimit);
 
 app.Run();

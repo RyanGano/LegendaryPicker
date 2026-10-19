@@ -190,13 +190,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return new NoEligibleScheme(players);
         }
 
-        var scheme = schemes[random.Next(schemes.Count)];
+        var scheme = random.Pick(schemes);
         var pairs = masterminds
             .Where(mastermind => !mastermind.RuledOutBy(scheme))
             .Select(mastermind => (Mastermind: mastermind, Draw: draws.FirstOrDefault(draw => draw.Follows(scheme, mastermind))))
             .Where(pair => pair.Draw is not null)
             .ToList();
-        var (drawn, draw) = pairs[random.Next(pairs.Count)];
+        var drawn = random.Pick(pairs.Select(pair => pair.Mastermind).ToList());
+        var draw = pairs.Single(pair => pair.Mastermind == drawn).Draw;
         return draw!.Finish(scheme, epic ? draw.PlayedEpic(drawn) : drawn);
     }
 
@@ -306,7 +307,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             var villainsSetAside = VillainsSetAside(plan, mastermind, villainGroups, drainedLeads, slotNotes);
             var outside = DrawOutsideHeroes(deck);
-            plan = plan with { Steps = FillHeroSteps(plan, heroes, outside) };
+            var (steps, stepHeroes) = FillHeroSteps(plan, heroes, outside);
+            plan = plan with { Steps = steps };
 
             // The Masterminds the Scheme draws besides its own, from the included ones the setup doesn't otherwise use.
             var drawnDrained = drainedLeads.Select(entry => entry.other).ToList();
@@ -543,7 +545,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 outsideMasterminds,
                 villainsSetAside,
                 joinsLater is not null ? Reveal(plan.Scheme, drawnMastermind, joinsLater) : null,
-                plan.Scheme.Setup.PlayersChooseHeroes is not null ? Math.Min(players, heroes.Count) : 0);
+                plan.Scheme.Setup.PlayersChooseHeroes is not null ? Math.Min(players, heroes.Count) : 0,
+                stepHeroes);
         }
 
         // What a setup with these cards lays out: the rulesets of the cards, whether they are mixed, the boxes whose
@@ -1267,13 +1270,13 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // A setup step that would leave a Hero to the players names a placeholder the app fills by drawing (#242): {hero}
         // is an extra Hero for the Hero Deck, as Avatarr's, drawn from the included Heroes the setup doesn't use that keep
         // the Scheme's Hero rules met with it in the Hero Deck, else from any it doesn't use. With none to draw, the step
-        // keeps the words its rule note uses.
+        // keeps the words its rule note uses. The Heroes drawn for the steps come back with them, for the setup code (#335).
         private const string HeroPlaceholder = "{hero}";
 
         private static string Unfilled(string label) =>
             label.Replace(HeroPlaceholder, "an extra Hero");
 
-        private IReadOnlyList<string> FillHeroSteps(SetupPlan plan, IReadOnlyList<Hero> deck, IReadOnlyList<OutsideHero> outside)
+        private (IReadOnlyList<string> Steps, IReadOnlyList<Hero> Extras) FillHeroSteps(SetupPlan plan, IReadOnlyList<Hero> deck, IReadOnlyList<OutsideHero> outside)
         {
             var outsideHeroes = outside.Select(drawn => drawn.Hero).ToList();
             var outsideRules = plan.Outside.SelectMany(draw => Enumerable.Repeat(draw.Rule, draw.Count)).ToList();
@@ -1298,7 +1301,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 return Unfilled(label);
             }
 
-            return plan.Steps.Select(Fill).ToList();
+            return (plan.Steps.Select(Fill).ToList(), extras);
         }
 
         // "X-Men Heroes", "Jean Grey Hero" or "Heroes": what count Heroes of a team or a Hero Name are called.
@@ -1339,7 +1342,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             _ => throw new ArgumentOutOfRangeException(nameof(to), to, null),
         };
 
-        private List<T> DrawMany<T>(IEnumerable<T> options, int count)
+        private List<T> DrawMany<T>(IEnumerable<T> options, int count) where T : ICard
         {
             var left = options.ToList();
             var drawn = new List<T>();
@@ -1353,7 +1356,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return drawn;
         }
 
-        private T DrawOne<T>(IReadOnlyList<T> options) => options[random.Next(options.Count)];
+        private T DrawOne<T>(IReadOnlyList<T> options) where T : ICard => random.Pick(options);
 
         // The drawn Henchman Groups that are the Scheme's extra groups when it gives them a card count of their own: the
         // last of those drawn into open slots, as every drawn group is random, never a group the Scheme requires or the

@@ -9,10 +9,12 @@ public abstract record SetupResponse
 {
     public abstract string Kind { get; }
 
-    public static SetupResponse From(GenerationResult result, BoxCatalog catalog, int? target = null, int? complexityTarget = null) => result switch
+    // code is the setup code that reloads the setup (#335), or null to leave it out.
+    public static SetupResponse From(GenerationResult result, BoxCatalog catalog, int? target = null, int? complexityTarget = null, string? code = null) => result switch
     {
         SetupResult setup => FromSetup(
             setup,
+            code,
             new Glossary(catalog, setup.Boxes, setup.Mixed, RulesetTerms.For(setup.Ruleset)),
             RateHeroDeck(setup, catalog) is var difficulty && target is not null
                 ? difficulty with
@@ -72,7 +74,7 @@ public abstract record SetupResponse
         return meter.Score(meter.Inputs(cards, stacks, setup.StandIns));
     }
 
-    private static SetupBody FromSetup(SetupResult setup, Glossary glossary, Difficulty difficulty, Complexity complexity)
+    private static SetupBody FromSetup(SetupResult setup, string? code, Glossary glossary, Difficulty difficulty, Complexity complexity)
     {
         var scheme = glossary.Component(setup.Scheme.Id, setup.Scheme.Name, setup.Scheme.Terms);
         var mastermind = glossary.Component(setup.Mastermind.Id, setup.Mastermind.Name, setup.Mastermind.Terms);
@@ -135,6 +137,7 @@ public abstract record SetupResponse
 
         return new SetupBody(
             setup.Players,
+            setup.Boxes.Select(box => box.Id).ToList(),
             setup.Ruleset,
             scheme,
             mastermind,
@@ -162,7 +165,8 @@ public abstract record SetupResponse
             villainsSetAside.Count > 0 ? villainsSetAside : null,
             specialCards.Count > 0 ? specialCards : null,
             reveal,
-            setup.FillInHeroes);
+            setup.FillInHeroes,
+            code);
     }
 
     // Every loaded box's glossary terms, ordered teams, then classes, then keywords, each in catalog order.
@@ -239,9 +243,11 @@ public abstract record SetupResponse
 // Difficulty is always written: the rating of the drawn Hero Deck, 1 easiest to 5 (#264). Complexity is always written:
 // how much there is to learn and remember, 1 simplest to 5 (#270). MastermindReveal is written
 // only when the Scheme adds its Mastermind mid-game (#245): the checklist then hides mastermind behind a button, and the
-// reveal holds what it shows with it.
+// reveal holds what it shows with it. Boxes are the ids of the included boxes. Code is the setup code that reloads the setup
+// (#335), written when the response has one.
 public sealed record SetupBody(
     int Players,
+    IReadOnlyList<string> Boxes,
     Ruleset Ruleset,
     Component Scheme,
     Component Mastermind,
@@ -269,7 +275,8 @@ public sealed record SetupBody(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<VillainsSetAsideBody>? VillainsSetAside = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] IReadOnlyList<SpecialCardsBody>? SpecialCards = null,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] MastermindRevealBody? MastermindReveal = null,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int FillInHeroes = 0) : SetupResponse
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] int FillInHeroes = 0,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Code = null) : SetupResponse
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "setup";

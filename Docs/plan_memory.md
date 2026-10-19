@@ -18,6 +18,10 @@ This is a handoff snapshot. `Docs/Plan.md` holds the decisions, the verified Fir
 
 A request may ask for a target with `difficulty=1..5` (#267; anything else is a 400) or `complexity=1..5` (#270). Since #329 the setup is drawn plainly and its open picks (Hero Deck Heroes no card requires, groups drawn into open slots) are then repaired by single swaps among legal options, judged by the response's own scorers (`Setup/RatingTargets.cs`); it never relaxes a rule or changes the Scheme or Mastermind, and a target it doesn't reach keeps the closest choice. Without a target the draw is unchanged. The response's `difficulty` and `complexity` carry `target`, `reached` and, when it wasn't reached, a `note` beside the real rating; the web app shows the note. The web app's Difficulty and Complexity pickers (#271) list the band names from `GET /api/ratings` and send the picked band; "Any" sends nothing.
 
+## Setup codes (#335 part 1, 2026-10-18)
+
+Every drawn setup carries a setup code that stores the cards plus the box data version, not a seed (the issue's recommendation); `GET /api/setup/{code}` reloads it with its shown ratings, player count and box ids, or answers 409 when the current data can no longer give the same cards. Format and replay: Setup codes in `Docs/Plan.md`. The `/record-rating` and `/recalibrate-bands` skills and saving favourites in browser storage are later PRs of #335.
+
 ## Resolved in the 2026-09-27 session
 
 - The whole core-box catalog is confirmed. An earlier note wrongly listed Sentinel and Hand Ninjas as Villain Groups; they are Henchman Groups.

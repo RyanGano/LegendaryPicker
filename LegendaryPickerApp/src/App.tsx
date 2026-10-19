@@ -1,9 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { BoxInfo } from './BoxInfo.tsx'
-import { getBoxes, getRatingBands, getSetup, ping, type Box, type RatingBands, type RuleEdition, type Setup } from './api/setupApi.ts'
+import {
+  getBoxes,
+  getRatingBands,
+  getSetup,
+  getSetupByCode,
+  ping,
+  SetupCodeError,
+  type Box,
+  type RatingBands,
+  type RuleEdition,
+  type Setup,
+} from './api/setupApi.ts'
 import { RatingPicker } from './RatingPicker.tsx'
 import { setupTerms } from './rulesetTerms.ts'
 import { SetupChecklist } from './SetupChecklist.tsx'
+import { SetupCode } from './SetupCode.tsx'
 import { SetupSkeleton } from './SetupSkeleton.tsx'
 import { SetupSummary } from './SetupSummary.tsx'
 
@@ -47,6 +59,18 @@ const WHAT_IF_RULEBOOK_URL = 'https://upperdeck.com/wp-content/uploads/2024/05/W
 // Source SE in LegendaryPickerService/Data/Boxes/second-edition.json: the Second Edition rulebook.
 const SECOND_EDITION_RULEBOOK_URL = 'https://upperdeck.com/wp-content/uploads/2026/08/Legendary-Second-Edition-Rulebook.pdf'
 const REPO_URL = 'https://github.com/RyanGano/LegendaryPicker'
+// The query parameter of a link that reloads a setup from its code (#335).
+const CODE_PARAM = 'code'
+
+// The setup code a link opened the page with, taken out of the address so a reload or a later draw doesn't bring it back.
+function takeLinkedCode(): string | null {
+  const url = new URL(window.location.href)
+  const code = url.searchParams.get(CODE_PARAM)
+  if (code === null) return null
+  url.searchParams.delete(CODE_PARAM)
+  window.history.replaceState(window.history.state, '', url)
+  return code.trim() || null
+}
 
 // Storage is a convenience: private browsing or blocked site data must not break the page.
 function loadPlayerCount(): number | null {
@@ -168,11 +192,13 @@ function saveBoxes(ids: string[]) {
   }
 }
 
+// A loading state without players is a setup code being reloaded. codeError is a code the API can't reload, with why.
 type Status =
   | { kind: 'idle' }
-  | { kind: 'loading'; players: number }
+  | { kind: 'loading'; players?: number }
   | { kind: 'result'; setup: Setup }
   | { kind: 'noEligibleScheme'; message: string }
+  | { kind: 'codeError'; message: string }
   | { kind: 'error' }
 
 function playerCount(players: number) {
@@ -187,7 +213,7 @@ function announcement(status: Status, showWakeUpNotice: boolean) {
     case 'idle':
       return ''
     case 'loading':
-      return `Drawing a setup for ${playerCount(status.players)}…${
+      return `${status.players === undefined ? 'Loading the setup code' : `Drawing a setup for ${playerCount(status.players)}`}…${
         showWakeUpNotice ? ' The server may be waking up. This can take up to 30 seconds.' : ''
       }`
     case 'result': {
@@ -199,6 +225,8 @@ function announcement(status: Status, showWakeUpNotice: boolean) {
     }
     case 'noEligibleScheme':
       return `${status.message} Pick another player count.`
+    case 'codeError':
+      return status.message
     case 'error':
       return "Couldn't get a setup. Check your connection and try again."
   }
@@ -220,6 +248,8 @@ function App() {
   // that fails or finds no legal Scheme keeps it.
   const [shownSetup, setShownSetup] = useState(false)
   const [showWakeUpNotice, setShowWakeUpNotice] = useState(false)
+  // The code typed or pasted into Load a setup.
+  const [codeInput, setCodeInput] = useState('')
 
   // Wake the API while the player is still choosing a count. Strict mode may repeat this harmlessly.
   useEffect(() => {
@@ -238,6 +268,14 @@ function App() {
 
   useEffect(() => {
     void getRatingBands().then(setBands, () => {})
+  }, [])
+
+  // A link with a setup code opens on that setup. The ref keeps strict mode's second run from loading it twice.
+  const linkedCode = useRef<string | null | undefined>(undefined)
+  useEffect(() => {
+    if (linkedCode.current !== undefined) return
+    linkedCode.current = takeLinkedCode()
+    if (linkedCode.current !== null) void loadCode(linkedCode.current)
   }, [])
 
   const loading = status.kind === 'loading'
@@ -320,9 +358,13 @@ function App() {
     </div>
   )
 
-  // Generate, Generate another and Retry all draw for the selected count and boxes.
+  // The setup code Retry loads again when the last request loaded one; null when it was a draw.
+  const lastCode = useRef<string | null>(null)
+
+  // Generate, Generate another and Retry after a failed draw all draw for the selected count and boxes.
   async function generate() {
     if (players === null) return
+    lastCode.current = null
     setStatus({ kind: 'loading', players })
     setMastermindShown(false)
     try {
@@ -349,6 +391,22 @@ function App() {
       }
     } catch {
       setStatus({ kind: 'error' })
+    }
+  }
+
+  // Reloads the setup a code names, as it was shown (#335).
+  async function loadCode(code: string) {
+    lastCode.current = code
+    setStatus({ kind: 'loading' })
+    setMastermindShown(false)
+    try {
+      const setup = await getSetupByCode(code)
+      // A link opened before any count was picked would leave Generate another with no count to draw for.
+      setPlayers((current) => current ?? setup.players)
+      setStatus({ kind: 'result', setup })
+      setShownSetup(true)
+    } catch (error) {
+      setStatus(error instanceof SetupCodeError ? { kind: 'codeError', message: error.message } : { kind: 'error' })
     }
   }
 
@@ -488,6 +546,31 @@ function App() {
             >
               Generate
             </button>
+            <form
+              className="code-form"
+              aria-labelledby="code-label"
+              onSubmit={(event) => {
+                event.preventDefault()
+                if (codeInput.trim()) void loadCode(codeInput.trim())
+              }}
+            >
+              <h2 id="code-label">Load a setup</h2>
+              <div className="code-row">
+                <input
+                  type="text"
+                  aria-label="Setup code"
+                  placeholder="Paste a setup code"
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={codeInput}
+                  disabled={loading}
+                  onChange={(event) => setCodeInput(event.target.value)}
+                />
+                <button type="submit" className="secondary" disabled={loading || codeInput.trim() === ''}>
+                  Load
+                </button>
+              </div>
+            </form>
             {!shownSetup && (
               <p className="intro">
                 Get a random legal setup and a checklist for laying it out, following the official rules.
@@ -495,6 +578,7 @@ function App() {
             )}
           </section>
           {status.kind === 'result' && <SetupSummary setup={status.setup} headingRef={resultHeading} mastermindShown={mastermindShown} />}
+          {status.kind === 'result' && status.setup.code && <SetupCode key={status.setup.code} code={status.setup.code} />}
         </div>
 
         {/* Announces each state change. The status below is not live, so a new checklist isn't read
@@ -506,7 +590,7 @@ function App() {
         <section className="status">
           {status.kind === 'loading' && (
             <>
-              <p className="loading-line">Drawing a setup…</p>
+              <p className="loading-line">{status.players === undefined ? 'Loading the setup…' : 'Drawing a setup…'}</p>
               {showWakeUpNotice && (
                 <p className="notice">The server may be waking up. This can take up to 30 seconds.</p>
               )}
@@ -520,10 +604,16 @@ function App() {
               <p className="state-prompt">Pick another player count.</p>
             </div>
           )}
+          {status.kind === 'codeError' && (
+            <div className="state-card">
+              <p>{status.message}</p>
+              <p className="state-prompt">Generate a new setup instead.</p>
+            </div>
+          )}
           {status.kind === 'error' && (
             <div className="state-card">
               <p>Couldn't get a setup. Check your connection and try again.</p>
-              <button type="button" className="primary" onClick={generate}>
+              <button type="button" className="primary" onClick={() => void (lastCode.current === null ? generate() : loadCode(lastCode.current))}>
                 Retry
               </button>
             </div>
