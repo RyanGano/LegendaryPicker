@@ -6,7 +6,7 @@ description: Record how a played LegendaryPicker setup felt against the difficul
 # Record a rating
 
 Usage: `/record-rating [game_code] [felt rating]`, for example
-`/record-rating 1-a0dul3-20000-... difficulty harder, complexity about right, note: Twists piled up fast`.
+`/record-rating 2-4j-4e-4245-47-3y3v3l3x3p-thm difficulty harder, complexity about right, note: Twists piled up fast`.
 
 One game, one comment on issue #336. The comment holds the code and the bands, never card text: the code reloads the
 setup, so the cards need not be listed.
@@ -33,9 +33,11 @@ so a first call can take a minute; `GET $api/api/health` wakes it.
 
 Answers:
 
-- **200**: read `players`, `boxes`, `difficulty.band` and `complexity.band`. Use the `code` it returns.
+- **200**: read `players`, `boxes`, `difficulty.band` and `complexity.band`. Use the `code` it returns. `boxes` are the
+  boxes the setup was drawn from again: those of its cards, unless the code keeps the ticked boxes because they changed
+  the setup.
 - **409**: the box data changed and the code no longer gives the same cards. Tell the owner and stop; post nothing.
-- **400**: not a setup code. Ask for the code again.
+- **400**: not a setup code (or a code of the current data that names no setup, likely mistyped). Ask for the code again.
 
 ## 2. Confirm the shown bands
 

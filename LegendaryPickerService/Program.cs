@@ -164,18 +164,19 @@ app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? ru
     }
 
     var result = generator.Generate(count, included, random, epic ?? false, edition, target, complexityTarget);
-    return Results.Ok(SetupResponse.From(result, catalog, target, complexityTarget, codes.For(result, edition, epic ?? false, target, complexityTarget)));
+    return Results.Ok(SetupResponse.From(result, catalog, target, complexityTarget, codes.For(result, edition, epic ?? false)));
 }).RequireRateLimiting(SetupRateLimit);
 
-// The setup a setup code names (#335), with the ratings and targets it was shown with, so the app can reload a pasted
-// code or a link and a script can read a code's setup without the browser. A code that isn't one is a 400; one the
+// The setup a setup code names (#335, #340), with its ratings, so the app can reload a pasted code or a link and a script
+// can read a code's setup without the browser. A code keeps no difficulty or complexity target: its cards are the ones
+// the draw for them gave, so the reload shows their ratings without a target note. A code that isn't one is a 400; one the
 // current data can no longer reproduce is a 409, whose detail says so.
 app.MapGet("/api/setup/{code}", (string code, HttpResponse response, BoxCatalog catalog, SetupCodes codes) =>
 {
     response.Headers.CacheControl = "no-store";
     return codes.Load(code) switch
     {
-        SetupCodes.Loaded loaded => Results.Ok(SetupResponse.From(loaded.Setup, catalog, loaded.Difficulty, loaded.Complexity, loaded.Code)),
+        SetupCodes.Loaded loaded => Results.Ok(SetupResponse.From(loaded.Setup, catalog, code: loaded.Code)),
         SetupCodes.Invalid invalid => Results.ValidationProblem(new Dictionary<string, string[]> { ["code"] = [invalid.Message] }),
         SetupCodes.Outdated outdated => Results.Problem(outdated.Message, statusCode: StatusCodes.Status409Conflict, title: "Setup code out of date"),
         var other => throw new InvalidOperationException($"Unknown reload {other}."),
