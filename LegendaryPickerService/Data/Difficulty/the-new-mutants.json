@@ -417,6 +417,19 @@
           ]
         },
         {
+          "name": "Crotus",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
+          ]
+        },
+        {
           "name": "N'astirh",
           "copies": 2,
           "inflicts": [
@@ -483,6 +496,19 @@
           ],
           "on": [
             "ambush"
+          ]
+        },
+        {
+          "name": "Witchfire",
+          "copies": 2,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
           ]
         }
       ]
@@ -574,6 +600,19 @@
           "on": [
             "ambush",
             "escape"
+          ]
+        },
+        {
+          "name": "Empath",
+          "copies": 1,
+          "inflicts": [
+            [
+              "attack-inflation",
+              1
+            ]
+          ],
+          "on": [
+            "fight"
           ]
         },
         {
