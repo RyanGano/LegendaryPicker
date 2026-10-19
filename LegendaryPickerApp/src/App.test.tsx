@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { StrictMode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App.tsx'
-import type { Box, NoEligibleScheme, Setup } from './api/setupApi.ts'
+import type { Box, Card, NoEligibleScheme, Setup } from './api/setupApi.ts'
 import mixedCrushHydra from './test/fixtures/mixedCrushHydra.json'
 
 const setup: Setup = {
@@ -51,16 +51,19 @@ const never: SetupAnswer = () => new Promise<Response>(() => {})
 let fetchMock: ReturnType<typeof vi.fn>
 let setupAnswers: SetupAnswer[]
 let boxesAnswer: () => Promise<Response>
+let cardsAnswer: () => Promise<Response>
 
-// Health always answers, /api/boxes lists the core box unless a test says otherwise, and each
+// Health always answers, /api/boxes lists the core box and /api/cards no cards unless a test says otherwise, and each
 // /api/setup request takes the next queued answer.
 beforeEach(() => {
   setupAnswers = []
   boxesAnswer = () => json([core])
+  cardsAnswer = () => json([])
   fetchMock = vi.fn((url: string, init?: RequestInit) => {
     if (url.endsWith('/api/health')) return json({ status: 'ok' })
     if (url.endsWith('/api/boxes')) return boxesAnswer()
     if (url.endsWith('/api/ratings')) return json(ratingBands)
+    if (url.endsWith('/api/cards')) return cardsAnswer()
     const answer = setupAnswers.shift()
     if (!answer) throw new Error(`Unexpected request ${url}`)
     return answer(init!.signal!)
@@ -959,5 +962,87 @@ describe('setup codes', () => {
     await waitFor(() => expect(announced()).toBe(message))
     expect(document.querySelector('.status')).toHaveTextContent(`${message}Generate a new setup instead.`)
     expect(screen.queryByRole('heading', { name: 'Midtown Bank Robbery' })).not.toBeInTheDocument()
+  })
+})
+
+describe('must include', () => {
+  const cards: Card[] = [
+    { id: 'core_hero_wolverine', name: 'Wolverine', kind: 'hero', boxes: ['core'] },
+    { id: 'core_mastermind_magneto', name: 'Magneto', kind: 'mastermind', boxes: ['core'] },
+    { id: 'fixture_villain_wolf-pack', name: 'Wolf Pack', kind: 'villain', boxes: ['fixture'] },
+    { id: 'fixture_mastermind_dire-wolf', name: 'Dire Wolf', kind: 'mastermind', boxes: ['fixture'] },
+    { id: 'villains_hero_wolfsbane', name: 'Wolfsbane', kind: 'hero', boxes: ['villains'] },
+  ]
+
+  beforeEach(() => {
+    boxesAnswer = () => json([core, fixture, villains])
+    cardsAnswer = () => json(cards)
+  })
+
+  it('matches part of a name across every box, ticked or not, with the kind and box of each card', async () => {
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.type(await screen.findByRole('combobox', { name: 'Must include' }), 'WOL')
+
+    // Names that start with the text come first.
+    const matches = within(screen.getByRole('listbox')).getAllByRole('option')
+    expect(matches.map((option) => option.textContent)).toEqual([
+      'WolverineHero · Marvel Legendary First Edition core box',
+      'Wolf PackVillain Group · Fixture Expansion',
+      'WolfsbaneAlly · Legendary: Villains',
+      'Dire WolfMastermind · Fixture Expansion',
+    ])
+  })
+
+  it('adds a chosen card as a chip, ticks its box, sends it with the draw and removes it again', async () => {
+    setupAnswers.push(() => json(setup), () => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+
+    const filter = await screen.findByRole('combobox', { name: 'Must include' })
+    await user.type(filter, 'pack')
+    await user.keyboard('{Enter}')
+
+    const chips = screen.getByRole('list', { name: 'Chosen cards' })
+    expect(within(chips).getAllByRole('listitem').map((chip) => chip.textContent)).toEqual(['Wolf PackVillain Group · Fixture Expansion×'])
+    expect(screen.getByRole('checkbox', { name: 'Fixture Expansion' })).toBeChecked()
+    expect(screen.getByText('1 chosen. The rest of the setup is drawn around it.')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+    expect(setupRequests()[0]).toMatch(/&boxes=core,fixture&include=fixture_villain_wolf-pack$/)
+
+    await user.click(screen.getByRole('button', { name: 'Remove Wolf Pack' }))
+    expect(screen.queryByRole('list', { name: 'Chosen cards' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /Generate another/ }))
+    await waitFor(() => expect(setupRequests()).toHaveLength(2))
+    expect(setupRequests()[1]).not.toMatch(/include=/)
+  })
+
+  it('keeps one chosen Mastermind, the last one chosen', async () => {
+    const user = userEvent.setup()
+    renderApp()
+
+    const filter = await screen.findByRole('combobox', { name: 'Must include' })
+    await user.type(filter, 'magneto{Enter}')
+    await user.type(filter, 'dire{Enter}')
+
+    const chips = screen.getByRole('list', { name: 'Chosen cards' })
+    expect(within(chips).getAllByRole('listitem').map((chip) => chip.querySelector('.chosen-name')?.textContent)).toEqual(['Dire Wolf'])
+  })
+
+  it('says which choice to change when the chosen cards cannot share a setup', async () => {
+    const message = "The Scheme Clash of the Monsters Unleashed can't be played with the Mastermind Fin Fang Foom: choose another Mastermind."
+    setupAnswers.push(() => json({ kind: 'chosenCardsConflict', message }))
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '2' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+
+    expect(await screen.findByText(message)).toBeInTheDocument()
+    expect(screen.getByText('Change the cards under Must include.')).toBeInTheDocument()
   })
 })

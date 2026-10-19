@@ -66,6 +66,11 @@ const TERMS: Record<Ruleset, RulesetTerms> = {
   },
 }
 
+// The words of one ruleset, as for a card of a box of it; First Edition's for a box from an API before rulesets.
+export function termsFor(ruleset: Ruleset | undefined): RulesetTerms {
+  return TERMS[ruleset ?? 'firstEdition']
+}
+
 // A mixed setup's cards come from both rulesets, so a part that isn't one card is named by both words, as
 // the API's rule notes do. Its starting deck is named from the setup's choices instead.
 const MIXED: RulesetTerms = {

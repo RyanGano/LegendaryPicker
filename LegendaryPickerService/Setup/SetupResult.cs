@@ -8,6 +8,10 @@ public abstract record GenerationResult;
 // No Scheme in the included boxes can be set up legally at this player count.
 public sealed record NoEligibleScheme(int Players) : GenerationResult;
 
+// The cards the player chose for the setup (#337) can't all be in one legal setup with the drawn or chosen Scheme and
+// Mastermind; Message says why and which choice to change. No rule is relaxed to fit a chosen card.
+public sealed record ChosenCardsConflict(string Message) : GenerationResult;
+
 // A legal random setup and the checklist for laying it out, under the Ruleset whose rules it follows.
 // Steps are the labels of the setup steps its Scheme and Mastermind print that change no count, Scheme first.
 // When the included boxes follow more than one ruleset, the Scheme and Mastermind decide the Ruleset and

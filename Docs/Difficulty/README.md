@@ -67,6 +67,13 @@ uses.
   Cosmic Threat half the time: core's opposition is light once the Scheme and Mastermind are fixed. Complexity with every
   box ticked stops at 2 when the Scheme and Mastermind alone bring that much. Not built: retrying with another Mastermind.
 
+## Targets with chosen cards (#337)
+
+Cards the player chose to be in the game are not open picks: they sit after the required cards, so the repair never swaps
+them, and it repairs only what is left open. Chosen cards can make a target unreachable, as a chosen Mastermind fixes
+most of the opposition; the repair then keeps the closest choice and answers `reached: false` with the usual note, which
+never names a rule or a chosen card.
+
 ## Calibration (#268)
 
 Fitted once, on the core box, to eight reference setups (`DifficultyCalibrationTests`). The expected bands are proposed

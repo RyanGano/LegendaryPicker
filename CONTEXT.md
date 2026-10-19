@@ -162,7 +162,12 @@ The combination of game elements selected before play begins. Its identity is th
 A game setup that satisfies all applicable official setup rules; legality does not imply a particular difficulty or balance.
 
 **Random setup**:
-A complete legal setup selected without player-selected card preferences; only official setup rules constrain the selection.
+A complete legal setup selected without player-selected card preferences, apart from any chosen cards; only official setup rules constrain the selection.
+
+**Chosen card**:
+A Scheme, Mastermind, Villain Group, Henchman Group or Hero the player chose to be in the game (#337), from any box: a required pick, in the setup the way a card a Scheme requires is, never swapped by a draw or a repair toward a target. A chosen Scheme is the Scheme; a chosen Mastermind is the Mastermind, and with no chosen Scheme the Scheme is drawn from those that allow it. With chosen groups or Heroes, the Scheme and then the Mastermind are drawn only from the pairs that leave room for every chosen card, so the same choice always draws. A chosen group fills a slot after every group a rule places, and a chosen Hero a Hero Deck slot after the required Heroes, within the Scheme's Hero rules. A chosen card from a box that isn't ticked includes its box. Chosen cards no legal setup can hold give a message naming the choice to change; no rule is relaxed for them.
+
+_Avoid_: Pinned card, locked card, must-include card.
 
 **Table draw**:
 How a random setup is selected, mirroring a normal game at the table: draw the Scheme from every included Scheme its card allows at the player count, then the Mastermind from the included ones the Scheme doesn't exclude, then add the groups the Scheme and Mastermind require, then draw the remaining Villain and Henchman Groups from what is left, then any Henchman Groups outside the Villain Deck, then draw the Heroes, then any Heroes outside the Hero Deck. Each draw is equally likely among the remaining options that still leave a legal setup. Nothing is checked per draw: every requirement a box's cards make is met inside that box, or allowed from another box by its data (owner decision, #138).

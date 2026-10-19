@@ -78,6 +78,20 @@ app.MapGet("/api/boxes", (BoxCatalog catalog) =>
         box.Id, box.Name, BaseGame = box.IsBaseGame, box.Ruleset, box.About.FirstPublished, Description = box.About.Description.Value,
     })));
 
+// Every card a player can choose to be in the game (#337): each Scheme, Mastermind, Villain Group, Henchman Group and Hero
+// of every box, ticked or not, with its id, name, kind (the kind part of its id) and the boxes that hold it, the declaring
+// box first. The list is about 800 cards, so the app loads it once.
+app.MapGet("/api/cards", (BoxCatalog catalog) =>
+    Results.Ok(catalog.Boxes
+        .SelectMany(box => box.Schemes.Cast<ICard>().Concat(box.Masterminds).Concat(box.VillainGroups).Concat(box.HenchmanGroups).Concat(box.Heroes))
+        .Select(card => new
+        {
+            card.Id,
+            card.Name,
+            Kind = card.Id.Split('_')[1],
+            Boxes = catalog.Boxes.Where(box => box.Holds(card.Id)).Select(box => box.Id),
+        })));
+
 // The band names by rating, 1 to 5, so the picker lists the bands the scorers use instead of keeping its own copy (#271).
 app.MapGet("/api/ratings", () => Results.Ok(new
 {
@@ -96,9 +110,10 @@ var editions = new Dictionary<string, Ruleset>(StringComparer.Ordinal)
 // players is read as text so a non-number gets the same ProblemDetails as an out-of-range count.
 // boxes is a comma-separated list of box ids; without it a setup uses the core box alone. epic=true plays a drawn
 // Mastermind that has an Epic side on that side (#185). rules names the rule edition the whole setup follows; without
-// it the boxes decide (D-editions, #240).
-// NoEligibleScheme is a valid answer, not an error, so it is a 200 like a setup.
-app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? rules, string? difficulty, string? complexity, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog, SetupCodes codes) =>
+// it the boxes decide (D-editions, #240). include is a comma-separated list of the ids of cards the player chose to be in the
+// game, of any kind (#337); a box that holds one is included even when boxes leaves it out.
+// NoEligibleScheme and ChosenCardsConflict are valid answers, not errors, so they are a 200 like a setup.
+app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? rules, string? difficulty, string? complexity, string? include, HttpResponse response, SetupGenerator generator, IRandomSource random, BoxCatalog catalog, SetupCodes codes) =>
 {
     // "Generate another" must always draw a fresh setup.
     response.Headers.CacheControl = "no-store";
@@ -155,15 +170,21 @@ app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? ru
         complexityTarget = wantedComplexity;
     }
 
-    var included = (boxes ?? SetupGenerator.CoreBoxId)
-        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-        .ToHashSet(StringComparer.Ordinal);
+    var chosen = (include ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    if (generator.CheckChosenCards(chosen) is { } wrongCard)
+    {
+        return Results.ValidationProblem(new Dictionary<string, string[]> { ["include"] = [wrongCard] });
+    }
+
+    var included = generator.BoxesWith(
+        (boxes ?? SetupGenerator.CoreBoxId).Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToHashSet(StringComparer.Ordinal),
+        chosen);
     if (generator.CheckBoxes(included, edition) is { } problem)
     {
         return Results.ValidationProblem(new Dictionary<string, string[]> { ["boxes"] = [problem] });
     }
 
-    var result = generator.Generate(count, included, random, epic ?? false, edition, target, complexityTarget);
+    var result = generator.Generate(count, included, random, epic ?? false, edition, target, complexityTarget, chosen);
     return Results.Ok(SetupResponse.From(result, catalog, target, complexityTarget, codes.For(result, edition, epic ?? false)));
 }).RequireRateLimiting(SetupRateLimit);
 
