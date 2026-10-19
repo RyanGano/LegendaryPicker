@@ -59,11 +59,19 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     // setup follows that rule edition, from the first loaded base game of it when none is included (#240). With a
     // difficulty from 1 to 5 (#267), a complexity from 1 to 5 (#270), or both, the plain draw is made and its open picks
     // are then repaired toward those ratings (#329): the Scheme and Mastermind stay as drawn, and no rule is relaxed.
-    // Without a target the draw is the plain one.
+    // Without a target the draw is the plain one. chosenCards are the ids of the cards the player chose to be in the game
+    // (#337): each is in the setup as a card a rule requires would be, and a box that holds one is included.
     public GenerationResult Generate(
         int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random, bool epic = false, Ruleset? rules = null,
-        int? difficulty = null, int? complexity = null)
+        int? difficulty = null, int? complexity = null, IReadOnlyCollection<string>? chosenCards = null)
     {
+        if (CheckChosenCards(chosenCards ?? []) is { } wrongCard)
+        {
+            throw new ArgumentException(wrongCard, nameof(chosenCards));
+        }
+
+        var chosen = ChosenCards.Of(catalog, chosenCards ?? []);
+        includedBoxes = BoxesWith(includedBoxes, chosenCards ?? []);
         if (CheckBoxes(includedBoxes, rules) is { } problem)
         {
             throw new ArgumentException(problem, nameof(includedBoxes));
@@ -93,7 +101,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     $"Supported player counts are 1 (Solo) and {string.Join(", ", rules.PlayerCounts.Select(r => r.Players))}.");
             }
 
-            return new TableDraw(catalog.Boxes, boxes, rulesBox, mixingBox, baseRulesets, standIns, rules, players, row, random, edition, targets);
+            return new TableDraw(catalog.Boxes, boxes, rulesBox, mixingBox, baseRulesets, standIns, rules, players, row, random, edition, targets, chosen);
         }
 
         // One rule edition for the whole setup, when the player chose one or the boxes call for one; otherwise one set of
@@ -105,8 +113,69 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .Select(group => Table(group.Key == mixingBox?.Ruleset ? mixingBox : group.First(), null))
                 .ToList();
 
-        return Run(boxes, draws, players, random, epic);
+        try
+        {
+            return Run(boxes, draws, players, random, epic, chosen);
+        }
+        catch (ChosenCardsConflictException conflict)
+        {
+            return new ChosenCardsConflict(conflict.Message);
+        }
     }
+
+    // The kinds of card a player can choose to be in the game (#337), by the kind part of their ids.
+    private static readonly HashSet<string> ChoosableKinds = ["scheme", "mastermind", "villain", "henchman", "hero"];
+
+    // Why a list of chosen card ids can't be used, or null when it can: each must be a loaded Scheme, Mastermind, Villain
+    // Group, Henchman Group or Hero, and a setup has one Scheme and one Mastermind, so at most one of each is chosen.
+    public string? CheckChosenCards(IReadOnlyCollection<string> chosenCards)
+    {
+        var known = SetupCodes.CardIds(catalog).ToHashSet(StringComparer.Ordinal);
+        if (chosenCards.FirstOrDefault(id => !known.Contains(id) || !ChoosableKinds.Contains(id.Split('_')[1])) is { } unknown)
+        {
+            return $"No card has id {unknown}.";
+        }
+
+        var distinct = chosenCards.Distinct(StringComparer.Ordinal).ToList();
+        return distinct.Count(id => id.Split('_')[1] == "scheme") > 1 ? "Choose at most one Scheme."
+            : distinct.Count(id => id.Split('_')[1] == "mastermind") > 1 ? "Choose at most one Mastermind."
+            : null;
+    }
+
+    // The included boxes and, for each chosen card none of them holds, the box that declares it (#337): a chosen card's box
+    // is included rather than the card refused, so the setup draws it as one of its own.
+    public IReadOnlyCollection<string> BoxesWith(IReadOnlyCollection<string> includedBoxes, IReadOnlyCollection<string> chosenCards) =>
+        includedBoxes
+            .Concat(chosenCards
+                .Where(id => !catalog.Boxes.Any(box => includedBoxes.Contains(box.Id) && box.Holds(id)))
+                .Select(id => id[..id.IndexOf('_')]))
+            .ToHashSet(StringComparer.Ordinal);
+
+    // The cards the player chose for the setup (#337), by kind, each in the order chosen.
+    private sealed record ChosenCards(
+        Scheme? Scheme, Mastermind? Mastermind, IReadOnlyList<VillainGroup> VillainGroups, IReadOnlyList<HenchmanGroup> HenchmanGroups,
+        IReadOnlyList<Hero> Heroes)
+    {
+        public static ChosenCards Of(BoxCatalog catalog, IReadOnlyCollection<string> ids)
+        {
+            var order = ids.Distinct(StringComparer.Ordinal).ToList();
+            List<T> Chosen<T>(Func<Box, IEnumerable<T>> cards) where T : ICard =>
+                catalog.Boxes.SelectMany(cards).Where(card => order.Contains(card.Id)).OrderBy(card => order.IndexOf(card.Id)).ToList();
+            return new ChosenCards(
+                Chosen(box => box.Schemes).SingleOrDefault(),
+                Chosen(box => box.Masterminds).SingleOrDefault(),
+                Chosen(box => box.VillainGroups),
+                Chosen(box => box.HenchmanGroups),
+                Chosen(box => box.Heroes));
+        }
+    }
+
+    // Ends a draw whose chosen cards can't all be in one legal setup; Generate returns its message as the result.
+    private sealed class ChosenCardsConflictException(string message) : Exception(message);
+
+    // What a card's own ruleset calls its kind, for a message about it: "the Plot" for a Villainous Scheme.
+    private string Word(ICard card, Func<RulesetTerms, string> kind) =>
+        kind(RulesetTerms.For(catalog.Boxes.Single(box => card.Id.StartsWith(box.Id + "_", StringComparison.Ordinal)).Ruleset));
 
     // The rule edition a setup follows when the player chooses none (D-editions, #240), or null when its boxes follow one
     // ruleset or its Scheme and Mastermind decide. A Revised base game brings the newest rules. Without one, First Edition
@@ -177,9 +246,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
     // Draws the Scheme from every included Scheme its card allows at the player count, then the Mastermind from the
     // included ones the Scheme doesn't exclude and some set of rules covers, in catalog order; the rest of the draw
-    // follows that pair's rules.
-    private static GenerationResult Run(
-        IReadOnlyList<Box> boxes, IReadOnlyList<TableDraw> draws, int players, IRandomSource random, bool epic)
+    // follows that pair's rules. A chosen Scheme is the Scheme, and a chosen Mastermind the Mastermind (#337): with a chosen
+    // Mastermind and no chosen Scheme, the Scheme is drawn from those that allow it.
+    private GenerationResult Run(
+        IReadOnlyList<Box> boxes, IReadOnlyList<TableDraw> draws, int players, IRandomSource random, bool epic, ChosenCards chosen)
     {
         var schemes = boxes.SelectMany(box => box.AllSchemes).DistinctBy(scheme => scheme.Id)
             .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(players) ?? true)
@@ -190,12 +260,94 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return new NoEligibleScheme(players);
         }
 
+        var count = players == 1 ? "1 player" : $"{players} players";
+        if (chosen.Scheme is { } chosenScheme)
+        {
+            schemes = schemes.Where(scheme => scheme.Id == chosenScheme.Id).ToList();
+            if (schemes.Count == 0)
+            {
+                throw new ChosenCardsConflictException(
+                    $"The {Word(chosenScheme, terms => terms.Scheme)} {chosenScheme.Name} can't be played with {count}: choose another {Word(chosenScheme, terms => terms.Scheme)} or player count.");
+            }
+        }
+
+        if (chosen.Mastermind is { } chosenMastermind)
+        {
+            var mastermindWord = Word(chosenMastermind, terms => terms.Mastermind);
+            masterminds = masterminds.Where(mastermind => mastermind.Id == chosenMastermind.Id).ToList();
+            if (masterminds.Count == 0)
+            {
+                throw new ChosenCardsConflictException(
+                    $"The {mastermindWord} {chosenMastermind.Name} uses cards none of the included boxes has: include a box that has them, or choose another {mastermindWord}.");
+            }
+
+            var allowing = schemes.Where(scheme => !chosenMastermind.RuledOutBy(scheme) && draws.Any(draw => draw.Follows(scheme, chosenMastermind))).ToList();
+            if (allowing.Count == 0)
+            {
+                throw new ChosenCardsConflictException(chosen.Scheme is { } picked
+                    ? $"The {Word(picked, terms => terms.Scheme)} {picked.Name} can't be played with the {mastermindWord} {chosenMastermind.Name}: choose another {mastermindWord}."
+                    : $"No {Word(chosenMastermind, terms => terms.Scheme)} of the included boxes can be played with the {mastermindWord} {chosenMastermind.Name} at {count}: choose another {mastermindWord}.");
+            }
+
+            schemes = allowing;
+        }
+
+        // With chosen groups or Heroes, the Scheme and then the Mastermind are drawn only from the pairs that leave room for
+        // every chosen card, as a chosen Mastermind narrows the Schemes: each pair is laid out on a Probe up to its open
+        // picks. The pools narrow before each draw, so no drawn card is dropped or redrawn and no rule is relaxed; only when
+        // no pair can hold the chosen cards is the answer a conflict.
+        var misfits = new Dictionary<(string, string), string?>();
+        var narrows = chosen.VillainGroups.Count + chosen.HenchmanGroups.Count + chosen.Heroes.Count > 0;
+        if (narrows)
+        {
+            var probes = draws.ToDictionary(draw => draw, draw => draw.Probe());
+            var fitting = schemes
+                .Where(scheme => masterminds
+                    .Where(mastermind => !mastermind.RuledOutBy(scheme))
+                    .Select(mastermind => (Mastermind: mastermind, Draw: draws.FirstOrDefault(draw => draw.Follows(scheme, mastermind))))
+                    .Where(pair => pair.Draw is not null)
+                    .Any(pair => (misfits[(scheme.Id, pair.Mastermind.Id)] =
+                        probes[pair.Draw!].Misfit(scheme, epic ? pair.Draw!.PlayedEpic(pair.Mastermind) : pair.Mastermind)) is null))
+                .ToList();
+            if (fitting.Count == 0)
+            {
+                var reasons = misfits.Values.Distinct().ToList();
+                var instead = (chosen.Scheme, chosen.Mastermind) switch
+                {
+                    (_, { } chosenOne) when chosen.Scheme is null =>
+                        $"No {Word(chosenOne, terms => terms.Scheme)} of the included boxes leaves room for the chosen cards with the {Word(chosenOne, terms => terms.Mastermind)} {chosenOne.Name} at {count}: remove a chosen card, or choose another {Word(chosenOne, terms => terms.Mastermind)}.",
+                    ({ } chosenOne, null) =>
+                        $"No {Word(chosenOne, terms => terms.Mastermind)} of the included boxes leaves room for the chosen cards with the {Word(chosenOne, terms => terms.Scheme)} {chosenOne.Name} at {count}: remove a chosen card, or choose another {Word(chosenOne, terms => terms.Scheme)}.",
+                    _ => $"No Scheme and Mastermind of the included boxes leave room for all the chosen cards at {count}: remove a chosen card, or include more boxes.",
+                };
+                // One reason for every pair is the answer: for a chosen pair, its own; otherwise only when it names no
+                // Mastermind, since a kept answer can name another one than the pair's (TableDraw.Misfit).
+                var only = reasons.Count == 1 ? reasons[0] : null;
+                throw new ChosenCardsConflictException(
+                    only is not null && (chosen.Scheme is not null && chosen.Mastermind is not null || !masterminds.Any(mastermind => only.Contains(mastermind.Name)))
+                        ? only
+                        : instead);
+            }
+
+            schemes = fitting;
+        }
+
         var scheme = random.Pick(schemes);
         var pairs = masterminds
             .Where(mastermind => !mastermind.RuledOutBy(scheme))
             .Select(mastermind => (Mastermind: mastermind, Draw: draws.FirstOrDefault(draw => draw.Follows(scheme, mastermind))))
             .Where(pair => pair.Draw is not null)
             .ToList();
+        if (narrows)
+        {
+            // The Mastermind is drawn from those that leave room with the drawn Scheme; the search above stopped at the first.
+            var probes = pairs.Select(pair => pair.Draw!).Distinct().ToDictionary(draw => draw, draw => draw.Probe());
+            pairs = pairs
+                .Where(pair => (misfits.TryGetValue((scheme.Id, pair.Mastermind.Id), out var known)
+                    ? known
+                    : probes[pair.Draw!].Misfit(scheme, epic ? pair.Draw!.PlayedEpic(pair.Mastermind) : pair.Mastermind)) is null)
+                .ToList();
+        }
         var drawn = random.Pick(pairs.Select(pair => pair.Mastermind).ToList());
         var draw = pairs.Single(pair => pair.Mastermind == drawn).Draw;
         return draw!.Finish(scheme, epic ? draw.PlayedEpic(drawn) : drawn);
@@ -207,11 +359,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     // one of them has mixing rules, the rulesets of the included base games, the stand-ins of the parts no
     // included box supplies, and the random source. row is the player-count table row, or null in Solo. edition is
     // present when the setup follows one rule edition whatever its Scheme and Mastermind (D-editions, #240), and is why.
-    // targets are the ratings the request asks for, or null when it asks for none (#329).
+    // targets are the ratings the request asks for, or null when it asks for none (#329). chosenCards are the cards the
+    // player chose to be in the game (#337), which fill slots as required cards do and which a repair never swaps.
     private sealed class TableDraw(
         IReadOnlyList<Box> catalogBoxes, IReadOnlyList<Box> boxes, Box rulesBox, Box? mixingBox, IReadOnlySet<Ruleset> baseRulesets,
         IReadOnlyDictionary<Part, ActiveStandIn> standIns, SetupRules rules, int players, PlayerCountSetup? row,
-        IRandomSource random, RuleNote? edition, RatingTargets? targets)
+        IRandomSource random, RuleNote? edition, RatingTargets? targets, ChosenCards chosenCards)
     {
         // The most rounds of swaps the repair toward a target makes (#329).
         private const int RepairRounds = 6;
@@ -252,46 +405,93 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // Whether a Scheme and Mastermind pair follows these rules: every pair does under one rule edition.
         public bool Follows(Scheme scheme, Mastermind mastermind) => edition is not null || RulesOf(scheme, mastermind) == rulesBox.Ruleset;
 
+        // A copy of these rules that draws the first option every time, so Misfit can try a pair without using up the
+        // setup's random draws (#337).
+        public TableDraw Probe() =>
+            new(catalogBoxes, boxes, rulesBox, mixingBox, baseRulesets, standIns, rules, players, row, new FirstOption(), edition, null, chosenCards)
+            {
+                IsProbe = true,
+            };
+
+        private bool IsProbe { get; init; }
+
+        // A Probe's plans by Scheme, and why its chosen Heroes don't fit a Hero Deck, by what the deck depends on.
+        private readonly Dictionary<string, SetupPlan> _plans = [];
+        private readonly Dictionary<(string Scheme, int Heroes, string Required), string?> _deckMisfits = [];
+        private readonly Dictionary<(string Scheme, string Mastermind), string?> _groupMisfits = [];
+
+        // What a Mastermind brings to a Scheme's group slots, so Masterminds that bring the same fill them alike: the type
+        // of the group it always leads and the extra groups and Henchmen its setup adds, or its own id when the group it
+        // leads is one the player chose or the Scheme requires, or it leads a second group, or the Scheme sets Masterminds
+        // aside.
+        private string SlotsKey(Scheme scheme, Mastermind mastermind)
+        {
+            var seen = AsSeen(scheme, mastermind);
+            var named = chosenCards.VillainGroups.Select(group => group.Id).Concat(chosenCards.HenchmanGroups.Select(group => group.Id))
+                .Concat(scheme.Setup.RequiredGroups?.Select(group => group.GroupId) ?? []).Concat(scheme.Setup.OneOfGroups?.GroupIds ?? []);
+            if (seen.AlsoLeads is not null || scheme.Setup.OutsideMasterminds is not null || seen.AlwaysLeads?.GroupIds.Intersect(named).Any() == true)
+            {
+                return seen.Id;
+            }
+
+            var effects = seen.Setup;
+            return string.Join('|',
+                seen.AlwaysLeads is { } leads ? $"{leads.GroupType}{(leads.EvenInSolo ? "+" : "")}{(leads.OrGroupIds is null ? "" : "*")}" : "",
+                ForPlayers(effects?.ExtraVillainGroups ?? [])?.Value,
+                ForPlayers(effects?.ExtraHenchmanGroups ?? [])?.Value,
+                ForPlayers(effects?.HenchmanCards ?? [])?.Value);
+        }
+
+        // Why the chosen cards can't all be in a setup of this Scheme and Mastermind, or null when they can (#337): the
+        // groups and Hero Deck are laid out as a draw lays them out, up to the open picks. Called on a Probe. Each answer is
+        // kept for the next Mastermind that would give the same one: for the groups, one that brings the same to the slots
+        // (SlotsKey); for the Hero Deck, one with the same Hero count and required Heroes. A kept answer about the groups
+        // can name the Mastermind it was found with.
+        public string? Misfit(Scheme scheme, Mastermind mastermind)
+        {
+            string? Conflict(Action check)
+            {
+                _conflict = null;
+                check();
+                var message = _conflict;
+                _conflict = null;
+                return message;
+            }
+
+            if (chosenCards.VillainGroups.Count + chosenCards.HenchmanGroups.Count > 0)
+            {
+                var slots = (scheme.Id, SlotsKey(scheme, mastermind));
+                if (!_groupMisfits.TryGetValue(slots, out var groups))
+                {
+                    _groupMisfits[slots] = groups = Conflict(() => Place(scheme, mastermind));
+                }
+
+                if (groups is not null)
+                {
+                    return groups;
+                }
+            }
+
+            if (chosenCards.Heroes.Count == 0)
+            {
+                return null;
+            }
+
+            var plan = WithMastermind(PlanOf(scheme), AsSeen(scheme, mastermind));
+            var key = (scheme.Id, plan.Heroes, string.Join(',', plan.Mastermind?.Setup?.RequiredHeroes?.Select(rule => rule.HeroId) ?? []));
+            if (!_deckMisfits.TryGetValue(key, out var heroes))
+            {
+                _deckMisfits[key] = heroes = Conflict(() => StartDeck(plan));
+            }
+
+            return heroes;
+        }
+
         // Draws the rest of the setup for a Scheme and Mastermind pair that follows these rules.
         public SetupResult Finish(Scheme scheme, Mastermind drawnMastermind)
         {
-            // A Scheme that adds its Mastermind mid-game (Enshrouded Identity, #245) still has one drawn, but its Always Leads
-            // groups and setup effects are no part of the setup: the rest of the draw sees it without them, and they are
-            // returned as the lines shown when the player reveals it.
-            var joinsLater = scheme.Setup.MastermindJoinsLater?.Value;
-            var mastermind = joinsLater is not null ? drawnMastermind with { AlwaysLeads = null, AlsoLeads = null, Setup = null } : drawnMastermind;
-            var plan = WithMastermind(Plan(scheme), mastermind);
-            var slotNotes = new List<RuleNote>();
-
-            // A Mastermind the Scheme sets aside and whose Always Leads group it adds (Symbiotic Absorption) is drawn
-            // before the groups, since its group is one more of them.
-            var drainedDraws = plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value == true).ToList();
-            // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out. One with no Always
-            // Leads group (Ego) is drawable too: it adds a Villain Group drawn by the normal rules instead (#211).
-            var drained = new Queue<Mastermind>(DrawMany(
-                _masterminds.Where(other => other.Id != mastermind.Id && (other.AlwaysLeads is null || !other.AlwaysLeads.GroupIds.Intersect(mastermind.AlwaysLeads?.GroupIds ?? []).Any()) && !other.RuledOutBy(scheme)),
-                drainedDraws.Sum(draw => draw.Count)));
-            var drainedLeads = drainedDraws
-                .SelectMany(draw => Enumerable.Repeat(draw.Rule.BringsAlwaysLeads!.Source, draw.Count))
-                .Select(source => (other: drained.Dequeue(), source))
-                .ToList();
-            plan = plan with
-            {
-                VillainGroups = plan.VillainGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads is null || entry.other.AlwaysLeads.GroupType == GroupType.Villain),
-                HenchmanGroups = plan.HenchmanGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads?.GroupType == GroupType.Henchman),
-            };
-
-            // A group the Scheme sets every card of beside it has none left for the Villain Deck, so it isn't drawn there.
-            // A required group whose card gives a substitute is replaced by the group drawn for it.
-            var required = new Dictionary<string, RequiredGroup>(plan.Required);
-            var villainSlots = FillSlots(
-                _villainGroups.Where(g => DeckCards(plan, g.Id, GroupType.Villain) > 0).ToList(), GroupType.Villain,
-                plan.VillainGroups, plan.Scheme, mastermind, required, slotNotes, drainedLeads);
-            var henchmanSlots = FillSlots(
-                _henchmanGroups.Where(g => DeckCards(plan, g.Id, GroupType.Henchman) > 0).ToList(), GroupType.Henchman,
-                plan.HenchmanGroups, plan.Scheme, mastermind, required, slotNotes, drainedLeads);
+            var (plan, mastermind, joinsLater, slotNotes, drainedLeads, villainSlots, henchmanSlots) = Place(scheme, drawnMastermind);
             var (villainGroups, henchmanGroups) = (villainSlots.Groups, henchmanSlots.Groups);
-            plan = plan with { Required = required };
             // Each Henchman Group drawn outside the Villain Deck is one the Villain Deck doesn't use (D-readings).
             var outsideHenchmen = plan.OutsideHenchmen
                 .Zip(DrawMany(_henchmanGroups.Except(henchmanGroups), plan.OutsideHenchmen.Count), (draw, group) => new OutsideHenchmanGroup(group, draw.To, draw.Cards))
@@ -311,7 +511,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             plan = plan with { Steps = steps };
 
             // The Masterminds the Scheme draws besides its own, from the included ones the setup doesn't otherwise use.
-            var drawnDrained = drainedLeads.Select(entry => entry.other).ToList();
+            var drawnDrained = drainedLeads.Select(entry => entry.Drained).ToList();
             var otherMasterminds = new Queue<Mastermind>(DrawMany(
                 _masterminds.Where(other => other.Id != mastermind.Id && !drawnDrained.Contains(other)),
                 plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value != true).Sum(draw => draw.Count)));
@@ -548,6 +748,89 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 plan.Scheme.Setup.PlayersChooseHeroes is not null ? Math.Min(players, heroes.Count) : 0,
                 stepHeroes);
         }
+
+        // The Mastermind as the setup sees it: without its Always Leads groups and setup effects when the Scheme adds it
+        // mid-game (#245).
+        private static Mastermind AsSeen(Scheme scheme, Mastermind mastermind) =>
+            scheme.Setup.MastermindJoinsLater is not null ? mastermind with { AlwaysLeads = null, AlsoLeads = null, Setup = null } : mastermind;
+
+        // A Scheme's plan, kept per Scheme on a Probe, which tries each Scheme with many Masterminds.
+        private SetupPlan PlanOf(Scheme scheme)
+        {
+            if (!IsProbe)
+            {
+                return Plan(scheme);
+            }
+
+            if (!_plans.TryGetValue(scheme.Id, out var plan))
+            {
+                _plans[scheme.Id] = plan = Plan(scheme);
+            }
+
+            return plan;
+        }
+
+        // Lays out a pair's plan and fills its Villain and Henchman Group slots, the first steps of Finish.
+        private Placed Place(Scheme scheme, Mastermind drawnMastermind)
+        {
+            // A Scheme that adds its Mastermind mid-game (Enshrouded Identity, #245) still has one drawn, but its Always Leads
+            // groups and setup effects are no part of the setup: the rest of the draw sees it without them, and they are
+            // returned as the lines shown when the player reveals it.
+            var joinsLater = scheme.Setup.MastermindJoinsLater?.Value;
+            var mastermind = AsSeen(scheme, drawnMastermind);
+            var plan = WithMastermind(PlanOf(scheme), mastermind);
+            var slotNotes = new List<RuleNote>();
+
+            // A Mastermind the Scheme sets aside and whose Always Leads group it adds (Symbiotic Absorption) is drawn
+            // before the groups, since its group is one more of them.
+            var drainedDraws = plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value == true).ToList();
+            // Its group differs from the main Mastermind's, and the Scheme's card doesn't rule it out. One with no Always
+            // Leads group (Ego) is drawable too: it adds a Villain Group drawn by the normal rules instead (#211).
+            var drained = new Queue<Mastermind>(DrawMany(
+                _masterminds.Where(other => other.Id != mastermind.Id && (other.AlwaysLeads is null || !other.AlwaysLeads.GroupIds.Intersect(mastermind.AlwaysLeads?.GroupIds ?? []).Any()) && !other.RuledOutBy(scheme)),
+                drainedDraws.Sum(draw => draw.Count)));
+            var drainedLeads = drainedDraws
+                .SelectMany(draw => Enumerable.Repeat(draw.Rule.BringsAlwaysLeads!.Source, draw.Count))
+                .Select(source => (other: drained.Dequeue(), source))
+                .ToList();
+            plan = plan with
+            {
+                VillainGroups = plan.VillainGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads is null || entry.other.AlwaysLeads.GroupType == GroupType.Villain),
+                HenchmanGroups = plan.HenchmanGroups + drainedLeads.Count(entry => entry.other.AlwaysLeads?.GroupType == GroupType.Henchman),
+            };
+
+            // A group the Scheme sets every card of beside it has none left for the Villain Deck, so it isn't drawn there.
+            // A required group whose card gives a substitute is replaced by the group drawn for it.
+            var required = new Dictionary<string, RequiredGroup>(plan.Required);
+            var villainSlots = FillSlots(
+                DeckPool(_villainGroups, plan, GroupType.Villain), GroupType.Villain,
+                plan.VillainGroups, plan, mastermind, required, slotNotes, drainedLeads, chosenCards.VillainGroups);
+            var henchmanSlots = FillSlots(
+                DeckPool(_henchmanGroups, plan, GroupType.Henchman), GroupType.Henchman,
+                plan.HenchmanGroups, plan, mastermind, required, slotNotes, drainedLeads, chosenCards.HenchmanGroups);
+            return new Placed(plan with { Required = required }, mastermind, joinsLater, slotNotes, drainedLeads, villainSlots, henchmanSlots);
+        }
+
+        // The groups of a pool that can put cards in the Villain Deck with this plan. A Probe keeps them by what they depend
+        // on besides the Scheme's own cards: its count of cards of each group.
+        private List<T> DeckPool<T>(List<T> groups, SetupPlan plan, GroupType type) where T : ICard
+        {
+            var key = (plan.Scheme.Id, type, plan.VillainCards, plan.HenchmanCards);
+            if (IsProbe && _deckPools.TryGetValue(key, out var kept))
+            {
+                return [.. kept.Cast<T>()];
+            }
+
+            var pool = groups.Where(group => DeckCards(plan, group.Id, type) > 0).ToList();
+            if (IsProbe)
+            {
+                _deckPools[key] = [.. pool.Cast<ICard>()];
+            }
+
+            return pool;
+        }
+
+        private readonly Dictionary<(string, GroupType, int?, int?), List<ICard>> _deckPools = [];
 
         // What a setup with these cards lays out: the rulesets of the cards, whether they are mixed, the boxes whose
         // stacks are laid out, the parts the setup uses and the stand-ins its cards need. tacticsOnly are the Masterminds
@@ -922,7 +1205,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // The group a Mastermind leads: its one group, or of several the one already chosen, else one drawn from those the
         // pool still holds (all of them when it holds none), as the owner's ruling on an open choice says (#217).
-        private T LeadGroup<T>(AlwaysLeadsGroup leads, List<T> chosen, List<T> pool) where T : ICard
+        // A group the player chose (#337) is taken over a draw, so the chosen cards fit wherever the rules allow them.
+        private T LeadGroup<T>(AlwaysLeadsGroup leads, List<T> chosen, List<T> pool, IReadOnlyList<T> playerChosen) where T : ICard
         {
             if (leads.OrGroupIds is null)
             {
@@ -931,7 +1215,9 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             var options = leads.GroupIds.Select(id => (T)CatalogGroup(id)).ToList();
             var drawable = options.Intersect(pool).ToList();
-            return chosen.FirstOrDefault(options.Contains) ?? DrawOne(drawable.Count > 0 ? drawable : options);
+            return chosen.FirstOrDefault(options.Contains)
+                ?? drawable.FirstOrDefault(option => playerChosen.Any(other => other.Id == option.Id))
+                ?? DrawOne(drawable.Count > 0 ? drawable : options);
         }
 
         // Fills one group type's slots: the Scheme's required groups first, then the one it requires of several, then the Always Leads
@@ -939,12 +1225,14 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // the Always Leads group. A required group from a box the setup doesn't include is still drawn, as the
         // player owns it, unless its card gives a substitute: then a group drawn from the pool takes its place, and
         // required records the substitute in its place. The groups drawn for the rest are the open picks a repair toward a
-        // target may swap for others of the pool (#329).
+        // target may swap for others of the pool (#329). The groups the player chose (#337) come after every group a rule
+        // places, so none displaces one, and before the open picks, so a repair never swaps them.
         private FilledSlots<T> FillSlots<T>(
-            List<T> pool, GroupType type, int slots, Scheme scheme, Mastermind mastermind,
+            List<T> pool, GroupType type, int slots, SetupPlan plan, Mastermind mastermind,
             Dictionary<string, RequiredGroup> required, List<RuleNote> notes,
-            List<(Mastermind Drained, string Source)> drained) where T : ICard
+            List<(Mastermind Drained, string Source)> drained, IReadOnlyList<T> playerChosen) where T : ICard
         {
+            var scheme = plan.Scheme;
             var chosen = new List<T>();
             foreach (var rule in (scheme.Setup.RequiredGroups ?? []).Where(group => group.GroupType == type))
             {
@@ -975,14 +1263,16 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             }
 
             // The one group the Scheme requires of several: the Mastermind's Always Leads group when it is one of them, so
-            // both rules are met, or else one drawn. The others are left out of every later draw (#172).
+            // both rules are met, or else one drawn; a group the player chose (#337) is taken first. The others are left out
+            // of every later draw (#172).
             if (scheme.Setup.OneOfGroups is { } choice && choice.GroupType == type)
             {
                 var options = choice.GroupIds.Select(id => (T)CatalogGroup(id)).ToList();
                 var leadable = Ignores(mastermind) || mastermind.AlwaysLeads is not { } alwaysLeads || alwaysLeads.GroupType != type
                     ? []
                     : alwaysLeads.GroupIds.Where(choice.GroupIds.Contains).Select(id => (T)CatalogGroup(id)).ToList();
-                var group = leadable.Count switch { 0 => DrawOne(options), 1 => leadable[0], _ => DrawOne(leadable) };
+                var group = options.FirstOrDefault(option => playerChosen.Any(other => other.Id == option.Id))
+                    ?? leadable.Count switch { 0 => DrawOne(options), 1 => leadable[0], _ => DrawOne(leadable) };
                 chosen.Add(group);
                 required[group.Id] = new RequiredGroup(group.Id, type, choice.Source);
                 pool = pool.Where(g => g.Id == group.Id || !choice.GroupIds.Contains(g.Id)).ToList();
@@ -994,7 +1284,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             // The Always Leads group of each Mastermind the Scheme sets aside, as an extra group of its own.
             foreach (var (other, source) in drained.Where(entry => entry.Drained.AlwaysLeads?.GroupType == type))
             {
-                var group = LeadGroup(other.AlwaysLeads!, chosen, pool);
+                var group = LeadGroup(other.AlwaysLeads!, chosen, pool, playerChosen);
                 if (!chosen.Contains(group))
                 {
                     chosen.Add(group);
@@ -1031,7 +1321,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                     }
                     else
                     {
-                        var group = LeadGroup(leads, chosen, pool);
+                        var group = LeadGroup(leads, chosen, pool, playerChosen);
                         if (!chosen.Contains(group))
                         {
                             chosen.Add(group);
@@ -1050,7 +1340,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 }
             }
 
-            // The Mastermind's second group, one of several: one already chosen serves, or one is drawn into a slot left.
+            // The Mastermind's second group, one of several: one already chosen serves, or one the player chose or else one
+            // drawn goes into a slot left.
             // Solo's note that it ignores Always Leads covers this group too.
             if (mastermind.AlsoLeads is { } also && also.GroupType == type && !Ignores(mastermind))
             {
@@ -1066,7 +1357,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 {
                     if (group is null)
                     {
-                        group = DrawOne(options);
+                        group = options.FirstOrDefault(option => playerChosen.Any(other => other.Id == option.Id)) ?? DrawOne(options);
                         chosen.Add(group);
                     }
 
@@ -1074,6 +1365,44 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                         $"{Called(mastermind)} also always leads {Called(group)}, one of {string.Join(" and ", options.Select(g => Called(g)))}",
                         also.Source, BoxOf(mastermind.Id), mastermind.Id));
                 }
+            }
+
+            // The player's chosen groups: one a rule already placed, or whose every card the Scheme sets beside it, is in
+            // the game already and takes no slot.
+            var placedByRules = chosen.Count;
+            var toPlace = playerChosen.Where(group => !chosen.Any(other => other.Id == group.Id) && Beside(plan, group.Id) == 0).ToList();
+            var groupWord = type == GroupType.Villain ? _terms.VillainGroup : _terms.HenchmanGroup;
+            foreach (var group in toPlace)
+            {
+                if (!pool.Any(other => other.Id == group.Id))
+                {
+                    if (Conflicts(Supplied(boxes, standIns, group)
+                        ? $"{TheScheme(scheme)} rules out the {groupWord} {group.Name}: remove it, or {Instead(null, $"choose another {SchemeWord(scheme)}")}."
+                        : $"The {groupWord} {group.Name} uses cards none of the included boxes has: include a box that has them, or remove it."))
+                    {
+                        return new FilledSlots<T>(chosen, chosen.Count, 0, pool);
+                    }
+                }
+            }
+
+            if (toPlace.Count > 0 && placedByRules + toPlace.Count > slots)
+            {
+                var room = Math.Max(slots - placedByRules, 0);
+                var groupsWord = type == GroupType.Villain ? _terms.VillainGroups : _terms.HenchmanGroups;
+                if (Conflicts(Crowded(
+                    $"{TheScheme(scheme)} with the {(chosenCards.Mastermind is null ? "drawn " : "")}{_terms.Mastermind} {mastermind.Name}", room, toPlace.Count,
+                    groupWord, groupsWord, Instead(mastermind, $"choose another {SchemeWord(scheme)} or {_terms.Mastermind}"))))
+                {
+                    return new FilledSlots<T>(chosen, chosen.Count, 0, pool);
+                }
+            }
+
+            chosen.AddRange(toPlace.Select(group => pool.First(other => other.Id == group.Id)));
+
+            // A Probe asks only whether the chosen groups fit, so it draws no open picks.
+            if (IsProbe)
+            {
+                return new FilledSlots<T>(chosen, chosen.Count, 0, pool);
             }
 
             var firstOpen = chosen.Count;
@@ -1109,6 +1438,22 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // has it. The Heroes the Scheme draws outside the Hero Deck come after it, from DrawOutsideHeroes.
         private DeckDraw DrawDeck(SetupPlan plan)
         {
+            var (deck, pool, preferred, heroes, included, rules) = StartDeck(plan);
+            var required = deck.Count;
+            while (deck.Count < rules.DeckSlots)
+            {
+                var options = pool.Where(hero => rules.CanComplete([.. deck, hero], [])).ToList();
+                var fromIncluded = options.Where(preferred.Contains).ToList();
+                deck.Add(DrawOne(fromIncluded.Count > 0 ? fromIncluded : options));
+            }
+
+            return new DeckDraw(deck, required, preferred, heroes, included, rules);
+        }
+
+        // The Hero Deck before its draws: the required and chosen Heroes, the pool the draws take from, the Heroes they
+        // prefer, every Hero a draw may take, the included Heroes and the Scheme's Hero rules. It draws nothing.
+        private (List<Hero> Deck, List<Hero> Pool, List<Hero> Preferred, List<Hero> Heroes, List<Hero> Included, HeroRules Rules) StartDeck(SetupPlan plan)
+        {
             // The Mastermind's required Heroes are the Scheme's too, in the Hero Deck (#203).
             var setup = plan.Scheme.Setup with
             {
@@ -1132,7 +1477,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
             var included = boxes.SelectMany(box => box.AllHeroes).DistinctBy(hero => hero.Id).ToList();
             var deck = (setup.RequiredHeroes ?? []).Select(rule => included.Single(hero => hero.Id == rule.HeroId)).ToList();
-            var required = deck.Count;
             var (pool, heroes, rules) = From(_heroes);
             if (!rules.CanComplete(deck, []))
             {
@@ -1150,14 +1494,45 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 (pool, heroes, rules) = From(catalogBoxes.Where(box => box.Ruleset == ruleset).SelectMany(box => box.Heroes).ToList());
             }
 
-            while (deck.Count < rules.DeckSlots)
+            // The Heroes the player chose (#337) come after the required ones, so a repair never swaps them, and each must
+            // be one a plain draw could take, so the setup's code reloads it. The pools above are chosen as a plain draw's
+            // are, by the required Heroes alone.
+            var toPlace = chosenCards.Heroes.Where(hero => !deck.Any(other => other.Id == hero.Id)).ToList();
+            if (toPlace.Count > 0)
             {
-                var options = pool.Where(hero => rules.CanComplete([.. deck, hero], [])).ToList();
-                var fromIncluded = options.Where(preferred.Contains).ToList();
-                deck.Add(DrawOne(fromIncluded.Count > 0 ? fromIncluded : options));
+                if (toPlace.FirstOrDefault(hero => !preferred.Any(other => other.Id == hero.Id)) is { } missing)
+                {
+                    if (Conflicts(
+                        $"The {_terms.Hero} {missing.Name} uses cards none of the included boxes has: include a box that has them, or remove it."))
+                    {
+                        return (deck, pool, preferred, heroes, included, rules);
+                    }
+                }
+
+                if (deck.Count + toPlace.Count > rules.DeckSlots)
+                {
+                    if (Conflicts(Crowded(
+                        $"{TheScheme(plan.Scheme)} at {(players == 1 ? "1 player" : $"{players} players")}", rules.DeckSlots - deck.Count, toPlace.Count, _terms.Hero,
+                        _terms.Heroes, Instead(null, $"choose another {SchemeWord(plan.Scheme)} or player count"))))
+                    {
+                        return (deck, pool, preferred, heroes, included, rules);
+                    }
+                }
+
+                deck.AddRange(toPlace.Select(hero => preferred.First(other => other.Id == hero.Id)));
+                if (!rules.CanComplete(deck, []))
+                {
+                    var names = toPlace.Select(hero => hero.Name).ToList();
+                    var listed = names.Count == 1 ? names[0] : $"{string.Join(", ", names[..^1])} and {names[^1]}";
+                    if (Conflicts(
+                        $"The {_terms.Hero} rules of the {(chosenCards.Scheme is null ? "drawn " : "")}{SchemeWord(plan.Scheme)} {plan.Scheme.Name} can't be met with {listed}: remove a chosen {_terms.Hero}, or {Instead(null, $"choose another {SchemeWord(plan.Scheme)}")}."))
+                    {
+                        return (deck, pool, preferred, heroes, included, rules);
+                    }
+                }
             }
 
-            return new DeckDraw(deck, required, preferred, heroes, included, rules);
+            return (deck, pool, preferred, heroes, included, rules);
         }
 
         // Draws each Hero the Scheme draws outside the Hero Deck, once the Hero Deck is final. A draw the box data lets take
@@ -1304,6 +1679,35 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return (plan.Steps.Select(Fill).ToList(), extras);
         }
 
+        // "The Scheme X" for the chosen Scheme, or "The drawn Scheme X" for one the draw took (#337), so a message never asks
+        // the player to change a card they didn't choose.
+        private string TheScheme(Scheme scheme) => $"The {(chosenCards.Scheme is null ? "drawn " : "")}{SchemeWord(scheme)} {scheme.Name}";
+
+        // What to change besides the chosen cards (#337): the chosen Scheme (and Mastermind, when one is passed) as instead
+        // says, or, when the draw took either, another draw.
+        private string Instead(Mastermind? mastermind, string instead) =>
+            chosenCards.Scheme is null || (mastermind is not null && chosenCards.Mastermind is null) ? "generate again" : instead;
+
+        // A conflict over the chosen cards (#337) ends a draw with its message. A Probe, which tries thousands of pairs,
+        // records the first one instead, since throwing costs too much there; its caller then returns at once.
+        private bool Conflicts(string message)
+        {
+            if (!IsProbe)
+            {
+                throw new ChosenCardsConflictException(message);
+            }
+
+            _conflict ??= message;
+            return true;
+        }
+
+        private string? _conflict;
+
+        // Why count chosen cards don't fit the room the rest of the setup leaves them, and what to change instead (#337).
+        private static string Crowded(string setup, int room, int count, string one, string many, string instead) => room == 0
+            ? $"{setup} leaves no room for a chosen {one}: remove {(count == 1 ? "it" : "them")}, or {instead}."
+            : $"{setup} leaves room for {room} chosen {(room == 1 ? one : many)}, but {count} are chosen: remove {count - room}, or {instead}.";
+
         // "X-Men Heroes", "Jean Grey Hero" or "Heroes": what count Heroes of a team or a Hero Name are called.
         // nameContains is a word the Heroes have in their Hero Names: 'Heroes with "Hulk" in their Hero Names'.
         private string HeroesOf(int count, string? team, string? heroName, string? nameContains = null)
@@ -1318,7 +1722,8 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // A card's printed name, with its box when another card of its kind in the included boxes prints the same name
         // and more than one box is included, so a note never leaves the player unsure which physical card it means (#243).
-        private string Called(ICard card) => boxes.Count > 1 && SharedName(card) ? Labelled(card) : card.Name;
+        // A Probe's notes are never shown, so it names each card plainly.
+        private string Called(ICard card) => !IsProbe && boxes.Count > 1 && SharedName(card) ? Labelled(card) : card.Name;
 
         private string Labelled(ICard card) => $"{card.Name} (from {BoxLabel(BoxOf(card.Id), card.Id)})";
 
@@ -1492,7 +1897,17 @@ public sealed class SetupGenerator(BoxCatalog catalog)
 
         // Ids start with the declaring box's id, and box ids contain no underscore. A required card can come from a
         // box the setup doesn't include, so every loaded box is looked in.
-        private Box BoxOf(string id) => catalogBoxes.Single(box => id.StartsWith(box.Id + "_", StringComparison.Ordinal));
+        private Box BoxOf(string id)
+        {
+            if (!_boxesOf.TryGetValue(id, out var box))
+            {
+                _boxesOf[id] = box = catalogBoxes.Single(box => id.StartsWith(box.Id + "_", StringComparison.Ordinal));
+            }
+
+            return box;
+        }
+
+        private readonly Dictionary<string, Box> _boxesOf = [];
 
         private Ruleset RulesetOf(string id) => BoxOf(id).Ruleset;
 
@@ -1528,7 +1943,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         // A note a card causes cites the box that declares it but names the included boxes that hold it, as the card's
         // own label does: a reprint's note names the reprinting box when the original isn't included (#153).
         private RuleNote Note(string text, string citation, Box from, string? cardId = null) =>
-            new(text, citation, LinkOf(citation, from), boxes.Count > 1 ? BoxLabel(from, cardId) : null);
+            new(text, citation, IsProbe ? null : LinkOf(citation, from), !IsProbe && boxes.Count > 1 ? BoxLabel(from, cardId) : null);
 
         private string BoxLabel(Box from, string? cardId)
         {
@@ -1536,12 +1951,18 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             return holders.Count == 0 ? from.Name : string.Join(" or ", holders.Select(box => box.Name));
         }
 
+        // A pair's plan with its groups placed, the first steps of Finish: the Mastermind as the setup sees it, when it joins
+        // later, the slot notes, the Masterminds the Scheme sets aside with their Always Leads groups, and the filled slots.
+        private sealed record Placed(
+            SetupPlan Plan, Mastermind Mastermind, string? JoinsLater, List<RuleNote> SlotNotes,
+            List<(Mastermind Drained, string Source)> DrainedLeads, FilledSlots<VillainGroup> VillainSlots, FilledSlots<HenchmanGroup> HenchmanSlots);
+
         // The groups filling one type's slots, and the open picks among them: Open groups from FirstOpen, drawn from Pool.
         private sealed record FilledSlots<T>(List<T> Groups, int FirstOpen, int Open, IReadOnlyList<T> Pool);
 
-        // The Hero Deck's Heroes, the first Required of them the ones the Scheme or Mastermind requires; Preferred, the
-        // included Heroes each draw takes first; Drawable, every Hero a draw may take; Included, the included boxes' Heroes;
-        // and the Scheme's Hero rules.
+        // The Hero Deck's Heroes, the first Required of them the ones the Scheme or Mastermind requires or the player chose;
+        // Preferred, the included Heroes each draw takes first; Drawable, every Hero a draw may take; Included, the included
+        // boxes' Heroes; and the Scheme's Hero rules.
         private sealed record DeckDraw(
             List<Hero> Heroes, int Required, IReadOnlyList<Hero> Preferred, IReadOnlyList<Hero> Drawable, IReadOnlyList<Hero> Included, HeroRules Rules);
 
@@ -1561,6 +1982,12 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         card.Parts.All(part => standIns.TryGetValue(part, out var active)
             ? active.Rule.With is not { } with || boxes.Any(box => box.Components.Supplies(with)?.Value > 0)
             : boxes.Any(box => box.Components.Supplies(part)?.Value > 0));
+
+    // The random source of a Probe: the first option of every draw.
+    private sealed class FirstOption : IRandomSource
+    {
+        public int Next(int exclusiveMax) => 0;
+    }
 
     // A stand-in that applies to a setup, and the box that gives it.
     private sealed record ActiveStandIn(StandIn Rule, Box From);

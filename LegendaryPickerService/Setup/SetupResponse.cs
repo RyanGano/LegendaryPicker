@@ -4,7 +4,7 @@ using LegendaryPickerService.Catalog;
 namespace LegendaryPickerService.Setup;
 
 // The body GET /api/setup returns: a generator result reduced to what the result checklist shows.
-// Kind tells the client which shape it holds, "setup" or "noEligibleScheme".
+// Kind tells the client which shape it holds, "setup", "noEligibleScheme" or "chosenCardsConflict".
 public abstract record SetupResponse
 {
     public abstract string Kind { get; }
@@ -33,6 +33,7 @@ public abstract record SetupResponse
         NoEligibleScheme none => new NoEligibleSchemeBody(
             none.Players,
             $"No Scheme can be set up legally for {none.Players} player{(none.Players == 1 ? "" : "s")} with the included boxes."),
+        ChosenCardsConflict conflict => new ChosenCardsConflictBody(conflict.Message),
         _ => throw new ArgumentOutOfRangeException(nameof(result), result, "Unknown generation result."),
     };
 
@@ -286,6 +287,13 @@ public sealed record NoEligibleSchemeBody(int Players, string Message) : SetupRe
 {
     [JsonPropertyOrder(-1)]
     public override string Kind => "noEligibleScheme";
+}
+
+// The player's chosen cards can't all be in one legal setup (#337): Message says why and which choice to change.
+public sealed record ChosenCardsConflictBody(string Message) : SetupResponse
+{
+    [JsonPropertyOrder(-1)]
+    public override string Kind => "chosenCardsConflict";
 }
 
 // A chosen Scheme, Mastermind, group or Hero: its catalog id, display name, and the ids of the

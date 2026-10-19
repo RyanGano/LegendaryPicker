@@ -282,7 +282,26 @@ export type NoEligibleScheme = {
   message: string
 }
 
-export type SetupResponse = Setup | NoEligibleScheme
+// A valid answer, not an error: the cards the player chose can't all be in one legal setup (#337). message says why
+// and which choice to change.
+export type ChosenCardsConflict = {
+  kind: 'chosenCardsConflict'
+  message: string
+}
+
+export type SetupResponse = Setup | NoEligibleScheme | ChosenCardsConflict
+
+// The kinds of card a player can choose to be in the game, as the API names them (#337).
+export type ChoosableKind = 'scheme' | 'mastermind' | 'villain' | 'henchman' | 'hero'
+
+// A card a player can choose to be in the game: its id, printed name, kind and the ids of the boxes that hold it, the
+// box that declares it first.
+export type Card = {
+  id: string
+  name: string
+  kind: ChoosableKind
+  boxes: string[]
+}
 
 // A box a setup can include. A base game supplies the setup rules; an expansion adds cards. An API from before
 // rulesets leaves ruleset out.
@@ -331,6 +350,21 @@ export async function getBoxes(): Promise<Box[]> {
   }
 }
 
+// Every card a player can choose to be in the game, from every box (#337). Throws like getBoxes.
+export async function getCards(): Promise<Card[]> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/cards`, { signal: controller.signal })
+    if (!response.ok) {
+      throw new Error(`GET /api/cards returned ${response.status}.`)
+    }
+    return (await response.json()) as Card[]
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
 // The band names the difficulty and complexity pickers list. Throws like getBoxes.
 export async function getRatingBands(): Promise<RatingBands> {
   const controller = new AbortController()
@@ -348,7 +382,8 @@ export async function getRatingBands(): Promise<RatingBands> {
 
 // Draws from the named boxes, or from the core box alone when boxes is empty. With epic, a drawn Mastermind that has
 // an Epic side is played on that side. With rules, the whole setup follows that rule edition; without, the boxes decide.
-// With difficulty or complexity (1 to 5), the draw leans toward that rating; without, the draw is plain.
+// With difficulty or complexity (1 to 5), the draw leans toward that rating; without, the draw is plain. chosen are the
+// ids of cards that must be in the game (#337); the API includes the box of any that no named box holds.
 // Throws on a network failure, a non-2xx status (bad count or boxes, rate limit, server error),
 // an unrecognised body, or no answer within REQUEST_TIMEOUT_MS.
 export async function getSetup(
@@ -358,6 +393,7 @@ export async function getSetup(
   rules: RuleEdition | null = null,
   difficulty: number | null = null,
   complexity: number | null = null,
+  chosen: string[] = [],
 ): Promise<SetupResponse> {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
@@ -366,7 +402,8 @@ export async function getSetup(
     (epic ? '&epic=true' : '') +
     (rules ? `&rules=${rules}` : '') +
     (difficulty ? `&difficulty=${difficulty}` : '') +
-    (complexity ? `&complexity=${complexity}` : '')
+    (complexity ? `&complexity=${complexity}` : '') +
+    (chosen.length > 0 ? `&include=${chosen.map(encodeURIComponent).join(',')}` : '')
   try {
     const response = await fetch(`${apiBaseUrl}/api/setup?players=${players}${query}`, {
       signal: controller.signal,
@@ -375,7 +412,7 @@ export async function getSetup(
       throw new Error(`GET /api/setup returned ${response.status}.`)
     }
     const body = (await response.json()) as SetupResponse
-    if (body.kind !== 'setup' && body.kind !== 'noEligibleScheme') {
+    if (body.kind !== 'setup' && body.kind !== 'noEligibleScheme' && body.kind !== 'chosenCardsConflict') {
       throw new Error('GET /api/setup returned an unknown result.')
     }
     return body

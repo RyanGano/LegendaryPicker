@@ -1353,3 +1353,128 @@ div.box-option {
   font-size: var(--text-sm);
   color: var(--muted);
 }
+
+/* Must include (#337): a filter box over every card, its matches below it, and the chosen cards as chips. Each card
+   carries its type's accent on its leading edge. */
+.chosen-cards {
+  margin-top: var(--space-5);
+}
+
+.chosen-hint {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.chosen-filter {
+  position: relative;
+}
+
+.chosen-filter input {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 var(--space-3);
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.chosen-matches {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  margin: var(--space-1) 0 0;
+  padding: var(--space-1);
+  list-style: none;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.chosen-match,
+.chosen-chip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--space-2);
+  border-inline-start: 4px solid var(--kind, var(--border));
+}
+
+.chosen-match {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.chosen-match[aria-selected='true'],
+.chosen-match:hover {
+  background: var(--surface);
+}
+
+.chosen-match .detail,
+.chosen-chip .detail {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.chosen-name {
+  font-weight: 600;
+}
+
+.chosen-chips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chosen-chip {
+  position: relative;
+  padding: var(--space-2) calc(44px + var(--space-2)) var(--space-2) var(--space-3);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+}
+
+.chip-remove {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 44px;
+  padding: 0;
+  font-size: var(--text-md);
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.chip-remove:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.kind-scheme {
+  --kind: var(--scheme);
+}
+
+.kind-mastermind {
+  --kind: var(--mastermind);
+}
+
+.kind-villain {
+  --kind: var(--villain);
+}
+
+.kind-henchman {
+  --kind: var(--henchman);
+}
+
+.kind-hero {
+  --kind: var(--hero);
+}

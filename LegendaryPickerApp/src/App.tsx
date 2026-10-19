@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { BoxInfo } from './BoxInfo.tsx'
+import { ChosenCards } from './ChosenCards.tsx'
 import {
   getBoxes,
+  getCards,
   getRatingBands,
   getSetup,
   getSetupByCode,
   ping,
   SetupCodeError,
   type Box,
+  type Card,
   type RatingBands,
   type RuleEdition,
   type Setup,
@@ -39,6 +42,8 @@ const RULES_KEY = 'legendaryPicker.rules'
 // The difficulty and complexity the player asked the draw to lean toward, or none for any (#271).
 const DIFFICULTY_KEY = 'legendaryPicker.difficulty'
 const COMPLEXITY_KEY = 'legendaryPicker.complexity'
+// The ids of the cards the player chose to be in the game (#337).
+const CHOSEN_KEY = 'legendaryPicker.chosen'
 // The rule editions a player can choose, after the default.
 const RULE_EDITIONS: { id: RuleEdition; name: string; detail?: string }[] = [
   { id: 'first-edition', name: 'First Edition' },
@@ -186,6 +191,26 @@ function saveEpic(epic: boolean) {
   }
 }
 
+function loadChosen(): string[] {
+  return readIds(CHOSEN_KEY) ?? []
+}
+
+function saveChosen(ids: string[]) {
+  try {
+    localStorage.setItem(CHOSEN_KEY, JSON.stringify(ids))
+  } catch {
+    // Remembering the chosen cards is optional.
+  }
+}
+
+// The chosen cards with card added: a card of a kind a setup has one of, a Scheme or a Mastermind, takes the place of
+// the one chosen before (#337).
+function withChosen(cards: Card[], chosen: string[], card: Card): string[] {
+  const single = card.kind === 'scheme' || card.kind === 'mastermind'
+  const kept = single ? chosen.filter((id) => cards.find((other) => other.id === id)?.kind !== card.kind) : chosen
+  return [...kept, card.id]
+}
+
 function saveBoxes(ids: string[]) {
   try {
     localStorage.setItem(BOXES_KEY, JSON.stringify(ids))
@@ -200,6 +225,7 @@ type Status =
   | { kind: 'loading'; players?: number }
   | { kind: 'result'; setup: Setup }
   | { kind: 'noEligibleScheme'; message: string }
+  | { kind: 'chosenCardsConflict'; message: string }
   | { kind: 'codeError'; message: string }
   | { kind: 'error' }
 
@@ -227,6 +253,8 @@ function announcement(status: Status, showWakeUpNotice: boolean) {
     }
     case 'noEligibleScheme':
       return `${status.message} Pick another player count.`
+    case 'chosenCardsConflict':
+      return `${status.message} Change the cards under Must include.`
     case 'codeError':
       return status.message
     case 'error':
@@ -238,6 +266,9 @@ function App() {
   const [players, setPlayers] = useState<number | null>(loadPlayerCount)
   const [boxes, setBoxes] = useState<Box[]>([])
   const [included, setIncluded] = useState<string[]>(loadBoxes)
+  // Every card a player can choose from the API, and the ids of those chosen to be in the game (#337).
+  const [cards, setCards] = useState<Card[]>([])
+  const [chosen, setChosen] = useState<string[]>(loadChosen)
   const [epic, setEpic] = useState(loadEpic)
   const [rules, setRules] = useState<RuleEdition | null>(loadRules)
   const [difficulty, setDifficulty] = useState<number | null>(() => loadRating(DIFFICULTY_KEY))
@@ -271,6 +302,14 @@ function App() {
 
   useEffect(() => {
     void getRatingBands().then(setBands, () => {})
+  }, [])
+
+  // Without the card list nothing can be chosen, and the draw takes no chosen cards. Generate waits for it as for the boxes.
+  const cardsRequest = useRef<Promise<Card[]>>(Promise.resolve([]))
+  useEffect(() => {
+    const request = getCards().catch((): Card[] => [])
+    cardsRequest.current = request
+    void request.then(setCards)
   }, [])
 
   // A link with a setup code opens on that setup. The ref keeps strict mode's second run from loading it twice.
@@ -320,6 +359,29 @@ function App() {
     const next = boxes.every((box) => included.includes(box.id)) ? [] : boxes.map((box) => box.id)
     setIncluded(next)
     saveBoxes(next)
+  }
+
+  // A card chosen from a box that isn't ticked ticks its box, so the setup draws it as one of its own (#337).
+  function addChosen(card: Card) {
+    const next = withChosen(cards, chosen, card)
+    setChosen(next)
+    saveChosen(next)
+    if (!card.boxes.some((id) => included.includes(id))) {
+      const boxes = [...included, card.boxes[0]]
+      setIncluded(boxes)
+      saveBoxes(boxes)
+    }
+  }
+
+  function removeChosen(id: string) {
+    const next = chosen.filter((other) => other !== id)
+    setChosen(next)
+    saveChosen(next)
+  }
+
+  function clearChosen() {
+    setChosen([])
+    saveChosen([])
   }
 
   function chooseDifficulty(rating: number | null) {
@@ -372,6 +434,7 @@ function App() {
     setMastermindShown(false)
     try {
       const available = await boxesRequest.current
+      const known = await cardsRequest.current
       const drawn = available.filter(isIncluded)
       // A draw started before the box list loaded may turn out to have boxes it can't draw from; the picker now says so.
       if (boxHint(available, included) !== null) {
@@ -385,10 +448,14 @@ function App() {
         spansRulesets(available, included) ? rules : null,
         bands ? difficulty : null,
         bands ? complexity : null,
+        // Stored ids the API no longer lists are left out.
+        chosen.filter((id) => known.some((card) => card.id === id)),
       )
       if (response.kind === 'setup') {
         setStatus({ kind: 'result', setup: response })
         setShownSetup(true)
+      } else if (response.kind === 'chosenCardsConflict') {
+        setStatus({ kind: 'chosenCardsConflict', message: response.message })
       } else {
         setStatus({ kind: 'noEligibleScheme', message: response.message })
       }
@@ -548,6 +615,18 @@ function App() {
                 </div>
               </>
             )}
+            {cards.length > 0 && (
+              <ChosenCards
+                cards={cards}
+                boxes={boxes}
+                included={included}
+                chosen={chosen}
+                disabled={loading}
+                onAdd={addChosen}
+                onRemove={removeChosen}
+                onClear={clearChosen}
+              />
+            )}
             <h2 id="options-label">Options</h2>
             <div className="box-options" role="group" aria-labelledby="options-label">
               <label className="box-option">
@@ -629,6 +708,12 @@ function App() {
             <div className="state-card scheme">
               <p>{status.message}</p>
               <p className="state-prompt">Pick another player count.</p>
+            </div>
+          )}
+          {status.kind === 'chosenCardsConflict' && (
+            <div className="state-card">
+              <p>{status.message}</p>
+              <p className="state-prompt">Change the cards under Must include.</p>
             </div>
           )}
           {status.kind === 'codeError' && (
