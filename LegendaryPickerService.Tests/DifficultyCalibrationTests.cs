@@ -49,7 +49,7 @@ public sealed class DifficultyCalibrationTests
             Core.Masterminds.Single(mastermind => mastermind.Id == $"core_mastermind_{reference.Mastermind}"),
             reference.Villains.Select(group => Core.VillainGroups.Single(card => card.Id == $"core_villain_{group}")),
             [Core.HenchmanGroups.Single(card => card.Id == $"core_henchman_{reference.Henchmen}")],
-            5, 8, 10, new Dictionary<string, string>());
+            5, 8, 10, 2, Ruleset.FirstEdition, new Dictionary<string, string>());
         expected = DifficultyScorer.Expected(heroes, tuning, opposition);
         return DifficultyScorer.Score(heroes, tuning, opposition);
     }
@@ -71,6 +71,34 @@ public sealed class DifficultyCalibrationTests
         }
 
         Assert.Empty(misses);
+    }
+
+    // The rating is relative to the player count (#334). At 5 players the Villain Deck holds 4 Villain Groups and 2 Henchman
+    // Groups of 10, so the cheap deck against the light opposition with its 5-player groups still rates 1 and the costly
+    // deck against the heavy one 5; rated as a 2-player setup, the same cards rate harder.
+    [Fact]
+    public void The_extremes_keep_their_bands_at_5_players_and_the_same_cards_rate_harder_at_2()
+    {
+        double FivePlayerCards(string[] deck, string mastermind, string scheme, string[] villains, string[] henchmen, int ratedAt)
+        {
+            var heroes = deck.Select(name => DifficultyInputs.Scored(Catalog, Core.Heroes.Single(hero => hero.Id == $"core_hero_{name}"))).ToList();
+            var opposition = DifficultyInputs.Opposition(
+                Catalog,
+                Core.Schemes.Single(card => card.Id == $"core_scheme_{scheme}"),
+                Core.Masterminds.Single(card => card.Id == $"core_mastermind_{mastermind}"),
+                villains.Select(group => Core.VillainGroups.Single(card => card.Id == $"core_villain_{group}")),
+                henchmen.Select(group => Core.HenchmanGroups.Single(card => card.Id == $"core_henchman_{group}")),
+                5, 8, 20, ratedAt, Ruleset.FirstEdition, new Dictionary<string, string>());
+            return DifficultyScorer.Expected(heroes, DifficultyTuning.Default, opposition);
+        }
+
+        double Light(int ratedAt) => FivePlayerCards(EasyDeck, "loki", "portals-to-the-dark-dimension",
+            ["enemies-of-asgard", "masters-of-evil", "spider-foes", "hydra"], ["sentinel", "hand-ninjas"], ratedAt);
+        var heavy = FivePlayerCards(HardDeck, "red-skull", "replace-earths-leaders-with-killbots",
+            ["skrulls", "brotherhood", "radiation", "spider-foes"], ["sentinel", "savage-land-mutates"], 5);
+
+        Assert.Equal((1, 5), ((int)Math.Round(Light(5)), (int)Math.Round(heavy)));
+        Assert.True(Light(2) > Light(5) + 0.5, $"{Light(2)} rated at 2 players against {Light(5)} at 5");
     }
 
     [Fact]

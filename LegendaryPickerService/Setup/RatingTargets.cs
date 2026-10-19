@@ -19,14 +19,16 @@ public sealed class RatingTargets(BoxCatalog catalog, int? difficulty, int? comp
     // What the response rates of a choice: the Scheme, the drawn Mastermind, the groups and the Hero Deck's rated Heroes
     // against the Villain Deck's real Master Strikes, Twists and Henchman cards, and for complexity the cards it reads with
     // the stacks the setup lays out for them and the stand-ins it uses, which layout gives only when complexity is asked for.
+    // players and ruleset are the setup's, which the difficulty is relative to (#334).
     public Rated Rate(
         ICard scheme, ICard mastermind, IReadOnlyList<ICard> villainGroups, IReadOnlyList<ICard> henchmanGroups, IReadOnlyList<Hero> heroes,
-        int masterStrikes, int twists, int henchmanCards, Func<(IEnumerable<Part> Stacks, IReadOnlyCollection<StandIn> StandIns)> layout)
+        int masterStrikes, int twists, int henchmanCards, int players, Ruleset ruleset,
+        Func<(IEnumerable<Part> Stacks, IReadOnlyCollection<StandIn> StandIns)> layout)
     {
         var (rating, expected) = (0, 0.0);
         if (difficulty is not null)
         {
-            var opposition = DifficultyInputs.Opposition(catalog, scheme, mastermind, villainGroups, henchmanGroups, masterStrikes, twists, henchmanCards, NoNames);
+            var opposition = DifficultyInputs.Opposition(catalog, scheme, mastermind, villainGroups, henchmanGroups, masterStrikes, twists, henchmanCards, players, ruleset, NoNames);
             (rating, expected) = DifficultyScorer.Measure(heroes.Select(Scored).ToList(), DifficultyTuning.Default, opposition);
         }
 

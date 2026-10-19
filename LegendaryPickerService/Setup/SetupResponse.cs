@@ -53,7 +53,7 @@ public abstract record SetupResponse
         var names = catalog.Boxes.SelectMany(box => box.Glossary).GroupBy(term => term.Id).ToDictionary(terms => terms.Key, terms => terms.First().Name);
         var opposition = DifficultyInputs.Opposition(
             catalog, setup.Scheme, setup.Mastermind, setup.VillainGroups, setup.HenchmanGroups,
-            setup.VillainDeck.MasterStrikes, setup.VillainDeck.Twists, setup.VillainDeck.HenchmanCards, names);
+            setup.VillainDeck.MasterStrikes, setup.VillainDeck.Twists, setup.VillainDeck.HenchmanCards, setup.Players, setup.Ruleset, names);
         return DifficultyScorer.Score(scored.ToList(), DifficultyTuning.Default, opposition);
     }
 

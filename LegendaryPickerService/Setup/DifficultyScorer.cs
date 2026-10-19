@@ -73,6 +73,14 @@ public sealed record DifficultyTuning
     // raw score against the Hero Deck's terms, and the least load worth a reason.
     public double LoadEasy { get; init; } = 15;
     public double LoadHard { get; init; } = 55;
+
+    // The load a Villain Group, a Henchman card and a Master Strike add on average (#334): the mean over every loaded
+    // box's groups and Masterminds against the three #268 reference decks, an untagged one adding none. A player count
+    // whose rules put more of them in the Villain Deck than 2 players get moves LoadEasy and LoadHard up by the load they
+    // add, so the rating is relative to the player count and the 2-player scale is the calibrated one.
+    public double LoadPerVillainGroup { get; init; } = 6.1;
+    public double LoadPerHenchmanCard { get; init; } = 0.32;
+    public double LoadPerMasterStrike { get; init; } = 1.7;
     public double OppositionWeight { get; init; } = 0.4;
     public double ReasonLoadMin { get; init; } = 0.75;
     public int MaxOppositionReasons { get; init; } = 3;
@@ -118,10 +126,16 @@ public sealed record ScoredHero(IReadOnlyList<string> Teams, IReadOnlyList<HeroC
 // the box whose glossary names its team.
 public sealed record OppositionPart(string Subject, string Box, OppositionTag Tag, IReadOnlyList<Timing> Timings, double Count);
 
-// The drawn opposition as the scorer sees it: its tagged parts, the axes the Scheme amplifies, and the display names of
-// glossary terms by id. A setup with none of its opposition tagged has no parts and rates on the Hero Deck alone.
+// What a player count's rules put in the Villain Deck beyond what 2 players get under the same rules (#334): Villain
+// Groups, Henchman cards and Master Strikes, fewer (negative) in Solo. None at 2 players.
+public readonly record struct PlayerCountExtra(int VillainGroups, int HenchmanCards, int MasterStrikes);
+
+// The drawn opposition as the scorer sees it: its tagged parts, the axes the Scheme amplifies, the display names of
+// glossary terms by id, and what its player count adds to the Villain Deck, which the load is rated relative to. A setup
+// with none of its opposition tagged has no parts and rates on the Hero Deck alone.
 public sealed record ScoredOpposition(
-    IReadOnlyList<OppositionPart> Parts, IReadOnlyList<OppositionAxis> Amplified, IReadOnlyDictionary<string, string> TermNames);
+    IReadOnlyList<OppositionPart> Parts, IReadOnlyList<OppositionAxis> Amplified, IReadOnlyDictionary<string, string> TermNames,
+    PlayerCountExtra Players = default);
 
 // What the response shows: rating 1 (easiest) to 5, its band name and up to three reasons in plain words. Target is the
 // difficulty the request asked for (#267), absent when it asked for none; the rating is what the draw really has. With a
@@ -366,7 +380,10 @@ public static class DifficultyScorer
         if (contributions.Count > 0)
         {
             var load = contributions.Sum(contribution => contribution.Load) + selfLoad;
-            raw = (1 - tuning.OppositionWeight) * raw + tuning.OppositionWeight * Scale(load, tuning.LoadEasy, tuning.LoadHard);
+            var extra = opposition!.Players;
+            var shift = extra.VillainGroups * tuning.LoadPerVillainGroup + extra.HenchmanCards * tuning.LoadPerHenchmanCard
+                + extra.MasterStrikes * tuning.LoadPerMasterStrike;
+            raw = (1 - tuning.OppositionWeight) * raw + tuning.OppositionWeight * Scale(load, tuning.LoadEasy + shift, tuning.LoadHard + shift);
             oppositionReasons = contributions
                 .Where(contribution => contribution.Load >= tuning.ReasonLoadMin)
                 .OrderByDescending(contribution => contribution.Load)

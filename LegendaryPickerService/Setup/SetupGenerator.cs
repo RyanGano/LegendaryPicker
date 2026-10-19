@@ -1192,7 +1192,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             ICard[] alongside = [.. outsideHenchmen.Select(outside => outside.Group), .. plan.Beside.Select(beside => CatalogGroup(beside.Rule.GroupId))];
             RatingTargets.Rated Rate() => targets.Rate(
                 plan.Scheme, drawnMastermind, villains.Groups, henchmen.Groups, heroes.Take(rated).ToList(),
-                plan.MasterStrikes, plan.Twists, HenchmanCards(plan, henchmen.Groups),
+                plan.MasterStrikes, plan.Twists, HenchmanCards(plan, henchmen.Groups), players, rulesBox.Ruleset,
                 () =>
                 {
                     var layout = LayOut([plan.Scheme, drawnMastermind, .. villains.Groups, .. henchmen.Groups, .. heroes, .. alongside], []);
