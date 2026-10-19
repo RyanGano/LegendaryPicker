@@ -193,6 +193,9 @@ The printed names of the special cards a box shuffles into a shared stack, such 
 **Setup code**:
 A short string that reloads one drawn setup (#335, #340), shown under the drawn cards with buttons to copy it or a link (`?code=`) that opens it. It names the cards, not a seed: the player count, then the Scheme, the Masterminds, the Villain Groups, the Henchman Groups and the Heroes as short card numbers from a fixed, append-only order, then a short box data version and, only when needed, Epic Masterminds, the chosen rule edition and the included boxes. The boxes come from the cards unless a ticked box with no drawn card changes the setup. Reloading searches for a draw that gives the code's cards, so a code keeps working while its cards can still be drawn together, even after other box data changes; when they can't, it says the data has changed instead of showing another setup. `GET /api/setup/{code}` returns the setup with its ratings, player count and box ids.
 
+**Saved setup**:
+A setup the player kept on this device (#335): its setup code with a name, an optional note and the date it was saved, held in the browser's storage and listed under Load a setup. Loading one reloads its code; no cards are stored. Saving the same code again replaces its name and note.
+
 **No eligible Scheme**:
 The result when no Scheme in the included boxes is allowed at the player count, or no Mastermind is included. It is a result, not an error.
 
