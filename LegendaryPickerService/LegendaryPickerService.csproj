@@ -13,6 +13,7 @@
   <ItemGroup>
     <Content Update="Data\Boxes\*.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Update="Data\Difficulty\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="Data\CodeNumbers.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

@@ -817,7 +817,7 @@ describe('App', () => {
 })
 
 describe('setup codes', () => {
-  const code = '1-a0dul3-30020-4q6n7x-vqv4c39p6bg7'
+  const code = '3-0b-3k-1a2c-0f-5v6x7a7c8d-k3p'
   const coded: Setup = { ...setup, boxes: ['core'], code }
 
   afterEach(() => window.history.replaceState(null, '', '/'))
