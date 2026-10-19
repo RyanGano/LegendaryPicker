@@ -462,3 +462,20 @@ What to watch:
 - The three means were measured against the core reference decks. A deck that fails other boxes' checks more often meets
   more load per extra group than the shift allows, so every box at 4 players still rates 5 in 3 of 4 seeds. Re-measure
   the means when many groups are re-tagged.
+
+## Playtest ratings (#335)
+
+The bands are re-tuned from played games, not from reference setups the owner would have to guess bands for. Each
+setup carries a setup code; `GET /api/setup/{code}` reloads it with the ratings it was shown.
+
+1. After a game, `/record-rating <code> <felt>` (`.claude/skills/record-rating`) reloads the code, confirms the shown
+   difficulty and complexity bands, and posts one comment on #336: the code, players, boxes, shown bands, and how each
+   felt on the scale much easier, easier, about right, harder, much harder, with an optional one-line note. No card
+   text; the code names the cards.
+2. When enough games are in, `/recalibrate-bands` (`.claude/skills/recalibrate-bands`) reads #336, tables felt against
+   shown, and proposes `DifficultyTuning` or `ComplexityTuning` changes as a PR by the #281 method: no sweeps, at most
+   4 seeds, before and after quoted, every #268 reference setup kept in its band. A handful of games is weak evidence,
+   and the PR says so; no band moves without the games that call for it.
+
+Both skills read the deployed API from the `VITE_API_BASE_URL` repository variable, or a local `dotnet run` at
+`http://localhost:5179`.
