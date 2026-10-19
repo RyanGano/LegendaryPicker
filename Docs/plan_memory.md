@@ -20,7 +20,7 @@ A request may ask for a target with `difficulty=1..5` (#267; anything else is a 
 
 ## Setup codes (#335 part 1, 2026-10-18)
 
-Every drawn setup carries a setup code that stores the cards plus the box data version, not a seed (the issue's recommendation); `GET /api/setup/{code}` reloads it with its shown ratings, player count and box ids, or answers 409 when the current data can no longer give the same cards. Format and replay: Setup codes in `Docs/Plan.md`. The `/record-rating` and `/recalibrate-bands` skills and saving favourites in browser storage are later PRs of #335.
+Every drawn setup carries a setup code that stores the cards plus the box data version, not a seed (the issue's recommendation); `GET /api/setup/{code}` reloads it with its shown ratings, player count and box ids, or answers 409 when the current data can no longer give the same cards. Format and replay: Setup codes in `Docs/Plan.md`. Part 2 adds the repo skills `/record-rating` (posts one game's felt-against-shown rating on #336) and `/recalibrate-bands` (proposes band changes from #336 by the #281 method); see Playtest ratings in `Docs/Difficulty/README.md`. Saving favourites in browser storage is a later PR of #335.
 
 ## Resolved in the 2026-09-27 session
 
