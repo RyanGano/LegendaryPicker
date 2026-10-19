@@ -92,6 +92,24 @@ public sealed class DifficultyTargetTests
         }
     }
 
+    // With the rating relative to the player count (#334), both extremes stay reachable in Solo and at 4 and 5 players.
+    [Theory]
+    [InlineData(1, 1, 3)]
+    [InlineData(1, 5, 0)]
+    [InlineData(4, 1, 0)]
+    [InlineData(4, 5, 0)]
+    [InlineData(5, 1, 0)]
+    [InlineData(5, 5, 0)]
+    public void Both_extremes_are_reached_at_other_player_counts(int players, int target, int seed)
+    {
+        var pattern = Enumerable.Range(0, 30).Select(i => (seed * 7919 + i * 104729 + 13) % 100003).ToArray();
+
+        var setup = Assert.IsType<SetupResult>(new SetupGenerator(Catalog).Generate(
+            players, ["core", "dark-city", "secret-wars-volume-1"], new CyclingRandom(pattern), difficulty: target));
+
+        Assert.Equal(target, Rating(setup, target).Rating);
+    }
+
     [Fact]
     public async Task The_response_carries_the_requested_target_the_real_rating_and_whether_it_was_reached()
     {

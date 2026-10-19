@@ -262,7 +262,7 @@ public sealed class DifficultyTests : IDisposable
         var catalog = BoxCatalog.Load(_boxes, _difficulty);
         var hydra = catalog.Boxes.Single().VillainGroups.Single(group => group.Id == "core_villain_hydra");
 
-        var parts = DifficultyInputs.Opposition(catalog, null, null, [hydra], [], 5, 8, 0, new Dictionary<string, string>()).Parts;
+        var parts = DifficultyInputs.Opposition(catalog, null, null, [hydra], [], 5, 8, 0, 2, Ruleset.FirstEdition, new Dictionary<string, string>()).Parts;
 
         Assert.Equal(
             [(OppositionAxis.Wounds, "Ambush"), (OppositionAxis.DeckThinning, "Fight, Escape")],

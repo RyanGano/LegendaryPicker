@@ -10,10 +10,11 @@ public static class DifficultyInputs
         new(hero.Teams, catalog.Difficulty.GetValueOrDefault(BoxOf(hero.Id))?.Heroes.FirstOrDefault(tags => tags.Hero == hero.Id)?.Cards, weight);
 
     // The tagged parts of a Scheme, Mastermind and groups. masterStrikes, twists and henchmanCards are how many the Villain
-    // Deck holds (or is expected to hold); termNames name teams in a reason and may be empty when no reason is read.
+    // Deck holds (or is expected to hold); players and ruleset are the setup's player count and the rules it follows, which
+    // its load is rated relative to (#334); termNames name teams in a reason and may be empty when no reason is read.
     public static ScoredOpposition Opposition(
         BoxCatalog catalog, ICard? scheme, ICard? mastermind, IEnumerable<ICard> villainGroups, IEnumerable<ICard> henchmanGroups,
-        int masterStrikes, int twists, int henchmanCards, IReadOnlyDictionary<string, string> termNames)
+        int masterStrikes, int twists, int henchmanCards, int players, Ruleset ruleset, IReadOnlyDictionary<string, string> termNames)
     {
         var parts = new List<OppositionPart>();
         var amplified = new List<OppositionAxis>();
@@ -65,7 +66,29 @@ public static class DifficultyInputs
             }
         }
 
-        return new ScoredOpposition(parts, amplified, termNames);
+        return new ScoredOpposition(parts, amplified, termNames, Extra(catalog, players, ruleset));
+    }
+
+    // What the player count's table puts in the Villain Deck beyond the 2-player row, from the first loaded base game of the
+    // ruleset: every base game of one ruleset has the same table, and Revised adds a Villain Group at 4 and 5 players. A
+    // Scheme's own changes to the counts are not taken off, so they still rate as harder.
+    private static PlayerCountExtra Extra(BoxCatalog catalog, int players, Ruleset ruleset)
+    {
+        var rulesBox = catalog.Boxes.First(box => box.IsBaseGame && box.Ruleset == ruleset);
+        var rules = rulesBox.Setup!;
+        (int Groups, int Henchmen, int Strikes) Deck(int count)
+        {
+            if (count == 1)
+            {
+                return (rules.Solo.VillainGroups.Value, rules.Solo.HenchmanCards.Value, rules.Solo.MasterStrikes.Value);
+            }
+
+            var row = rules.PlayerCounts.Single(row => row.Players == count);
+            return (row.VillainGroups, row.HenchmanGroups * rulesBox.Components.HenchmanGroupCards.Value, rules.MasterStrikes.Value);
+        }
+
+        var (at, two) = (Deck(players), Deck(2));
+        return new PlayerCountExtra(at.Groups - two.Groups, at.Henchmen - two.Henchmen, at.Strikes - two.Strikes);
     }
 
     private static string BoxOf(string id) => id.Split('_')[0];
