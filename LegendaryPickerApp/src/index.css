@@ -1354,16 +1354,101 @@ div.box-option {
   color: var(--muted);
 }
 
-/* Must include (#337): a filter box over every card, its matches below it, and the chosen cards as chips. Each card
-   carries its type's accent on its leading edge. */
+/* Must include (#337): an expander over a filter box over every card, its matches below it, and the chosen cards as
+   chips. Each card carries its type's accent on its leading edge. */
 .chosen-cards {
-  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.chosen-cards > summary h2 {
+  margin: 0;
+}
+
+.chosen-cards[open] > summary {
+  margin-bottom: var(--space-3);
+}
+
+.chosen-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
 }
 
 .chosen-hint {
-  margin: 0 0 var(--space-2);
   font-size: var(--text-sm);
   color: var(--muted);
+}
+
+/* A card of a kind the setup has no more room for stays listed, greyed, with why. */
+.chosen-match[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.chosen-over {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+/* The two expanders, Must include and Expansions: the summary is the heading with a turning arrow before it and a note
+   after it. */
+.chosen-cards > summary,
+.expansions > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+  list-style: none;
+}
+
+.chosen-cards > summary::-webkit-details-marker,
+.expansions > summary::-webkit-details-marker {
+  display: none;
+}
+
+.chosen-cards > summary::before,
+.expansions > summary::before {
+  content: '▸';
+  display: inline-block;
+  width: 1em;
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+
+.chosen-cards[open] > summary::before,
+.expansions[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.chosen-cards > summary .detail {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.expansions > summary .box-group-label {
+  margin: 0;
+}
+
+.expansions > summary .box-group-note {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.expansions[open] > summary {
+  margin-bottom: var(--space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chosen-cards > summary::before,
+  .expansions > summary::before {
+    transition: none;
+  }
 }
 
 .chosen-filter {

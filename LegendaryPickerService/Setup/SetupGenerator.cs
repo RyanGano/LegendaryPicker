@@ -77,6 +77,59 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             throw new ArgumentException(problem, nameof(includedBoxes));
         }
 
+        var targets = difficulty is not null || complexity is not null ? new RatingTargets(catalog, difficulty, complexity) : null;
+        var (boxes, draws) = Draws(players, includedBoxes, random, rules, targets, chosen);
+        try
+        {
+            return Run(boxes, draws, players, random, epic, chosen);
+        }
+        catch (ChosenCardsConflictException conflict)
+        {
+            return new ChosenCardsConflict(conflict.Message);
+        }
+    }
+
+    // The most Heroes, Villain Groups and Henchman Groups a player can choose for a setup of these boxes and player count
+    // (#337): the most the Hero Deck and group slots hold with any included Scheme and a Mastermind it can be drawn with, or
+    // with the chosen Scheme or Mastermind when there is one. It is an upper bound: a Mastermind's Always Leads group or a
+    // Scheme's required group can take a slot, and the draw then narrows to the pairs that leave room, or says no pair does.
+    // With epic, each Mastermind counts on the side a draw with epic plays, as Epic Annihilus's extra Villain Group.
+    public ChoiceLimits Limits(
+        int players, IReadOnlyCollection<string> includedBoxes, Ruleset? rules = null, IReadOnlyCollection<string>? chosenCards = null, bool epic = false)
+    {
+        if (CheckChosenCards(chosenCards ?? []) is { } wrongCard)
+        {
+            throw new ArgumentException(wrongCard, nameof(chosenCards));
+        }
+
+        var chosen = ChosenCards.Of(catalog, chosenCards ?? []);
+        includedBoxes = BoxesWith(includedBoxes, chosenCards ?? []);
+        if (CheckBoxes(includedBoxes, rules) is { } problem)
+        {
+            throw new ArgumentException(problem, nameof(includedBoxes));
+        }
+
+        var (boxes, draws) = Draws(players, includedBoxes, new FirstOption(), rules, null, chosen);
+        var schemes = boxes.SelectMany(box => box.AllSchemes).DistinctBy(scheme => scheme.Id)
+            .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(players) ?? true)
+            .ToList();
+        ChoiceLimits Most(Scheme? scheme, Mastermind? mastermind) => draws
+            .Select(draw => draw.Limits(
+                schemes.Where(other => scheme is null || other.Id == scheme.Id).ToList(),
+                draw.Masterminds.Where(other => mastermind is null || other.Id == mastermind.Id)
+                    .Select(other => epic ? draw.PlayedEpic(other) : other).ToList()))
+            .Aggregate(new ChoiceLimits(0, 0, 0), (most, limits) => new ChoiceLimits(
+                Math.Max(most.Heroes, limits.Heroes), Math.Max(most.VillainGroups, limits.VillainGroups), Math.Max(most.HenchmanGroups, limits.HenchmanGroups)));
+
+        // A chosen Scheme and Mastermind no setup can pair leave nothing to count; the draw says why, so the limits are
+        // then those of every pair.
+        return Most(chosen.Scheme, chosen.Mastermind) is { Heroes: > 0 } limits ? limits : Most(null, null);
+    }
+
+    // The included boxes, in catalog order, and the sets of rules a draw from them can follow.
+    private (List<Box> Boxes, List<TableDraw> Draws) Draws(
+        int players, IReadOnlyCollection<string> includedBoxes, IRandomSource random, Ruleset? rules, RatingTargets? targets, ChosenCards chosen)
+    {
         var boxes = catalog.Boxes.Where(box => includedBoxes.Contains(box.Id)).ToList();
         var mixingBox = boxes.Select(box => box.Ruleset).Distinct().Count() > 1
             ? boxes.FirstOrDefault(box => box.Setup?.Mixing is not null)
@@ -89,7 +142,6 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             .DistinctBy(active => active.Rule.Part)
             .ToDictionary(active => active.Rule.Part);
         var baseRulesets = boxes.Where(box => box.IsBaseGame).Select(box => box.Ruleset).ToHashSet();
-        var targets = difficulty is not null || complexity is not null ? new RatingTargets(catalog, difficulty, complexity) : null;
 
         TableDraw Table(Box rulesBox, RuleNote? edition)
         {
@@ -112,15 +164,7 @@ public sealed class SetupGenerator(BoxCatalog catalog)
                 .GroupBy(box => box.Ruleset)
                 .Select(group => Table(group.Key == mixingBox?.Ruleset ? mixingBox : group.First(), null))
                 .ToList();
-
-        try
-        {
-            return Run(boxes, draws, players, random, epic, chosen);
-        }
-        catch (ChosenCardsConflictException conflict)
-        {
-            return new ChosenCardsConflict(conflict.Message);
-        }
+        return (boxes, draws);
     }
 
     // The kinds of card a player can choose to be in the game (#337), by the kind part of their ids.
@@ -414,6 +458,34 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             };
 
         private bool IsProbe { get; init; }
+
+        // The most Heroes, Villain Groups and Henchman Groups a setup of these rules holds with one of the Schemes and a
+        // Mastermind of these it can be drawn with (#337). A Mastermind's extra groups and Heroes add to any Scheme's, and a
+        // Mastermind the Scheme sets aside with its Always Leads group may add a group of either type.
+        public ChoiceLimits Limits(IReadOnlyList<Scheme> schemes, IReadOnlyList<Mastermind> masterminds)
+        {
+            var most = new ChoiceLimits(0, 0, 0);
+            foreach (var scheme in schemes)
+            {
+                var pairs = masterminds.Where(mastermind => !mastermind.RuledOutBy(scheme) && Follows(scheme, mastermind))
+                    .Select(mastermind => AsSeen(scheme, mastermind).Setup).ToList();
+                if (pairs.Count == 0)
+                {
+                    continue;
+                }
+
+                var plan = Plan(scheme);
+                var drained = plan.OutsideMasterminds.Where(draw => draw.Rule.BringsAlwaysLeads?.Value == true).Sum(draw => draw.Count);
+                int Extra(Func<SetupEffects, IReadOnlyList<PlayerCountValue>?> effect) =>
+                    pairs.Max(effects => effects is null ? 0 : ForPlayers(effect(effects) ?? [])?.Value ?? 0);
+                most = new ChoiceLimits(
+                    Math.Max(most.Heroes, plan.Heroes + Extra(effects => effects.ExtraHeroes)),
+                    Math.Max(most.VillainGroups, plan.VillainGroups + drained + Extra(effects => effects.ExtraVillainGroups)),
+                    Math.Max(most.HenchmanGroups, plan.HenchmanGroups + drained + Extra(effects => effects.ExtraHenchmanGroups)));
+            }
+
+            return most;
+        }
 
         // A Probe's plans by Scheme, and why its chosen Heroes don't fit a Hero Deck, by what the deck depends on.
         private readonly Dictionary<string, SetupPlan> _plans = [];

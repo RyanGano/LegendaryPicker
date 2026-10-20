@@ -52,18 +52,21 @@ let fetchMock: ReturnType<typeof vi.fn>
 let setupAnswers: SetupAnswer[]
 let boxesAnswer: () => Promise<Response>
 let cardsAnswer: () => Promise<Response>
+let limitsAnswer: () => Promise<Response>
 
-// Health always answers, /api/boxes lists the core box and /api/cards no cards unless a test says otherwise, and each
-// /api/setup request takes the next queued answer.
+// Health always answers, /api/boxes lists the core box, /api/cards no cards and /api/limits room for plenty unless a test
+// says otherwise, and each /api/setup request takes the next queued answer.
 beforeEach(() => {
   setupAnswers = []
   boxesAnswer = () => json([core])
   cardsAnswer = () => json([])
+  limitsAnswer = () => json({ heroes: 6, villainGroups: 4, henchmanGroups: 2 })
   fetchMock = vi.fn((url: string, init?: RequestInit) => {
     if (url.endsWith('/api/health')) return json({ status: 'ok' })
     if (url.endsWith('/api/boxes')) return boxesAnswer()
     if (url.endsWith('/api/ratings')) return json(ratingBands)
     if (url.endsWith('/api/cards')) return cardsAnswer()
+    if (url.includes('/api/limits?')) return limitsAnswer()
     const answer = setupAnswers.shift()
     if (!answer) throw new Error(`Unexpected request ${url}`)
     return answer(init!.signal!)
@@ -166,17 +169,32 @@ describe('App', () => {
     await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
   })
 
-  it('checks every box, then unchecks them all, from one button', async () => {
+  it('checks every expansion, then unchecks them all, from one button that leaves the base games alone', async () => {
     boxesAnswer = () => json([core, fixture])
     const user = userEvent.setup()
     renderApp()
 
-    await user.click(await screen.findByRole('button', { name: 'Check all' }))
-    const boxChecks = screen.getAllByRole('checkbox').filter((box) => !/Epic Masterminds/.test(box.parentElement?.textContent ?? ''))
-    expect(boxChecks.every((box) => (box as HTMLInputElement).checked)).toBe(true)
+    await user.click(await screen.findByRole('button', { name: 'Check all expansions' }))
+    const coreBox = screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box' })
+    const fixtureBox = screen.getByRole('checkbox', { name: 'Fixture Expansion' })
+    expect([coreBox, fixtureBox].map((box) => (box as HTMLInputElement).checked)).toEqual([true, true])
+    expect(screen.getByRole('group', { name: 'Expansions' })).toHaveTextContent('1 of 1 ticked')
 
-    await user.click(screen.getByRole('button', { name: 'Uncheck all' }))
-    expect(boxChecks.some((box) => (box as HTMLInputElement).checked)).toBe(false)
+    await user.click(screen.getByRole('button', { name: 'Uncheck all expansions' }))
+    expect([coreBox, fixtureBox].map((box) => (box as HTMLInputElement).checked)).toEqual([true, false])
+  })
+
+  it('folds the expansions away until the player opens them', async () => {
+    boxesAnswer = () => json([core, fixture])
+    const user = userEvent.setup()
+    renderApp()
+
+    const expansions = await screen.findByRole('group', { name: 'Expansions' })
+    expect(expansions).not.toHaveAttribute('open')
+    expect(screen.getByRole('group', { name: /^Base games/ }).tagName).not.toBe('DETAILS')
+
+    await user.click(within(expansions).getByText('Expansions'))
+    expect(expansions).toHaveAttribute('open')
   })
 
   it('asks for Epic Masterminds only once the option is ticked, and remembers it', async () => {
@@ -1031,6 +1049,65 @@ describe('must include', () => {
 
     const chips = screen.getByRole('list', { name: 'Chosen cards' })
     expect(within(chips).getAllByRole('listitem').map((chip) => chip.querySelector('.chosen-name')?.textContent)).toEqual(['Dire Wolf'])
+  })
+
+  it('folds Must include away until it is opened, and sits above the boxes', async () => {
+    const user = userEvent.setup()
+    renderApp()
+
+    const filter = await screen.findByRole('combobox', { name: 'Must include' })
+    const expander = filter.closest('details')!
+    expect(expander).not.toHaveAttribute('open')
+    expect(expander.compareDocumentPosition(screen.getByRole('heading', { name: 'Boxes' })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+
+    await user.click(screen.getByRole('heading', { name: 'Must include' }))
+    expect(expander).toHaveAttribute('open')
+  })
+
+  it('stops more Heroes being chosen than a setup of the player count holds, and asks for the limits again when it changes', async () => {
+    limitsAnswer = () => json({ heroes: 1, villainGroups: 2, henchmanGroups: 1 })
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '2' }))
+    await waitFor(() => expect(fetchMock.mock.calls.some(([url]) => /\/api\/limits\?players=2&boxes=core$/.test(url as string))).toBe(true))
+
+    const filter = await screen.findByRole('combobox', { name: 'Must include' })
+    await user.type(filter, 'wolverine{Enter}')
+    await user.type(filter, 'wolfsbane')
+
+    const full = within(screen.getByRole('listbox')).getByRole('option', { name: /Wolfsbane/ })
+    expect(full).toHaveAttribute('aria-disabled', 'true')
+    expect(full).toHaveTextContent('No room: a setup at 2 players holds at most 1 Ally')
+    await user.keyboard('{Enter}')
+    await user.click(full)
+    const chips = screen.getByRole('list', { name: 'Chosen cards' })
+    expect(within(chips).getAllByRole('listitem').map((chip) => chip.querySelector('.chosen-name')?.textContent)).toEqual(['Wolverine'])
+
+    // A Mastermind chosen can change the limits, so they are asked for again with it.
+    await user.clear(filter)
+    await user.type(filter, 'magneto{Enter}')
+    await waitFor(() =>
+      expect(fetchMock.mock.calls.some(([url]) => /\/api\/limits\?players=2&boxes=core&include=core_mastermind_magneto$/.test(url as string))).toBe(true),
+    )
+
+    // So can Epic Masterminds, whose Epic sides can add a group.
+    await user.click(screen.getByRole('checkbox', { name: /Epic Masterminds/ }))
+    await waitFor(() =>
+      expect(
+        fetchMock.mock.calls.some(([url]) => /\/api\/limits\?players=2&boxes=core&epic=true&include=core_mastermind_magneto$/.test(url as string)),
+      ).toBe(true),
+    )
+  })
+
+  it('says how many to remove once a smaller player count holds fewer than are chosen', async () => {
+    localStorage.setItem('legendaryPicker.chosen', JSON.stringify(['core_hero_wolverine']))
+    limitsAnswer = () => json({ heroes: 0, villainGroups: 1, henchmanGroups: 1 })
+    const user = userEvent.setup()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: '1' }))
+
+    expect(await screen.findByText('A setup in Solo holds at most 0 Heroes: remove 1.')).toBeInTheDocument()
   })
 
   it('says which choice to change when the chosen cards cannot share a setup', async () => {

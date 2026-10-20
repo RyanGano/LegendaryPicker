@@ -12,6 +12,9 @@ public sealed record NoEligibleScheme(int Players) : GenerationResult;
 // Mastermind; Message says why and which choice to change. No rule is relaxed to fit a chosen card.
 public sealed record ChosenCardsConflict(string Message) : GenerationResult;
 
+// The most Heroes, Villain Groups and Henchman Groups a player can choose for one setup (#337).
+public sealed record ChoiceLimits(int Heroes, int VillainGroups, int HenchmanGroups);
+
 // A legal random setup and the checklist for laying it out, under the Ruleset whose rules it follows.
 // Steps are the labels of the setup steps its Scheme and Mastermind print that change no count, Scheme first.
 // When the included boxes follow more than one ruleset, the Scheme and Mastermind decide the Ruleset and

@@ -1,5 +1,5 @@
 import { useId, useState, type KeyboardEvent } from 'react'
-import type { Box, Card, ChoosableKind } from './api/setupApi.ts'
+import type { Box, Card, ChoiceLimits, ChoosableKind } from './api/setupApi.ts'
 import { termsFor, type RulesetTerms } from './rulesetTerms.ts'
 
 // The most matches the filter lists at once; typing more of the name narrows them.
@@ -13,6 +13,13 @@ const KIND_WORD: Record<ChoosableKind, (terms: RulesetTerms) => string> = {
   hero: (terms) => terms.hero,
 }
 
+// The kinds a setup holds a limited number of, by their field in the limits, with their plural words.
+const LIMITED: Partial<Record<ChoosableKind, { limit: keyof ChoiceLimits; words: (terms: RulesetTerms) => string }>> = {
+  hero: { limit: 'heroes', words: (terms) => terms.heroes },
+  villain: { limit: 'villainGroups', words: (terms) => terms.villainGroups },
+  henchman: { limit: 'henchmanGroups', words: (terms) => terms.henchmanGroups },
+}
+
 type Props = {
   cards: Card[]
   boxes: Box[]
@@ -20,15 +27,21 @@ type Props = {
   included: string[]
   // The chosen cards' ids, in the order chosen.
   chosen: string[]
+  // The most Heroes and groups a setup of the picked player count and boxes holds, or null while unknown.
+  limits: ChoiceLimits | null
+  players: number | null
   disabled: boolean
   onAdd: (card: Card) => void
   onRemove: (id: string) => void
   onClear: () => void
 }
 
-// The cards that must be in the game (#337): a filter box that matches part of a name across every box, ticked or not,
-// and the chosen cards as removable chips. Each card shows its kind, in its own ruleset's words, and its box.
-export function ChosenCards({ cards, boxes, included, chosen, disabled, onAdd, onRemove, onClear }: Props) {
+// The cards that must be in the game (#337), under an expander that starts closed unless cards are chosen: a filter box
+// that matches part of a name across every box, ticked or not, and the chosen cards as removable chips. Each card shows
+// its kind, in its own ruleset's words, and its box. Once as many Heroes or groups of a kind are chosen as any setup of
+// the player count holds, more of that kind can't be chosen.
+export function ChosenCards({ cards, boxes, included, chosen, limits, players, disabled, onAdd, onRemove, onClear }: Props) {
+  const [expanded, setExpanded] = useState(chosen.length > 0)
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(0)
   const listId = useId()
@@ -49,7 +62,21 @@ export function ChosenCards({ cards, boxes, included, chosen, disabled, onAdd, o
   const open = matches.length > 0
   const current = Math.min(active, matches.length - 1)
 
+  const chosenCards = chosen.map((id) => cards.find((card) => card.id === id)).filter((card): card is Card => card !== undefined)
+  // How many more of a kind the setup has room for, or null when the kind isn't limited or the limits aren't known.
+  const room = (kind: ChoosableKind) => {
+    const limited = LIMITED[kind]
+    return limited && limits ? limits[limited.limit] - chosenCards.filter((card) => card.kind === kind).length : null
+  }
+  const full = (card: Card) => (room(card.kind) ?? 1) <= 0
+  const atPlayers = players === 1 ? 'in Solo' : `at ${players} players`
+  // The kinds chosen past what a setup holds, as after a smaller player count is picked.
+  const over = (Object.keys(LIMITED) as ChoosableKind[])
+    .map((kind) => ({ kind, extra: -(room(kind) ?? 0), card: chosenCards.find((card) => card.kind === kind) }))
+    .filter((entry) => entry.extra > 0 && entry.card)
+
   function add(card: Card) {
+    if (full(card)) return
     onAdd(card)
     setQuery('')
     setActive(0)
@@ -70,23 +97,30 @@ export function ChosenCards({ cards, boxes, included, chosen, disabled, onAdd, o
     }
   }
 
-  const chosenCards = chosen.map((id) => cards.find((card) => card.id === id)).filter((card): card is Card => card !== undefined)
+  // The limit of a card's kind with its word, in the card's ruleset's words: "1 Hero", "6 Heroes".
+  const limitOf = (card: Card) => {
+    const most = limits![LIMITED[card.kind]!.limit]
+    return `${most} ${most === 1 ? kindOf(card) : LIMITED[card.kind]!.words(termsFor(boxOf(card)?.ruleset))}`
+  }
 
   return (
-    <div className="chosen-cards">
-      <div className="boxes-heading">
+    <details className="chosen-cards" open={expanded} onToggle={(event) => setExpanded(event.currentTarget.open)}>
+      <summary>
         <h2 id={labelId}>Must include</h2>
+        {chosenCards.length > 0 && <span className="detail">{chosenCards.length} chosen</span>}
+      </summary>
+      <div className="chosen-heading">
+        <p className="chosen-hint">
+          {chosenCards.length === 0
+            ? 'Type part of a card name to choose a Scheme, Mastermind, group or Hero for the setup.'
+            : `${chosenCards.length} chosen. The rest of the setup is drawn around ${chosenCards.length === 1 ? 'it' : 'them'}.`}
+        </p>
         {chosenCards.length > 0 && (
           <button type="button" className="link-button" disabled={disabled} onClick={onClear}>
             Clear
           </button>
         )}
       </div>
-      <p className="chosen-hint">
-        {chosenCards.length === 0
-          ? 'Type part of a card name to choose a Scheme, Mastermind, group or Hero for the setup.'
-          : `${chosenCards.length} chosen. The rest of the setup is drawn around ${chosenCards.length === 1 ? 'it' : 'them'}.`}
-      </p>
       <div className="chosen-filter">
         <input
           type="text"
@@ -115,6 +149,7 @@ export function ChosenCards({ cards, boxes, included, chosen, disabled, onAdd, o
                 id={`${listId}-${index}`}
                 role="option"
                 aria-selected={index === current}
+                aria-disabled={full(card) || undefined}
                 className={`chosen-match kind-${card.kind}`}
                 // Pressing down would blur the input before the click lands.
                 onMouseDown={(event) => event.preventDefault()}
@@ -123,6 +158,7 @@ export function ChosenCards({ cards, boxes, included, chosen, disabled, onAdd, o
                 <span className="chosen-name">{card.name}</span>
                 <span className="detail">
                   {kindOf(card)} · {boxOf(card)?.name ?? card.boxes[0]}
+                  {full(card) && ` · No room: a setup ${atPlayers} holds at most ${limitOf(card)}`}
                 </span>
               </li>
             ))}
@@ -151,6 +187,11 @@ export function ChosenCards({ cards, boxes, included, chosen, disabled, onAdd, o
           ))}
         </ul>
       )}
-    </div>
+      {over.map(({ kind, extra, card }) => (
+        <p key={kind} className="chosen-over">
+          A setup {atPlayers} holds at most {limitOf(card!)}: remove {extra}.
+        </p>
+      ))}
+    </details>
   )
 }
