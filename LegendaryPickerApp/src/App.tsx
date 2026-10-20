@@ -4,6 +4,7 @@ import { ChosenCards } from './ChosenCards.tsx'
 import {
   getBoxes,
   getCards,
+  getLimits,
   getRatingBands,
   getSetup,
   getSetupByCode,
@@ -11,6 +12,7 @@ import {
   SetupCodeError,
   type Box,
   type Card,
+  type ChoiceLimits,
   type RatingBands,
   type RuleEdition,
   type Setup,
@@ -269,6 +271,8 @@ function App() {
   // Every card a player can choose from the API, and the ids of those chosen to be in the game (#337).
   const [cards, setCards] = useState<Card[]>([])
   const [chosen, setChosen] = useState<string[]>(loadChosen)
+  // The most Heroes and groups a player can choose, with the request they answer.
+  const [answeredLimits, setAnsweredLimits] = useState<{ request: string; limits: ChoiceLimits } | null>(null)
   const [epic, setEpic] = useState(loadEpic)
   const [rules, setRules] = useState<RuleEdition | null>(loadRules)
   const [difficulty, setDifficulty] = useState<number | null>(() => loadRating(DIFFICULTY_KEY))
@@ -354,9 +358,12 @@ function App() {
     saveBoxes(next)
   }
 
-  // Ticks every listed box, or unticks them all once every one is ticked.
-  function toggleAllBoxes() {
-    const next = boxes.every((box) => included.includes(box.id)) ? [] : boxes.map((box) => box.id)
+  // Ticks every expansion, or unticks them all once every one is ticked; the base games stay as they are.
+  function toggleAllExpansions() {
+    const expansions = boxes.filter((box) => !box.baseGame).map((box) => box.id)
+    const next = expansions.every((id) => included.includes(id))
+      ? included.filter((id) => !expansions.includes(id))
+      : [...included, ...expansions.filter((id) => !included.includes(id))]
     setIncluded(next)
     saveBoxes(next)
   }
@@ -406,12 +413,30 @@ function App() {
 
   // Stored ids the API no longer lists are ignored.
   const isIncluded = (box: Box) => included.includes(box.id)
-  const allIncluded = boxes.length > 0 && boxes.every(isIncluded)
   const hint = boxHint(boxes, included)
   // The rule edition choice matters only while the ticked boxes follow more than one ruleset.
   const choosesRules = spansRulesets(boxes, included)
-  // Base games first, then expansions, each in the API's order.
-  const listedBoxes = [...boxes.filter((box) => box.baseGame), ...boxes.filter((box) => !box.baseGame)]
+  const baseGames = boxes.filter((box) => box.baseGame)
+  const expansions = boxes.filter((box) => !box.baseGame)
+  const allExpansions = expansions.length > 0 && expansions.every(isIncluded)
+
+  // The most Heroes and groups a player can choose under Must include for the picked count, boxes and rule edition, and the
+  // chosen Scheme or Mastermind, which can change them (#337), and Epic Masterminds, whose Epic sides can add a group. Until
+  // the API answers, or when it can't, nothing is limited.
+  const limitBoxes = boxes.filter(isIncluded).map((box) => box.id).join(',')
+  const limitRules = choosesRules ? rules : null
+  const limitCards = chosen.filter((id) => cards.some((card) => card.id === id && (card.kind === 'scheme' || card.kind === 'mastermind'))).join(',')
+  const limitRequest = [players, limitBoxes, epic, limitRules, limitCards].join('|')
+  const limits = answeredLimits?.request === limitRequest ? answeredLimits.limits : null
+  useEffect(() => {
+    if (players === null || limitBoxes === '' || hint !== null) return
+    const controller = new AbortController()
+    getLimits(players, limitBoxes.split(','), epic, limitRules, limitCards === '' ? [] : limitCards.split(','), controller.signal).then(
+      (answer) => setAnsweredLimits({ request: limitRequest, limits: answer }),
+      () => {},
+    )
+    return () => controller.abort()
+  }, [players, limitBoxes, epic, limitRules, limitCards, limitRequest, hint])
 
   const renderBox = (box: Box) => (
     <div key={box.id} className="box-option">
@@ -555,13 +580,29 @@ function App() {
                 />
               </div>
             )}
+            {cards.length > 0 && (
+              <ChosenCards
+                cards={cards}
+                boxes={boxes}
+                included={included}
+                chosen={chosen}
+                limits={limits}
+                players={players}
+                disabled={loading}
+                onAdd={addChosen}
+                onRemove={removeChosen}
+                onClear={clearChosen}
+              />
+            )}
             {boxes.length > 0 && (
               <>
                 <div className="boxes-heading">
                   <h2 id="boxes-label">Boxes</h2>
-                  <button type="button" className="link-button" disabled={loading} onClick={toggleAllBoxes}>
-                    {allIncluded ? 'Uncheck all' : 'Check all'}
-                  </button>
+                  {expansions.length > 0 && (
+                    <button type="button" className="link-button" disabled={loading} onClick={toggleAllExpansions}>
+                      {allExpansions ? 'Uncheck all expansions' : 'Check all expansions'}
+                    </button>
+                  )}
                 </div>
                 {/* One base game is always needed, so the base games sit in their own accented group that says so. */}
                 <div
@@ -572,16 +613,22 @@ function App() {
                   <h3 id="base-games-label" className="box-group-label">
                     Base games <span className="box-group-note">Choose at least one</span>
                   </h3>
-                  <div className="box-options">{listedBoxes.filter((box) => box.baseGame).map(renderBox)}</div>
+                  <div className="box-options">{baseGames.map(renderBox)}</div>
                   {hint && <p className="box-hint">{hint}</p>}
                 </div>
-                {listedBoxes.some((box) => !box.baseGame) && (
-                  <div className="box-group" role="group" aria-labelledby="expansions-label">
-                    <h3 id="expansions-label" className="box-group-label">
-                      Expansions
-                    </h3>
-                    <div className="box-options">{listedBoxes.filter((box) => !box.baseGame).map(renderBox)}</div>
-                  </div>
+                {/* The expansion list is long, so it stays folded until the player opens it. */}
+                {expansions.length > 0 && (
+                  <details className="box-group expansions" role="group" aria-labelledby="expansions-label">
+                    <summary>
+                      <h3 id="expansions-label" className="box-group-label">
+                        Expansions
+                      </h3>
+                      <span className="box-group-note">
+                        {expansions.filter(isIncluded).length} of {expansions.length} ticked
+                      </span>
+                    </summary>
+                    <div className="box-options">{expansions.map(renderBox)}</div>
+                  </details>
                 )}
               </>
             )}
@@ -614,18 +661,6 @@ function App() {
                   ))}
                 </div>
               </>
-            )}
-            {cards.length > 0 && (
-              <ChosenCards
-                cards={cards}
-                boxes={boxes}
-                included={included}
-                chosen={chosen}
-                disabled={loading}
-                onAdd={addChosen}
-                onRemove={removeChosen}
-                onClear={clearChosen}
-              />
             )}
             <h2 id="options-label">Options</h2>
             <div className="box-options" role="group" aria-labelledby="options-label">

@@ -188,6 +188,47 @@ app.MapGet("/api/setup", (string? players, string? boxes, bool? epic, string? ru
     return Results.Ok(SetupResponse.From(result, catalog, target, complexityTarget, codes.For(result, edition, epic ?? false)));
 }).RequireRateLimiting(SetupRateLimit);
 
+// The most Heroes, Villain Groups and Henchman Groups a player can choose under Must include (#337) for a setup of these
+// players, boxes, Epic choice, rule edition and chosen cards, read as /api/setup reads them. The app asks again whenever
+// one changes, so it isn't rate-limited like a draw; it lays out no setup.
+app.MapGet("/api/limits", (string? players, string? boxes, bool? epic, string? rules, string? include, SetupGenerator generator) =>
+{
+    if (!int.TryParse(players, out var count) || count is < BoxCatalog.MinPlayers or > BoxCatalog.MaxPlayers)
+    {
+        return Results.ValidationProblem(new Dictionary<string, string[]>
+        {
+            ["players"] = [$"players must be a whole number from {BoxCatalog.MinPlayers} to {BoxCatalog.MaxPlayers}."],
+        });
+    }
+
+    Ruleset? edition = null;
+    if (!string.IsNullOrEmpty(rules))
+    {
+        if (!editions.TryGetValue(rules, out var named))
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]> { ["rules"] = [$"rules must be one of {string.Join(", ", editions.Keys)}."] });
+        }
+
+        edition = named;
+    }
+
+    var chosen = (include ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    if (generator.CheckChosenCards(chosen) is { } wrongCard)
+    {
+        return Results.ValidationProblem(new Dictionary<string, string[]> { ["include"] = [wrongCard] });
+    }
+
+    var included = generator.BoxesWith(
+        (boxes ?? SetupGenerator.CoreBoxId).Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToHashSet(StringComparer.Ordinal),
+        chosen);
+    if (generator.CheckBoxes(included, edition) is { } problem)
+    {
+        return Results.ValidationProblem(new Dictionary<string, string[]> { ["boxes"] = [problem] });
+    }
+
+    return Results.Ok(generator.Limits(count, included, edition, chosen, epic ?? false));
+});
+
 // The setup a setup code names (#335, #340), with its ratings, so the app can reload a pasted code or a link and a script
 // can read a code's setup without the browser. A code keeps no difficulty or complexity target: its cards are the ones
 // the draw for them gave, so the reload shows their ratings without a target note. A code that isn't one is a 400; one the

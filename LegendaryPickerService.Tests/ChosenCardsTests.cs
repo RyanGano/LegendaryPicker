@@ -121,6 +121,23 @@ public sealed class ChosenCardsTests : IDisposable
     }
 
     [Fact]
+    public void The_limits_are_the_most_any_Scheme_holds_or_the_chosen_Scheme_holds()
+    {
+        var generator = new SetupGenerator(Catalog);
+
+        // At 2 players: Secret Invasion of the Skrull Shapeshifters uses 6 Heroes, and Negative Zone Prison Breakout adds a
+        // Henchman Group to the table's 1.
+        Assert.Equal(new ChoiceLimits(6, 2, 2), generator.Limits(2, ["core"]));
+        Assert.Equal(new ChoiceLimits(4, 2, 1), generator.Limits(2, ["core"], chosenCards: ["core_scheme_super-hero-civil-war"]));
+        // In Solo the Scheme's 6 Heroes override Solo's 3.
+        Assert.Equal(new ChoiceLimits(6, 1, 1), generator.Limits(1, ["core"], chosenCards: ["core_hero_wolverine"]));
+        // Epic Annihilus adds a Villain Group his normal side doesn't, so with Epic Masterminds the setup holds one more.
+        string[] annihilus = ["core_scheme_super-hero-civil-war", "annihilation_mastermind_annihilus"];
+        Assert.Equal(new ChoiceLimits(4, 2, 1), generator.Limits(2, ["core", "annihilation"], chosenCards: annihilus));
+        Assert.Equal(new ChoiceLimits(4, 3, 1), generator.Limits(2, ["core", "annihilation"], chosenCards: annihilus, epic: true));
+    }
+
+    [Fact]
     public void Chosen_cards_no_Scheme_and_Mastermind_can_hold_say_so()
     {
         // Three Villain Groups at 2 players: no core Scheme adds a Villain Group.
@@ -162,6 +179,16 @@ public sealed class ChosenCardsTests : IDisposable
         Assert.Equal(HttpStatusCode.BadRequest, wrong.StatusCode);
         var problem = await wrong.Content.ReadFromJsonAsync<JsonObject>();
         Assert.Equal("No card has id core_scheme_nothing.", (string)problem!["errors"]!["include"]![0]!);
+    }
+
+    [Fact]
+    public async Task The_limits_endpoint_reads_the_draws_parameters()
+    {
+        var client = Client();
+
+        var limits = await client.GetFromJsonAsync<JsonObject>("/api/limits?players=2&boxes=core&include=core_scheme_super-hero-civil-war");
+        Assert.Equal((4, 2, 1), ((int)limits!["heroes"]!, (int)limits["villainGroups"]!, (int)limits["henchmanGroups"]!));
+        Assert.Equal(HttpStatusCode.BadRequest, (await client.GetAsync("/api/limits?players=6")).StatusCode);
     }
 
     [Fact]

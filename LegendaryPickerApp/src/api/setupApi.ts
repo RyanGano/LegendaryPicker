@@ -314,6 +314,14 @@ export type Box = {
   description?: string
 }
 
+// The most Heroes, Villain Groups and Henchman Groups a player can choose for one setup of a player count and boxes
+// (#337): the most any of their Schemes, or the chosen one, holds.
+export type ChoiceLimits = {
+  heroes: number
+  villainGroups: number
+  henchmanGroups: number
+}
+
 // The band names of each rating, index 0 for rating 1, as the API's scorers name them.
 export type RatingBands = {
   difficulty: string[]
@@ -363,6 +371,28 @@ export async function getCards(): Promise<Card[]> {
   } finally {
     clearTimeout(timeout)
   }
+}
+
+// The most cards of each kind a player can choose for a setup of these players, boxes, Epic choice, rule edition and chosen
+// cards, read as getSetup sends them. Throws like getBoxes, or when signal aborts.
+export async function getLimits(
+  players: number,
+  boxes: string[],
+  epic: boolean,
+  rules: RuleEdition | null,
+  chosen: string[],
+  signal: AbortSignal,
+): Promise<ChoiceLimits> {
+  const query =
+    (boxes.length > 0 ? `&boxes=${boxes.map(encodeURIComponent).join(',')}` : '') +
+    (epic ? '&epic=true' : '') +
+    (rules ? `&rules=${rules}` : '') +
+    (chosen.length > 0 ? `&include=${chosen.map(encodeURIComponent).join(',')}` : '')
+  const response = await fetch(`${apiBaseUrl}/api/limits?players=${players}${query}`, { signal })
+  if (!response.ok) {
+    throw new Error(`GET /api/limits returned ${response.status}.`)
+  }
+  return (await response.json()) as ChoiceLimits
 }
 
 // The band names the difficulty and complexity pickers list. Throws like getBoxes.
