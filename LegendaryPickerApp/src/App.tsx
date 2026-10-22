@@ -421,11 +421,13 @@ function App() {
   const allExpansions = expansions.length > 0 && expansions.every(isIncluded)
 
   // The most Heroes and groups a player can choose under Must include for the picked count, boxes and rule edition, and the
-  // chosen Scheme or Mastermind, which can change them (#337), and Epic Masterminds, whose Epic sides can add a group. Until
-  // the API answers, or when it can't, nothing is limited.
+  // chosen Scheme, Mastermind and groups, which can change them (#337): only a chosen Scheme allows more than the count's
+  // usual numbers, and a group the chosen Scheme requires or the chosen Mastermind always leads takes a slot unless it is
+  // chosen too. Epic Masterminds'
+  // Epic sides can add a group. Until the API answers, or when it can't, nothing is limited.
   const limitBoxes = boxes.filter(isIncluded).map((box) => box.id).join(',')
   const limitRules = choosesRules ? rules : null
-  const limitCards = chosen.filter((id) => cards.some((card) => card.id === id && (card.kind === 'scheme' || card.kind === 'mastermind'))).join(',')
+  const limitCards = chosen.filter((id) => cards.some((card) => card.id === id && card.kind !== 'hero')).join(',')
   const limitRequest = [players, limitBoxes, epic, limitRules, limitCards].join('|')
   const limits = answeredLimits?.request === limitRequest ? answeredLimits.limits : null
   useEffect(() => {

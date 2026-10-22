@@ -121,20 +121,43 @@ public sealed class ChosenCardsTests : IDisposable
     }
 
     [Fact]
-    public void The_limits_are_the_most_any_Scheme_holds_or_the_chosen_Scheme_holds()
+    public void The_limits_are_the_usual_counts_or_what_the_chosen_Scheme_holds()
     {
         var generator = new SetupGenerator(Catalog);
 
-        // At 2 players: Secret Invasion of the Skrull Shapeshifters uses 6 Heroes, and Negative Zone Prison Breakout adds a
-        // Henchman Group to the table's 1.
-        Assert.Equal(new ChoiceLimits(6, 2, 2), generator.Limits(2, ["core"]));
+        // At 2 players the table's 5 Heroes, 2 Villain Groups and 1 Henchman Group, though Secret Invasion of the Skrull
+        // Shapeshifters uses 6 Heroes and Negative Zone Prison Breakout adds a Henchman Group: only choosing them allows more.
+        Assert.Equal(new ChoiceLimits(5, 2, 1), generator.Limits(2, ["core"], chosenCards: ["core_hero_wolverine"]));
+        Assert.Equal(new ChoiceLimits(6, 2, 1), generator.Limits(2, ["core"], chosenCards: ["core_scheme_secret-invasion-of-the-skrull-shapeshifters", "core_villain_skrulls"]));
+        Assert.Equal(new ChoiceLimits(5, 2, 2), generator.Limits(2, ["core"], chosenCards: ["core_scheme_negative-zone-prison-breakout"]));
         Assert.Equal(new ChoiceLimits(4, 2, 1), generator.Limits(2, ["core"], chosenCards: ["core_scheme_super-hero-civil-war"]));
-        // In Solo the Scheme's 6 Heroes override Solo's 3.
-        Assert.Equal(new ChoiceLimits(6, 1, 1), generator.Limits(1, ["core"], chosenCards: ["core_hero_wolverine"]));
+        // Solo's 3 Heroes, and the chosen Scheme's 6 override them.
+        Assert.Equal(new ChoiceLimits(3, 1, 1), generator.Limits(1, ["core"]));
+        Assert.Equal(new ChoiceLimits(6, 1, 1), generator.Limits(1, ["core"], chosenCards: ["core_scheme_secret-invasion-of-the-skrull-shapeshifters", "core_villain_skrulls"]));
         // Epic Annihilus adds a Villain Group his normal side doesn't, so with Epic Masterminds the setup holds one more.
+        // Either way his Always Leads Annihilation Wave takes a Villain Group slot.
         string[] annihilus = ["core_scheme_super-hero-civil-war", "annihilation_mastermind_annihilus"];
-        Assert.Equal(new ChoiceLimits(4, 2, 1), generator.Limits(2, ["core", "annihilation"], chosenCards: annihilus));
-        Assert.Equal(new ChoiceLimits(4, 3, 1), generator.Limits(2, ["core", "annihilation"], chosenCards: annihilus, epic: true));
+        Assert.Equal(new ChoiceLimits(4, 1, 1), generator.Limits(2, ["core", "annihilation"], chosenCards: annihilus));
+        Assert.Equal(new ChoiceLimits(4, 2, 1), generator.Limits(2, ["core", "annihilation"], chosenCards: annihilus, epic: true));
+    }
+
+    [Fact]
+    public void A_chosen_Scheme_and_Mastermind_leave_room_for_the_groups_they_require()
+    {
+        var generator = new SetupGenerator(Catalog);
+
+        // Secret Invasion of the Skrull Shapeshifters requires the Skrulls, which fill one of the 2 Villain Groups at 2
+        // players unless they are chosen too; Red Skull's Always Leads HYDRA fills the other.
+        const string skrullInvasion = "core_scheme_secret-invasion-of-the-skrull-shapeshifters";
+        Assert.Equal(new ChoiceLimits(6, 1, 1), generator.Limits(2, ["core"], chosenCards: [skrullInvasion]));
+        Assert.Equal(new ChoiceLimits(6, 0, 1), generator.Limits(2, ["core"], chosenCards: [skrullInvasion, "core_mastermind_red-skull"]));
+        Assert.Equal(new ChoiceLimits(6, 1, 1), generator.Limits(2, ["core"], chosenCards: [skrullInvasion, "core_mastermind_red-skull", "core_villain_hydra"]));
+
+        // Dr. Doom always leads the Doombot Legion, which fills the 1 Henchman Group at 2 players unless it is chosen too.
+        Assert.Equal(new ChoiceLimits(5, 2, 0), generator.Limits(2, ["core"], chosenCards: ["core_mastermind_dr-doom"]));
+        Assert.Equal(new ChoiceLimits(5, 2, 1), generator.Limits(2, ["core"], chosenCards: ["core_mastermind_dr-doom", "core_henchman_doombot-legion"]));
+        // Solo ignores Always Leads, so it takes no slot there.
+        Assert.Equal(new ChoiceLimits(3, 1, 1), generator.Limits(1, ["core"], chosenCards: ["core_mastermind_dr-doom"]));
     }
 
     [Fact]

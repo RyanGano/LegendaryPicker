@@ -90,9 +90,10 @@ public sealed class SetupGenerator(BoxCatalog catalog)
     }
 
     // The most Heroes, Villain Groups and Henchman Groups a player can choose for a setup of these boxes and player count
-    // (#337): the most the Hero Deck and group slots hold with any included Scheme and a Mastermind it can be drawn with, or
-    // with the chosen Scheme or Mastermind when there is one. It is an upper bound: a Mastermind's Always Leads group or a
-    // Scheme's required group can take a slot, and the draw then narrows to the pairs that leave room, or says no pair does.
+    // (#337): with a chosen Scheme, the most the Hero Deck and group slots hold with it and a Mastermind it can be drawn
+    // with (or the chosen one); otherwise the player count's usual numbers, with a chosen Mastermind's extras. Either way
+    // the groups the chosen Scheme requires and the chosen Mastermind always leads keep their slots. It is an upper bound:
+    // a drawn Mastermind's Always Leads group can take a slot, and the draw then narrows to the pairs that leave room.
     // With epic, each Mastermind counts on the side a draw with epic plays, as Epic Annihilus's extra Villain Group.
     public ChoiceLimits Limits(
         int players, IReadOnlyCollection<string> includedBoxes, Ruleset? rules = null, IReadOnlyCollection<string>? chosenCards = null, bool epic = false)
@@ -113,17 +114,29 @@ public sealed class SetupGenerator(BoxCatalog catalog)
         var schemes = boxes.SelectMany(box => box.AllSchemes).DistinctBy(scheme => scheme.Id)
             .Where(scheme => scheme.Setup.AllowedPlayerCounts?.Value.Contains(players) ?? true)
             .ToList();
-        ChoiceLimits Most(Scheme? scheme, Mastermind? mastermind) => draws
-            .Select(draw => draw.Limits(
-                schemes.Where(other => scheme is null || other.Id == scheme.Id).ToList(),
-                draw.Masterminds.Where(other => mastermind is null || other.Id == mastermind.Id)
-                    .Select(other => epic ? draw.PlayedEpic(other) : other).ToList()))
+        var chosenGroups = chosen.VillainGroups.Select(group => group.Id).Concat(chosen.HenchmanGroups.Select(group => group.Id)).ToHashSet();
+        ChoiceLimits Most(Func<TableDraw, Mastermind?, ChoiceLimits> limitsOf) => draws
+            .Select(draw =>
+            {
+                var mastermind = chosen.Mastermind is { } chosenMastermind && epic ? draw.PlayedEpic(chosenMastermind) : chosen.Mastermind;
+                return draw.LessRequiredGroups(limitsOf(draw, mastermind), chosen.Scheme, mastermind, chosenGroups);
+            })
             .Aggregate(new ChoiceLimits(0, 0, 0), (most, limits) => new ChoiceLimits(
                 Math.Max(most.Heroes, limits.Heroes), Math.Max(most.VillainGroups, limits.VillainGroups), Math.Max(most.HenchmanGroups, limits.HenchmanGroups)));
 
-        // A chosen Scheme and Mastermind no setup can pair leave nothing to count; the draw says why, so the limits are
-        // then those of every pair.
-        return Most(chosen.Scheme, chosen.Mastermind) is { Heroes: > 0 } limits ? limits : Most(null, null);
+        // Without a chosen Scheme the limits are the player count's usual ones: a Scheme that holds more is a rare draw, so
+        // a player chooses it to choose more. A chosen Scheme and Mastermind no setup can pair leave nothing to count; the
+        // draw says why, so the limits are then the usual ones too.
+        if (chosen.Scheme is { } scheme
+            && Most((draw, mastermind) => draw.Limits(
+                schemes.Where(other => other.Id == scheme.Id).ToList(),
+                mastermind is null ? draw.Masterminds.Select(other => epic ? draw.PlayedEpic(other) : other).ToList() : [mastermind]))
+                is { Heroes: > 0 } limits)
+        {
+            return limits;
+        }
+
+        return Most((draw, mastermind) => draw.Usual(mastermind));
     }
 
     // The included boxes, in catalog order, and the sets of rules a draw from them can follow.
@@ -485,6 +498,53 @@ public sealed class SetupGenerator(BoxCatalog catalog)
             }
 
             return most;
+        }
+
+        // The Heroes, Villain Groups and Henchman Groups these rules hold at the player count before a Scheme changes them,
+        // with what a chosen Mastermind's setup adds (#337).
+        public ChoiceLimits Usual(Mastermind? mastermind)
+        {
+            int Extra(IReadOnlyList<PlayerCountValue>? effect) => ForPlayers(effect ?? [])?.Value ?? 0;
+            return new ChoiceLimits(
+                (Solo ? rules.Solo.Heroes.Value : rules.Heroes.Value + Extra(rules.ExtraHeroes)) + Extra(mastermind?.Setup?.ExtraHeroes),
+                (Solo ? rules.Solo.VillainGroups.Value : row!.VillainGroups) + Extra(mastermind?.Setup?.ExtraVillainGroups),
+                (Solo ? rules.Solo.HenchmanGroups.Value : row!.HenchmanGroups) + Extra(mastermind?.Setup?.ExtraHenchmanGroups));
+        }
+
+        // The limits less the slots the groups a chosen Scheme requires and a chosen Mastermind always leads take, so the
+        // player leaves room for them (#337). A group the player chose takes no more, nor does a required one the Mastermind
+        // also leads, nor an Always Leads group these rules ignore.
+        public ChoiceLimits LessRequiredGroups(ChoiceLimits limits, Scheme? scheme, Mastermind? mastermind, IReadOnlySet<string> chosenGroups)
+        {
+            if (limits.Heroes == 0)
+            {
+                return limits;
+            }
+
+            // Each group the setup must hold, as the ids any one of which meets it, by type.
+            var claims = new List<(GroupType Type, IReadOnlyList<string> Ids)>();
+            foreach (var group in scheme?.Setup.RequiredGroups ?? [])
+            {
+                claims.Add((group.GroupType, [group.GroupId]));
+            }
+
+            if (scheme?.Setup.OneOfGroups is { } oneOf)
+            {
+                claims.Add((oneOf.GroupType, oneOf.GroupIds));
+            }
+
+            if (mastermind?.AlwaysLeads is { } leads && !Ignores(mastermind)
+                && !claims.Any(claim => claim.Type == leads.GroupType && claim.Ids.Any(leads.GroupIds.Contains)))
+            {
+                claims.Add((leads.GroupType, leads.GroupIds));
+            }
+
+            int Taken(GroupType type) => claims.Count(claim => claim.Type == type && !claim.Ids.Any(chosenGroups.Contains));
+            return limits with
+            {
+                VillainGroups = Math.Max(limits.VillainGroups - Taken(GroupType.Villain), 0),
+                HenchmanGroups = Math.Max(limits.HenchmanGroups - Taken(GroupType.Henchman), 0),
+            };
         }
 
         // A Probe's plans by Scheme, and why its chosen Heroes don't fit a Hero Deck, by what the deck depends on.
