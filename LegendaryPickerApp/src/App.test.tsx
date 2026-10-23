@@ -159,16 +159,6 @@ describe('App', () => {
     expect(setupRequests()).toEqual([expect.stringMatching(/\/api\/setup\?players=3&boxes=core$/)])
   })
 
-  it('draws from the Generate button at the top of the controls too', async () => {
-    setupAnswers.push(() => json(setup))
-    const user = userEvent.setup()
-    renderApp()
-
-    await user.click(screen.getByRole('button', { name: '3' }))
-    await user.click(screen.getByRole('button', { name: 'Generate setup' }))
-    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
-  })
-
   it('checks every expansion, then unchecks them all, from one button that leaves the base games alone', async () => {
     boxesAnswer = () => json([core, fixture])
     const user = userEvent.setup()
@@ -182,6 +172,23 @@ describe('App', () => {
 
     await user.click(screen.getByRole('button', { name: 'Uncheck all expansions' }))
     expect([coreBox, fixtureBox].map((box) => (box as HTMLInputElement).checked)).toEqual([true, false])
+  })
+
+  it('says when the box list cannot be loaded, and loads it again on Try again', async () => {
+    boxesAnswer = () => Promise.reject(new TypeError('Failed to fetch'))
+    const user = userEvent.setup()
+    renderApp()
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      "Couldn't reach the server, so the boxes and cards to choose from aren't shown.",
+    )
+    expect(screen.queryByRole('group', { name: /^Base games/ })).not.toBeInTheDocument()
+
+    boxesAnswer = () => json([core])
+    await user.click(screen.getByRole('button', { name: 'Try again' }))
+
+    expect(await screen.findByRole('group', { name: /^Base games/ })).toHaveTextContent('Marvel Legendary First Edition core box')
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
 
   it('folds the expansions away until the player opens them', async () => {
@@ -547,6 +554,20 @@ describe('App', () => {
 
     expect(screen.getByRole('button', { name: 'Generate' })).toBeEnabled()
     expect(screen.queryByText('Pick a base game to draw a setup.')).not.toBeInTheDocument()
+  })
+
+  it('keeps the setup on screen and disables Generate another while no base game is ticked', async () => {
+    setupAnswers.push(() => json(setup))
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('button', { name: '3' }))
+    await user.click(screen.getByRole('button', { name: 'Generate' }))
+    await screen.findByRole('heading', { name: 'Midtown Bank Robbery' })
+
+    await user.click(screen.getByRole('checkbox', { name: 'Marvel Legendary First Edition core box' }))
+
+    expect(screen.getByRole('button', { name: 'Generate another' })).toBeDisabled()
+    expect(screen.getByRole('heading', { name: 'Midtown Bank Robbery' })).toBeInTheDocument()
   })
 
   it('enables Generate for boxes of any rulesets once a base game is ticked', async () => {

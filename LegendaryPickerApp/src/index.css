@@ -24,15 +24,24 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+  /* Chips, pills and quiet buttons. */
+  --radius-pill: 999px;
+
+  /* The smallest a control may be, so every one is an easy tap target. */
+  --tap: 44px;
 
   --shadow-sm: 0 1px 2px rgb(20 18 26 / 0.12);
   --shadow-md: 0 2px 4px rgb(20 18 26 / 0.1), 0 6px 16px rgb(20 18 26 / 0.12);
+  /* Lifts the Generate bar off the page it floats over. */
+  --shadow-up: 0 -2px 4px rgb(20 18 26 / 0.06), 0 -6px 16px rgb(20 18 26 / 0.08);
 
   --text: #1f1d24;
   --muted: #5d5866;
   --bg: #fff;
   --surface: #f5f4f7;
   --border: #d9d7de;
+  /* A border the pointer is over: one step stronger than --border. */
+  --border-strong: #b5b1bd;
   /* --accent fills buttons under --accent-text; --link is the accent as text on the page. */
   --accent: #b3121f;
   --accent-text: #fff;
@@ -71,12 +80,14 @@
   :root {
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
     --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 6px 16px rgb(0 0 0 / 0.4);
+    --shadow-up: 0 -2px 4px rgb(0 0 0 / 0.3), 0 -6px 16px rgb(0 0 0 / 0.35);
 
     --text: #f1f0f4;
     --muted: #aaa6b3;
     --bg: #16151a;
     --surface: #222128;
     --border: #3a3842;
+    --border-strong: #5a5765;
     --accent: #d42431;
     --link: #ff7a85;
     --focus: #78adff;
@@ -94,56 +105,58 @@
 
 body {
   margin: 0;
+  background: var(--bg);
 }
 
-/* Mobile first: one column on a phone, a wider one on a tablet (600px), and two columns from
-   900px, where the rail (the controls and drawn cards) stays in view beside the checklist. */
+/* Mobile first: one column on a phone, with Generate in a bar at the bottom of the screen. From
+   900px the controls become a column of their own beside the setup, Generate still at the bottom
+   of the screen under them. */
 .app {
   box-sizing: border-box;
-  max-width: 32rem;
+  max-width: 84rem;
   margin: 0 auto;
-  padding: var(--space-4) var(--space-4) var(--space-6);
+  padding: var(--space-4) var(--space-4) 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
 }
 
-.content,
-.rail {
+.content {
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+}
+
+/* On a phone the rail is no box of its own: its panels and the Generate bar join the page's one
+   column, the bar last so it can stay at the bottom of the screen over everything above it. */
+.rail {
+  display: contents;
 }
 
 @media (width >= 37.5rem) {
   .app {
-    max-width: 44rem;
     padding-inline: var(--space-6);
   }
 }
 
 @media (width >= 56.25rem) {
-  .app {
-    max-width: 76rem;
-  }
-
   .content {
     display: grid;
-    grid-template-columns: minmax(20rem, 26rem) minmax(0, 1fr);
-    gap: var(--space-7);
-    align-items: start;
+    grid-template-columns: minmax(20rem, 24rem) minmax(0, 1fr);
+    gap: var(--space-6);
   }
 
-  /* A rail taller than the screen scrolls on its own. The padding keeps focus rings and card
-     shadows clear of the scroll edge. */
+  /* The rail runs the full height of the setup beside it, so the Generate bar at its foot stays at
+     the bottom of the screen however far the checklist scrolls. The controls scroll with the page:
+     there is no box scrolling inside another. */
   .rail {
-    position: sticky;
-    top: var(--space-4);
-    max-height: calc(100dvh - var(--space-6));
-    box-sizing: border-box;
-    overflow-y: auto;
-    margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2));
-    padding: var(--space-1) var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .status {
+    align-self: start;
   }
 }
 
@@ -202,7 +215,7 @@ a {
   align-items: center;
   gap: var(--space-3);
   padding-bottom: var(--space-4);
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .site-header .mark {
@@ -216,18 +229,15 @@ a {
 }
 
 .tagline {
-  color: var(--muted);
-}
-
-.tagline {
   font-size: var(--text-sm);
+  color: var(--muted);
 }
 
 .site-footer {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding-top: var(--space-4);
+  padding: var(--space-4) 0 var(--space-6);
   border-top: 1px solid var(--border);
   font-size: var(--text-sm);
   color: var(--muted);
@@ -237,14 +247,65 @@ a {
 .footer-link {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: var(--tap);
 }
 
+/* Panels: the rail's two groups of controls, one surface each. */
+.panel {
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* The setup's choices, one step after another, each under its own heading and a hairline. */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.step + .step,
+.catalog-error + .step {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.controls h2,
+.library h2 {
+  font-size: var(--text-md);
+  margin: 0 0 var(--space-2);
+}
+
+/* A step heading with a quiet action beside it. */
+.step-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.step-heading h2 {
+  margin: 0;
+}
+
+/* What the app gives, shown until the first draw. */
+.intro {
+  color: var(--muted);
+}
+
+/* Buttons. Every one is a full tap target; the primary is the one action the page is for. */
 button {
   font: inherit;
-  min-height: 44px;
+  min-height: var(--tap);
   border-radius: var(--radius-md);
   cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s,
+    filter 0.15s;
 }
 
 button:disabled {
@@ -252,11 +313,57 @@ button:disabled {
   opacity: 0.5;
 }
 
+.primary {
+  width: 100%;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent);
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+/* A quieter action beside a field or under the drawn cards: copying or loading a setup code. */
+.secondary {
+  padding: 0 var(--space-4);
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg);
+  border: 2px solid var(--border);
+}
+
+/* The quietest action: a small pill in the link color, beside a heading or a saved setup. */
+.link-button {
+  padding: 0 var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--link);
+  background: transparent;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+
+.secondary:hover:not(:disabled),
+.link-button:hover:not(:disabled),
+.player-count:hover:not(:disabled, [aria-pressed='true']),
+.box-option:hover,
+.expansions > summary:hover {
+  border-color: var(--border-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition: none;
+  }
+}
+
 .player-counts {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: var(--space-2);
-  margin-bottom: var(--space-4);
 }
 
 .player-count {
@@ -264,7 +371,7 @@ button:disabled {
   font-size: var(--text-md);
   font-weight: 600;
   color: var(--text);
-  background: var(--surface);
+  background: var(--bg);
   border: 2px solid var(--border);
 }
 
@@ -275,24 +382,38 @@ button:disabled {
   box-shadow: var(--shadow-sm);
 }
 
-/* The boxes to draw from: base games, then expansions. */
+/* The boxes app couldn't load: said plainly, with a way to ask again. */
+.catalog-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--link);
+  border-radius: var(--radius-md);
+}
+
+/* Rows to tick or choose: boxes, rule editions and options. */
 .box-options {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  margin-bottom: var(--space-4);
 }
 
 .box-option {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  min-height: 44px;
+  min-height: var(--tap);
+  box-sizing: border-box;
   padding: var(--space-2) var(--space-3);
-  background: var(--surface);
+  background: var(--bg);
   border: 2px solid var(--border);
   border-radius: var(--radius-md);
   cursor: pointer;
+  transition: border-color 0.15s;
 }
 
 /* A box in the picker is a row holding its checkbox label and its info button, so the button can sit outside the label. */
@@ -314,7 +435,8 @@ div.box-option {
   cursor: default;
 }
 
-.box-option:has(input:checked) {
+.box-option:has(input:checked),
+.box-option:has(input:checked):hover {
   border-color: var(--accent);
 }
 
@@ -345,7 +467,13 @@ div.box-option {
   color: var(--muted);
 }
 
-/* Base games and expansions are separate groups; the base games carry the accent and the "choose one" note. */
+@media (prefers-reduced-motion: reduce) {
+  .box-option {
+    transition: none;
+  }
+}
+
+/* Base games and expansions are separate groups under small labels; the base games carry the "choose one" note. */
 .box-group-label {
   display: flex;
   flex-wrap: wrap;
@@ -354,6 +482,7 @@ div.box-option {
   gap: var(--space-1) var(--space-3);
   margin: 0 0 var(--space-2);
   font-size: var(--text-sm);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--muted);
@@ -366,37 +495,33 @@ div.box-option {
 }
 
 .base-games {
-  margin-bottom: var(--space-4);
-  padding: var(--space-3);
-  background: var(--surface);
-  border: 2px solid var(--accent);
-  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
 }
 
-.base-games .box-group-label {
-  color: var(--accent);
-}
-
-.base-games .box-options {
-  margin-bottom: 0;
-}
-
-/* No base game ticked: the group's border and note warn until one is. */
-.base-games.needs-choice {
+/* No base game ticked: the rows go dashed and the note and hint speak up until one is. */
+.base-games.needs-choice .box-option {
   border-style: dashed;
+  border-color: var(--link);
 }
 
 .base-games.needs-choice .box-group-note,
 .base-games.needs-choice .box-hint {
-  color: var(--text);
+  color: var(--link);
   font-weight: 600;
+}
+
+/* Shown while no base game is ticked, since a setup takes its rules from one. */
+.box-hint {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--muted);
 }
 
 /* The info button is a 44px tap target around a small circled "i". */
 .info-button {
   flex: none;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: var(--tap);
+  min-height: var(--tap);
   margin: calc(-1 * var(--space-2)) calc(-1 * var(--space-3)) calc(-1 * var(--space-2)) 0;
   padding: 0;
   color: var(--accent);
@@ -451,34 +576,26 @@ div.box-option {
   list-style: disc;
 }
 
-/* Shown while no base game is ticked, since a setup takes its rules from one. */
-.box-hint {
-  margin: var(--space-2) 0 0;
-  font-size: var(--text-sm);
-  color: var(--muted);
-}
-
-.primary {
-  width: 100%;
-  font-weight: 600;
-  color: var(--accent-text);
-  background: var(--accent);
-  border: none;
-  box-shadow: var(--shadow-sm);
-}
-
-/* A quieter action beside a field or under the drawn cards: copying or loading a setup code. */
-.secondary {
-  padding: 0 var(--space-4);
-  font-weight: 600;
+/* Fields: a setup code, a save's name and note, the Must include filter and the rating selects. */
+.code-row input,
+.save-form input,
+.chosen-filter input,
+.rating-picker select {
+  min-height: var(--tap);
+  box-sizing: border-box;
+  padding: 0 var(--space-3);
+  font: inherit;
   color: var(--text);
-  background: var(--surface);
+  background: var(--bg);
   border: 2px solid var(--border);
+  border-radius: var(--radius-md);
 }
 
 /* Load a setup: a pasted setup code and its Load button on one row (#335). */
-.code-form {
-  margin-top: var(--space-5);
+.library {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .code-row {
@@ -490,65 +607,93 @@ div.box-option {
 .save-form input {
   flex: 1;
   min-width: 0;
-  min-height: 44px;
-  box-sizing: border-box;
-  padding: 0 var(--space-3);
-  font: inherit;
-  color: var(--text);
-  background: var(--bg);
-  border: 2px solid var(--border);
-  border-radius: var(--radius-md);
 }
 
-/* The Boxes heading with its check/uncheck all toggle beside it. */
-.boxes-heading {
+/* Generate and the count it draws for. The bar stays at the bottom of the screen while the page
+   scrolls, then settles at the end of its column: under the setup on a phone, under the controls in
+   two columns. */
+.action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  order: 1;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0 calc(-1 * var(--space-4));
+  padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  box-shadow: var(--shadow-up);
 }
 
-.boxes-heading h2 {
-  margin: 0;
+.action-players {
+  flex: none;
+  font-weight: 600;
+  color: var(--muted);
 }
 
-.link-button {
-  padding: 0;
-  font: inherit;
-  font-size: var(--text-sm);
-  color: var(--link);
-  background: none;
-  border: none;
-  text-decoration: underline;
-  cursor: pointer;
+/* The one action the page is for, in the display face. */
+.generate {
+  min-height: 52px;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 400;
+  letter-spacing: 0.05em;
 }
 
-/* The top Generate stays at the top of the rail while the box list scrolls under it. */
-.generate-top {
-  margin-bottom: var(--space-4);
-}
-
-@media (width >= 56.25rem) {
-  .generate-top {
-    position: sticky;
-    top: calc(-1 * var(--space-1));
-    z-index: 2;
+@media (width >= 37.5rem) {
+  .action-bar {
+    margin-inline: calc(-1 * var(--space-6));
+    padding-inline: var(--space-6);
   }
 }
 
-.status {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+@media (width >= 56.25rem) {
+  .action-bar {
+    margin: auto 0 0;
+    padding: var(--space-3) 0 var(--space-4);
+    box-shadow: none;
+  }
 }
 
-/* What the app gives, shown until the first draw. */
-.intro {
-  margin-top: var(--space-3);
-  font-size: var(--text-sm);
-  text-align: center;
-  color: var(--muted);
+/* The setup's column: its states, then the drawn cards, the code and the checklist. Its width
+   decides how many cards sit side by side. */
+.status {
+  container: status / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* Before anything is drawn, the setup's column says what will appear there. A phone shows the
+   controls instead, with Generate under them. */
+.empty-state {
+  display: none;
+}
+
+@media (width >= 56.25rem) {
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: center;
+    min-height: 20rem;
+    padding: var(--space-6);
+    text-align: center;
+    color: var(--muted);
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+  }
+}
+
+.empty-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  letter-spacing: 0.03em;
+  color: var(--text);
 }
 
 .loading-line {
@@ -646,35 +791,6 @@ div.box-option {
   font-weight: 600;
 }
 
-/* Generate another and the count it draws for, on a phone only. The bar stays at the bottom of
-   the screen while the checklist scrolls, then settles after the last row so it never covers it.
-   Wider screens have room for Generate in view, so they don't need the bar. */
-.action-bar {
-  position: sticky;
-  bottom: 0;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  /* Close under the checklist, as the status's own lines are. */
-  margin: calc(var(--space-3) - var(--space-5)) calc(-1 * var(--space-4)) 0;
-  padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-}
-
-.action-players {
-  flex: none;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-@media (width >= 37.5rem) {
-  .action-bar {
-    display: none;
-  }
-}
-
 /* The drawn cards. Each card or tile takes its type's accent, and its name is the main text. */
 .summary {
   display: flex;
@@ -683,9 +799,15 @@ div.box-option {
 }
 
 .headline-cards {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: var(--space-3);
+}
+
+/* With room, the Scheme and the Mastermind sit side by side, and so do the checklist's sections. */
+@container status (width >= 36rem) {
+  .headline-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .headline-card {
@@ -760,7 +882,7 @@ div.box-option {
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-sm);
   border: 1px solid var(--type);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 .summary .tile-heading {
@@ -798,11 +920,22 @@ div.box-option {
   font-weight: 600;
 }
 
-/* The checklist: one column of rows, the label wrapping and the count right-aligned beside it. */
+/* The checklist: its sections as cards, each row's label wrapping and its count right-aligned beside it. */
 .setup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
+  display: grid;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+@container status (width >= 44rem) {
+  .setup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* The progress line, the ratings, the steps, notes and terms read best across the whole column. */
+  .setup > :not(.checklist-section) {
+    grid-column: 1 / -1;
+  }
 }
 
 .result-heading {
@@ -851,6 +984,7 @@ div.box-option {
 .setup-code-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
 }
 
@@ -881,10 +1015,6 @@ div.box-option {
 }
 
 /* The setups saved on this device, under Load a setup (#335). */
-.saved-setups {
-  margin-top: var(--space-5);
-}
-
 .saved-list {
   display: flex;
   flex-direction: column;
@@ -896,17 +1026,18 @@ div.box-option {
 
 .saved-entry {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-3);
   padding: var(--space-2) var(--space-3);
-  background: var(--surface);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
 }
 
 .saved-text {
   display: flex;
-  flex: 1;
+  flex: 1 1 10rem;
   flex-direction: column;
   min-width: 0;
 }
@@ -930,18 +1061,18 @@ div.box-option {
   display: flex;
   flex: none;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .progress {
-  align-self: flex-start;
+  justify-self: start;
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-sm);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 /* The difficulty and complexity panels sit side by side, and stack when the page is narrow. */
@@ -957,14 +1088,14 @@ div.box-option {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  margin-bottom: var(--space-4);
 }
 
 .rating-picker {
   display: flex;
-  flex: 1 1 10rem;
+  flex: 1 1 8rem;
   flex-direction: column;
   gap: var(--space-1);
+  min-width: 0;
 }
 
 .rating-picker label {
@@ -976,13 +1107,8 @@ div.box-option {
 }
 
 .rating-picker select {
-  min-height: 2.75rem;
-  padding: var(--space-1) var(--space-2);
-  font: inherit;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  width: 100%;
+  padding-inline: var(--space-2);
 }
 
 .rating-picker select:disabled {
@@ -1080,11 +1206,17 @@ div.box-option {
   padding: 0;
 }
 
-/* Each checklist section wears its card type's accent: a colored heading over a colored rule. */
+/* Each checklist section is a card wearing its card type's accent: a colored top edge over a colored heading. */
+.setup .checklist-section {
+  padding: var(--space-3) var(--space-4) var(--space-1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--type);
+  border-radius: var(--radius-lg);
+}
+
 .setup .checklist-section h3 {
-  padding-bottom: var(--space-1);
   color: var(--type);
-  border-bottom: 3px solid var(--type);
 }
 
 .row,
@@ -1097,6 +1229,10 @@ div.box-option {
 .row {
   padding: var(--space-2) 0;
   border-bottom: 1px solid var(--border);
+}
+
+.checklist-section .row:last-child {
+  border-bottom: none;
 }
 
 .row label {
@@ -1254,18 +1390,31 @@ div.box-option {
 
 .term-chip {
   min-height: 2rem;
-  padding: 0 var(--space-2);
+  padding: 0 var(--space-3);
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--kind);
   background: var(--bg);
   border: 1px solid var(--kind);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 .term-chip[aria-expanded='true'] {
   color: var(--bg);
   background: var(--kind);
+}
+
+/* On a touch screen the small controls grow to a full tap target. */
+@media (pointer: coarse) {
+  .term-chip {
+    min-height: var(--tap);
+  }
+
+  .difficulty summary {
+    display: flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
 }
 
 /* A term's explanation: a popover under its chip, or a bottom sheet on a phone. */
@@ -1314,7 +1463,7 @@ div.box-option {
 }
 
 .term-close {
-  min-width: 44px;
+  min-width: var(--tap);
   margin: calc(-1 * var(--space-2)) calc(-1 * var(--space-3)) calc(-1 * var(--space-2)) 0;
   font-size: var(--text-lg);
   line-height: 1;
@@ -1340,7 +1489,7 @@ div.box-option {
 }
 
 .glossary li {
-  padding: 0.375rem 0;
+  padding: var(--space-2) 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -1354,23 +1503,15 @@ div.box-option {
   color: var(--muted);
 }
 
-/* Must include (#337): an expander over a filter box over every card, its matches below it, and the chosen cards as
-   chips. Each card carries its type's accent on its leading edge. */
-.chosen-cards {
-  margin-bottom: var(--space-5);
-}
-
-.chosen-cards > summary h2 {
-  margin: 0;
-}
-
+/* Must include (#337): a step whose heading opens a filter box over every card, its matches below it, and the chosen
+   cards as chips. Each card carries its type's accent on its leading edge. */
 .chosen-cards[open] > summary {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
 }
 
 .chosen-heading {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
   margin-bottom: var(--space-2);
@@ -1393,18 +1534,30 @@ div.box-option {
   font-weight: 600;
 }
 
-/* The two expanders, Must include and Expansions: the summary is the heading with a turning arrow before it and a note
-   after it. */
+/* The two expanders, Must include and Expansions, open from a summary with a turning arrow before it and a note after
+   it. Must include's summary is its step's heading; the Expansions summary is a row among the boxes. */
 .chosen-cards > summary,
 .expansions > summary {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-1) var(--space-2);
-  min-height: 44px;
-  align-content: center;
+  min-height: var(--tap);
   cursor: pointer;
   list-style: none;
+}
+
+.chosen-cards > summary h2 {
+  margin: 0;
+}
+
+.expansions > summary {
+  box-sizing: border-box;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.15s;
 }
 
 .chosen-cards > summary::-webkit-details-marker,
@@ -1426,9 +1579,14 @@ div.box-option {
   transform: rotate(90deg);
 }
 
+/* How many cards are chosen: a pill beside the heading. */
 .chosen-cards > summary .detail {
+  padding: 0 var(--space-2);
   font-size: var(--text-sm);
-  color: var(--muted);
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent);
+  border-radius: var(--radius-pill);
 }
 
 .expansions > summary .box-group-label {
@@ -1436,6 +1594,7 @@ div.box-option {
 }
 
 .expansions > summary .box-group-note {
+  margin-left: auto;
   font-size: var(--text-sm);
   color: var(--muted);
 }
@@ -1446,7 +1605,8 @@ div.box-option {
 
 @media (prefers-reduced-motion: reduce) {
   .chosen-cards > summary::before,
-  .expansions > summary::before {
+  .expansions > summary::before,
+  .expansions > summary {
     transition: none;
   }
 }
@@ -1457,14 +1617,6 @@ div.box-option {
 
 .chosen-filter input {
   width: 100%;
-  min-height: 44px;
-  box-sizing: border-box;
-  padding: 0 var(--space-3);
-  font: inherit;
-  color: var(--text);
-  background: var(--bg);
-  border: 2px solid var(--border);
-  border-radius: var(--radius-md);
 }
 
 .chosen-matches {
@@ -1490,6 +1642,9 @@ div.box-option {
 }
 
 .chosen-match {
+  min-height: var(--tap);
+  box-sizing: border-box;
+  align-content: center;
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -1521,8 +1676,8 @@ div.box-option {
 
 .chosen-chip {
   position: relative;
-  padding: var(--space-2) calc(44px + var(--space-2)) var(--space-2) var(--space-3);
-  background: var(--surface);
+  padding: var(--space-2) calc(var(--tap) + var(--space-2)) var(--space-2) var(--space-3);
+  background: var(--bg);
   border-radius: var(--radius-md);
 }
 
@@ -1530,7 +1685,7 @@ div.box-option {
   position: absolute;
   inset-block: 0;
   inset-inline-end: 0;
-  width: 44px;
+  width: var(--tap);
   padding: 0;
   font-size: var(--text-md);
   color: var(--muted);
