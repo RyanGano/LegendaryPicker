@@ -864,7 +864,7 @@ describe('setup codes', () => {
 
   afterEach(() => window.history.replaceState(null, '', '/'))
 
-  it('shows the code with the setup and copies a link that reloads it', async () => {
+  it('shows the code beside Load a setup, out of the setup column, and copies a link that reloads it', async () => {
     setupAnswers.push(() => json(coded))
     const user = userEvent.setup()
     renderApp()
@@ -872,8 +872,10 @@ describe('setup codes', () => {
     await user.click(screen.getByRole('button', { name: '3' }))
     await user.click(screen.getByRole('button', { name: 'Generate' }))
 
-    const shown = await screen.findByRole('region', { name: 'Setup code' })
+    const shown = await screen.findByRole('region', { name: 'This setup' })
     expect(shown).toHaveTextContent(code)
+    expect(screen.getByRole('region', { name: 'Saved setups and codes' })).toContainElement(shown)
+    expect(document.querySelector('.status')).not.toHaveTextContent(code)
     await user.click(within(shown).getByRole('button', { name: 'Copy link' }))
     expect(await navigator.clipboard.readText()).toBe(`${window.location.origin}/?code=${code}`)
     expect(within(shown).getByRole('status')).toHaveTextContent('Link copied')
@@ -913,7 +915,7 @@ describe('setup codes', () => {
 
     await user.click(screen.getByRole('button', { name: '3' }))
     await user.click(screen.getByRole('button', { name: 'Generate' }))
-    const shown = await screen.findByRole('region', { name: 'Setup code' })
+    const shown = await screen.findByRole('region', { name: 'This setup' })
     await user.click(within(shown).getByRole('button', { name: 'Save' }))
     const name = within(shown).getByRole('textbox', { name: 'Name' })
     expect(name).toHaveValue('Midtown Bank Robbery')
@@ -959,7 +961,7 @@ describe('setup codes', () => {
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
     await user.click(screen.getByRole('button', { name: 'Generate' }))
-    const shown = await screen.findByRole('region', { name: 'Setup code' })
+    const shown = await screen.findByRole('region', { name: 'This setup' })
     const other = { code: 'other', name: 'Other', note: '', savedAt: '2026-10-18T12:00:00.000Z' }
     localStorage.setItem('legendaryPicker.savedSetups', JSON.stringify([other]))
 
@@ -977,7 +979,7 @@ describe('setup codes', () => {
     renderApp()
     await user.click(screen.getByRole('button', { name: '3' }))
     await user.click(screen.getByRole('button', { name: 'Generate' }))
-    const shown = await screen.findByRole('region', { name: 'Setup code' })
+    const shown = await screen.findByRole('region', { name: 'This setup' })
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new DOMException('Blocked', 'SecurityError')
     })

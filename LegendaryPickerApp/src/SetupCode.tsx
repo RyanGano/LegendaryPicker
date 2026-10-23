@@ -11,9 +11,9 @@ type SetupCodeProps = {
   onSave: (name: string, note: string) => boolean
 }
 
-// The setup code under the drawn cards (#335): the code, buttons that copy it or a link that reloads the setup, and
-// a small form that saves it on this device with a name and note. Copying is a convenience: without clipboard access
-// the code can still be selected and copied by hand.
+// The code of the setup on screen (#335), above Load a setup (#352): the code, buttons that copy it or a link that
+// reloads the setup, and a small form that saves it on this device with a name and note. Copying is a convenience:
+// without clipboard access the code can still be selected and copied by hand.
 export function SetupCode({ code, defaultName, saved, onSave }: SetupCodeProps) {
   const id = useId()
   const [message, setMessage] = useState<string | null>(null)
@@ -49,9 +49,7 @@ export function SetupCode({ code, defaultName, saved, onSave }: SetupCodeProps) 
 
   return (
     <section className="setup-code" aria-labelledby={id}>
-      <h3 id={id} className="setup-code-heading">
-        Setup code
-      </h3>
+      <h2 id={id}>This setup</h2>
       <p className="setup-code-value">
         <code>{code}</code>
       </p>

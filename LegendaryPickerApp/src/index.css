@@ -128,7 +128,8 @@ body {
 }
 
 /* On a phone the rail is no box of its own: its panels and the Generate bar join the page's one
-   column, the bar last so it can stay at the bottom of the screen over everything above it. */
+   column, the codes panel after the setup and the bar last so it can stay at the bottom of the
+   screen over everything above it. */
 .rail {
   display: contents;
 }
@@ -591,8 +592,11 @@ div.box-option {
   border-radius: var(--radius-md);
 }
 
-/* Load a setup: a pasted setup code and its Load button on one row (#335). */
+/* The codes panel: the setup on screen's code, Load a setup with a pasted code and its Load button on
+   one row, and the saved setups (#335). On a phone it follows the setup, so a new setup's code is
+   right under it (#352). */
 .library {
+  order: 1;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -657,7 +661,7 @@ div.box-option {
   }
 }
 
-/* The setup's column: its states, then the drawn cards, the code and the checklist. Its width
+/* The setup's column: its states, then the drawn cards and the checklist. Its width
    decides how many cards sit side by side. */
 .status {
   container: status / inline-size;
@@ -955,24 +959,18 @@ div.box-option {
   white-space: nowrap;
 }
 
-/* The drawn setup's code, which reloads it (#335), with its copy buttons. */
+/* The code of the setup on screen, which reloads it (#335), with its copy buttons: the first step of
+   the codes panel, over a hairline (#352). */
 .setup-code {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
 }
 
-.setup-code-heading {
+.library .setup-code h2 {
   margin: 0;
-  font-size: var(--text-sm);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--muted);
 }
 
 .setup-code-value code {
