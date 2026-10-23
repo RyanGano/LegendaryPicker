@@ -28,7 +28,7 @@ import { SetupSummary } from './SetupSummary.tsx'
 
 const PLAYER_COUNTS = [1, 2, 3, 4, 5]
 
-// The two-column layout in index.css, where the result's heading sits in the rail under the controls.
+// The two-column layout in index.css, where the setup starts at the top of the column beside the controls.
 const TWO_COLUMNS = '(width >= 56.25rem)'
 
 // A sleeping API answers slowly; past this point the loading state says so.
@@ -294,26 +294,27 @@ function App() {
     void ping()
   }, [])
 
-  // Without the box list there is nothing to pick, and a setup uses the core box alone.
-  // Generate waits for this request, so a draw made while a cold start is still answering
-  // includes the remembered boxes.
+  // Without the box list there is nothing to pick, and a setup uses the core box alone; the controls then say the
+  // server can't be reached and offer to try again. Generate waits for these requests, so a draw made while a cold
+  // start is still answering includes the remembered boxes. Without the card list nothing can be chosen, and without
+  // the band names the rating pickers stay hidden.
   const boxesRequest = useRef<Promise<Box[]>>(Promise.resolve([]))
-  useEffect(() => {
-    const request = getBoxes().catch((): Box[] => [])
-    boxesRequest.current = request
-    void request.then(setBoxes)
-  }, [])
-
-  useEffect(() => {
-    void getRatingBands().then(setBands, () => {})
-  }, [])
-
-  // Without the card list nothing can be chosen, and the draw takes no chosen cards. Generate waits for it as for the boxes.
   const cardsRequest = useRef<Promise<Card[]>>(Promise.resolve([]))
+  const [catalogFailed, setCatalogFailed] = useState(false)
+  function loadCatalog() {
+    const boxesAnswer = getBoxes().catch((): Box[] => {
+      setCatalogFailed(true)
+      return []
+    })
+    boxesRequest.current = boxesAnswer
+    void boxesAnswer.then(setBoxes)
+    const cardsAnswer = getCards().catch((): Card[] => [])
+    cardsRequest.current = cardsAnswer
+    void cardsAnswer.then(setCards)
+    void getRatingBands().then(setBands, () => {})
+  }
   useEffect(() => {
-    const request = getCards().catch((): Card[] => [])
-    cardsRequest.current = request
-    void request.then(setCards)
+    loadCatalog()
   }, [])
 
   // A link with a setup code opens on that setup. The ref keeps strict mode's second run from loading it twice.
@@ -327,8 +328,7 @@ function App() {
   const loading = status.kind === 'loading'
 
   // A new setup lands below the controls, so bring its heading into view and give it focus. In two
-  // columns the setup starts at the top of both, so scroll there instead: scrolling the heading to
-  // the top would scroll the controls out of the rail.
+  // columns the setup starts at the top of its column, so scroll the page there instead.
   const resultHeading = useRef<HTMLHeadingElement>(null)
   useEffect(() => {
     if (status.kind !== 'result') return
@@ -522,6 +522,11 @@ function App() {
     }
   }
 
+  // The one Generate: it draws for the picked count, and once a setup is on screen it draws another, naming the count
+  // when it differs from the setup's.
+  const result = status.kind === 'result' ? status.setup : null
+  const shownPlayers = result?.players ?? players
+
   return (
     <div className="app">
       <header className="site-header">
@@ -535,37 +540,49 @@ function App() {
       </header>
 
       <main className="content">
-        {/* The controls and the drawn cards. On a wide screen they stay in view beside the checklist. */}
+        {/* The choices and the one Generate. On a wide screen they stay in view beside the setup, Generate pinned to
+            the bottom of the column; on a phone Generate sits at the bottom of the screen. */}
         <div className="rail">
-          <section className="controls">
-            {/* A second Generate at the top, so a long box list doesn't mean scrolling to draw. On a wide
-                screen it stays in view at the top of the rail. Its label differs so each button is findable. */}
-            <button
-              type="button"
-              className="primary generate-top"
-              aria-label="Generate setup"
-              disabled={players === null || loading || hint !== null}
-              onClick={generate}
-            >
-              Generate
-            </button>
-            <h2 id="players-label">Players</h2>
-            <div className="player-counts" role="group" aria-labelledby="players-label">
-              {PLAYER_COUNTS.map((count) => (
-                <button
-                  key={count}
-                  type="button"
-                  className="player-count"
-                  aria-pressed={players === count}
-                  disabled={loading}
-                  onClick={() => choosePlayers(count)}
-                >
-                  {count}
-                </button>
-              ))}
+          <section className="controls panel" aria-label="Setup options">
+            {!shownSetup && (
+              <p className="intro">
+                Get a random legal setup and a checklist for laying it out, following the official rules.
+              </p>
+            )}
+            <div className="step">
+              <h2 id="players-label">Players</h2>
+              <div className="player-counts" role="group" aria-labelledby="players-label">
+                {PLAYER_COUNTS.map((count) => (
+                  <button
+                    key={count}
+                    type="button"
+                    className="player-count"
+                    aria-pressed={players === count}
+                    disabled={loading}
+                    onClick={() => choosePlayers(count)}
+                  >
+                    {count}
+                  </button>
+                ))}
+              </div>
             </div>
+            {catalogFailed && (
+              <div className="catalog-error" role="alert">
+                <p>Couldn't reach the server, so the boxes and cards to choose from aren't shown.</p>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => {
+                    setCatalogFailed(false)
+                    loadCatalog()
+                  }}
+                >
+                  Try again
+                </button>
+              </div>
+            )}
             {bands && (
-              <div className="rating-pickers">
+              <div className="step rating-pickers">
                 <RatingPicker
                   label="Difficulty"
                   bands={bands.difficulty}
@@ -583,22 +600,24 @@ function App() {
               </div>
             )}
             {cards.length > 0 && (
-              <ChosenCards
-                cards={cards}
-                boxes={boxes}
-                included={included}
-                chosen={chosen}
-                limits={limits}
-                players={players}
-                disabled={loading}
-                onAdd={addChosen}
-                onRemove={removeChosen}
-                onClear={clearChosen}
-              />
+              <div className="step">
+                <ChosenCards
+                  cards={cards}
+                  boxes={boxes}
+                  included={included}
+                  chosen={chosen}
+                  limits={limits}
+                  players={players}
+                  disabled={loading}
+                  onAdd={addChosen}
+                  onRemove={removeChosen}
+                  onClear={clearChosen}
+                />
+              </div>
             )}
             {boxes.length > 0 && (
-              <>
-                <div className="boxes-heading">
+              <div className="step">
+                <div className="step-heading">
                   <h2 id="boxes-label">Boxes</h2>
                   {expansions.length > 0 && (
                     <button type="button" className="link-button" disabled={loading} onClick={toggleAllExpansions}>
@@ -606,7 +625,7 @@ function App() {
                     </button>
                   )}
                 </div>
-                {/* One base game is always needed, so the base games sit in their own accented group that says so. */}
+                {/* One base game is always needed, so the base games sit in their own group that says so. */}
                 <div
                   className={`box-group base-games${hint ? ' needs-choice' : ''}`}
                   role="group"
@@ -632,10 +651,10 @@ function App() {
                     <div className="box-options">{expansions.map(renderBox)}</div>
                   </details>
                 )}
-              </>
+              </div>
             )}
             {choosesRules && (
-              <>
+              <div className="step">
                 <h2 id="rules-label">Rules</h2>
                 <div className="box-options" role="radiogroup" aria-labelledby="rules-label">
                   <label className="box-option">
@@ -662,24 +681,21 @@ function App() {
                     </label>
                   ))}
                 </div>
-              </>
+              </div>
             )}
-            <h2 id="options-label">Options</h2>
-            <div className="box-options" role="group" aria-labelledby="options-label">
-              <label className="box-option">
-                <input type="checkbox" checked={epic} disabled={loading} onChange={toggleEpic} />
-                <span className="box-name">Epic Masterminds</span>
-                <span className="detail">Play the Epic side</span>
-              </label>
+            <div className="step">
+              <h2 id="options-label">Options</h2>
+              <div className="box-options" role="group" aria-labelledby="options-label">
+                <label className="box-option">
+                  <input type="checkbox" checked={epic} disabled={loading} onChange={toggleEpic} />
+                  <span className="box-name">Epic Masterminds</span>
+                  <span className="detail">Play the Epic side</span>
+                </label>
+              </div>
             </div>
-            <button
-              type="button"
-              className="primary"
-              disabled={players === null || loading || hint !== null}
-              onClick={generate}
-            >
-              Generate
-            </button>
+          </section>
+
+          <section className="library panel" aria-label="Saved setups and codes">
             <form
               className="code-form"
               aria-labelledby="code-label"
@@ -706,22 +722,20 @@ function App() {
               </div>
             </form>
             <SavedSetups saved={saved} disabled={loading} onLoad={(code) => void loadCode(code)} onDelete={deleteSaved} />
-            {!shownSetup && (
-              <p className="intro">
-                Get a random legal setup and a checklist for laying it out, following the official rules.
-              </p>
-            )}
           </section>
-          {status.kind === 'result' && <SetupSummary setup={status.setup} headingRef={resultHeading} mastermindShown={mastermindShown} />}
-          {status.kind === 'result' && status.setup.code && (
-            <SetupCode
-              key={status.setup.code}
-              code={status.setup.code}
-              defaultName={status.setup.scheme.name}
-              saved={saved.find((entry) => entry.code === status.setup.code)}
-              onSave={(name, note) => saveSetup(status.setup.code!, name, note)}
-            />
-          )}
+
+          <div className="action-bar" role="group" aria-label="Setup actions">
+            <p className="action-players">{shownPlayers === null ? 'Pick players' : playerCount(shownPlayers)}</p>
+            <button
+              type="button"
+              className="primary generate"
+              disabled={players === null || loading || hint !== null}
+              onClick={generate}
+            >
+              {result === null ? 'Generate' : 'Generate another'}
+              {result !== null && players !== null && players !== result.players && ` · ${playerCount(players)}`}
+            </button>
+          </div>
         </div>
 
         {/* Announces each state change. The status below is not live, so a new checklist isn't read
@@ -731,6 +745,12 @@ function App() {
         </p>
 
         <section className="status">
+          {status.kind === 'idle' && (
+            <div className="empty-state">
+              <p className="empty-title">Your setup appears here</p>
+              <p>Pick a player count and the boxes you own, then Generate.</p>
+            </div>
+          )}
           {status.kind === 'loading' && (
             <>
               <p className="loading-line">{status.players === undefined ? 'Loading the setup…' : 'Drawing a setup…'}</p>
@@ -740,7 +760,21 @@ function App() {
               <SetupSkeleton />
             </>
           )}
-          {status.kind === 'result' && <SetupChecklist setup={status.setup} mastermindShown={mastermindShown} onShowMastermind={() => setMastermindShown(true)} />}
+          {result && (
+            <>
+              <SetupSummary setup={result} headingRef={resultHeading} mastermindShown={mastermindShown} />
+              {result.code && (
+                <SetupCode
+                  key={result.code}
+                  code={result.code}
+                  defaultName={result.scheme.name}
+                  saved={saved.find((entry) => entry.code === result.code)}
+                  onSave={(name, note) => saveSetup(result.code!, name, note)}
+                />
+              )}
+              <SetupChecklist setup={result} mastermindShown={mastermindShown} onShowMastermind={() => setMastermindShown(true)} />
+            </>
+          )}
           {status.kind === 'noEligibleScheme' && (
             <div className="state-card scheme">
               <p>{status.message}</p>
@@ -768,19 +802,6 @@ function App() {
             </div>
           )}
         </section>
-
-        {/* Outside the status so it can stick while the drawn cards above the checklist scroll by. It
-            names the count of the setup on screen; once the player picks another count, the button says
-            it draws for that one. */}
-        {status.kind === 'result' && (
-          <div className="action-bar" role="group" aria-label="Setup actions">
-            <p className="action-players">{playerCount(status.setup.players)}</p>
-            <button type="button" className="primary" onClick={generate}>
-              Generate another
-              {players !== null && players !== status.setup.players && ` · ${playerCount(players)}`}
-            </button>
-          </div>
-        )}
       </main>
 
       <footer className="site-footer">
