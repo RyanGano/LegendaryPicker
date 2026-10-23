@@ -695,7 +695,17 @@ function App() {
             </div>
           </section>
 
+          {/* Every setup code in one place: the one on screen, one to load, and the saved ones. */}
           <section className="library panel" aria-label="Saved setups and codes">
+            {result?.code && (
+              <SetupCode
+                key={result.code}
+                code={result.code}
+                defaultName={result.scheme.name}
+                saved={saved.find((entry) => entry.code === result.code)}
+                onSave={(name, note) => saveSetup(result.code!, name, note)}
+              />
+            )}
             <form
               className="code-form"
               aria-labelledby="code-label"
@@ -763,15 +773,6 @@ function App() {
           {result && (
             <>
               <SetupSummary setup={result} headingRef={resultHeading} mastermindShown={mastermindShown} />
-              {result.code && (
-                <SetupCode
-                  key={result.code}
-                  code={result.code}
-                  defaultName={result.scheme.name}
-                  saved={saved.find((entry) => entry.code === result.code)}
-                  onSave={(name, note) => saveSetup(result.code!, name, note)}
-                />
-              )}
               <SetupChecklist setup={result} mastermindShown={mastermindShown} onShowMastermind={() => setMastermindShown(true)} />
             </>
           )}
