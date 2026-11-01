@@ -576,10 +576,14 @@ public sealed class SetupEndpointTests : IDisposable
         Assert.Equal([origin], response.Headers.GetValues("Access-Control-Allow-Origin"));
     }
 
-    [Fact]
-    public async Task A_preflight_from_an_unlisted_origin_is_not_allowed()
+    // The Pages site serves from its custom domain, so its github.io origin (shared by every Pages
+    // site on the account) is not listed.
+    [Theory]
+    [InlineData("https://example.com")]
+    [InlineData("https://ryangano.github.io")]
+    public async Task A_preflight_from_an_unlisted_origin_is_not_allowed(string origin)
     {
-        var response = await Client().SendAsync(Preflight("https://example.com"));
+        var response = await Client().SendAsync(Preflight(origin));
 
         Assert.False(response.Headers.Contains("Access-Control-Allow-Origin"));
     }
